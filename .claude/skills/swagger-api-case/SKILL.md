@@ -1,6 +1,6 @@
 ---
 name: swagger-api-case
-description: 单接口测试 case 生成。以 Swagger 为接口定义基线，从 ES 日志中抽取真实参数样本，生成单接口测试 case（覆盖正常路径 + 异常路径），输出到 single-api/<服务>/<模块>/task-<timestamp>/cases.json。当用户要"针对某个接口生成测试 case"、"基于 Swagger 生成接口测试"时使用本 skill。
+description: 单接口测试 case 生成。以 Swagger 为接口定义基线，从 ES 日志中抽取真实参数样本，生成单接口测试 case（覆盖正常路径 + 异常路径），输出到 single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json。当用户要"针对某个接口生成测试 case"、"基于 Swagger 生成接口测试"时使用本 skill。
 ---
 
 # swagger-api-case（单接口测试 Case 生成）
@@ -14,7 +14,7 @@ description: 单接口测试 case 生成。以 Swagger 为接口定义基线，�
 | 输入来源 | 前端源码扫描 | Swagger 定义 + ES 日志 |
 | 粒度 | 业务流程（多接口链） | **单接口** |
 | 场景 | 用户操作路径 | 正常路径 + 参数异常路径 |
-| 产物目录 | `api-case-work/task-*/` | `single-api/<服务>/<模块>/task-*/` |
+| 产物目录 | `api-case-work/task-*/` | `single-api/<服务>/<swagger>/<模块>/task-*/` |
 
 ---
 
@@ -25,15 +25,19 @@ single-api/
 ├── endpoints-<info.title>.json              # 每个 Swagger 一份全量接口列表（放根目录）
 └── <服务>/                                   # 服务目录，如 mainapi（config 跟服务走）
     ├── config.json                           # 🔴 服务级配置：token / profile_id / base_urls / auth
-    └── <模块>/                               # 模块目录，如 Target / Targeting / Campaign
-        └── task-<YYYY-MM-DD-HH-MM-SS>/
-            ├── cases.json
-            └── report.json
+    └── <swagger>/                            # 🔴 swagger 层，取 info.title，如 Amazon.Advertising.Api / PacvueMainApi
+        └── <模块>/                           # 模块目录，如 Target / Targeting / Campaign
+            └── task-<YYYY-MM-DD-HH-MM-SS>/
+                ├── cases.json
+                └── report.json
 ```
 
-- **按服务组织，不是按平台**：一个服务可能对应**多个 Swagger**（如 mainapi 服务下同时有 `Amazon.Advertising.Api` 和 `PacvueMainApi` 两个 Swagger）。同服务的所有 Swagger、模块、task 都归到同一个 `single-api/<服务>/` 下。
-- **config.json 是服务级**：同一服务共用一份 `single-api/<服务>/config.json`，`base_urls` 里含该服务**所有** Swagger 的 base_url（如同时有 `INDBASEURL` 和 `BASEURL`）。不放模块目录、不放根目录。
-- **服务名**先查 `single-api/services.json` 反查（见"输入"第二步）：命中用表里的名，未命中问用户后回写；默认一 swagger 一服务、名=`info.title`。**模块名**取接口路径首段（如 `/api/Target/*` → `Target`，`/api/Targeting/V3/*` → `Targeting`）。
+- **四层：服务 / swagger / 模块 / task**。服务是部署单元（可含多个 swagger）；swagger 层区分同服务下不同 spec，避免重名模块（如两个 swagger 都有 `Campaign`）撞目录。
+- **按服务组织，不是按平台**：一个服务可能对应**多个 Swagger**（如 mainapi 服务下同时有 `Amazon.Advertising.Api` 和 `PacvueMainApi` 两个 Swagger）。
+- **config.json 是服务级**：同一服务共用一份 `single-api/<服务>/config.json`，`base_urls` 里含该服务**所有** Swagger 的 base_url（如同时有 `INDBASEURL` 和 `BASEURL`）。放服务根，不放 swagger/模块层。
+- **服务名**先查 `single-api/services.json` 反查（见"输入"第二步）：命中用表里的名，未命中问用户后回写；默认一 swagger 一服务、名=`info.title`。
+- **swagger 层名**取该接口来源 spec 的 `info.title`（也是 `endpoints-<title>.json` 的 title）。
+- **模块名**取接口路径首段（如 `/api/Target/*` → `Target`，`/api/Targeting/V3/*` → `Targeting`）。
 - **endpoints-*.json 放 `single-api/` 根**，文件名取各 Swagger 的 `info.title`（一个 Swagger 一份，与服务/模块正交）。
 
 ---
@@ -43,7 +47,7 @@ single-api/
 1. **Swagger 是结构权威**：字段类型、必填性、枚举值以 Swagger 为准，ES 只提供真实值样本
 2. **禁止猜参数值**：无 Swagger example 且 ES 无样本的字段，值填 `"[NEEDS_REAL_VALUE]"` 并在末尾列出待补清单
 3. **动态 ID 必须变量化**：数字 ID / timestamp 替换为 `{{var}}`，不得硬编码
-4. **每次新建目录**：`single-api/<服务>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`，禁止复用
+4. **每次新建目录**：`single-api/<服务>/<swagger>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`，禁止复用
 5. **config.json 跟服务走**：位于 `single-api/<服务>/config.json`，一个服务一份（含该服务所有 base_url）
 6. **服务身份先查 `single-api/services.json`**：swagger→服务 的映射维护在此表，命中就不问用户；未命中才问并回写
 7. **产物只有 cases.json、endpoints.json、services.json**：禁止生成其他文件
@@ -257,7 +261,7 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 
 ## Phase 3 — 生成 cases.json
 
-**创建目录**：`single-api/<服务>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`（如 `single-api/mainapi/Targeting/task-2026-08-13-12-00-55/`）
+**创建目录**：`single-api/<服务>/<swagger>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`（如 `single-api/mainapi/PacvueMainApi/Targeting/task-2026-08-13-12-00-55/`）
 
 **只生成 Happy Path case，每个真实用户场景对应一个 case。不生成异常、边界、缺失字段等额外 case。**
 
@@ -402,7 +406,7 @@ PowerShell 生成的文件带 UTF-8 BOM，Python 的 `json.load` 会报错，执
 ```bash
 python -c "
 import json
-for f in ['single-api/<服务>/<模块>/task-<timestamp>/cases.json', 'single-api/<服务>/config.json']:
+for f in ['single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json', 'single-api/<服务>/config.json']:
     with open(f, encoding='utf-8-sig') as r: d = json.load(r)
     with open(f, 'w', encoding='utf-8') as w: json.dump(d, w, ensure_ascii=False, indent=2)
     print('Fixed:', f)
@@ -413,9 +417,9 @@ for f in ['single-api/<服务>/<模块>/task-<timestamp>/cases.json', 'single-ap
 
 ```bash
 python .claude/skills/api-case-generate/api-case-run/scripts/run-cases.py \
-  --cases single-api/<服务>/<模块>/task-<timestamp>/cases.json \
+  --cases single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json \
   --config single-api/<服务>/config.json \
-  --out    single-api/<服务>/<模块>/task-<timestamp>/report.json
+  --out    single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json
 ```
 
 🔴 **注意事项**：
@@ -428,7 +432,7 @@ python .claude/skills/api-case-generate/api-case-run/scripts/run-cases.py \
 ```bash
 python -c "
 import json
-with open('single-api/<服务>/<模块>/task-<timestamp>/report.json', encoding='utf-8') as f:
+with open('single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json', encoding='utf-8') as f:
     r = json.load(f)
 print(f'总计:{r[\"total\"]}  PASS:{r[\"passed\"]}  FAIL:{r[\"failed\"]}')
 from collections import defaultdict
@@ -462,7 +466,7 @@ for api,v in sorted(by_api.items()):
 | `single-api/services.json` | 🔴 服务映射表：swagger(title/url) → 服务名 / ES 索引 / config，命中免询问，未命中回写 |
 | `single-api/endpoints-<info.title>.json` | 当前 Swagger 全量有效接口列表，文件名取 spec 的 `info.title`（每次覆盖，放根目录） |
 | `single-api/<服务>/config.json` | 🔴 服务级执行环境配置（token、profile_id、base_urls 等），一个服务一份 |
-| `single-api/<服务>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
-| `single-api/<服务>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
+| `single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
+| `single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
 
 对话中额外输出**待补清单**（若有 `[NEEDS_REAL_VALUE]` 字段）。
