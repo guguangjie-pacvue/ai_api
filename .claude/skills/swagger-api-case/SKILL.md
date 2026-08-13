@@ -1,6 +1,6 @@
 ---
 name: swagger-api-case
-description: 单接口测试 case 生成。以 Swagger 为接口定义基线，从 ES 日志中抽取真实参数样本，生成单接口测试 case（覆盖正常路径 + 异常路径），输出到 single-api/task-<timestamp>/cases.json。当用户要"针对某个接口生成测试 case"、"基于 Swagger 生成接口测试"时使用本 skill。
+description: 单接口测试 case 生成。以 Swagger 为接口定义基线，从 ES 日志中抽取真实参数样本，生成单接口测试 case（覆盖正常路径 + 异常路径），输出到 single-api/<服务>/<模块>/task-<timestamp>/cases.json。当用户要"针对某个接口生成测试 case"、"基于 Swagger 生成接口测试"时使用本 skill。
 ---
 
 # swagger-api-case（单接口测试 Case 生成）
@@ -14,7 +14,27 @@ description: 单接口测试 case 生成。以 Swagger 为接口定义基线，�
 | 输入来源 | 前端源码扫描 | Swagger 定义 + ES 日志 |
 | 粒度 | 业务流程（多接口链） | **单接口** |
 | 场景 | 用户操作路径 | 正常路径 + 参数异常路径 |
-| 产物目录 | `api-case-work/task-*/` | `single-api/task-*/` |
+| 产物目录 | `api-case-work/task-*/` | `single-api/<服务>/<模块>/task-*/` |
+
+---
+
+## 🔴 目录结构（强制）
+
+```
+single-api/
+├── endpoints-<info.title>.json              # 每个 Swagger 一份全量接口列表（放根目录）
+└── <服务>/                                   # 服务目录，如 mainapi（config 跟服务走）
+    ├── config.json                           # 🔴 服务级配置：token / profile_id / base_urls / auth
+    └── <模块>/                               # 模块目录，如 Target / Targeting / Campaign
+        └── task-<YYYY-MM-DD-HH-MM-SS>/
+            ├── cases.json
+            └── report.json
+```
+
+- **按服务组织，不是按平台**：一个服务可能对应**多个 Swagger**（如 mainapi 服务下同时有 `Amazon.Advertising.Api` 和 `PacvueMainApi` 两个 Swagger）。同服务的所有 Swagger、模块、task 都归到同一个 `single-api/<服务>/` 下。
+- **config.json 是服务级**：同一服务共用一份 `single-api/<服务>/config.json`，`base_urls` 里含该服务**所有** Swagger 的 base_url（如同时有 `INDBASEURL` 和 `BASEURL`）。不放模块目录、不放根目录。
+- **服务名**先查 `single-api/services.json` 反查（见"输入"第二步）：命中用表里的名，未命中问用户后回写；默认一 swagger 一服务、名=`info.title`。**模块名**取接口路径首段（如 `/api/Target/*` → `Target`，`/api/Targeting/V3/*` → `Targeting`）。
+- **endpoints-*.json 放 `single-api/` 根**，文件名取各 Swagger 的 `info.title`（一个 Swagger 一份，与服务/模块正交）。
 
 ---
 
@@ -23,8 +43,10 @@ description: 单接口测试 case 生成。以 Swagger 为接口定义基线，�
 1. **Swagger 是结构权威**：字段类型、必填性、枚举值以 Swagger 为准，ES 只提供真实值样本
 2. **禁止猜参数值**：无 Swagger example 且 ES 无样本的字段，值填 `"[NEEDS_REAL_VALUE]"` 并在末尾列出待补清单
 3. **动态 ID 必须变量化**：数字 ID / timestamp 替换为 `{{var}}`，不得硬编码
-4. **每次新建目录**：`single-api/task-<YYYY-MM-DD-HH-MM-SS>/`，禁止复用
-5. **产物只有 cases.json 和 endpoints.json**：禁止生成其他文件
+4. **每次新建目录**：`single-api/<服务>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`，禁止复用
+5. **config.json 跟服务走**：位于 `single-api/<服务>/config.json`，一个服务一份（含该服务所有 base_url）
+6. **服务身份先查 `single-api/services.json`**：swagger→服务 的映射维护在此表，命中就不问用户；未命中才问并回写
+7. **产物只有 cases.json、endpoints.json、services.json**：禁止生成其他文件
 
 ---
 
@@ -34,19 +56,35 @@ description: 单接口测试 case 生成。以 Swagger 为接口定义基线，�
 
 用户只需提供一个或多个 Swagger 文档的 URL（index.html 或 swagger.json 均可），无需事先指定接口。
 
-**第二步：完成 Swagger 扫描后，向用户确认要查哪个服务**
+**第二步：查 `single-api/services.json` 反查服务（🔴 先查表，别问）**
 
-ES 连接信息已固定，无需用户每次提供：
+服务身份的锚点是 **GitHub 后端服务（部署单元）**，一个服务可能对应多个 Swagger、共用一个 ES 索引和一份 config。这个归并关系 Swagger 里推不出，维护在 `single-api/services.json`：
+
+```json
+{
+  "<服务名>": {
+    "github_repo": "<仓库名>",
+    "swagger_titles": ["<info.title>", "..."],
+    "swagger_urls": ["<swagger json url>", "..."],
+    "es_index": "<ES 索引，如 amazon-access-*>",
+    "config": "single-api/<服务名>/config.json"
+  }
+}
+```
+
+**流程**：
+1. 读 `single-api/services.json`（不存在则视为空表）
+2. 用用户给的 swagger URL / 扫描出的 `info.title` 去匹配某条目的 `swagger_urls` / `swagger_titles`
+   - **命中** → 直接得到服务名、`es_index`、`config` 路径，**不再向用户提问**，进 Phase 2
+   - **未命中** → 只问一次：`"这些 swagger 属于哪个服务？(默认按各自 info.title 分开；若同属一个服务请给统一名，如 mainapi。并告知 ES 索引，如 amazon-access-*)"`，收到后**追加/更新 `services.json`**，下次自动命中
+3. 默认规则：一个 swagger 一个服务，服务名 = `info.title`；仅当用户显式归并时才多 swagger 合一
+
+ES 连接信息已固定，无需用户提供：
 - **Kibana 地址**：`https://logs.pacvue.com`
 - **用户名**：`watcher`
 - **密码**：`kY9GErML%luQTorm`
 - **访问方式**：PowerShell `Invoke-RestMethod` + Basic Auth
-
-🔴 **只需向用户提问一项：**
-
-> "请告诉我要查哪个服务的日志（服务名 / 索引关键字 / 环境，如 amazon-advertising-api、us-prod 等）"
-
-收到后执行 Phase 2。
+- **ES 索引**：从 `services.json` 的 `es_index` 读，不再每次询问
 
 ---
 
@@ -219,7 +257,7 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 
 ## Phase 3 — 生成 cases.json
 
-**创建目录**：`single-api/task-<YYYY-MM-DD-HH-MM-SS>/`
+**创建目录**：`single-api/<服务>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`（如 `single-api/mainapi/Targeting/task-2026-08-13-12-00-55/`）
 
 **只生成 Happy Path case，每个真实用户场景对应一个 case。不生成异常、边界、缺失字段等额外 case。**
 
@@ -262,7 +300,7 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
       {
         "name": "调用 <接口末段名>",
         "method": "<METHOD>",
-        "base_url": "{{BASEURL}}",
+        "base_url": "<按来源 swagger 选，见下方 base_url 规则，如 {{INDBASEURL}} / {{BASEURL}}>",
         "path": "<path>",
         "request_body": {},
         "extract_vars": {},
@@ -276,20 +314,82 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 ]
 ```
 
-**base_url 选择规则**（参照 `api-case-work/config.json`）：
+**base_url 选择规则**（🔴 按 **endpoint 来源的 swagger** 选，不是按路径前缀）：
 
-| 路径特征 | base_url 变量 |
-|---------|--------------|
-| `/api/` 开头（MainApi） | `{{BASEURL}}` |
-| `amazon-advertising-api` 服务 | `{{INDBASEURL}}` |
-| `/meta-api-` | `{{META}}` |
-| `/micro-api-v2/` | `{{DAYPARTING}}` |
-| `/filter-column/` | `{{FILTER_COLUMN}}` |
-| `/ai-api/` | `{{AIURL}}` |
+同一服务下多个 swagger 的路径可能都以 `/api/` 开头，**不能用路径前缀判断**。要看该 endpoint 是从哪个 swagger 扫出来的，映射到对应 base_url 变量：
+
+| endpoint 来源 swagger（info.title） | base_url 变量 | 实际地址 |
+|---|---|---|
+| `Amazon.Advertising.Api` | `{{INDBASEURL}}` | `amazon-advertising-api/api/` |
+| `PacvueMainApi` | `{{BASEURL}}` | `pacvuemainapiv2/api/` |
+
+其他服务的 base_url 变量（按需在 config.json 的 `base_urls` 里补充）：`{{META}}`(meta-api)、`{{DAYPARTING}}`(micro-api-v2)、`{{FILTER_COLUMN}}`(filter-column)、`{{AIURL}}`(ai-api)。
+
+🔴 **生成前先确认**：该 endpoint 在哪个 `endpoints-<title>.json` 里 → 对应 base_url 变量 → config.json 的 `base_urls` 里必须有这个变量。
 
 **断言规则**：见上方"Phase 3 断言规则"，`status_code` 已移除，以 `code: 200` + `success: true` 为接口成功标准。
 
 ---
+
+## Phase 3.5 — 写操作类 case 必须自清理 + 可重复（🔴 强制）
+
+**判定为写操作类**：接口名/语义属于 **创建 / 编辑 / 批量操作**（Create、Add、Update、BulkUpdate、Copy、Delete、Archive、状态变更、出价变更等）。查询类（Get/Report/Chart/Total/PageData）不适用本节。
+
+### 铁律
+
+1. **写操作 case 必须成对**：主操作步骤 + 后置逆操作步骤，把产生/改动的数据还原，禁止在测试账号留残留。
+   - 创建 ↔ 归档（archive）
+   - 状态变更（如 paused）↔ 改回原 state
+   - 出价变更 ↔ 改回原 bid
+   - 批量操作 ↔ 逆向批量还原
+
+2. **Amazon 实体只能 archive，不能物理删**：清理创建类数据 = 调状态接口把 `state` 置为 `archived`，这就是业务层"删除"。
+
+3. **用 `extract_vars` 抓取新建实体 ID**，后置步骤引用，**禁止硬编码 ID**。
+   - 提取路径支持数组下标，如 `data.result[0].APIResult[0].entityId`
+   - 框架自动把提取值注入后续步骤的 `{{var}}`（同一 case 内跨步骤有效）
+
+4. **断言用业务成功信号**：写操作断言 `data.successCount: {"$gte": 1}`（或对应的真实成功计数字段），**不能只断言 `code:200`**——很多写接口 HTTP/业务 code 都是 200 但实际 `success 0`（如 bid 超预算一半、谓词类型错误、重复创建）。
+
+5. **保证幂等可重跑**：后置清理后，同参数必须能再次执行。
+   - 创建类：归档后同 ASIN/关键词可再次创建（已验证 Amazon 支持）
+   - 编辑类：先在前置/主步骤存原值，后置步骤还原
+   - 生成后**连跑 2 次**验证全 PASS，才算通过
+
+### 写操作 case 模板（创建+后置归档）
+
+```json
+{
+  "name": "POST /api/xxx/CreateXxx - <场景>(含后置清理,可重复)",
+  "description": "...第2步后置操作将新建实体归档,保证用例可重复执行。",
+  "module": "<模块>",
+  "granularity": "API",
+  "since": "init", "last_modified": "init",
+  "change_type": "NEW", "generated_by": "swagger-api-case",
+  "steps": [
+    {
+      "name": "创建 <实体>",
+      "method": "POST", "base_url": "{{BASEURL}}", "path": "/xxx/CreateXxx",
+      "request_body": { "...": "..." },
+      "extract_vars": { "created_entity_id": "data.result[0].APIResult[0].entityId" },
+      "expected_response": { "code": 200, "success": true, "data": { "successCount": { "$gte": 1 } } }
+    },
+    {
+      "name": "后置清理-归档新建实体",
+      "method": "POST", "base_url": "{{BASEURL}}", "path": "/xxx/UpdateXxxStatus",
+      "request_body": { "Item": [ { "TargetId": "{{created_entity_id}}", "...": "..." } ], "state": "archived" },
+      "extract_vars": {},
+      "expected_response": { "code": 200, "success": true, "data": { "successCount": { "$gte": 1 } } }
+    }
+  ]
+}
+```
+
+### 写操作类值探测（因涉及真实写库，主动排查再定稿）
+
+- **写操作必须落到能接收的真实层级**：从测试账号真实数据里找有效 campaign/adgroup（如 SP 手动-PAT 广告组、SD 广告组），不可用查询类 case 的 profile 直接套。规则托管广告组可能拒绝手动写入。
+- **bid 类约束**：Amazon 常见 `bid < 日预算的一半`，先查目标 campaign 的 DailyBudget 再定 bid。
+- **枚举/类型值以 ES 真实样本为准**：如 SD 商品定向 clause `type` 真实值为空串 `""`（不是猜的 `T00030`）。无样本不猜。
 
 ---
 
@@ -302,7 +402,7 @@ PowerShell 生成的文件带 UTF-8 BOM，Python 的 `json.load` 会报错，执
 ```bash
 python -c "
 import json
-for f in ['single-api/task-<timestamp>/cases.json', 'single-api/config.json']:
+for f in ['single-api/<服务>/<模块>/task-<timestamp>/cases.json', 'single-api/<服务>/config.json']:
     with open(f, encoding='utf-8-sig') as r: d = json.load(r)
     with open(f, 'w', encoding='utf-8') as w: json.dump(d, w, ensure_ascii=False, indent=2)
     print('Fixed:', f)
@@ -313,13 +413,13 @@ for f in ['single-api/task-<timestamp>/cases.json', 'single-api/config.json']:
 
 ```bash
 python .claude/skills/api-case-generate/api-case-run/scripts/run-cases.py \
-  --cases single-api/task-<timestamp>/cases.json \
-  --config single-api/config.json \
-  --out    single-api/task-<timestamp>/report.json
+  --cases single-api/<服务>/<模块>/task-<timestamp>/cases.json \
+  --config single-api/<服务>/config.json \
+  --out    single-api/<服务>/<模块>/task-<timestamp>/report.json
 ```
 
 🔴 **注意事项**：
-- `--config` 必须指向 `single-api/config.json`，不得用默认的 `api-case-work/config.json`
+- `--config` 必须指向该服务的 `single-api/<服务>/config.json`，不得用默认的 `api-case-work/config.json`
 - cases 的 `path` 字段**不含 `/api/` 前缀**（已在生成时去掉），`INDBASEURL` 末尾有 `/api/`，两者拼接才正确
 - token 会过期（约 10 小时），执行前确认 config.json 里 token 有效；脚本检测到 401 会自动用 `auth` 配置重新登录
 
@@ -328,7 +428,7 @@ python .claude/skills/api-case-generate/api-case-run/scripts/run-cases.py \
 ```bash
 python -c "
 import json
-with open('single-api/task-<timestamp>/report.json', encoding='utf-8') as f:
+with open('single-api/<服务>/<模块>/task-<timestamp>/report.json', encoding='utf-8') as f:
     r = json.load(f)
 print(f'总计:{r[\"total\"]}  PASS:{r[\"passed\"]}  FAIL:{r[\"failed\"]}')
 from collections import defaultdict
@@ -350,6 +450,8 @@ for api,v in sorted(by_api.items()):
 | HTTP 200 但 FAIL | `data` 返回空列表，`$not_empty` 断言不过 | 断言改为 `$is_array` 允许空 |
 | HTTP 401 | token 过期 | 重新登录刷新 token |
 | HTTP 403 `toMarket contains illegal characters` | `{{to_market}}` 变量未替换（不经 run-cases.py 直接发请求时出现） | 必须通过 run-cases.py 执行 |
+| HTTP 200 + `success:true` 但写操作 `successCount=0` / `success 0` | 写接口业务层未生效：bid 超预算一半 / 谓词类型(如 SD `type`)错误 / 同参重复创建 / 规则托管广告组拒绝 | 查看 `data.result[].APIResult[].message` 或 `ErrorMessages` 定位；修正 bid/枚举值/目标层级；确保后置清理已归档避免重复 |
+| 写操作 case 第二次跑失败（首次 PASS） | 未加后置清理，实体已存在导致重复创建失败 | 按 Phase 3.5 补后置逆操作步骤，连跑 2 次验证 |
 
 ---
 
@@ -357,9 +459,10 @@ for api,v in sorted(by_api.items()):
 
 | 文件 | 说明 |
 |------|------|
-| `single-api/endpoints-<info.title>.json` | 当前 Swagger 全量有效接口列表，文件名取 spec 的 `info.title`（每次覆盖） |
-| `single-api/task-<timestamp>/cases.json` | 目标接口的测试 case |
-| `single-api/task-<timestamp>/report.json` | 执行结果报告 |
-| `single-api/config.json` | 执行环境配置（token、profile_id、base_urls 等） |
+| `single-api/services.json` | 🔴 服务映射表：swagger(title/url) → 服务名 / ES 索引 / config，命中免询问，未命中回写 |
+| `single-api/endpoints-<info.title>.json` | 当前 Swagger 全量有效接口列表，文件名取 spec 的 `info.title`（每次覆盖，放根目录） |
+| `single-api/<服务>/config.json` | 🔴 服务级执行环境配置（token、profile_id、base_urls 等），一个服务一份 |
+| `single-api/<服务>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
+| `single-api/<服务>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
 
 对话中额外输出**待补清单**（若有 `[NEEDS_REAL_VALUE]` 字段）。
