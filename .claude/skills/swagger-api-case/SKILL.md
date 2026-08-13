@@ -116,24 +116,12 @@ Write-Host "Downloaded OK, size: $((Get-Item "$env:TEMP\swagger_<服务名>.json
 下载完成后，用 Node.js 解析（PowerShell 的 `ConvertFrom-Json` 对大文件会失败，禁止使用）：
 
 ```powershell
-node -e "
-const fs = require('fs');
-const spec = JSON.parse(fs.readFileSync(process.env.TEMP + '/swagger_<服务名>.json', 'utf8'));
-const paths = spec.paths || {};
-const rows = [];
-for (const [path, methods] of Object.entries(paths)) {
-    for (const [method, op] of Object.entries(methods)) {
-        if (['get','post','put','delete','patch'].includes(method) && !op.deprecated) {
-            const tag = (op.tags && op.tags[0]) || '(no tag)';
-            const summary = op.summary || '';
-            rows.push({ tag, method: method.toUpperCase(), path, summary });
-        }
-    }
-}
-rows.sort((a,b) => a.tag.localeCompare(b.tag) || a.path.localeCompare(b.path));
-console.log(JSON.stringify(rows, null, 2));
-"
+node ".claude/skills/swagger-api-case/scripts/parse_swagger.js" `
+  "$env:TEMP\swagger_<服务名>.json" `
+  "C:/AI engineering/single-api/ai_api/single-api/endpoints-<title>.json"
 ```
+
+> 脚本源码见 `scripts/parse_swagger.js`。输出：写入 endpoints 文件 + 按模块分组的汇总表。
 
 ### 0.3 将有效接口写入 endpoints.json
 
@@ -211,7 +199,7 @@ $body = @"
           {"term":{"method.keyword":"<METHOD>"}}
         ],
         "must_not":[{"term":{"userId.keyword":"18183"}}],
-        "filter":[{"range":{"@timestamp":{"gte":"now-30d"}}}]
+        "filter":[{"range":{"@timestamp":{"gte":"now-90d"}}}]
       }},
       "functions":[{"random_score":{}}],
       "boost_mode":"replace"
@@ -230,19 +218,33 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 
 取出的每条记录即为真实入参，进入 2.3 分析。
 
+**🔴 若 500 条样本中命中数 < 10**：先扩大时间窗口至 `now-90d` 再试；仍不足则用全部命中条数，并在对话中注明"样本较少，场景覆盖可能不全"。
+
 ### 2.3 分析真实入参，归纳用户场景
 
 🔴 **不得直接用频率统计替代场景分析**。要阅读每条入参的实际内容，理解用户在做什么操作，再归纳成有业务意义的场景。
 
-**分析维度**（逐条阅读入参后归纳）：
+🔴 **场景数下限**：每个接口至少归纳 **3 个场景**（ES 样本总数 < 3 条除外）。500 条样本中若能识别出 5 个以上有业务差异的场景，全部生成 case，不合并、不丢弃。
 
-| 维度 | 看什么 |
-|------|--------|
-| 核心过滤组合 | Filters 里用了哪些 filterFieldName，决定用户的筛选意图 |
-| 数 据维度| `Dim` 字段（ytd=汇总、date=趋势/逐日） |
-| 分页/排序 | `pageSize` + `orderBy` 决定是列表浏览还是数据导出 |
-| 特殊开关 | `IsFead`、`IsShowNTB` 等业务标志位的不同取值 |
-| 市场 | `ToMarket` 是否有非 US 的真实用法 |
+**场景归纳方法（以调用频率为核心）**：
+
+场景不是从字段差异推导出来的，而是从**用户最常用的入参组合**归纳出来的。步骤：
+
+1. **让样本自己暴露维度**：通读 500 条样本，观察这个接口里哪些字段的取值在请求之间**实际发生了变化**——变化的字段才是本接口的划分维度。不要拿预设的字段清单去套；不同接口的维度完全不同，以当前样本为准。
+2. **统计入参组合频率**：按上一步发现的维度字段的取值组合分组，统计每种组合出现的次数和占比
+3. **按频率排序**：出现次数最多的组合 → 场景1，次多 → 场景2，以此类推
+4. **判断是否值得独立成场景**：占比 ≥ 5% 的组合单独成场景；占比 < 5% 且与高频场景业务意图相同的合并进高频场景；极低频（< 2%）且无特殊业务意义的舍弃
+5. **用该场景最典型的一条真实入参**作为 case 的 `request_body`，动态字段变量化后直接使用
+
+场景描述中注明频率：
+```
+代表条数：n 条，占比约 xx%（500条样本中）
+```
+
+场景优先级规则：
+- 高频场景（≥ 20%）必须覆盖
+- 中频场景（5%~20%）全部覆盖
+- 低频场景（< 5%）仅当代表了高频场景没有的独立业务意图时才覆盖
 
 **归纳输出格式**（每个场景一段）：
 
@@ -416,7 +418,7 @@ for f in ['single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json', 
 ### 4.2 执行
 
 ```bash
-python .claude/skills/api-case-generate/api-case-run/scripts/run-cases.py \
+python "C:/AI engineering/rule-modules-web-master/rule-modules-web-master/.claude/skills/api-case-generate/api-case-run/scripts/run-cases.py" \
   --cases single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json \
   --config single-api/<服务>/config.json \
   --out    single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json
@@ -459,6 +461,39 @@ for api,v in sorted(by_api.items()):
 
 ---
 
+## Phase 5 — 写入 Excel 统计表（🔴 每次执行后必做）
+
+同时写入两个目标：
+
+| 目标 | Sheet | 内容 |
+|------|-------|------|
+| **5.1 模块汇总** | `模块汇总` | Case数 / 通过率 / 接口覆盖率 |
+| **5.2 场景覆盖** | `Amazon.Advertising.Api` / `PacvueMainApi` 等 | 每接口行追加「场景覆盖」列，格式：`场景N: 描述 — xx%` |
+
+**一条命令搞定**（脚本源码见 `scripts/update_excel.py`）：
+
+```powershell
+python ".claude/skills/swagger-api-case/scripts/update_excel.py" `
+  --cases    "single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json" `
+  --report   "single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json" `
+  --endpoints "single-api/endpoints-<swagger-title>.json" `
+  --swagger-title "<swagger info.title，如 Amazon.Advertising.Api>" `
+  --module   "<模块名，如 SupplementData>"
+```
+
+**接口覆盖率计算**：  
+`api_covered` = cases.json 中不重复的 `path` 数量（一个接口多个场景只算 1）  
+`api_total` = `endpoints-<title>.json` 中该模块的接口总数
+
+**场景覆盖格式**（从 case `name`/`description` 自动提取）：
+```
+场景1: Campaign+日期过滤 Campaign汇总含广告组数 — 52.6%
+场景2: Campaign+日期过滤 CostControl输出不含AdGroupCount — 18.8%
+...
+```
+
+---
+
 ## 交付物
 
 | 文件 | 说明 |
@@ -468,5 +503,6 @@ for api,v in sorted(by_api.items()):
 | `single-api/<服务>/config.json` | 🔴 服务级执行环境配置（token、profile_id、base_urls 等），一个服务一份 |
 | `single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
 | `single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
+| `single-api/swagger_modules.xlsx`（`模块汇总` sheet） | 更新 Case数 / 通过率 / 接口覆盖率三列 |
 
 对话中额外输出**待补清单**（若有 `[NEEDS_REAL_VALUE]` 字段）。
