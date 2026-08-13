@@ -70,14 +70,14 @@ for (swagger, module), (task, fpath) in sorted(task_dirs.items()):
 
         label = clean_scenario_label(label_raw)
 
-        # extract percentage from description
+        # extract percentage from description（无则 None → 不显示占比后缀）
         pct_m = re.search(r'占比约([\d.]+%)', desc)
-        pct = pct_m.group(1) if pct_m else '?%'
+        pct = pct_m.group(1) if pct_m else None
 
         path_cases[full_path].append((label, pct))
 
     for full_path, items in path_cases.items():
-        lines = [f'{label} — {pct}' for label, pct in items]
+        lines = [(f'{label} — {pct}' if pct else label) for label, pct in items]
         scenario_map[(swagger, full_path)] = lines
 
 print(f'Built scenario_map: {len(scenario_map)} entries')
