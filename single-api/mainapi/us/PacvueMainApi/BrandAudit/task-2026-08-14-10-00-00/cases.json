@@ -1,0 +1,165 @@
+[
+  {
+    "name": "POST /api/BrandAudit/v3/BrandAsinAdd - US市场新建品牌追踪",
+    "description": "单接口测试：POST /api/BrandAudit/v3/BrandAsinAdd。US市场新建品牌追踪，无brandId字段表示新建。响应data字段为bool(true)，无法自动提取创建后的brandId，测试执行后需手动清理生成的测试品牌。500条随机样本中占比约55%(5次)。",
+    "module": "BrandAudit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "新建品牌追踪(US市场)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BrandAudit/v3/BrandAsinAdd",
+        "request_body": {
+          "brand": "Pacvue Test Brand 20260814",
+          "countryCode": "US",
+          "asins": "B09XVNPN3R,B0CJZSXQ2J,B07R3D628G"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BrandAudit/v3/BrandAsinAdd - 非US市场品牌追踪(UK)",
+    "description": "单接口测试：POST /api/BrandAudit/v3/BrandAsinAdd。英国市场(UK)新建品牌追踪，countryCode=UK，无brandId表示新建。ES样本中UK等非US市场品牌追踪占比约25%(约2次)。500条随机样本中占比约25%(2次)。",
+    "module": "BrandAudit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "新建品牌追踪(UK市场)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BrandAudit/v3/BrandAsinAdd",
+        "request_body": {
+          "brand": "Miracle-Gro UK",
+          "countryCode": "UK",
+          "asins": "B0BS6373C7,B000TAP7PY,B0BS6GJ7CH,B004RG2PD8,B000TAW92S"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BrandAudit/v3/BrandAsinAdd - 更新已有品牌ASIN列表(含brandId)",
+    "description": "单接口测试：POST /api/BrandAudit/v3/BrandAsinAdd。更新已有品牌的ASIN追踪列表，含brandId字段表示更新操作，CA市场，brandId=10217(Enfagrow CA)为ES样本中真实品牌ID。500条随机样本中占比约22%(2次)。",
+    "module": "BrandAudit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新品牌ASIN列表(CA市场,含brandId)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BrandAudit/v3/BrandAsinAdd",
+        "request_body": {
+          "brand": "Enfagrow",
+          "countryCode": "CA",
+          "asins": "B09BG839PD,B09BG8SMGM,B07XR3HQD8,B07XL4TZ9Y",
+          "brandId": "{{brand_audit_update_brand_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BrandAudit/v3/BrandAuditAction - 触发单品牌审计",
+    "description": "单接口测试：POST /api/BrandAudit/v3/BrandAuditAction。触发对指定品牌的审计扫描任务，brand字段为品牌整数ID，使用ES真实样本中brand=10861(client 3186真实品牌)。触发操作为幂等写操作(重复触发不影响数据)。500条随机样本中占比约100%(10次)。",
+    "module": "BrandAudit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "触发品牌审计(单品牌)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BrandAudit/v3/BrandAuditAction",
+        "request_body": {
+          "brand": "{{brand_audit_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BrandAudit/v3/BrandAuditActionBulk - 批量触发品牌审计",
+    "description": "单接口测试：POST /api/BrandAudit/v3/BrandAuditActionBulk。批量触发多个品牌的审计扫描，brands为品牌ID整数数组，使用ES真实样本brand IDs(10861,10864)。ES 90天内无该接口日志，参数结构依据Swagger schema及BrandAuditAction样本推导生成。",
+    "module": "BrandAudit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量触发品牌审计",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BrandAudit/v3/BrandAuditActionBulk",
+        "request_body": {
+          "brands": ["{{brand_audit_id}}", "{{brand_audit_id2}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BrandAudit/v3/DeleteBrandAsync - 删除品牌追踪记录(单品牌)",
+    "description": "单接口测试：POST /api/BrandAudit/v3/DeleteBrandAsync。删除单个品牌追踪记录，brands为整数ID数组，ES样本全部为单元素数组，使用ES真实样本brand=10920。接口对不存在ID同样返回success=true(幂等)。500条随机样本中占比约100%(10次)。",
+    "module": "BrandAudit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "删除品牌追踪记录(单品牌)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BrandAudit/v3/DeleteBrandAsync",
+        "request_body": {
+          "brands": ["{{brand_audit_delete_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

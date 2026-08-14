@@ -1,0 +1,1632 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-14T07:36:53.476Z",
+  "finished_at": "2026-08-14T07:37:44.759Z",
+  "total": 14,
+  "passed": 14,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Campaign/v3/UpsertCampaignNote - 创建campaign备注(含后置删除,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建campaign备注",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/UpsertCampaignNote",
+          "request_body": {
+            "ProfileId": "2755545444012419",
+            "CampaignId": "154528180950009",
+            "Note": "swagger-api-case 自动化测试备注(可删除)",
+            "Id": 0
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "取最新备注id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/GetCampaignNote",
+          "request_body": {
+            "ProfileId": "2755545444012419",
+            "CampaignId": "154528180950009"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": [
+              {
+                "Id": 41864,
+                "ProfileId": 2755545444012419,
+                "CampaignId": 154528180950009,
+                "CreateId": 0,
+                "CreateTime": "2026-08-14T00:36:52.757",
+                "IsDelete": 0,
+                "Note": "swagger-api-case 自动化测试备注(可删除)",
+                "batchId": null,
+                "UserName": "superAdmin0913"
+              }
+            ],
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置清理-删除新建备注",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/DeleteCampaignNote?id=41864",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": "ok",
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/DeleteCampaignNote - 删除campaign备注(前置创建,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置创建-新增一条备注",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/UpsertCampaignNote",
+          "request_body": {
+            "ProfileId": "2755545444012419",
+            "CampaignId": "154528180950009",
+            "Note": "swagger-api-case 待删除备注",
+            "Id": 0
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "取最新备注id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/GetCampaignNote",
+          "request_body": {
+            "ProfileId": "2755545444012419",
+            "CampaignId": "154528180950009"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": [
+              {
+                "Id": 41865,
+                "ProfileId": 2755545444012419,
+                "CampaignId": 154528180950009,
+                "CreateId": 0,
+                "CreateTime": "2026-08-14T00:36:55.143",
+                "IsDelete": 0,
+                "Note": "swagger-api-case 待删除备注",
+                "batchId": null,
+                "UserName": "superAdmin0913"
+              }
+            ],
+            "msg": ""
+          }
+        },
+        {
+          "name": "删除备注",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/DeleteCampaignNote?id=41865",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": "ok",
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/BulkCampaignEndDate - 设置campaign结束日期(含后置还原,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "设置campaign结束日期",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/BulkCampaignEndDate",
+          "request_body": {
+            "campaignIds": [
+              "154528180950009"
+            ],
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "enddate": "20991231"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置还原-恢复原结束日期",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/BulkCampaignEndDate",
+          "request_body": {
+            "campaignIds": [
+              "154528180950009"
+            ],
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "enddate": "20990101"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/UpdateCampaignBidForSbAndSp - 更新SP竞价策略(读取原值回写,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置读取-当前SP竞价策略",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/GetCampaignSetting?profileId=2755545444012419&campaignId=154528180950009",
+          "request_body": {
+            "profileId": "2755545444012419",
+            "campaignId": "154528180950009"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "data": {
+                "OffAmazonSettings": "{\"offAmazonBudgetControlStrategy\":\"MINIMIZE_SPEND\"}",
+                "campaignId": "154528180950009",
+                "profileId": "2755545444012419",
+                "countryCode": "US",
+                "name": "TC-SP-CampaignUpdate-Test",
+                "portfolioId": 204806772208933,
+                "campaignType": "sponsoredProducts",
+                "state": "enabled",
+                "servingStatus": "CAMPAIGN_STATUS_ENABLED",
+                "startDate": "20260707",
+                "endDate": "20990101",
+                "dailyBudget": 5.0,
+                "targetingType": "auto",
+                "biddingStrategy": "legacyForSales",
+                "productPagesAdjustPercentage": 0,
+                "placementTopAdjustPercentage": 0,
+                "restOfSearchAdjustPercentage": 0,
+                "homePageAdjustPercentage": null,
+                "siteAmazonBussinessPercentage": 0,
+                "targetACOS": null,
+                "targetROAS": null,
+                "targetCPC": null,
+                "targetCPA": null,
+                "targetCTR": null,
+                "targetNTBSales": null,
+                "targetCVR": null,
+                "costType": null,
+                "defaultBid": 0.0,
+                "goal": null,
+                "costControlEnabled": false,
+                "metricName": null,
+                "threshold": null,
+                "costRuleName": null,
+                "costRuleId": null,
+                "costKindType": null,
+                "ShopperCohortBidding": "[{\"shopperCohortType\":\"AUDIENCE_SEGMENT\",\"percentage\":60,\"audienceSegments\":[{\"audienceId\":\"412978094962770620\",\"audienceSegmentType\":\"SPONSORED_ADS_AMC\"}]}]",
+                "AudienceSegments": [
+                  {
+                    "audienceId": "412978094962770620",
+                    "audienceResolved": "High interest based on shopping history"
+                  }
+                ],
+                "AudienceResolved": "High interest based on shopping history",
+                "siteRestrictions": null,
+                "siteRestrictionShow": "Amazon",
+                "audienceBidAdjustments": "[{\"audienceId\":\"412978094962770620\",\"percentage\":111}]",
+                "creativeBidAdjustments": null
+              },
+              "tagging": []
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "回写SP竞价策略(值不变)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/UpdateCampaignBidForSbAndSp",
+          "request_body": {
+            "eventType": 1,
+            "updateSp": true,
+            "updateSpEntity": {
+              "profileIds": [
+                "2755545444012419"
+              ],
+              "campaignIds": [
+                "154528180950009"
+              ],
+              "biddingStrategy": "legacyForSales"
+            }
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/UpdateCampaignName - 更新SP campaign名称(读取原值回写,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "读取当前名称",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/GetCampaignSetting?profileId=2755545444012419&campaignId=154528180950009",
+          "request_body": {
+            "profileId": "2755545444012419",
+            "campaignId": "154528180950009"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "data": {
+                "OffAmazonSettings": "{\"offAmazonBudgetControlStrategy\":\"MINIMIZE_SPEND\"}",
+                "campaignId": "154528180950009",
+                "profileId": "2755545444012419",
+                "countryCode": "US",
+                "name": "TC-SP-CampaignUpdate-Test",
+                "portfolioId": 204806772208933,
+                "campaignType": "sponsoredProducts",
+                "state": "enabled",
+                "servingStatus": "CAMPAIGN_STATUS_ENABLED",
+                "startDate": "20260707",
+                "endDate": "20990101",
+                "dailyBudget": 5.0,
+                "targetingType": "auto",
+                "biddingStrategy": "legacyForSales",
+                "productPagesAdjustPercentage": 0,
+                "placementTopAdjustPercentage": 0,
+                "restOfSearchAdjustPercentage": 0,
+                "homePageAdjustPercentage": null,
+                "siteAmazonBussinessPercentage": 0,
+                "targetACOS": null,
+                "targetROAS": null,
+                "targetCPC": null,
+                "targetCPA": null,
+                "targetCTR": null,
+                "targetNTBSales": null,
+                "targetCVR": null,
+                "costType": null,
+                "defaultBid": 0.0,
+                "goal": null,
+                "costControlEnabled": false,
+                "metricName": null,
+                "threshold": null,
+                "costRuleName": null,
+                "costRuleId": null,
+                "costKindType": null,
+                "ShopperCohortBidding": "[{\"shopperCohortType\":\"AUDIENCE_SEGMENT\",\"percentage\":60,\"audienceSegments\":[{\"audienceId\":\"412978094962770620\",\"audienceSegmentType\":\"SPONSORED_ADS_AMC\"}]}]",
+                "AudienceSegments": [
+                  {
+                    "audienceId": "412978094962770620",
+                    "audienceResolved": "High interest based on shopping history"
+                  }
+                ],
+                "AudienceResolved": "High interest based on shopping history",
+                "siteRestrictions": null,
+                "siteRestrictionShow": "Amazon",
+                "audienceBidAdjustments": "[{\"audienceId\":\"412978094962770620\",\"percentage\":111}]",
+                "creativeBidAdjustments": null
+              },
+              "tagging": []
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "回写名称(值不变)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/UpdateCampaignName",
+          "request_body": {
+            "profileId": "2755545444012419",
+            "campaignId": "154528180950009",
+            "name": "TC-SP-CampaignUpdate-Test"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": "yes",
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/UpdateCampaignBidForSB - 更新SB竞价优化(现值回写,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "回写SB竞价优化",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/UpdateCampaignBidForSB",
+          "request_body": {
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "campaignIds": [
+              "189321374680541"
+            ],
+            "bidOptimization": 0,
+            "BidAdjustments": [
+              {
+                "BidAdjustmentPredicate": "placementGroupDetailPage",
+                "BidAdjustmentPercent": 0
+              },
+              {
+                "BidAdjustmentPredicate": "placementGroupTopOfSearch",
+                "BidAdjustmentPercent": 0
+              },
+              {
+                "BidAdjustmentPredicate": "placementGroupHome",
+                "BidAdjustmentPercent": 0
+              },
+              {
+                "BidAdjustmentPredicate": "placementGroupOther",
+                "BidAdjustmentPercent": 0
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "189321374680541",
+                      "adGroupId": "0",
+                      "entityId": "189321374680541",
+                      "isSuccess": true,
+                      "campaignType": "headlineSearch"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/BulkUpdateCampaignPortfolio - 更新campaign所属portfolio(设为当前,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "设置portfolio(值不变)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/BulkUpdateCampaignPortfolio",
+          "request_body": {
+            "portfolioId": "204806772208933",
+            "profileId": "2755545444012419",
+            "campaigns": [
+              {
+                "campaignId": "154528180950009",
+                "campaignType": "sponsoredProducts"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/BulkDeleteCampaignFromPortfolio - 从portfolio移除campaign(含后置还原,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "从portfolio移除",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/BulkDeleteCampaignFromPortfolio",
+          "request_body": {
+            "profileId": "2755545444012419",
+            "campaigns": [
+              {
+                "campaignId": "154528180950009",
+                "campaignType": "sponsoredProducts"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 0,
+                  "Success": 0,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": []
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置还原-加回原portfolio",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/BulkUpdateCampaignPortfolio",
+          "request_body": {
+            "portfolioId": "204806772208933",
+            "profileId": "2755545444012419",
+            "campaigns": [
+              {
+                "campaignId": "154528180950009",
+                "campaignType": "sponsoredProducts"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/CopyCampaign - 复制SP campaign(含后置归档,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "复制SP campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/CopyCampaign",
+          "request_body": {
+            "ToProfileId": "2755545444012419",
+            "Campaign": {
+              "ProfileId": "2755545444012419",
+              "CampaignId": "154528180950009",
+              "CampaignName": "ZZ-swagger-autotest-CopyCampaign",
+              "DailyBudget": "5",
+              "StartDate": "2026-07-05",
+              "EndDate": null,
+              "Tags": [],
+              "PlacementBidAdjustments": [],
+              "portfolioId": "",
+              "State": "paused"
+            },
+            "CopySdCreative": 0
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "ProfileId": "2755545444012419",
+              "Code": "200",
+              "CampaignId": "172544172338033",
+              "BatchId": "94a3f091-b928-4411-b3ac-748b82ec95ad",
+              "CampaignBatchId": "146066",
+              "Message": "ok"
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置归档-归档复制的campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/CampaignUpdateBatch",
+          "request_body": {
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "campaigns": [
+              {
+                "campaignType": "sponsoredProducts",
+                "campaignId": "172544172338033",
+                "profileId": "2755545444012419",
+                "state": "archived"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "172544172338033",
+                      "adGroupId": "0",
+                      "entityId": "172544172338033",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/CopyCampaignV2 - 复制SP campaign V2(含后置归档,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "复制SP campaign(V2)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/CopyCampaignV2",
+          "request_body": {
+            "ToProfileId": "2755545444012419",
+            "Campaign": {
+              "ProfileId": "2755545444012419",
+              "CampaignId": "154528180950009",
+              "CampaignName": "ZZ-swagger-autotest-CopyCampaignV2",
+              "DailyBudget": "5",
+              "StartDate": "2026-07-05",
+              "EndDate": null,
+              "Tags": [],
+              "PlacementBidAdjustments": [],
+              "portfolioId": "",
+              "State": "paused"
+            },
+            "CopySdCreative": 0,
+            "AdGroupAsins": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "ProfileId": "2755545444012419",
+              "Code": "200",
+              "CampaignId": "138837708538633",
+              "BatchId": "dd6c2cc2-570b-4bb8-ad63-0b31fab26201",
+              "CampaignBatchId": "146067",
+              "Message": "ok"
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置归档-归档复制的campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/CampaignUpdateBatch",
+          "request_body": {
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "campaigns": [
+              {
+                "campaignType": "sponsoredProducts",
+                "campaignId": "138837708538633",
+                "profileId": "2755545444012419",
+                "state": "archived"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "138837708538633",
+                      "adGroupId": "0",
+                      "entityId": "138837708538633",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/BulkCopyCampaign - 批量复制SP campaign(含后置归档,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "批量复制SP campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/BulkCopyCampaign",
+          "request_body": {
+            "SP": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "154528180950009"
+              }
+            ],
+            "SB": [],
+            "SD": [],
+            "StartDate": "2026-07-05",
+            "EndDate": null,
+            "State": 2,
+            "copyTag": false,
+            "copyPortfolio": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "TotalCount": 1,
+              "SuccessCount": 1,
+              "FailedCount": 0,
+              "Results": [
+                {
+                  "ProfileId": 2755545444012419,
+                  "CampaignId": 154528180950009,
+                  "Type": "SP",
+                  "Success": true,
+                  "Message": "ok",
+                  "NewCampaignId": "84867681976406"
+                }
+              ]
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置归档-归档复制的campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/CampaignUpdateBatch",
+          "request_body": {
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "campaigns": [
+              {
+                "campaignType": "sponsoredProducts",
+                "campaignId": "84867681976406",
+                "profileId": "2755545444012419",
+                "state": "archived"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "84867681976406",
+                      "adGroupId": "0",
+                      "entityId": "84867681976406",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/SaveCampaignShopperCohortBidding - 设置SP shopper cohort竞价(含后置清除,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "取AMC受众id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/GetAmazonAmcAudienceId",
+          "request_body": {
+            "ProfileId": "2755545444012419",
+            "CampaignType": 0,
+            "AudienceId": "x"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "TargetableEntities": [
+                {
+                  "audienceId": "412978094962770620",
+                  "audienceResolved": "High interest based on shopping history",
+                  "audienceTooltip": "People whose shopping activity indicates a high interest in purchasing the advertised product",
+                  "path": [
+                    "Audience Category",
+                    "Custom-built",
+                    "Product"
+                  ],
+                  "targetType": "AUDIENCE",
+                  "audienceType": null,
+                  "updateFrequency": 0,
+                  "createTime": null,
+                  "size": 0,
+                  "campaignType": null,
+                  "kindType": "AMAZON"
+                },
+                {
+                  "audienceId": "413580582382876358",
+                  "audienceResolved": "Clicked or Added brand's product to cart",
+                  "audienceTooltip": "The \"clicked or added brand’s product to cart\" audience includes people who have clicked or added to cart within the last 3 months, but haven’t purchased.",
+                  "path": [
+                    "Audience Category",
+                    "Custom-built",
+                    "Product"
+                  ],
+                  "targetType": "AUDIENCE",
+                  "audienceType": null,
+                  "updateFrequency": 0,
+                  "createTime": null,
+                  "size": 0,
+                  "campaignType": null,
+                  "kindType": "AMAZON"
+                },
+                {
+                  "audienceId": "430778787414928818",
+                  "audienceResolved": "Purchased brand's product",
+                  "audienceTooltip": "The \"purchased brand’s product\" audience includes people who have purchased a product from this brand within the last 3 months.",
+                  "path": [
+                    "Audience Category",
+                    "Custom-built",
+                    "Product"
+                  ],
+                  "targetType": "AUDIENCE",
+                  "audienceType": null,
+                  "updateFrequency": 0,
+                  "createTime": null,
+                  "size": 0,
+                  "campaignType": null,
+                  "kindType": "AMAZON"
+                }
+              ],
+              "CurrentAudience": {
+                "audienceId": null,
+                "audienceResolved": null,
+                "audienceTooltip": null,
+                "path": null,
+                "targetType": null,
+                "audienceType": null,
+                "updateFrequency": 0,
+                "createTime": null,
+                "size": 0,
+                "campaignType": null,
+                "kindType": null
+              }
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "设置shopper cohort竞价",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/SaveCampaignShopperCohortBidding",
+          "request_body": {
+            "campaignId": "154528180950009",
+            "profileId": "2755545444012419",
+            "campaignType": "sponsoredProducts",
+            "shopperCohortBidding": [
+              {
+                "ShopperCohortType": "AUDIENCE_SEGMENT",
+                "Percentage": 50,
+                "AudienceSegments": [
+                  {
+                    "AudienceId": "412978094962770620",
+                    "AudienceSegmentType": "SPONSORED_ADS_AMC"
+                  }
+                ]
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置清除-清空shopper cohort竞价",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/SaveCampaignShopperCohortBidding",
+          "request_body": {
+            "campaignId": "154528180950009",
+            "profileId": "2755545444012419",
+            "campaignType": "sponsoredProducts",
+            "shopperCohortBidding": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp - 更新受众竞价百分比(含后置清除,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "取AMC受众id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/GetAmazonAmcAudienceId",
+          "request_body": {
+            "ProfileId": "2755545444012419",
+            "CampaignType": 0,
+            "AudienceId": "x"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "TargetableEntities": [
+                {
+                  "audienceId": "412978094962770620",
+                  "audienceResolved": "High interest based on shopping history",
+                  "audienceTooltip": "People whose shopping activity indicates a high interest in purchasing the advertised product",
+                  "path": [
+                    "Audience Category",
+                    "Custom-built",
+                    "Product"
+                  ],
+                  "targetType": "AUDIENCE",
+                  "audienceType": null,
+                  "updateFrequency": 0,
+                  "createTime": null,
+                  "size": 0,
+                  "campaignType": null,
+                  "kindType": "AMAZON"
+                },
+                {
+                  "audienceId": "413580582382876358",
+                  "audienceResolved": "Clicked or Added brand's product to cart",
+                  "audienceTooltip": "The \"clicked or added brand’s product to cart\" audience includes people who have clicked or added to cart within the last 3 months, but haven’t purchased.",
+                  "path": [
+                    "Audience Category",
+                    "Custom-built",
+                    "Product"
+                  ],
+                  "targetType": "AUDIENCE",
+                  "audienceType": null,
+                  "updateFrequency": 0,
+                  "createTime": null,
+                  "size": 0,
+                  "campaignType": null,
+                  "kindType": "AMAZON"
+                },
+                {
+                  "audienceId": "430778787414928818",
+                  "audienceResolved": "Purchased brand's product",
+                  "audienceTooltip": "The \"purchased brand’s product\" audience includes people who have purchased a product from this brand within the last 3 months.",
+                  "path": [
+                    "Audience Category",
+                    "Custom-built",
+                    "Product"
+                  ],
+                  "targetType": "AUDIENCE",
+                  "audienceType": null,
+                  "updateFrequency": 0,
+                  "createTime": null,
+                  "size": 0,
+                  "campaignType": null,
+                  "kindType": "AMAZON"
+                }
+              ],
+              "CurrentAudience": {
+                "audienceId": null,
+                "audienceResolved": null,
+                "audienceTooltip": null,
+                "path": null,
+                "targetType": null,
+                "audienceType": null,
+                "updateFrequency": 0,
+                "createTime": null,
+                "size": 0,
+                "campaignType": null,
+                "kindType": null
+              }
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "更新受众竞价百分比",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp",
+          "request_body": {
+            "campaignIds": [
+              "154528180950009"
+            ],
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "updateEntity": [
+              {
+                "campaignId": "154528180950009",
+                "profileId": "2755545444012419",
+                "shopperCohortBidding": [
+                  {
+                    "ShopperCohortType": "AUDIENCE_SEGMENT",
+                    "Percentage": 60,
+                    "AudienceSegments": [
+                      {
+                        "AudienceId": "412978094962770620",
+                        "AudienceSegmentType": "SPONSORED_ADS_AMC"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "eventType": 1
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置清除-清空受众竞价",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp",
+          "request_body": {
+            "campaignIds": [
+              "154528180950009"
+            ],
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "updateEntity": [
+              {
+                "campaignId": "154528180950009",
+                "profileId": "2755545444012419",
+                "shopperCohortBidding": []
+              }
+            ],
+            "eventType": 1
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Campaign/v3/CampaignUpdateBatch - 批量编辑campaign(现值回写,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "回写campaign(值不变)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/v3/CampaignUpdateBatch",
+          "request_body": {
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "campaigns": [
+              {
+                "campaignType": "sponsoredProducts",
+                "campaignId": "154528180950009",
+                "profileId": "2755545444012419",
+                "name": "TC-SP-CampaignUpdate-Test",
+                "budget": 5,
+                "state": "enabled",
+                "BiddingStrategy": "legacyForSales",
+                "endDate": "20990101"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "154528180950009",
+                      "adGroupId": "0",
+                      "entityId": "154528180950009",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    }
+  ]
+}

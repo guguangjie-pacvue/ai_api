@@ -1,0 +1,102 @@
+[
+  {
+    "name": "PUT /api/AdGroup/V4/Update - 更新SD广告组状态为paused（含后置恢复）",
+    "description": "单接口测试：PUT /api/AdGroup/V4/Update。更新SD广告组名称、默认出价并设置状态为paused，第2步后置恢复状态为enabled保证可重复执行。500条随机样本中占比约75%（15次）。",
+    "module": "AdGroupUpdate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新SD广告组为paused状态",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AdGroup/V4/Update",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "AutoCase-SDAdGroup",
+          "defaultBid": 5.0,
+          "state": "paused"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置恢复-广告组状态改回enabled",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AdGroup/V4/Update",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "AutoCase-SDAdGroup",
+          "defaultBid": 5.0,
+          "state": "enabled"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/AdGroup/V4/Update - 更新SD广告组状态为enabled（含后置恢复）",
+    "description": "单接口测试：PUT /api/AdGroup/V4/Update。更新SD广告组默认出价并设置状态为enabled，第2步后置恢复状态为paused保证可重复执行。500条随机样本中占比约15%（3次）。",
+    "module": "AdGroupUpdate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新SD广告组为enabled状态",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AdGroup/V4/Update",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "AutoCase-SDAdGroup",
+          "defaultBid": 5.0,
+          "state": "enabled"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置恢复-广告组状态改回paused",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AdGroup/V4/Update",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "AutoCase-SDAdGroup",
+          "defaultBid": 5.0,
+          "state": "paused"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
