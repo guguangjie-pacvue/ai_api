@@ -1,0 +1,556 @@
+[
+  {
+    "name": "POST /api/CampaignMapping/V3/GetCampaignMapping - 按Source Profile+日期范围+市场筛选查询映射列表",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/GetCampaignMapping。按SourceProfileId+日期区间(dim=ytd)+toMarket=US+campaignNameOperand=LikeOr+kindType=Default分页查询映射列表，为该接口最主流的真实使用模式。500条随机样本中占比约98.6%（493次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询CampaignMapping列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetCampaignMapping",
+        "request_body": {
+          "profileIds": [],
+          "multiSortList": [],
+          "kindType": "Default",
+          "dim": "ytd",
+          "SourceProfileId": ["{{profile_id}}"],
+          "SourceCampaignId": [],
+          "SourceAdgroupId": [],
+          "DestinationProfileId": [],
+          "DestinationCampaignId": [],
+          "DestinationAdgroupId": [],
+          "campaignName": [],
+          "LabelId": [],
+          "SourceAdgroupTagId": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "campaignNameOperand": "LikeOr",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "labelId": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderAsc": false,
+            "orderByField": "id"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/GetAdgroups - 场景1_按ExludeFixedPrice过滤广告组",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/GetAdgroups。按ProfileIds+CampaignState/AdgroupState(enabled+paused)+TargetingType(null+manual-keyword)+ExludeFixedPrice=1过滤可用于映射的广告组，为该接口最高频的真实使用模式。500条随机样本中占比约44.4%（222次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询广告组列表(ExludeFixedPrice过滤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetAdgroups",
+        "request_body": {
+          "ProfileIds": ["{{profile_id}}"],
+          "CampaignTagIds": [],
+          "CampaignState": ["enabled", "paused"],
+          "TargetingType": ["null", "manual-keyword"],
+          "AdgroupState": ["enabled", "paused"],
+          "ExludeFixedPrice": "1"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/GetAdgroups - 场景2_按IsFilterKeyword过滤广告组",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/GetAdgroups。按ProfileIds+CampaignState/AdgroupState过滤+IsFilterKeyword=false(不区分TargetingType)查询广告组。500条随机样本中占比约23.4%（117次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询广告组列表(IsFilterKeyword过滤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetAdgroups",
+        "request_body": {
+          "ProfileIds": ["{{profile_id}}"],
+          "CampaignTagIds": [],
+          "TargetingType": [],
+          "AdgroupState": ["enabled", "paused"],
+          "CampaignState": ["enabled", "paused"],
+          "IsFilterKeyword": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/GetAdgroups - 场景3_按Tactics+TargetingType+市场过滤广告组",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/GetAdgroups。按ProfileIds(多个)+CampaignState/AdgroupState+TargetingType(null+manual-keyword)+Tactics(T00020)+toMarket=US过滤广告组。500条随机样本中占比约22.4%（112次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询广告组列表(Tactics+市场过滤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetAdgroups",
+        "request_body": {
+          "ProfileIds": ["{{profile_id}}"],
+          "CampaignTagIds": [],
+          "CampaignState": ["enabled", "paused"],
+          "TargetingType": ["null", "manual-keyword"],
+          "AdgroupState": ["enabled", "paused"],
+          "toMarket": "US",
+          "Tactics": ["T00020"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/GetAdgroups - 场景4_按CampaignTagIds+ExludeFixedPrice过滤广告组",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/GetAdgroups。按ProfileIds+CampaignTagIds(按Campaign标签过滤)+CampaignState/AdgroupState+TargetingType+ExludeFixedPrice=1过滤广告组。500条随机样本中占比约5.2%（26次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询广告组列表(CampaignTagIds+ExludeFixedPrice过滤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetAdgroups",
+        "request_body": {
+          "ProfileIds": ["{{profile_id}}"],
+          "CampaignTagIds": ["164694"],
+          "CampaignState": ["enabled", "paused"],
+          "TargetingType": ["null", "manual-keyword"],
+          "AdgroupState": ["enabled", "paused"],
+          "ExludeFixedPrice": "1"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/GetAdgroups - 场景5_按CampaignTagIds+IsFilterKeyword过滤广告组",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/GetAdgroups。按ProfileIds+CampaignTagIds+CampaignState/AdgroupState+IsFilterKeyword=false过滤广告组。500条随机样本中占比约2.0%（10次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询广告组列表(CampaignTagIds+IsFilterKeyword过滤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetAdgroups",
+        "request_body": {
+          "ProfileIds": ["{{profile_id}}"],
+          "CampaignTagIds": ["610246"],
+          "TargetingType": [],
+          "AdgroupState": ["enabled", "paused"],
+          "CampaignState": ["enabled", "paused"],
+          "IsFilterKeyword": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/GetAdgroups - 场景6_按TargetingType+市场过滤广告组(不含Tactics)",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/GetAdgroups。按ProfileIds(多个)+CampaignState/AdgroupState+TargetingType(null+manual-keyword)+toMarket=US过滤广告组，不含Tactics过滤。500条随机样本中占比约1.4%（7次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询广告组列表(TargetingType+市场过滤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetAdgroups",
+        "request_body": {
+          "ProfileIds": ["{{profile_id}}", "611929851593111", "779877532535614"],
+          "CampaignTagIds": [],
+          "CampaignState": ["enabled", "paused"],
+          "TargetingType": ["null", "manual-keyword"],
+          "AdgroupState": ["enabled", "paused"],
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignMapping/V3/GetLabel - 获取当前用户所有CampaignMapping标签",
+    "description": "单接口测试：GET /api/CampaignMapping/V3/GetLabel。无请求参数，获取当前用户/客户下所有CampaignMapping标签列表。5460条真实调用100%为无参GET请求。500条随机样本中占比约100.0%（500次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取标签列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetLabel",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/DownloadCampaignMapping - 无筛选下载全部映射",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/DownloadCampaignMapping。仅带分页信息、不带任何筛选条件导出映射列表，为28条真实样本中最高频模式。500条随机样本中占比约25.0%（7/28次）。⚠️实测该接口当前对本测试账号无论传入何种参数均返回code 513 \"Value cannot be null (Parameter 'source')\"（服务端CampaignMappingService.GetCampaignMapping内部NullReferenceException），疑似线上缺陷，已如实按真实入参生成用例以暴露该问题。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "下载映射列表(无筛选)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/DownloadCampaignMapping",
+        "request_body": {
+          "SourceAdgroupTagId": [],
+          "labelId": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderAsc": false,
+            "orderByField": "id"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/UpsertCampaignMapping - 创建SP广告组到SD广告组的映射(含定位+后置清理)",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/UpsertCampaignMapping。将SP手动PAT广告组作为Source、SD广告组作为Destination新建一条CampaignMapping，MatchType=PT，为该接口100%真实调用模式（Id始终为0/新建）。第2步用GetCampaignMapping按Source条件定位新建记录的真实Id(接口本身不在响应中返回)，第3步用BulkDeleteCampaignMapping删除该记录作为清理，保证用例可重复执行。500条随机样本中占比约100.0%（500次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建CampaignMapping(SP->SD)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/UpsertCampaignMapping",
+        "request_body": {
+          "SourceProfileId": "{{profile_id}}",
+          "SourceCampaignId": "{{sp_manual_pat_campaign_id}}",
+          "SourceAdgroupId": "{{sp_manual_pat_adgroup_id}}",
+          "NegativeInSource": [],
+          "CampaignMappingDestination": [
+            {
+              "DestinationProfileId": "{{profile_id}}",
+              "DestinationCampaignId": "{{sd_campaign_id}}",
+              "DestinationAdgroupId": "{{sd_adgroup_id}}",
+              "LabelId": 0,
+              "MatchType": ["PT"],
+              "TargetingType": "manual-PAT"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": { "$gte": 1 }
+          }
+        }
+      },
+      {
+        "name": "定位新建映射的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetCampaignMapping",
+        "request_body": {
+          "SourceProfileId": ["{{profile_id}}"],
+          "SourceCampaignId": ["{{sp_manual_pat_campaign_id}}"],
+          "SourceAdgroupId": ["{{sp_manual_pat_adgroup_id}}"],
+          "toMarket": "US",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderAsc": false,
+            "orderByField": "id"
+          }
+        },
+        "extract_vars": {
+          "created_mapping_id": "data.Data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "Data": { "$not_empty": true }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建映射",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/BulkDeleteCampaignMapping",
+        "request_body": {
+          "ids": ["{{created_mapping_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/BulkSetLabel - 为已有映射批量设置标签(含创建测试映射+清理)",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/BulkSetLabel。为CampaignMapping的某条Destination批量设置LabelId。该接口全量历史仅3次真实调用（样本量过小，已用现有标签+新建的自包含测试映射覆盖真实字段结构，避免污染生产数据），第2/3步创建一条一次性映射并定位其Id，第4步用真实已存在的标签为其设置Label，第5步删除该临时映射作为清理。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取一个真实存在的标签Id",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetLabel",
+        "request_body": {},
+        "extract_vars": {
+          "existing_label_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      },
+      {
+        "name": "创建一次性测试映射",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/UpsertCampaignMapping",
+        "request_body": {
+          "SourceProfileId": "{{profile_id}}",
+          "SourceCampaignId": "{{sp_manual_pat_campaign_id}}",
+          "SourceAdgroupId": "{{sp_manual_pat_adgroup_id}}",
+          "NegativeInSource": [],
+          "CampaignMappingDestination": [
+            {
+              "DestinationProfileId": "{{profile_id}}",
+              "DestinationCampaignId": "{{sd_campaign_id}}",
+              "DestinationAdgroupId": "{{sd_adgroup_id}}",
+              "LabelId": 0,
+              "MatchType": ["PT"],
+              "TargetingType": "manual-PAT"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": { "$gte": 1 }
+          }
+        }
+      },
+      {
+        "name": "定位新建映射的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/GetCampaignMapping",
+        "request_body": {
+          "SourceProfileId": ["{{profile_id}}"],
+          "SourceCampaignId": ["{{sp_manual_pat_campaign_id}}"],
+          "SourceAdgroupId": ["{{sp_manual_pat_adgroup_id}}"],
+          "toMarket": "US",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderAsc": false,
+            "orderByField": "id"
+          }
+        },
+        "extract_vars": {
+          "created_mapping_id": "data.Data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "Data": { "$not_empty": true }
+          }
+        }
+      },
+      {
+        "name": "批量设置标签(主测试步骤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/BulkSetLabel",
+        "request_body": [
+          {
+            "CampaignMappingId": "{{created_mapping_id}}",
+            "DestinationProfileId": "{{profile_id}}",
+            "DestinationCampaignId": "{{sd_campaign_id}}",
+            "DestinationAdgroupId": "{{sd_adgroup_id}}",
+            "LabelId": "{{existing_label_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除临时映射",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/BulkDeleteCampaignMapping",
+        "request_body": {
+          "ids": ["{{created_mapping_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMapping/V3/UpsertLabel - 创建新标签(含后置清理)",
+    "description": "单接口测试：POST /api/CampaignMapping/V3/UpsertLabel。仅传Name字段创建新标签(不传Id即为新建)，为该接口全部11条真实样本的唯一模式。第2步用DeleteLabel删除新建标签作为清理，保证用例可重复执行。500条随机样本中占比约100.0%（11次）。",
+    "module": "CampaignMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/UpsertLabel",
+        "request_body": {
+          "Name": "TC-CampaignMapping-AutoTestLabel"
+        },
+        "extract_vars": {
+          "new_label_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "后置清理-删除新建标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignMapping/V3/DeleteLabel",
+        "request_body": {
+          "Id": "{{new_label_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

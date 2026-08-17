@@ -1,0 +1,147 @@
+[
+  {
+    "name": "POST /api/ProductEligibility/v3/ExportProductTopData - 导出Top商品数据",
+    "description": "单接口测试：POST /api/ProductEligibility/v3/ExportProductTopData。按profileIds+日期区间+OrderByField导出Top商品Excel报表，为该接口最主流真实模式。500条随机样本中占比约100%（501/501次）。⚠️该接口返回二进制xlsx文件而非JSON(已用curl实测确认HTTP 200+有效Excel文件)，run-cases.py执行框架按JSON解析响应会失败(http 0)，此为测试框架对二进制响应的已知局限，非接口真实缺陷(与Dashboard/DownloadHomeForShare同类)。",
+    "module": "ProductEligibility",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出Top商品数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductEligibility/v3/ExportProductTopData",
+        "request_body": {
+          "advertiserIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "OrderByField": "adsSales",
+          "shareId": "",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductEligibility/v3/GetProductPageDataDashboard - 按ServingState查询商品资质分页数据",
+    "description": "单接口测试：POST /api/ProductEligibility/v3/GetProductPageDataDashboard。按profileIds+日期区间+servingState=INELIGIBLE分页查询商品资质(不可投放原因)明细，为该接口最主流真实模式。500条随机样本中占比约100%（500/500次）。测试账号该日期区间下暂无匹配数据，返回空列表属预期。",
+    "module": "ProductEligibility",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询商品资质分页数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductEligibility/v3/GetProductPageDataDashboard",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "servingState": "INELIGIBLE",
+          "isAnd": "0",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderAsc": false,
+            "orderByField": "Spend"
+          },
+          "toMarket": "US",
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductEligibility/v3/GetProductTopData - 按标签+广告主查询Top商品",
+    "description": "单接口测试：POST /api/ProductEligibility/v3/GetProductTopData。按profileIds+campaignTagIds+OrderByField查询Top商品数据(TopFive类模型)，为该接口最主流真实模式。500条随机样本中占比约100%（500/500次）。",
+    "module": "ProductEligibility",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Top商品",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductEligibility/v3/GetProductTopData",
+        "request_body": {
+          "advertiserIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "OrderByField": "Spend",
+          "shareId": "",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductEligibility/v3/PadPageDataCountForNewTable - 查询商品资质统计计数",
+    "description": "单接口测试：POST /api/ProductEligibility/v3/PadPageDataCountForNewTable。按profileIds+日期区间查询notInBuybox/ineligible/notBuyable各类不可投放原因的商品计数，为该接口最主流真实模式。500条随机样本中占比约100%（500/500次）。",
+    "module": "ProductEligibility",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询商品资质统计计数",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductEligibility/v3/PadPageDataCountForNewTable",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": ["{{profile_id}}"],
+          "amzPortfolioIds": [],
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "timeType": 0,
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  }
+]

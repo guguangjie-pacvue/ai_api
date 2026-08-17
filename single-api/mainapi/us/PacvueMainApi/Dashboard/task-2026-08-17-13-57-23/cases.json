@@ -1,0 +1,426 @@
+[
+  {
+    "name": "POST /api/Dashboard/v3/GetBrandsAndCategory - 场景1_按Profile+日期查询品牌分类列表",
+    "description": "单接口测试：POST /api/Dashboard/v3/GetBrandsAndCategory。按单个profileId(注意字段为单数非数组)+日期区间查询该Profile下的品牌/分类列表，为该接口最主流真实模式。500条随机样本中占比约98.2%（491/500次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询品牌分类列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/GetBrandsAndCategory",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/GetBrandsAndCategory - 场景2_按Profile+日期+shareId查询品牌分类列表",
+    "description": "单接口测试：POST /api/Dashboard/v3/GetBrandsAndCategory。在场景1基础上携带shareId(分享链接场景)。500条随机样本中占比约1.6%（8/500次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询品牌分类列表(含shareId)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/GetBrandsAndCategory",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileId": "{{profile_id}}",
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/GetBenchmarkDashboardTrendChart - 场景1_基础维度查询Benchmark趋势",
+    "description": "单接口测试：POST /api/Dashboard/v3/GetBenchmarkDashboardTrendChart。按profileIds+日期区间+adProduct+reportTypeId=crossProgramBenchmarks+dateType=DAILY查询品牌/分类Benchmark趋势，不含adFormat/campaignGoal，为该接口最主流真实模式。测试账号无匹配品牌/分类数据，返回空列表属预期。500条随机样本中占比约81.0%（405/500次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Benchmark趋势(基础维度)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/GetBenchmarkDashboardTrendChart",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": ["{{profile_id}}"],
+          "toMarket": "US",
+          "isExchange": 0,
+          "adProduct": "SP",
+          "campaignGoal": "",
+          "adFormat": "",
+          "reportTypeId": "crossProgramBenchmarks",
+          "brand": "",
+          "browseCategory": "",
+          "dateType": "DAILY"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/GetBenchmarkDashboardTrendChart - 场景2_含adFormat+campaignGoal查询Benchmark趋势",
+    "description": "单接口测试：POST /api/Dashboard/v3/GetBenchmarkDashboardTrendChart。在场景1基础上增加adFormat+campaignGoal维度过滤。500条随机样本中占比约18.0%（90/500次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Benchmark趋势(含adFormat+campaignGoal)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/GetBenchmarkDashboardTrendChart",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": ["{{profile_id}}"],
+          "toMarket": "US",
+          "isExchange": 0,
+          "adProduct": "SD",
+          "campaignGoal": "all",
+          "adFormat": "all",
+          "reportTypeId": "crossProgramBenchmarks",
+          "brand": "",
+          "browseCategory": "",
+          "dateType": "DAILY"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/DownloadHomeForShare - 关键词维度Home看板导出",
+    "description": "单接口测试：POST /api/Dashboard/v3/DownloadHomeForShare。按profileIds+日期区间+KeywordCompareColumn(关键词维度)+多个homeWidgetExports导出Home看板Excel，为该接口全量51条真实样本中最高频模式。500条随机样本中占比约31.4%（16/51次）。⚠️该接口返回二进制xlsx文件而非JSON(已用curl实测确认HTTP 200+有效Excel文件)，run-cases.py执行框架按JSON解析响应会失败(http 0)，此为测试框架对二进制响应的已知局限，非接口真实缺陷。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出Home看板(关键词维度)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/DownloadHomeForShare",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "isExchange": 1,
+          "homeWidgetExports": [
+            { "widgetName": "TopImprovers" },
+            { "widgetName": "TopPerformers" }
+          ],
+          "performanceGroupBy": "TYD",
+          "efficiencyGroupBy": "TYD",
+          "awarenessGroupBy": "TYD",
+          "monthOfYearEnd": "202607",
+          "monthOfYearStart": "202607",
+          "OrderbyField": "Cost",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5,
+            "orderAsc": true,
+            "orderByField": "Spend"
+          },
+          "department": "Amazon.com",
+          "KeywordCompareColumn": "Spend",
+          "matchtype": [],
+          "fileName": "TOP 50 Keywords",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/GetCampaignOutofBudgetTotal - 查询超预算Campaign汇总",
+    "description": "单接口测试：POST /api/Dashboard/v3/GetCampaignOutofBudgetTotal。按profileIds+日期区间查询超预算(Out of Budget)Campaign汇总数据。⚠️该接口(v3版本)在ES近90天及全量历史日志中均无真实调用记录(疑似前端仍在使用旧版/api/Dashboard/GetCampaignOutofBudget而非此v3接口)，用例基于Swagger结构+config真实profile构造，已用curl实测确认可返回code 200。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询超预算Campaign汇总",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/GetCampaignOutofBudgetTotal",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "toMarket": "US",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/GetConversionInfo - 查询转化效率看板数据",
+    "description": "单接口测试：POST /api/Dashboard/v3/GetConversionInfo。按profileIds+日期区间查询Efficiency/Performance/Awareness转化看板每日数据。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构(CampaignParamSimple)+config真实profile构造，已用curl实测确认可返回code 200且data.data非空(测试账号有真实每日数据)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询转化效率看板数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/GetConversionInfo",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "targetIds": [],
+          "adgroupIds": [],
+          "adIds": [],
+          "toMarket": "US",
+          "isExchange": 1,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderAsc": false,
+            "orderByField": ""
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/ROASDashboard - 查询ROAS看板数据",
+    "description": "单接口测试：POST /api/Dashboard/v3/ROASDashboard。按profileIds+日期区间+performanceGroupBy查询ROAS看板汇总数据。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构(ROASDashboardInput)+config真实profile构造，已用curl实测确认可返回code 200。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ROAS看板数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/ROASDashboard",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "toMarket": "US",
+          "isExchange": 1,
+          "performanceGroupBy": "TYD"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/TargetACOS - 查询Campaign目标ACOS达成情况",
+    "description": "单接口测试：POST /api/Dashboard/v3/TargetACOS。按profileIds+日期区间查询各Campaign的目标ACOS(TargetACOS)达成对比数据。⚠️该接口响应体为裸数组(非{code,success,data}标准封装)且在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构(DashboardDataInput)+config真实profile构造，已用curl实测确认可返回HTTP 200。裸数组响应无法用code/success断言，故expected_response仅校验HTTP成功。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign目标ACOS达成情况",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/TargetACOS",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "toMarket": "US",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/TargetData - 查询Campaign目标CPA达成情况",
+    "description": "单接口测试：POST /api/Dashboard/v3/TargetData。按profileIds+日期区间查询各Campaign的目标CPA(TargetCPA)达成对比数据。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录(疑似前端仍在使用旧版/api/Dashboard/TargetDataAll而非此v3接口)，用例基于Swagger结构(DashboardDataInput)+config真实profile构造，已用curl实测确认可返回code 200且data非空(测试账号有真实Campaign数据)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign目标CPA达成情况",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/TargetData",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "toMarket": "US",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/TargetDataViewCPC - 查询Campaign目标CPC达成情况",
+    "description": "单接口测试：POST /api/Dashboard/v3/TargetDataViewCPC。按profileIds+日期区间查询各Campaign的目标CPC(TargetCPC)达成对比数据。⚠️该接口响应体为裸数组(非{code,success,data}标准封装)且在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构(DashboardDataInput)+config真实profile构造，已用curl实测确认可返回HTTP 200且含真实Campaign数据。裸数组响应无法用code/success断言，故expected_response仅校验HTTP成功。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign目标CPC达成情况",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/TargetDataViewCPC",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "toMarket": "US",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/v3/TargetROAS - 查询Campaign目标ROAS达成情况",
+    "description": "单接口测试：POST /api/Dashboard/v3/TargetROAS。按profileIds+日期区间查询各Campaign的目标ROAS达成对比数据。⚠️该接口响应体为裸数组(非{code,success,data}标准封装)且在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构(DashboardDataInput)+config真实profile构造，已用curl实测确认可返回HTTP 200。裸数组响应无法用code/success断言，故expected_response仅校验HTTP成功。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign目标ROAS达成情况",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Dashboard/v3/TargetROAS",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "toMarket": "US",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  }
+]

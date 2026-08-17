@@ -1,0 +1,542 @@
+[
+  {
+    "name": "POST /api/AnlayticShare/V3/AddShareLink - 创建分析看板分享链接(含后置清理)",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/AddShareLink。按profileIds创建一条Analytics看板分享链接。第2步查询分享链接列表定位新建记录的真实ID(创建接口本身不直接返回ID)，第3步用DeleteShareLink删除新建记录作为清理，保证用例可重复执行。500条随机样本中占比约100%（12/12次）。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/AddShareLink",
+        "request_body": {
+          "Description": "TC-AnalyticShare-AutoTest",
+          "ExpiredDate": "",
+          "UserID": "{{user_id}}",
+          "ProfileIds": ["{{profile_id}}"],
+          "DspAdvertisers": [],
+          "AttributionAdvertisers": [],
+          "CampaignTags": [],
+          "AsinTags": [],
+          "UserBrand": [],
+          "ID": null,
+          "SecretKey": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.TotalShareCount": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "定位新建分享链接的真实ID",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTime",
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "Ids": []
+        },
+        "extract_vars": {
+          "created_share_id": "data.Data[0].ID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": { "$is_array": true }
+        }
+      },
+      {
+        "name": "后置清理-删除新建分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/DeleteShareLink",
+        "request_body": {
+          "Ids": ["{{created_share_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AnlayticShare/V3/GetShareLinkList - 场景1_不筛选ID查询全部分享链接",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/GetShareLinkList。按userIds+分页查询当前用户全部分享链接列表，不筛选具体ID，为该接口最主流真实模式。500条随机样本中占比约78.6%（66/84次）。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询全部分享链接列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTime",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "userIds": ["{{user_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AnlayticShare/V3/GetShareLinkList - 场景2_按指定ID查询分享链接状态",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/GetShareLinkList。按Ids筛选查询指定分享链接的当前状态(如是否过期)。500条随机样本中占比约21.4%（18/84次）。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时分享链接用于查询",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/AddShareLink",
+        "request_body": {
+          "Description": "TC-AnalyticShare-QueryById",
+          "ExpiredDate": "",
+          "UserID": "{{user_id}}",
+          "ProfileIds": ["{{profile_id}}"],
+          "DspAdvertisers": [],
+          "AttributionAdvertisers": [],
+          "CampaignTags": [],
+          "AsinTags": [],
+          "UserBrand": [],
+          "ID": null,
+          "SecretKey": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "定位新建分享链接的真实ID",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTime",
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "Ids": []
+        },
+        "extract_vars": {
+          "created_share_id": "data.Data[0].ID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "按指定ID查询分享链接状态(主测试步骤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTime",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "Ids": ["{{created_share_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "后置清理-删除临时分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/DeleteShareLink",
+        "request_body": {
+          "Ids": ["{{created_share_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AnlayticShare/V3/UpdateShareLink - 编辑分享链接完整信息(含创建+清理)",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/UpdateShareLink。对已有分享链接整体编辑(ProfileIds/Description等)。第1步创建一次性分享链接，第2步定位其真实ID，第3步执行编辑(主测试步骤)，第4步删除作为清理，保证用例可重复执行。500条随机样本中占比约100%（9/9次）。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建一次性分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/AddShareLink",
+        "request_body": {
+          "Description": "TC-AnalyticShare-UpdateTest",
+          "ExpiredDate": "",
+          "UserID": "{{user_id}}",
+          "ProfileIds": ["{{profile_id}}"],
+          "DspAdvertisers": [],
+          "AttributionAdvertisers": [],
+          "CampaignTags": [],
+          "AsinTags": [],
+          "UserBrand": [],
+          "ID": null,
+          "SecretKey": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "定位新建分享链接的真实ID",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTime",
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "Ids": []
+        },
+        "extract_vars": {
+          "created_share_id": "data.Data[0].ID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "编辑分享链接完整信息(主测试步骤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/UpdateShareLink",
+        "request_body": {
+          "Description": "TC-AnalyticShare-UpdateTest-Edited",
+          "ExpiredDate": "",
+          "UserID": "{{user_id}}",
+          "ProfileIds": ["{{profile_id}}"],
+          "DspAdvertisers": [],
+          "AttributionAdvertisers": [],
+          "CampaignTags": [],
+          "AsinTags": [],
+          "UserBrand": [],
+          "ID": "{{created_share_id}}",
+          "SecretKey": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/DeleteShareLink",
+        "request_body": {
+          "Ids": ["{{created_share_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AnlayticShare/V3/UpdateShareLinkDescription - 编辑分享链接描述(含创建+清理)",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/UpdateShareLinkDescription。仅编辑分享链接的Description字段。第1步创建一次性分享链接，第2步定位真实ID，第3步编辑描述(主测试步骤)，第4步删除作为清理。500条随机样本中占比约100%（7/7次）。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建一次性分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/AddShareLink",
+        "request_body": {
+          "Description": "TC-AnalyticShare-DescTest",
+          "ExpiredDate": "",
+          "UserID": "{{user_id}}",
+          "ProfileIds": ["{{profile_id}}"],
+          "DspAdvertisers": [],
+          "AttributionAdvertisers": [],
+          "CampaignTags": [],
+          "AsinTags": [],
+          "UserBrand": [],
+          "ID": null,
+          "SecretKey": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "定位新建分享链接的真实ID",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTime",
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "Ids": []
+        },
+        "extract_vars": {
+          "created_share_id": "data.Data[0].ID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "编辑分享链接描述(主测试步骤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/UpdateShareLinkDescription",
+        "request_body": {
+          "Ids": ["{{created_share_id}}"],
+          "Description": "autotest"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/DeleteShareLink",
+        "request_body": {
+          "Ids": ["{{created_share_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AnlayticShare/V3/UpdateShareLinkExpiredDate - 编辑分享链接过期时间(含创建+清理)",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/UpdateShareLinkExpiredDate。设置分享链接是否有过期时间(HasExpiredDate)。第1步创建一次性分享链接，第2步定位真实ID，第3步编辑过期时间(主测试步骤，HasExpiredDate=0表示永不过期，为真实样本主流模式)，第4步删除作为清理。500条随机样本中占比约100%（7/7次）。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建一次性分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/AddShareLink",
+        "request_body": {
+          "Description": "TC-AnalyticShare-ExpiryTest",
+          "ExpiredDate": "",
+          "UserID": "{{user_id}}",
+          "ProfileIds": ["{{profile_id}}"],
+          "DspAdvertisers": [],
+          "AttributionAdvertisers": [],
+          "CampaignTags": [],
+          "AsinTags": [],
+          "UserBrand": [],
+          "ID": null,
+          "SecretKey": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "定位新建分享链接的真实ID",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTime",
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "Ids": []
+        },
+        "extract_vars": {
+          "created_share_id": "data.Data[0].ID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "编辑分享链接过期时间(主测试步骤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/UpdateShareLinkExpiredDate",
+        "request_body": {
+          "Ids": ["{{created_share_id}}"],
+          "HasExpiredDate": 0,
+          "ExpiredDate": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除分享链接",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/DeleteShareLink",
+        "request_body": {
+          "Ids": ["{{created_share_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AnlayticShare/V3/GetBrandtag - 按Profile查询品牌/非品牌标签树",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/GetBrandtag。按profileIds查询当前可选的品牌(brands)/非品牌(nonbrands)Campaign标签树，用于Benchmark品牌分类设置。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构构造，已用curl实测确认可返回code 200。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询品牌/非品牌标签树",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/GetBrandtag",
+        "request_body": {
+          "profileIds": ["{{profile_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.brands": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AnlayticShare/V3/SaveBrandtag - 保存品牌/非品牌标签设置(含读取原值+还原)",
+    "description": "单接口测试：POST /api/AnlayticShare/V3/SaveBrandtag。设置哪些Campaign标签属于品牌(Brand)/非品牌(NonBrand)分类，为客户级全局设置(非一次性实体)。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录。用例先设置1个真实CampaignTag为Brand+1个为NonBrand验证写入成功，第2步还原为空(测试账号当前默认两者均未勾选，已用curl实测确认原始状态)，避免遗留对客户级设置的改动。",
+    "module": "AnlayticShare",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置品牌/非品牌标签(主测试步骤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/SaveBrandtag",
+        "request_body": {
+          "BrandCampaignTagIds": ["545447"],
+          "NonBrandCampaignTagIds": ["545460"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-还原为空(测试账号原始状态)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AnlayticShare/v3/SaveBrandtag",
+        "request_body": {
+          "BrandCampaignTagIds": [],
+          "NonBrandCampaignTagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,772 @@
+[
+  {
+    "name": "GET /api/NegativeKeywordList - 查询当前用户全部否定关键词列表",
+    "description": "单接口测试：GET /api/NegativeKeywordList。无请求参数，查询当前用户/客户下全部否定关键词列表(NegativeKeywordList)概览，为该接口唯一真实模式。500条随机样本中占比约100%（319/319次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询全部否定关键词列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/CreateNegativeKeywordList - 创建否定关键词列表完整生命周期(创建+加词+应用+查看+改名+删词+删除)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/CreateNegativeKeywordList。完整覆盖NegativeKeywordList实体的CRUD生命周期，一次case串联9个真实接口：1)创建列表 2)按ListName定位真实Id(创建响应data.id恒为0) 3)向列表添加关键词 4)按列表Id查关键词表定位关键词Id 5)将列表应用到真实Campaign(Type=campaign+Campaigns数组，为该接口39.2%的真实模式，另56.2%为按CampaignTagIds应用) 6)查看列表详情 7)查看列表关键词纯文本 8)重命名列表 9)删除刚添加的关键词 10)删除整个列表作为清理，保证用例可重复执行。CreateNegativeKeywordList本身500条随机样本中占比约100%（309/309次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建否定关键词列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordList",
+        "request_body": {
+          "ListName": "TC-NKL-Lifecycle-Test",
+          "MatchType": "exact",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "按ListName定位新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
+        "request_body": {
+          "ListName": "TC-NKL-Lifecycle-Test",
+          "profileIds": ["{{profile_id}}"]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "向列表添加否定关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListId": "{{created_list_id}}",
+          "KeywordText": ["tc-autotest-negkw"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "按列表Id查关键词表定位关键词Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListKeywordTable",
+        "request_body": {
+          "Id": "{{created_list_id}}"
+        },
+        "extract_vars": {
+          "created_keyword_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      },
+      {
+        "name": "将列表应用到真实Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListCampaign",
+        "request_body": {
+          "NegativeKeywordListId": "{{created_list_id}}",
+          "CampaignTagIds": [],
+          "Campaigns": [
+            { "ProfileId": "{{profile_id}}", "CampaignId": "{{sp_manual_pat_campaign_id}}" }
+          ],
+          "Type": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查看列表应用详情",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListDetail",
+        "request_body": {
+          "Id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      },
+      {
+        "name": "查看列表关键词纯文本",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListKeywords",
+        "request_body": {
+          "Id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      },
+      {
+        "name": "重命名列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/UpdateNegativeKeywordList",
+        "request_body": {
+          "Id": "{{created_list_id}}",
+          "ListName": "TC-NKL-Lifecycle-Test-Renamed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除刚添加的关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListKeywordId": ["{{created_keyword_id}}"],
+          "DeleteType": "delete"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除整个列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordList",
+        "request_body": {
+          "Id": "{{created_list_id}}",
+          "ListName": "TC-NKL-Lifecycle-Test-Renamed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/SaveCampaignNegativeKeyword - 为单个Campaign直接应用否定关键词列表(含创建+清理)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/SaveCampaignNegativeKeyword。按profileId+campaignId+negativeKeywordListId直接为单个Campaign应用一个已有否定关键词列表，为该接口最主流真实模式。500条随机样本中占比约90.9%(10/11次，该接口全量历史样本量较小)。第1步创建一次性列表，第2步应用到测试账号真实Campaign，第3步删除列表作为清理。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建一次性列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordList",
+        "request_body": {
+          "ListName": "TC-NKL-SaveCamp-Test",
+          "MatchType": "exact",
+          "Level": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "按ListName定位新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
+        "request_body": {
+          "ListName": "TC-NKL-SaveCamp-Test",
+          "profileIds": ["{{profile_id}}"]
+        },
+        "extract_vars": { "created_list_id": "data[0].Id" },
+        "expected_response": { "code": 200, "success": true, "data": { "$not_empty": true } }
+      },
+      {
+        "name": "为Campaign直接应用列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/SaveCampaignNegativeKeyword",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}",
+          "negativeKeywordListId": ["{{created_list_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "后置清理-删除列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordList",
+        "request_body": {
+          "Id": "{{created_list_id}}",
+          "ListName": "TC-NKL-SaveCamp-Test"
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/CreateBulkNegativeKeywordListKeyword - 批量为多个列表添加同一关键词(含创建+清理)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/CreateBulkNegativeKeywordListKeyword。按keywordText+negativeKeywordListIds批量将同一关键词添加到多个列表，为该接口最主流真实模式。500条随机样本中占比约84.1%(37/44次)。第1步创建一次性列表，第2步用本接口添加关键词，第3步删除列表作为清理(级联删除关键词)。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建一次性列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordList",
+        "request_body": {
+          "ListName": "TC-NKL-BulkKW-Test",
+          "MatchType": "exact",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "按ListName定位新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
+        "request_body": {
+          "ListName": "TC-NKL-BulkKW-Test",
+          "profileIds": ["{{profile_id}}"]
+        },
+        "extract_vars": { "created_list_id": "data[0].Id" },
+        "expected_response": { "code": 200, "success": true, "data": { "$not_empty": true } }
+      },
+      {
+        "name": "批量为多个列表添加关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateBulkNegativeKeywordListKeyword",
+        "request_body": {
+          "keywordText": ["tc-bulk-negkw"],
+          "negativeKeywordListIds": ["{{created_list_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true, "data.successCount": { "$not_empty": true } }
+      },
+      {
+        "name": "后置清理-删除列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordList",
+        "request_body": {
+          "Id": "{{created_list_id}}",
+          "ListName": "TC-NKL-BulkKW-Test"
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/BulkCopyToNegativeKeywordMult - 批量直接创建AdGroup级否定关键词(含创建Campaign+清理)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/BulkCopyToNegativeKeywordMult。按profileId+new_keywords(campaignId/adGroupId/keywordText/matchType)直接在真实AdGroup上创建否定关键词(不经过List)，为该接口唯一真实模式。500条随机样本中占比约100%（8/8次，该接口全量历史样本量较小）。第1步创建一次性SP Campaign+AdGroup(测试账号既有AdGroup已归档，不可用于新建子实体)，第2步创建否定关键词，第3步归档Campaign作为清理(级联清理否定关键词)。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建一次性SP Campaign+AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaign": {
+            "campaignType": "sponsoredProducts",
+            "targetingType": "manual",
+            "name": "TC-NKL-BulkCopy-Test",
+            "dailyBudget": "10",
+            "state": "enabled",
+            "startDate": "2026/08/17",
+            "endDate": "",
+            "costType": "",
+            "bidding": { "Strategy": "legacyForSales", "Adjustments": [] }
+          },
+          "duration": 0,
+          "adgroupName": "TC-NKL-BulkCopy-AG",
+          "asinstr": "B000MXB3K6",
+          "autoBid": "0.5",
+          "campaignTagIds": []
+        },
+        "extract_vars": {
+          "created_campaign_id": "data.campaignId",
+          "created_adgroup_id": "data.adGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.padidstr": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "批量创建AdGroup级否定关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/BulkCopyToNegativeKeywordMult",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "new_keywords": [
+            {
+              "state": "enabled",
+              "campaignId": "{{created_campaign_id}}",
+              "adGroupId": "{{created_adgroup_id}}",
+              "keywordText": "tc-autotest-negcopy",
+              "matchType": "negativePhrase"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "后置清理-归档一次性Campaign",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/V4/Update",
+        "request_body": {
+          "profileIds": ["{{profile_id}}"],
+          "campaigns": [
+            {
+              "campaignId": "{{created_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetAdgroupsByPortfolioOrProfile - 按Profile查询AdGroup列表",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetAdgroupsByPortfolioOrProfile。按ProfileIds查询可用于否定关键词应用的AdGroup(按Campaign分组)列表，为该接口唯一真实模式。500条随机样本中占比约100%（500/500次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AdGroup列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetAdgroupsByPortfolioOrProfile",
+        "request_body": {
+          "ProfileIds": ["{{profile_id}}"],
+          "state": "",
+          "adGroupState": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetAdgroupsNegativeKeywordByCampaignId - 按Campaign查询AdGroup已有否定关键词",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetAdgroupsNegativeKeywordByCampaignId。按profileIds查询(不限定campaignIds)AdGroup维度已存在的否定关键词映射，为该接口最主流真实模式。500条随机样本中占比约69.8%（349/500次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AdGroup已有否定关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetAdgroupsNegativeKeywordByCampaignId",
+        "request_body": {
+          "profileIds": ["{{profile_id}}"],
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetAdgroupsTargetByCampaignId - 按Campaign查询AdGroup定位信息",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetAdgroupsTargetByCampaignId。按profileIds+campaignIds查询该Campaign下AdGroup的定位类型/竞价等映射信息，为该接口最主流真实模式。500条随机样本中占比约64.4%（322/500次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AdGroup定位信息",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetAdgroupsTargetByCampaignId",
+        "request_body": {
+          "profileIds": ["{{profile_id}}"],
+          "campaignIds": ["{{sp_manual_pat_campaign_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetBrandByKW - 按关键词查询关联品牌列表",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetBrandByKW。按profileId+keyword查询该关键词关联的品牌候选列表(用于品牌否定场景)，为该接口最主流真实模式。500条随机样本中占比约60.2%（301/500次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询关联品牌列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetBrandByKW",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "keyword": "vitamins"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetCampaignExploreAutomation - 查询Campaign否定关键词自动化探索状态",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetCampaignExploreAutomation。按ProfileId+CampaignId查询该Campaign的否定关键词/PAT自动化规则应用计数与最近运行时间，为该接口唯一真实模式。500条随机样本中占比约100%（500/500次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动化探索状态",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetCampaignExploreAutomation",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{sp_manual_pat_campaign_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetCampaingsByNegativeKeyword - 按Profile+Level查询可选Campaign列表",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetCampaingsByNegativeKeyword。按profileId+level=campaign(不限定state/campaignTagIds)查询可应用否定关键词的Campaign列表，为该接口最主流真实模式。500条随机样本中占比约85.6%（428/500次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询可选Campaign列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetCampaingsByNegativeKeyword",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "state": [],
+          "level": "campaign",
+          "campaignTagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetNegativeKeywordListDetailForLink - 按Id查询列表详情(分享链接场景)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetNegativeKeywordListDetailForLink。按Id查询列表应用详情，用于分享链接查看场景，为该接口唯一真实模式。500条随机样本中占比约100%（125/125次）。使用测试账号既有真实列表Id(非本次生成)，为只读查询不影响该列表。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询列表详情(分享链接)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListDetailForLink",
+        "request_body": {
+          "Id": 3358
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/NegativeKeywordList/v3/ListAutomationNegativeByCampaignTag/{campaignTag} - 按CampaignTag查询自动化否定统计",
+    "description": "单接口测试：GET /api/NegativeKeywordList/v3/ListAutomationNegativeByCampaignTag/{campaignTag}。按路径参数campaignTag查询该标签下自动化否定关键词/PAT的计数与最近运行时间，为该接口唯一真实模式(path参数变量化)。500条随机样本中占比约100%（794次，wildcard统计）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询CampaignTag自动化否定统计",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/ListAutomationNegativeByCampaignTag/1",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/CampaignNegativeKeyword - 查询Campaign当前关联的否定关键词列表",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/CampaignNegativeKeyword?profileId=&campaignId=。按query参数profileId+campaignId查询该Campaign已关联/可选的否定关键词列表(AllNegativeList+SelectedNegativeList)，为该接口唯一真实模式(query参数)。⚠️run-cases.py执行框架不会对path字段中的{{var}}做变量替换(仅替换request_body)，故path中的profileId/campaignId直接写入测试账号真实值字面量，而非模板变量。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign关联的否定关键词列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CampaignNegativeKeyword?profileId=2755545444012419&campaignId=331759186953136",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/AppliedNegativeKeywordList - 查询否定关键词应用状态明细(v1)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/AppliedNegativeKeywordList。按NegativeKeywordListId+Items(前端已持有的应用记录快照)刷新应用状态，为该接口唯一真实模式(全量历史仅2次)。真实值取自ES真实样本(仅为数字ID引用，无副作用，只读状态查询)。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "刷新应用状态明细(v1)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/AppliedNegativeKeywordList",
+        "request_body": {
+          "NegativeKeywordListId": 9170,
+          "Items": [
+            {
+              "CampaignId": 124243948291188,
+              "CampaignIdStr": "124243948291188",
+              "CampaignName": null,
+              "AdgroupId": 351413347549645,
+              "AdgroupIdStr": "351413347549645",
+              "AdgroupName": "Auto",
+              "Level": "adgroup",
+              "MatchType": "negativePhrase",
+              "ProfileId": 788514733281484,
+              "ProfileIdStr": "788514733281484",
+              "Status": "failed",
+              "CampaignType": "sponsoredProducts",
+              "State": "enabled",
+              "KeywordText": "dropoff",
+              "ErrorMsg": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/AppliedNegativeKeywordListV2 - 查询否定关键词应用状态明细(v2)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/AppliedNegativeKeywordListV2。按NegativeKeywordListId+ItemIds刷新指定应用记录的状态，为该接口唯一真实模式(结构较v1简化，仅传Id列表)。500条随机样本中占比约100%（31/31次）。已用curl实测确认返回code 200(空数组亦为合法响应)。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "刷新应用状态明细(v2)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/AppliedNegativeKeywordListV2",
+        "request_body": {
+          "NegativeKeywordListId": 3358,
+          "ItemIds": [495661]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$is_array": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/NegativeKeywordListAppliedStatus - 分页查询关键词级应用状态",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/NegativeKeywordListAppliedStatus。按Ids(NegativeKeywordListKeywordId列表)+pageInfo分页查询关键词应用到各Campaign/AdGroup的状态明细，为该接口唯一真实模式。500条随机样本中占比约100%（89/89次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询关键词级应用状态",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListAppliedStatus",
+        "request_body": {
+          "Ids": [3358],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "Status"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": { "$not_empty": true }
+        }
+      }
+    ]
+  }
+]

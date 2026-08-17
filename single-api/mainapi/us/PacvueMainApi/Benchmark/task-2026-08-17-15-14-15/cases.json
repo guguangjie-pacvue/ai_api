@@ -1,0 +1,1135 @@
+[
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkAdFormatAndGoal - 按品牌+分类+广告类型查询AdFormat与目标分布",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkAdFormatAndGoal。按ReportDateTime+Brand+BrowseCategory+AdProduct=SP等filters查询AdFormat/CampaignGoal分布，为该接口最主流真实模式。500条随机样本中占比约39.0%（195/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按品牌+分类+广告类型查询AdFormat与目标分布",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkAdFormatAndGoal",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"03/01/2026\",\"end\":\"03/31/2026\"}}"
+            },
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "[\"Victoria\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategory",
+              "filterContent": "[\"Home & Kitchen\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SP\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "HasDspProfile": false,
+          "SelectedProfileIds": [
+            "AMAZON-{{profile_id}}"
+          ],
+          "InferStart": "11/01/2025",
+          "InferEnd": "03/01/2026",
+          "DateType": "MONTHLY",
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "AdCampaignType": "SP",
+          "BrandList": [],
+          "FilterBrowseCategory": [
+            "Home & Kitchen"
+          ],
+          "BrandNameList": [
+            "Victoria"
+          ],
+          "OutPutFields": [
+            "CTR",
+            "CPC"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkBrandDistribution - 按分类+广告类型查询品牌分布",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkBrandDistribution。按ReportDateTime+BrowseCategory+AdFormat+CampaignGoal+AdProduct等filters查询品牌分布，为该接口最主流真实模式。500条随机样本中占比约39.2%（196/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按分类+广告类型查询品牌分布",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkBrandDistribution",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"06/01/2026\",\"end\":\"06/30/2026\"}}"
+            },
+            {
+              "filterFieldName": "BrowseCategory",
+              "filterContent": "[\"IT Informatica\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdFormat",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "CampaignGoal",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SB\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "HasDspProfile": false,
+          "SelectedProfileIds": [
+            "AMAZON-{{profile_id}}"
+          ],
+          "InferStart": "11/01/2025",
+          "InferEnd": "06/01/2026",
+          "DateType": "MONTHLY",
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "SelectedBrandList": [
+            "624217224633914@@SanDisk@@0"
+          ],
+          "AdCampaignType": "SB",
+          "BrandList": [],
+          "FilterBrowseCategory": [
+            "IT Informatica"
+          ],
+          "BrandNameList": [
+            "SanDisk"
+          ],
+          "OutPutFields": [
+            "CTR",
+            "CPC",
+            "CPM",
+            "PercentOfPurchasesNewToBrand",
+            "NewToBrandPurchaseRate",
+            "CostPerNewToBrandPurchase"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkBrands - 按Profile+日期粒度查询可选品牌列表",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkBrands。按profileIds+DateType=DAILY查询该Profile下Benchmark可选品牌列表，不含filters，为该接口最主流真实模式。500条随机样本中占比约86.0%（430/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Profile+日期粒度查询可选品牌列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkBrands",
+        "request_body": {
+          "DateType": "DAILY",
+          "OutPutFields": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkBrowseCategory - 按品牌筛选查询浏览分类",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkBrowseCategory。按profileIds+Brand filter(精确匹配filterType=7)+DateType查询浏览分类(BrowseCategory)列表，为该接口唯一真实模式。500条随机样本中占比约100%（500/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按品牌筛选查询浏览分类",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkBrowseCategory",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "DateType": "DAILY",
+          "OutPutFields": [
+            "CampaignCountry",
+            "PeerSetSize"
+          ],
+          "filters": [
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "Pocket Hose",
+              "filterType": 7
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkBrowseCategoryList - 按品牌+报表类型查询浏览分类树",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkBrowseCategoryList。按profileIds+Brand+ReportTypeId filter查询浏览分类树列表，为该接口唯一真实模式。500条随机样本中占比约100%（500/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按品牌+报表类型查询浏览分类树",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkBrowseCategoryList",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "OutPutFields": [],
+          "filters": [
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "Facade Games",
+              "filterType": 7
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "crossProgramBenchmarks",
+              "filterType": 7
+            }
+          ],
+          "DateType": "MONTHLY"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkCampaignTypeComparison - 按品牌+分类查询广告类型对比",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkCampaignTypeComparison。按ReportDateTime+Brand+BrowseCategory+AdFormat+CampaignGoal+AdProduct等filters查询各广告类型(SP/SB/SD)指标对比，为该接口最主流真实模式。500条随机样本中占比约37.6%（188/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按品牌+分类查询广告类型对比",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkCampaignTypeComparison",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"04/01/2026\",\"end\":\"04/30/2026\"}}"
+            },
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "[\"BROTHER\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategory",
+              "filterContent": "[\"IT Informatica\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdFormat",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "CampaignGoal",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "All",
+              "filterType": 7
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "HasDspProfile": false,
+          "SelectedProfileIds": [
+            "AMAZON-{{profile_id}}"
+          ],
+          "InferStart": "11/01/2025",
+          "InferEnd": "04/01/2026",
+          "DateType": "MONTHLY",
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "AdCampaignType": "SB",
+          "BrandList": [],
+          "FilterBrowseCategory": [
+            "IT Informatica"
+          ],
+          "BrandNameList": [
+            "BROTHER"
+          ],
+          "OutPutFields": [
+            "CTR",
+            "CPC",
+            "CPM",
+            "PercentOfPurchasesNewToBrand",
+            "NewToBrandPurchaseRate",
+            "CostPerNewToBrandPurchase"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkCategoryComparison - 按品牌+广告类型查询分类对比",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkCategoryComparison。按ReportDateTime+Brand+AdFormat+CampaignGoal+AdProduct等filters查询不同浏览分类间指标对比，为该接口最主流真实模式。500条随机样本中占比约39.4%（197/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按品牌+广告类型查询分类对比",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkCategoryComparison",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"12/01/2025\",\"end\":\"12/31/2025\"}}"
+            },
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "[\"Schwarzkopf\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdFormat",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "CampaignGoal",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SB\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "HasDspProfile": false,
+          "SelectedProfileIds": [
+            "AMAZON-{{profile_id}}"
+          ],
+          "InferStart": "11/01/2025",
+          "InferEnd": "12/01/2025",
+          "DateType": "MONTHLY",
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "AdCampaignType": "SB",
+          "BrandList": [],
+          "FilterBrowseCategory": [
+            "Beauty & Personal Care"
+          ],
+          "BrandNameList": [
+            "Schwarzkopf"
+          ],
+          "OutPutFields": [
+            "CTR",
+            "CPC",
+            "CPM",
+            "PercentOfPurchasesNewToBrand",
+            "NewToBrandPurchaseRate",
+            "CostPerNewToBrandPurchase"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkFavorites - 按多Profile查询已收藏Benchmark",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkFavorites。按ProfileIds(多个)+ReportDateTime+AdProduct+Benchmark百分位(P50)查询用户已收藏的Benchmark列表，为该接口最主流真实模式。500条随机样本中占比约76.2%（32/42次，该接口全量历史样本量较小）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按多Profile查询已收藏Benchmark",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkFavorites",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"05/17/2026\",\"end\":\"05/23/2026\"}}"
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SP\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Benchmark": [
+            "P50"
+          ],
+          "IncludeZero": 0,
+          "DateType": "WEEKLY",
+          "OutPutFields": [
+            "CTR",
+            "CPC"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkFavoritesStar - 按多Profile+广告主查询收藏星标状态",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkFavoritesStar。按ProfileIds(多个)+AdvertiserId filter查询各Benchmark项的收藏星标(是否已收藏)状态，为该接口最主流真实模式。500条随机样本中占比约99.4%（497/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按多Profile+广告主查询收藏星标状态",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkFavoritesStar",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{}}"
+            },
+            {
+              "filterFieldName": "AdvertiserId",
+              "filterContent": "[\"0\",\"579604927542321609\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkHomeAllBrands - 按多Profile+广告主+广告类型查询全部品牌Benchmark概览",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkHomeAllBrands。按ProfileIds(多个)+AdvertiserId+AdProduct filters+Benchmark百分位查询Home页全部品牌Benchmark概览，为该接口最主流真实模式。500条随机样本中占比约80.0%（400/500次）。⚠️原始样本ProfileIds数组过长(66个)，已保留完整AdvertiserId/AdProduct filter结构，仅将ProfileIds替换为测试账号单一profile。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按多Profile+广告主+广告类型查询全部品牌Benchmark概览",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkHomeAllBrands",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"05/24/2026\",\"end\":\"05/30/2026\"}}"
+            },
+            {
+              "filterFieldName": "AdvertiserId",
+              "filterContent": "[\"0\",\"577537744854626599\",\"585951679752482779\",\"589039713156191461\",\"4619066960601\",\"587189637752300795\",\"6126686130901\",\"4918898740601\",\"583949319070038814\",\"578521954694348784\",\"8256790000601\",\"590880025736648713\",\"579535280980700072\",\"2490377990402\",\"3330182230701\",\"580039760373636288\",\"582427383340841092\",\"583693397972754699\",\"589235846897383327\",\"592590262862918583\",\"582935397198449424\",\"589850018769612252\",\"591025116990872449\",\"584426318804833228\",\"579384099374554011\",\"594263370859289056\",\"582117234156452310\",\"580342566302232518\",\"579651568627132907\",\"576979628490064102\",\"582319098990486389\",\"589077171296960883\",\"590900364071118727\",\"4147326510401\",\"577438879676979245\",\"592192454204609778\",\"589701967447552586\",\"586949832286534012\",\"577122283751163095\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SB\",\"SD\",\"SP\",\"DSP\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "IncludeZero": 0,
+          "DateType": "WEEKLY",
+          "OutPutFields": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkHomeSingleBrand - 按单Profile+品牌查询单品牌Benchmark概览",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkHomeSingleBrand。按ProfileIds(单个)+Brand+AdProduct+ReportTypeId filters+Benchmark百分位查询Home页单品牌Benchmark概览，为该接口唯一真实模式。500条随机样本中占比约100%（222/222次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按单Profile+品牌查询单品牌Benchmark概览",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkHomeSingleBrand",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"08/24/2025\",\"end\":\"08/30/2025\"}}"
+            },
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "[\"Smartish\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SP\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Benchmark": [
+            "P50"
+          ],
+          "IncludeZero": 0,
+          "DateType": "WEEKLY",
+          "OutPutFields": [
+            "CTR",
+            "CPC"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkUnderformingCampaigns - 按品牌+分类+分页查询表现不佳Campaign",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkUnderformingCampaigns。按ReportDateTime+CPC阈值filter(GreaterOrEqual)+Brand+BrowseCategory+AdProduct+分页查询表现不佳(underperforming)的Campaign列表，为该接口最主流真实模式。500条随机样本中占比约42.2%（211/500次）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按品牌+分类+分页查询表现不佳Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkUnderformingCampaigns",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"06/01/2026\",\"end\":\"06/30/2026\"}}"
+            },
+            {
+              "filterFieldName": "CPC",
+              "filterContent": "{\"IsNot\":0,\"Filters\":[{\"Operand\":\"GreaterOrEqual\",\"Value\":22.0962}]}"
+            },
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "[\"365methods\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategory",
+              "filterContent": "[\"JP ホーム＆キッチン\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SP\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "CampaignType",
+              "filterContent": "sponsoredProducts",
+              "filterType": 7
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "HasDspProfile": false,
+          "SelectedProfileIds": [
+            "AMAZON-{{profile_id}}"
+          ],
+          "InferStart": "11/01/2025",
+          "InferEnd": "06/01/2026",
+          "DateType": "MONTHLY",
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "SelectedBrandList": [
+            "675755475580077@@365methods@@0"
+          ],
+          "AdCampaignType": "SP",
+          "BrandList": [],
+          "FilterBrowseCategory": [
+            "JP ホーム＆キッチン"
+          ],
+          "BrandNameList": [
+            "365methods"
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "State",
+            "DailyBudget",
+            "UnderperformingTargetingCount",
+            "Impression",
+            "Click",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "CTR",
+            "CPC",
+            "NewToBrandSales",
+            "NewToBrandOrders"
+          ],
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkUnderformingTargetCount - 按品牌+分类+CampaignId查询表现不佳Target数",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkUnderformingTargetCount。按ReportDateTime+Brand+BrowseCategory+AdProduct+CampaignId(多个)filters查询表现不佳Target数量，为该接口最主流真实模式。500条随机样本中占比约53.5%（85/159次，该接口全量历史样本量较小）。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按品牌+分类+CampaignId查询表现不佳Target数",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkUnderformingTargetCount",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"05/01/2026\",\"end\":\"05/31/2026\"}}"
+            },
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "[\"LOCTITE\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategory",
+              "filterContent": "[\"US Industrial & Scientific/Adhesives, Sealants & Lubricants/Cyanoacrylate Adhesives\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"SP\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"crossProgramBenchmarks\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterContent": "[66566051797730,145090576292289,80041440289133,490638315621801,30052541699107,191107186759870,24803577201613,65626704606993,81713797880912,517735941139520]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "HasDspProfile": false,
+          "SelectedProfileIds": [
+            "AMAZON-{{profile_id}}"
+          ],
+          "InferStart": "11/01/2025",
+          "InferEnd": "05/01/2026",
+          "DateType": "MONTHLY",
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "SelectedBrandList": [
+            "2770014062114501@@LOCTITE@@0"
+          ],
+          "AdCampaignType": "SP",
+          "BrandList": [],
+          "FilterBrowseCategory": [
+            "US Industrial & Scientific/Adhesives, Sealants & Lubricants/Cyanoacrylate Adhesives"
+          ],
+          "BrandNameList": [
+            "LOCTITE"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetBenchmarkTrend - 按DSP品牌+分类查询趋势",
+    "description": "单接口测试：POST /api/Benchmark/GetBenchmarkTrend。按ReportDateTime+AdvertiserId+Brand+BrowseCategory+AdProduct=DSP等filters查询Benchmark趋势数据。该接口真实场景高度碎片化(最高频单一组合占比仅16.6%)，本case取占比最高的DSP品牌趋势场景。500条随机样本中占比约16.6%（83/500次）。SelectedProfileIds为DSP广告主ID非profile维度，保留真实样本值。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按DSP品牌+分类查询趋势",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetBenchmarkTrend",
+        "request_body": {
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"11/01/2025\",\"end\":\"04/01/2026\"}}"
+            },
+            {
+              "filterFieldName": "AdvertiserId",
+              "filterContent": "[\"2298850700201\",\"0\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "Brand",
+              "filterContent": "[\"Dove\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategory",
+              "filterContent": "[\"US Beauty & Personal Care/Personal Care/Deodorants & Antiperspirants/Antiperspirant Deodorant\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "BrowseCategoryLevel",
+              "filterContent": "[\"1\",\"2\",\"3\",\"4\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdFormat",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "CampaignGoal",
+              "filterContent": "[\"ALL\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "AdProduct",
+              "filterContent": "[\"DSP\"]",
+              "filterType": 3
+            },
+            {
+              "filterFieldName": "ReportTypeId",
+              "filterContent": "[\"dspBenchmarks\"]",
+              "filterType": 3
+            }
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "HasDspProfile": true,
+          "SelectedProfileIds": [
+            "AMAZON-{{profile_id}}"
+          ],
+          "InferStart": "11/01/2025",
+          "InferEnd": "04/01/2026",
+          "DateType": "MONTHLY",
+          "Benchmark": [
+            "P25",
+            "P50",
+            "P75"
+          ],
+          "SelectedBrandList": [
+            "2239103493237903@@Dove@@2298850700201"
+          ],
+          "AdCampaignType": "DSP",
+          "BrandList": [],
+          "FilterBrowseCategory": [
+            "US Beauty & Personal Care/Personal Care/Deodorants & Antiperspirants/Antiperspirant Deodorant"
+          ],
+          "BrandNameList": [
+            "Dove"
+          ],
+          "OutPutFields": [
+            "CTR",
+            "CPC",
+            "CPM",
+            "PercentOfPurchasesNewToBrand",
+            "NewToBrandPurchaseRate",
+            "CostPerNewToBrandPurchase",
+            "CompletionRateVideoAd",
+            "CostPerCompletedViewVideoAd"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/GetProfilePATQueryAsin - 按Profile查询PAT可用ASIN",
+    "description": "单接口测试：POST /api/Benchmark/GetProfilePATQueryAsin。按profileIds查询该Profile下可用于商品定向(PAT)的ASIN列表。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构(BenchmarkInput)构造，已用curl实测确认可返回code 200。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Profile查询PAT可用ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/GetProfilePATQueryAsin",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Benchmark/UpdateBenchmarkFavorites - 收藏Benchmark品牌+分类组合(含后置取消收藏)",
+    "description": "单接口测试：POST /api/Benchmark/UpdateBenchmarkFavorites。按profileId+brand+browseCategory等维度将某Benchmark组合标记为收藏(sign=1)，为该接口全量6条真实样本中的主流模式(5/6次)。第2步用sign=0取消收藏作为清理，保证用例可重复执行、不遗留收藏项。",
+    "module": "Benchmark",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "收藏Benchmark组合",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/UpdateBenchmarkFavorites",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "brand": "TC-Benchmark-AutoTestBrand",
+          "browseCategory": "US Grocery & Gourmet Food/Pantry Staples",
+          "browseCategoryLevel": 2,
+          "adProduct": "SP",
+          "campaignCountry": "US",
+          "campaignGoal": "CONVERSION",
+          "adFormat": "SP",
+          "reportTypeId": "crossProgramBenchmarks",
+          "sign": 1,
+          "advertiserId": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-取消收藏",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Benchmark/UpdateBenchmarkFavorites",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "brand": "TC-Benchmark-AutoTestBrand",
+          "browseCategory": "US Grocery & Gourmet Food/Pantry Staples",
+          "browseCategoryLevel": 2,
+          "adProduct": "SP",
+          "campaignCountry": "US",
+          "campaignGoal": "CONVERSION",
+          "adFormat": "SP",
+          "reportTypeId": "crossProgramBenchmarks",
+          "sign": 0,
+          "advertiserId": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

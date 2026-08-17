@@ -1,0 +1,83 @@
+[
+  {
+    "name": "POST /api/AmazonAudience/InsertAmazonAudienceCampaignToClickhouse - 写入受众Campaign到Clickhouse(仅构造未执行)",
+    "description": "单接口测试：POST /api/AmazonAudience/InsertAmazonAudienceCampaignToClickhouse。真实场景：内部ETL任务批量写入受众Campaign数据到Clickhouse分析表。500条随机样本中占比约100%(该接口90天内11707次调用，均为后台批量任务特征，非用户交互触发)。⚠️本case仅生成未执行：该接口直接写入Clickhouse分析事实表且无对应delete接口可清理，直接执行存在污染真实分析数据的风险，需人工评估后在专用测试环境执行。",
+    "module": "AmazonAudience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量写入受众Campaign到Clickhouse(未执行)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAudience/InsertAmazonAudienceCampaignToClickhouse",
+        "request_body": [
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AudienceId": "424757007251024260",
+            "ResolvedName": "",
+            "CampaignType": "sponsoredProducts",
+            "KindType": "AMC"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAudience/RefreshStockAudienceCampaign - 全量刷新受众Campaign库存(仅构造未执行)",
+    "description": "单接口测试：POST /api/AmazonAudience/RefreshStockAudienceCampaign。真实场景：无请求体，触发全账号范围的受众Campaign库存重新同步。500条随机样本中占比约100%(全量历史仅4次调用，均为管理员/系统触发)。⚠️本case仅生成未执行：该接口会触发全账号范围与Amazon Ads API的重新同步，执行成本高且可能受Amazon接口限流影响，需人工评估后执行。",
+    "module": "AmazonAudience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "全量刷新受众Campaign库存(未执行)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAudience/RefreshStockAudienceCampaign",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAudience/RefreshStockAudienceCampaignByProfile - 按Profile刷新受众Campaign库存(仅构造未执行)",
+    "description": "单接口测试：POST /api/AmazonAudience/RefreshStockAudienceCampaignByProfile。按profileId(query参数)触发单Profile范围的受众Campaign库存重新同步。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构构造。⚠️本case仅生成未执行：与RefreshStockAudienceCampaign同理，会触发与Amazon Ads API的重新同步，需人工评估后执行。",
+    "module": "AmazonAudience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Profile刷新受众Campaign库存(未执行)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAudience/RefreshStockAudienceCampaignByProfile?profileId={{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

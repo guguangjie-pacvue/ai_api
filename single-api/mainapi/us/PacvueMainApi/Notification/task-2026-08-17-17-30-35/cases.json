@@ -1,0 +1,432 @@
+[
+  {
+    "name": "POST /api/Notification/V3/AddEmailNotification - 邮件通知规则生命周期(创建+查+改+暂停+删除)",
+    "description": "单接口测试：POST /api/Notification/V3/AddEmailNotification。串联该Notification子体系5个真实接口：1)创建按Spend条件的邮件通知规则 2)按列表定位真实Id(创建响应不返回Id) 3)修改规则名称 4)暂停规则(ChangeStatus) 5)删除规则作为清理。AddEmailNotification全量历史仅4条真实样本，字段结构取自真实样本。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建邮件通知规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/AddEmailNotification",
+        "request_body": {
+          "Name": "TC-AutoTest-EmailNotif",
+          "AdvertiserIds": [],
+          "ProfileIds": ["{{profile_id}}"],
+          "Conditions": [
+            { "DataTypeStr": "Spend", "Index": 1, "Length": 1, "OPStr": "Greater", "Value": "1", "Unit": "$", "OP": "Greater", "DataType": "Spend" }
+          ],
+          "Emails": ["test@example.com"],
+          "DataAppliedIn": 0,
+          "CampaignTagId": []
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "定位新建规则的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/GetEmailNotificationList",
+        "request_body": { "index": 0, "length": 5, "dataAppliedIn": [] },
+        "extract_vars": { "created_notif_id": "data.data[0].Id" },
+        "expected_response": { "code": 200, "success": true, "data.data": { "$is_array": true } }
+      },
+      {
+        "name": "修改规则名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/UpdateEmailNotification",
+        "request_body": {
+          "id": "{{created_notif_id}}",
+          "Name": "TC-AutoTest-EmailNotif-Updated",
+          "AdvertiserIds": [],
+          "ProfileIds": ["{{profile_id}}"],
+          "Conditions": [
+            { "DataTypeStr": "Spend", "Index": 1, "Length": 1, "OPStr": "Greater", "Value": "1", "Unit": "$", "OP": "Greater", "DataType": "Spend" }
+          ],
+          "Emails": ["test@example.com"],
+          "DataAppliedIn": 0,
+          "CampaignTagId": []
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "暂停规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/ChangeStatus",
+        "request_body": { "id": "{{created_notif_id}}", "isPaused": true },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "后置清理-删除规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/DeleteEmailNotification",
+        "request_body": { "id": "{{created_notif_id}}" },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Notification/V3/SettingEmailCommonInfo - 通用邮件/站内信通知设置生命周期(创建+查+改状态+删除)",
+    "description": "单接口测试：POST /api/Notification/V3/SettingEmailCommonInfo。串联该Notification子体系4个真实接口：1)按emailAndNotificationType=14创建通用通知设置 2)按类型查列表定位真实Id 3)将状态改为false 4)删除该设置作为清理。SettingEmailCommonInfo/GetEmailCommonInfoList均500条随机样本中占比约100%。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建通用通知设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/SettingEmailCommonInfo",
+        "request_body": {
+          "emailAndNotificationType": 14,
+          "userId": "{{user_id}}",
+          "isMyEmail": 1,
+          "Status": true,
+          "clientId": 3186,
+          "emails": "",
+          "emailOrAndtification": "{\"methodEmail\":1,\"methodMessage\":1}"
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "按类型查列表定位真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/GetEmailCommonInfoList",
+        "request_body": { "emailAndNotificationType": 14 },
+        "extract_vars": { "created_setting_id": "data[0].id" },
+        "expected_response": { "code": 200, "success": true, "data": { "$is_array": true } }
+      },
+      {
+        "name": "将状态改为false",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/UpdateEmailCommonStatus",
+        "request_body": { "id": "{{created_setting_id}}", "status": false },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "后置清理-删除该设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/DeleteEmailCommon",
+        "request_body": { "id": "{{created_setting_id}}" },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Notification/V3/SaveOutofBudgetEmailSetting - 保存超预算邮件提醒设置(含读取+还原)",
+    "description": "单接口测试：POST /api/Notification/V3/SaveOutofBudgetEmailSetting+GET同名读取接口。1)读取当前设置(测试账号默认为空/关闭) 2)开启设置(status=true) 3)还原为关闭，保证用例可重复且不改变测试账号长期状态。SaveOutofBudgetEmailSetting为按用户维度的单例设置(非列表实体)，故用读+写+还原代替创建+删除。500条随机样本中占比约100%（500/500次）。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前超预算邮件设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/GetOutofBudgetEmailSetting",
+        "request_body": { "userId": "{{user_id}}" },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "开启超预算邮件设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/SaveOutofBudgetEmailSetting",
+        "request_body": {
+          "userId": "{{user_id}}",
+          "status": true,
+          "email": "",
+          "frequency": 4,
+          "selectCampaignJson": "{}",
+          "selectCampaignType": "All",
+          "selectCampaigns": "[]",
+          "isMyEmail": 1
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true, "data": { "$not_empty": true } }
+      },
+      {
+        "name": "后置还原-关闭设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/SaveOutofBudgetEmailSetting",
+        "request_body": {
+          "userId": "{{user_id}}",
+          "status": false,
+          "email": "",
+          "frequency": 0,
+          "selectCampaignJson": "{}",
+          "selectCampaignType": "All",
+          "selectCampaigns": "[]",
+          "isMyEmail": 0
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Notification/V3/SaveProductsEmailSettingUnused - 保存商品资质邮件提醒设置(含读取+还原)",
+    "description": "单接口测试：POST /api/Notification/V3/SaveProductsEmailSettingUnused+GetProductsEmailSetting。⚠️接口名含Unused字样疑似历史遗留标记，但实测确认接口本身功能正常(非死代码)，ES近90天及全量历史均无真实调用记录。1)读取当前设置 2)开启NotInBuybox提醒 3)还原为关闭。已用curl实测确认可正常保存与读取。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前商品资质邮件设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/GetProductsEmailSetting",
+        "request_body": { "userId": "{{user_id}}" },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "开启商品资质邮件设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/SaveProductsEmailSettingUnused",
+        "request_body": {
+          "userId": "{{user_id}}",
+          "status": true,
+          "notInBuybox": true,
+          "ineligaible": false,
+          "outofStock": false,
+          "email": "",
+          "isMyEmail": 1
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true, "data": { "$not_empty": true } }
+      },
+      {
+        "name": "后置还原-关闭设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/SaveProductsEmailSettingUnused",
+        "request_body": {
+          "userId": "{{user_id}}",
+          "status": false,
+          "notInBuybox": false,
+          "ineligaible": false,
+          "outofStock": false,
+          "email": "",
+          "isMyEmail": 0
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Notification/V3/BudgetNotificationEmailSetting - 保存预算通知设置(含读取+还原)",
+    "description": "单接口测试：POST /api/Notification/V3/BudgetNotificationEmailSetting+GET同名读取接口。1)读取当前设置 2)开启isBudgetNotSet提醒 3)还原为关闭。BudgetNotificationEmailSetting全量历史仅16条真实样本，占比约50%(8/16次，另50%为关闭态)，两态均已覆盖(开启态为主case，关闭态即还原步骤)。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前预算通知设置",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/GetBudgetNotificationEmailSetting",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "开启预算通知设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/BudgetNotificationEmailSetting",
+        "request_body": {
+          "status": true,
+          "greaterSDR": null,
+          "lessSDR": null,
+          "spendreach": null,
+          "isSOS": false,
+          "isReenable": false,
+          "isBudgetNotSet": true,
+          "emails": "",
+          "isMyEmail": 1
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "后置还原-关闭设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/BudgetNotificationEmailSetting",
+        "request_body": {
+          "status": false,
+          "greaterSDR": null,
+          "lessSDR": null,
+          "spendreach": null,
+          "isSOS": false,
+          "isReenable": false,
+          "isBudgetNotSet": false,
+          "emails": "",
+          "isMyEmail": 0
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Notification/V3/SettingEmailAndAlert - 保存类型级邮件/站内信告警设置(含读取+还原)",
+    "description": "单接口测试：POST /api/Notification/V3/SettingEmailAndAlert+GetEmailAndAlertInfo。按NotificationType=39(固定类型)保存告警内容与开关状态。1)读取当前设置 2)开启(Status=1) 3)还原为关闭(Status=0)。SettingEmailAndAlert全量历史仅1条真实样本，结构取自真实样本。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前告警设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/GetEmailAndAlertInfo",
+        "request_body": { "NotificationType": "39" },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "开启告警设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/SettingEmailAndAlert",
+        "request_body": {
+          "NotificationType": "39",
+          "NotificationId": "",
+          "Status": 1,
+          "NotificationContent": "[{\"Succeed\":1},{\"Errors\":1}]"
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "后置还原-关闭告警设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/SettingEmailAndAlert",
+        "request_body": {
+          "NotificationType": "39",
+          "NotificationId": "",
+          "Status": 0,
+          "NotificationContent": "[{\"Succeed\":1},{\"Errors\":1}]"
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Notification/V3/MatchRuleSetting - 保存标签匹配规则提醒设置(含读取+还原)",
+    "description": "单接口测试：POST /api/Notification/V3/MatchRuleSetting+GET MatchRuleSettingDetail。按matchRuleType=campaign查询/保存标签匹配规则提醒开关。1)读取当前设置 2)开启(IsEnable=true+ruleTypes) 3)还原为关闭。MatchRuleSetting全量历史仅3条真实样本，结构取自真实样本；MatchRuleSettingDetail的matchRuleType为必填query参数，Swagger未声明枚举值，已用curl实测确认\"campaign\"可正常返回。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前标签匹配规则设置",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/MatchRuleSettingDetail?matchRuleType=campaign",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true, "data": { "$is_array": true } }
+      },
+      {
+        "name": "开启标签匹配规则设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/MatchRuleSetting",
+        "request_body": {
+          "IsEnable": true,
+          "MatchRuleType": "campaign",
+          "Emails": "",
+          "ruleTypes": [
+            { "Type": "campaign", "Value": 0 },
+            { "Type": "keyword", "Value": 1 },
+            { "Type": "asin", "Value": 0 }
+          ],
+          "isMyEmail": 0
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      },
+      {
+        "name": "后置还原-关闭设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/MatchRuleSetting",
+        "request_body": {
+          "IsEnable": false,
+          "MatchRuleType": "campaign",
+          "Emails": "",
+          "ruleTypes": [],
+          "isMyEmail": 0
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Notification/V3/GetUserProfiles - 查询当前用户可用Profile列表",
+    "description": "单接口测试：POST /api/Notification/V3/GetUserProfiles。无关键筛选字段，查询当前用户可选择接收通知的Profile列表。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构构造，已用curl实测确认可正常返回测试账号真实Profile列表。",
+    "module": "Notification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询可用Profile列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Notification/V3/GetUserProfiles",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": { "code": 200, "success": true, "data": { "$is_array": true } }
+      }
+    ]
+  }
+]

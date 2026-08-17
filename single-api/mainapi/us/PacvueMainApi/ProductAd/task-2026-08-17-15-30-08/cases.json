@@ -1,0 +1,181 @@
+[
+  {
+    "name": "POST /api/ProductAd/BulkUpdateProductAdState - 批量更新ProductAd状态(旧版,含一次性campaign创建+清理)",
+    "description": "单接口测试：POST /api/ProductAd/BulkUpdateProductAdState。旧版批量更新ProductAd(商品广告)状态接口，已被/api/ProductAd/v3/BulkChangeState取代(该新接口90天内11333次调用，旧接口仅全量历史107次)。第1步用CreateCampaignandAdGroup创建一次性SP Campaign+AdGroup+ProductAd获取真实可用的padidstr，第2步调用本接口尝试将其置为paused，第3步归档Campaign作为清理。⚠️实测发现：本接口对该真实ProductAd返回HTTP 200+success:true，但内层totalCount=0/successCount=0/message=null——即请求被静默接受但未执行任何实际操作，与90天内近乎零调用量的现象一致，判断该旧版接口在当前环境已失效/未再维护，建议业务方确认是否可下线。",
+    "module": "ProductAd",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建一次性SP Campaign+AdGroup+ProductAd",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaign": {
+            "campaignType": "sponsoredProducts",
+            "targetingType": "manual",
+            "name": "TC-ProductAd-Legacy-Test",
+            "dailyBudget": "10",
+            "state": "enabled",
+            "startDate": "2026/08/17",
+            "endDate": "",
+            "costType": "",
+            "bidding": { "Strategy": "legacyForSales", "Adjustments": [] }
+          },
+          "duration": 0,
+          "adgroupName": "TC-ProductAd-Legacy-AG",
+          "asinstr": "B000MXB3K6",
+          "autoBid": "0.5",
+          "campaignTagIds": []
+        },
+        "extract_vars": {
+          "created_campaign_id": "data.campaignId",
+          "created_ad_id": "data.padidstr"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.padidstr": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "批量更新ProductAd状态(旧版接口)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductAd/BulkUpdateProductAdState",
+        "request_body": [
+          {
+            "CampaignId": "{{created_campaign_id}}",
+            "AdId": "{{created_ad_id}}",
+            "State": "paused",
+            "CampaignType": "sponsoredProducts",
+            "profileId": "{{profile_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档一次性Campaign",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/V4/Update",
+        "request_body": {
+          "profileIds": ["{{profile_id}}"],
+          "campaigns": [
+            {
+              "campaignId": "{{created_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": { "$not_empty": true }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductAd/v3/BulkChangeState - 批量更新ProductAd状态(含一次性campaign创建+清理)",
+    "description": "单接口测试：POST /api/ProductAd/v3/BulkChangeState。按entityID+profileId批量将ProductAd状态改为paused，为该接口最主流真实模式。500条随机样本中占比约100%（500/500次）。第1步用CreateCampaignandAdGroup创建一次性SP Campaign+AdGroup+ProductAd获取真实可用的padidstr，第2步调用本接口将其置为paused(实测successCount=1)，第3步归档Campaign作为清理，保证用例可重复执行。",
+    "module": "ProductAd",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建一次性SP Campaign+AdGroup+ProductAd",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaign": {
+            "campaignType": "sponsoredProducts",
+            "targetingType": "manual",
+            "name": "TC-ProductAd-V3-Test",
+            "dailyBudget": "10",
+            "state": "enabled",
+            "startDate": "2026/08/17",
+            "endDate": "",
+            "costType": "",
+            "bidding": { "Strategy": "legacyForSales", "Adjustments": [] }
+          },
+          "duration": 0,
+          "adgroupName": "TC-ProductAd-V3-AG",
+          "asinstr": "B000MXB3K6",
+          "autoBid": "0.5",
+          "campaignTagIds": []
+        },
+        "extract_vars": {
+          "created_campaign_id": "data.campaignId",
+          "created_ad_id": "data.padidstr"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.padidstr": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "批量更新ProductAd状态(v3接口)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductAd/v3/BulkChangeState",
+        "request_body": {
+          "adIds": [
+            {
+              "entityID": "{{created_ad_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "state": "paused"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": { "$not_empty": true }
+        }
+      },
+      {
+        "name": "后置清理-归档一次性Campaign",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/V4/Update",
+        "request_body": {
+          "profileIds": ["{{profile_id}}"],
+          "campaigns": [
+            {
+              "campaignId": "{{created_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": { "$not_empty": true }
+        }
+      }
+    ]
+  }
+]

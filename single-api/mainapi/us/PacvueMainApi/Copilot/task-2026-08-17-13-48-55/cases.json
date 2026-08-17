@@ -1,0 +1,558 @@
+[
+  {
+    "name": "POST /api/v3/Copilot/GetAsinChangeRatio - 场景1_无filter含对比期查询ASIN变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetAsinChangeRatio。按profileIds+日期区间+对比期(startCompare/endCompare)+isExChange=true查询ASIN指标变化率，不带filter，为该接口最主流真实模式。500条随机样本中占比约56.3%（9/16次，该接口历史全量样本量较小）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ASIN变化率(无filter+对比期)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetAsinChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "asinTagIds": [],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [],
+          "pageInfo": {
+            "orderByField": "OrderChange",
+            "orderAsc": true,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "orderchange asc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetAsinChangeRatio - 场景2_含SalesChange过滤+对比期查询ASIN变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetAsinChangeRatio。在场景1基础上增加filter(SalesChange > 0)按销售额变化率过滤ASIN。500条随机样本中占比约31.3%（5/16次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ASIN变化率(SalesChange过滤+对比期)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetAsinChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "asinTagIds": [],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [
+            { "field": "SalesChange", "operand": 3, "value": "0", "isNot": 0 }
+          ],
+          "pageInfo": {
+            "orderByField": "SalesChange",
+            "orderAsc": true,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "saleschange asc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetAsinChangeRatio - 场景3_dim模式(ytd)+状态过滤查询ASIN变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetAsinChangeRatio。使用dim=ytd相对日期维度+states(enabled/paused)过滤，不同于场景1/2的显式start/end绝对日期入口。500条随机样本中占比约12.5%（2/16次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ASIN变化率(dim模式)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetAsinChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "startCompare": "{{compare_start}}",
+          "endCompare": "{{compare_end}}",
+          "profileIds": ["{{profile_id}}"],
+          "dim": "ytd",
+          "__dim__": "ytd",
+          "states": ["enabled", "paused"],
+          "filter": [],
+          "isExchange": 0,
+          "isFead": 0,
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 200,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetCampaignChangeRatio - 场景1_含CPCChange过滤+对比期查询Campaign变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetCampaignChangeRatio。按profileIds+日期区间+对比期+filter(CPCChange!=0)查询Campaign指标变化率，为该接口最高频真实模式。500条随机样本中占比约49.2%（29/59次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign变化率(CPCChange过滤+对比期)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetCampaignChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [
+            { "field": "CPCChange", "operand": 1, "value": "0", "isNot": 0 }
+          ],
+          "pageInfo": {
+            "orderByField": "CPCChange",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "cpcchange desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetCampaignChangeRatio - 场景2_无filter含对比期查询Campaign变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetCampaignChangeRatio。按profileIds+日期区间+对比期查询Campaign变化率，不带filter。500条随机样本中占比约45.8%（27/59次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign变化率(无filter+对比期)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetCampaignChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": [],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [],
+          "pageInfo": {
+            "orderByField": "SpendChange",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "spendchange desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetCampaignChangeRatio - 场景3_dim模式(ytd)+状态过滤查询Campaign变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetCampaignChangeRatio。使用dim=ytd相对日期维度+states过滤，区别于场景1/2的显式start/end绝对日期入口。500条随机样本中占比约3.4%（2/59次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign变化率(dim模式)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetCampaignChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "startCompare": "{{compare_start}}",
+          "endCompare": "{{compare_end}}",
+          "profileIds": ["{{profile_id}}"],
+          "dim": "ytd",
+          "__dim__": "ytd",
+          "states": ["enabled", "paused"],
+          "filter": [],
+          "isExchange": 0,
+          "isFead": 0,
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 200,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetCampaignChangeRatio - 场景4_按campaignTagIds过滤查询Campaign变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetCampaignChangeRatio。按campaignTagIds(Campaign标签)过滤+日期区间+对比期查询Campaign变化率，不带filter。500条随机样本中占比约1.7%（1/59次，样本极少但为独立业务意图，予以覆盖）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign变化率(按campaignTagIds过滤)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetCampaignChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "campaignTagIds": ["180703", "180704", "180705"],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [],
+          "pageInfo": {
+            "orderByField": "SpendChange",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "spendchange desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetCampaignTagChangeRatio - 场景1_无filter含对比期查询CampaignTag变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetCampaignTagChangeRatio。按profileIds+日期区间+对比期查询CampaignTag维度指标变化率，不带filter。500条随机样本中占比约33.3%（2/6次，该接口历史全量样本量很小）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询CampaignTag变化率(无filter+对比期)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetCampaignTagChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [],
+          "pageInfo": {
+            "orderByField": "SpendChange",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "spendchange desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetCampaignTagChangeRatio - 场景2_含CPCChange过滤+对比期查询CampaignTag变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetCampaignTagChangeRatio。在场景1基础上增加filter(CPCChange!=0)。500条随机样本中占比约33.3%（2/6次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询CampaignTag变化率(CPCChange过滤+对比期)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetCampaignTagChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [
+            { "field": "CPCChange", "operand": 1, "value": "0", "isNot": 0 }
+          ],
+          "pageInfo": {
+            "orderByField": "CPCChange",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "cpcchange desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetCampaignTagChangeRatio - 场景3_dim模式(ytd)+状态过滤查询CampaignTag变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetCampaignTagChangeRatio。使用dim=ytd相对日期维度+states过滤。500条随机样本中占比约33.3%（2/6次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询CampaignTag变化率(dim模式)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetCampaignTagChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "startCompare": "{{compare_start}}",
+          "endCompare": "{{compare_end}}",
+          "profileIds": ["{{profile_id}}"],
+          "dim": "ytd",
+          "__dim__": "ytd",
+          "states": ["enabled", "paused"],
+          "filter": [],
+          "isExchange": 0,
+          "isFead": 0,
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 200,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetKeywordChangeRatio - 场景1_dim模式(ytd)+状态过滤查询Keyword变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetKeywordChangeRatio。使用dim=ytd相对日期维度+states过滤查询Keyword指标变化率。500条随机样本中占比约50.0%（2/4次，该接口历史全量样本量极小）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Keyword变化率(dim模式)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetKeywordChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "startCompare": "{{compare_start}}",
+          "endCompare": "{{compare_end}}",
+          "profileIds": ["{{profile_id}}"],
+          "dim": "ytd",
+          "__dim__": "ytd",
+          "states": ["enabled", "paused"],
+          "filter": [],
+          "isExchange": 0,
+          "isFead": 0,
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 200,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v3/Copilot/GetKeywordChangeRatio - 场景2_无filter含对比期查询Keyword变化率",
+    "description": "单接口测试：POST /api/v3/Copilot/GetKeywordChangeRatio。按profileIds+日期区间+对比期查询Keyword变化率，不带filter。500条随机样本中占比约50.0%（2/4次）。",
+    "module": "Copilot",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Keyword变化率(无filter+对比期)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "V3/Copilot/GetKeywordChangeRatio",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "startCompare": "{{compare_start}}T00:00:00",
+          "endCompare": "{{compare_end}}T00:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "keywordTagIds": [],
+          "toMarket": "US",
+          "isExChange": true,
+          "filter": [],
+          "pageInfo": {
+            "orderByField": "SalesChange",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 1000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "saleschange desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": { "$not_empty": true }
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "name": "POST /api/PromptInsight/generate - 基于Prompt整体表现数据生成AI洞察摘要",
+    "description": "单接口测试：POST /api/PromptInsight/generate。前端将已计算好的Prompt维度整体表现统计(Overview.Overall+SpendConcentration+LongtailEffectiveness)传入，由后端调用AI生成自然语言洞察摘要。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录(疑似新上线/未大规模启用功能)，用例基于Swagger结构(PromptInsightRequest)构造最小合法统计数据集。⚠️实测发现Overview.SpendConcentration/LongtailEffectiveness为隐式必填(缺失返回400校验错误，Swagger未显式标注required)，已在构造中补全；补全后实测确认可正常返回AI生成的洞察文本(code 200)。",
+    "module": "PromptInsight",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "生成Overview维度AI洞察摘要",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "PromptInsight/generate",
+        "request_body": {
+          "Dimension": "Overview",
+          "Overview": {
+            "Overall": {
+              "DataDays": 30,
+              "TotalPrompts": 10,
+              "TotalImpressions": 1000,
+              "TotalClicks": 50,
+              "TotalPurchases": 5,
+              "TotalSpend": 100.0,
+              "TotalSales": 500.0,
+              "OverallCtr": 5.0,
+              "OverallCvr": 10.0,
+              "OverallCpc": 2.0,
+              "OverallAcos": 20.0,
+              "OverallRoas": 5.0
+            },
+            "SpendConcentration": {
+              "Top5": { "Count": 5, "Sum": 50.0, "Pct": 50.0 },
+              "Top10": { "Count": 10, "Sum": 80.0, "Pct": 80.0 },
+              "Top20": { "Count": 10, "Sum": 100.0, "Pct": 100.0 },
+              "Top10Detail": [
+                { "Rank": 1, "Spend": 20.0, "Sales": 100.0, "Roas": 5.0 }
+              ],
+              "Top10LowRoasCount": 1
+            },
+            "LongtailEffectiveness": {
+              "ZeroSalesCount": 2,
+              "ZeroSalesPct": 20.0,
+              "HasPurchaseCount": 5,
+              "HasPurchasePct": 50.0,
+              "ZeroSpendCount": 0,
+              "ZeroSpendPct": 0.0,
+              "ImpNoClickCount": 100,
+              "ZeroSalesHighImpCount": 1
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": { "$not_empty": true }
+        }
+      }
+    ]
+  }
+]

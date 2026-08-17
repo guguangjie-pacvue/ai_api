@@ -1,0 +1,37 @@
+[
+  {
+    "name": "POST /api/AmazonAudience/GetAmazonAudienceCampaign - 按Profile+Campaign查询受众投放Campaign",
+    "description": "单接口测试：POST /api/AmazonAudience/GetAmazonAudienceCampaign。按profileIds+campaignIds查询受众(Audience)投放的Campaign列表。⚠️该接口在ES近90天及全量历史日志中均无真实调用记录，用例基于Swagger结构(AmazonAudienceInput)构造。⚠️实测发现：campaignIds/audienceIds为必填字段(缺失会返回400校验错误)，且当两者同时为空数组时会返回code 513 SQL异常(Incorrect syntax near ')' —— 疑似查询构造器对空IN()子句处理有缺陷)，故本case按campaignIds非空的正常用法构造以规避该缺陷验证正常路径；该513异常已记录供参考。",
+    "module": "AmazonAudience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询受众投放Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAudience/GetAmazonAudienceCampaign",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{sp_manual_pat_campaign_id}}"
+          ],
+          "audienceIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

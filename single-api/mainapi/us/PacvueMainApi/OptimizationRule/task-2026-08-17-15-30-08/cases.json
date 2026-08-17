@@ -1,0 +1,33 @@
+[
+  {
+    "name": "POST /api/v3/OptimizationRule/SaveCostControl - 保存Campaign成本控制规则",
+    "description": "单接口测试：POST /api/v3/OptimizationRule/SaveCostControl。按profileId+campaignId+costControlEnabled+threshold+bidOptimization保存Campaign级成本控制规则，为该接口全量35条真实样本的主流模式。⚠️实测该接口对测试账号真实Campaign({{sp_manual_pat_campaign_id}})返回HTTP 200但内层data.Code=500/Total=0(创建失败)，推测该接口语义为更新一条已存在的Amazon成本控制规则(需真实costRuleId)而非创建新规则，测试账号下无可用的真实costRuleId，已如实记录该发现，未强行伪造costRuleId掩盖此限制。",
+    "module": "OptimizationRule",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存成本控制规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "v3/OptimizationRule/SaveCostControl",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}",
+          "costControlEnabled": false,
+          "threshold": 1,
+          "bidOptimization": "clicks",
+          "campaignType": "sponsoredProducts"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

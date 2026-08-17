@@ -1,0 +1,139 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-17T08:35:18.744554+00:00",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/ProductAd/BulkUpdateProductAdState - 批量更新ProductAd状态(旧版,含一次性campaign创建+清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建一次性SP Campaign+AdGroup+ProductAd",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/CampaignCreate/V3/CreateCampaignandAdGroup",
+          "status_code": 200,
+          "ms": 2729,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:campaignId,profileId,padidstr,adGroupId,error",
+          "data_len": 5,
+          "msg": null
+        },
+        {
+          "name": "批量更新ProductAd状态(旧版接口)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/ProductAd/BulkUpdateProductAdState",
+          "status_code": 200,
+          "ms": 1350,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档一次性Campaign",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/V4/Update",
+          "status_code": 200,
+          "ms": 1873,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/ProductAd/v3/BulkChangeState - 批量更新ProductAd状态(含一次性campaign创建+清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建一次性SP Campaign+AdGroup+ProductAd",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/CampaignCreate/V3/CreateCampaignandAdGroup",
+          "status_code": 200,
+          "ms": 2657,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:campaignId,profileId,padidstr,adGroupId,error",
+          "data_len": 5,
+          "msg": null
+        },
+        {
+          "name": "批量更新ProductAd状态(v3接口)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/ProductAd/v3/BulkChangeState",
+          "status_code": 200,
+          "ms": 4644,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档一次性Campaign",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/V4/Update",
+          "status_code": 200,
+          "ms": 2991,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-08-17T08:35:34.993850+00:00"
+}

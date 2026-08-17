@@ -1,0 +1,504 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-17T07:09:50.855566+00:00",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/AnlayticShare/V3/AddShareLink - 创建分析看板分享链接(含后置清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/AddShareLink",
+          "status_code": 200,
+          "ms": 1078,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Message,TotalShareCount,AvailableShareCount",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "定位新建分享链接的真实ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetShareLinkList",
+          "status_code": 200,
+          "ms": 900,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/DeleteShareLink",
+          "status_code": 200,
+          "ms": 892,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AnlayticShare/V3/GetShareLinkList - 场景1_不筛选ID查询全部分享链接",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询全部分享链接列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetShareLinkList",
+          "status_code": 200,
+          "ms": 2023,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AnlayticShare/V3/GetShareLinkList - 场景2_按指定ID查询分享链接状态",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建临时分享链接用于查询",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/AddShareLink",
+          "status_code": 200,
+          "ms": 1897,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Message,TotalShareCount,AvailableShareCount",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "定位新建分享链接的真实ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetShareLinkList",
+          "status_code": 200,
+          "ms": 1131,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "按指定ID查询分享链接状态(主测试步骤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetShareLinkList",
+          "status_code": 200,
+          "ms": 1064,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除临时分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/DeleteShareLink",
+          "status_code": 200,
+          "ms": 1496,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AnlayticShare/V3/UpdateShareLink - 编辑分享链接完整信息(含创建+清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建一次性分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/AddShareLink",
+          "status_code": 200,
+          "ms": 1965,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Message,TotalShareCount,AvailableShareCount",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "定位新建分享链接的真实ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetShareLinkList",
+          "status_code": 200,
+          "ms": 1842,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "编辑分享链接完整信息(主测试步骤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/UpdateShareLink",
+          "status_code": 200,
+          "ms": 1303,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/DeleteShareLink",
+          "status_code": 200,
+          "ms": 1070,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AnlayticShare/V3/UpdateShareLinkDescription - 编辑分享链接描述(含创建+清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建一次性分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/AddShareLink",
+          "status_code": 200,
+          "ms": 2541,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Message,TotalShareCount,AvailableShareCount",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "定位新建分享链接的真实ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetShareLinkList",
+          "status_code": 200,
+          "ms": 1845,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "编辑分享链接描述(主测试步骤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/UpdateShareLinkDescription",
+          "status_code": 200,
+          "ms": 1341,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/DeleteShareLink",
+          "status_code": 200,
+          "ms": 1760,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AnlayticShare/V3/UpdateShareLinkExpiredDate - 编辑分享链接过期时间(含创建+清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建一次性分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/AddShareLink",
+          "status_code": 200,
+          "ms": 1132,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Message,TotalShareCount,AvailableShareCount",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "定位新建分享链接的真实ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetShareLinkList",
+          "status_code": 200,
+          "ms": 1565,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "编辑分享链接过期时间(主测试步骤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/UpdateShareLinkExpiredDate",
+          "status_code": 200,
+          "ms": 2054,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除分享链接",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/DeleteShareLink",
+          "status_code": 200,
+          "ms": 1007,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AnlayticShare/V3/GetBrandtag - 按Profile查询品牌/非品牌标签树",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询品牌/非品牌标签树",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/GetBrandtag",
+          "status_code": 200,
+          "ms": 2071,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:brands,nonbrands",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AnlayticShare/V3/SaveBrandtag - 保存品牌/非品牌标签设置(含读取原值+还原)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "设置品牌/非品牌标签(主测试步骤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/SaveBrandtag",
+          "status_code": 200,
+          "ms": 1030,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-还原为空(测试账号原始状态)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AnlayticShare/v3/SaveBrandtag",
+          "status_code": 200,
+          "ms": 1888,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-08-17T07:10:25.764771+00:00"
+}

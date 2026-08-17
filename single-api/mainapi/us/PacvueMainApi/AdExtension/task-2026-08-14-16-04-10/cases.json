@@ -1,7 +1,7 @@
 [
   {
-    "name": "POST /api/AdExtension/BulkCreate - 批量创建ENABLED状态PROMPTS广告扩展(含后置清理,未执行)",
-    "description": "单接口测试：POST /api/AdExtension/BulkCreate。真实用户场景：批量为sponsoredProducts广告组创建State=ENABLED、AdExtensionType=PROMPTS、AdExtensionStatus=OPTED_OUT的AI Prompt广告扩展。500条随机样本中占比约94.1%(305/324条item)，是最主流的写入场景。第2步后置操作将新建扩展的State改为PAUSED，尽量减少对该真实AdGroup(ProfileId/AdGroupId来自真实客户,非测试账号)的持续影响。⚠️本case仅生成未执行(用户要求写操作先不执行)：ProfileId/AdGroupId取自ES真实样本(与测试账号{{profile_id}}无关联)，若后续要实际执行，必须先替换为测试账号下可访问的真实ProfileId+AdGroupId组合，否则会写入真实客户数据且可能因权限不足被拒绝。",
+    "name": "POST /api/AdExtension/BulkCreate - 批量创建ENABLED状态PROMPTS广告扩展(含后置清理)",
+    "description": "单接口测试：POST /api/AdExtension/BulkCreate。真实用户场景：批量为sponsoredProducts广告组创建State=ENABLED、AdExtensionType=PROMPTS、AdExtensionStatus=OPTED_OUT的AI Prompt广告扩展。500条随机样本中占比约94.1%(305/324条item)，是最主流的写入场景。第2步后置操作将新建扩展的State改为PAUSED作为清理，保证用例可重复执行。ProfileId/AdGroupId已替换为测试账号真实可用组合(ES原始样本使用的是其他真实客户ID，不可直接执行；测试账号下sp_manual_pat_adgroup_id对该接口返回Invalid adGroup id，已改用ad_adgroup_id)。",
     "module": "AdExtension",
     "granularity": "API",
     "since": "init",
@@ -16,20 +16,20 @@
         "path": "AdExtension/BulkCreate",
         "request_body": [
           {
-            "UserId": 32756,
-            "ProfileId": 3666772103412774,
+            "UserId": "{{user_id}}",
+            "ProfileId": "{{profile_id}}",
             "CampaignType": "sponsoredProducts",
             "AdExtensionType": "PROMPTS",
             "State": "ENABLED",
             "MarketplaceScope": "SINGLE_MARKETPLACE",
             "Marketplace": "US",
-            "AdGroupId": "457377979564426",
+            "AdGroupId": "{{ad_adgroup_id}}",
             "AdExtensionStatus": "OPTED_OUT",
             "PromptText": "Dog treats made in USA facilities"
           }
         ],
         "extract_vars": {
-          "created_ad_extension_id": "data.ids[0]"
+          "created_ad_extension_id": "data.result[0].APIResult[0].entityId"
         },
         "expected_response": {
           "code": 200,
@@ -45,11 +45,11 @@
         "base_url": "{{BASEURL}}",
         "path": "AdExtension/BulkUpdate",
         "request_body": {
-          "UserId": 32756,
+          "UserId": "{{user_id}}",
           "Items": [
             {
-              "UserId": 32756,
-              "ProfileId": 3666772103412774,
+              "UserId": "{{user_id}}",
+              "ProfileId": "{{profile_id}}",
               "CampaignType": "sponsoredProducts",
               "AdExtensionId": "{{created_ad_extension_id}}",
               "State": "PAUSED",
@@ -67,8 +67,8 @@
     ]
   },
   {
-    "name": "POST /api/AdExtension/BulkCreate - 批量创建PAUSED状态PROMPTS广告扩展(未执行)",
-    "description": "单接口测试：POST /api/AdExtension/BulkCreate。真实用户场景：批量创建时直接指定State=PAUSED(而非默认ENABLED)。500条随机样本中占比约5.9%(19/324条item)，属于中频独立场景(用户希望Prompt先以暂停状态创建，之后再手动启用)。因创建时已是PAUSED(非活跃)终态，未额外追加后置清理步骤。⚠️本case仅生成未执行：ProfileId/AdGroupId取自ES真实样本，与测试账号无关联，实际执行前需替换为测试账号可访问的真实组合。",
+    "name": "POST /api/AdExtension/BulkCreate - 批量创建PAUSED状态PROMPTS广告扩展",
+    "description": "单接口测试：POST /api/AdExtension/BulkCreate。真实用户场景：批量创建时直接指定State=PAUSED(而非默认ENABLED)。500条随机样本中占比约5.9%(19/324条item)，属于中频独立场景(用户希望Prompt先以暂停状态创建，之后再手动启用)。因创建时已是PAUSED(非活跃)终态，未额外追加后置清理步骤。ProfileId/AdGroupId已替换为测试账号下真实可访问的SP手动PAT广告组。",
     "module": "AdExtension",
     "granularity": "API",
     "since": "init",
@@ -83,20 +83,20 @@
         "path": "AdExtension/BulkCreate",
         "request_body": [
           {
-            "UserId": 14495,
-            "ProfileId": 4387771326471344,
+            "UserId": "{{user_id}}",
+            "ProfileId": "{{profile_id}}",
             "CampaignType": "sponsoredProducts",
             "AdExtensionType": "PROMPTS",
             "State": "PAUSED",
             "MarketplaceScope": "SINGLE_MARKETPLACE",
             "Marketplace": "US",
-            "AdGroupId": "331199234623295",
+            "AdGroupId": "{{ad_adgroup_id}}",
             "AdExtensionStatus": "OPTED_OUT",
             "PromptText": "Electric wheelchairs with airline-approved battery"
           }
         ],
         "extract_vars": {
-          "created_ad_extension_id": "data.ids[0]"
+          "created_ad_extension_id": "data.result[0].APIResult[0].entityId"
         },
         "expected_response": {
           "code": 200,

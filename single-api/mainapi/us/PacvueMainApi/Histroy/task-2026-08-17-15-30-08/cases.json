@@ -1,0 +1,35 @@
+[
+  {
+    "name": "POST /api/Histroy/GetAmazonHistoryDatas - 按Profile+事件类型查询操作历史",
+    "description": "单接口测试：POST /api/Histroy/GetAmazonHistoryDatas。按profileId+startTime/endTime+eventType+eventTypeIds查询指定事件类型的操作历史记录，为该接口最主流真实模式。500条随机样本中占比约100%（30/30次，该接口全量历史样本量较小）。⚠️该接口响应体为自定义HistroyOutput结构(events/pageSize/totalRecords/message)，不含标准code/success字段，断言已按实测真实结构调整。实测偶发返回message含\"Too Many Requests\"(下游Amazon History API限流)，重试后恢复正常，为已知瞬时性限流现象非接口缺陷。",
+    "module": "Histroy",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询操作历史",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Histroy/GetAmazonHistoryDatas",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "startTime": "{{date_start}}T00:00:00.000Z",
+          "endTime": "{{date_end}}T00:00:00.000Z",
+          "count": 0,
+          "sort": 0,
+          "eventType": 6,
+          "eventTypeIds": [],
+          "filters": [],
+          "parents": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "totalRecords": { "$not_empty": true }
+        }
+      }
+    ]
+  }
+]
