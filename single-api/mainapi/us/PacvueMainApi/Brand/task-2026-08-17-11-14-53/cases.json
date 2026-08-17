@@ -1,0 +1,93 @@
+[
+  {
+    "name": "GET /api/Brand/brands - 场景1_按ProfileId获取品牌列表",
+    "description": "单接口测试：GET /api/Brand/brands。按profileId从ClickHouse Benchmark月表聚合出该Profile下的distinct品牌列表。参数只有profileId一个维度，无其他业务差异，属于唯一真实调用模式。500条随机样本中占比约100.0%（500次）。",
+    "module": "Brand",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBrands",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Brand/brands",
+        "request_body": {},
+        "query_params": {
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Brand/v1/advertisedProductCategories/list - 场景1_获取DSP广告品类首页列表",
+    "description": "单接口测试：POST /api/Brand/v1/advertisedProductCategories/list。代理Amazon DSP Discovery接口，按ProfileId拉取广告品类列表(首页，不带NextToken/MaxResults)。500条真实样本均只传ProfileId，未见分页参数使用，属于唯一真实调用模式。500条随机样本中占比约100.0%（500次）。",
+    "module": "Brand",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AdvertisedProductCategoriesList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Brand/v1/advertisedProductCategories/list",
+        "request_body": {
+          "ProfileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "categories": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Brand/v1/GetCategoryList - 场景1_按国家码US获取品类列表",
+    "description": "单接口测试：GET /api/Brand/v1/GetCategoryList。传countryCode=US获取该国家下的品类列表(BrowseCategoryModel)。ES样本中因90天窗口内无流量，改用全量历史日志(共113条命中，最近一次为2026-04-07)，样本较少场景覆盖可能不全。全量样本中占比约97.3%（110次）。另有2.7%(3次)样本不传countryCode，经实测该请求返回HTTP 400(非成功场景)，判定为异常调用而非真实Happy Path，未生成对应case。",
+    "module": "Brand",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCategoryList",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Brand/v1/GetCategoryList",
+        "request_body": {},
+        "query_params": {
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

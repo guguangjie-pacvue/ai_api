@@ -1,0 +1,1596 @@
+[
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTag - 默认拉取广告组标签树",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTag。本路径 POST 近30/90天无样本。同源 Tagging GET /api/Tagging/v3/GetAdGroupTag 近30天 2629 次，500条随机样本均为空 body，占比100%(500次)。使用空请求体覆盖默认拉树场景。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTag",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTag",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageData - US ytd 默认列表 pageSize=25",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageData。v3 近30天 0 条、90天 2 条；同源 ES /api/AdGroupTag/GetAdGroupTagPageData 224条随机样本中，US、ytd、fieldSet、pageSize=25 占42.9%(96次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 25,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageData - US ytd UserId筛选 pageSize=25",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageData。同源 ES 224条样本中 US、ytd、UserId+fieldSet、pageSize=25 占9.8%(22次)。UserId 使用测试账号 {{user_id}}。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "UserId",
+              "filterContent": "[\"{{user_id}}\"]"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 25,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageData - DE ytd TagId筛选 pageSize=300",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageData。同源 ES 224条样本中 DE、ytd、TagId、pageSize=300 占8.5%(19次)。toMarket 保留 ES 真实值 DE。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "DE",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageData - US ytd 列表 pageSize=100",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageData。同源 ES 224条样本中 US、ytd、fieldSet、pageSize=100 占8.5%(19次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 100,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageData - CA ytd TagId筛选 pageSize=300",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageData。同源 ES 224条样本中 CA、ytd、TagId、pageSize=300 占7.1%(16次)。toMarket 保留 ES 真实值 CA。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "CA",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageData - US ytd TagId筛选 pageSize=25",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageData。同源 ES 224条样本中 US、ytd、TagId+fieldSet、pageSize=25 占4.9%(11次)。独立业务意图：按广告组标签筛选列表。TagId 使用 {{test_adgroup_tag_id}}。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 25,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagChartData - US ytd 默认汇总趋势",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagChartData。v3 近30天 0 条、90天 1 条；同源 ES /api/AdGroupTag/GetAdGroupTagChart 229条随机样本中，US、ytd、仅日期过滤 占50.7%(116次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagChartData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagChartData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "CPA"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagChartData - US ytd UserId筛选趋势",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagChartData。同源 ES 229条样本中 US、ytd、UserId 占9.2%(21次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagChartData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagChartData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "UserId",
+              "filterContent": "[\"{{user_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "CPA"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagChartData - US ytd TagId筛选趋势",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagChartData。同源 ES 229条样本中 US、ytd、TagId 占9.2%(21次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagChartData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagChartData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "CPA"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagChartData - DE date TagId日粒度趋势",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagChartData。同源 ES 229条样本中 DE、date、TagId 占7.4%(17次)。toMarket 保留 DE，dim=date。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagChartData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagChartData",
+        "request_body": {
+          "dim": "date",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "DE",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "CPA"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagChartData - US date TagId日粒度趋势",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagChartData。同源 ES 229条样本中 US、date、TagId 占5.2%(12次)。dim=date。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagChartData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagChartData",
+        "request_body": {
+          "dim": "date",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "CPA"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal - US ytd 默认合计",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal。v3 近30天 0 条、90天 1 条；同源 ES /api/AdGroupTag/GetAdGroupTotalList 290条随机样本中，US、ytd、fieldSet、pageSize=25 占33.1%(96次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageDataTotal",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 25,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal - DE ytd TagId合计",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal。同源 ES 290条样本中 DE、ytd、TagId、pageSize=300 占20.0%(58次)。toMarket 保留 DE。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageDataTotal",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "DE",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal - US ytd TagId合计",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal。同源 ES 290条样本中 US、ytd、TagId、pageSize=300 占9.7%(28次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageDataTotal",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal - CA ytd TagId合计",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal。同源 ES 290条样本中 CA、ytd、TagId、pageSize=300 占9.0%(26次)。toMarket 保留 CA。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageDataTotal",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "CA",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal - US ytd UserId合计",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal。同源 ES 290条样本中 US、ytd、UserId+fieldSet、pageSize=25 占7.6%(22次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageDataTotal",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "UserId",
+              "filterContent": "[\"{{user_id}}\"]"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 25,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal - US ytd 合计 pageSize=100",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupTagPageDataTotal。同源 ES 290条样本中 US、ytd、fieldSet、pageSize=100 占6.6%(19次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupTagPageDataTotal",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 100,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupSubTagData - US ytd 子标签 pageSize=10000",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupSubTagData。本路径近30/90天无样本；同源 ES /api/AdGroupTag/GetAdGroupSubTagList 56条随机样本中，US、ytd、TagId+fieldSet、pageSize=10000 占33.9%(19次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupSubTagData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupSubTagData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "fieldSet",
+              "filterContent": "{\"isShowNTB\":1}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 10000,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupSubTagData - US ytd 子标签 pageSize=300",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupSubTagData。同源 ES 56条样本中 US、ytd、TagId、pageSize=300 占32.1%(18次)。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupSubTagData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupSubTagData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupSubTagData - DE ytd 子标签 pageSize=300",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupSubTagData。同源 ES 56条样本中 DE、ytd、TagId、pageSize=300 占17.9%(10次)。toMarket 保留 DE。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupSubTagData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupSubTagData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "DE",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTag/v3/GetAdGroupSubTagData - CA ytd 子标签 pageSize=300",
+    "description": "单接口测试：POST /api/AdGroupTag/v3/GetAdGroupSubTagData。同源 ES 56条样本中 CA、ytd、TagId、pageSize=300 占7.1%(4次)。toMarket 保留 CA。",
+    "module": "AdGroupTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupSubTagData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupTag/v3/GetAdGroupSubTagData",
+        "request_body": {
+          "dim": "ytd",
+          "isFead": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "CA",
+          "MetricIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "TagId",
+              "filterContent": "[\"{{test_adgroup_tag_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AdGroupTagName",
+            "UserName",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "NewToBrandOrders",
+            "AOV",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "isExchange": 1,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageSize": 300,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

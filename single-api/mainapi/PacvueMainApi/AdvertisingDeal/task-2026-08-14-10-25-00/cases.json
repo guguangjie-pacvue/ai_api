@@ -1,0 +1,498 @@
+[
+  {
+    "name": "POST /api/AdvertisingDeal/QueryAdvertisingDeal/{profileId} - 按单个dealId查询广告交易",
+    "description": "单接口测试：POST /api/AdvertisingDeal/QueryAdvertisingDeal/{profileId}。30天11条随机样本全部是 advertisingDealIdFilter.include 单ID查询(100%)。线上探测省略 maxResults 会触发 Amazon maxResults<=50 校验失败，故补 maxResults:50；dealId 使用测试账号真实 Deal。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 QueryAdvertisingDeal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/QueryAdvertisingDeal/{{profile_id}}",
+        "request_body": {
+          "advertisingDealIdFilter": {
+            "include": [
+              "{{test_advertising_deal_id}}"
+            ]
+          },
+          "maxResults": 50
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdvertisingDeal/QueryAdvertisingDealTarget/{profileId} - 按单个dealId查询交易目标",
+    "description": "单接口测试：POST /api/AdvertisingDeal/QueryAdvertisingDealTarget/{profileId}。30天11条随机样本全部是 advertisingDealIdFilter.include 单ID查询(100%)。dealId 使用测试账号真实 Deal。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 QueryAdvertisingDealTarget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/QueryAdvertisingDealTarget/{{profile_id}}",
+        "request_body": {
+          "advertisingDealIdFilter": {
+            "include": [
+              "{{test_advertising_deal_id}}"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdvertisingDeal/GetReserveKeywordRecommendation/{profileId} - 拉取品牌词推荐",
+    "description": "单接口测试：POST /api/AdvertisingDeal/GetReserveKeywordRecommendation/{profileId}。30天160条随机样本中按 brandAlternateId 查询占98.1%(157次)；null brand 占1.9%已舍弃。测试账号 GetBrands 为空，外账户牌ID会返回 gcorId 不关联，故使用可执行的空 recommendation 成员（与ES同结构、无brand）。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetReserveKeywordRecommendation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/GetReserveKeywordRecommendation/{{profile_id}}",
+        "request_body": {
+          "recommendations": [
+            {}
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdvertisingDeal/GetKeywordReservationValidation/{profileId} - 单关键词预定校验",
+    "description": "单接口测试：POST /api/AdvertisingDeal/GetKeywordReservationValidation/{profileId}。90天7条样本(30天0条，样本较少)中单关键词占42.9%(3次)。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordReservationValidation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/GetKeywordReservationValidation/{{profile_id}}",
+        "request_body": {
+          "keywordReservationValidations": [
+            {
+              "keyword": "monster jam"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdvertisingDeal/GetKeywordReservationValidation/{profileId} - 3到4个品牌词批量校验",
+    "description": "单接口测试：POST /api/AdvertisingDeal/GetKeywordReservationValidation/{profileId}。90天7条样本中3-4个关键词批量占42.9%(3次)，其中4词 caron 组合出现2次。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordReservationValidation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/GetKeywordReservationValidation/{{profile_id}}",
+        "request_body": {
+          "keywordReservationValidations": [
+            {
+              "keyword": "caron and doucet"
+            },
+            {
+              "keyword": "caron et doucet"
+            },
+            {
+              "keyword": "caron doucet"
+            },
+            {
+              "keyword": "caron & doucet cast iron"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdvertisingDeal/GetKeywordReservationValidation/{profileId} - 大批量54个关键词校验",
+    "description": "单接口测试：POST /api/AdvertisingDeal/GetKeywordReservationValidation/{profileId}。90天7条样本中54词大批量占14.3%(1次)。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordReservationValidation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/GetKeywordReservationValidation/{{profile_id}}",
+        "request_body": {
+          "keywordReservationValidations": [
+            {
+              "keyword": "hp mouse"
+            },
+            {
+              "keyword": "hp wireless mouse"
+            },
+            {
+              "keyword": "hp mouse wireless"
+            },
+            {
+              "keyword": "hp bluetooth mouse"
+            },
+            {
+              "keyword": "hp silent mouse"
+            },
+            {
+              "keyword": "hp quiet mouse"
+            },
+            {
+              "keyword": "hp travel mouse"
+            },
+            {
+              "keyword": "hp ergonomic mouse"
+            },
+            {
+              "keyword": "hp rechargeable mouse"
+            },
+            {
+              "keyword": "hp mouse for laptop"
+            },
+            {
+              "keyword": "hp mouse deals"
+            },
+            {
+              "keyword": "hp mouse rechargeable"
+            },
+            {
+              "keyword": "hp mouse silent"
+            },
+            {
+              "keyword": "hp mouse bluetooth"
+            },
+            {
+              "keyword": "hp mouse for hp laptop"
+            },
+            {
+              "keyword": "hp computer mouse"
+            },
+            {
+              "keyword": "hp x3000 mouse"
+            },
+            {
+              "keyword": "hp 280 wireless mouse"
+            },
+            {
+              "keyword": "hp 280 silent mouse"
+            },
+            {
+              "keyword": "hp 430 mouse"
+            },
+            {
+              "keyword": "hp 690 mouse"
+            },
+            {
+              "keyword": "hp x3000 wireless mouse"
+            },
+            {
+              "keyword": "hp x3000 g3 mouse"
+            },
+            {
+              "keyword": "hp x3000 g3 black"
+            },
+            {
+              "keyword": "hp x3000 g3 blue"
+            },
+            {
+              "keyword": "hp 400 wireless mouse"
+            },
+            {
+              "keyword": "hp 400 quiet mouse"
+            },
+            {
+              "keyword": "hp 400 black mouse"
+            },
+            {
+              "keyword": "hp 400 pink mouse"
+            },
+            {
+              "keyword": "hp 240 bluetooth mouse"
+            },
+            {
+              "keyword": "hp 240 bt mouse"
+            },
+            {
+              "keyword": "hp mouse wireless for laptop"
+            },
+            {
+              "keyword": "wireless mouse for hp laptop"
+            },
+            {
+              "keyword": "wireless mouse hp"
+            },
+            {
+              "keyword": "mouse for hp laptop"
+            },
+            {
+              "keyword": "mouse for laptop hp"
+            },
+            {
+              "keyword": "hp wireless mouse for laptop"
+            },
+            {
+              "keyword": "mouse hp"
+            },
+            {
+              "keyword": "hp laptop mouse"
+            },
+            {
+              "keyword": "wireless mouse for hp laptop computer"
+            },
+            {
+              "keyword": "hp laptop mouse wireless"
+            },
+            {
+              "keyword": "mouse for hp laptop windows 11"
+            },
+            {
+              "keyword": "wireless mouse for laptop hp"
+            },
+            {
+              "keyword": "hp wireless mouse for desktop computer"
+            },
+            {
+              "keyword": "wireless mouse hp laptop"
+            },
+            {
+              "keyword": "wireless hp mouse"
+            },
+            {
+              "keyword": "best wireless mouse for hp laptop"
+            },
+            {
+              "keyword": "bluetooth mouse for hp laptop"
+            },
+            {
+              "keyword": "hp computer mouse wireless"
+            },
+            {
+              "keyword": "mouse for hp"
+            },
+            {
+              "keyword": "mouse hp laptop"
+            },
+            {
+              "keyword": "wireless mouse for hp laptop windows 11"
+            },
+            {
+              "keyword": "computer mouse hp"
+            },
+            {
+              "keyword": "bluetooth mouse hp"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdvertisingDeal/GetBrandedKeywordPriceSummary/{profileId} - 5个品牌词约90天询价",
+    "description": "单接口测试：POST /api/AdvertisingDeal/GetBrandedKeywordPriceSummary/{profileId}。90天2条样本(30天0条，样本较少)中5词+约90天日期占50%(1次)。日期改为未来区间(开始须晚于今天+3天)，关键词保留ES原值。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBrandedKeywordPriceSummary",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/GetBrandedKeywordPriceSummary/{{profile_id}}",
+        "request_body": {
+          "brandedKeywordsPricings": [
+            {
+              "startDateTime": "{{deal_price_start_90d}}",
+              "endDateTime": "{{deal_price_end_90d}}",
+              "keywords": [
+                "tropiclean dog shampoo",
+                "tropiclean dog spray",
+                "tropiclean dog wipes",
+                "dog shampoo tropiclean",
+                "tropiclean deodorizing pet spray"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdvertisingDeal/GetBrandedKeywordPriceSummary/{profileId} - 大批量54个关键词约30天询价",
+    "description": "单接口测试：POST /api/AdvertisingDeal/GetBrandedKeywordPriceSummary/{profileId}。90天2条样本中54词+约30天日期占50%(1次)。日期改为未来区间，关键词保留ES原值。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBrandedKeywordPriceSummary",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/GetBrandedKeywordPriceSummary/{{profile_id}}",
+        "request_body": {
+          "brandedKeywordsPricings": [
+            {
+              "startDateTime": "{{deal_price_start_30d}}",
+              "endDateTime": "{{deal_price_end_30d}}",
+              "keywords": [
+                "hp mouse",
+                "hp wireless mouse",
+                "hp mouse wireless",
+                "hp bluetooth mouse",
+                "hp silent mouse",
+                "hp quiet mouse",
+                "hp travel mouse",
+                "hp ergonomic mouse",
+                "hp rechargeable mouse",
+                "hp mouse for laptop",
+                "hp mouse deals",
+                "hp mouse rechargeable",
+                "hp mouse silent",
+                "hp mouse bluetooth",
+                "hp mouse for hp laptop",
+                "hp computer mouse",
+                "hp x3000 mouse",
+                "hp 280 wireless mouse",
+                "hp 280 silent mouse",
+                "hp 430 mouse",
+                "hp 690 mouse",
+                "hp x3000 wireless mouse",
+                "hp x3000 g3 mouse",
+                "hp x3000 g3 black",
+                "hp x3000 g3 blue",
+                "hp 400 wireless mouse",
+                "hp 400 quiet mouse",
+                "hp 400 black mouse",
+                "hp 400 pink mouse",
+                "hp 240 bluetooth mouse",
+                "hp 240 bt mouse",
+                "hp mouse wireless for laptop",
+                "wireless mouse for hp laptop",
+                "wireless mouse hp",
+                "mouse for hp laptop",
+                "mouse for laptop hp",
+                "hp wireless mouse for laptop",
+                "mouse hp",
+                "hp laptop mouse",
+                "wireless mouse for hp laptop computer",
+                "hp laptop mouse wireless",
+                "mouse for hp laptop windows 11",
+                "wireless mouse for laptop hp",
+                "hp wireless mouse for desktop computer",
+                "wireless mouse hp laptop",
+                "wireless hp mouse",
+                "best wireless mouse for hp laptop",
+                "bluetooth mouse for hp laptop",
+                "hp computer mouse wireless",
+                "mouse for hp",
+                "mouse hp laptop",
+                "wireless mouse for hp laptop windows 11",
+                "computer mouse hp",
+                "bluetooth mouse hp"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
