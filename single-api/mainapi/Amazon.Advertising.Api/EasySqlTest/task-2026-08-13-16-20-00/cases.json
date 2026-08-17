@@ -1,0 +1,1671 @@
+[
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTest - US 默认启用/暂停状态 100条分页",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTest。EasySqlTest 无生产日志；同源 Campaign/GetCampaignPageData 500条随机样本中，US、ytd、CampaignState+日期、pageSize=100 占7.6%(38条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTest",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTest",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{date_start_mdy}}\",\"endCompare\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "CampaignTagNames",
+            "CreationDate",
+            "StartDate",
+            "PlacementTopAdjustPercentage",
+            "ProductPagesAdjustPercentage",
+            "RestOfSearchAdjustPercentage",
+            "HomePageAdjustPercentage",
+            "AudienceResolved",
+            "AudienceId",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTest - US 按活动下钻逐日",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTest。同源 PageData 样本中 US、date、CampaignId 筛选、pageSize=100 占13.4%(67条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTest",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTest",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterType": 8,
+              "filterContent": "[\"{{exist_sp_campaign_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "ReportDateTime",
+            "ActlBid",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "CampaignType",
+            "CampaignTypeDetails",
+            "CurrencySymbol",
+            "CostType"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "ReportDateTime",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTest - US 按活动名搜索",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTest。同源 PageData 样本中 US、ytd、CampaignName+State、pageSize=100 占4.6%(23条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTest",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTest",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignName",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"NB\"]}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "RecommendedBudget",
+            "ActlBid",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "IROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTest - US 默认25条分页",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTest。同源 PageData 样本中 US、ytd、CampaignState、pageSize=25 占4.4%(22条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTest",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTest",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{date_start_mdy}}\",\"endCompare\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "CampaignTagNames",
+            "CreationDate",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "TopOfSearchIS",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "CreationDate",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 25,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTest - US Feed模式浏览",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTest。同源 PageData 样本中 US、ytd、IsFead=1、pageSize=25 占1.8%(9条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTest",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTest",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 1,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "BiddingStrategy",
+            "BidOptimization",
+            "PlacementTopAdjustPercentage",
+            "ProductPagesAdjustPercentage",
+            "RestOfSearchAdjustPercentage",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 25,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTest - CA 市场汇总浏览",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTest。同源 PageData 样本中 CA、ytd 占4.8%(24条)。ToMarket 保留真实 CA。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTest",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTest",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "CA",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "Spend",
+            "Conversion",
+            "ACOS",
+            "TargetACOS",
+            "CVR",
+            "518540",
+            "83626",
+            "71780",
+            "510500",
+            "71781",
+            "526686",
+            "545989",
+            "4623194",
+            "4645702",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "CreationDate",
+            "PlacementTopAdjustPercentage",
+            "ProductPagesAdjustPercentage",
+            "RestOfSearchAdjustPercentage",
+            "HomePageAdjustPercentage",
+            "AudienceResolved",
+            "AudienceId",
+            "BudgetUsage",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "ServingStatus",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "Impression",
+            "Click",
+            "CTR",
+            "CPC",
+            "TopOfSearchIS",
+            "Sales",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "PageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestChart - US 按活动下钻趋势",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestChart。同源 Campaign/GetCampaignChart 500条样本中 US、date、CampaignId 占29.4%(147条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestChart",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestChart",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterType": 8,
+              "filterContent": "[\"{{exist_sp_campaign_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestChart - US 默认状态汇总趋势",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestChart。同源 Chart 样本中 US、ytd、CampaignState 占7.4%(37条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestChart",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestChart - US 按活动名搜索趋势",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestChart。同源 Chart 样本中 US、ytd、CampaignName+State 占7.2%(36条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestChart",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignName",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"BPC_SP_NB_Strobe_Light_by_Color_Auto\"]}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestChart - JP 按活动下钻趋势",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestChart。同源 Chart 样本中 JP、date 占1.4%(7条)。ToMarket 保留真实 JP。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestChart",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestChart",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "JP",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterType": 8,
+              "filterContent": "[\"{{exist_sp_campaign_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestChart - US Feed模式趋势",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestChart。同源 Chart 样本中 US、ytd、IsFead=1 占2.0%(10条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestChart",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 1,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestTotal - US 按活动下钻汇总",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestTotal。同源 Campaign/GetCampaignTotal 500条样本中 US、date、CampaignId、pageSize=100 占10.4%(52条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestTotal",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{date_start_mdy}}\",\"endCompare\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterType": 8,
+              "filterContent": "[\"{{exist_sp_campaign_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "ACOS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "ReportDateTime",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestTotal - US 默认状态汇总",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestTotal。同源 Total 样本中 US、ytd、CampaignState、pageSize=100 占3.8%(19条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{date_start_mdy}}\",\"endCompare\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "ACOS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "StartDate",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestTotal - US 按活动名搜索汇总",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestTotal。同源 Total 样本中 US、ytd、CampaignName 占3.6%(18条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{date_start_mdy}}\",\"endCompare\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignName",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"Nautic\"]}"
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "AvlBid",
+            "Spend",
+            "CPC",
+            "TopOfSearchIS",
+            "Impression",
+            "Click",
+            "CTR",
+            "DetailPageViews",
+            "Conversion",
+            "CVR",
+            "CPA",
+            "ACOS",
+            "ROAS",
+            "Sales",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestTotal - US 仅日期筛选汇总",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestTotal。同源 Total 样本中 US、ytd、仅 ReportDateTime、pageSize=100 占2.6%(13条)。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "Spend",
+            "CTR",
+            "CPC",
+            "TopOfSearchIS",
+            "ViewImpression",
+            "VCPM",
+            "BrandedSearch",
+            "DetailPageViews",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "CPA",
+            "ACOS",
+            "ROAS",
+            "NewToBrandDetailPageView",
+            "NewToBrandSales",
+            "NewToBrandSalesPercentage",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "NewToBrandOrderRate",
+            "NewToBrandUnitsOrdered",
+            "NewToBrandUnitsOrderedPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "VideoCompleteViews",
+            "VideoCompleteRate",
+            "OtherSales",
+            "OtherSalesPercent",
+            "SBSDNewToBrandSalesPercentage"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EasySqlTest/GetCampaignListTestTotal - CA 市场汇总",
+    "description": "单接口测试：POST /api/EasySqlTest/GetCampaignListTestTotal。同源 Total 样本中 CA、ytd 占4.4%(22条)。ToMarket 保留真实 CA。",
+    "module": "EasySqlTest",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignListTestTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "EasySqlTest/GetCampaignListTestTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "CA",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignName",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"SB_Home_KW_BR_PDM\"]}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "ACOS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
