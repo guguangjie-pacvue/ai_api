@@ -1,0 +1,153 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-13T05:51:39.775Z",
+  "finished_at": "2026-08-13T05:51:43.607Z",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Targeting/V3/CreateSDPAT - 场景1_SD广告组新增ASIN商品定向PAT(含后置清理,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建 SD 商品定向 PAT",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Targeting/V3/CreateSDPAT",
+          "request_body": {
+            "targetingClause": [
+              {
+                "adGroupId": "476695894980872",
+                "expression": [
+                  {
+                    "type": "asinSameAs",
+                    "value": "B0CG88XKV6"
+                  }
+                ],
+                "type": "",
+                "bid": "0.2",
+                "expressionType": "manual",
+                "state": "enabled"
+              }
+            ],
+            "adGroupsAndCampaigns": [
+              {
+                "profileId": "2755545444012419",
+                "campaignId": "350403371302624",
+                "adGroupId": "476695894980872"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 200,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "350403371302624",
+                      "adGroupId": "476695894980872",
+                      "entityId": "267921374221515",
+                      "isSuccess": true,
+                      "campaignType": "SponsoredDisplay",
+                      "keywordText": "[{\"type\":\"asinSameAs\",\"value\":\"B0CG88XKV6\"}]",
+                      "matchType": ""
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置清理-归档新建target",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Targeting/V3/UpdateTargetPATStatus",
+          "request_body": {
+            "Item": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "350403371302624",
+                "AdgroupId": "476695894980872",
+                "TargetId": "267921374221515",
+                "CampaignType": "SponsoredDisplay",
+                "MatchType": ""
+              }
+            ],
+            "state": "archived"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [
+                {
+                  "Code": 0,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "350403371302624",
+                      "adGroupId": "476695894980872",
+                      "entityId": "267921374221515",
+                      "message": "",
+                      "isSuccess": true,
+                      "campaignType": "sponsoredProducts"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    }
+  ]
+}

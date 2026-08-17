@@ -1,0 +1,874 @@
+[
+  {
+    "name": "POST /api/Campaign/v3/UpsertCampaignNote - 创建campaign备注(含后置删除,可重复)",
+    "description": "单接口测试(写操作)：POST /api/Campaign/v3/UpsertCampaignNote。为SP campaign新增一条备注(Id=0为创建);因创建接口不回传新备注id,第2步用GetCampaignNote取最新一条(newest-first)的Id,第3步DeleteCampaignNote删除,保证用例可重复执行、无残留。近90天样本中创建形态占比约100%(80次)。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建campaign备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/UpsertCampaignNote",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sp_campaign_id}}",
+          "Note": "swagger-api-case 自动化测试备注(可删除)",
+          "Id": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "取最新备注id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/GetCampaignNote",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "created_note_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除新建备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/DeleteCampaignNote?id={{created_note_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/DeleteCampaignNote - 删除campaign备注(前置创建,可重复)",
+    "description": "单接口测试(写操作)：POST /api/Campaign/v3/DeleteCampaignNote。第1步前置创建一条备注,第2步GetCampaignNote取最新id,第3步删除该备注为主验证目标,保证可重复执行。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-新增一条备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/UpsertCampaignNote",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sp_campaign_id}}",
+          "Note": "swagger-api-case 待删除备注",
+          "Id": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "取最新备注id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/GetCampaignNote",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "note_id_to_delete": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/DeleteCampaignNote?id={{note_id_to_delete}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/BulkCampaignEndDate - 设置campaign结束日期(含后置还原,可重复)",
+    "description": "单接口测试(写操作)：POST /api/Campaign/v3/BulkCampaignEndDate。enddate格式为yyyyMMdd。第1步将SP campaign结束日期设为20991231,第2步还原为原值20990101(远期日期,无实际投放影响),保证用例可重复执行。近90天样本中占比约100%。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置campaign结束日期",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkCampaignEndDate",
+        "request_body": {
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "enddate": "20991231"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置还原-恢复原结束日期",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkCampaignEndDate",
+        "request_body": {
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "enddate": "20990101"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/UpdateCampaignBidForSbAndSp - 更新SP竞价策略(读取原值回写,可重复)",
+    "description": "单接口测试(写操作)：POST /api/Campaign/v3/UpdateCampaignBidForSbAndSp。第1步读取SP campaign当前biddingStrategy,第2步以相同值回写(幂等无实际变更,天然自清理),避免污染测试账号。近90天样本中updateSp形态为主流。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置读取-当前SP竞价策略",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/GetCampaignSetting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "orig_sp_bidding": "data.data.biddingStrategy"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "回写SP竞价策略(值不变)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/UpdateCampaignBidForSbAndSp",
+        "request_body": {
+          "eventType": 1,
+          "updateSp": true,
+          "updateSpEntity": {
+            "profileIds": [
+              "{{profile_id}}"
+            ],
+            "campaignIds": [
+              "{{exist_sp_campaign_id}}"
+            ],
+            "biddingStrategy": "{{orig_sp_bidding}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/UpdateCampaignName - 更新SP campaign名称(读取原值回写,可重复)",
+    "description": "写操作：读取当前name,以相同值回写(幂等无变更,自清理)。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前名称",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/GetCampaignSetting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "orig_sp_name": "data.data.name"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "回写名称(值不变)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/UpdateCampaignName",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "name": "{{orig_sp_name}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/UpdateCampaignBidForSB - 更新SB竞价优化(现值回写,可重复)",
+    "description": "写操作：SB campaign bidOptimization 现值(0=关闭)回写,BidAdjustments置空(该SB关键词campaign无位置调价),幂等无实质变更。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "回写SB竞价优化",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/UpdateCampaignBidForSB",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ],
+          "bidOptimization": 0,
+          "BidAdjustments": [
+            {
+              "BidAdjustmentPredicate": "placementGroupDetailPage",
+              "BidAdjustmentPercent": 0
+            },
+            {
+              "BidAdjustmentPredicate": "placementGroupTopOfSearch",
+              "BidAdjustmentPercent": 0
+            },
+            {
+              "BidAdjustmentPredicate": "placementGroupHome",
+              "BidAdjustmentPercent": 0
+            },
+            {
+              "BidAdjustmentPredicate": "placementGroupOther",
+              "BidAdjustmentPercent": 0
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/BulkUpdateCampaignPortfolio - 更新campaign所属portfolio(设为当前,可重复)",
+    "description": "写操作：将SP campaign的portfolio设为其当前值204806772208933,幂等无变更。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置portfolio(值不变)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkUpdateCampaignPortfolio",
+        "request_body": {
+          "portfolioId": "204806772208933",
+          "profileId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/BulkDeleteCampaignFromPortfolio - 从portfolio移除campaign(含后置还原,可重复)",
+    "description": "写操作：第1步将SP campaign移出portfolio,第2步后置还原-重新加入原portfolio 204806772208933,保证可重复。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "从portfolio移除",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkDeleteCampaignFromPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置还原-加回原portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkUpdateCampaignPortfolio",
+        "request_body": {
+          "portfolioId": "204806772208933",
+          "profileId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/CopyCampaign - 复制SP campaign(含后置归档,可重复)",
+    "description": "写操作(创建)：复制SP campaign为paused新campaign,提取新CampaignId后用CampaignUpdateBatch归档(archived=业务删除),保证可重复、无有效残留。近90天样本占比约100%。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SP campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/CopyCampaign",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "Campaign": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "CampaignName": "ZZ-swagger-autotest-CopyCampaign",
+            "DailyBudget": "5",
+            "StartDate": "{{date_start}}",
+            "EndDate": null,
+            "Tags": [],
+            "PlacementBidAdjustments": [],
+            "portfolioId": "",
+            "State": "paused"
+          },
+          "CopySdCreative": 0
+        },
+        "extract_vars": {
+          "copied_sp_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置归档-归档复制的campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/CampaignUpdateBatch",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{copied_sp_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/CopyCampaignV2 - 复制SP campaign V2(含后置归档,可重复)",
+    "description": "写操作(创建)：CopyCampaignV2复制SP campaign(可携带广告组ASIN),提取新CampaignId后归档,保证可重复。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SP campaign(V2)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/CopyCampaignV2",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "Campaign": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "CampaignName": "ZZ-swagger-autotest-CopyCampaignV2",
+            "DailyBudget": "5",
+            "StartDate": "{{date_start}}",
+            "EndDate": null,
+            "Tags": [],
+            "PlacementBidAdjustments": [],
+            "portfolioId": "",
+            "State": "paused"
+          },
+          "CopySdCreative": 0,
+          "AdGroupAsins": []
+        },
+        "extract_vars": {
+          "copied_v2_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置归档-归档复制的campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/CampaignUpdateBatch",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{copied_v2_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/BulkCopyCampaign - 批量复制SP campaign(含后置归档,可重复)",
+    "description": "写操作(创建)：BulkCopyCampaign批量复制SP campaign(State=2 paused),提取新CampaignId后归档,保证可重复。近90天样本占比约100%。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量复制SP campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkCopyCampaign",
+        "request_body": {
+          "SP": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sp_campaign_id}}"
+            }
+          ],
+          "SB": [],
+          "SD": [],
+          "StartDate": "{{date_start}}",
+          "EndDate": null,
+          "State": 2,
+          "copyTag": false,
+          "copyPortfolio": false
+        },
+        "extract_vars": {
+          "bulk_copied_id": "data.Results[0].NewCampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置归档-归档复制的campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/CampaignUpdateBatch",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{bulk_copied_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/SaveCampaignShopperCohortBidding - 设置SP shopper cohort竞价(含后置清除,可重复)",
+    "description": "写操作：第1步取一个AMC受众id,第2步为SP campaign设置shopper cohort竞价,第3步后置清除(shopperCohortBidding置空),保证可重复。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "取AMC受众id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/GetAmazonAmcAudienceId",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignType": 0,
+          "AudienceId": "x"
+        },
+        "extract_vars": {
+          "aud_id": "data.TargetableEntities[0].audienceId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "设置shopper cohort竞价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/SaveCampaignShopperCohortBidding",
+        "request_body": {
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "campaignType": "sponsoredProducts",
+          "shopperCohortBidding": [
+            {
+              "ShopperCohortType": "AUDIENCE_SEGMENT",
+              "Percentage": 50,
+              "AudienceSegments": [
+                {
+                  "AudienceId": "{{aud_id}}",
+                  "AudienceSegmentType": "SPONSORED_ADS_AMC"
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清除-清空shopper cohort竞价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/SaveCampaignShopperCohortBidding",
+        "request_body": {
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "campaignType": "sponsoredProducts",
+          "shopperCohortBidding": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp - 更新受众竞价百分比(含后置清除,可重复)",
+    "description": "写操作：第1步取AMC受众id,第2步为SP campaign更新受众竞价百分比,第3步后置清除,保证可重复。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "取AMC受众id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/GetAmazonAmcAudienceId",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignType": 0,
+          "AudienceId": "x"
+        },
+        "extract_vars": {
+          "aud_id2": "data.TargetableEntities[0].audienceId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "更新受众竞价百分比",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp",
+        "request_body": {
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "updateEntity": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "shopperCohortBidding": [
+                {
+                  "ShopperCohortType": "AUDIENCE_SEGMENT",
+                  "Percentage": 60,
+                  "AudienceSegments": [
+                    {
+                      "AudienceId": "{{aud_id2}}",
+                      "AudienceSegmentType": "SPONSORED_ADS_AMC"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "eventType": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清除-清空受众竞价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp",
+        "request_body": {
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "updateEntity": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "shopperCohortBidding": []
+            }
+          ],
+          "eventType": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/v3/CampaignUpdateBatch - 批量编辑campaign(现值回写,可重复)",
+    "description": "写操作：以SP campaign当前值(name/budget/state/策略)回写,幂等无实质变更,天然自清理。",
+    "module": "CampaignPartial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "回写campaign(值不变)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/CampaignUpdateBatch",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "name": "TC-SP-CampaignUpdate-Test",
+              "budget": 5,
+              "state": "enabled",
+              "BiddingStrategy": "legacyForSales",
+              "endDate": "20990101"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  }
+]

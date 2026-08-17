@@ -1,0 +1,260 @@
+[
+  {
+    "name": "POST /api/AmazonAds/GetAmazonAds - 查询广告组下的亚马逊广告列表",
+    "description": "单接口测试：POST /api/AmazonAds/GetAmazonAds。按profileId和adgroupIds（单个广告组）查询广告列表，为唯一常见场景。500条随机样本中占比约100%（20次）。",
+    "module": "AmazonAds",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询广告组下的Amazon广告",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/GetAmazonAds",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adgroupIds": ["{{ad_adgroup_id}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/AmazonAds/STV/Video - 更新STV广告视频素材（含后置恢复）",
+    "description": "单接口测试：PUT /api/AmazonAds/STV/Video。更新SponsoredTelevision广告的视频assetId，第2步后置恢复原assetId保证可重复执行。需在config.json中填入stv_*变量后执行。ES样本50%最高频实体（4条样本）。500条随机样本中占比约100%（4次）。",
+    "module": "AmazonAds",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新STV广告视频asset",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/STV/Video",
+        "request_body": {
+          "updates": [
+            {
+              "profileId": "{{stv_profile_id}}",
+              "campaignId": "{{stv_campaign_id}}",
+              "adGroupId": "{{stv_adgroup_id}}",
+              "adId": "{{stv_ad_id}}",
+              "video": {
+                "assetId": "amzn1.assetlibrary.asset1.6f64b99f63aa0164b0f71cc1deb19270",
+                "assetVersion": "version_v1"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置恢复-广告视频asset还原",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/STV/Video",
+        "request_body": {
+          "updates": [
+            {
+              "profileId": "{{stv_profile_id}}",
+              "campaignId": "{{stv_campaign_id}}",
+              "adGroupId": "{{stv_adgroup_id}}",
+              "adId": "{{stv_ad_id}}",
+              "video": {
+                "assetId": "{{stv_asset_id_original}}",
+                "assetVersion": "version_v1"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/AmazonAds/UpdateAd - 批量暂停广告（含后置恢复）",
+    "description": "单接口测试：PUT /api/AmazonAds/UpdateAd。将广告状态设置为PAUSED，第2步后置恢复为ENABLED保证可重复执行。广告当前状态PAUSED，本case先设PAUSED再cleanup至ENABLED。500条随机样本中占比约35%（7次）。",
+    "module": "AmazonAds",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "暂停广告",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/UpdateAd",
+        "request_body": {
+          "Updates": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdGroupId": "{{ad_adgroup_id}}",
+              "AdId": "{{ad_id}}",
+              "State": "PAUSED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置恢复-广告状态改回ENABLED",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/UpdateAd",
+        "request_body": {
+          "Updates": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdGroupId": "{{ad_adgroup_id}}",
+              "AdId": "{{ad_id}}",
+              "State": "ENABLED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/AmazonAds/UpdateAd - 批量启用广告（含后置恢复）",
+    "description": "单接口测试：PUT /api/AmazonAds/UpdateAd。将广告状态设置为ENABLED，第2步后置恢复为PAUSED保证可重复执行。500条随机样本中占比约30%（6次）。",
+    "module": "AmazonAds",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "启用广告",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/UpdateAd",
+        "request_body": {
+          "Updates": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdGroupId": "{{ad_adgroup_id}}",
+              "AdId": "{{ad_id}}",
+              "State": "ENABLED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置恢复-广告状态改回PAUSED",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/UpdateAd",
+        "request_body": {
+          "Updates": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdGroupId": "{{ad_adgroup_id}}",
+              "AdId": "{{ad_id}}",
+              "State": "PAUSED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/AmazonAds/UpdateAd - 更新广告名称（含后置恢复）",
+    "description": "单接口测试：PUT /api/AmazonAds/UpdateAd。更新单个广告的Name字段，第2步后置恢复为原名称\"12341234\"保证可重复执行。500条随机样本中占比约35%（7次）。",
+    "module": "AmazonAds",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新广告名称",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/UpdateAd",
+        "request_body": {
+          "Updates": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdGroupId": "{{ad_adgroup_id}}",
+              "AdId": "{{ad_id}}",
+              "Name": "AutoCase_Ad_Updated"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置恢复-广告名称改回原名称",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAds/UpdateAd",
+        "request_body": {
+          "Updates": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdGroupId": "{{ad_adgroup_id}}",
+              "AdId": "{{ad_id}}",
+              "Name": "12341234"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

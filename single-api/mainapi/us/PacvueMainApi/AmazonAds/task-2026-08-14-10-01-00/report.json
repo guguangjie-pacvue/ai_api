@@ -1,0 +1,484 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-14T03:23:54.771Z",
+  "finished_at": "2026-08-14T03:24:09.972Z",
+  "total": 5,
+  "passed": 4,
+  "failed": 1,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/AmazonAds/GetAmazonAds - 查询广告组下的亚马逊广告列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询广告组下的Amazon广告",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/GetAmazonAds",
+          "request_body": {
+            "profileId": "2755545444012419",
+            "adgroupIds": [
+              "522006819243519"
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": [
+              {
+                "Profileid": 2755545444012419,
+                "AdGroupId": 522006819243519,
+                "AdId": 484354405398182,
+                "CampaignId": 189321374680541,
+                "Name": "12341234",
+                "State": "PAUSED",
+                "CreationDate": null,
+                "LastUpdatedDate": null,
+                "ServingStatus": "AD_PAUSED",
+                "CreativeType": "PRODUCT_MANUAL",
+                "LandingPageJson": "{\"landingPageType\":\"ASIN_LIST\"}",
+                "LastSyncTime": "2026-08-13T09:16:48Z"
+              }
+            ],
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/AmazonAds/STV/Video - 更新STV广告视频素材（需补充STV实体ID后执行）",
+      "excel_keys": null,
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "更新STV广告视频asset",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/STV/Video",
+          "request_body": {
+            "updates": [
+              {
+                "profileId": "[NEEDS_REAL_VALUE: STV profileId，如 1891683808833451]",
+                "campaignId": "[NEEDS_REAL_VALUE: STV campaignId]",
+                "adGroupId": "[NEEDS_REAL_VALUE: STV adGroupId]",
+                "adId": "[NEEDS_REAL_VALUE: STV adId]",
+                "video": {
+                  "assetId": "amzn1.assetlibrary.asset1.6f64b99f63aa0164b0f71cc1deb19270",
+                  "assetVersion": "version_v1"
+                }
+              }
+            ]
+          },
+          "status_code": 400,
+          "pass": false,
+          "failures": [
+            "status_code: expected 200, got 400"
+          ],
+          "response_preview": "{\"errors\":{\"input\":[\"The input field is required.\"],\"updates[0].adId\":[\"Error converting value \\\"[NEEDS_REAL_VALUE: STV adId]\\\" to type 'System.Int64'. Path 'updates[0].adId', line 1, position 223.\"],\"updates[0].adGroupId\":[\"Error converting value \\\"[NEEDS_REAL_VALUE: STV adGroupId]\\\" to type 'Syste…"
+        },
+        {
+          "name": "后置恢复-广告视频asset还原",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/STV/Video",
+          "request_body": {
+            "updates": [
+              {
+                "profileId": "[NEEDS_REAL_VALUE: STV profileId]",
+                "campaignId": "[NEEDS_REAL_VALUE: STV campaignId]",
+                "adGroupId": "[NEEDS_REAL_VALUE: STV adGroupId]",
+                "adId": "[NEEDS_REAL_VALUE: STV adId]",
+                "video": {
+                  "assetId": "[NEEDS_REAL_VALUE: 原始assetId]",
+                  "assetVersion": "version_v1"
+                }
+              }
+            ]
+          },
+          "status_code": 400,
+          "pass": false,
+          "failures": [
+            "status_code: expected 200, got 400"
+          ],
+          "response_preview": "{\"errors\":{\"input\":[\"The input field is required.\"],\"updates[0].adId\":[\"Error converting value \\\"[NEEDS_REAL_VALUE: STV adId]\\\" to type 'System.Int64'. Path 'updates[0].adId', line 1, position 204.\"],\"updates[0].adGroupId\":[\"Error converting value \\\"[NEEDS_REAL_VALUE: STV adGroupId]\\\" to type 'Syste…"
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/AmazonAds/UpdateAd - 批量暂停广告（含后置恢复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "暂停广告",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/UpdateAd",
+          "request_body": {
+            "Updates": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "189321374680541",
+                "AdGroupId": "522006819243519",
+                "AdId": "484354405398182",
+                "State": "PAUSED"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": null,
+              "result": [
+                {
+                  "Code": 200,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "189321374680541",
+                      "adGroupId": "522006819243519",
+                      "entityId": "484354405398182",
+                      "isSuccess": true,
+                      "campaignType": "headlineSearch"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置恢复-广告状态改回ENABLED",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/UpdateAd",
+          "request_body": {
+            "Updates": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "189321374680541",
+                "AdGroupId": "522006819243519",
+                "AdId": "484354405398182",
+                "State": "ENABLED"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": null,
+              "result": [
+                {
+                  "Code": 200,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "189321374680541",
+                      "adGroupId": "522006819243519",
+                      "entityId": "484354405398182",
+                      "isSuccess": true,
+                      "campaignType": "headlineSearch"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/AmazonAds/UpdateAd - 批量启用广告（含后置恢复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "启用广告",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/UpdateAd",
+          "request_body": {
+            "Updates": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "189321374680541",
+                "AdGroupId": "522006819243519",
+                "AdId": "484354405398182",
+                "State": "ENABLED"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": null,
+              "result": [
+                {
+                  "Code": 200,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "189321374680541",
+                      "adGroupId": "522006819243519",
+                      "entityId": "484354405398182",
+                      "isSuccess": true,
+                      "campaignType": "headlineSearch"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置恢复-广告状态改回PAUSED",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/UpdateAd",
+          "request_body": {
+            "Updates": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "189321374680541",
+                "AdGroupId": "522006819243519",
+                "AdId": "484354405398182",
+                "State": "PAUSED"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": null,
+              "result": [
+                {
+                  "Code": 200,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "189321374680541",
+                      "adGroupId": "522006819243519",
+                      "entityId": "484354405398182",
+                      "isSuccess": true,
+                      "campaignType": "headlineSearch"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/AmazonAds/UpdateAd - 更新广告名称（含后置恢复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "更新广告名称",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/UpdateAd",
+          "request_body": {
+            "Updates": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "189321374680541",
+                "AdGroupId": "522006819243519",
+                "AdId": "484354405398182",
+                "Name": "AutoCase_Ad_Updated"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": null,
+              "result": [
+                {
+                  "Code": 200,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "189321374680541",
+                      "adGroupId": "522006819243519",
+                      "entityId": "484354405398182",
+                      "isSuccess": true,
+                      "campaignType": "headlineSearch"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置恢复-广告名称改回原名称",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/AmazonAds/UpdateAd",
+          "request_body": {
+            "Updates": [
+              {
+                "ProfileId": "2755545444012419",
+                "CampaignId": "189321374680541",
+                "AdGroupId": "522006819243519",
+                "AdId": "484354405398182",
+                "Name": "12341234"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": null,
+              "result": [
+                {
+                  "Code": 200,
+                  "Total": 1,
+                  "Success": 1,
+                  "IsBackground": 0,
+                  "ErrorMessages": [],
+                  "APIResult": [
+                    {
+                      "index": 0,
+                      "profileId": "2755545444012419",
+                      "campaignId": "189321374680541",
+                      "adGroupId": "522006819243519",
+                      "entityId": "484354405398182",
+                      "isSuccess": true,
+                      "campaignType": "headlineSearch"
+                    }
+                  ]
+                }
+              ],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,743 @@
+[
+  {
+    "name": "POST /api/Target/GetReportTargetPageData - 场景1_单Campaign默认视图_ytd_US_Spend降序",
+    "description": "单接口测试：POST /api/Target/GetReportTargetPageData。单个Campaign下查看所有Target汇总投放数据，默认Spend排序，States含enabled+paused+pending。500条随机样本中占比约35%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetReportTargetPageData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/GetReportTargetPageData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "CampaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "ToMarket": "US",
+          "Start": "{{date_start_mdy}}",
+          "End": "{{date_end_mdy}}",
+          "Dim": "ytd",
+          "IsFead": 0,
+          "States": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "Filters": [],
+          "TextFilters": [],
+          "TargetTypes": [],
+          "CampaignTypeItems": [],
+          "CampaignStates": [],
+          "AdgroupIds": [],
+          "GroupByParam": 0,
+          "GroupByMatchType": false,
+          "MultiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "Columns": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "AddToCart",
+            "OrderPrice",
+            "ASP",
+            "OtherSales",
+            "OtherSalesPercent"
+          ],
+          "IncludeZero": true,
+          "IsExchange": 0,
+          "CountryCode": "US",
+          "IsShowKeywordTag": false,
+          "IsShowAsinTag": false,
+          "IsShowCampaignTag": false,
+          "IsOutlierScore": false,
+          "IsShowOrignalBid": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/GetReportTargetPageData - 场景2_跨账号ROAS+Spend过滤_多Profile",
+    "description": "单接口测试：POST /api/Target/GetReportTargetPageData。跨多个Profile账号，通过Spend>=100且ROAS区间筛选低效target，同时TextFilter排除productai命名。500条随机样本中占比约5%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetReportTargetPageData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/GetReportTargetPageData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Start": "{{date_start_mdy}}",
+          "End": "{{date_end_mdy}}",
+          "Dim": "ytd",
+          "IsFead": 0,
+          "States": [],
+          "CampaignStates": [
+            "enabled"
+          ],
+          "Filters": [
+            {
+              "Field": "Spend",
+              "Operand": "GreaterOrEqual",
+              "Value": "100",
+              "isNot": 0
+            },
+            {
+              "Field": "ROAS",
+              "Operand": "GreaterOrEqual",
+              "Value": "1.01",
+              "isNot": 0
+            },
+            {
+              "Field": "ROAS",
+              "Operand": "LessOrEqual",
+              "Value": "2",
+              "isNot": 0
+            }
+          ],
+          "TextFilters": [
+            {
+              "Field": "name",
+              "Operand": "NotLike",
+              "Value": "productai",
+              "isNot": 0
+            }
+          ],
+          "IsAnd": "0",
+          "TargetTypes": [],
+          "CampaignTypeItems": [],
+          "AdgroupIds": [],
+          "GroupByParam": 0,
+          "GroupByMatchType": false,
+          "MultiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "Columns": [
+            "CPC",
+            "Spend",
+            "ROAS",
+            "SameSkuROAS",
+            "Impression",
+            "Click",
+            "CTR",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "AddToCart",
+            "OrderPrice",
+            "ASP",
+            "OtherSales",
+            "OtherSalesPercent"
+          ],
+          "IncludeZero": false,
+          "IsExchange": 0,
+          "CountryCode": "US",
+          "IsShowKeywordTag": false,
+          "IsShowAsinTag": false,
+          "IsShowCampaignTag": false,
+          "IsOutlierScore": false,
+          "IsShowOrignalBid": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/GetReportTargetPageData - 场景3_JP市场关键词文本精确过滤",
+    "description": "单接口测试：POST /api/Target/GetReportTargetPageData。日本市场单Campaign下通过关键词文本精确筛选target，IsShowOrignalBid=true显示原始竞价。500条随机样本中占比约14%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetReportTargetPageData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/GetReportTargetPageData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "CampaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "ToMarket": "JP",
+          "Start": "{{date_start_mdy}}",
+          "End": "{{date_end_mdy}}",
+          "Dim": "ytd",
+          "IsFead": 0,
+          "States": [
+            "enabled"
+          ],
+          "Filters": [],
+          "TextFilters": [
+            {
+              "Field": "keywordText",
+              "Operand": "Equal",
+              "Value": "シャンプー",
+              "isNot": 0
+            }
+          ],
+          "TargetTypes": [],
+          "CampaignTypeItems": [],
+          "CampaignStates": [],
+          "AdgroupIds": [],
+          "GroupByParam": 0,
+          "GroupByMatchType": false,
+          "MultiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "Columns": [
+            "ROAS",
+            "Spend",
+            "Conversion",
+            "CPC",
+            "Impression",
+            "Click",
+            "CTR",
+            "Sales",
+            "OrderPrice",
+            "ASP",
+            "OtherSales",
+            "OtherSalesPercent"
+          ],
+          "IncludeZero": true,
+          "IsExchange": 0,
+          "CountryCode": "JP",
+          "IsShowKeywordTag": false,
+          "IsShowAsinTag": false,
+          "IsShowCampaignTag": false,
+          "IsOutlierScore": false,
+          "IsShowOrignalBid": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/GetReportTargetTotal - 场景1_单Campaign汇总行_ytd_US",
+    "description": "单接口测试：POST /api/Target/GetReportTargetTotal。获取单Campaign内所有Target的汇总统计行，与GetReportTargetPageData同步调用。500条随机样本中占比约55%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetReportTargetTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/GetReportTargetTotal",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "CampaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "ToMarket": "US",
+          "Start": "{{date_start_mdy}}",
+          "End": "{{date_end_mdy}}",
+          "Dim": "ytd",
+          "IsFead": 0,
+          "States": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "Filters": [],
+          "TextFilters": [],
+          "TargetTypes": [],
+          "CampaignTypeItems": [],
+          "CampaignStates": [],
+          "AdgroupIds": [],
+          "GroupByParam": 0,
+          "GroupByMatchType": false,
+          "Columns": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "AddToCart",
+            "OrderPrice",
+            "ASP",
+            "OtherSales",
+            "OtherSalesPercent"
+          ],
+          "IncludeZero": true,
+          "IsExchange": 0,
+          "CountryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/GetReportTargetTotal - 场景2_带ROAS过滤的跨账号汇总",
+    "description": "单接口测试：POST /api/Target/GetReportTargetTotal。跨账号多Profile，带ROAS>=2指标过滤的汇总行，返回过滤后的合计数据。500条随机样本中占比约20%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetReportTargetTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/GetReportTargetTotal",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "CampaignIds": [],
+          "ToMarket": "US",
+          "Start": "{{date_start_mdy}}",
+          "End": "{{date_end_mdy}}",
+          "Dim": "ytd",
+          "IsFead": 0,
+          "States": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "Filters": [
+            {
+              "Field": "ROAS",
+              "Operand": "GreaterOrEqual",
+              "Value": "2",
+              "isNot": 0
+            }
+          ],
+          "TextFilters": [],
+          "TargetTypes": [],
+          "CampaignTypeItems": [],
+          "CampaignStates": [],
+          "AdgroupIds": [],
+          "GroupByParam": 0,
+          "GroupByMatchType": false,
+          "Columns": [
+            "Spend",
+            "ROAS",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "CPC",
+            "Impression",
+            "Click",
+            "CTR"
+          ],
+          "IncludeZero": true,
+          "IsExchange": 0,
+          "CountryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/GetHourlyReportTargetPageData - 场景1_单日小时级Target报表_JP市场",
+    "description": "单接口测试：POST /api/Target/GetHourlyReportTargetPageData。查看单日JP市场单Campaign下各Target的小时级投放数据，IsFead=1表示飞燕模式。500条随机样本中占比约14%(JP)。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetHourlyReportTargetPageData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/GetHourlyReportTargetPageData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "CampaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "ToMarket": "JP",
+          "Start": "{{date_end_mdy}}",
+          "End": "{{date_end_mdy}}",
+          "Dim": "ytd",
+          "IsFead": 1,
+          "States": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "Filters": [],
+          "TextFilters": [],
+          "TargetTypes": [],
+          "CampaignTypeItems": [],
+          "CampaignStates": [],
+          "AdgroupIds": [],
+          "GroupByParam": 0,
+          "GroupByMatchType": false,
+          "MultiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "Columns": [
+            "Spend",
+            "ROAS",
+            "Impression",
+            "Click",
+            "CTR",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "OrderPrice",
+            "ASP",
+            "OtherSales",
+            "OtherSalesPercent"
+          ],
+          "IncludeZero": false,
+          "IsExchange": 0,
+          "CountryCode": "JP",
+          "IsShowOrignalBid": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/BulkUpdateTargetBid - 场景1_按百分比批量调整竞价_Type0",
+    "description": "单接口测试：POST /api/Target/BulkUpdateTargetBid。对选中的Keyword/Target批量按百分比上调竞价（BidPercent=1.3表示提高30%），Type=0为百分比模式。500条随机样本中占比约48%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkUpdateTargetBid",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/BulkUpdateTargetBid",
+        "request_body": {
+          "BidInput": {
+            "ProfileIds": [
+              "{{profile_id}}"
+            ],
+            "KeywordIds": [],
+            "TargetIds": [
+              "{{target_id}}"
+            ],
+            "Bids": 0,
+            "BidPercent": 1.1,
+            "IncreasePrice": 0,
+            "MinBid": 0,
+            "MaxBid": 0,
+            "Type": 0,
+            "Start": "{{date_start_mdy}}",
+            "End": "{{date_end_mdy}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/BulkUpdateTargetBid - 场景2_固定竞价批量更新_Type1",
+    "description": "单接口测试：POST /api/Target/BulkUpdateTargetBid。对选中关键词批量设置固定竞价金额（Bids=0.54），Type=1为固定金额模式。500条随机样本中占比约31%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkUpdateTargetBid",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/BulkUpdateTargetBid",
+        "request_body": {
+          "BidInput": {
+            "ProfileIds": [
+              "{{profile_id}}"
+            ],
+            "KeywordIds": [],
+            "TargetIds": [
+              "{{target_id}}"
+            ],
+            "Bids": 0.54,
+            "BidPercent": 0,
+            "IncreasePrice": 0,
+            "MinBid": 0,
+            "MaxBid": 0,
+            "Type": 1,
+            "Start": "{{date_start_mdy}}",
+            "End": "{{date_end_mdy}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/BulkUpdateTargetBid - 场景3_应用建议出价_Type4",
+    "description": "单接口测试：POST /api/Target/BulkUpdateTargetBid。对PAT TargetIds应用系统建议出价，BidPercent=1.2表示在建议出价基础上上浮20%，Type=4为建议出价模式。500条随机样本中占比约13%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkUpdateTargetBid",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/BulkUpdateTargetBid",
+        "request_body": {
+          "BidInput": {
+            "ProfileIds": [
+              "{{profile_id}}"
+            ],
+            "KeywordIds": [],
+            "TargetIds": [
+              "{{target_id}}"
+            ],
+            "Bids": 0,
+            "BidPercent": 1.2,
+            "IncreasePrice": 0,
+            "MinBid": 0,
+            "MaxBid": 0,
+            "Type": 4
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/BulkUpdateTargetState - 场景1_批量暂停Target",
+    "description": "单接口测试：POST /api/Target/BulkUpdateTargetState。将选中Keyword或Target的状态批量设为paused，State=paused为最常见操作。500条随机样本中占比约67%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkUpdateTargetState",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/BulkUpdateTargetState",
+        "request_body": {
+          "StateInput": {
+            "State": "paused",
+            "ProfileIds": [
+              "{{profile_id}}"
+            ],
+            "KeywordIds": [],
+            "TargetIds": [
+              "{{target_id}}"
+            ],
+            "Start": "{{date_start_mdy}}",
+            "End": "{{date_end_mdy}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Target/BulkUpdateTargetState - 场景2_批量启用Target",
+    "description": "单接口测试：POST /api/Target/BulkUpdateTargetState。将选中Target/Keyword的状态批量设为enabled，State=enabled为第二常见操作。500条随机样本中占比约29%。",
+    "module": "Target",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkUpdateTargetState",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Target/BulkUpdateTargetState",
+        "request_body": {
+          "StateInput": {
+            "State": "enabled",
+            "ProfileIds": [
+              "{{profile_id}}"
+            ],
+            "KeywordIds": [],
+            "TargetIds": [
+              "{{target_id}}"
+            ],
+            "Start": "{{date_start_mdy}}",
+            "End": "{{date_end_mdy}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

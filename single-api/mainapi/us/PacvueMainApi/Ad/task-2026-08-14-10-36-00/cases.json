@@ -1,0 +1,567 @@
+[
+  {
+    "name": "POST /api/Ad/v3/GetAdByAdgroup - 场景1_按Profile+Campaign查广告(占比90%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdByAdgroup。仅传 profileIds + campaignIds，查询该广告活动下所有广告。US环境。500条随机样本中占比约90%(451条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdByAdgroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdByAdgroup",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdByAdgroup - 场景2_指定Adgroup查广告(占比10%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdByAdgroup。profileIds + campaignIds + adgroupIds，指定广告组维度查广告。US环境。500条随机样本中占比约10%(49条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdByAdgroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdByAdgroup",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{ad_adgroup_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdChart - 场景1_广告级逐日趋势(dim=date,占比99%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdChart。定位到 profile+campaign+adgroup+ad 单个广告，dim=date 查逐日趋势图。US环境。302条随机样本中占比约99%(299条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{ad_adgroup_id}}"
+          ],
+          "adIds": [
+            "{{ad_id}}"
+          ],
+          "dim": "date",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdChart - 场景2_Profile汇总(dim=ytd,占比1%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdChart。Profile 级汇总，dim=ytd，含 states/multiSortList 等完整列表参数。US环境。302条随机样本中占比约1%(3条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "adgroupIds": [],
+          "adgroupName": "",
+          "adIds": [],
+          "groupBy": "0",
+          "servingState": "",
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "isAnd": "0",
+          "adgroupOperand": "Like",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "taggingIds": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdPageData - 场景1_SB广告单活动详情(SbAds,占比96%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdPageData。SB广告单活动详情视图(menu=SbAds,Level=campaign,singleType=SB-Product)，分页浏览该活动下广告，pageSize=25，Spend降序。US环境。157条随机样本中占比约96%(151条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdPageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "Level": "campaign",
+          "keyword": "",
+          "CampaignTypeItems": [],
+          "campaignTypes": [],
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ],
+          "singleCampaignType": "headlineSearch",
+          "singleTargetingType": null,
+          "state": "enabled",
+          "singleType": "SB-Product",
+          "singleSBVersion": "V4",
+          "singleState": "enabled",
+          "menu": "SbAds",
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "adgroupIds": [],
+          "adgroupName": "",
+          "adIds": [],
+          "groupBy": "0",
+          "servingState": "",
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "campaignCombination": {
+            "campaignIds": [
+              "{{exist_sb_campaign_id}}"
+            ],
+            "states": []
+          },
+          "taggingIds": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "isHasStv": true,
+          "fieldSet": {
+            "isShowNTB": 0
+          },
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdPageData - 场景2_Profile聚合列表(aggregate,占比4%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdPageData。Profile 级聚合广告列表，含 filter(adgroupName IsNot) 文本过滤，dim=ytd，pageSize=25。US环境。157条随机样本中占比约4%(6条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdPageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "adgroupIds": [],
+          "adgroupName": "",
+          "adIds": [],
+          "groupBy": "0",
+          "servingState": "",
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "isAnd": "0",
+          "adgroupOperand": "Like",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "taggingIds": [],
+          "CampaignTypeItems": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isHasStv": true,
+          "fieldSet": {
+            "isShowNTB": 0
+          },
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdTotal - 场景1_SB广告单活动汇总(SbAds,占比75%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdTotal。SB广告单活动详情的汇总行(menu=SbAds,Level=campaign,singleType=SB-Product)，返回该活动广告的合计指标。US环境。201条随机样本中占比约75%(151条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdTotal",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "Level": "campaign",
+          "keyword": "",
+          "CampaignTypeItems": [],
+          "campaignTypes": [],
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ],
+          "singleCampaignType": "headlineSearch",
+          "singleTargetingType": null,
+          "state": "enabled",
+          "singleType": "SB-Product",
+          "singleSBVersion": "V4",
+          "singleState": "enabled",
+          "menu": "SbAds",
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "adgroupIds": [],
+          "adgroupName": "",
+          "adIds": [],
+          "groupBy": "0",
+          "servingState": "",
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "campaignCombination": {
+            "campaignIds": [
+              "{{exist_sb_campaign_id}}"
+            ],
+            "states": []
+          },
+          "taggingIds": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "isHasStv": true,
+          "fieldSet": {
+            "isShowNTB": 0
+          },
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": [],
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdTotal - 场景2_Profile聚合汇总(aggregate,占比25%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdTotal。Profile 级聚合广告的汇总行，dim=ytd，isExchange=1，pageSize=50。US环境。201条随机样本中占比约25%(50条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdTotal",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "adgroupIds": [],
+          "adgroupName": "",
+          "adIds": [],
+          "groupBy": "0",
+          "servingState": "",
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "CampaignTypeItems": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isHasStv": true,
+          "fieldSet": {
+            "isShowNTB": 0
+          },
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 50,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": [],
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/BulkUpdateAds - 场景1_批量改广告名(可逆,占比100%)",
+    "description": "单接口测试：POST /api/Ad/v3/BulkUpdateAds。批量更新广告名(50/50样本均为改Name,占比约100%)。US环境。写操作：步骤1改名为测试名，步骤2还原原名(12341234)，可重复执行不留残留。断言业务成功计数 data.result[0].Success>=1。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "改广告名为测试名",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/BulkUpdateAds",
+        "request_body": {
+          "Inputs": [
+            {
+              "profileId": "{{profile_id}}",
+              "AdId": "{{ad_id}}",
+              "Name": "12341234_apitest"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "message": {
+              "$contains": "Success:1"
+            }
+          }
+        }
+      },
+      {
+        "name": "后置还原-改回原广告名",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/BulkUpdateAds",
+        "request_body": {
+          "Inputs": [
+            {
+              "profileId": "{{profile_id}}",
+              "AdId": "{{ad_id}}",
+              "Name": "12341234"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "message": {
+              "$contains": "Success:1"
+            }
+          }
+        }
+      }
+    ]
+  }
+]

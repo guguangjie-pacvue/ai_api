@@ -23,22 +23,23 @@ description: 单接口测试 case 生成。以 Swagger 为接口定义基线，�
 ```
 single-api/
 ├── endpoints-<info.title>.json              # 每个 Swagger 一份全量接口列表（放根目录）
-└── <服务>/                                   # 服务目录，如 mainapi（config 跟服务走）
-    ├── config.json                           # 🔴 服务级配置：token / profile_id / base_urls / auth
-    └── <swagger>/                            # 🔴 swagger 层，取 info.title，如 Amazon.Advertising.Api / PacvueMainApi
-        └── <模块>/                           # 模块目录，如 Target / Targeting / Campaign
-            └── task-<YYYY-MM-DD-HH-MM-SS>/
-                ├── cases.json
-                └── report.json
+└── <服务>/                                   # 服务目录，如 mainapi
+    └── <环境>/                               # 🔴 环境层：us / cn / eu
+        ├── config.json                       # 🔴 环境级配置：token / profile_id / base_urls / auth
+        └── <swagger>/                        # swagger 层，取 info.title，如 Amazon.Advertising.Api / PacvueMainApi
+            └── <模块>/                       # 模块目录，如 Target / Targeting / Campaign
+                └── task-<YYYY-MM-DD-HH-MM-SS>/
+                    ├── cases.json
+                    └── report.json
 ```
 
-- **四层：服务 / swagger / 模块 / task**。服务是部署单元（可含多个 swagger）；swagger 层区分同服务下不同 spec，避免重名模块（如两个 swagger 都有 `Campaign`）撞目录。
+- **五层：服务 / 环境 / swagger / 模块 / task**。环境层（us/cn/eu）将三个独立部署的用户数据和配置隔离，同一接口在不同环境的用户行为差异显著，必须分开生成 case。
 - **按服务组织，不是按平台**：一个服务可能对应**多个 Swagger**（如 mainapi 服务下同时有 `Amazon.Advertising.Api` 和 `PacvueMainApi` 两个 Swagger）。
-- **config.json 是服务级**：同一服务共用一份 `single-api/<服务>/config.json`，`base_urls` 里含该服务**所有** Swagger 的 base_url（如同时有 `INDBASEURL` 和 `BASEURL`）。放服务根，不放 swagger/模块层。
+- **config.json 是环境级**：每个环境有独立的 `single-api/<服务>/<环境>/config.json`，含该环境的 token、profile_id、base_urls 等；不同环境的 base_url 域名不同，不能共用。
 - **服务名**先查 `single-api/services.json` 反查（见"输入"第二步）：命中用表里的名，未命中问用户后回写；默认一 swagger 一服务、名=`info.title`。
 - **swagger 层名**取该接口来源 spec 的 `info.title`（也是 `endpoints-<title>.json` 的 title）。
 - **模块名**取接口路径首段（如 `/api/Target/*` → `Target`，`/api/Targeting/V3/*` → `Targeting`）。
-- **endpoints-*.json 放 `single-api/` 根**，文件名取各 Swagger 的 `info.title`（一个 Swagger 一份，与服务/模块正交）。
+- **endpoints-*.json 放 `single-api/` 根**，文件名取各 Swagger 的 `info.title`（一个 Swagger 一份，与环境/服务/模块正交，Swagger 结构不分环境）。
 
 ---
 
@@ -70,8 +71,12 @@ single-api/
     "github_repo": "<仓库名>",
     "swagger_titles": ["<info.title>", "..."],
     "swagger_urls": ["<swagger json url>", "..."],
-    "es_index": "<ES 索引，如 amazon-access-*>",
-    "config": "single-api/<服务名>/config.json"
+    "es_index": {
+      "us": "<US ES 索引，如 amazon-access-*>",
+      "cn": "<CN ES 索引，如 cn-amazon-access-*>",
+      "eu": "<EU ES 索引，如 eu-amazon-access-*>"
+    },
+    "config": "single-api/<服务名>/{env}/config.json"
   }
 }
 ```
@@ -79,9 +84,10 @@ single-api/
 **流程**：
 1. 读 `single-api/services.json`（不存在则视为空表）
 2. 用用户给的 swagger URL / 扫描出的 `info.title` 去匹配某条目的 `swagger_urls` / `swagger_titles`
-   - **命中** → 直接得到服务名、`es_index`、`config` 路径，**不再向用户提问**，进 Phase 2
-   - **未命中** → 只问一次：`"这些 swagger 属于哪个服务？(默认按各自 info.title 分开；若同属一个服务请给统一名，如 mainapi。并告知 ES 索引，如 amazon-access-*)"`，收到后**追加/更新 `services.json`**，下次自动命中
-3. 默认规则：一个 swagger 一个服务，服务名 = `info.title`；仅当用户显式归并时才多 swagger 合一
+   - **命中** → 直接得到服务名、`es_index`（对象）、`config` 路径模板，**不再向用户提问服务归属**，进环境确认
+   - **未命中** → 只问一次：`"这些 swagger 属于哪个服务？(默认按各自 info.title 分开；若同属一个服务请给统一名，如 mainapi)"`，收到后**追加/更新 `services.json`**，下次自动命中
+3. **确认目标环境**：若用户请求中已明确环境（如"CN 环境"、"eu"），直接使用；否则反问一次：`"为哪个环境生成 case？us / cn / eu"`。根据环境从 `es_index.<env>` 取对应索引，config 路径替换 `{env}` 为实际环境名
+4. 默认规则：一个 swagger 一个服务，服务名 = `info.title`；仅当用户显式归并时才多 swagger 合一
 
 ES 连接信息已固定，无需用户提供：
 - **Kibana 地址**：`https://logs.pacvue.com`
@@ -224,7 +230,12 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 
 🔴 **不得直接用频率统计替代场景分析**。要阅读每条入参的实际内容，理解用户在做什么操作，再归纳成有业务意义的场景。
 
-🔴 **场景数下限**：每个接口至少归纳 **3 个场景**（ES 样本总数 < 3 条除外）。500 条样本中若能识别出 5 个以上有业务差异的场景，全部生成 case，不合并、不丢弃。
+🔴 **硬规则是"占比 ≥1% 的真实场景全覆盖"，不是"凑够 3 条"**。case 数 = 真实存在的 ≥1% 场景数，有几个写几个：
+
+- **3 条是争取目标，不是硬性下限**：先尽力从样本里挖真实业务差异（不同 recordType / campaignType / 分页 / 过滤组合 / 排序等）；只要是样本里真实出现且占比 ≥1% 的差异，就各自成 case。
+- **🔴 绝不为凑数编造**：若某接口真实调用就只有 1~2 种模式（如空 body 的日志/列表接口、单一 100% 场景），就只写这 1~2 条真实 case。**禁止**用样本里不存在的 recordType/参数组合硬造第 3 条来凑数——宁可 1 条真实，不要 3 条有假。
+- 识别出的有业务差异场景越多越好，全部生成 case，不合并、不丢弃。
+- case 少于 3 条时，在对话中说明"该接口真实调用仅 N 种模式，已全覆盖"，让用户知道是真实情况而非漏测。
 
 **场景归纳方法（以调用频率为核心）**：
 
@@ -233,7 +244,7 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 1. **让样本自己暴露维度**：通读 500 条样本，观察这个接口里哪些字段的取值在请求之间**实际发生了变化**——变化的字段才是本接口的划分维度。不要拿预设的字段清单去套；不同接口的维度完全不同，以当前样本为准。
 2. **统计入参组合频率**：按上一步发现的维度字段的取值组合分组，统计每种组合出现的次数和占比
 3. **按频率排序**：出现次数最多的组合 → 场景1，次多 → 场景2，以此类推
-4. **判断是否值得独立成场景**：占比 ≥ 5% 的组合单独成场景；占比 < 5% 且与高频场景业务意图相同的合并进高频场景；极低频（< 2%）且无特殊业务意义的舍弃
+4. **判断是否值得独立成场景**：占比 **≥ 1%** 的组合**必须**独立成场景并生成 case（含占比恰为 1% 的）；仅占比 **< 1%** 的组合才舍弃（除非它代表了高频场景没有的独立业务意图，则仍要覆盖）。不再按 5%/2% 做合并——只要占比 ≥ 1% 一律覆盖，不合并进高频场景。
 5. **用该场景最典型的一条真实入参**作为 case 的 `request_body`，动态字段变量化后直接使用
 
 场景描述中注明频率：
@@ -241,10 +252,10 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 代表条数：n 条，占比约 xx%（500条样本中）
 ```
 
-场景优先级规则：
-- 高频场景（≥ 20%）必须覆盖
-- 中频场景（5%~20%）全部覆盖
-- 低频场景（< 5%）仅当代表了高频场景没有的独立业务意图时才覆盖
+场景覆盖规则（唯一标准：占比 ≥ 1%）：
+- 占比 ≥ 1% 的场景**全部必须覆盖**，一个不漏（无论高频低频，1% 是硬门槛）
+- 占比 < 1% 的场景：默认舍弃；仅当代表了 ≥1% 场景没有覆盖到的独立业务意图时才额外补上
+- case 数 = 覆盖到的真实场景数，可能不足 3 条：若接口真实调用模式本就少（如单一 100% 场景），如实只写真实的，**不编造凑数**（见上方 case 数下限说明）
 
 **归纳输出格式**（每个场景一段）：
 
@@ -259,11 +270,32 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 
 - ES 查询失败或无结果：记录原因，告知用户，终止本次生成
 
+**🔴 占比必须写进 case `description`**：每个 Happy Path case 的 `description` 末尾固定追加 `500条随机样本中占比约xx%（n次）。`，供 Phase 5 场景覆盖列提取。**漏写会导致 Excel 场景覆盖显示不出占比**。
+
+**旧 case 占比补算（`scripts/backfill_pct.py`）**：若已有 cases.json 缺占比，用此脚本按现有 case 的判别签名重新查 ES 统计并回填：
+
+```powershell
+python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
+  "single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json"
+```
+
+**🔴 增/查/改/删全部统计**，脚本按 `(接口路径, HTTP方法)` 分组，各组独立查 ES：
+
+| 接口类型 | 判别方式 | 说明 |
+|---|---|---|
+| **POST/PUT/DELETE 有 body** | `body` 签名 | `(Dim, 非US市场, filter字段集, 对比列startCompare, MetricIds, IsGroupByProfile, isSameSku/AsinGroupBy, matchType, type, state, 是否adGroup级)` |
+| **GET 无 body** | `queryString` 签名 | 参数集合；动态 id/日期只留参数名，枚举/布尔留 `名=值`。空 queryString（布尔默认如 `isCheckEdit=0` 不带参）→ 归 query 最简的 case |
+| **写操作（增/改/删）** | body 签名 + 均摊 | 能按 matchType/层级/state 区分的拆开；**构造场景 body 完全相同无法区分的，按该 endpoint 真实调用量在同签名场景间平均分摊**（而非全塞第一个） |
+
+- 归类规则：完全相等 → 判别维度全等且 filter/query 子集最具体 → 兜底默认场景；算占比回填 description（幂等可重跑）。
+- **Health / ES 无记录端点**：无流量则不写占比（Excel 场景覆盖只显示场景标签，不显示 `— xx%`）。
+- ES 字段：body 在 `body`、GET 参数在 `queryString`、方法在 `method.keyword`、路径在 `apiEndpoint.keyword`。
+
 ---
 
 ## Phase 3 — 生成 cases.json
 
-**创建目录**：`single-api/<服务>/<swagger>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`（如 `single-api/mainapi/PacvueMainApi/Targeting/task-2026-08-13-12-00-55/`）
+**创建目录**：`single-api/<服务>/<环境>/<swagger>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`（如 `single-api/mainapi/us/PacvueMainApi/Targeting/task-2026-08-13-12-00-55/`）
 
 **只生成 Happy Path case，每个真实用户场景对应一个 case。不生成异常、边界、缺失字段等额外 case。**
 
@@ -408,7 +440,7 @@ PowerShell 生成的文件带 UTF-8 BOM，Python 的 `json.load` 会报错，执
 ```bash
 python -c "
 import json
-for f in ['single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json', 'single-api/<服务>/config.json']:
+for f in ['single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json', 'single-api/<服务>/<环境>/config.json']:
     with open(f, encoding='utf-8-sig') as r: d = json.load(r)
     with open(f, 'w', encoding='utf-8') as w: json.dump(d, w, ensure_ascii=False, indent=2)
     print('Fixed:', f)
@@ -419,9 +451,9 @@ for f in ['single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json', 
 
 ```bash
 python "C:/AI engineering/rule-modules-web-master/rule-modules-web-master/.claude/skills/api-case-generate/api-case-run/scripts/run-cases.py" \
-  --cases single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json \
-  --config single-api/<服务>/config.json \
-  --out    single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json
+  --cases single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json \
+  --config single-api/<服务>/<环境>/config.json \
+  --out    single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json
 ```
 
 🔴 **注意事项**：
@@ -434,7 +466,7 @@ python "C:/AI engineering/rule-modules-web-master/rule-modules-web-master/.claud
 ```bash
 python -c "
 import json
-with open('single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json', encoding='utf-8') as f:
+with open('single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json', encoding='utf-8') as f:
     r = json.load(f)
 print(f'总计:{r[\"total\"]}  PASS:{r[\"passed\"]}  FAIL:{r[\"failed\"]}')
 from collections import defaultdict
@@ -467,18 +499,25 @@ for api,v in sorted(by_api.items()):
 
 | 目标 | Sheet | 内容 |
 |------|-------|------|
-| **5.1 模块汇总** | `模块汇总` | Case数 / 通过率 / 接口覆盖率 |
-| **5.2 场景覆盖** | `Amazon.Advertising.Api` / `PacvueMainApi` 等 | 每接口行追加「场景覆盖」列，格式：`场景N: 描述 — xx%` |
+| **5.1 模块汇总** | `模块汇总` | 按 `环境+Swagger+模块` 匹配行，写 Case数 / 通过率 / 接口覆盖率 |
+| **5.2 接口级覆盖** | `Amazon.Advertising.Api` / `PacvueMainApi` 等 | 按 `接口路径` 匹配行，写三列（均带环境后缀）：`场景数(env)` / `通过率(env)` / `场景覆盖(env)` |
+
+**5.2 三列含义**（env 后缀区分环境，如 `场景数(us)`）：
+- `场景数(env)`：该接口在本次生成的 case 数（= 场景数），从 report 按接口路径统计
+- `通过率(env)`：该接口所有 case 的通过率（passed/total）
+- `场景覆盖(env)`：多行文本，列出每个场景的标签 + 占比，格式 `场景N: 描述 — xx%`
+- 未生成 case 的接口三列留空，一眼可见哪些接口还没覆盖
 
 **一条命令搞定**（脚本源码见 `scripts/update_excel.py`）：
 
 ```powershell
 python ".claude/skills/swagger-api-case/scripts/update_excel.py" `
-  --cases    "single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json" `
-  --report   "single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json" `
+  --cases    "single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json" `
+  --report   "single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json" `
   --endpoints "single-api/endpoints-<swagger-title>.json" `
   --swagger-title "<swagger info.title，如 Amazon.Advertising.Api>" `
-  --module   "<模块名，如 SupplementData>"
+  --module   "<模块名，如 SupplementData>" `
+  --env      "<环境，如 us / cn / eu>"
 ```
 
 **接口覆盖率计算**：  
@@ -500,9 +539,9 @@ python ".claude/skills/swagger-api-case/scripts/update_excel.py" `
 |------|------|
 | `single-api/services.json` | 🔴 服务映射表：swagger(title/url) → 服务名 / ES 索引 / config，命中免询问，未命中回写 |
 | `single-api/endpoints-<info.title>.json` | 当前 Swagger 全量有效接口列表，文件名取 spec 的 `info.title`（每次覆盖，放根目录） |
-| `single-api/<服务>/config.json` | 🔴 服务级执行环境配置（token、profile_id、base_urls 等），一个服务一份 |
-| `single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
-| `single-api/<服务>/<swagger>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
+| `single-api/<服务>/<环境>/config.json` | 🔴 环境级执行配置（token、profile_id、base_urls 等），us/cn/eu 各一份 |
+| `single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
+| `single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
 | `single-api/swagger_modules.xlsx`（`模块汇总` sheet） | 更新 Case数 / 通过率 / 接口覆盖率三列 |
 
 对话中额外输出**待补清单**（若有 `[NEEDS_REAL_VALUE]` 字段）。

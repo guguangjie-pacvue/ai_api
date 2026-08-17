@@ -1,0 +1,275 @@
+[
+  {
+    "name": "GET /api/AmazonAttribution/Advertisers/{profileId} - 获取归因广告主列表",
+    "description": "单接口测试：GET /api/AmazonAttribution/Advertisers/{profileId}。按profileId获取Amazon Attribution下的广告主列表，为唯一常见场景（测试账号无attribution广告主时返回空列表，接口仍返回成功）。500条随机样本中占比约100%（87次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取归因广告主列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAttribution/Advertisers/{{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AmazonAttribution/Publishers/{profileId} - 获取归因发布商列表",
+    "description": "单接口测试：GET /api/AmazonAttribution/Publishers/{profileId}。按profileId获取Amazon Attribution下所有可用发布商（含macroEnabled标识），为唯一常见场景。500条随机样本中占比约100%（49次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取归因发布商列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAttribution/Publishers/{{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAttribution/Tags/MacroTag - 单宏发布商获取归因宏标签",
+    "description": "单接口测试：POST /api/AmazonAttribution/Tags/MacroTag。指定单个宏类型publisherId（Google Ads=1）获取Attribution宏标签，为最常见场景（用户在归因标签页选择发布商生成宏标签）。publisherIds 1-4为宏类型（Google/Facebook/Bing/Pinterest），无需advertiserIds。500条随机样本中占比约67%（4次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Attribution宏标签（单宏publisher）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAttribution/Tags/MacroTag",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "publisherIds": [
+            "1"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAttribution/Tags/MacroTag - 多宏发布商批量获取归因宏标签",
+    "description": "单接口测试：POST /api/AmazonAttribution/Tags/MacroTag。指定多个宏类型publisherIds批量获取Attribution宏标签（用户同时为多个渠道生成标签）。500条随机样本中占比约17%（1次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Attribution宏标签（多宏publishers）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAttribution/Tags/MacroTag",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "publisherIds": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAttribution/Tags/NonMacroTemplateTag - 单非宏发布商获取归因非宏模板标签",
+    "description": "单接口测试：POST /api/AmazonAttribution/Tags/NonMacroTemplateTag。指定单个非宏类型publisherId（Display-Other=9）获取非宏模板标签，为最常见场景（用户在归因标签页为非宏渠道生成模板标签）。publisherIds 5+为非宏类型。500条随机样本中占比约90%（161次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Attribution非宏模板标签（单非宏publisher）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAttribution/Tags/NonMacroTemplateTag",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "publisherIds": [
+            "9"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAttribution/Tags/NonMacroTemplateTag - 多非宏发布商批量获取归因非宏模板标签",
+    "description": "单接口测试：POST /api/AmazonAttribution/Tags/NonMacroTemplateTag。指定多个非宏类型publisherIds批量获取非宏模板标签（Display-Other=9, Video-Other=10）。500条随机样本中占比约5%（9次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Attribution非宏模板标签（多非宏publishers）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/AmazonAttribution/Tags/NonMacroTemplateTag",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "publisherIds": [
+            "9",
+            "10"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v1/amz/attribution/performance/query - 查询归因性能报表（publisher+日期范围）",
+    "description": "单接口测试：POST /api/v1/amz/attribution/performance/query。按profileId、publisher和日期范围查询Amazon Attribution性能数据（Doris），为唯一常见场景。注：US生产环境该路径当前返回404，待确认正确base_url后启用。500条随机样本中占比约100%（3次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询归因性能报表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/v1/amz/attribution/performance/query",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "reportDateStartTime": "{{date_start}}",
+          "reportDateEndTime": "{{date_end}}",
+          "publisher": "Display - Other"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v1/amz/attribution/product/query - 查询归因商品报表（仅指定开始日期）",
+    "description": "单接口测试：POST /api/v1/amz/attribution/product/query。按profileId和publisher查询归因商品数据，仅指定开始日期（结束日期为null），为最常见场景。注：US生产环境该路径当前返回404，待确认正确base_url后启用。500条随机样本中占比约67%（8次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询归因商品报表（开放结束日期）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/v1/amz/attribution/product/query",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "reportDateStartTime": "{{date_start}}",
+          "reportDateEndTime": null,
+          "publisher": "Display - Other"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/v1/amz/attribution/product/query - 查询归因商品报表（指定完整日期范围）",
+    "description": "单接口测试：POST /api/v1/amz/attribution/product/query。按profileId、publisher和完整日期范围查询归因商品数据。注：US生产环境该路径当前返回404，待确认正确base_url后启用。500条随机样本中占比约33%（4次）。",
+    "module": "AmazonAttribution",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询归因商品报表（完整日期范围）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/v1/amz/attribution/product/query",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "reportDateStartTime": "{{date_start}}",
+          "reportDateEndTime": "{{date_end}}",
+          "publisher": "Display - Other"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  }
+]
