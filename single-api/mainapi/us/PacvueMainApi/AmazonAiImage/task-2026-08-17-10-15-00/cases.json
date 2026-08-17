@@ -1,0 +1,360 @@
+[
+  {
+    "name": "POST /api/AmazonAiImage/GeneratorAmazonAiImageTask - 场景1_主题+描述词组合生成",
+    "description": "单接口测试：POST /api/AmazonAiImage/GeneratorAmazonAiImageTask。真实用户场景：同时指定themeId(主题)和prompt(描述词)生成AI图片，useRecommendedTheme未开启。169条ES随机样本(近180天)中占比约46.2%(78条)，是最高频场景。已知环境限制：当前测试账号调用该接口下游Amazon返回403 ACCESS_DENIED(\"Third-party access to this API has been deprecated.\")，data.IsSuccessStatusCode预期为true但实际为false，为账号/环境级第三方访问权限被Amazon下线导致，非用例设计问题。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "生成AI图片任务(主题+描述词)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GeneratorAmazonAiImageTask",
+        "request_body": {
+          "asin": "B09FPWN9B8",
+          "imageSpec": {
+            "fileFormat": "PNG",
+            "resolution": "1200x628"
+          },
+          "maxResults": 5,
+          "profileId": "{{profile_id}}",
+          "prompt": "travel",
+          "themeId": "back_to_school"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/GeneratorAmazonAiImageTask - 场景2_仅指定主题",
+    "description": "单接口测试：POST /api/AmazonAiImage/GeneratorAmazonAiImageTask。真实用户场景：仅指定themeId(主题)，不填prompt(描述词为空串)。169条ES随机样本中占比约18.9%(32条)。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "生成AI图片任务(仅主题)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GeneratorAmazonAiImageTask",
+        "request_body": {
+          "imageSpec": {
+            "resolution": "1200x628",
+            "fileFormat": "PNG"
+          },
+          "maxResults": 10,
+          "themeId": "no_theme",
+          "asin": "B07WQJ3L9H",
+          "prompt": "",
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/GeneratorAmazonAiImageTask - 场景3_仅描述词无主题",
+    "description": "单接口测试：POST /api/AmazonAiImage/GeneratorAmazonAiImageTask。真实用户场景：不选主题，仅填prompt自由描述词，useRecommendedTheme=false。169条ES随机样本中占比约13.0%(22条)。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "生成AI图片任务(仅描述词)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GeneratorAmazonAiImageTask",
+        "request_body": {
+          "imageSpec": {
+            "resolution": "1200x628",
+            "fileFormat": "PNG"
+          },
+          "maxResults": 6,
+          "asin": "B0CPLC64H6",
+          "prompt": "Dice on a table that feels romantic with a candle",
+          "useRecommendedTheme": false,
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/GeneratorAmazonAiImageTask - 场景4_无主题无描述词默认生成",
+    "description": "单接口测试：POST /api/AmazonAiImage/GeneratorAmazonAiImageTask。真实用户场景：不填themeId也不填prompt，仅传asin+imageSpec+maxResults，走默认生成逻辑。169条ES随机样本中占比约10.1%(17条)。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "生成AI图片任务(默认无主题无描述词)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GeneratorAmazonAiImageTask",
+        "request_body": {
+          "imageSpec": {
+            "resolution": "1200x628",
+            "fileFormat": "PNG"
+          },
+          "maxResults": 6,
+          "asin": "B0GK9PCS34",
+          "useRecommendedTheme": false,
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/GeneratorAmazonAiImageTask - 场景5_主题+描述词+推荐主题开启",
+    "description": "单接口测试：POST /api/AmazonAiImage/GeneratorAmazonAiImageTask。真实用户场景：指定themeId和prompt的同时开启useRecommendedTheme=true。169条ES随机样本中占比约8.3%(14条)，与场景1业务意图有差异(叠加推荐主题开关)，独立成场景。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "生成AI图片任务(主题+描述词+推荐主题)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GeneratorAmazonAiImageTask",
+        "request_body": {
+          "imageSpec": {
+            "resolution": "1200x628",
+            "fileFormat": "PNG"
+          },
+          "maxResults": 6,
+          "themeId": "city",
+          "asin": "B08KJDH2GX",
+          "prompt": "a person holding the EMF 5G Meter to get measurements of a cell phone tower",
+          "useRecommendedTheme": true,
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/EditGeneratorAmazonAiImageTask - 场景1_单图片区域裁剪编辑",
+    "description": "单接口测试：POST /api/AmazonAiImage/EditGeneratorAmazonAiImageTask。真实用户场景：对单张已生成图片指定productBoundingBox(裁剪区域)和imageCount重新生成编辑任务。近180天ES样本仅2条(样本较少，场景覆盖可能不全)，2条结构一致，取其一为代表。已知环境限制：当前测试账号调用该接口下游Amazon返回403 ACCESS_DENIED(\"Third-party access to this API has been deprecated.\")，data.IsSuccessStatusCode预期为true但实际为false，为账号/环境级第三方访问权限被Amazon下线导致，非用例设计问题。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "编辑生成AI图片任务",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/EditGeneratorAmazonAiImageTask",
+        "request_body": {
+          "imageEditProductTaskMetadataList": [
+            {
+              "imageId": "f151565b-c28c-44d5-aa6a-6d1dc3bca999/511a879b-486b-4a1e-81cb-50f3368a4ace/44d4c4c0-816a-49ab-8aaf-0981fb4bb392",
+              "productBoundingBox": {
+                "top": 205,
+                "left": 591,
+                "width": 345,
+                "height": 400
+              },
+              "imageCount": 4
+            }
+          ],
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/GetAmazonAiImages - 场景1_不限制返回数量查询",
+    "description": "单接口测试：POST /api/AmazonAiImage/GetAmazonAiImages。真实用户场景：仅传profileId+batchId查询AI图片生成结果，不传maxResults。500条ES随机样本中占比约80%(400条)，是最高频场景。已知环境限制：当前测试账号调用该接口下游Amazon返回403 ACCESS_DENIED(\"Third-party access to this API has been deprecated.\")，data.IsSuccessStatusCode预期为true但实际为false，为账号/环境级第三方访问权限被Amazon下线导致，非用例设计问题。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AI图片生成结果(默认数量)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GetAmazonAiImages",
+        "request_body": {
+          "batchId": "80d1e120-e5ed-4b82-bcc2-c4568a226d1a",
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/GetAmazonAiImages - 场景2_限制返回数量查询",
+    "description": "单接口测试：POST /api/AmazonAiImage/GetAmazonAiImages。真实用户场景：传profileId+maxResults+batchId限制单次查询返回条数。500条ES随机样本中占比约20%(100条)。已知环境限制：当前测试账号调用该接口下游Amazon返回403 ACCESS_DENIED(\"Third-party access to this API has been deprecated.\")，data.IsSuccessStatusCode预期为true但实际为false，为账号/环境级第三方访问权限被Amazon下线导致，非用例设计问题。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AI图片生成结果(限定maxResults)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GetAmazonAiImages",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "maxResults": 6,
+          "batchId": "abe9123f-56b7-4652-a240-240a70fa6a4f"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/GetRegisteAiImageAssets - 场景1_查询资产注册状态",
+    "description": "单接口测试：POST /api/AmazonAiImage/GetRegisteAiImageAssets。真实用户场景：传profileId+batchId查询已提交的AI图片素材注册(RegisteAiImageAssets)状态。40条ES随机样本(近180天)结构完全一致(均只有profileId+batchId两个字段)，未出现结构性差异维度，故只归纳为1个场景。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AI图片素材注册状态",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GetRegisteAiImageAssets",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "batchId": "91783a0e680bf488a371dbbdf5c1ccd7"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmazonAiImage/RegisteAiImageAssets - 场景1_注册单张AI生成图片素材",
+    "description": "单接口测试：POST /api/AmazonAiImage/RegisteAiImageAssets。真实用户场景：将1张已生成的AI图片(S3预签名url)+关联asinList注册为Amazon可用素材。42条ES随机样本(近180天)结构一致(均为1个assetDetailsList元素，仅含url+asinList，assetType/assetSubTypeList均未传)，故只归纳为1个场景。注意：url为S3预签名下载链接，含1小时时效的X-Amz-Signature，样本已过期，执行时该步骤可能因链接失效而失败，此为ES真实历史数据的已知限制。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "注册AI图片素材",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/RegisteAiImageAssets",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "assetDetailsList": [
+            {
+              "url": "https://catwalk-generated-assets-prod-us-west-2.s3.us-west-2.amazonaws.com/70a45102-3f28-44b9-8ced-076473c68a23/ce44c30d-6ead-4f68-a24b-eeb55099002f/6cb6adb2-6eba-4d9e-9ca3-1dca547efa1d.png?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEIX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIBpgi%2Bh7Jis5FkB4OEj8IbRiD6POpe3VqlYQGOMpPkw8AiAcUxRQonR4gx4SknDEBp%2FLCezoHY3dQxCvXZVZdClcRyqOBAhOEAAaDDQxMDY4NDUyODAzNyIMatlfeOPac5Zz8XUcKusDqz5oKUMd18O6PbvuLtS3tL%2F7DCjt70xC2CZSPADrXvjU%2B9sQ%2Ft%2Fw02aZRlJ4W1hcqA8EIB0WxJPez2vPLYcX985m4GAW%2Fl9pORgdjcbRV5cWDvjkKz8nKkv%2F77ru8AiTciojAMY7WFp8AV0XcpvOb4fdljNZIWVwK1Y%2BuYKiRplLp7iYwFl7nZ4h4UTR%2FUjIYLFUG%2FkXs88fBSp8yGxpTgDOUJiae18tjjcedWwwSNwtiH0I1YHH6Q3yVIlZovUJ2qtI7O8qGRlRbgjy2BEnKjmm3XyS%2Bqjyxaiv%2FIXgcTZ%2BVwzpmZf8n1MoNuTDaS8nxdBG4bgNTQ3cI8lQxm1GXEnDvLq2lxWHe44RfjQfLRy4eeBJkfZmL5HlX9TuvnxTNeRDZeOJW3n6Ihupz7H78KoPtA6dNEGJWDUrfUm5%2FawRgS46zKO2ZPd2S7wXYJYHszuzm63kIM3bRb0b71ji7otoqqHQNfo8G1RLhN76nuRLtDqFWiAcJe0kizza5aoFms5rdaY%2BspRpJqkXUEwk9mnVP1mJaA%2B2LDuD8v1yDbjfVL%2Fqp3jmv40f4fIa9aJjqbfDScdYhRVPvqwaOrMT1Eo4VeoU6K96GvJTEFAFcPcXkXP%2FIirYzRdIK3oY9x%2FgfZfVE%2F4lZQZGkYgwssyyzgY6ogHgV0%2BmfJ1Lv%2BMD48BQ930NXrDYlb8wTtrY12q%2FBRkpQynRyiUTWprZ4k%2FShYdWIx9WTAGTZkuBHU7Qy1UHh7pdZUSXx7pUPdgwcsUYpYdy9FTyPl%2FwTUXlHdcHYqZIQgp4pwvU9ZRCiv%2BifgcLhaqa7MPzPHxHczzeiY1ngMbQCxP5x2USCcqZVETgCAlMRz4%2F8vvDybLk8c4NeEYyHnZZLOs%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260401T063346Z&X-Amz-SignedHeaders=host&X-Amz-Credential=ASIAV7HVUSWS7TMNEQAQ%2F20260401%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=b9fa59db7dada74eded07b0ce33e58024a4851cff12bca52c2ef07c79a3760af",
+              "asinList": [
+                "B09FPWN9B8"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AmazonAiImage/GetThemes/{profileId} - 场景1_按profileId查询可用主题列表",
+    "description": "单接口测试：GET /api/AmazonAiImage/GetThemes/{profileId}。真实用户场景：按profileId路径参数查询该账号可用的AI图片生成主题列表。500条ES随机样本(近180天)均只有profileId一个变化维度(路径参数)，无请求体，故只归纳为1个场景。注意：run-cases.py执行框架不支持路径参数变量替换，故path中直接使用config.json的profile_id真实值硬编码。已知环境限制：当前测试账号调用该接口下游Amazon返回403 ACCESS_DENIED(\"Third-party access to this API has been deprecated.\")，data.IsSuccessStatusCode预期为true但实际为false，为账号/环境级第三方访问权限被Amazon下线导致，非用例设计问题。",
+    "module": "AmazonAiImage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询可用主题列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "AmazonAiImage/GetThemes/2755545444012419",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]

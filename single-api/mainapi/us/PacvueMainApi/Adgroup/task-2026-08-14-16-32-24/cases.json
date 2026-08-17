@@ -1,0 +1,4370 @@
+[
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupBulkSkuSave - 场景1_单AdGroup_ASIN定向新增",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupBulkSkuSave。真实用户场景：为单个sponsoredProducts手动/PAT广告组批量新增ASIN(B0开头10位)商品定向，isAdgroupBulkAdd=true。500条ES随机样本中占比约29.8%(149/500)，是高频场景。后置清理：用同模块BulkUpdataAdGroupSkuState把新建的定向entity状态置为archived，避免在测试账号残留有效定向。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "新增单AdGroup的ASIN定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupBulkSkuSave",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}"
+            }
+          ],
+          "asinstr": "B08W8CS14D",
+          "isAdgroupBulkAdd": true
+        },
+        "extract_vars": {
+          "new_target_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-将新建ASIN定向置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_target_id}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupBulkSkuSave - 场景2_单AdGroup_自定义SKU编号定向新增",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupBulkSkuSave。真实用户场景：为单个sponsoredProducts手动/PAT广告组新增非ASIN格式的商家自定义SKU编号定向(如ELITEAIR-2-PINK)。500条ES随机样本中占比约20.0%(100/500)，属于高频/中频临界场景，需覆盖。后置清理：用BulkUpdataAdGroupSkuState把新建定向置为archived。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "新增单AdGroup的SKU编号定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupBulkSkuSave",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}"
+            }
+          ],
+          "asinstr": "ELITEAIR-2-PINK",
+          "isAdgroupBulkAdd": true
+        },
+        "extract_vars": {
+          "new_target_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-将新建SKU定向置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_target_id}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupBulkSkuSave - 场景3_多AdGroup批量_ASIN定向新增",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupBulkSkuSave。真实用户场景：同一批ASIN定向一次性批量应用到多个AdGroup(可跨不同campaign，同一profile下)，adGroups数组长度≥2。500条ES随机样本中占比约35.4%(177/500)，是最高频场景。后置清理：对本次新建的两个定向entity分别调用BulkUpdataAdGroupSkuState置为archived。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量为多个AdGroup新增同一批ASIN定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupBulkSkuSave",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}"
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}"
+            }
+          ],
+          "asinstr": "B0G2SPSYW3,B0G2T1RG9R",
+          "isAdgroupBulkAdd": true
+        },
+        "extract_vars": {
+          "new_target_id_1": "data.ids[0]",
+          "new_target_id_2": "data.ids[1]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-将两个新建ASIN定向置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_target_id_1}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "entityID": "{{new_target_id_2}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupBulkSkuSave - 场景4_多AdGroup批量_自定义SKU编号定向新增",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupBulkSkuSave。真实用户场景：同一个非ASIN商家SKU编号一次性批量应用到多个AdGroup。500条ES随机样本中占比约14.8%(74/500)，属于中频独立场景(自定义SKU + 批量多AdGroup组合)，需覆盖。后置清理：对新建的两个定向entity分别调用BulkUpdataAdGroupSkuState置为archived。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量为多个AdGroup新增同一SKU编号定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupBulkSkuSave",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}"
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}"
+            }
+          ],
+          "asinstr": "ESN-RCPLA-CLA-4",
+          "isAdgroupBulkAdd": true
+        },
+        "extract_vars": {
+          "new_target_id_1": "data.ids[0]",
+          "new_target_id_2": "data.ids[1]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-将两个新建SKU定向置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_target_id_1}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "entityID": "{{new_target_id_2}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupSkuSave - 场景1_单个SP广告组少量ASIN添加(1-4个)",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupSkuSave。真实用户场景：给一个sponsoredProducts手动/PAT广告组保存少量(1-4个)ASIN定向，是最主流的操作方式。500条ES随机样本中占比59.8%(299/500条)。asinstr取自ES真实样本(profileId=582277837869288的一条asinstr字段原值\"B00MPQ88RY,B00MPQ8784\")。断言用data.ids非空(返回新建的SKU定向实体id)。第2步用本模块BulkUpdataAdGroupSkuState将新建实体的第一个entityID(data.ids[0])置为archived做清理还原。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存少量ASIN定向到SP手动/PAT广告组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupSkuSave",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}",
+          "asinstr": "B00MPQ88RY,B00MPQ8784"
+        },
+        "extract_vars": {
+          "new_sku_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "ids": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建SKU定向实体",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_sku_id}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupSkuSave - 场景2_SP广告组中等批量多规格SKU添加(5-49个)",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupSkuSave。真实用户场景：一次性给广告组保存中等数量(5-49个)ASIN/SKU，常见于给同款商品的多个尺寸/颜色规格SKU统一打上定向(如本例14个ZT8654X系列变体)。500条ES样本中占比20.0%(100/500条)。asinstr取自ES真实样本(profileId=4191079805953213的asins字段原值拼接)。断言用data.ids非空。第2步用BulkUpdataAdGroupSkuState将新建实体的第一个entityID(data.ids[0])归档做清理，若一次保存返回多个entityID，出于测试框架仅支持标量变量提取的限制，当前仅代表性清理第一个新建实体，其余实体默认保持有效(风险信息见needs_real_value)。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存中等批量多规格SKU定向到SP广告组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupSkuSave",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "asinstr": "ZT8654X-5XL,FBA-ZT8654-5XL,ZT8654X-2XL,FBA-ZT8654-2XL,ZT8654X-XL,FBA-ZT8654-XL,ZT8654X-S,FBA-ZT8654-S,ZT8654X-M,FBA-ZT8654-M,ZT8654X-L,FBA-ZT8654-L,ZT8654X-3XL,FBA-ZT8654-3XL"
+        },
+        "extract_vars": {
+          "new_sku_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "ids": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建SKU定向实体(代表性清理第一个)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "entityID": "{{new_sku_id}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupSkuSave - 场景3_SP广告组大批量SKU导入(≥50个,整店同步)",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupSkuSave。真实用户场景：一次性给广告组保存大批量(≥50个)SKU，常见于卖家整店/整品类SKU目录批量同步到某个广告组。500条ES样本中占比20.2%(101/500条)，且样本中大批量呈明显整数批次分布(50/60/100/120/160等)，属于独立的批量导入业务意图。asinstr取自ES真实样本(profileId=3519579618194131的asins字段原值拼接，共56个真实SKU编码)。断言用data.ids非空。第2步同场景2一样用BulkUpdataAdGroupSkuState归档代表性的第一个新建entityID(data.ids[0])。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存大批量SKU定向到SP广告组(整店同步)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupSkuSave",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "asinstr": "35.14.09.04,35.14.95.04,35.14.94.03,35.12.01.05,35.12.95.04,35.12.94.03,35.11.37.02,35.11.33.02,35.09.33.02,35.07.33.02,30.23.65.73,35.14.96.04,30.23.65.42,30.23.65.33,30.25.65.42,30.25.65.33,35.14.47.04,35.14.44.03,35.14.43.02,35.12.47.04,35.12.44.03,35.12.43.02,35.14.92.03,35.11.57.02,35.11.53.02,35.09.53.02,35.07.53.02,30.23.15.42,30.23.15.72,30.23.15.32,32.23.14.42,32.23.14.32,32.23.13.42,35.12.04.04,32.23.13.32,32.23.12.72,32.23.12.43,32.23.12.32,32.23.62.43,32.23.64.42,32.23.64.32,32.23.63.42,32.23.63.32,32.23.62.32,35.12.96.04,32.25.64.42,32.25.64.32,32.25.63.42,32.25.63.32,32.25.62.73,32.25.62.33,35.12.92.03,35.11.23.02,35.07.23.02,35.14.99.03,35.14.02.05"
+        },
+        "extract_vars": {
+          "new_sku_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "ids": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建SKU定向实体(代表性清理第一个)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "entityID": "{{new_sku_id}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupSkuSaveBulk - 单广告组添加单个ASIN商品定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupSkuSaveBulk。场景1：向单个SP手动/PAT广告组添加一个ASIN商品定向（最典型用法，用户在广告组的ASIN定向面板里粘贴一个竞品/自有ASIN）。500条随机样本中该组合(adGroups长度=1 且 asinstr含1个ASIN)代表135条，占比约27%。第2步用同模块 BulkUpdataAdGroupSkuState 接口把新建的SKU定向entityID归档(archived)，保证用例可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "AdGroupSkuSaveBulk-单广告组单ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupSkuSaveBulk",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ],
+          "asinstr": "{{target_asin}}"
+        },
+        "extract_vars": {
+          "new_sku_id_1": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建SKU定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_sku_id_1}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupSkuSaveBulk - 单广告组批量粘贴多个ASIN商品定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupSkuSaveBulk。场景2：向单个SP手动/PAT广告组一次性批量添加多个ASIN商品定向（用户在ASIN定向面板批量粘贴多个ASIN，逗号分隔）。500条随机样本中该组合(adGroups长度=1 且 asinstr含多个ASIN)代表165条，占比约33%。第2步用同模块 BulkUpdataAdGroupSkuState 接口把新建的两个SKU定向entityID逐一归档(archived)，保证用例可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "AdGroupSkuSaveBulk-单广告组多ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupSkuSaveBulk",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ],
+          "asinstr": "{{target_asin}},B0CQN58MT8"
+        },
+        "extract_vars": {
+          "new_sku_id_1": "data.ids[0]",
+          "new_sku_id_2": "data.ids[1]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-批量归档新建SKU定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_sku_id_1}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_sku_id_2}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/AdGroupSkuSaveBulk - 跨多个广告组批量应用同一ASIN商品定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/Adgroup/v3/AdGroupSkuSaveBulk。场景3：把同一个ASIN商品定向批量应用到多个不同SP广告组/campaign（用户在批量操作里选中多个广告组，统一追加同一批ASIN定向）。500条随机样本中adGroups数组长度>1的组合代表200条，占比约40%，是最高频场景；其中181/200的多广告组请求跨了不同campaignId，与本case用两个不同campaign下的广告组模拟一致。第2步用同模块 BulkUpdataAdGroupSkuState 接口把两个广告组下各自新建的SKU定向entityID分别归档(archived)，保证用例可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "AdGroupSkuSaveBulk-多广告组同一ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/AdGroupSkuSaveBulk",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}"
+            }
+          ],
+          "asinstr": "{{target_asin}}"
+        },
+        "extract_vars": {
+          "new_sku_id_ag1": "data.ids[0]",
+          "new_sku_id_ag2": "data.ids[1]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档两个广告组下新建的SKU定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdGroupSkuState",
+        "request_body": {
+          "state": "archived",
+          "models": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "entityID": "{{new_sku_id_ag1}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "entityID": "{{new_sku_id_ag2}}",
+              "campaignType": "sponsoredProducts",
+              "state": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BatchCreateNegativeKeywords - Campaign级批量创建否定精确匹配关键词(SP)",
+    "description": "单接口测试：POST /api/Adgroup/v3/BatchCreateNegativeKeywords。场景：在Campaign层级（不带AdGroupId）批量创建否定精确匹配(negativeExact)关键词，用于阻止特定搜索词触发广告展现。500条ES样本中该组合(campaign+negativeExact)代表条数约41474条关键词项，占全部关键词项(89402)约46.4%，为最高频场景，映射到SP campaign。该操作属于排除性质（阻止搜索词触发广告），不产生额外花费风险；本模块未发现否定关键词的删除/归档接口，故未加后置清理步骤。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Campaign级批量创建否定精确匹配关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BatchCreateNegativeKeywords",
+        "request_body": [
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "KeywordText": "dove men deodorant",
+            "MatchType": "negativeExact",
+            "State": "enabled"
+          },
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "KeywordText": "deodorant men spray",
+            "MatchType": "negativeExact",
+            "State": "enabled"
+          },
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "KeywordText": "deodorant men",
+            "MatchType": "negativeExact",
+            "State": "enabled"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BatchCreateNegativeKeywords - Campaign级批量创建否定词组匹配关键词(SB)",
+    "description": "单接口测试：POST /api/Adgroup/v3/BatchCreateNegativeKeywords。场景：在Campaign层级（不带AdGroupId）批量创建否定词组匹配(negativePhrase)关键词。500条ES样本中该组合(campaign+negativePhrase)代表条数约23003条关键词项，占全部关键词项(89402)约25.7%，为中高频场景，映射到SB campaign（SB无独立adgroup概念，否定关键词一般只在campaign层级创建）。属于排除性质操作，不产生额外花费风险；本模块未发现否定关键词的删除/归档接口，故未加后置清理步骤。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Campaign级批量创建否定词组匹配关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BatchCreateNegativeKeywords",
+        "request_body": [
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sb_campaign_id}}",
+            "KeywordText": "charlee bear",
+            "MatchType": "negativePhrase",
+            "State": "enabled"
+          },
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sb_campaign_id}}",
+            "KeywordText": "charlie bear",
+            "MatchType": "negativePhrase",
+            "State": "enabled"
+          },
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sb_campaign_id}}",
+            "KeywordText": "charley bear",
+            "MatchType": "negativePhrase",
+            "State": "enabled"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BatchCreateNegativeKeywords - AdGroup级批量创建否定关键词(SP手动/PAT)",
+    "description": "单接口测试：POST /api/Adgroup/v3/BatchCreateNegativeKeywords。场景：在AdGroup层级（带AdGroupId）批量创建否定关键词（覆盖negativeExact与negativePhrase两种matchType，此处用真实样本中的negativePhrase示例），用于仅在特定广告组下排除某些搜索词。500条ES样本中该组合(adgroup级，两种matchType合计)代表条数约24925条关键词项(12314 negativeExact + 12611 negativePhrase)，占全部关键词项(89402)约27.9%，映射到SP手动/PAT campaign+adgroup。属于排除性质操作，不产生额外花费风险；本模块未发现否定关键词的删除/归档接口，故未加后置清理步骤。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "AdGroup级批量创建否定关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BatchCreateNegativeKeywords",
+        "request_body": [
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "KeywordText": "celery juice",
+            "MatchType": "negativePhrase",
+            "State": "enabled"
+          },
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "KeywordText": "selleriesamen extrakt",
+            "MatchType": "negativePhrase",
+            "State": "enabled"
+          },
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "KeywordText": "selleriepulver bio",
+            "MatchType": "negativePhrase",
+            "State": "enabled"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "SP广告组仅设置ROAS竞价优化目标(ACOS未设置/高频场景)",
+    "description": "ES样本中6/7条(约86%)为该模式:ACOS恒为0(表示未设置ACOS目标),仅设置一个真实ROAS目标值对adgroup做批量竞价优化目标更新。测试对{{profile_id}}下的SP通用adgroup({{exist_sp_campaign_id}}/{{adgroup_id}})设置ROAS=10(ES真实出现值),验证接口更新成功后再还原为ES样本中另一常见默认值ROAS=1、ACOS=0。因Adgroup模块内未发现能直接查询当前ACOS/ROAS目标值的接口(GetAdGroupEditData/GetAdgroupsByCampaignIds均不返回该字段,GetAdgroupReportData虽在Data[].targetACOS/targetROAS中暴露该字段但请求体含多个无ES样本支撑的必填enum/日期字段,构造风险较高故未采用),因此未执行前置读取步骤,还原值凭ES样本中出现频率同样很高的默认值(ACOS=0,ROAS=1)人工判断,执行前请再次确认该测试adgroup当前的目标设置,避免误覆盖真实业务配置。",
+    "module": "Adgroup",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "granularity": "API",
+    "steps": [
+      {
+        "name": "批量设置adgroup的ROAS竞价优化目标",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BatchUpdateAdgroupTarget",
+        "request_body": {
+          "adgroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}"
+            }
+          ],
+          "ACOS": 0,
+          "ROAS": "10"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.success": true
+        }
+      },
+      {
+        "name": "还原adgroup目标为ES常见默认值(清理)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BatchUpdateAdgroupTarget",
+        "request_body": {
+          "adgroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}"
+            }
+          ],
+          "ACOS": 0,
+          "ROAS": "1"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "SP手动/PAT广告组同时设置ACOS与ROAS双竞价优化目标(中频场景)",
+    "description": "ES样本中1/7条(约14%)为该模式:ACOS与ROAS同时被设为非零真实值(ACOS=8.33, ROAS=12.00),代表用户同时配置两个竞价优化目标的业务场景,属于5%~20%中频场景需全覆盖。测试对{{profile_id}}下的SP手动/PAT campaign的adgroup({{sp_manual_pat_campaign_id}}/{{sp_manual_pat_adgroup_id}})执行该组合更新,再还原为ES样本中的常见默认值(ACOS=0,ROAS=1)。同场景1,Adgroup模块内未找到可靠的原值查询接口,故跳过前置读取,还原值为人工判断的常见默认值,执行前请再次确认该测试adgroup当前的目标设置,避免误覆盖真实业务配置。",
+    "module": "Adgroup",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "granularity": "API",
+    "steps": [
+      {
+        "name": "批量同时设置adgroup的ACOS+ROAS竞价优化目标",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BatchUpdateAdgroupTarget",
+        "request_body": {
+          "adgroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}"
+            }
+          ],
+          "ACOS": "8.33",
+          "ROAS": "12.00"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.success": true
+        }
+      },
+      {
+        "name": "还原adgroup目标为ES常见默认值(清理)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BatchUpdateAdgroupTarget",
+        "request_body": {
+          "adgroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}"
+            }
+          ],
+          "ACOS": 0,
+          "ROAS": "1"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkAdGroupSkuReplace - 场景1_单ASIN替换_旧目标转Paused_新目标默认",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkAdGroupSkuReplace。真实用户场景：sponsoredProducts手动/PAT广告组下，用新ASIN(asinstr字段真实值)替换已有ASIN目标(asin字段真实值)，只指定顶层State=paused(将被替换掉的旧SKU目标转为paused)，不显式传NewAsinState/keep，走接口默认行为。99条ES真实样本中占比约90.9%(90/99条)，是最主流场景。第2步用同接口把新建的替换目标entityID(从响应data.ids[0]提取)置为archived，尽量还原测试账号状态。⚠️模块内未发现专门查询/归档SKU目标的接口，该清理方式基于\"BulkAdGroupSkuReplace自身支持按adgroupSkus[].entityID+State归档已建目标\"的假设，执行前请再次核实此假设是否成立。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用BulkAdGroupSkuReplace-单ASIN替换(State=paused)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkAdGroupSkuReplace",
+        "request_body": {
+          "models": [
+            {
+              "asin": "B0FN5THYFL",
+              "asinstr": "B07GXW7KR6",
+              "adgroupSkus": [
+                {
+                  "profileId": "{{profile_id}}",
+                  "campaignId": "{{sp_manual_pat_campaign_id}}",
+                  "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+                  "entityID": "{{target_id}}",
+                  "state": "enabled"
+                }
+              ]
+            }
+          ],
+          "State": "paused"
+        },
+        "extract_vars": {
+          "new_sku_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-将新建替换目标entityID归档(archived)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkAdGroupSkuReplace",
+        "request_body": {
+          "models": [
+            {
+              "asin": "B07GXW7KR6",
+              "asinstr": "B07GXW7KR6",
+              "adgroupSkus": [
+                {
+                  "profileId": "{{profile_id}}",
+                  "campaignId": "{{sp_manual_pat_campaign_id}}",
+                  "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+                  "entityID": "{{new_sku_id}}",
+                  "state": "archived"
+                }
+              ]
+            }
+          ],
+          "State": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkAdGroupSkuReplace - 场景2_全字段显式替换_旧目标Archived_新目标Enabled_keep=false",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkAdGroupSkuReplace。真实用户场景：显式传满State=archived(旧SKU目标归档)、NewAsinState=enabled(新替换目标启用)、keep=false(不保留旧ASIN目标，彻底替换)的完整替换请求。99条ES真实样本中占比约7.07%(7/99条)，属于中频场景，需覆盖。第2步用同接口把新建的替换目标entityID(从data.ids[0]提取)再置为archived，尽量还原测试账号状态。⚠️同场景1，该清理方式基于接口自身支持按entityID+State归档的假设，执行前请核实。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用BulkAdGroupSkuReplace-全字段显式替换(State=archived,NewAsinState=enabled,keep=false)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkAdGroupSkuReplace",
+        "request_body": {
+          "models": [
+            {
+              "asin": "B077NHF4FS",
+              "asinstr": "B0GK2MF6HQ",
+              "adgroupSkus": [
+                {
+                  "profileId": "{{profile_id}}",
+                  "campaignId": "{{sp_manual_pat_campaign_id}}",
+                  "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+                  "entityID": "{{target_id}}",
+                  "state": "enabled"
+                }
+              ]
+            }
+          ],
+          "State": "archived",
+          "NewAsinState": "enabled",
+          "keep": false
+        },
+        "extract_vars": {
+          "new_sku_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-将新建替换目标entityID归档(archived)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkAdGroupSkuReplace",
+        "request_body": {
+          "models": [
+            {
+              "asin": "B0GK2MF6HQ",
+              "asinstr": "B0GK2MF6HQ",
+              "adgroupSkus": [
+                {
+                  "profileId": "{{profile_id}}",
+                  "campaignId": "{{sp_manual_pat_campaign_id}}",
+                  "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+                  "entityID": "{{new_sku_id}}",
+                  "state": "archived"
+                }
+              ]
+            }
+          ],
+          "State": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkAdGroupSkuReplace - 场景3_保留旧目标keep=true_新增替换目标Paused",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkAdGroupSkuReplace。真实用户场景：keep=true(保留原ASIN目标，不删除旧目标)，同时新增替换目标并置为NewAsinState=paused，顶层State=archived。99条ES真实样本中占比约2.02%(2/99条)，属于低频但代表独立业务意图(\"保留旧目标+新增替换目标共存\"，区别于场景1/2的\"替换并处置旧目标\")，故予以覆盖。第2步用同接口把新建的替换目标entityID(从data.ids[0]提取)置为archived清理；因keep=true语义下旧目标未被本次调用修改(未新建/未删除)，无需额外还原旧目标。⚠️清理方式同样基于接口自身支持按entityID+State归档的假设，执行前请核实。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用BulkAdGroupSkuReplace-保留旧目标并新增替换目标(keep=true,NewAsinState=paused)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkAdGroupSkuReplace",
+        "request_body": {
+          "models": [
+            {
+              "asin": "B00NI088TE",
+              "asinstr": "B016TRTXXM",
+              "adgroupSkus": [
+                {
+                  "profileId": "{{profile_id}}",
+                  "campaignId": "{{sp_manual_pat_campaign_id}}",
+                  "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+                  "entityID": "{{target_id}}",
+                  "state": "enabled"
+                }
+              ]
+            }
+          ],
+          "State": "archived",
+          "NewAsinState": "paused",
+          "keep": true
+        },
+        "extract_vars": {
+          "new_sku_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.ids": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-将新建替换目标entityID归档(archived)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkAdGroupSkuReplace",
+        "request_body": {
+          "models": [
+            {
+              "asin": "B016TRTXXM",
+              "asinstr": "B016TRTXXM",
+              "adgroupSkus": [
+                {
+                  "profileId": "{{profile_id}}",
+                  "campaignId": "{{sp_manual_pat_campaign_id}}",
+                  "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+                  "entityID": "{{new_sku_id}}",
+                  "state": "archived"
+                }
+              ]
+            }
+          ],
+          "State": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "SP单个AdGroup批量改价（高频场景）",
+    "description": "对单个 sponsoredProducts AdGroup 执行批量改价接口（datas只含1条记录），先读取当前 defaultBid 作为还原基准，改价后再改回原值，避免污染测试账号真实出价。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前bid（还原基准）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {
+          "original_bid_sp": "data.defaultBid"
+        }
+      },
+      {
+        "name": "批量修改SP AdGroup出价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "bidOptimization": ""
+            }
+          ],
+          "autoBid": 0.5
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "还原AdGroup出价为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "bidOptimization": ""
+            }
+          ],
+          "autoBid": "{{original_bid_sp}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "SP多个AdGroup跨Campaign批量改价（中频场景）",
+    "description": "datas 中同时包含两条不同campaignId下的sponsoredProducts AdGroup记录，用同一个autoBid批量改价（对应ES样本中约8%的多条目跨campaign批量选择请求）。先分别读取两个AdGroup的原bid，改价后分别用各自原值还原。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup#1当前bid（还原基准）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {
+          "original_bid_sp_1": "data.defaultBid"
+        }
+      },
+      {
+        "name": "读取AdGroup#2当前bid（还原基准）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {
+          "original_bid_sp_2": "data.defaultBid"
+        }
+      },
+      {
+        "name": "批量修改两个SP AdGroup出价为同一新值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "bidOptimization": ""
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "bidOptimization": ""
+            }
+          ],
+          "autoBid": 0.3
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "还原AdGroup#1出价为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "bidOptimization": ""
+            }
+          ],
+          "autoBid": "{{original_bid_sp_1}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "还原AdGroup#2出价为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "bidOptimization": ""
+            }
+          ],
+          "autoBid": "{{original_bid_sp_2}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "跨广告类型批量改价含SD设置bidOptimization（中频场景）",
+    "description": "datas 中同时包含sponsoredProducts和SponsoredDisplay两种类型的AdGroup（对应ES样本中约8%的跨类型批量选择请求，其中SD条目常同时设置bidOptimization=conversions）。SP条目bidOptimization保持空。先分别读取两个AdGroup原bid/bidOptimization，改价后分别还原。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取SP AdGroup当前bid（还原基准）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {
+          "original_bid_sp": "data.defaultBid"
+        }
+      },
+      {
+        "name": "读取SD AdGroup当前bid/bidOptimization（还原基准）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {
+          "original_bid_sd": "data.defaultBid",
+          "original_bidopt_sd": "data.bidOptimization"
+        }
+      },
+      {
+        "name": "跨类型批量修改SP和SD AdGroup出价（SD附带bidOptimization=conversions）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "bidOptimization": ""
+            },
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "SponsoredDisplay",
+              "campaignId": "{{sd_campaign_id}}",
+              "adGroupId": "{{sd_adgroup_id}}",
+              "bidOptimization": "conversions"
+            }
+          ],
+          "autoBid": 0.75
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "还原SP AdGroup出价为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}",
+              "bidOptimization": ""
+            }
+          ],
+          "autoBid": "{{original_bid_sp}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "还原SD AdGroup出价及bidOptimization为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupBid",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "SponsoredDisplay",
+              "campaignId": "{{sd_campaign_id}}",
+              "adGroupId": "{{sd_adgroup_id}}",
+              "bidOptimization": "{{original_bidopt_sd}}"
+            }
+          ],
+          "autoBid": "{{original_bid_sd}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkUpdataAdgroupState - 场景1_SponsoredProducts通用场景_启用AdGroup",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkUpdataAdgroupState。场景1_SponsoredProducts通用场景_批量启用(enabled)单个AdGroup，是ES样本中campaignType=sponsoredProducts且state=enabled的最高频组合。500条随机样本中占比62.0%(310次)。清理策略：先用GetAdGroupEditData读取AdGroup当前真实state，主操作改为enabled后，用同接口把state还原为读取到的原值，保证用例可重复执行、不遗留脏数据。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前state(还原用)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_sp_state_1": "data.state"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "state": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "批量将SP AdGroup状态改为enabled",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}"
+            }
+          ],
+          "state": "enabled"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "还原AdGroup状态为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}"
+            }
+          ],
+          "state": "{{original_sp_state_1}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkUpdataAdgroupState - 场景2_SponsoredProducts手动PAT场景_暂停AdGroup",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkUpdataAdgroupState。场景2_SponsoredProducts手动/PAT场景_批量暂停(paused)单个AdGroup，是ES样本中campaignType=sponsoredProducts且state=paused的第二高频组合。500条随机样本中占比24.8%(124次)。清理策略：先用GetAdGroupEditData读取AdGroup当前真实state，主操作改为paused后，用同接口把state还原为读取到的原值。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前state(还原用)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_sp_state_2": "data.state"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "state": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "批量将SP手动/PAT AdGroup状态改为paused",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ],
+          "state": "paused"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "还原AdGroup状态为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ],
+          "state": "{{original_sp_state_2}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkUpdataAdgroupState - 场景3_SponsoredDisplay场景_切换AdGroup状态",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkUpdataAdgroupState。场景3_SponsoredDisplay场景_批量将AdGroup状态改为paused，覆盖ES样本中campaignType=\"SponsoredDisplay\"(注意大小写与sponsoredProducts不同，照抄ES真实值)这一独立广告类型。500条随机样本中campaignType=SponsoredDisplay合计占比6.4%(enabled 24次+paused 8次=32次)，属于中低频但业务上是独立的广告平台类型，需单独覆盖。清理策略：先用GetAdGroupEditData读取AdGroup当前真实state，主操作改为paused后还原为原值。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取SD AdGroup当前state(还原用)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_sd_state": "data.state"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "state": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "批量将SD AdGroup状态改为paused",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "SponsoredDisplay",
+              "campaignId": "{{sd_campaign_id}}",
+              "adGroupId": "{{sd_adgroup_id}}"
+            }
+          ],
+          "state": "paused"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "还原SD AdGroup状态为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "SponsoredDisplay",
+              "campaignId": "{{sd_campaign_id}}",
+              "adGroupId": "{{sd_adgroup_id}}"
+            }
+          ],
+          "state": "{{original_sd_state}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkUpdataAdgroupState - 场景4_SponsoredProducts通用场景_归档AdGroup",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkUpdataAdgroupState。场景4_SponsoredProducts通用场景_批量归档(archived)AdGroup，与enabled/paused的\"开关\"性质不同，archived是相对不可逆的下线操作，代表独立业务意图。500条随机样本中campaignType=sponsoredProducts且state=archived占比2.6%(13次)，属低频但业务意图独立，故纳入覆盖。清理策略：先用GetAdGroupEditData读取AdGroup当前真实state，主操作改为archived后还原为原值。注意：本场景复用了场景1中的{{exist_sp_campaign_id}}+{{adgroup_id}}(可用变量池中sponsoredProducts通用场景仅有这一组)，请确保该case与场景1在同一测试账号下按顺序串行执行(非并发)，避免两个case同时操作同一AdGroup产生状态覆盖冲突；执行前请再次确认该AdGroup当前不是生产在用的关键测试实体。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前state(还原用)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_sp_state_4": "data.state"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "state": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "批量将SP AdGroup状态改为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "还原AdGroup状态为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{adgroup_id}}"
+            }
+          ],
+          "state": "{{original_sp_state_4}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/BulkUpdateSDAdGroupBidOptimization - 批量设置SD广告组优化方式为clicks(前置读原值+后置还原,可重复)",
+    "description": "单接口测试：POST /api/Adgroup/v3/BulkUpdateSDAdGroupBidOptimization。场景来自ES真实样本：2条样本均为将一批SD广告组的bidOptimization批量设置为\"clicks\"（占比2/2=100%）。因该接口属于改优化方式类写操作，测试步骤为：1)先用GetAdGroupEditData读取目标SD广告组当前的bidOptimization原值并记录；2)执行主接口把优化方式改为ES样本中出现的真实值\"clicks\"；3)再次调用本接口把优化方式改回步骤1读到的原值，保证测试账号数据不被污染、case可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-读取SD广告组当前bidOptimization原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_bid_optimization": "data.bidOptimization"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "主操作-批量设置SD广告组优化方式为clicks",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdateSDAdGroupBidOptimization",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sd_adgroup_id}}",
+              "campaignId": "{{sd_campaign_id}}"
+            }
+          ],
+          "bidOptimization": "clicks"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置还原-将SD广告组优化方式改回原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdateSDAdGroupBidOptimization",
+        "request_body": {
+          "adGroups": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{sd_adgroup_id}}",
+              "campaignId": "{{sd_campaign_id}}"
+            }
+          ],
+          "bidOptimization": "{{original_bid_optimization}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "CopyAdGroup_SP_Manual_ToDifferentCampaign",
+    "description": "复制一个sponsoredProducts手动定向(manual)的AdGroup到另一个campaign下（真实场景中最高频，占比约63.8%）。复制成功后立即用BulkUpdataAdgroupState把新建的AdGroup状态置为archived做清理，避免在测试账号中长期残留新建实体。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SP手动定向AdGroup到不同campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroup",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{exist_sp_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "AdGroupName": "The Gratitude Way - K",
+            "CampaignType": "sponsoredProducts",
+            "TargetingType": "manual",
+            "State": "enabled"
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.AdGroupId": {
+            "$not_empty": true
+          }
+        },
+        "extract_vars": {
+          "new_adgroup_id": "data.AdGroupId"
+        }
+      },
+      {
+        "name": "清理：将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{new_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "CopyAdGroup_SP_Manual_SameCampaign_Duplicate",
+    "description": "在同一campaign内复制一个sponsoredProducts手动定向(manual)的AdGroup（ToCampaignId与源AdGroup所属CampaignId一致，即“在原campaign内生成副本”场景，占比约17.7%）。复制成功后用BulkUpdataAdgroupState把新建的AdGroup状态置为archived做清理。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "在同一campaign内复制SP手动定向AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroup",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{sp_manual_pat_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "AdGroupName": "Womens Dualaction - PD",
+            "CampaignType": "sponsoredProducts",
+            "TargetingType": "manual",
+            "State": "enabled"
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.AdGroupId": {
+            "$not_empty": true
+          }
+        },
+        "extract_vars": {
+          "new_adgroup_id": "data.AdGroupId"
+        }
+      },
+      {
+        "name": "清理：将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{new_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "CopyAdGroup_SP_Auto_ToDifferentCampaign",
+    "description": "复制一个sponsoredProducts自动定向(auto)的AdGroup到另一个campaign下（占比约15.6%，是与manual定向不同的独立业务意图场景）。复制成功后用BulkUpdataAdgroupState把新建的AdGroup状态置为archived做清理。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SP自动定向AdGroup到不同campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroup",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{sp_manual_pat_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "AdGroupId": "{{adgroup_id}}",
+            "AdGroupName": "Growing in Understanding",
+            "CampaignType": "sponsoredProducts",
+            "TargetingType": "auto",
+            "State": "enabled"
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.AdGroupId": {
+            "$not_empty": true
+          }
+        },
+        "extract_vars": {
+          "new_adgroup_id": "data.AdGroupId"
+        }
+      },
+      {
+        "name": "清理：将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{new_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/CopyAdGroup2 - 场景1_SP手动投放AdGroup单ASIN复制",
+    "description": "复制SP手动投放(manual)AdGroup，源AdGroup与目标Campaign为同一Campaign（即自我复制生成一份新配置相同的AdGroup），AdGroupAsin携带单个ASIN定向。74条ES真实样本中占比约82.4%（61次），为最高频场景。复制成功后从响应data.AdGroupId提取新建AdGroupId，用BulkUpdataAdgroupState将其状态置为archived完成清理，避免在测试账号下残留无用AdGroup。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CopyAdGroup2 复制SP手动投放AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroup2",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{sp_manual_pat_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "AdGroupName": "SP Manual PAT AdGroup - CopyAdGroup2 Test Copy",
+            "State": "enabled",
+            "TargetingType": "manual",
+            "CampaignType": "sponsoredProducts"
+          },
+          "AdGroupAsin": {
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "Name": "SP Manual PAT AdGroup - CopyAdGroup2 Test Copy",
+            "Asins": [
+              "{{target_asin}}"
+            ]
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "AdGroupId": {
+              "$not_empty": true
+            }
+          }
+        },
+        "extract_vars": {
+          "new_adgroup_id_manual": "data.AdGroupId"
+        }
+      },
+      {
+        "name": "清理_将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{new_adgroup_id_manual}}"
+            }
+          ],
+          "state": "archived",
+          "notEmpty": true
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/CopyAdGroup2 - 场景2_SP自动投放AdGroup单ASIN复制",
+    "description": "复制SP自动投放(auto)AdGroup，源AdGroup与目标Campaign为同一Campaign（自我复制），AdGroupAsin携带单个ASIN定向。74条ES真实样本中占比约6.8%（5次），为中频场景，需覆盖。复制成功后提取新建AdGroupId，用BulkUpdataAdgroupState将其状态置为archived完成清理。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CopyAdGroup2 复制SP自动投放AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroup2",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{exist_sp_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "AdGroupId": "{{adgroup_id}}",
+            "AdGroupName": "SP Auto AdGroup - CopyAdGroup2 Test Copy",
+            "State": "enabled",
+            "TargetingType": "auto",
+            "CampaignType": "sponsoredProducts"
+          },
+          "AdGroupAsin": {
+            "AdGroupId": "{{adgroup_id}}",
+            "Name": "SP Auto AdGroup - CopyAdGroup2 Test Copy",
+            "Asins": [
+              "{{target_asin}}"
+            ]
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "AdGroupId": {
+              "$not_empty": true
+            }
+          }
+        },
+        "extract_vars": {
+          "new_adgroup_id_auto": "data.AdGroupId"
+        }
+      },
+      {
+        "name": "清理_将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{new_adgroup_id_auto}}"
+            }
+          ],
+          "state": "archived",
+          "notEmpty": true
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/CopyAdGroup2 - 场景3_SP手动投放AdGroup多ASIN复制",
+    "description": "复制SP手动投放(manual)AdGroup，源AdGroup与目标Campaign为同一Campaign（自我复制），AdGroupAsin携带多个ASIN定向（ES样本中该场景ASIN多为同一值在数组中重复出现，如[\"B0DJDK21Y4\",\"B0DJDK21Y4\"]、[\"B0GFBR4RRG\",\"B0GFBR4RRG\"]）。74条ES真实样本中占比约8.1%（6次），为中频场景，需覆盖。复制成功后提取新建AdGroupId，用BulkUpdataAdgroupState将其状态置为archived完成清理。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CopyAdGroup2 复制SP手动投放AdGroup（多ASIN）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroup2",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{sp_manual_pat_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sp_manual_pat_campaign_id}}",
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "AdGroupName": "SP Manual PAT AdGroup - CopyAdGroup2 MultiAsin Test Copy",
+            "State": "enabled",
+            "TargetingType": "manual",
+            "CampaignType": "sponsoredProducts"
+          },
+          "AdGroupAsin": {
+            "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+            "Name": "SP Manual PAT AdGroup - CopyAdGroup2 MultiAsin Test Copy",
+            "Asins": [
+              "{{target_asin}}",
+              "{{target_asin}}"
+            ]
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "AdGroupId": {
+              "$not_empty": true
+            }
+          }
+        },
+        "extract_vars": {
+          "new_adgroup_id_manual_multi": "data.AdGroupId"
+        }
+      },
+      {
+        "name": "清理_将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{new_adgroup_id_manual_multi}}"
+            }
+          ],
+          "state": "archived",
+          "notEmpty": true
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/CopyAdGroupSB - 场景1_同Campaign内复制并保持enabled",
+    "description": "单接口测试：POST /api/Adgroup/v3/CopyAdGroupSB。用户在同一个SB(Sponsored Brands)Campaign内对某个AdGroup执行“复制”操作，新副本沿用enabled状态。33条ES真实样本中，ToProfileId==ProfileId且ToCampaignId==CampaignId占比100%（即目前观察到的真实业务只有“在原Campaign内复制”这一种，未出现跨Campaign复制样本），State=enabled占51.5%(17/33)。前置用GetAdgroupsByCampaignIds查出{{exist_sb_campaign_id}}下一个真实存在的AdGroupId作为复制源（因为SB场景没有独立的AdGroup测试变量），主操作CopyAdGroupSB创建新AdGroup并提取新AdGroupId，后置清理调用BulkUpdataAdgroupState将新建AdGroup状态置为archived（campaignType用SB对应的\"headlineSearch\"）。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：查询源Campaign下一个真实存在的AdGroupId作为复制源",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupsByCampaignIds",
+        "request_body": {
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ]
+        },
+        "extract_vars": {
+          "source_sb_adgroup_id": "data[0].adgroupid"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "调用 CopyAdGroupSB - 复制并保持enabled",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroupSB",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{exist_sb_campaign_id}}",
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sb_campaign_id}}",
+          "AdGroupId": "{{source_sb_adgroup_id}}",
+          "AdGroupName": "Horizontal",
+          "State": "enabled"
+        },
+        "extract_vars": {
+          "new_sb_adgroup_id_enabled": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.AdGroupId": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理：将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "headlineSearch",
+              "campaignId": "{{exist_sb_campaign_id}}",
+              "adGroupId": "{{new_sb_adgroup_id_enabled}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/CopyAdGroupSB - 场景2_同Campaign内复制并保持paused",
+    "description": "单接口测试：POST /api/Adgroup/v3/CopyAdGroupSB。用户在同一个SB Campaign内复制AdGroup，新副本沿用paused状态（常见于暂停中的品牌广告组做A/B测试或备份）。33条ES真实样本中State=paused占比48.5%(16/33)，与enabled场景近似对半，属高频场景需覆盖。前置同样用GetAdgroupsByCampaignIds查出真实AdGroupId作为复制源，主操作后提取新AdGroupId，后置用BulkUpdataAdgroupState归档新建AdGroup做清理。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：查询源Campaign下一个真实存在的AdGroupId作为复制源",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupsByCampaignIds",
+        "request_body": {
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ]
+        },
+        "extract_vars": {
+          "source_sb_adgroup_id": "data[0].adgroupid"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "调用 CopyAdGroupSB - 复制并保持paused",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroupSB",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{exist_sb_campaign_id}}",
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sb_campaign_id}}",
+          "AdGroupId": "{{source_sb_adgroup_id}}",
+          "AdGroupName": "KW-Exact (Branded)",
+          "State": "paused"
+        },
+        "extract_vars": {
+          "new_sb_adgroup_id_paused": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.AdGroupId": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理：将新建AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "headlineSearch",
+              "campaignId": "{{exist_sb_campaign_id}}",
+              "adGroupId": "{{new_sb_adgroup_id_paused}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "复制SponsoredDisplay广告组（manual targeting，同campaign内复制）",
+    "description": "基于ES真实样本：将一个manual targeting的SponsoredDisplay AdGroup复制到同一个Campaign下（ToCampaignId与源AdGroup.CampaignId相同），CopySdCreative=0表示不复制SD创意。复制成功后提取新生成的AdGroupId，并调用BulkUpdataAdgroupState将其状态置为archived以清理测试数据，避免在测试账号下累积无用的AdGroup。",
+    "module": "Adgroup",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "since": "init",
+    "last_modified": "init",
+    "granularity": "API",
+    "steps": [
+      {
+        "name": "复制SD AdGroup到同一campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroupSD",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{sd_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sd_campaign_id}}",
+            "AdGroupId": "{{sd_adgroup_id}}",
+            "AdGroupName": "copy of sd adgroup test",
+            "CampaignType": 3,
+            "TargetingType": "manual",
+            "State": "enabled"
+          },
+          "CopySdCreative": 0
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "AdGroupId": {
+              "$not_empty": true
+            }
+          }
+        },
+        "extract_vars": {
+          "new_sd_adgroup_id": "data.AdGroupId"
+        }
+      },
+      {
+        "name": "清理：将新建的SD AdGroup状态置为archived",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "SponsoredDisplay",
+              "campaignId": "{{sd_campaign_id}}",
+              "adGroupId": "{{new_sd_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/CopyAdGroupSD2 - 复制SD广告组(含创意+ASIN定向,含后置清理,可重复)",
+    "description": "单接口测试：POST /api/Adgroup/v3/CopyAdGroupSD2。复制一个SponsoredDisplay手动投放广告组到同一Campaign下，同时复制创意(CopySdCreative=1)和ASIN定向(AdGroupAsin.Asins)。ES样本中仅1条真实请求，占比100%(1/1)。第2步后置操作将新建的SD广告组状态置为archived归档，保证用例可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SD广告组CopyAdGroupSD2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/CopyAdGroupSD2",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "ToCampaignId": "{{sd_campaign_id}}",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sd_campaign_id}}",
+            "AdGroupId": "{{sd_adgroup_id}}",
+            "AdgroupName": "copy of Product adgroup 001 0522",
+            "CampaignType": "SponsoredDisplay",
+            "TargetingType": "manual",
+            "State": "paused"
+          },
+          "CopySdCreative": 1,
+          "AdGroupAsin": {
+            "AdGroupId": "{{sd_adgroup_id}}",
+            "Name": "copy of Product adgroup 001 0522",
+            "Asins": [
+              "B000MXB3JC",
+              "B001PO6GTY"
+            ]
+          }
+        },
+        "extract_vars": {
+          "new_adgroup_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "AdGroupId": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建SD广告组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "SponsoredDisplay",
+              "campaignId": "{{sd_campaign_id}}",
+              "adGroupId": "{{new_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch - 不指定CampaignIds查询全部候选AdGroup",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch。真实用户场景：PAT(Product Targeting)研究页面未预先框选campaign，CampaignIds传空数组，返回该profile下全部可用于PAT研究的adgroup列表。500条ES真实样本中占比约61.4%(307/500)，是最高频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "不带campaign过滤查询PAT研究adgroup列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignIds": [],
+          "Asin": "",
+          "TargetingType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch - 单个CampaignId查询PAT研究AdGroup",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch。真实用户场景：用户在PAT研究页面选定了一个具体campaign(通常为sponsoredProducts手动/PAT类型campaign)，按CampaignIds=[单个id]查询该campaign下可用于PAT研究的adgroup列表。500条ES真实样本中占比约36.8%(184/500)，是次高频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "单campaign过滤查询PAT研究adgroup列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignIds": [
+            "{{sp_manual_pat_campaign_id}}"
+          ],
+          "Asin": "",
+          "TargetingType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch - 多个CampaignIds批量查询PAT研究AdGroup",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch。真实用户场景：用户在PAT研究页面批量勾选多个campaign(跨campaign做product targeting调研)，CampaignIds传多个id查询这些campaign下可用于PAT研究的adgroup列表。500条ES真实样本中该模式占比约1.8%(9/500)，属低频但独立的批量业务意图，真实流量中反复出现，故纳入以覆盖批量查询路径。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "多campaign过滤查询PAT研究adgroup列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupByCampaignIdsForPatResearch",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignIds": [
+            "{{sp_manual_pat_campaign_id}}",
+            "{{exist_sp_campaign_id}}"
+          ],
+          "Asin": "",
+          "TargetingType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "SB广告活动详情页-单Campaign级Adgroup趋势图（按周Dim）",
+    "description": "单接口测试:POST /api/Adgroup/v3/GetAdgroupChart。场景:在SponsoredBrands(headlineSearch)Campaign详情页查看该campaign的Adgroup趋势图,SB无独立AdGroup概念,故仅按campaignIds+state过滤,dim=week。样本中占比48.0%(240/500),为最高频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "SB Campaign详情页Adgroup趋势图",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "week",
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ],
+          "state": "enabled",
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "servingState": [],
+          "targetingType": [],
+          "taggingIds": [],
+          "campaignStates": [],
+          "hascampaignTag": false,
+          "isExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Adgroup列表页-账户级总览趋势图（不筛选任何Campaign/AdGroup）",
+    "description": "单接口测试:POST /api/Adgroup/v3/GetAdgroupChart。场景:在Adgroup列表页未选中任何行时查看整体趋势图,不带campaignIds/adgroupIds过滤,通过campaignTypeItems覆盖全部广告类型,dim=date。样本中占比15.2%(76/500),为中高频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Adgroup列表页账户级趋势图",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "date",
+          "filter": [],
+          "isAnd": 0,
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "campaignStates": [
+            "enabled",
+            "paused"
+          ],
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 0,
+            "PageIndex": 0
+          },
+          "campaignTypeItems": [
+            {
+              "CampaignType": "sponsoredProducts"
+            },
+            {
+              "CampaignType": "headlineSearch"
+            },
+            {
+              "CampaignType": "SponsoredDisplay"
+            },
+            {
+              "CampaignType": "SponsoredTV"
+            }
+          ],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1,
+            "isShowTopOfSearchIS": 1
+          },
+          "hascampaignTag": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "AdGroup Tag聚合分析-跨Profile的Tag维度Adgroup趋势图",
+    "description": "单接口测试:POST /api/Adgroup/v3/GetAdgroupChart。场景:在AdGroup标签管理/聚合分析页面,按多个profileIds聚合查看Adgroup趋势(tag维度分析结构,dim=ytd,不限定单一campaignIds/adgroupIds)。样本中占比14.6%(73/500),为中频且业务意图独立的场景(跨账户Tag聚合,与列表页单账户总览结构不同)。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "跨Profile的Tag维度Adgroup趋势图",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [],
+          "taggingIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "states": [],
+          "campaignStates": [],
+          "toMarket": "US",
+          "hascampaignTag": false,
+          "isSameSku": 0,
+          "servingState": [],
+          "targetingType": [],
+          "isExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Adgroup列表页-按Portfolio筛选后的趋势图",
+    "description": "单接口测试:POST /api/Adgroup/v3/GetAdgroupChart。场景:在Adgroup列表页按PortfolioId筛选后查看趋势图,同时带campaignIds限定,dim=date。样本中占比8.8%(44/500),为中频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Portfolio筛选的Adgroup趋势图",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "date",
+          "filter": [],
+          "isAnd": 0,
+          "portfolioIds": [
+            134431112622668
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "campaignStates": [
+            "enabled"
+          ],
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 0,
+            "PageIndex": 0
+          },
+          "campaignTypeItems": [
+            {
+              "CampaignType": "sponsoredProducts"
+            },
+            {
+              "CampaignType": "headlineSearch"
+            },
+            {
+              "CampaignType": "SponsoredDisplay"
+            },
+            {
+              "CampaignType": "SponsoredTV"
+            }
+          ],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1,
+            "isShowTopOfSearchIS": 1
+          },
+          "hascampaignTag": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Adgroup列表页-钻取到指定AdGroup的趋势图",
+    "description": "单接口测试:POST /api/Adgroup/v3/GetAdgroupChart。场景:在Adgroup列表页选中/钻取到某个具体AdGroup后查看该AdGroup的趋势图,同时带campaignIds+adgroupIds限定,dim=date。样本中占比4.8%(24/500),属于低频但代表独立业务意图(查看单个AdGroup趋势,与账户级总览/Portfolio筛选均不同)的场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "指定AdGroup的趋势图",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "date",
+          "filter": [],
+          "isAnd": 0,
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{adgroup_id}}"
+          ],
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "campaignStates": [
+            "enabled",
+            "paused"
+          ],
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 0,
+            "PageIndex": 0
+          },
+          "campaignTypeItems": [
+            {
+              "CampaignType": "sponsoredProducts"
+            },
+            {
+              "CampaignType": "headlineSearch"
+            },
+            {
+              "CampaignType": "SponsoredDisplay"
+            },
+            {
+              "CampaignType": "SponsoredTV"
+            }
+          ],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1,
+            "isShowTopOfSearchIS": 1
+          },
+          "hascampaignTag": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /Adgroup/v3/GetAdGroupEditData - 通过全局唯一id查询广告组编辑数据",
+    "description": "单接口测试：GET /api/Adgroup/v3/GetAdGroupEditData。前端仅传全局唯一id（对应adGroupId）查询广告组编辑数据，服务端据此解析profile/campaign等上下文，是最常见的编辑入口方式。10条ES样本中该模式占比约60%（6/10，含高频重复值355252293523710出现4次）。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupEditData(仅传id)",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "id": "{{adgroup_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /Adgroup/v3/GetAdGroupEditData - 通过profileId+campaignId+adGroupId组合查询广告组编辑数据",
+    "description": "单接口测试：GET /api/Adgroup/v3/GetAdGroupEditData。前端在已知campaign上下文（sponsoredProducts场景）下，传profileId+campaignId+adGroupId完整组合查询广告组编辑数据。10条ES样本中该模式占比约10%（1/10）。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdGroupEditData(profileId+campaignId+adGroupId)",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupReportData - 按Campaign查看AdGroup列表(不限定具体AdGroup)",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupReportData。真实用户场景：从Campaign详情页钻取查看该Campaign下所有AdGroup的数据列表，仅传campaignIds过滤，不传adgroupIds/states/campaignTypeItems等筛选条件，dim=ytd(相对日期,不显式传start/end)。500条真实样本中占比约43.6%(218/500)，是最主流场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Campaign查询AdGroup报表数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupReportData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "states": [],
+          "campaignStates": [],
+          "campaignTypeItems": [],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1,
+            "isShowTopOfSearchIS": 1
+          },
+          "isExport": false,
+          "hascampaignTag": false,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 1000,
+            "PageCount": 0,
+            "TotalDataCount": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupReportData - AdGroup模块主列表(默认活跃状态,不限Campaign)",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupReportData。真实用户场景：AdGroup模块主列表页，不限定campaignIds/adgroupIds，按states=[All_but_Archived,enabled,paused,pending]默认活跃状态过滤，按Spend降序分页浏览，显式传入start/end日期区间。500条真实样本中占比约25.8%(129/500)，属于高频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AdGroup模块主列表(默认活跃状态)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupReportData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "dim": "ytd",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "MetricIds": [],
+          "campaignIds": [],
+          "adgroupIds": [],
+          "campaignStates": [],
+          "campaignTypeItems": [],
+          "targetingType": [],
+          "servingState": [],
+          "taggingIds": [],
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "isAnd": 0,
+          "toMarket": "US",
+          "hascampaignTag": true,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 100,
+            "PageCount": 0,
+            "TotalDataCount": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupReportData - AdGroup模块主列表(按AdGroup标签筛选)",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupReportData。真实用户场景：AdGroup模块主列表页按AdGroup Tag(adGroupTagIds)筛选，其余条件与默认活跃状态列表一致(states=[All_but_Archived,enabled,paused,pending])。500条真实样本中占比约25.6%(128/500)，属于高频独立业务意图(标签过滤)场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按AdGroup标签查询AdGroup模块列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupReportData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "dim": "ytd",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "MetricIds": [],
+          "campaignIds": [],
+          "adgroupIds": [],
+          "campaignStates": [],
+          "campaignTypeItems": [],
+          "targetingType": [],
+          "servingState": [],
+          "taggingIds": [],
+          "adGroupTagIds": [
+            "{{adgroup_tag_id}}"
+          ],
+          "states": [
+            "All_but_Archived",
+            "enabled",
+            "paused",
+            "pending"
+          ],
+          "isAnd": 0,
+          "toMarket": "US",
+          "hascampaignTag": true,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 100,
+            "PageCount": 0,
+            "TotalDataCount": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupReportData - Campaign详情钻取查看单个AdGroup",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupReportData。真实用户场景：从Campaign详情页进一步钻取到某一具体AdGroup的数据(同时传campaignIds+adgroupIds)，并显式指定日期区间。500条真实样本中占比约4.2%(21/500)，属于代表独立业务意图(单AdGroup钻取)的中低频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Campaign+AdGroup查询单个AdGroup数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupReportData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{adgroup_id}}"
+          ],
+          "dim": "ytd",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "filter": [],
+          "isAnd": 0,
+          "states": [],
+          "campaignStates": [],
+          "campaignTypeItems": [],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1
+          },
+          "isExport": false,
+          "hascampaignTag": false,
+          "pageInfo": {
+            "OrderByField": "Spend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 100,
+            "PageCount": 0,
+            "TotalDataCount": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupsByCampaignIds - 单个SP广告系列查询广告组列表",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupsByCampaignIds。用户查看单个SP广告系列下的广告组列表，campaignIds传入单个campaignId。245条真实样本中该单ID模式占比约92.7%(227次)，为最高频场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdgroupsByCampaignIds",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupsByCampaignIds",
+        "request_body": {
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupsByCampaignIds - 单个SD广告系列查询广告组列表",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupsByCampaignIds。用户查看单个SD广告系列下的广告组列表，campaignIds传入单个campaignId，结构与SP单ID场景一致，用于覆盖不同广告类型下该通用接口的返回一致性。属于245条样本中单ID高频模式(占比约92.7%,227次)的一个业务子场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdgroupsByCampaignIds",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupsByCampaignIds",
+        "request_body": {
+          "campaignIds": [
+            "{{sd_campaign_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupsByCampaignIds - 批量多campaignId查询广告组列表",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupsByCampaignIds。用户在广告系列列表页勾选多个广告系列后批量查看广告组，campaignIds传入多个campaignId(取自ES真实样本中出现的多ID组合,已剔除样本中前端bug产生的字符拆分噪音元素，还原为Swagger定义的扁平数组结构)。245条样本中多ID模式占比约7.3%(18次)。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdgroupsByCampaignIds",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupsByCampaignIds",
+        "request_body": {
+          "campaignIds": [
+            "405224416712120",
+            "198472686513524",
+            "163824345398445"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "campaignId查询AdgroupTotal_单campaign汇总",
+    "description": "仅传入单个 campaignId（不含 adgroupId、不含广告类型过滤），查询该 campaign 下 Adgroup 维度的汇总统计总计，覆盖最高频（84.2%）的 campaign 详情页下钻查看 adgroup 汇总的场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按单个campaignId查询Adgroup汇总总计",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupTotal",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "states": [],
+          "campaignStates": [],
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageCount": 0,
+            "PageIndex": 1,
+            "PageSize": 100,
+            "TotalDataCount": 0
+          },
+          "campaignTypeItems": [],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "toMarket": "UK",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1,
+            "isShowTopOfSearchIS": 1
+          },
+          "export": false,
+          "textFilters": [],
+          "hascampaignTag": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "campaignId加adgroupId查询AdgroupTotal_指定adgroup汇总",
+    "description": "传入 campaignId 与具体的 adgroupId，查询指定 adgroup 的汇总统计总计，覆盖中频（8.6%）的用户在 adgroup 列表/详情页选中具体 adgroup 查看汇总指标的场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按campaignId加adgroupId查询Adgroup汇总总计",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupTotal",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{adgroup_id}}"
+          ],
+          "states": [],
+          "campaignStates": [],
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageCount": 0,
+            "PageIndex": 1,
+            "PageSize": 100,
+            "TotalDataCount": 0
+          },
+          "campaignTypeItems": [],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1
+          },
+          "export": false,
+          "textFilters": [],
+          "hascampaignTag": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "广告类型加状态过滤查询AdgroupTotal_账户级汇总",
+    "description": "不指定 campaignId/adgroupId，仅按广告类型(campaignTypeItems)与投放状态(states/campaignStates)过滤，查询账户级 Adgroup 汇总总计，覆盖低频但具备独立业务意图（3.0%）的 Explorer/Dashboard 跨 campaign 按类型和状态筛选查看整体汇总的场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按广告类型和状态过滤查询Adgroup汇总总计",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupTotal",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "campaignStates": [
+            "enabled",
+            "paused"
+          ],
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageCount": 0,
+            "PageIndex": 1,
+            "PageSize": 100,
+            "TotalDataCount": 0
+          },
+          "campaignTypeItems": [
+            {
+              "CampaignType": "sponsoredProducts"
+            },
+            {
+              "CampaignType": "headlineSearch"
+            },
+            {
+              "CampaignType": "SponsoredDisplay"
+            }
+          ],
+          "isExplorer": 0,
+          "isShowCampaignTag": 0,
+          "isPerformance": 0,
+          "isExchange": 0,
+          "toMarket": "ES",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1
+          },
+          "export": false,
+          "textFilters": [],
+          "hascampaignTag": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupTypeIsPat - 查询SP手动定位(PAT)广告系列的广告组类型",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupTypeIsPat。请求体仅含profileId+campaignId两个字段，500条ES真实样本中未发现其他区分维度（同一请求结构，占比100%）。业务上该接口用于判断指定campaign下的广告组是否为PAT（Product Attribute Targeting，手动商品定位）类型，是SP手动/PAT详情页加载广告组设置时的核心调用场景。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdgroupTypeIsPat",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupTypeIsPat",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupTypeIsPat - 查询SP通用广告系列的广告组类型",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupTypeIsPat。同一请求结构（profileId+campaignId），覆盖SP通用（非PAT专用）广告系列场景，用户在普通SP广告系列详情页加载广告组设置时触发。ES 500条样本中148个不同profileId、381个不同profileId+campaignId组合，绝大多数为该类通用查询。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdgroupTypeIsPat",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupTypeIsPat",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/GetAdgroupTypeIsPat - 查询SD广告系列的广告组类型",
+    "description": "单接口测试：POST /api/Adgroup/v3/GetAdgroupTypeIsPat。同一请求结构（profileId+campaignId），覆盖跨广告类型（Sponsored Display）场景，验证接口对非SP campaignId的通用兼容性。该接口只需campaignId，不区分平台，故SD广告系列详情页同样会调用该接口检查广告组类型。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdgroupTypeIsPat",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdgroupTypeIsPat",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sd_campaign_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/UpdataAdgroupBid - 低价位默认出价调整(<1,含读原值+还原)",
+    "description": "单接口测试：POST /api/Adgroup/v3/UpdataAdgroupBid。用户将AdGroup的默认出价(autoBid)调整为1美元以下的低价位(如0.55)，常见于低竞争度/低单次点击成本的商品定向广告组场景。132条ES真实样本中该区间占67条，占比约50.8%，为最高频场景。先用GetAdGroupEditData读取当前defaultBid作为原值，主操作后再用同接口还原原值，保证测试账号数据不留残留、可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前默认出价(defaultBid)作为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_bid": "data.defaultBid"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "调整AdGroup默认出价为低价位测试值(0.55)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdataAdgroupBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "autoBid": 0.55
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "还原AdGroup默认出价为读取到的原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdataAdgroupBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "autoBid": "{{original_bid}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/UpdataAdgroupBid - 中价位默认出价调整(1~3,含读原值+还原)",
+    "description": "单接口测试：POST /api/Adgroup/v3/UpdataAdgroupBid。用户将AdGroup的默认出价(autoBid)调整为1~3美元的中等价位(如2)，为常规SP商品广告组的典型出价调整场景。132条ES真实样本中该区间占54条，占比约40.9%，为次高频场景。先用GetAdGroupEditData读取当前defaultBid作为原值，主操作后再用同接口还原原值，保证测试账号数据不留残留、可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前默认出价(defaultBid)作为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_bid": "data.defaultBid"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "调整AdGroup默认出价为中价位测试值(2)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdataAdgroupBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "autoBid": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "还原AdGroup默认出价为读取到的原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdataAdgroupBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "autoBid": "{{original_bid}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/UpdataAdgroupBid - 高价位默认出价调整(>3,含读原值+还原)",
+    "description": "单接口测试：POST /api/Adgroup/v3/UpdataAdgroupBid。用户将AdGroup的默认出价(autoBid)调整为3美元以上的高价位(如10)，常见于高竞争度关键词/稀缺流量商品定向的激进出价策略场景。132条ES真实样本中该区间占11条，占比约8.3%，为中频场景，代表了与低/中价位不同的高竞价业务意图，需单独覆盖。先用GetAdGroupEditData读取当前defaultBid作为原值，主操作后再用同接口还原原值，保证测试账号数据不留残留、可重复执行。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前默认出价(defaultBid)作为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "extract_vars": {
+          "original_bid": "data.defaultBid"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "调整AdGroup默认出价为高价位测试值(10)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdataAdgroupBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "autoBid": 10
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "还原AdGroup默认出价为读取到的原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdataAdgroupBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "autoBid": "{{original_bid}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "SD_AdGroup_Update_Basic_Attributes_NoCostControl",
+    "description": "SD(Sponsored Display) AdGroup 基础属性更新场景（不涉及费用控制）：先用 GetAdGroupEditData 读取当前 name/state/bidOptimization/defaultBid 原值，再调用 UpdateAdGroup 修改 name/defaultBid/state/bidOptimization（costControlEnabled=false，不带 threshold/costRuleId，与该场景下 ES 真实样本一致），最后用读到的原值调用 UpdateAdGroup 还原。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前AdGroup原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "name": {
+              "$not_empty": true
+            }
+          }
+        },
+        "extract_vars": {
+          "original_name": "data.name",
+          "original_state": "data.state",
+          "original_bidOptimization": "data.bidOptimization",
+          "original_defaultBid": "data.defaultBid"
+        }
+      },
+      {
+        "name": "更新AdGroup基础属性(名称/出价/状态/优化方式)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "{{original_name}}_autotest_edit",
+          "defaultBid": 0.5,
+          "state": "paused",
+          "bidOptimization": "clicks",
+          "costControlEnabled": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "id": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "还原AdGroup为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "{{original_name}}",
+          "defaultBid": "{{original_defaultBid}}",
+          "state": "{{original_state}}",
+          "bidOptimization": "{{original_bidOptimization}}",
+          "costControlEnabled": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "SD_AdGroup_Update_EnableCostControl",
+    "description": "SD AdGroup 开启费用控制(Cost Control)场景：先读取当前 name/state/bidOptimization/defaultBid 原值，再调用 UpdateAdGroup 设置 costControlEnabled=true 并带真实样本中出现过的 threshold=6 与 costRuleId，其余字段保持原值不变；最后再次调用 UpdateAdGroup 将 costControlEnabled 置回 false（不带 threshold/costRuleId）完成还原。注意：本模块内查询接口(GetAdGroupEditData)不返回 costControlEnabled/threshold/costRuleId 字段，无法读取该 AdGroup 开启前真实的费用控制状态，还原时采用 ES 样本中最常见的基线(禁用费用控制)作为安全还原值，执行前请再次确认目标 AdGroup 当前费用控制配置。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前AdGroup原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "name": {
+              "$not_empty": true
+            }
+          }
+        },
+        "extract_vars": {
+          "original_name": "data.name",
+          "original_state": "data.state",
+          "original_bidOptimization": "data.bidOptimization",
+          "original_defaultBid": "data.defaultBid"
+        }
+      },
+      {
+        "name": "开启费用控制(设置threshold与costRuleId)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "{{original_name}}",
+          "defaultBid": "{{original_defaultBid}}",
+          "state": "{{original_state}}",
+          "bidOptimization": "{{original_bidOptimization}}",
+          "costControlEnabled": true,
+          "threshold": 6,
+          "costRuleId": "amzn1.ads-rule.m.cu2wu2w9ce8t8vgcy4lbn01c6"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "id": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "还原-关闭费用控制",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "{{original_name}}",
+          "defaultBid": "{{original_defaultBid}}",
+          "state": "{{original_state}}",
+          "bidOptimization": "{{original_bidOptimization}}",
+          "costControlEnabled": false
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "SD_AdGroup_Update_DisableCostControl",
+    "description": "SD AdGroup 关闭费用控制(Cost Control)场景：ES真实样本显示关闭操作时 costControlEnabled=false 但payload仍带上一次生效的 threshold/costRuleId(如 threshold=8, costRuleId=amzn1.ads-rule.m.3lltnbdjloh9kiyodjukmplzg)。先读取 name/state/bidOptimization/defaultBid 原值，再调用 UpdateAdGroup 执行关闭；最后用相同的 threshold/costRuleId 重新调用 UpdateAdGroup 将 costControlEnabled 置回 true，还原为关闭前(视为已启用)的状态。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取当前AdGroup原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "name": {
+              "$not_empty": true
+            }
+          }
+        },
+        "extract_vars": {
+          "original_name": "data.name",
+          "original_state": "data.state",
+          "original_bidOptimization": "data.bidOptimization",
+          "original_defaultBid": "data.defaultBid"
+        }
+      },
+      {
+        "name": "关闭费用控制(costControlEnabled=false，保留上次threshold/costRuleId)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "{{original_name}}",
+          "defaultBid": "{{original_defaultBid}}",
+          "state": "{{original_state}}",
+          "bidOptimization": "{{original_bidOptimization}}",
+          "costControlEnabled": false,
+          "threshold": 8,
+          "costRuleId": "amzn1.ads-rule.m.3lltnbdjloh9kiyodjukmplzg"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "id": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "还原-重新开启费用控制",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sd_adgroup_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "name": "{{original_name}}",
+          "defaultBid": "{{original_defaultBid}}",
+          "state": "{{original_state}}",
+          "bidOptimization": "{{original_bidOptimization}}",
+          "costControlEnabled": true,
+          "threshold": 8,
+          "costRuleId": "amzn1.ads-rule.m.3lltnbdjloh9kiyodjukmplzg"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Adgroup/v3/UpdateAdgroupByExcel - 批量修改AdGroup名称(含读原值+还原,可重复)",
+    "description": "单接口测试：POST /api/Adgroup/v3/UpdateAdgroupByExcel。真实用户场景：通过Excel批量导入方式修改AdGroup信息，数组元素仅携带Name字段(State/Bid未传，说明该次操作只改名)。ES样本总数仅1条(sample_count=1，未达3条下限，按实际条数生成1个case)。写操作前先用GetAdGroupEditData读取{{adgroup_id}}当前name作为{{original_name}}；主操作用ES真实样本出现过的名称值批量改名；最后用同接口把名称改回读到的原值，保证成对可重复执行、不留残留脏数据。ProfileId/CampaignId/AdgroupId已替换为测试账号sponsoredProducts通用测试实体({{profile_id}}/{{exist_sp_campaign_id}}/{{adgroup_id}})，未直接使用ES日志中其他真实客户的实体ID。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前编辑数据(记录原名称)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "adGroupId": "{{adgroup_id}}"
+        },
+        "extract_vars": {
+          "original_name": "data.name"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.name": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "通过Excel批量导入修改AdGroup名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdgroupByExcel",
+        "request_body": [
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "AdgroupId": "{{adgroup_id}}",
+            "Name": "Classic Hiking Crew Socks (3 Pack) - Generic Broad"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置还原-把AdGroup名称改回原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdgroupByExcel",
+        "request_body": [
+          {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "AdgroupId": "{{adgroup_id}}",
+            "Name": "{{original_name}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "普通改名场景-读取原名后改名并还原",
+    "description": "ES样本中85.7%(6/7)的请求为不带sourceName的普通AdGroup改名操作，同一adGroupId反复在两个名称间切换。先用GetAdGroupEditData读取当前真实name做备份，再调用UpdateAdGroupName改为ES真实样本值'autoTest_Rule_adgroup1_K1'，最后还原为读取到的原始名称。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {
+          "original_name": "data.name"
+        }
+      },
+      {
+        "name": "修改AdGroup名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroupName",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "name": "autoTest_Rule_adgroup1_K1"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "还原AdGroup名称为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroupName",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "name": "{{original_name}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "带sourceName(Creative Hub来源)的改名场景-读取原名后改名并还原",
+    "description": "ES样本中14.3%(1/7)的请求携带sourceName='Creative Hub'字段，代表从Creative Hub素材工具触发的AdGroup改名，属于独立业务意图。先用GetAdGroupEditData读取当前真实name做备份，再调用UpdateAdGroupName改为ES真实样本值'replace 02'并带上sourceName='Creative Hub'，最后还原为读取到的原始名称。",
+    "module": "Adgroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取AdGroup当前名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/GetAdGroupEditData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {
+          "original_name": "data.name"
+        }
+      },
+      {
+        "name": "通过Creative Hub来源修改AdGroup名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroupName",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "name": "replace 02",
+          "sourceName": "Creative Hub"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "还原AdGroup名称为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/UpdateAdGroupName",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{adgroup_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "name": "{{original_name}}"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -20,7 +20,7 @@ import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
-EXCEL_PATH = 'C:/AI engineering/single-api/ai_api/single-api/swagger_modules.xlsx'
+EXCEL_PATH = 'single-api/swagger_modules.xlsx'
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 def _thin_border():

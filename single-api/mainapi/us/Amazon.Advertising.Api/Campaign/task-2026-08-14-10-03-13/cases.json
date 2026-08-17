@@ -1,0 +1,4134 @@
+[
+  {
+    "name": "POST /api/Campaign/GetCampaignChart - 单个Campaign详情页趋势图（按日Dim）",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignChart。场景：在Campaign详情页查看单个campaign的按日(Dim=date)趋势图，通过CampaignId+ReportDateTime筛选。样本中占比29.2%(146次)，为最高频场景。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "单campaign按日趋势图",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignChart",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterType": 8,
+              "filterContent": "[\"91936304109532\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "isExchange": 1,
+          "Columns": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ]
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignChart - 按Campaign状态筛选的汇总趋势图（Dim=ytd）",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignChart。场景：Campaign列表页按状态(enabled/paused)筛选，查看汇总期间(ytd)趋势图，无标签/组合等其他筛选。样本中占比11.2%(56次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按状态筛选的汇总趋势图",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignChart - 按状态+标签筛选的趋势图",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignChart。场景：Campaign列表页按状态(enabled/paused)+自定义CampaignTagId标签组合筛选，查看趋势图(Dim=ytd)。样本中占比11.0%(55次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按状态+标签筛选的趋势图",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"594931\"],\"IsNum\":true}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignChart - 按名称搜索+状态筛选的趋势图",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignChart。场景：Campaign列表页按名称关键词(LikeOr)搜索并叠加状态筛选，查看趋势图(Dim=ytd)。样本中占比6.0%(30次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按名称+状态筛选的趋势图",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignName",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"US-\"]}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignChart - 无筛选查看全部Campaign整体趋势图",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignChart。场景：不带任何campaign维度筛选(仅日期区间)，查看账户下全部campaign的整体趋势图(Dim=ytd)，对应默认打开列表页无过滤条件的场景。样本中占比4.4%(22次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "无筛选整体趋势图",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignChart - 按广告组合(Portfolio)+状态筛选的趋势图",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignChart。场景：Campaign列表页按所属广告组合(PortfolioId)+状态筛选，查看趋势图(Dim=ytd)，用于组合维度的业绩追踪。样本中占比2.8%(14次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按组合+状态筛选的趋势图",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignChart",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"141133066721056\"],\"IsNum\":true}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignDetailList - 按campaignId+campaignState+日期范围查询campaign列表",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignDetailList。用户在campaign列表页选中特定campaignId后，按启用状态(CampaignState)和日期范围过滤查询campaign明细数据，按周(Dim=week)聚合。样本中占比32.6%(151/463次，符合Swagger结构的有效样本)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按campaignId+campaignState+日期范围查询campaign列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignDetailList",
+        "request_body": {
+          "Dim": "week",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "UK",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "FilterFieldName": "ReportDateTime",
+              "FilterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "FilterFieldName": "CampaignId",
+              "FilterType": 8,
+              "FilterContent": "[\"180572918290688\"]"
+            },
+            {
+              "FilterFieldName": "CampaignState",
+              "FilterType": 3,
+              "FilterContent": "[\"enabled\"]"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "PlacementTopAdjustPercentage",
+            "ProductPagesAdjustPercentage",
+            "RestOfSearchAdjustPercentage",
+            "AudienceResolved",
+            "AudienceId",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AdGroupActiveCount",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": 0,
+          "PageInfo": {
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 10000,
+            "IsJustOrderby": true
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignDetailList - 按campaignId+日期范围查询campaign列表（不筛选状态）",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignDetailList。用户选中campaignId后仅按日期范围查询campaign明细数据，不额外筛选campaign状态，按天(Dim=date)聚合。样本中占比17.7%(82/463次，符合Swagger结构的有效样本)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按campaignId+日期范围查询campaign列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignDetailList",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "FilterFieldName": "ReportDateTime",
+              "FilterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "FilterFieldName": "CampaignId",
+              "FilterType": 8,
+              "FilterContent": "[\"517649653979057\"]"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "CampaignTagNames",
+            "PortfolioName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": 0,
+          "PageInfo": {
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 10000,
+            "IsJustOrderby": true
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignDetailList - 按campaignId+campaignName模糊搜索+campaignState+日期范围查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignDetailList。用户在campaign列表页通过名称模糊搜索(CampaignName Like)结合campaignId、campaignState(多状态enabled+paused)和日期范围查询campaign明细，按周(Dim=week)聚合。样本中占比16.0%(74/463次，符合Swagger结构的有效样本)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按campaignId+campaignName模糊搜索+campaignState+日期范围查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignDetailList",
+        "request_body": {
+          "Dim": "week",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "FilterFieldName": "ReportDateTime",
+              "FilterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "FilterFieldName": "CampaignName",
+              "FilterType": 2,
+              "FilterContent": "{\"Operand\":\"Like\",\"Values\":[\"HVT_exact\"]}"
+            },
+            {
+              "FilterFieldName": "CampaignId",
+              "FilterType": 8,
+              "FilterContent": "[\"435528993787923\"]"
+            },
+            {
+              "FilterFieldName": "CampaignState",
+              "FilterType": 3,
+              "FilterContent": "[\"enabled\",\"paused\"]"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "TopOfSearchIS",
+            "Sales",
+            "ROAS",
+            "CVR",
+            "Conversion",
+            "NewToBrandSalesPercentage",
+            "OrderPrice",
+            "ASP",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DailyBudget",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": 0,
+          "PageInfo": {
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 10000,
+            "IsJustOrderby": true
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignDetailList - 按campaignId+campaignState+广告类型(CampaignTypeItems)+日期范围查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignDetailList。用户按campaignId、campaignState(多状态)结合具体广告类型子分类(CampaignTypeItems，如SponsoredDisplay/SponsoredTV细分)和日期范围查询campaign明细，按天(Dim=date)聚合。样本中占比7.8%(36/463次，符合Swagger结构的有效样本)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按campaignId+campaignState+CampaignTypeItems+日期范围查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignDetailList",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "FilterFieldName": "ReportDateTime",
+              "FilterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "FilterFieldName": "CampaignId",
+              "FilterType": 8,
+              "FilterContent": "[\"531444676807667\"]"
+            },
+            {
+              "FilterFieldName": "CampaignTypeItems",
+              "FilterContent": "[{\"CampaignType\":\"SponsoredDisplay\",\"items\":[\"T00030\",\"T00020\",\"remarketing\",\"T0001\"]},{\"CampaignType\":\"SponsoredTV\",\"items\":[]}]"
+            },
+            {
+              "FilterFieldName": "CampaignState",
+              "FilterType": 3,
+              "FilterContent": "[\"enabled\",\"paused\"]"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": 0,
+          "PageInfo": {
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 10000,
+            "IsJustOrderby": true
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignDetailList - 按campaignId+campaignName模糊搜索+日期范围查询（不筛选状态）",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignDetailList。用户按campaignId结合名称模糊搜索(CampaignName LikeOr)和日期范围查询campaign明细，不筛选campaign状态，按周(Dim=week)聚合。样本中占比5.2%(24/463次，符合Swagger结构的有效样本)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按campaignId+campaignName模糊搜索+日期范围查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignDetailList",
+        "request_body": {
+          "Dim": "week",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "FilterFieldName": "ReportDateTime",
+              "FilterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "FilterFieldName": "CampaignName",
+              "FilterType": 2,
+              "FilterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"cotest2\"]}"
+            },
+            {
+              "FilterFieldName": "CampaignId",
+              "FilterType": 8,
+              "FilterContent": "[\"240488434203859\"]"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "CampaignTagNames",
+            "SameSkuSaleUnits",
+            "Spend",
+            "CPC",
+            "CPA",
+            "CVR",
+            "ROAS",
+            "NewToBrandSales",
+            "NewToBrandSalesPercentage",
+            "Impression",
+            "Click",
+            "CTR",
+            "Sales",
+            "Conversion",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "NewToBrandOrderRate",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": 0,
+          "PageInfo": {
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 10000,
+            "IsJustOrderby": true
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageData - 按指定CampaignId精确查询单个广告活动效果数据",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageData。用户在广告活动详情/选中若干CampaignId后，仅按CampaignId过滤+日期范围(date维度)查询效果数据，无对比周期。样本中占比27.8%(139/500次)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageData - 按CampaignId查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageData",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterType": 8,
+              "filterContent": "[\"135369917228966\"]"
+            }
+          ],
+          "OutPutFields": [
+            "ReportDateTime",
+            "ActlBid",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "CampaignType",
+            "CampaignTypeDetails",
+            "CurrencySymbol",
+            "CostType"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "ReportDateTime",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 25,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageData - 按状态筛选并附带同期对比查询广告活动列表",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageData。用户按CampaignState=enabled筛选广告活动列表，并选择了同期对比区间(StartCompare/EndCompare)查看趋势。样本中占比11.6%(58/500次)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageData - 按状态+对比周期查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageData",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "DailyBudget",
+            "BudgetUsage",
+            "ActlBid",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "ROAS",
+            "CVR",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageData - 按名称搜索并按状态筛选广告活动列表",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageData。用户在搜索框输入CampaignName模糊搜索并叠加CampaignState多状态(enabled,paused)筛选广告活动列表。样本中占比9.4%(47/500次)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageData - 按名称+状态查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageData",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "JP",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignName",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"jp_cpd_oap_haco_auto_sp_alwayson_color\"]}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "DailyBudget",
+            "OriginalBid",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "OOBHour",
+            "CampaignTagNames",
+            "PortfolioName",
+            "StartDate",
+            "EndDate",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageData - 按状态和标签组合筛选广告活动列表",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageData。用户按CampaignState=enabled + CampaignTagId(标签)组合筛选广告活动列表，并附带同期对比区间。样本中占比8.8%(44/500次)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageData - 按状态+标签查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageData",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"4640684\"],\"IsNum\":true}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "DailyBudget",
+            "CampaignType",
+            "CreationDate",
+            "Spend",
+            "Impression",
+            "Click",
+            "CTR",
+            "ACOS",
+            "CVR",
+            "CPC",
+            "Conversion",
+            "ROAS",
+            "OtherSalesPercent",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 50,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageData - 无附加筛选条件的默认列表查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageData。用户未添加任何筛选条件，仅指定日期范围查看全部广告活动默认列表（页面初次加载场景）。样本中占比4.2%(21/500次)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageData - 默认无筛选查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageData",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageData - 按广告类型(CampaignTypeItems)筛选广告活动列表",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageData。用户按广告类型CampaignTypeItems(如SB-Video)筛选广告活动列表，并附带同期对比区间。CampaignTypeItems相关组合样本占比5.6%(28/500次)，本case取其中一条典型样本(该具体组合4/500次)",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageData - 按广告类型查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageData",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTypeItems",
+              "filterContent": "[{\"CampaignType\":\"headlineSearch\",\"items\":[\"SB-Video\"]}]"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignName",
+            "CampaignState",
+            "ReportDateTime",
+            "ServingStatus",
+            "AdGroupActiveCount",
+            "AdGroupCount",
+            "AliasName",
+            "CampaignType",
+            "TargetingType",
+            "DailyBudget",
+            "ActlBid",
+            "AvlBid",
+            "CampaignTagNames",
+            "StartDate",
+            "EndDate",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "NewToBrandSales",
+            "NewToBrandSalesPercentage",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "AddToCart",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "AudienceResolved",
+            "AudienceSegments",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TotalBudget"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageDataMaxPageSize - 按效果指标筛选条件查询广告活动列表",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageDataMaxPageSize。用户在Campaign列表页设置字段筛选条件（如ROAS阈值>=2）查询符合条件的广告活动，不叠加tag/campaignIds/portfolio/campaignType等其他筛选维度。样本中占比38.2%(118次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageDataMaxPageSize",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageDataMaxPageSize",
+        "request_body": {
+          "MetricFileds": {},
+          "MetricFiledName": "CustomMetrics",
+          "amzPortfolioIds": null,
+          "isShowHourBudget": 0,
+          "groupBy": "campaign",
+          "createdDateStart": null,
+          "createdDateIsNot": 0,
+          "createdDateEnd": null,
+          "isExchange": 0,
+          "isFead": 1,
+          "asins": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [],
+          "portfolioIds": [],
+          "campaignIds": [],
+          "state": 0,
+          "states": [],
+          "servingStatus": [
+            "CAMPAIGN_OUT_OF_BUDGET"
+          ],
+          "campaignType": 4,
+          "campaignTypes": null,
+          "targetingType": null,
+          "startDate": "",
+          "hascampaignTag": false,
+          "groupByCampaignType": false,
+          "groupByCampaignTypeDetail": 0,
+          "dayparting": null,
+          "pageInfo": {
+            "OrderByField": "Impression",
+            "OrderAsc": false,
+            "TotalDataCount": 0,
+            "PageSize": 2147483647,
+            "PageIndex": 1,
+            "PageCount": 0,
+            "OrderString": "impression desc"
+          },
+          "actlBid": false,
+          "sTag": null,
+          "tagFieldName": "",
+          "dayBudget": 0,
+          "IsCampaigndDetailPage": "",
+          "CampaignTypeItems": [],
+          "isExplorer": 0,
+          "fieldSet": {
+            "isShowNTB": 0,
+            "isShowSuggestBudget": 0,
+            "isShowCampaignTag": 0,
+            "isActlBid": 0,
+            "isShowAmzPortfolio": 0,
+            "isOutlierScore": false,
+            "isShowTopOfSearchIS": 1,
+            "isSameSku": 0,
+            "isShopperCohortBidding": 0,
+            "showBudgetUsage": 1
+          },
+          "searchExtendModel": {
+            "isAiOn": null,
+            "isNotHaveRules": 0,
+            "isNotHaveAsinTag": 0,
+            "isShowSalesVelocity": 0,
+            "isAsinAnd": 0,
+            "isFead": 1,
+            "isNotHaveCPA": 0,
+            "isNotHaveROAS": 0,
+            "isNotHaveACOS": 0,
+            "isNotHaveCPC": 0,
+            "isNotHaveCTR": 0,
+            "isNotHaveNTBSales": 0,
+            "isNotHaveCVR": 0,
+            "campaignCostType": null,
+            "aiOn": null,
+            "NotHaveNegative": 0
+          },
+          "withoutTargetRoas": false,
+          "isImpressionValid": false,
+          "toMarket": "CA",
+          "searchPlacements": null,
+          "BiddingStrategy": null,
+          "SBBiddingStrategy": null,
+          "isAllPlacement": 0,
+          "isFeadHourly": null,
+          "AmazonSites": null,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignState",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AdGroupActiveCount",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignName",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DailyBudget",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget",
+            "AdGroupCount",
+            "CampaignTagNames",
+            "CampaignTagNameShow",
+            "CampaignTagIds",
+            "SuggestBudget",
+            "CostControl",
+            "CostControlEnabled",
+            "MetricName",
+            "Threshold",
+            "CostRuleId",
+            "OriginalBid"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": null,
+          "endCompar": null,
+          "MetricIds": null,
+          "dim": "ytd",
+          "filters": [
+            {
+              "Field": "ROAS",
+              "Operand": 2,
+              "Value": "2",
+              "isNot": 0
+            }
+          ],
+          "filter": [
+            {
+              "Field": "ROAS",
+              "Operand": 2,
+              "Value": "2",
+              "isNot": 0
+            }
+          ],
+          "filterJson": null,
+          "isExport": false,
+          "isAnd": 0,
+          "isAsinAnd": "0",
+          "ExportFields": null,
+          "AllocateBudget": {
+            "SpendType": 0,
+            "Impression": null,
+            "Click": null,
+            "Budget": null
+          },
+          "exludeFixedPrice": "1"
+        },
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageDataMaxPageSize - 无筛选条件的默认活动列表查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageDataMaxPageSize。用户不设置任何自定义筛选条件，仅按投放状态(states)和服务状态(servingStatus，如CAMPAIGN_OUT_OF_BUDGET预算超支)浏览默认的广告活动列表。样本中占比21.0%(65次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageDataMaxPageSize",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageDataMaxPageSize",
+        "request_body": {
+          "MetricFileds": {},
+          "MetricFiledName": "CustomMetrics",
+          "amzPortfolioIds": null,
+          "isShowHourBudget": 0,
+          "groupBy": "campaign",
+          "createdDateStart": null,
+          "createdDateIsNot": 0,
+          "createdDateEnd": null,
+          "isExchange": 0,
+          "isFead": 1,
+          "asins": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [],
+          "portfolioIds": null,
+          "campaignIds": [],
+          "state": 0,
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "servingStatus": [
+            "CAMPAIGN_OUT_OF_BUDGET"
+          ],
+          "campaignType": 4,
+          "campaignTypes": null,
+          "targetingType": null,
+          "startDate": "",
+          "hascampaignTag": true,
+          "groupByCampaignType": false,
+          "groupByCampaignTypeDetail": 0,
+          "dayparting": null,
+          "pageInfo": {
+            "OrderByField": "Impression",
+            "OrderAsc": false,
+            "TotalDataCount": 0,
+            "PageSize": 2147483647,
+            "PageIndex": 1,
+            "PageCount": 0,
+            "OrderString": "impression desc"
+          },
+          "actlBid": false,
+          "sTag": null,
+          "tagFieldName": "",
+          "dayBudget": 0,
+          "IsCampaigndDetailPage": "",
+          "CampaignTypeItems": [],
+          "isExplorer": 0,
+          "fieldSet": {
+            "isShowNTB": 0,
+            "isShowSuggestBudget": 0,
+            "isShowCampaignTag": 1,
+            "isActlBid": 0,
+            "isShowAmzPortfolio": 1,
+            "isOutlierScore": false,
+            "isShowTopOfSearchIS": 0,
+            "isSameSku": 0,
+            "isShopperCohortBidding": 0,
+            "showBudgetUsage": 1
+          },
+          "searchExtendModel": {
+            "isAiOn": null,
+            "isNotHaveRules": 0,
+            "isNotHaveAsinTag": 0,
+            "isShowSalesVelocity": 0,
+            "isAsinAnd": 0,
+            "isFead": 1,
+            "isNotHaveCPA": 0,
+            "isNotHaveROAS": 0,
+            "isNotHaveACOS": 0,
+            "isNotHaveCPC": 0,
+            "isNotHaveCTR": 0,
+            "isNotHaveNTBSales": 0,
+            "isNotHaveCVR": 0,
+            "campaignCostType": null,
+            "aiOn": [],
+            "NotHaveNegative": 0
+          },
+          "withoutTargetRoas": false,
+          "isImpressionValid": false,
+          "toMarket": "US",
+          "searchPlacements": null,
+          "BiddingStrategy": null,
+          "SBBiddingStrategy": null,
+          "isAllPlacement": 0,
+          "isFeadHourly": null,
+          "AmazonSites": null,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignState",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AdGroupActiveCount",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignName",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DailyBudget",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget",
+            "AdGroupCount",
+            "CampaignTagNames",
+            "CampaignTagNameShow",
+            "CampaignTagIds",
+            "SuggestBudget",
+            "CostControl",
+            "CostControlEnabled",
+            "MetricName",
+            "Threshold",
+            "CostRuleId",
+            "OriginalBid"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": null,
+          "endCompar": null,
+          "MetricIds": null,
+          "dim": "ytd",
+          "filters": null,
+          "filter": null,
+          "filterJson": null,
+          "isExport": false,
+          "isAnd": 0,
+          "isAsinAnd": "0",
+          "ExportFields": null,
+          "AllocateBudget": {
+            "SpendType": 0,
+            "Impression": null,
+            "Click": null,
+            "Budget": null
+          },
+          "exludeFixedPrice": "1"
+        },
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageDataMaxPageSize - 按campaign标签(Tag)筛选查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageDataMaxPageSize。用户按已打的campaign标签(taggingIds)筛选查询广告活动列表，不叠加其他筛选条件。样本中占比17.8%(55次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageDataMaxPageSize",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageDataMaxPageSize",
+        "request_body": {
+          "MetricFileds": {},
+          "MetricFiledName": "CustomMetrics",
+          "amzPortfolioIds": null,
+          "isShowHourBudget": 0,
+          "groupBy": "campaign",
+          "createdDateStart": null,
+          "createdDateIsNot": 0,
+          "createdDateEnd": null,
+          "isExchange": 0,
+          "isFead": 1,
+          "asins": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [
+            617073
+          ],
+          "portfolioIds": [],
+          "campaignIds": [],
+          "state": 0,
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "servingStatus": [],
+          "campaignType": 4,
+          "campaignTypes": null,
+          "targetingType": null,
+          "startDate": "",
+          "hascampaignTag": true,
+          "groupByCampaignType": false,
+          "groupByCampaignTypeDetail": 0,
+          "dayparting": null,
+          "pageInfo": {
+            "OrderByField": "Impression",
+            "OrderAsc": false,
+            "TotalDataCount": 0,
+            "PageSize": 2147483647,
+            "PageIndex": 1,
+            "PageCount": 0,
+            "OrderString": "impression desc"
+          },
+          "actlBid": false,
+          "sTag": null,
+          "tagFieldName": "",
+          "dayBudget": 0,
+          "IsCampaigndDetailPage": "",
+          "CampaignTypeItems": [],
+          "isExplorer": 0,
+          "fieldSet": {
+            "isShowNTB": 0,
+            "isShowSuggestBudget": 0,
+            "isShowCampaignTag": 1,
+            "isActlBid": 0,
+            "isShowAmzPortfolio": 1,
+            "isOutlierScore": false,
+            "isShowTopOfSearchIS": 0,
+            "isSameSku": 0,
+            "isShopperCohortBidding": 0,
+            "showBudgetUsage": 1
+          },
+          "searchExtendModel": {
+            "isAiOn": null,
+            "isNotHaveRules": 0,
+            "isNotHaveAsinTag": 0,
+            "isShowSalesVelocity": 0,
+            "isAsinAnd": 0,
+            "isFead": 1,
+            "isNotHaveCPA": 0,
+            "isNotHaveROAS": 0,
+            "isNotHaveACOS": 0,
+            "isNotHaveCPC": 0,
+            "isNotHaveCTR": 0,
+            "isNotHaveNTBSales": 0,
+            "isNotHaveCVR": 0,
+            "campaignCostType": null,
+            "aiOn": [],
+            "NotHaveNegative": 0
+          },
+          "withoutTargetRoas": false,
+          "isImpressionValid": false,
+          "toMarket": "US",
+          "searchPlacements": null,
+          "BiddingStrategy": null,
+          "SBBiddingStrategy": null,
+          "isAllPlacement": 0,
+          "isFeadHourly": null,
+          "AmazonSites": null,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignState",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignName",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DailyBudget",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget",
+            "AdGroupCount",
+            "AdGroupActiveCount",
+            "CampaignTagNames",
+            "CampaignTagNameShow",
+            "CampaignTagIds",
+            "SuggestBudget",
+            "CostControl",
+            "CostControlEnabled",
+            "MetricName",
+            "Threshold",
+            "CostRuleId",
+            "OriginalBid"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": null,
+          "endCompar": null,
+          "MetricIds": null,
+          "dim": "ytd",
+          "filters": null,
+          "filter": null,
+          "filterJson": null,
+          "isExport": false,
+          "isAnd": 0,
+          "isAsinAnd": "0",
+          "ExportFields": null,
+          "AllocateBudget": {
+            "SpendType": 0,
+            "Impression": null,
+            "Click": null,
+            "Budget": null
+          },
+          "exludeFixedPrice": "0"
+        },
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageDataMaxPageSize - 按指定campaignIds批量精确查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageDataMaxPageSize。用户直接传入一批具体的campaignIds（如从其他页面勾选后跳转）批量查询这些广告活动的明细数据。样本中占比5.8%(18次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageDataMaxPageSize",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageDataMaxPageSize",
+        "request_body": {
+          "MetricFileds": {},
+          "MetricFiledName": "CustomMetrics",
+          "amzPortfolioIds": null,
+          "isShowHourBudget": 0,
+          "groupBy": "campaign",
+          "createdDateStart": null,
+          "createdDateIsNot": 0,
+          "createdDateEnd": null,
+          "isExchange": 0,
+          "isFead": 1,
+          "asins": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [],
+          "portfolioIds": null,
+          "campaignIds": [
+            585840757896436600,
+            594329728804751400,
+            587267668304612200,
+            590186919641641100,
+            593753907494937500,
+            581445489650727400
+          ],
+          "state": 0,
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "servingStatus": [],
+          "campaignType": 4,
+          "campaignTypes": null,
+          "targetingType": null,
+          "startDate": "",
+          "hascampaignTag": false,
+          "groupByCampaignType": false,
+          "groupByCampaignTypeDetail": 0,
+          "dayparting": null,
+          "pageInfo": {
+            "OrderByField": "Impression",
+            "OrderAsc": false,
+            "TotalDataCount": 0,
+            "PageSize": 2147483647,
+            "PageIndex": 1,
+            "PageCount": 0,
+            "OrderString": "impression desc"
+          },
+          "actlBid": true,
+          "sTag": null,
+          "tagFieldName": "",
+          "dayBudget": 0,
+          "IsCampaigndDetailPage": "",
+          "CampaignTypeItems": [],
+          "isExplorer": 0,
+          "fieldSet": {
+            "isShowNTB": 0,
+            "isShowSuggestBudget": 0,
+            "isShowCampaignTag": 0,
+            "isActlBid": 1,
+            "isShowAmzPortfolio": 0,
+            "isOutlierScore": false,
+            "isShowTopOfSearchIS": 0,
+            "isSameSku": 0,
+            "isShopperCohortBidding": 0,
+            "showBudgetUsage": 1
+          },
+          "searchExtendModel": {
+            "isAiOn": null,
+            "isNotHaveRules": 0,
+            "isNotHaveAsinTag": 0,
+            "isShowSalesVelocity": 0,
+            "isAsinAnd": 0,
+            "isFead": 1,
+            "isNotHaveCPA": 0,
+            "isNotHaveROAS": 0,
+            "isNotHaveACOS": 0,
+            "isNotHaveCPC": 0,
+            "isNotHaveCTR": 0,
+            "isNotHaveNTBSales": 0,
+            "isNotHaveCVR": 0,
+            "campaignCostType": null,
+            "aiOn": [],
+            "NotHaveNegative": 0
+          },
+          "withoutTargetRoas": false,
+          "isImpressionValid": false,
+          "toMarket": "US",
+          "searchPlacements": null,
+          "BiddingStrategy": null,
+          "SBBiddingStrategy": null,
+          "isAllPlacement": 0,
+          "isFeadHourly": null,
+          "AmazonSites": null,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignState",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignName",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DailyBudget",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget",
+            "AdGroupCount",
+            "AdGroupActiveCount",
+            "CampaignTagNames",
+            "CampaignTagNameShow",
+            "CampaignTagIds",
+            "SuggestBudget",
+            "CostControl",
+            "CostControlEnabled",
+            "MetricName",
+            "Threshold",
+            "CostRuleId",
+            "OriginalBid"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": null,
+          "endCompar": null,
+          "MetricIds": null,
+          "dim": "ytd",
+          "filters": null,
+          "filter": null,
+          "filterJson": null,
+          "isExport": false,
+          "isAnd": 0,
+          "isAsinAnd": "0",
+          "ExportFields": null,
+          "AllocateBudget": {
+            "SpendType": 0,
+            "Impression": null,
+            "Click": null,
+            "Budget": null
+          },
+          "exludeFixedPrice": "0"
+        },
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageDataMaxPageSize - 按广告类型明细(CampaignTypeItems)筛选查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageDataMaxPageSize。用户按广告类型明细(CampaignTypeItems，如sponsoredProducts手动投放)筛选广告活动，常与tag、字段筛选条件组合使用。样本中占比8.1%(25次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageDataMaxPageSize",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageDataMaxPageSize",
+        "request_body": {
+          "MetricFileds": {},
+          "MetricFiledName": "CustomMetrics",
+          "amzPortfolioIds": null,
+          "isShowHourBudget": 0,
+          "groupBy": "campaign",
+          "createdDateStart": null,
+          "createdDateIsNot": 0,
+          "createdDateEnd": null,
+          "isExchange": 0,
+          "isFead": 1,
+          "asins": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [
+            4637387,
+            4634264
+          ],
+          "portfolioIds": null,
+          "campaignIds": [],
+          "state": 0,
+          "states": [
+            "enabled"
+          ],
+          "servingStatus": [],
+          "campaignType": 4,
+          "campaignTypes": null,
+          "targetingType": null,
+          "startDate": "",
+          "hascampaignTag": true,
+          "groupByCampaignType": false,
+          "groupByCampaignTypeDetail": 0,
+          "dayparting": null,
+          "pageInfo": {
+            "OrderByField": "Impression",
+            "OrderAsc": false,
+            "TotalDataCount": 0,
+            "PageSize": 2147483647,
+            "PageIndex": 1,
+            "PageCount": 0,
+            "OrderString": "impression desc"
+          },
+          "actlBid": false,
+          "sTag": null,
+          "tagFieldName": "",
+          "dayBudget": 0,
+          "IsCampaigndDetailPage": "",
+          "CampaignTypeItems": [
+            {
+              "CampaignType": "sponsoredProducts",
+              "items": [
+                "manual"
+              ]
+            }
+          ],
+          "isExplorer": 0,
+          "fieldSet": {
+            "isShowNTB": 0,
+            "isShowSuggestBudget": 0,
+            "isShowCampaignTag": 1,
+            "isActlBid": 0,
+            "isShowAmzPortfolio": 0,
+            "isOutlierScore": false,
+            "isShowTopOfSearchIS": 1,
+            "isSameSku": 0,
+            "isShopperCohortBidding": 0,
+            "showBudgetUsage": 1
+          },
+          "searchExtendModel": {
+            "isAiOn": null,
+            "isNotHaveRules": 0,
+            "isNotHaveAsinTag": 0,
+            "isShowSalesVelocity": 0,
+            "isAsinAnd": 0,
+            "isFead": 1,
+            "isNotHaveCPA": 0,
+            "isNotHaveROAS": 0,
+            "isNotHaveACOS": 0,
+            "isNotHaveCPC": 0,
+            "isNotHaveCTR": 0,
+            "isNotHaveNTBSales": 0,
+            "isNotHaveCVR": 0,
+            "campaignCostType": null,
+            "aiOn": [],
+            "NotHaveNegative": 0
+          },
+          "withoutTargetRoas": false,
+          "isImpressionValid": false,
+          "toMarket": "US",
+          "searchPlacements": null,
+          "BiddingStrategy": null,
+          "SBBiddingStrategy": null,
+          "isAllPlacement": 0,
+          "isFeadHourly": null,
+          "AmazonSites": null,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignState",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AdGroupActiveCount",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignName",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DailyBudget",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget",
+            "AdGroupCount",
+            "CampaignTagNames",
+            "CampaignTagNameShow",
+            "CampaignTagIds",
+            "SuggestBudget",
+            "CostControl",
+            "CostControlEnabled",
+            "MetricName",
+            "Threshold",
+            "CostRuleId",
+            "OriginalBid"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": null,
+          "endCompar": null,
+          "MetricIds": null,
+          "dim": "ytd",
+          "filters": [
+            {
+              "Field": "Name",
+              "Operand": 9,
+              "Value": "B0CT2R7199",
+              "isNot": 0
+            }
+          ],
+          "filter": [
+            {
+              "Field": "Name",
+              "Operand": 9,
+              "Value": "B0CT2R7199",
+              "isNot": 0
+            }
+          ],
+          "filterJson": null,
+          "isExport": false,
+          "isAnd": 1,
+          "isAsinAnd": "0",
+          "ExportFields": null,
+          "AllocateBudget": {
+            "SpendType": 0,
+            "Impression": null,
+            "Click": null,
+            "Budget": null
+          },
+          "exludeFixedPrice": "1"
+        },
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignPageDataMaxPageSize - 按广告组合(Portfolio)筛选查询",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignPageDataMaxPageSize。用户按广告组合(portfolioIds)筛选查询该组合下的广告活动列表，常与campaign标签筛选组合使用。样本中占比8.7%(27次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignPageDataMaxPageSize",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignPageDataMaxPageSize",
+        "request_body": {
+          "MetricFileds": {},
+          "MetricFiledName": "CustomMetrics",
+          "amzPortfolioIds": null,
+          "isShowHourBudget": 0,
+          "groupBy": "campaign",
+          "createdDateStart": null,
+          "createdDateIsNot": 0,
+          "createdDateEnd": null,
+          "isExchange": 0,
+          "isFead": 1,
+          "asins": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [
+            4632751
+          ],
+          "portfolioIds": [
+            69291671186545,
+            32147128067150,
+            6281250658968,
+            171914405504811,
+            206067480056239,
+            211257441181479,
+            231882268518007,
+            92662750517468,
+            203549174203753,
+            148212475585912,
+            265296905910004,
+            220826651433865,
+            80873864769158,
+            260959737120272,
+            49698692539922,
+            75106083151651,
+            148029495453982,
+            130453013957499,
+            179089921148654,
+            160921613248146,
+            19551436979793,
+            69692169103124
+          ],
+          "campaignIds": [],
+          "state": 0,
+          "states": [
+            "enabled"
+          ],
+          "servingStatus": [],
+          "campaignType": 4,
+          "campaignTypes": null,
+          "targetingType": null,
+          "startDate": "",
+          "hascampaignTag": false,
+          "groupByCampaignType": false,
+          "groupByCampaignTypeDetail": 0,
+          "dayparting": null,
+          "pageInfo": {
+            "OrderByField": "Impression",
+            "OrderAsc": false,
+            "TotalDataCount": 0,
+            "PageSize": 2147483647,
+            "PageIndex": 1,
+            "PageCount": 0,
+            "OrderString": "impression desc"
+          },
+          "actlBid": false,
+          "sTag": null,
+          "tagFieldName": "",
+          "dayBudget": 0,
+          "IsCampaigndDetailPage": "",
+          "CampaignTypeItems": [],
+          "isExplorer": 0,
+          "fieldSet": {
+            "isShowNTB": 0,
+            "isShowSuggestBudget": 0,
+            "isShowCampaignTag": 0,
+            "isActlBid": 0,
+            "isShowAmzPortfolio": 0,
+            "isOutlierScore": false,
+            "isShowTopOfSearchIS": 0,
+            "isSameSku": 0,
+            "isShopperCohortBidding": 0,
+            "showBudgetUsage": 1
+          },
+          "searchExtendModel": {
+            "isAiOn": null,
+            "isNotHaveRules": 0,
+            "isNotHaveAsinTag": 0,
+            "isShowSalesVelocity": 0,
+            "isAsinAnd": 0,
+            "isFead": 1,
+            "isNotHaveCPA": 0,
+            "isNotHaveROAS": 0,
+            "isNotHaveACOS": 0,
+            "isNotHaveCPC": 0,
+            "isNotHaveCTR": 0,
+            "isNotHaveNTBSales": 0,
+            "isNotHaveCVR": 0,
+            "campaignCostType": null,
+            "aiOn": [],
+            "NotHaveNegative": 0
+          },
+          "withoutTargetRoas": false,
+          "isImpressionValid": false,
+          "toMarket": "US",
+          "searchPlacements": null,
+          "BiddingStrategy": null,
+          "SBBiddingStrategy": null,
+          "isAllPlacement": 0,
+          "isFeadHourly": null,
+          "AmazonSites": null,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS",
+            "BrandName",
+            "CalibrationScale",
+            "CampaignState",
+            "CampaignTypeDetails",
+            "CountryAddress",
+            "IsDaypartingOn",
+            "ExceptionCount",
+            "ExpressionJson",
+            "GrossProfit",
+            "ResolvedExpressionJson",
+            "IsRuleOn",
+            "Status",
+            "TargetText",
+            "UnmatchedCount",
+            "ActlBid",
+            "AdGroupActiveCount",
+            "AliasName",
+            "AudienceResolved",
+            "AudienceSegments",
+            "AvlBid",
+            "BiddingStrategy",
+            "BudgetManage",
+            "CampaignId",
+            "CampaignName",
+            "CampaignType",
+            "CostType",
+            "CountryCode",
+            "CreativeJson",
+            "CreationDateTimezone",
+            "CurrencySymbol",
+            "DailyBudget",
+            "DayPartSet",
+            "DayBudgetSetting",
+            "EndDate",
+            "Is1PAccount",
+            "IsBudgetSchedulerOn",
+            "IsShopperCohortBiddingDelete",
+            "NegativeKeywordListCount",
+            "Pacingon",
+            "Placement",
+            "PortfolioId",
+            "ProfileId",
+            "Rules",
+            "SBVersion",
+            "ScheduleModel",
+            "ServingStatus",
+            "ShopperCohortBidding",
+            "AudienceBidAdjustments",
+            "ShopperCohortBiddingPercentage",
+            "ShowName",
+            "SiteRestrictionShow",
+            "StartDate",
+            "State",
+            "StopOverSpend",
+            "Superon",
+            "Tactic",
+            "TargetingType",
+            "TotalBudget",
+            "AdGroupCount",
+            "CampaignTagNames",
+            "CampaignTagNameShow",
+            "CampaignTagIds",
+            "SuggestBudget",
+            "CostControl",
+            "CostControlEnabled",
+            "MetricName",
+            "Threshold",
+            "CostRuleId",
+            "OriginalBid"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": null,
+          "endCompar": null,
+          "MetricIds": null,
+          "dim": "ytd",
+          "filters": null,
+          "filter": null,
+          "filterJson": null,
+          "isExport": false,
+          "isAnd": 0,
+          "isAsinAnd": "0",
+          "ExportFields": null,
+          "AllocateBudget": {
+            "SpendType": 0,
+            "Impression": null,
+            "Click": null,
+            "Budget": null
+          },
+          "exludeFixedPrice": "1"
+        },
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景1_勾选指定Campaign汇总",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户在Campaign列表中勾选指定的CampaignId查看汇总数据（date维度，单日）。500条随机样本中占比27.2%(136次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "date",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignId",
+              "filterType": 8,
+              "filterContent": "[\"{{exist_sp_campaign_id}}\"]"
+            }
+          ],
+          "OutPutFields": [
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "ACOS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "ReportDateTime",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景2_按CampaignTag标签筛选汇总",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户按CampaignTagId(标签)筛选campaign查看汇总数据。500条随机样本中占比20.6%(103次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 1,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"550305\"],\"IsNum\":true}"
+            }
+          ],
+          "OutPutFields": [
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "ROAS",
+            "Impression",
+            "Click",
+            "CTR",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "CVR",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "fieldSet": {
+            "isSameSku": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景3_按Campaign名称搜索汇总",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户按CampaignName模糊搜索并叠加默认CampaignState状态筛选查看汇总数据。500条随机样本中占比18.8%(94次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignName",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"LLHICDR04\"]}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\",\"paused\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "ROAS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "fieldSet": {
+            "isSameSku": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景4_默认总览_State筛选_同期对比",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户未做额外筛选，仅按默认CampaignState查看campaign汇总数据，并叠加同期对比日期(StartCompare/EndCompare)。500条随机样本中占比17.2%(86次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\", \"startCompare\": \"{{compare_start_mdy}}\", \"endCompare\": \"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ACOS",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "fieldSet": {
+            "isSameSku": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景5_按投放状态ServingStatus筛选汇总",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户按Amazon投放状态ServingStatus(如CAMPAIGN_STATUS_ENABLED/ENABLED)筛选campaign查看汇总数据。500条随机样本中占比9.4%(47次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "ServingStatus",
+              "filterType": 3,
+              "filterContent": "[\"CAMPAIGN_STATUS_ENABLED\",\"ENABLED\"]"
+            }
+          ],
+          "OutPutFields": [
+            "Spend",
+            "CVR",
+            "CPA",
+            "ACOS",
+            "ROAS",
+            "Impression",
+            "Click",
+            "CTR",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "fieldSet": {
+            "isSameSku": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景6_按Portfolio筛选汇总",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户按PortfolioId筛选campaign并叠加CampaignState查看汇总数据。500条随机样本中占比8.0%(40次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"220826651433865\"],\"IsNum\":true}"
+            },
+            {
+              "filterFieldName": "CampaignState",
+              "filterContent": "[\"enabled\"]",
+              "filterType": 3
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "ROAS",
+            "Spend",
+            "Sales",
+            "Impression",
+            "Click",
+            "CTR",
+            "CPC",
+            "Conversion",
+            "CVR",
+            "SaleUnits",
+            "OrderPrice",
+            "ASP",
+            "ACOS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "fieldSet": {
+            "isSameSku": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景7_按广告类型CampaignTypeItems筛选汇总",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户按广告类型CampaignTypeItems(如SP手动/自动投放)筛选campaign查看汇总数据，并叠加同期对比日期。500条随机样本中占比5.6%(28次)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\", \"startCompare\": \"{{compare_start_mdy}}\", \"endCompare\": \"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTypeItems",
+              "filterContent": "[{\"CampaignType\":\"sponsoredProducts\",\"items\":[\"manual\",\"auto\"]}]"
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "AvlBid",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "CVR",
+            "ROAS",
+            "OrderPrice",
+            "ASP",
+            "NewToBrandOrders",
+            "SBSDNewToBrandOrdersPercentage",
+            "SaleUnits",
+            "ACOS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 25,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "fieldSet": {
+            "isSameSku": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Campaign/GetCampaignTotal - 场景8_按目标Asin筛选汇总",
+    "description": "单接口测试：POST /api/Campaign/GetCampaignTotal。用户按投放的商品Asin(CampaignAsin)筛选相关campaign查看汇总数据。500条随机样本中占比3.4%(17次)，独立业务意图(按商品定位campaign)予以保留。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTotal",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Campaign/GetCampaignTotal",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignAsin",
+              "filterType": 2,
+              "filterContent": "{\"Operand\":\"LikeOr\",\"Values\":[\"{{target_asin}}\"]}"
+            }
+          ],
+          "OutPutFields": [
+            "DailyBudget",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "SaleUnits",
+            "CVR",
+            "ACOS",
+            "Conversion",
+            "OrderPrice",
+            "ASP",
+            "ROAS",
+            "CPA",
+            "NewToBrandSales",
+            "SBSDNewToBrandSalesPercentage",
+            "SameSkuSales",
+            "SameSkuSaleUnits",
+            "SameSkuConversions",
+            "SameSkuCVR",
+            "SameSkuCPA",
+            "SameSkuACOS",
+            "SameSkuROAS",
+            "ViewImpression",
+            "VCPM",
+            "TopOfSearchIS"
+          ],
+          "IsShowNTB": 0,
+          "GroupByCampaignType": "0",
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 100,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          },
+          "fieldSet": {
+            "isSameSku": 0
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
