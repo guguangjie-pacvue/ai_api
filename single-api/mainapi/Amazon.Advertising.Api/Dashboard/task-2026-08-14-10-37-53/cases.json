@@ -1,0 +1,6104 @@
+[
+  {
+    "name": "POST /api/Dashboard/GetBenchmarkChart - Brand+品类过滤日粒度Benchmark(无分享链接)",
+    "description": "单接口测试:POST /api/Dashboard/GetBenchmarkChart。用户在指定日期区间内按Brand+CategoryId过滤查看默认日粒度的行业Benchmark对比图,不通过分享链接访问。样本中占比70.7%(135次)。",
+    "module": "Dashboard",
+    "generated_by": "swagger-api-case",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "granularity": "API",
+    "steps": [
+      {
+        "name": "POST /api/Dashboard/GetBenchmarkChart - Brand+品类过滤日粒度Benchmark",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetBenchmarkChart",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "Brand": "BROTHER",
+          "CategoryId": "186606"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetBenchmarkChart - 不带Brand/品类过滤的整体Benchmark",
+    "description": "单接口测试:POST /api/Dashboard/GetBenchmarkChart。用户查看整体(不区分具体品牌/品类)的行业Benchmark对比图,仅按日期区间过滤,不带Brand/CategoryId,不通过分享链接访问。样本中占比12.6%(24次)。",
+    "module": "Dashboard",
+    "generated_by": "swagger-api-case",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "granularity": "API",
+    "steps": [
+      {
+        "name": "POST /api/Dashboard/GetBenchmarkChart - 整体Benchmark无品牌品类过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetBenchmarkChart",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetBenchmarkChart - Brand+品类过滤且通过分享链接访问",
+    "description": "单接口测试:POST /api/Dashboard/GetBenchmarkChart。用户通过带ShareId的分享链接访问按Brand+CategoryId过滤的Benchmark对比图,验证分享链路场景。样本中占比12.6%(24次)。",
+    "module": "Dashboard",
+    "generated_by": "swagger-api-case",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "granularity": "API",
+    "steps": [
+      {
+        "name": "POST /api/Dashboard/GetBenchmarkChart - 分享链接场景Brand+品类过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetBenchmarkChart",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "fqjgV ",
+          "Brand": "Soft Scrub",
+          "CategoryId": "3760901"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetBenchmarkChart - Brand+品类过滤且按周粒度(Dim=week)展示",
+    "description": "单接口测试:POST /api/Dashboard/GetBenchmarkChart。用户在按Brand+CategoryId过滤的基础上,将图表粒度切换为按周(Dim=week)展示Benchmark趋势。样本中占比3.7%(7次)。",
+    "module": "Dashboard",
+    "generated_by": "swagger-api-case",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "granularity": "API",
+    "steps": [
+      {
+        "name": "POST /api/Dashboard/GetBenchmarkChart - 周粒度Benchmark",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetBenchmarkChart",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "Dim": "week",
+          "Brand": "Soft Scrub",
+          "CategoryId": "3760901"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignOutofBudget - 单Profile按日期范围查询超预算广告活动列表",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignOutofBudget。用户选择单个广告Profile（单店铺），仅按日期范围（ReportDateTime）筛选，分页查询处于超预算（Out of Budget）状态的广告活动列表。样本中占比51.6%(258次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询单Profile超预算广告活动列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignOutofBudget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "ActlBid",
+            "EndTime",
+            "ACOS",
+            "ROAS",
+            "Sales",
+            "DailyBudget",
+            "ProfileId",
+            "CampaignId",
+            "AvlBid",
+            "TargetACOS",
+            "TargetROAS",
+            "LostPoSales",
+            "SuggestBudget",
+            "CampaignState",
+            "CostType",
+            "CampaignType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "ActlBid",
+                "OrderAsc": true,
+                "orderByField": "ActlBid",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1,
+            "PageSize": 5
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignOutofBudget - 多Profile跨店铺合并按日期范围查询超预算广告活动列表",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignOutofBudget。用户选择多个广告Profile（跨店铺合并查询），仅按日期范围（ReportDateTime）筛选，分页查询处于超预算状态的广告活动列表。样本中占比40.6%(203次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询多Profile超预算广告活动列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignOutofBudget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "ActlBid",
+            "EndTime",
+            "ACOS",
+            "ROAS",
+            "Sales",
+            "DailyBudget",
+            "ProfileId",
+            "CampaignId",
+            "AvlBid",
+            "TargetACOS",
+            "TargetROAS",
+            "LostPoSales",
+            "SuggestBudget",
+            "CampaignState",
+            "CostType",
+            "CampaignType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "ActlBid",
+                "OrderAsc": true,
+                "orderByField": "ActlBid",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1,
+            "PageSize": 5
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignOutofBudget - 按Campaign Tag筛选查询超预算广告活动列表",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignOutofBudget。用户在日期范围（ReportDateTime）基础上叠加 Campaign Tag（自定义标签，CampaignTagId/Customize过滤）筛选，分页查询处于超预算状态的广告活动列表。样本中占比6.2%(31次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按CampaignTag筛选查询超预算广告活动列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignOutofBudget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"558613\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "ActlBid",
+            "EndTime",
+            "ACOS",
+            "ROAS",
+            "Sales",
+            "DailyBudget",
+            "ProfileId",
+            "CampaignId",
+            "AvlBid",
+            "TargetACOS",
+            "TargetROAS",
+            "LostPoSales",
+            "SuggestBudget",
+            "CampaignState",
+            "CostType",
+            "CampaignType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "ActlBid",
+                "OrderAsc": true,
+                "orderByField": "ActlBid",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1,
+            "PageSize": 5
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard - 默认日粒度趋势查询(含环比对比期)",
+    "description": "单接口测试：POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard。用户仅按日期范围(ReportDateTime)过滤、不叠加其他维度过滤，使用默认日(date)粒度查看Efficiency/Performance/Awareness卡的趋势数据，并携带对比期(StartCompare/EndCompare)以获取环比数据，是最常见的Home页看板默认打开场景。样本中占比90.8%(454次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认日粒度趋势数据(含对比期)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/EfficiencyPerformanceAwarenessDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "NewToBrandOrders",
+            "NewToBrandSales",
+            "NewToBrandUnitsOrdered",
+            "CTR",
+            "CPC",
+            "SPC",
+            "CVR",
+            "CPA",
+            "AOV",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "NewToBrandOrdersPercentage",
+            "SBSDNewToBrandOrdersPercentage"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "Dim": "date"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard - 按CampaignTag过滤的日粒度趋势查询",
+    "description": "单接口测试：POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard。用户在默认日期过滤基础上叠加CampaignTagId过滤(按广告活动标签缩小范围)，仍以日(date)粒度查看趋势数据，是用户按标签分组分析投放效果的典型场景。样本中占比5.6%(28次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询按CampaignTag过滤的日粒度趋势数据",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/EfficiencyPerformanceAwarenessDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"513717\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "NewToBrandOrders",
+            "NewToBrandSales",
+            "NewToBrandUnitsOrdered",
+            "CTR",
+            "CPC",
+            "SPC",
+            "CVR",
+            "CPA",
+            "AOV",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "NewToBrandOrdersPercentage",
+            "SBSDNewToBrandOrdersPercentage"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "Dim": "date"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard - 周粒度(Dim=week)趋势查询",
+    "description": "单接口测试：POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard。用户仅按日期范围过滤，将图表聚合粒度切换为周(Dim=week)查看趋势，是接口文档中明确支持的核心分组维度切换场景之一(date/week/month)，虽单看Dim=week占比较低但代表独立业务意图，需覆盖。样本中占比1.4%(7次)，Dim=week总体占比1.6%(8次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询周粒度趋势数据",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/EfficiencyPerformanceAwarenessDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "NewToBrandOrders",
+            "NewToBrandSales",
+            "NewToBrandUnitsOrdered",
+            "CTR",
+            "CPC",
+            "SPC",
+            "CVR",
+            "CPA",
+            "AOV",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "NewToBrandOrdersPercentage",
+            "SBSDNewToBrandOrdersPercentage"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "Dim": "week"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard - 月粒度(Dim=month)趋势查询",
+    "description": "单接口测试：POST /api/Dashboard/EfficiencyPerformanceAwarenessDashboard。用户仅按日期范围过滤，将图表聚合粒度切换为月(Dim=month)查看趋势，与date/week共同构成接口文档明确支持的核心分组维度切换场景，代表独立业务意图，需覆盖。样本中占比0.6%(3次)，Dim=month总体占比1.2%(6次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询月粒度趋势数据",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/EfficiencyPerformanceAwarenessDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "Impression",
+            "Click",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "NewToBrandOrders",
+            "NewToBrandSales",
+            "NewToBrandUnitsOrdered",
+            "CTR",
+            "CPC",
+            "SPC",
+            "CVR",
+            "CPA",
+            "AOV",
+            "ASP",
+            "ACOS",
+            "ROAS",
+            "NewToBrandOrdersPercentage",
+            "SBSDNewToBrandOrdersPercentage"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "Dim": "month"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignOutofBudgetChart - 基础日期范围查询Out of Budget图表（US市场，无标签/活动过滤）",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignOutofBudgetChart。仅按ReportDateTime日期区间过滤，无CampaignTagId/CampaignId等附加过滤条件，ToMarket为默认US市场，是最常见的查询预算耗尽趋势图场景。样本中占比74.4%(372次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Out of Budget图表-基础日期范围(US)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignOutofBudgetChart",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "ReportDateTime",
+            "Sales",
+            "LostPoSales",
+            "ACOS",
+            "ROAS"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignOutofBudgetChart - 非US市场查询Out of Budget图表（汇率换算场景，以CA为代表）",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignOutofBudgetChart。ToMarket指定为非美国市场（CA），触发按ToMarket的强制汇率转换逻辑，其余仅按ReportDateTime日期区间过滤，代表非US站点的预算耗尽图表查询场景。样本中CA市场占比8.4%(42次)，非US市场合计占比21.4%(107次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Out of Budget图表-非US市场(CA)汇率换算",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignOutofBudgetChart",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "CA",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "ReportDateTime",
+            "Sales",
+            "LostPoSales",
+            "ACOS",
+            "ROAS"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignOutofBudgetChart - 按CampaignTagId标签过滤的Out of Budget图表查询",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignOutofBudgetChart。在ReportDateTime日期区间过滤基础上叠加CampaignTagId（Customize类型）标签过滤条件，代表用户按活动标签筛选后查看预算耗尽趋势图的场景。样本中占比5.8%(29次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Out of Budget图表-按CampaignTagId过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignOutofBudgetChart",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"608459\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "ReportDateTime",
+            "Sales",
+            "LostPoSales",
+            "ACOS",
+            "ROAS"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          }
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTagTargetBySubTag - 查看标签ROAS目标达成率排名(默认汇率换算)",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTagTargetBySubTag。查询某个Campaign标签下子标签的ROAS目标达成情况排名(type=ROAS)，IsExchange=1表示按汇率换算后统计。样本中占比68.2%(15/22次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignTagTargetBySubTag",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTagTargetBySubTag",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"5661\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1,
+          "type": "ROAS"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTagTargetBySubTag - 查看标签ACOS目标达成率排名(默认汇率换算)",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTagTargetBySubTag。查询某个Campaign标签下子标签的ACOS目标达成情况排名(type=ACOS)，IsExchange=1表示按汇率换算后统计。样本中占比27.3%(6/22次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignTagTargetBySubTag",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTagTargetBySubTag",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"565940\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1,
+          "type": "ACOS"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTagTargetBySubTag - 查看标签ACOS目标达成率排名(不做汇率换算)",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTagTargetBySubTag。查询某个Campaign标签下子标签的ACOS目标达成情况排名(type=ACOS)，IsExchange=0表示不做汇率换算，属于独立业务意图(多币种账户下查看原币种数据)。样本中占比4.5%(1/22次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetCampaignTagTargetBySubTag",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTagTargetBySubTag",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"565940\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 0,
+          "type": "ACOS"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTagPageDataForWidget - 仅日期范围过滤查询Campaign Tag绩效widget(无Tag/Portfolio子筛选)",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTagPageDataForWidget。用户在Home页Campaign Tag绩效widget中仅按当前期/对比期日期范围查看Tag汇总绩效，不叠加CampaignTagId/PortfolioId等二次筛选，为最常见操作路径。样本中占比87.6%(352次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTagPageDataForWidget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTagPageDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "Spend",
+            "Sales",
+            "ACOS",
+            "ROAS",
+            "CPC",
+            "Impression",
+            "Click",
+            "CPA",
+            "CTR",
+            "CVR",
+            "FId",
+            "TagName",
+            "SubTagCount"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTagPageDataForWidget - 按CampaignTagId筛选查询Campaign Tag绩效widget",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTagPageDataForWidget。用户在日期范围基础上额外在Filters中指定CampaignTagId(Values数组)，缩小到特定标签范围查看绩效汇总，属于Tag维度二次筛选场景（其中约62%附带非空ShareId，疑似经分享链接进入，但接口注释显示ShareId分享链路暂未迁移生效）。样本中占比10.4%(42次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTagPageDataForWidget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTagPageDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"4622790\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "Spend",
+            "Sales",
+            "ACOS",
+            "ROAS",
+            "CPC",
+            "Impression",
+            "Click",
+            "CPA",
+            "CTR",
+            "CVR",
+            "FId",
+            "TagName",
+            "SubTagCount"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTagPageDataForWidget - 按PortfolioId筛选查询Campaign Tag绩效widget",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTagPageDataForWidget。用户在日期范围基础上额外在Filters中指定PortfolioId数组，按Portfolio维度筛选后查看Campaign Tag绩效汇总，与CampaignTagId筛选是不同的独立二次筛选维度。样本中占比2.0%(8次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTagPageDataForWidget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTagPageDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\",\"204806772208933\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "Spend",
+            "Sales",
+            "ACOS",
+            "ROAS",
+            "CPC",
+            "Impression",
+            "Click",
+            "CPA",
+            "CTR",
+            "CVR",
+            "FId",
+            "TagName",
+            "SubTagCount"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignSubTagPageDataForWidget - 多账号Portfolio下钻子标签ROAS指标(滚动周期对比)",
+    "description": "单接口测试:POST /api/Dashboard/GetCampaignSubTagPageDataForWidget。用户在Dashboard的Campaign Tag widget中勾选多个广告账号(Profile),对某个父级CampaignTag下钻展开查看子标签明细,输出字段含ROAS等核心指标,日期为滚动周期且带对比期。样本中占比约45.5%(15次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignSubTagPageDataForWidget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignSubTagPageDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[5661],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTagName",
+            "Spend",
+            "Sales",
+            "ROAS",
+            "CPC",
+            "Impression",
+            "Click",
+            "CPA",
+            "CTR",
+            "CVR",
+            "CampaignTagId",
+            "SubTagCount",
+            "SpendChange",
+            "SalesChange",
+            "ACOSChange",
+            "ROASChange",
+            "CPCChange",
+            "ImpressionChange",
+            "ClickChange",
+            "CPAChange",
+            "CTRChange",
+            "CVRChange"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignSubTagPageDataForWidget - 单账号下钻子标签ROAS指标(月度环比)",
+    "description": "单接口测试:POST /api/Dashboard/GetCampaignSubTagPageDataForWidget。用户仅勾选单个广告账号(Profile),对某个父级CampaignTag下钻展开查看子标签明细,输出字段含ROAS等核心指标,日期按自然月/自定义周期并带环比对比期。样本中占比约42.4%(14次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignSubTagPageDataForWidget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignSubTagPageDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[540620],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTagName",
+            "Spend",
+            "Sales",
+            "ROAS",
+            "CPC",
+            "Impression",
+            "Click",
+            "CPA",
+            "CTR",
+            "CVR",
+            "CampaignTagId",
+            "SubTagCount",
+            "SpendChange",
+            "SalesChange",
+            "ACOSChange",
+            "ROASChange",
+            "CPCChange",
+            "ImpressionChange",
+            "ClickChange",
+            "CPAChange",
+            "CTRChange",
+            "CVRChange"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignSubTagPageDataForWidget - ACOS指标视角下钻子标签(年度累计vs去年同期对比)",
+    "description": "单接口测试:POST /api/Dashboard/GetCampaignSubTagPageDataForWidget。用户将widget核心指标切换为ACOS(而非ROAS)查看子标签明细,并采用年度复盘对比周期(当年年初至今 vs 完整上一年度),与ROAS默认视角为不同的业务意图。样本中占比约12.1%(4次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignSubTagPageDataForWidget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignSubTagPageDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[553198],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTagName",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "CPC",
+            "Impression",
+            "Click",
+            "CPA",
+            "CTR",
+            "CVR",
+            "CampaignTagId",
+            "SubTagCount",
+            "SpendChange",
+            "SalesChange",
+            "ACOSChange",
+            "ROASChange",
+            "CPCChange",
+            "ImpressionChange",
+            "ClickChange",
+            "CPAChange",
+            "CTRChange",
+            "CVRChange"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignPerformanceComparator - US站点仅日期范围周对比周(单/多Profile聚合)",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignPerformanceComparator。Home页绩效对比widget最主流场景：ToMarket=US，Filters仅含ReportDateTime（基期7天 vs 紧邻上一个7天对比期，周对比周），不带CampaignTagId/PortfolioId/CampaignId等业务过滤；覆盖单Profile与多Profile聚合两类请求（对Profile数量本身不敏感，二者请求结构一致）。样本中占比67.1%(249次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignPerformanceComparator(US基础周对比)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignPerformanceComparator",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignPerformanceComparator - 非US市场(DE)基础周对比",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignPerformanceComparator。非美国市场(ToMarket=DE，代表其他本地化市场如JP/CA/UK/BR/MX/IN/SA等)的Home页绩效对比查询，仅ReportDateTime日期过滤，无其他业务过滤，验证非US市场货币/汇率场景下接口可用。样本中占比8.9%(33次，DE子集)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignPerformanceComparator(DE市场)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignPerformanceComparator",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "DE",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignPerformanceComparator - CampaignTagId标签过滤",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignPerformanceComparator。按Campaign Tag（filterType=11，CampaignTagId）过滤后的绩效对比查询，用户在Home页按自定义标签筛选广告活动进行周对比周分析，ToMarket=US。样本中占比9.7%(36次，含单标签与多标签值组合)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignPerformanceComparator(CampaignTagId过滤)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignPerformanceComparator",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"113726\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignPerformanceComparator - PortfolioId组合过滤",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignPerformanceComparator。按AmzPortfolio（PortfolioId）过滤后的绩效对比查询，用户在Home页按广告组合筛选进行周对比周分析，ToMarket=US。样本中占比2.2%(8次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignPerformanceComparator(PortfolioId过滤)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignPerformanceComparator",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignPerformanceComparator - ToMarket未指定(null)",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignPerformanceComparator。ToMarket字段为null（前端未选择目标市场/汇率转换目标）的绩效对比查询，仅ReportDateTime日期过滤，验证接口在不做汇率换算场景下仍可正常返回。样本中占比2.7%(10次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignPerformanceComparator(ToMarket为null)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignPerformanceComparator",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": null,
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReport - 仅按报表日期范围查询长尾词报表（无附加过滤）",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReport。Home页Long Tail Keyword widget，仅按ReportDateTime日期范围过滤，不叠加CampaignTagId/PortfolioId等业务过滤条件，为最典型的默认查询场景。样本中占比77%(174/226次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询长尾词报表-仅日期范围过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReport",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ROAS",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReport - 按广告系列标签(CampaignTagId)过滤查询长尾词报表",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReport。在ReportDateTime日期范围基础上叠加CampaignTagId（广告系列自定义标签，Customize过滤）过滤，用于按标签维度查看指定广告系列组的长尾词表现。样本中占比15%(34/226次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询长尾词报表-按CampaignTagId过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReport",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"4622790\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ACOS",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReport - 按Amazon Portfolio(PortfolioId)过滤查询长尾词报表",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReport。在ReportDateTime日期范围基础上叠加PortfolioId（Amazon Portfolio）过滤，用于按广告组合维度查看指定Portfolio下的长尾词表现。样本中占比6.2%(14/226次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询长尾词报表-按PortfolioId过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReport",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\",\"204806772208933\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ACOS",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType - 单词(NumberOfWord=1)长尾关键词按MatchType报表(ROAS指标)",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType。用户查询NumberOfWord=1的单词长尾关键词按MatchType分组报表，输出字段含ROAS指标，按ReportDateTime升序排序。样本中占比45.8%(11次，其中该ROAS子分支5次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询单词长尾关键词按MatchType报表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReportGroupByMatchType",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ROAS",
+            "CVR",
+            "MatchType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "NumberOfWord": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType - 双词(NumberOfWord=2)长尾关键词按MatchType报表",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType。用户查询NumberOfWord=2的双词长尾关键词按MatchType分组报表，输出字段含ROAS指标。样本中占比20.8%(5次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询双词长尾关键词按MatchType报表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReportGroupByMatchType",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ROAS",
+            "CVR",
+            "MatchType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "NumberOfWord": 2
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType - 三词(NumberOfWord=3)长尾关键词按MatchType报表",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType。用户查询NumberOfWord=3的三词长尾关键词按MatchType分组报表，输出字段含ROAS指标。样本中占比16.7%(4次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询三词长尾关键词按MatchType报表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReportGroupByMatchType",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ROAS",
+            "CVR",
+            "MatchType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "NumberOfWord": 3
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType - 四词(NumberOfWord=4)长尾关键词按MatchType报表",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType。用户查询NumberOfWord=4的四词长尾关键词按MatchType分组报表，输出字段含ROAS指标。样本中占比16.7%(4次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询四词长尾关键词按MatchType报表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReportGroupByMatchType",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ROAS",
+            "CVR",
+            "MatchType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "NumberOfWord": 4
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType - 分享报表(ShareId)+CampaignTagId标签过滤下的单词长尾关键词报表",
+    "description": "单接口测试：POST /api/Dashboard/GetLongTailKeywordReportGroupByMatchType。用户通过分享链接(ShareId)访问报表，同时叠加CampaignTagId标签过滤，NumberOfWord=1，日期范围较长，输出字段含ACOS指标。样本中占比4.2%(1次)，属独立业务意图（分享视图+标签过滤组合）故单独保留。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "分享链接+标签过滤查询长尾关键词报表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetLongTailKeywordReportGroupByMatchType",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"9740\",\"9741\",\"9742\",\"9743\",\"171729\",\"171730\",\"4631732\",\"9757\",\"9758\",\"9759\",\"9760\",\"164821\",\"164822\",\"164823\",\"164824\",\"582354\",\"582355\",\"582356\",\"582357\",\"4631734\",\"9761\",\"9762\",\"9763\",\"9764\",\"9765\",\"9766\",\"9767\",\"9768\",\"9769\",\"9770\",\"9771\",\"9772\",\"9773\",\"9774\",\"9775\",\"9776\",\"9777\",\"9778\",\"9779\",\"9780\",\"9733\",\"9734\",\"9735\",\"9736\",\"582358\",\"582359\",\"582360\",\"4631733\",\"9753\",\"9754\",\"9755\",\"9756\",\"9788\",\"9789\",\"9790\",\"14354\",\"582365\",\"582366\",\"9749\",\"9750\",\"9751\",\"9752\",\"582361\",\"582362\",\"582363\",\"9795\",\"9796\",\"9797\",\"9798\",\"9799\",\"9800\",\"9801\",\"9802\",\"9803\",\"9804\",\"9805\",\"9806\",\"29052\",\"29053\",\"79585\",\"79586\",\"136819\",\"140133\",\"158946\",\"158947\",\"158942\",\"158943\",\"158944\",\"158945\",\"164839\",\"166720\",\"267894\",\"267895\",\"267896\",\"492821\",\"492822\",\"492823\",\"492824\",\"522585\",\"522586\",\"522587\",\"522588\",\"553204\",\"553205\",\"553206\",\"553207\",\"553200\",\"553201\",\"553202\",\"553203\",\"555598\",\"555599\",\"555600\",\"555601\",\"555605\",\"555606\",\"555607\",\"555608\",\"588553\",\"4622788\",\"4622789\",\"4622790\",\"4630988\",\"4639532\",\"4640865\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "NumberOfWord",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "SpendPercent",
+            "Sales",
+            "CPC",
+            "ACOS",
+            "CVR",
+            "MatchType"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "fqjgV ",
+          "IsExchange": 1,
+          "NumberOfWord": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetKeywordRatioDashBoard - 默认场景：仅日期范围过滤的 Top Performers（按 Spend 排序，开启汇率转换）",
+    "description": "单接口测试：POST /api/Dashboard/GetKeywordRatioDashBoard。默认场景：仅按日期范围过滤，查询 Top Performers（performanceType=0），KeywordCompareColumn=Spend，IsExchange=1（开启汇率转换），未传对比期由服务端自动推导上一等长区间。样本中占比83.0%(415次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Keyword Ratio Dashboard - 默认 Top Performers（按 Spend）",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetKeywordRatioDashBoard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "KeywordText",
+            "AdGroupCount",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "Impressions",
+            "Clicks",
+            "CTR",
+            "CPC",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "performanceType": "0",
+          "IsTop": false,
+          "KeywordCompareColumn": "Spend"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetKeywordRatioDashBoard - 未开启汇率转换（IsExchange=0）的 Top Performers 场景",
+    "description": "单接口测试：POST /api/Dashboard/GetKeywordRatioDashBoard。多 Profile 场景下 IsExchange=0（未开启多币种汇率转换），ToMarket 未指定（null），其余同默认 Top Performers 按 Spend 排序。样本中占比4.8%(24次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Keyword Ratio Dashboard - IsExchange=0",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetKeywordRatioDashBoard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": null,
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "KeywordText",
+            "AdGroupCount",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "Impressions",
+            "Clicks",
+            "CTR",
+            "CPC",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 0,
+          "performanceType": "0",
+          "IsTop": false,
+          "KeywordCompareColumn": "Spend"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetKeywordRatioDashBoard - 按 Campaign Tag 过滤的 Top Performers 场景",
+    "description": "单接口测试：POST /api/Dashboard/GetKeywordRatioDashBoard。在日期过滤基础上叠加 CampaignTagId（Customize 类型）过滤条件，查询 Top Performers 关键词绩效。样本中占比5.6%(28次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Keyword Ratio Dashboard - 按 Campaign Tag 过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetKeywordRatioDashBoard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"498635\",\"498636\",\"498634\",\"498633\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "KeywordText",
+            "AdGroupCount",
+            "Spend",
+            "Sales",
+            "ROAS",
+            "Impressions",
+            "Clicks",
+            "CTR",
+            "CPC",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "performanceType": "0",
+          "IsTop": false,
+          "KeywordCompareColumn": "Spend"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetKeywordRatioDashBoard - 按 Sales 排序对比且带自定义对比期的 Top Performers 场景",
+    "description": "单接口测试：POST /api/Dashboard/GetKeywordRatioDashBoard。KeywordCompareColumn=Sales（按销售额作为排序/对比列），日期过滤中显式传入自定义对比期 StartCompare/EndCompare，查询 Top Performers 关键词绩效。样本中占比2.6%(13次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Keyword Ratio Dashboard - 按 Sales 排序带对比期",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetKeywordRatioDashBoard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\", \"startCompare\": \"{{compare_start_mdy}}\", \"endCompare\": \"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "KeywordText",
+            "AdGroupCount",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "Impressions",
+            "Clicks",
+            "CTR",
+            "CPC",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "orderByFields": [
+              {
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "performanceType": "0",
+          "IsTop": false,
+          "KeywordCompareColumn": "Sales"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetKeywordRatioDashBoard - Bottom Performers（performanceType=1）场景",
+    "description": "单接口测试：POST /api/Dashboard/GetKeywordRatioDashBoard。performanceType=1，查询垫底表现（Bottom Performers）关键词绩效，日期过滤带自定义对比期。样本中占比1.0%(5次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Keyword Ratio Dashboard - Bottom Performers",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetKeywordRatioDashBoard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\", \"startCompare\": \"{{compare_start_mdy}}\", \"endCompare\": \"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "KeywordText",
+            "AdGroupCount",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "Impressions",
+            "Clicks",
+            "CTR",
+            "CPC",
+            "CVR"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "orderByFields": [
+              {
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "performanceType": "1",
+          "IsTop": false,
+          "KeywordCompareColumn": "Spend"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetProductPageDataDashboard - 查询不合规商品(INELIGIBLE)明细列表",
+    "description": "单接口测试：POST /api/Dashboard/GetProductPageDataDashboard。查询Home页Products Ineligible(不合规商品)widget明细列表，仅按报表日期区间过滤，无额外Campaign/Portfolio筛选。样本中占比86.6%(433次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询不合规商品(INELIGIBLE)明细列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetProductPageDataDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "ASIN",
+            "campaignCount",
+            "adGroupCount",
+            "Spend",
+            "Sales",
+            "Eligibility",
+            "DDays",
+            "profileid"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "servingState": "INELIGIBLE"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetProductPageDataDashboard - 查询缺货商品(NOT_BUYABLE)明细列表",
+    "description": "单接口测试：POST /api/Dashboard/GetProductPageDataDashboard。查询Home页Products Out Of Stock(缺货/无法购买商品)widget明细列表，servingState=NOT_BUYABLE，返回字段含LostSalesOOS。样本中占比4.2%(21次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询缺货商品(NOT_BUYABLE)明细列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetProductPageDataDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "DE",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "ASIN",
+            "campaignCount",
+            "adGroupCount",
+            "LostSalesOOS",
+            "Spend",
+            "Sales",
+            "DDays",
+            "profileid"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 2,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 2,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "servingState": "NOT_BUYABLE"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetProductPageDataDashboard - 查询未获得购物车商品(NOT_IN_BUYBOX)明细列表",
+    "description": "单接口测试：POST /api/Dashboard/GetProductPageDataDashboard。查询Home页Products Not In Buybox(未获得购物车商品)widget明细列表，servingState=NOT_IN_BUYBOX，返回字段含countryCode，多Profile组合查询。样本中占比3.0%(15次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询未获得购物车商品(NOT_IN_BUYBOX)明细列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetProductPageDataDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "ASIN",
+            "countryCode",
+            "campaignCount",
+            "adGroupCount",
+            "Spend",
+            "Sales",
+            "profileid"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "servingState": "NOT_IN_BUYBOX"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetProductPageDataDashboard - 按CampaignTag筛选查询不合规商品(INELIGIBLE)明细列表",
+    "description": "单接口测试：POST /api/Dashboard/GetProductPageDataDashboard。在INELIGIBLE(不合规商品)基础查询上叠加CampaignTagId过滤条件，验证按Campaign Tag筛选商品明细的场景。样本中占比3.0%(15次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按CampaignTag筛选查询不合规商品(INELIGIBLE)明细列表",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetProductPageDataDashboard",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"558613\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "ASIN",
+            "campaignCount",
+            "adGroupCount",
+            "Spend",
+            "Sales",
+            "Eligibility",
+            "DDays",
+            "profileid"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 5,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 5
+          },
+          "ShareId": "",
+          "servingState": "INELIGIBLE"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetNewToBrandWidgetData - 基础场景:按天(Dim=date)+CampaignType(headlineSearch)筛选,无Tag/Portfolio筛选",
+    "description": "单接口测试:POST /api/Dashboard/GetNewToBrandWidgetData。最典型的New-to-brand widget查询场景:按天粒度(Dim=date)展示数据,仅通过ReportDateTime日期区间与CampaignType(headlineSearch)筛选,不附加CampaignTag/Portfolio等其他筛选条件。样本中占比82.97%(414次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询New-to-brand widget数据-基础场景(按天,headlineSearch)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetNewToBrandWidgetData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignType",
+              "filterType": 3,
+              "filterContent": "[\"headlineSearch\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1,
+          "Dim": "date"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetNewToBrandWidgetData - Campaign Tag筛选场景:附加CampaignTagId筛选,按天展示",
+    "description": "单接口测试:POST /api/Dashboard/GetNewToBrandWidgetData。用户在基础日期+CampaignType筛选之上,额外叠加CampaignTagId(Campaign Tag)筛选来查看指定Tag下的New-to-brand数据,Dim仍为按天(date)。样本中占比11.02%(55次,其中date维度49次为主)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询New-to-brand widget数据-CampaignTag筛选场景",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetNewToBrandWidgetData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"482769\"],\"IsNum\":true}"
+            },
+            {
+              "filterFieldName": "CampaignType",
+              "filterType": 3,
+              "filterContent": "[\"headlineSearch\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1,
+          "Dim": "date"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetNewToBrandWidgetData - 月粒度场景:Dim=month按月汇总展示",
+    "description": "单接口测试:POST /api/Dashboard/GetNewToBrandWidgetData。用户将时间粒度切换为按月(Dim=month)查看New-to-brand趋势,筛选条件仍为基础的ReportDateTime+CampaignType(headlineSearch),不叠加Tag/Portfolio筛选。样本中占比2.6%(13次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询New-to-brand widget数据-月粒度场景",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetNewToBrandWidgetData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignType",
+              "filterType": 3,
+              "filterContent": "[\"headlineSearch\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "IsExchange": 1,
+          "Dim": "month"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetNewToBrandWidgetData - Portfolio筛选场景:附加PortfolioId筛选,按天展示",
+    "description": "单接口测试:POST /api/Dashboard/GetNewToBrandWidgetData。用户在基础日期+CampaignType筛选之上,额外叠加PortfolioId(Amazon Portfolio)筛选来查看指定Portfolio下的New-to-brand数据,Dim为按天(date)。样本中占比1.6%(8次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询New-to-brand widget数据-Portfolio筛选场景",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetNewToBrandWidgetData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\",\"204806772208933\"]"
+            },
+            {
+              "filterFieldName": "CampaignType",
+              "filterType": 3,
+              "filterContent": "[\"headlineSearch\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "Dim": "date"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTopUnderPacingTagsInsight - 多Profile(2-4个)组合非分享链路查询",
+    "description": "单接口测试：POST /api/Dashboard/GetTopUnderPacingTagsInsight。用户在Home页Prescriptive Insight by Tag组件下，选中2-4个广告账号(Profile)组合、正常打开面板(非ShareId分享链路)查看指定日期范围内underpacing tag的洞察数据。样本中占比58.3%(116次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTagsInsight",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTopUnderPacingTagsInsight",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "TagName",
+            "LostBuybox",
+            "Eligibility",
+            "OutOfStock",
+            "Scale",
+            "ExpandDayparting"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTopUnderPacingTagsInsight - 单Profile非分享链路查询",
+    "description": "单接口测试：POST /api/Dashboard/GetTopUnderPacingTagsInsight。用户只切换/选中单个广告账号(Profile)，正常打开面板(非ShareId分享链路)查看指定日期范围内underpacing tag的洞察数据。样本中占比22.1%(44次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTagsInsight",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTopUnderPacingTagsInsight",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "TagName",
+            "LostBuybox",
+            "Eligibility",
+            "OutOfStock",
+            "Scale",
+            "ExpandDayparting"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTopUnderPacingTagsInsight - 多Profile组合通过分享链接(ShareId)访问",
+    "description": "单接口测试：POST /api/Dashboard/GetTopUnderPacingTagsInsight。用户通过Dashboard分享链接(带真实ShareId)访问他人分享的Prescriptive Insight by Tag面板，请求体携带2-4个Profile组合及ShareId标识。样本中占比13.6%(27次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTagsInsight",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTopUnderPacingTagsInsight",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "TagName",
+            "LostBuybox",
+            "Eligibility",
+            "OutOfStock",
+            "Scale",
+            "ExpandDayparting"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": "fqjgV "
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTopUnderPacingTagsInsight - 大批量Profile(5个以上/近全选)组合查询",
+    "description": "单接口测试：POST /api/Dashboard/GetTopUnderPacingTagsInsight。用户选中5个以上(样本中最多达45个)广告账号(Profile)进行批量/近似全选组合查询，正常打开面板(非分享链路)查看underpacing tag洞察数据。样本中占比5.5%(11次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTagsInsight",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTopUnderPacingTagsInsight",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "TagName",
+            "LostBuybox",
+            "Eligibility",
+            "OutOfStock",
+            "Scale",
+            "ExpandDayparting"
+          ],
+          "PageInfo": {
+            "orderAsc": true,
+            "pageIndex": 1,
+            "IsJustOrderby": true,
+            "OrderByFields": [
+              {
+                "OrderByField": "ReportDateTime",
+                "OrderAsc": true,
+                "orderByField": "ReportDateTime",
+                "orderAsc": true
+              }
+            ],
+            "OrderAsc": true,
+            "PageIndex": 1
+          },
+          "ShareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignLevel - 单日期范围查询campaign类型层级绩效(无对比期无筛选)",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignLevel。用户仅指定统计日期范围，查看campaign类型层级(SP/SB/SD)绩效汇总数据，不带同比/环比对比期，不附加tag/portfolio等筛选条件，仅使用ReportDateTime过滤器。样本中占比59.8%(299次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetPerformanceCampaignLevel-基础日期范围查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignLevel",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ROAS"
+          ],
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignLevel - 按日期范围并指定对比期查询campaign类型层级绩效",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignLevel。用户指定统计日期范围，并同时指定同比/环比对比期(StartCompare/EndCompare)，查看campaign类型层级绩效及环比变化数据，不附加tag/portfolio等筛选条件。样本中占比32.2%(161次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetPerformanceCampaignLevel-带对比期查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignLevel",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ROAS"
+          ],
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignLevel - 按CampaignTagId筛选查询campaign类型层级绩效",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignLevel。用户在多Profile场景下按CampaignTagId(campaign标签)筛选，查看该标签下campaign类型层级绩效汇总，不带对比期。样本中占比5.4%(27次，含不带对比期17次与带对比期10次两种子情形，已合并为同一业务意图场景)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetPerformanceCampaignLevel-按CampaignTag筛选查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignLevel",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"608459\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ACOS"
+          ],
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignLevel - 按PortfolioId筛选并指定对比期查询campaign类型层级绩效",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignLevel。用户按PortfolioId(广告组合)筛选，并同时指定同比/环比对比期，查看该Portfolio下campaign类型层级绩效及变化数据。样本中占比1.4%(7次)，虽为低频但代表独立的Portfolio维度筛选业务意图，予以保留。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetPerformanceCampaignLevel-按Portfolio筛选带对比期查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignLevel",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"204806772208933\",\"218848374758992\",\"188667465623173\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ACOS"
+          ],
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetWeekDayCampaignPerformance - 仅日期范围过滤查询周维度Campaign表现",
+    "description": "单接口测试：POST /api/Dashboard/GetWeekDayCampaignPerformance。最典型场景：仅使用 ReportDateTime 日期区间过滤，不叠加 CampaignTag/Portfolio 等额外过滤条件，查询指定 Profile 在该周期内按星期一到星期日汇总的Campaign表现数据。样本中占比93.4%(467次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetWeekDayCampaignPerformance - 仅日期过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetWeekDayCampaignPerformance",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "WeekDayShow",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "ACOS",
+            "Impression",
+            "Click",
+            "CPC",
+            "CPA",
+            "CTR",
+            "CVR",
+            "ASP",
+            "ReportDatetime"
+          ],
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetWeekDayCampaignPerformance - 按CampaignTagId过滤查询周维度Campaign表现",
+    "description": "单接口测试：POST /api/Dashboard/GetWeekDayCampaignPerformance。在日期区间过滤基础上叠加 CampaignTagId 过滤（Filters 中额外携带 filterFieldName=CampaignTagId 的自定义标签值集合），用于按Campaign标签查看周维度表现，属于中频独立业务场景。样本中占比6.0%(30次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetWeekDayCampaignPerformance - CampaignTagId过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetWeekDayCampaignPerformance",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"564362\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "WeekDayShow",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "ROAS",
+            "Impression",
+            "Click",
+            "CPC",
+            "CPA",
+            "CTR",
+            "CVR",
+            "ASP",
+            "ReportDatetime"
+          ],
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetWeekDayCampaignPerformance - 按PortfolioId过滤查询周维度Campaign表现",
+    "description": "单接口测试：POST /api/Dashboard/GetWeekDayCampaignPerformance。在日期区间过滤基础上叠加 PortfolioId 过滤（Filters 中额外携带 filterFieldName=PortfolioId 的组合列表），用于按Portfolio筛选后查看周维度Campaign表现，是与CampaignTagId过滤并列的另一种独立过滤维度，虽然频次很低但代表独立业务意图，故保留覆盖。样本中占比0.6%(3次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetWeekDayCampaignPerformance - PortfolioId过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetWeekDayCampaignPerformance",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"204806772208933\",\"218848374758992\",\"188667465623173\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "WeekDayShow",
+            "Spend",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "ACOS",
+            "Impression",
+            "Click",
+            "CPC",
+            "CPA",
+            "CTR",
+            "CVR",
+            "ASP",
+            "ReportDatetime"
+          ],
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetSearchTermDashboardData - Top Search Terms 按 ROAS 排序（无额外筛选）",
+    "description": "单接口测试：POST /api/Dashboard/GetSearchTermDashboardData。Home 页 Top Search Terms widget，仅按日期范围筛选，IsTop=true，按 ROAS 阈值取 top 搜索词。样本中占比47.7%(116次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetSearchTermDashboardData - Top by ROAS",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetSearchTermDashboardData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "query",
+            "campaignIds",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "Sales",
+            "ROAS",
+            "Conversion",
+            "CVR",
+            "CPC",
+            "rank",
+            "countryCode",
+            "firstClickedAsin",
+            "firstClickShare",
+            "firstConversionShare",
+            "secondClickedAsin",
+            "secondClickShare",
+            "secondConversionShare",
+            "thirdClickedAsin",
+            "thirdClickShare",
+            "thirdConversionShare"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 200,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 200
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "IsTop": true,
+          "department": "Amazon.com",
+          "ROAS": 0.8826077110343656
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetSearchTermDashboardData - Top Search Terms 按 ACOS 排序（无额外筛选）",
+    "description": "单接口测试：POST /api/Dashboard/GetSearchTermDashboardData。Home 页 Top Search Terms widget，仅按日期范围筛选，IsTop=true，按 ACOS 阈值取 top 搜索词。样本中占比26.7%(65次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetSearchTermDashboardData - Top by ACOS",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetSearchTermDashboardData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "query",
+            "campaignIds",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "Conversion",
+            "CVR",
+            "CPC",
+            "rank",
+            "countryCode",
+            "firstClickedAsin",
+            "firstClickShare",
+            "firstConversionShare",
+            "secondClickedAsin",
+            "secondClickShare",
+            "secondConversionShare",
+            "thirdClickedAsin",
+            "thirdClickShare",
+            "thirdConversionShare"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 200,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 200
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "IsTop": true,
+          "department": "Amazon.com",
+          "ACOS": 69.13093747497776
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetSearchTermDashboardData - 按 Campaign Tag 筛选查询 Top Search Terms",
+    "description": "单接口测试：POST /api/Dashboard/GetSearchTermDashboardData。Home 页 Top Search Terms widget，叠加 CampaignTagId 自定义标签筛选与日期筛选，IsTop=true，按 ACOS 阈值取 top 搜索词。样本中占比14.4%(35次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetSearchTermDashboardData - Filter by CampaignTag",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetSearchTermDashboardData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"9740\",\"9741\",\"9742\",\"9743\",\"171729\",\"171730\",\"4631732\",\"9757\",\"9758\",\"9759\",\"9760\",\"164821\",\"164822\",\"164823\",\"164824\",\"582354\",\"582355\",\"582356\",\"582357\",\"4631734\",\"9761\",\"9762\",\"9763\",\"9764\",\"9765\",\"9766\",\"9767\",\"9768\",\"9769\",\"9770\",\"9771\",\"9772\",\"9773\",\"9774\",\"9775\",\"9776\",\"9777\",\"9778\",\"9779\",\"9780\",\"9733\",\"9734\",\"9735\",\"9736\",\"582358\",\"582359\",\"582360\",\"4631733\",\"9753\",\"9754\",\"9755\",\"9756\",\"9788\",\"9789\",\"9790\",\"14354\",\"582365\",\"582366\",\"9749\",\"9750\",\"9751\",\"9752\",\"582361\",\"582362\",\"582363\",\"9795\",\"9796\",\"9797\",\"9798\",\"9799\",\"9800\",\"9801\",\"9802\",\"9803\",\"9804\",\"9805\",\"9806\",\"29052\",\"29053\",\"79585\",\"79586\",\"136819\",\"140133\",\"158946\",\"158947\",\"158942\",\"158943\",\"158944\",\"158945\",\"164839\",\"166720\",\"267894\",\"267895\",\"267896\",\"492821\",\"492822\",\"492823\",\"492824\",\"522585\",\"522586\",\"522587\",\"522588\",\"553204\",\"553205\",\"553206\",\"553207\",\"553200\",\"553201\",\"553202\",\"553203\",\"555598\",\"555599\",\"555600\",\"555601\",\"555605\",\"555606\",\"555607\",\"555608\",\"588553\",\"4622788\",\"4622789\",\"4622790\",\"4630988\",\"4639532\",\"4640865\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "query",
+            "campaignIds",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "Conversion",
+            "CVR",
+            "CPC",
+            "rank",
+            "countryCode",
+            "firstClickedAsin",
+            "firstClickShare",
+            "firstConversionShare",
+            "secondClickedAsin",
+            "secondClickShare",
+            "secondConversionShare",
+            "thirdClickedAsin",
+            "thirdClickShare",
+            "thirdConversionShare"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 200,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 200
+          },
+          "ShareId": "fqjgV ",
+          "IsExchange": 1,
+          "IsTop": true,
+          "department": "Amazon.com",
+          "ACOS": 38.81798985314302
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetSearchTermDashboardData - 按 Portfolio 筛选查询 Top Search Terms",
+    "description": "单接口测试：POST /api/Dashboard/GetSearchTermDashboardData。Home 页 Top Search Terms widget，叠加 PortfolioId 筛选与日期筛选，IsTop=true，按 ACOS 阈值取 top 搜索词。样本中占比5.8%(14次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetSearchTermDashboardData - Filter by Portfolio",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetSearchTermDashboardData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\",\"204806772208933\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "query",
+            "campaignIds",
+            "Click",
+            "Impression",
+            "CTR",
+            "Spend",
+            "Sales",
+            "ACOS",
+            "Conversion",
+            "CVR",
+            "CPC",
+            "rank",
+            "countryCode",
+            "firstClickedAsin",
+            "firstClickShare",
+            "firstConversionShare",
+            "secondClickedAsin",
+            "secondClickShare",
+            "secondConversionShare",
+            "thirdClickedAsin",
+            "thirdClickShare",
+            "thirdConversionShare"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 200,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 200
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "IsTop": true,
+          "department": "Amazon.com",
+          "ACOS": 20
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetSearchTermDashboardData - Poor Search Terms 查询",
+    "description": "单接口测试：POST /api/Dashboard/GetSearchTermDashboardData。Home 页 Poor Search Terms widget，仅按日期范围筛选，IsTop=false，按 ACOS 阈值取 poor 搜索词，与 Top 场景为不同业务意图。样本中占比3.7%(9次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GetSearchTermDashboardData - Poor by ACOS",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetSearchTermDashboardData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\": 1, \"FilterBetween\": {\"start\": \"{{date_start_mdy}}\", \"end\": \"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "PageInfo": {
+            "orderAsc": false,
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "pageIndex": 1,
+            "pageSize": 200,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Spend",
+                "OrderAsc": false,
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 200
+          },
+          "ShareId": "",
+          "IsExchange": 1,
+          "IsTop": false,
+          "department": "Amazon.com",
+          "ACOS": 70.70423474366909
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTop20Campaigns - 默认查询(无对比期,ROAS指标)",
+    "description": "单接口测试：POST /api/Dashboard/GetTop20Campaigns。用户查看Home页Top20 Campaigns，不勾选对比期，按Sales降序取Top20，指标列聚焦ROAS(默认场景)。样本中占比52.2%(261/500)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "默认查询(无对比期,ROAS指标)获取Top20 Campaigns",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTop20Campaigns",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":null,\"endCompare\":null}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "Sales",
+            "OtherSales",
+            "Cost",
+            "ROAS",
+            "Clicks",
+            "CTR",
+            "CPA",
+            "Id",
+            "ProfileId",
+            "State",
+            "DayPartSet",
+            "Superon",
+            "ScheduleModel",
+            "Pacing",
+            "CostType"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 20,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Sales",
+                "OrderAsc": false,
+                "orderByField": "Sales",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTop20Campaigns - 带环比对比期查询(ROAS指标)",
+    "description": "单接口测试：POST /api/Dashboard/GetTop20Campaigns。用户查看Home页Top20 Campaigns，同时勾选环比对比期(startCompare/endCompare)，按Sales降序取Top20，指标列聚焦ROAS。样本中占比21.0%(105/500)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "带对比期查询(ROAS指标)获取Top20 Campaigns",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTop20Campaigns",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "Sales",
+            "OtherSales",
+            "Cost",
+            "ROAS",
+            "Clicks",
+            "CTR",
+            "CPA",
+            "Id",
+            "ProfileId",
+            "State",
+            "DayPartSet",
+            "Superon",
+            "ScheduleModel",
+            "Pacing",
+            "CostType"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 20,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Sales",
+                "OrderAsc": false,
+                "orderByField": "Sales",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTop20Campaigns - 默认查询(无对比期,ACOS指标)",
+    "description": "单接口测试：POST /api/Dashboard/GetTop20Campaigns。用户查看Home页Top20 Campaigns，不勾选对比期，指标列切换为ACOS而非ROAS(指标偏好切换场景)。样本中占比11.8%(59/500)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "默认查询(无对比期,ACOS指标)获取Top20 Campaigns",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTop20Campaigns",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":null,\"endCompare\":null}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "Sales",
+            "OtherSales",
+            "Cost",
+            "ACOS",
+            "Clicks",
+            "CTR",
+            "CPA",
+            "Id",
+            "ProfileId",
+            "State",
+            "DayPartSet",
+            "Superon",
+            "ScheduleModel",
+            "Pacing",
+            "CostType"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 20,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Sales",
+                "OrderAsc": false,
+                "orderByField": "Sales",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTop20Campaigns - 带对比期查询(ACOS指标,非US市场)",
+    "description": "单接口测试：POST /api/Dashboard/GetTop20Campaigns。用户查看Home页Top20 Campaigns，勾选环比对比期，指标列为ACOS，市场为非US站点(JP)且关闭汇率换算(IsExchange=0)。样本中占比6.0%(30/500)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "带对比期查询(ACOS指标,非US市场)获取Top20 Campaigns",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTop20Campaigns",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "JP",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "Sales",
+            "OtherSales",
+            "Cost",
+            "ACOS",
+            "Clicks",
+            "CTR",
+            "CPA",
+            "Id",
+            "ProfileId",
+            "State",
+            "DayPartSet",
+            "Superon",
+            "ScheduleModel",
+            "Pacing",
+            "CostType"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 20,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Sales",
+                "OrderAsc": false,
+                "orderByField": "Sales",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "ShareId": "",
+          "IsExchange": 0
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTop20Campaigns - 按Campaign标签筛选查询",
+    "description": "单接口测试：POST /api/Dashboard/GetTop20Campaigns。用户先按Campaign标签(CampaignTagId)筛选出一批campaign,再查看该范围内的Top20(附加对比期)，ROAS指标。样本中占比6.2%(31/500，含CampaignId+CampaignTagId组合场景)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Campaign标签筛选获取Top20 Campaigns",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTop20Campaigns",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"558613\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "Sales",
+            "OtherSales",
+            "Cost",
+            "ROAS",
+            "Clicks",
+            "CTR",
+            "CPA",
+            "Id",
+            "ProfileId",
+            "State",
+            "DayPartSet",
+            "Superon",
+            "ScheduleModel",
+            "Pacing",
+            "CostType"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 20,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Sales",
+                "OrderAsc": false,
+                "orderByField": "Sales",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetTop20Campaigns - 按广告组合(Portfolio)筛选查询",
+    "description": "单接口测试：POST /api/Dashboard/GetTop20Campaigns。用户先按广告组合(PortfolioId)筛选,再查看该组合内的Top20 campaigns(附加对比期)，ACOS指标，多ProfileId跨账号聚合场景。样本中占比0.6%(3/500)，属于独立的Filters维度(PortfolioId)业务场景，故单独保留",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按广告组合筛选获取Top20 Campaigns",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetTop20Campaigns",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"165078884068854\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignName",
+            "Sales",
+            "OtherSales",
+            "Cost",
+            "ACOS",
+            "Clicks",
+            "CTR",
+            "CPA",
+            "Id",
+            "ProfileId",
+            "State",
+            "DayPartSet",
+            "Superon",
+            "ScheduleModel",
+            "Pacing",
+            "CostType"
+          ],
+          "PageInfo": {
+            "orderAsc": false,
+            "pageIndex": 1,
+            "pageSize": 20,
+            "IsJustOrderby": false,
+            "OrderByFields": [
+              {
+                "OrderByField": "Sales",
+                "OrderAsc": false,
+                "orderByField": "Sales",
+                "orderAsc": false
+              }
+            ],
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/PadPageDataCountForNewTable - 按日期范围查询商品异常状态计数（无附加过滤）",
+    "description": "单接口测试：POST /api/Dashboard/PadPageDataCountForNewTable。仅按 ReportDateTime 日期范围过滤，统计当前账号下 notInBuybox/ineligible/notBuyable 三类商品异常状态角标计数，无 CampaignTagId/PortfolioId 等附加过滤。样本中占比93.4%(467次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按日期范围查询商品异常状态计数（无附加过滤）",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/PadPageDataCountForNewTable",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "notInBuybox",
+            "ineligible",
+            "notBuyable"
+          ],
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/PadPageDataCountForNewTable - 按广告系列标签(CampaignTagId)过滤后统计商品异常状态计数",
+    "description": "单接口测试：POST /api/Dashboard/PadPageDataCountForNewTable。在日期范围过滤基础上叠加 CampaignTagId（广告系列标签）过滤，统计标签范围内的商品异常状态计数，用于验证按标签筛选后的角标计数逻辑。样本中占比5.4%(27次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按CampaignTagId过滤统计商品异常状态计数",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/PadPageDataCountForNewTable",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"157986\",\"157983\",\"157984\",\"157985\",\"169665\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "notInBuybox",
+            "ineligible",
+            "notBuyable"
+          ],
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/PadPageDataCountForNewTable - 按广告组合(PortfolioId)过滤后统计商品异常状态计数",
+    "description": "单接口测试：POST /api/Dashboard/PadPageDataCountForNewTable。在日期范围过滤基础上叠加 PortfolioId（广告组合）过滤，统计组合范围内的商品异常状态计数，代表按 Portfolio 维度筛选的独立业务场景。样本中占比1.0%(5次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按PortfolioId过滤统计商品异常状态计数",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/PadPageDataCountForNewTable",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\",\"204806772208933\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "notInBuybox",
+            "ineligible",
+            "notBuyable"
+          ],
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignTypeDetail - Sponsored Products(SP)明细,单一日期范围(无对比期),ROAS指标",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignTypeDetail。用户查看SP广告的Campaign Type明细绩效，仅选择单一日期范围，未开启对比期，输出字段含ROAS指标。样本中占比30.4%(152次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceCampaignTypeDetail",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignTypeDetail",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ROAS"
+          ],
+          "ShareId": "",
+          "campaignType": "sponsoredProducts"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignTypeDetail - Sponsored Brands(SB)明细,单一日期范围(无对比期),ROAS指标",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignTypeDetail。用户查看SB(headlineSearch)广告的Campaign Type明细绩效，仅选择单一日期范围，未开启对比期，输出字段含ROAS指标，同时返回sb专属均值字段(sbAverageSpend/sbAverageSale)。样本中占比30.6%(153次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceCampaignTypeDetail",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignTypeDetail",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ROAS"
+          ],
+          "ShareId": "",
+          "sbAverageSpend": 435580.12,
+          "sbAverageSale": 806751.92,
+          "sbAverageSaleCompar": 0,
+          "sbAverageSpendCompar": 0,
+          "campaignType": "headlineSearch"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignTypeDetail - Sponsored Products(SP)明细,含对比期(环比/同比)",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignTypeDetail。用户查看SP广告的Campaign Type明细绩效，同时开启对比期(startCompare/endCompare)查看环比/同比数据。样本中占比15.6%(78次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceCampaignTypeDetail",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignTypeDetail",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ROAS"
+          ],
+          "ShareId": "",
+          "campaignType": "sponsoredProducts"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignTypeDetail - Sponsored Brands(SB)明细,含对比期(环比/同比)",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignTypeDetail。用户查看SB(headlineSearch)广告的Campaign Type明细绩效，同时开启对比期查看环比/同比数据，返回sb专属均值及对比均值字段。样本中占比14.2%(71次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceCampaignTypeDetail",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignTypeDetail",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ROAS"
+          ],
+          "ShareId": "",
+          "sbAverageSpend": 359041.65,
+          "sbAverageSale": 1058340.62,
+          "sbAverageSaleCompar": 954696.42,
+          "sbAverageSpendCompar": 271413.36,
+          "campaignType": "headlineSearch"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignTypeDetail - 按CampaignTagId(广告系列标签)筛选的明细查询",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignTypeDetail。用户在Campaign Type明细绩效页面按广告系列标签(CampaignTagId)进行筛选，输出字段含ACOS指标。样本中占比6.0%(30次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceCampaignTypeDetail",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignTypeDetail",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"608459\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ACOS"
+          ],
+          "ShareId": "",
+          "campaignType": "sponsoredProducts"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetPerformanceCampaignTypeDetail - 按PortfolioId(广告组合)筛选的明细查询(含对比期)",
+    "description": "单接口测试：POST /api/Dashboard/GetPerformanceCampaignTypeDetail。用户在Campaign Type明细绩效页面按广告组合(PortfolioId)进行筛选，并开启对比期查看环比/同比数据，输出字段含ACOS指标。样本中占比2.0%(10次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceCampaignTypeDetail",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetPerformanceCampaignTypeDetail",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"204806772208933\",\"188667465623173\",\"218848374758992\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTypeName",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "AOV",
+            "ASP",
+            "CVR",
+            "CPA",
+            "ACOS"
+          ],
+          "ShareId": "",
+          "campaignType": "sponsoredProducts"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/PortfolioFromAmzDataForWidget - 仅日期范围过滤查询（美国市场，主流程）",
+    "description": "单接口测试：POST /api/Dashboard/PortfolioFromAmzDataForWidget。仅使用 Filters 中的 ReportDateTime 日期范围过滤，不附加 CampaignTagId/PortfolioId 等标签过滤，ToMarket=US，是该接口最主要的调用场景（Home 页 Portfolio 绩效 widget 默认查询）。样本中占比80.45%(321次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Portfolio 绩效 Widget 数据（仅日期范围过滤，US市场）",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/PortfolioFromAmzDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/PortfolioFromAmzDataForWidget - 非美国市场日期范围查询（跨市场场景）",
+    "description": "单接口测试：POST /api/Dashboard/PortfolioFromAmzDataForWidget。仅使用 ReportDateTime 日期范围过滤，ToMarket 为非US市场（样本中出现CA/DE/UK/JP/IN），用于验证多市场场景下按 Profile.CountryCode 生成 CurrencySymbol 及数据查询的正确性。样本中占比7.02%(28次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Portfolio 绩效 Widget 数据（非US市场，CA）",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/PortfolioFromAmzDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "CA",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/PortfolioFromAmzDataForWidget - 按广告活动标签（CampaignTagId）过滤查询",
+    "description": "单接口测试：POST /api/Dashboard/PortfolioFromAmzDataForWidget。除 ReportDateTime 日期范围外，额外附加 CampaignTagId 标签过滤（CustomizeType=102，自定义标签集合），且带有分享链接 ShareId，对应用户通过 Dashboard 分享视图按标签筛选 Portfolio 绩效的场景。样本中占比10.53%(42次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Portfolio 绩效 Widget 数据（按CampaignTagId过滤+分享链接）",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/PortfolioFromAmzDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"4631179\",\"4631180\",\"4631181\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "okOBb "
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/PortfolioFromAmzDataForWidget - 按 Portfolio ID 过滤查询",
+    "description": "单接口测试：POST /api/Dashboard/PortfolioFromAmzDataForWidget。除 ReportDateTime 日期范围外，额外附加 PortfolioId 过滤（对齐旧 amzPortfolioIds 场景），用于仅查询指定 Portfolio 集合的绩效数据。样本中占比2.01%(8次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询 Portfolio 绩效 Widget 数据（按PortfolioId过滤）",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/PortfolioFromAmzDataForWidget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\",\"204806772208933\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": ""
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetWidgetCampaignPlacementData - 默认视图(ROAS指标,仅日期筛选,全部广告类型)",
+    "description": "单接口测试：POST /api/Dashboard/GetWidgetCampaignPlacementData。用户在Home页Placement绩效widget中仅选择日期范围(含对比期)，广告类型选择全部(campaignType=0)，货币汇率换算开启(IsExchange=1)，指标列展示ROAS。样本中占比约73.6%(368/500次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetWidgetCampaignPlacementData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetWidgetCampaignPlacementData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "placement",
+            "Spend",
+            "TotalSpendPercent",
+            "Sales",
+            "TotalSalesPercent",
+            "Conversion",
+            "SaleUnits",
+            "Impression",
+            "Click",
+            "ROAS",
+            "CTR",
+            "CPC",
+            "CVR",
+            "CPA"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "campaignType": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetWidgetCampaignPlacementData - ACOS指标视图(仅日期筛选,全部广告类型)",
+    "description": "单接口测试：POST /api/Dashboard/GetWidgetCampaignPlacementData。用户在widget设置中将指标列切换为ACOS(替代默认ROAS展示)，其余条件同默认视图：仅日期筛选，广告类型全部，货币换算开启。样本中占比约17.2%(86/500次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetWidgetCampaignPlacementData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetWidgetCampaignPlacementData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "placement",
+            "Spend",
+            "TotalSpendPercent",
+            "Sales",
+            "TotalSalesPercent",
+            "Conversion",
+            "SaleUnits",
+            "Impression",
+            "Click",
+            "ACOS",
+            "CTR",
+            "CPC",
+            "CVR",
+            "CPA"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "campaignType": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetWidgetCampaignPlacementData - 按CampaignTag筛选(标签分组查看Placement绩效)",
+    "description": "单接口测试：POST /api/Dashboard/GetWidgetCampaignPlacementData。用户在日期筛选基础上追加了CampaignTagId筛选(按campaign标签分组查看指定标签下campaign的Placement绩效)，指标列展示ROAS，广告类型全部。样本中占比约5.4%(27/500次，含ROAS/ACOS两种指标变体)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetWidgetCampaignPlacementData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetWidgetCampaignPlacementData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"558614\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "placement",
+            "Spend",
+            "TotalSpendPercent",
+            "Sales",
+            "TotalSalesPercent",
+            "Conversion",
+            "SaleUnits",
+            "Impression",
+            "Click",
+            "ROAS",
+            "CTR",
+            "CPC",
+            "CVR",
+            "CPA"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "campaignType": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetWidgetCampaignPlacementData - 按指定广告类型筛选(campaignType=1,非全部类型)",
+    "description": "单接口测试：POST /api/Dashboard/GetWidgetCampaignPlacementData。用户在Home页widget中切换广告类型tab，仅查看某一广告类型(campaignType=1)的Placement绩效，而非默认的全部类型汇总，其余为仅日期筛选、ROAS指标。该场景虽样本占比低(1.2%,6/500次)，但代表了与默认聚合视图不同的独立业务意图(广告类型维度切换)，故单独保留。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetWidgetCampaignPlacementData",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetWidgetCampaignPlacementData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "CA",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\",\"startCompare\":\"{{compare_start_mdy}}\",\"endCompare\":\"{{compare_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "placement",
+            "Spend",
+            "TotalSpendPercent",
+            "Sales",
+            "TotalSalesPercent",
+            "Conversion",
+            "SaleUnits",
+            "Impression",
+            "Click",
+            "ROAS",
+            "CTR",
+            "CPC",
+            "CVR",
+            "CPA"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "campaignType": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/TargetDataAll - 默认日期范围查询(无标签/组合筛选)",
+    "description": "单接口测试：POST /api/Dashboard/TargetDataAll。仅通过 Filters 里的 ReportDateTime 指定日期范围查询 Home 页 Campaign Goal(Target) 数据，不叠加 CampaignTagId/PortfolioId 等其它筛选，是最典型的默认查询场景。样本中占比78.0%(170次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "TargetDataAll - 默认日期范围查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/TargetDataAll",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/TargetDataAll - 按CampaignTag标签筛选查询",
+    "description": "单接口测试：POST /api/Dashboard/TargetDataAll。在 ReportDateTime 日期筛选基础上叠加 CampaignTagId（CustomizeType=102 的 Campaign 标签批量筛选），用于验证按标签维度筛选campaign后的目标值绩效聚合。样本中占比16.5%(36次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "TargetDataAll - 按CampaignTag筛选查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/TargetDataAll",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"9740\",\"9741\",\"9742\",\"9743\",\"171729\",\"171730\",\"4631732\",\"9757\",\"9758\",\"9759\",\"9760\",\"164821\",\"164822\",\"164823\",\"164824\",\"582354\",\"582355\",\"582356\",\"582357\",\"4631734\",\"9761\",\"9762\",\"9763\",\"9764\",\"9765\",\"9766\",\"9767\",\"9768\",\"9769\",\"9770\",\"9771\",\"9772\",\"9773\",\"9774\",\"9775\",\"9776\",\"9777\",\"9778\",\"9779\",\"9780\",\"9733\",\"9734\",\"9735\",\"9736\",\"582358\",\"582359\",\"582360\",\"4631733\",\"9753\",\"9754\",\"9755\",\"9756\",\"9788\",\"9789\",\"9790\",\"14354\",\"582365\",\"582366\",\"9749\",\"9750\",\"9751\",\"9752\",\"582361\",\"582362\",\"582363\",\"9795\",\"9796\",\"9797\",\"9798\",\"9799\",\"9800\",\"9801\",\"9802\",\"9803\",\"9804\",\"9805\",\"9806\",\"29052\",\"29053\",\"79585\",\"79586\",\"136819\",\"140133\",\"158946\",\"158947\",\"158942\",\"158943\",\"158944\",\"158945\",\"164839\",\"166720\",\"267894\",\"267895\",\"267896\",\"492821\",\"492822\",\"492823\",\"492824\",\"522585\",\"522586\",\"522587\",\"522588\",\"553204\",\"553205\",\"553206\",\"553207\",\"553200\",\"553201\",\"553202\",\"553203\",\"555598\",\"555599\",\"555600\",\"555601\",\"555605\",\"555606\",\"555607\",\"555608\",\"588553\",\"4622788\",\"4622789\",\"4622790\",\"4630988\",\"4639532\",\"4640865\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "fqjgV ",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/TargetDataAll - 按Portfolio筛选查询",
+    "description": "单接口测试：POST /api/Dashboard/TargetDataAll。在 ReportDateTime 日期筛选基础上叠加 PortfolioId(AmzPortfolio) 批量筛选，用于验证按广告组合(Portfolio)维度筛选campaign后的目标值绩效聚合。样本中占比3.7%(8次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "TargetDataAll - 按Portfolio筛选查询",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/TargetDataAll",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"165078884068854\",\"37759729621365\",\"204062664827012\",\"77141556710810\",\"141069833056264\",\"6330741125682\",\"225801078641330\",\"241077928194397\",\"41809220005813\",\"54414578149274\",\"280878174349378\",\"271934408618201\",\"209877641101118\",\"264171923196157\",\"4061699838850\",\"215713146235751\",\"250170820695221\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/Performance4week - 默认日期范围查询(多Profile,US市场)",
+    "description": "单接口测试:POST /api/Dashboard/Performance4week。多个ProfileId合并查询,仅按ReportDateTime日期区间过滤,ToMarket为US,无标签/组合/分享等附加过滤,是最常见的仪表盘4周表现查询场景。样本中占比64.2%(212次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询4周表现数据-默认日期范围(多Profile)",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/Performance4week",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/Performance4week - 非美国市场(DE)日期范围查询",
+    "description": "单接口测试:POST /api/Dashboard/Performance4week。ToMarket为DE(德国)非US市场,仅按ReportDateTime日期区间过滤,验证跨市场(货币/币种)场景下的4周表现查询。样本中占比9.4%(31次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询4周表现数据-DE市场",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/Performance4week",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "DE",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/Performance4week - 按广告活动标签(CampaignTagId)过滤",
+    "description": "单接口测试:POST /api/Dashboard/Performance4week。在日期区间过滤基础上叠加CampaignTagId标签过滤(filterType=11),用于按自定义广告活动标签查看4周表现,无分享链接。样本中占比10.0%(33次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询4周表现数据-按CampaignTagId过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/Performance4week",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"4622790\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/Performance4week - 分享链接场景+广告活动标签过滤",
+    "description": "单接口测试:POST /api/Dashboard/Performance4week。ShareId非空表示通过仪表盘分享链接访问,叠加CampaignTagId标签过滤,验证分享场景下的4周表现数据查询。样本中占比5.8%(19次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询4周表现数据-分享链接+标签过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/Performance4week",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"505315\",\"505316\",\"505318\",\"505326\",\"505327\",\"505328\",\"505329\",\"505321\",\"505322\",\"505323\",\"505324\",\"505325\",\"505332\",\"505333\",\"505334\",\"505335\",\"505336\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "Rx5G1 ",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/Performance4week - 按广告组合(PortfolioId)过滤",
+    "description": "单接口测试:POST /api/Dashboard/Performance4week。在日期区间过滤基础上叠加PortfolioId广告组合过滤(filterType=8),用于按广告组合维度查看4周表现,代表独立的组合级筛选业务场景。样本中占比2.4%(8次)",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询4周表现数据-按PortfolioId过滤",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/Performance4week",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"165078884068854\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "ShareId": "",
+          "IsExchange": 1
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTaggingTarget - 场景1_默认ROAS视图_无标签筛选",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTaggingTarget。Home页Campaign Tagging vs Target widget默认视图，type=ROAS（只返回TargetROAS>0的父标签），不带CampaignTagId/PortfolioId筛选，US市场，最典型的Widget打开场景。样本中占比约57.5%(219次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTaggingTarget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTaggingTarget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTagName",
+            "Spend",
+            "TargetROAS",
+            "ROAS",
+            "ROASPerTarget",
+            "CampaignTagId",
+            "subTagCount"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "type": "ROAS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTaggingTarget - 场景2_ACOS视图_新版CampaignTag命名_无筛选",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTaggingTarget。Widget切换到type=ACOS视图（只返回TargetACOS>0的父标签），OutPutFields使用新版CampaignTagName/CampaignTagId命名，不带额外筛选，US市场。样本中占比约14.2%(54次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTaggingTarget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTaggingTarget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTagName",
+            "Spend",
+            "TargetACOS",
+            "ACOS",
+            "ACOSPerTarget",
+            "CampaignTagId",
+            "subTagCount"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "type": "ACOS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTaggingTarget - 场景3_ACOS视图_旧版Portfolio命名_无筛选",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTaggingTarget。type=ACOS视图，但OutPutFields仍使用旧版PortfolioName/PortfolioId命名（未迁移到CampaignTag命名的旧版前端组件调用），不带额外筛选，US市场。样本中占比约14.2%(54次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTaggingTarget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTaggingTarget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "PortfolioName",
+            "Spend",
+            "TargetACOS",
+            "ACOS",
+            "ACOSPerTarget",
+            "PortfolioId",
+            "subTagCount"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "type": "ACOS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTaggingTarget - 场景4_ACOS视图_按CampaignTagId筛选指定标签",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTaggingTarget。用户在Widget上按指定Campaign Tag筛选（Filters中追加CampaignTagId的Customize/FieldIdIn过滤），type=ACOS，US市场，验证父子标签归并筛选逻辑。样本中占比约8.4%(32次)。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTaggingTarget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTaggingTarget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[\"4622790\"],\"IsNum\":true}"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "CampaignTagName",
+            "Spend",
+            "TargetACOS",
+            "ACOS",
+            "ACOSPerTarget",
+            "CampaignTagId",
+            "subTagCount"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "type": "ACOS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/GetCampaignTaggingTarget - 场景5_ACOS视图_按旧版PortfolioId筛选",
+    "description": "单接口测试：POST /api/Dashboard/GetCampaignTaggingTarget。旧版组件调用，在Filters中追加PortfolioId的FieldIdIn过滤（对应旧Portfolio筛选入口，字段未迁移到CampaignTagId），type=ACOS，US市场。样本中占比约3.4%(13次)，代表旧版Portfolio筛选的独立业务场景。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTaggingTarget",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Dashboard/GetCampaignTaggingTarget",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "PortfolioId",
+              "filterType": 8,
+              "filterContent": "[\"188667465623173\",\"204806772208933\",\"218848374758992\"]"
+            }
+          ],
+          "IncludeZero": false,
+          "OutPutFields": [
+            "PortfolioName",
+            "Spend",
+            "TargetACOS",
+            "ACOS",
+            "ACOSPerTarget",
+            "PortfolioId",
+            "subTagCount"
+          ],
+          "ShareId": "",
+          "IsExchange": 1,
+          "type": "ACOS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]
