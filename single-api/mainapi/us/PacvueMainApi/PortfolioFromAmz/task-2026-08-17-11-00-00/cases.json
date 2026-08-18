@@ -1,0 +1,647 @@
+[
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageData - 场景1：全量 Portfolio 列表（Spend 排序，无过滤）",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageData。查询当前 profile 下所有 Amazon portfolio 的绩效列表，不指定 portfolioIds 过滤，按 Spend 降序排列，无日期对比。500条随机样本中占比约40%(199次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取全量 Portfolio 绩效分页数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioAmzPageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "portfolioIds": [],
+          "servingStatus": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "featureStateType": "0",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageData - 场景2：指定 PortfolioIds 过滤",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageData。通过 portfolioIds 指定具体组合 ID 进行数据过滤，查看特定 Portfolio 绩效，无日期对比。500条随机样本中占比约34.6%(173次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取指定 Portfolio 绩效分页数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioAmzPageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "portfolioIds": [
+            "{{test_portfolio_id}}"
+          ],
+          "servingStatus": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "featureStateType": "0",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageData - 场景3：日期对比模式（startCompar/endCompar）",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageData。携带 startCompar/endCompar 进行环比对比，同时展示当前期与对比期数据，无 portfolioIds 过滤。500条随机样本中占比约12.4%(62次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取 Portfolio 对比模式分页数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioAmzPageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "portfolioName",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "portfolioIds": [],
+          "servingStatus": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": "{{compare_start_mdy}}",
+          "endCompar": "{{compare_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "featureStateType": "0",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "portfolioName",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "portfolioName",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": [],
+          "fieldSet": {
+            "isSameSku": 1
+          },
+          "isSameSku": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal - 场景1：全量 Portfolio 汇总行（无对比）",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal。获取全量 portfolio 列表的汇总合计行，不含日期对比，用于表格底部合计展示。500条随机样本中占比约25%(125次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取全量 Portfolio 汇总合计",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "portfolioIds": [],
+          "servingStatus": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "featureStateType": "0",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal - 场景2：对比模式汇总行（isExchange=1）",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal。携带 startCompar/endCompar 及 isExchange=1 的对比模式下获取汇总合计行，返回含对比期数据的汇总。500条随机样本中占比约54.6%(273次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取对比模式 Portfolio 汇总合计",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "servingStatus": [],
+          "portfolioIds": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "startCompar": "{{compare_start_mdy}}",
+          "endCompar": "{{compare_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": [],
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal - 场景3：指定 Portfolio 过滤汇总行",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal。通过 portfolioIds 过滤指定组合，获取对应的汇总合计行数据。500条随机样本中占比约32.4%(162次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取指定 Portfolio 过滤汇总合计",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioAmzPageDataTotal",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "portfolioIds": [
+            "{{test_portfolio_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1
+          },
+          "export": false,
+          "textFilters": [],
+          "pageinfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageCount": 0,
+            "PageIndex": 1,
+            "PageSize": 100,
+            "TotalDataCount": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioChartData - 场景1：全量 Portfolio 趋势图（isExchange=1）",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioChartData。获取所有 portfolio 的趋势图数据，isExchange=1 开启对比模式，不指定 portfolio 过滤，用于折线图渲染。500条随机样本中占比约64.2%(321次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取全量 Portfolio 趋势图数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioChartData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "portfolioIds": [],
+          "servingStatus": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "featureStateType": "0",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/GetPortfolioChartData - 场景2：含 ServingStatus 过滤的趋势图",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/GetPortfolioChartData。携带 servingStatus 过滤（PORTFOLIO_STATUS_ENABLED/PORTFOLIO_OUT_OF_BUDGET），只展示特定投放状态的 portfolio 趋势图。500条随机样本中占比约3.8%(19次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取 ServingStatus 过滤后的 Portfolio 趋势图",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/GetPortfolioChartData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "servingStatus": [
+            "PORTFOLIO_STATUS_ENABLED",
+            "PORTFOLIO_OUT_OF_BUDGET"
+          ],
+          "portfolioIds": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "featureStateType": "0",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/AddCampaigns - 场景1：添加单个 SB Campaign 到 Portfolio（含后置清理）",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/AddCampaigns。将单个 SB headlineSearch 类型 campaign 添加到指定 portfolio。写操作，第2步后置调用 BulkDeleteCampaignFromPortfolio 将 campaign 从 portfolio 中移除，保证用例可重复执行。ES仅3条样本，样本较少，场景覆盖可能不全。500条随机样本中占比约33%(1次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "添加单个 SB Campaign 到 Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/AddCampaigns",
+        "request_body": {
+          "addCampaigns": [
+            {
+              "ProfileID": "{{profile_id}}",
+              "CampaignID": "{{exist_sb_campaign_id}}",
+              "DailyBudget": null,
+              "State": "enabled",
+              "StartDate": "20260718",
+              "PortfolioId": "{{test_portfolio_id}}",
+              "CampaignType": "headlineSearch"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-从 Portfolio 移除 Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkDeleteCampaignFromPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "portfolioId": "{{test_portfolio_id}}",
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sb_campaign_id}}",
+              "campaignType": "headlineSearch"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/AddCampaigns - 场景2：批量添加多个 SP Campaign 到 Portfolio（含后置清理）",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/AddCampaigns。将多个 SP sponsoredProducts 类型 campaign 批量添加到同一个 portfolio，每个 campaign 携带 DailyBudget 信息。写操作，第2步后置调用 BulkDeleteCampaignFromPortfolio 将 campaign 从 portfolio 中移除，保证用例可重复执行。ES仅3条样本，样本较少。500条随机样本中占比约67%(2次)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量添加多个 SP Campaign 到 Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/AddCampaigns",
+        "request_body": {
+          "addCampaigns": [
+            {
+              "ProfileID": "{{profile_id}}",
+              "CampaignID": "{{exist_sp_campaign_id}}",
+              "DailyBudget": 25.0,
+              "State": "enabled",
+              "StartDate": "20260718",
+              "PortfolioId": "{{test_portfolio_id}}",
+              "CampaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-从 Portfolio 移除 Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v3/BulkDeleteCampaignFromPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "portfolioId": "{{test_portfolio_id}}",
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/PortfolioFromAmz/v3/BlukAddCampaigns - 场景1：按名称+状态过滤批量添加 Campaign 到 Portfolio",
+    "description": "单接口测试：POST /api/PortfolioFromAmz/v3/BlukAddCampaigns。通过 campaignName 关键词搜索 + campaignStates 过滤，将所有匹配的 campaign 批量添加到目标 portfolio。写操作（后台异步任务），服务端返回 \"Task Running in Background\"，无法同步等待执行结果，后置清理需在任务完成后手动调用 BulkDeleteCampaignFromPortfolio 还原受影响 campaign。500条随机样本中占比约100%(27次，单一模式)。",
+    "module": "PortfolioFromAmz",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按名称+状态过滤批量添加 Campaign 到 Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/PortfolioFromAmz/v3/BlukAddCampaigns",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignName": "",
+          "campaignStates": [
+            "enabled",
+            "paused"
+          ],
+          "campaignTypes": [],
+          "pageInfo": {
+            "TotalDataCount": 0,
+            "PageSize": 100,
+            "PageIndex": 1
+          },
+          "portfolioId": "{{test_portfolio_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

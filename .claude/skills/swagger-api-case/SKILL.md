@@ -315,8 +315,13 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 ```
 不加 `status_code`，或仅作为辅助参考。
 
+🔴 **断言路径必须写成嵌套对象，不能用点号路径**：run-cases.py 的断言引擎**不按 `.` 拆分 key**，`"data.successCount"` 会被当成字面顶层 key → 永远 `undefined`。嵌套字段一律逐层嵌套：
+- ✅ `{"data": {"successCount": {"$gte": 1}}}`
+- ❌ `{"data.successCount": {"$gte": 1}}`（永远 undefined，误判 FAIL）
+
 **L2（基于实际响应结构，Phase 4 探测后补充）**：
-- 返回结构为 `data: {list:[], pageInfo:{}}` → 加 `"data.pageInfo": {"$not_empty": true}`
+- 返回结构为 `data: {list:[], pageInfo:{}}` → 加 `"data": {"pageInfo": {"$not_empty": true}}`
+- 返回结构为 `data: {Data:[...]}`（分页列表）→ 加 `"data": {"Data": {"$is_array": true}}`
 - 返回结构为 `data: []`（数组）→ 加 `"data": {"$is_array": true}`
 - 返回结构为 `data: {...}`（对象，非分页）→ 加 `"data": {"$not_empty": true}`
 - 不断言数据条数（测试账号可能空数据，`$length_gte:1` 不适用）
@@ -387,7 +392,7 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
    - 提取路径支持数组下标，如 `data.result[0].APIResult[0].entityId`
    - 框架自动把提取值注入后续步骤的 `{{var}}`（同一 case 内跨步骤有效）
 
-4. **断言用业务成功信号**：写操作断言 `data.successCount: {"$gte": 1}`（或对应的真实成功计数字段），**不能只断言 `code:200`**——很多写接口 HTTP/业务 code 都是 200 但实际 `success 0`（如 bid 超预算一半、谓词类型错误、重复创建）。
+4. **断言用业务成功信号**：写操作断言 `"data": {"successCount": {"$gte": 1}}`（嵌套写法，见 Phase 3 断言路径规则；或对应的真实成功计数字段），**不能只断言 `code:200`**——很多写接口 HTTP/业务 code 都是 200 但实际 `success 0`（如 bid 超预算一半、谓词类型错误、重复创建）。
 
 5. **保证幂等可重跑**：后置清理后，同参数必须能再次执行。
    - 创建类：归档后同 ASIN/关键词可再次创建（已验证 Amazon 支持）
