@@ -17,9 +17,12 @@ def post(url, body, headers, timeout=120, method="POST"):
     req=urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
         with urllib.request.urlopen(req, timeout=timeout, context=ctx) as r:
-            raw=r.read().decode(errors="replace")
-            try: return r.status, json.loads(raw or "{}")
-            except Exception: return r.status, {"__raw__": raw[:2000]}
+            raw=r.read()
+            ctype=r.headers.get("Content-Type","")
+            try:
+                return r.status, json.loads(raw.decode() or "{}")
+            except (UnicodeDecodeError, json.JSONDecodeError):
+                return r.status, {"__binary__": True, "content_type": ctype, "size": len(raw)}
     except urllib.error.HTTPError as e:
         raw=e.read().decode(errors="replace")
         try: return e.code, json.loads(raw)
@@ -61,12 +64,16 @@ def get_path(obj, path):
 def check(exp, resp):
     fails=[]
     for k,v in exp.items():
+        if k=="$binary":
+            is_bin = isinstance(resp,dict) and resp.get("__binary__") is True
+            min_size = v.get("$min_size",1) if isinstance(v,dict) else 1
+            if not is_bin: fails.append(f"$binary expected binary file response, got {json.dumps(resp,ensure_ascii=False)[:120]}")
+            elif resp.get("size",0) < min_size: fails.append(f"$binary expected size>={min_size}, got {resp.get('size',0)}")
+            continue
         if k=="$root":
             cur=resp
         else:
-            cur=resp
-            for part in k.split("."):
-                cur=(cur or {}).get(part) if isinstance(cur,dict) else None
+            cur=get_path(resp, k)
         if isinstance(v,dict):
             if "$not_empty" in v:
                 ok = cur not in (None,"",[],{})

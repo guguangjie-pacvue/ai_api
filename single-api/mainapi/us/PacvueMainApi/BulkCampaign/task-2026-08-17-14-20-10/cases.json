@@ -1,0 +1,733 @@
+[
+  {
+    "name": "POST /api/BulkCampaign/ConfirmCampaignChangeName - 确认并执行Campaign改名(含后置还原,可重复)",
+    "description": "单接口测试(写操作)：POST /api/BulkCampaign/ConfirmCampaignChangeName + POST /api/BulkCampaign/TestExecute。仅用测试账号自有SP Campaign(exist_sp_campaign_id)。第1步Confirm创建改名批次并取得BatchId，第2步TestExecute触发真实执行，第3步GetCampaignChangeNameDetailLog校验RenameSuccess=true(真实业务成功信号，而非仅code:200)，第4-5步以相同方式改回另一固定名称完成还原，保证可重复执行。字段结构与枚举值均取自ES 30条真实样本。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Confirm-Campaign改名为TC-BulkCampaign-ConfirmNameTest-A",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCampaignChangeName",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-name-test",
+          "ProfiledId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "CampaignName": "TC-CampaignUpdate-Restored",
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "NewCampaignName": "TC-BulkCampaign-ConfirmNameTest-A"
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_name_a": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestExecute-真实触发改名执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_name_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "校验-GetCampaignChangeNameDetailLog确认改名真正成功",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetCampaignChangeNameDetailLog",
+        "request_body": {
+          "BatchId": "{{batch_id_name_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "Confirm-后置清理-Campaign改名为TC-BulkCampaign-ConfirmNameTest-Restored",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCampaignChangeName",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-name-test-revert",
+          "ProfiledId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "CampaignName": "TC-BulkCampaign-ConfirmNameTest-A",
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "NewCampaignName": "TC-BulkCampaign-ConfirmNameTest-Restored"
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_name_b": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestExecute-真实触发还原执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_name_b}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/ConfirmCampaignChangeBudget - 确认并执行预算变更(含后置还原,可重复)",
+    "description": "单接口测试(写操作)：POST /api/BulkCampaign/ConfirmCampaignChangeBudget + POST /api/BulkCampaign/TestBudgetExecute。仅用测试账号自有SP Campaign(exist_sp_campaign_id)。第1步Confirm创建预算变更批次，第2步TestBudgetExecute真实执行，第3步GetCampaignChangeBudgetDetailLog校验RenameSuccess=true，第4-5步改回原预算完成还原，保证可重复。字段结构取自ES真实样本。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Confirm-预算改为12",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCampaignChangeBudget",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-budget-test",
+          "ProfiledId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "OldBudget": 10,
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "NewBudget": 12
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_budget_a": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestBudgetExecute-真实触发预算执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestBudgetExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_budget_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "校验-GetCampaignChangeBudgetDetailLog确认预算变更真正成功",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetCampaignChangeBudgetDetailLog",
+        "request_body": {
+          "BatchId": "{{batch_id_budget_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "Confirm-后置清理-预算还原为10",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCampaignChangeBudget",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-budget-test-revert",
+          "ProfiledId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "OldBudget": 12,
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "NewBudget": 10
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_budget_b": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestBudgetExecute-真实触发还原执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestBudgetExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_budget_b}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/ConfirmAdgroupChangeName - 确认并执行广告组改名(含后置还原,可重复)",
+    "description": "单接口测试(写操作)：POST /api/BulkCampaign/ConfirmAdgroupChangeName + POST /api/BulkCampaign/TestAdgroupNameExecute。使用测试账号自有真实Adgroup(ES样本中确认过属于本账号CampaignId=9658390233/AdgroupId=426350497599769)。第1步Confirm创建改名批次，第2步TestAdgroupNameExecute真实执行，第3步GetBulkChangeDeatailLog校验RenameSuccess=true，第4-5步改回另一固定名称完成还原，保证可重复。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Confirm-广告组改名为TC-BulkCampaign-AGName-A",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmAdgroupChangeName",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-adgroup-test",
+          "ProfiledId": "{{profile_id}}",
+          "adgroups": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "CampaignId": "9658390233",
+              "CampaignName": "Test_SB_Auto_Business_20260312_A02",
+              "AdgroupId": "426350497599769",
+              "AdgroupName": "Adgroup 0729 Edit 0813",
+              "NewAdgroupName": "TC-BulkCampaign-AGName-A"
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_ag_a": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestAdgroupNameExecute-真实触发改名执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestAdgroupNameExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_ag_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "校验-GetBulkChangeDeatailLog确认广告组改名真正成功",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetBulkChangeDeatailLog",
+        "request_body": {
+          "BatchId": "{{batch_id_ag_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "Confirm-后置清理-广告组改名为TC-BulkCampaign-AGName-Restored",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmAdgroupChangeName",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-adgroup-test-revert",
+          "ProfiledId": "{{profile_id}}",
+          "adgroups": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "CampaignId": "9658390233",
+              "CampaignName": "Test_SB_Auto_Business_20260312_A02",
+              "AdgroupId": "426350497599769",
+              "AdgroupName": "TC-BulkCampaign-AGName-A",
+              "NewAdgroupName": "TC-BulkCampaign-AGName-Restored"
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_ag_b": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestAdgroupNameExecute-真实触发还原执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestAdgroupNameExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_ag_b}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/ConfirmCampaignChangeState - 确认并执行状态变更(含后置还原,可重复)",
+    "description": "单接口测试(写操作)：POST /api/BulkCampaign/ConfirmCampaignChangeState + POST /api/BulkCampaign/TestCampaignStateExecute。仅用测试账号自有SP Campaign(exist_sp_campaign_id)，只在enabled/paused之间切换，不使用不可逆的archived。第1步Confirm创建状态变更批次，第2步TestCampaignStateExecute真实执行，第3步GetBulkChangeDeatailLog校验，第4-5步还原为enabled完成还原，保证可重复。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Confirm-Campaign状态改为paused",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCampaignChangeState",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-state-test",
+          "ProfiledId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "CampaignName": "TC-CampaignUpdate-Restored",
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "OldState": "enabled",
+              "NewState": "paused"
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_state_a": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestCampaignStateExecute-真实触发状态执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestCampaignStateExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_state_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "校验-GetBulkChangeDeatailLog确认状态变更真正成功",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetBulkChangeDeatailLog",
+        "request_body": {
+          "BatchId": "{{batch_id_state_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "Confirm-后置清理-Campaign状态还原为enabled",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCampaignChangeState",
+        "request_body": {
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-state-test-revert",
+          "ProfiledId": "{{profile_id}}",
+          "campaigns": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "ProfileName": "test profile 003 | KW66956",
+              "CampaignName": "TC-CampaignUpdate-Restored",
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "OldState": "paused",
+              "NewState": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_state_b": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestCampaignStateExecute-真实触发还原执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestCampaignStateExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_state_b}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/ConfirmChangeTarget - 确认并执行定向状态变更(含后置还原,可重复)",
+    "description": "单接口测试(写操作)：POST /api/BulkCampaign/ConfirmChangeTarget(KindType=target_state) + POST /api/BulkCampaign/TestTargetStateExecute。仅用测试账号自有PAT Target(target_id，Targeting模块历史case已验证可安全切换enabled/paused)。第1步Confirm创建定向状态变更批次，第2步TestTargetStateExecute真实执行，第3步GetBulkChangeDeatailLog校验，第4-5步还原为enabled完成还原，保证可重复。KindType取值target_state取自ES真实样本。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Confirm-Target状态改为paused",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmChangeTarget",
+        "request_body": {
+          "KindType": "target_state",
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-target-state-test",
+          "ProfiledId": "{{profile_id}}",
+          "Targets": [
+            {
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "ProfileId": "{{profile_id}}",
+              "CampaignName": "TC-CampaignUpdate-Restored",
+              "ProfileName": "test profile 003 | KW66956",
+              "AdgroupId": "{{adgroup_id}}",
+              "OldState": "enabled",
+              "NewState": "paused",
+              "TargetId": "{{target_id}}",
+              "TargetType": "Product-Expanded",
+              "TargetText": ""
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_target_a": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestTargetStateExecute-真实触发定向状态执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestTargetStateExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_target_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "校验-GetBulkChangeDeatailLog确认定向状态变更真正成功",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetBulkChangeDeatailLog",
+        "request_body": {
+          "BatchId": "{{batch_id_target_a}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "Confirm-后置清理-Target状态还原为enabled",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmChangeTarget",
+        "request_body": {
+          "KindType": "target_state",
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-target-state-test-revert",
+          "ProfiledId": "{{profile_id}}",
+          "Targets": [
+            {
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "ProfileId": "{{profile_id}}",
+              "CampaignName": "TC-CampaignUpdate-Restored",
+              "ProfileName": "test profile 003 | KW66956",
+              "AdgroupId": "{{adgroup_id}}",
+              "OldState": "paused",
+              "NewState": "enabled",
+              "TargetId": "{{target_id}}",
+              "TargetType": "Product-Expanded",
+              "TargetText": ""
+            }
+          ]
+        },
+        "extract_vars": {
+          "batch_id_target_b": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestTargetStateExecute-真实触发还原执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestTargetStateExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_target_b}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/ConfirmCreateTarget - 确认并执行新建正向关键词定向(含后置归档,可重复)",
+    "description": "单接口测试(写操作)：POST /api/BulkCampaign/ConfirmCreateTarget(KindType=target_add) + POST /api/BulkCampaign/TestTargetCreateExecute。使用测试账号自有SP手动PAT广告组(sp_manual_pat_campaign_id/adgroup_id)新建一个Exact关键词定向。第1步Confirm创建批次，第2步TestTargetCreateExecute真实执行创建，第3步GetBulkChangeDeatailLog校验并提取新建TargetId，第4步用Targeting/V3/UpdateTargetPATStatus归档新建定向(Amazon实体仅支持archive)，保证用例可重复、不留残留。TargetType=Exact取自ES真实样本。 【发现】TestTargetCreateExecute/TestCreateNegativeTargetExecuted返回空响应,后续GetBulkChangeDeatailLog查询为0条,判断实际未创建任何真实定向,故本次未执行归档清理步骤(无实体可清理)。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Confirm-新建Exact关键词定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCreateTarget",
+        "request_body": {
+          "KindType": "target_add",
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-create-target-test",
+          "ProfiledId": "{{profile_id}}",
+          "Targets": {
+            "Keywords": [
+              {
+                "ProfileId": "{{profile_id}}",
+                "ProfileName": "test profile 003 | KW66956",
+                "CampaignId": "{{sp_manual_pat_campaign_id}}",
+                "CampaignName": "",
+                "AdgroupId": "{{sp_manual_pat_adgroup_id}}",
+                "AdgroupName": "",
+                "TargetText": "swagger api case autotest exact positive",
+                "TargetType": "Exact",
+                "Bid": 0.3
+              }
+            ]
+          }
+        },
+        "extract_vars": {
+          "batch_id_create_pos": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestTargetCreateExecute-真实触发创建执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestTargetCreateExecute",
+        "request_body": {
+          "BatchId": "{{batch_id_create_pos}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "校验-GetBulkChangeDeatailLog提取新建TargetId",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetBulkChangeDeatailLog",
+        "request_body": {
+          "BatchId": "{{batch_id_create_pos}}"
+        },
+        "extract_vars": {
+          "created_target_id_pos": "data[0].TargetId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/ConfirmCreateTarget - 确认并执行新建否定关键词定向(含后置归档,可重复)",
+    "description": "单接口测试(写操作)：POST /api/BulkCampaign/ConfirmCreateTarget(KindType=ng_target_add) + POST /api/BulkCampaign/TestCreateNegativeTargetExecuted。使用测试账号自有SP手动PAT广告组(sp_manual_pat_campaign_id/adgroup_id)新建一个Negative Exact否定关键词定向。第1步Confirm创建批次，第2步TestCreateNegativeTargetExecuted真实执行创建，第3步GetBulkChangeDeatailLog校验并提取新建TargetId，第4步用Targeting/V3/UpdateTargetPATStatus归档新建定向，保证用例可重复、不留残留。TargetType=Negative Exact取自ES真实样本。 【发现】TestTargetCreateExecute/TestCreateNegativeTargetExecuted返回空响应,后续GetBulkChangeDeatailLog查询为0条,判断实际未创建任何真实定向,故本次未执行归档清理步骤(无实体可清理)。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Confirm-新建Negative Exact否定关键词定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ConfirmCreateTarget",
+        "request_body": {
+          "KindType": "ng_target_add",
+          "FilePath": "",
+          "Name": "swagger-api-case-batch4-create-negtarget-test",
+          "ProfiledId": "{{profile_id}}",
+          "Targets": {
+            "Keywords": [
+              {
+                "ProfileId": "{{profile_id}}",
+                "ProfileName": "test profile 003 | KW66956",
+                "CampaignId": "{{sp_manual_pat_campaign_id}}",
+                "CampaignName": "",
+                "AdgroupId": "{{sp_manual_pat_adgroup_id}}",
+                "AdgroupName": "",
+                "TargetText": "swagger api case autotest negative exact",
+                "TargetType": "Negative Exact",
+                "Bid": 0
+              }
+            ]
+          }
+        },
+        "extract_vars": {
+          "batch_id_create_neg": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "TestCreateNegativeTargetExecuted-真实触发创建执行",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/TestCreateNegativeTargetExecuted",
+        "request_body": {
+          "BatchId": "{{batch_id_create_neg}}"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "校验-GetBulkChangeDeatailLog提取新建TargetId",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetBulkChangeDeatailLog",
+        "request_body": {
+          "BatchId": "{{batch_id_create_neg}}"
+        },
+        "extract_vars": {
+          "created_target_id_neg": "data[0].TargetId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]
