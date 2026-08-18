@@ -1,0 +1,676 @@
+[
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageData - YTD汇总(默认时间维度)",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageData。Profile列表页默认拉取，dim=ytd按年至今汇总、Spend降序分页。500条随机样本中占比约85.7%(427次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "ytd",
+          "startCompar": "{{compare_start_mdy}}",
+          "endCompar": "{{compare_end_mdy}}",
+          "toMarket": "US",
+          "hasTACOS": 0,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 50,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": [],
+          "fieldSet": {
+            "isShowNTB": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageData - 自定义日期(dim=date)按天明细",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageData。dim=date自定义日期区间、DateTime降序、100条/页，用户查看逐日明细。500条随机样本中占比约10.2%(51次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "DateTime",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "date",
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "date",
+          "toMarket": "US",
+          "hasTACOS": 1,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "DateTime",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "DateTime",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": [],
+          "fieldSet": {
+            "isShowNTB": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageData - 高级过滤请求(大写字段+多指标Operand)",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageData。大写字段Shape的高级请求：多profile批量、DateStart/DateEnd、指标Operand过滤、campaignTag/asin过滤参数。500条随机样本中占比约7.4%(37次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageData",
+        "request_body": {
+          "Start": "{{date_start_mdy}}",
+          "start": "{{date_start_mdy}}",
+          "DateStart": "{{date_start_mdy}}",
+          "End": "{{date_end_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "DateEnd": "{{date_end_mdy}}",
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "dim": "ytd",
+          "Dim": "ytd",
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "isFeadHourly": 0,
+          "campaignTypes": [],
+          "isDetail": false,
+          "timeType": 0,
+          "compareType": 0,
+          "isAnd": 1,
+          "IsAnd": 1,
+          "isAsinAnd": 1,
+          "groupByCampaignType": false,
+          "GroupByMatchType": false,
+          "groupByAsin": false,
+          "groupBySku": false,
+          "includeZero": false,
+          "MetricIds": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 50,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageData - 按月维度(dim=month)",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageData。dim=month按月聚合明细。500条随机样本中占比约2.4%(12次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "DateTime",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "month",
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "__dim__": "month",
+          "toMarket": "US",
+          "hasTACOS": 0,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "DateTime",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "DateTime",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "MetricIds": [],
+          "fieldSet": {
+            "isShowNTB": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageData - 按周维度(dim=week)",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageData。dim=week按周聚合明细，含Columns指标列表。500条随机样本中占比约1.6%(8次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageData",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "week",
+          "Dim": "week",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "isFeadHourly": 0,
+          "campaignTypes": [],
+          "isDetail": true,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "DateTime",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortType": "desc",
+                "sortData": "DateTime"
+              }
+            ]
+          },
+          "Columns": [
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "CPA",
+            "CVR",
+            "Conversion",
+            "SaleUnits",
+            "Sales",
+            "ACOS"
+          ],
+          "MetricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageDataTotal - YTD汇总合计行",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageDataTotal。Profile列表页底部合计行，dim=ytd汇总。500条随机样本中占比约87.8%(438次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageDataTotal",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "toMarket": "US",
+          "hasTACOS": 0,
+          "campaignTypes": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "MetricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageDataTotal - 自定义日期合计(大写字段+isDetail)",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageDataTotal。dim=date自定义日期、大写字段Shape、isDetail=true合计。500条随机样本中占比约8.8%(44次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageDataTotal",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "date",
+          "Dim": "date",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "isFeadHourly": 0,
+          "campaignTypes": [],
+          "isDetail": true,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "DateTime",
+            "pageIndex": 1,
+            "pageSize": 100
+          },
+          "MetricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfileChartData - YTD趋势图数据",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfileChartData。Profile趋势图，dim=ytd按日期区间取图表数据。500条随机样本中占比约99.0%(494次)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfileChartData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfileChartData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/VerifyAuthAMCProfile - 校验AMC授权",
+    "description": "单接口测试：POST /api/Profile/VerifyAuthAMCProfile。传入profileId数组校验其AMC(Amazon Marketing Cloud)授权状态。500条随机样本中占比约100%(单一模式:profileId数组)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 VerifyAuthAMCProfile",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/VerifyAuthAMCProfile",
+        "request_body": [
+          "{{profile_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfileBudgetMode - 查询Profile预算模式",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfileBudgetMode。传入单个profileId查询其预算分配模式。真实调用仅单一模式(仅profileId)，已全覆盖。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfileBudgetMode",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfileBudgetMode",
+        "request_body": {
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Profile/GetProfileByAdvertiserId - 按广告主ID查Profile",
+    "description": "单接口测试：GET /api/Profile/GetProfileByAdvertiserId。按amazon advertiserId查询对应Profile。真实调用仅单一模式(仅advertiserId查询参数)，已全覆盖。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfileByAdvertiserId",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/GetProfileByAdvertiserId?advertiserId={{amazon_advertiser_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/UpdataProfileAliasName - 修改Profile别名(含后置还原,可重复)",
+    "description": "单接口测试(写操作)：POST /api/Profile/v3/UpdataProfileAliasName。第1步将测试Profile别名改为autotest_alias，第2步后置清理将别名清空还原，保证用例可重复执行。500条随机样本中占比约100%(单一模式:profileId+aliasName)。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改别名为测试值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/UpdataProfileAliasName",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "aliasName": "autotest_alias"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-清空别名还原",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/UpdataProfileAliasName",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "aliasName": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v1/GetProfileStatusResult - 查询Profile数据状态(结构构造)",
+    "description": "单接口测试：POST /api/Profile/v1/GetProfileStatusResult。查询Profile数据同步/就绪状态。近90天ES无真实流量样本，按Swagger结构(profileIds+start+end)构造Happy Path。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfileStatusResult",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v1/GetProfileStatusResult",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Profile/v3/GetProfilePageDataForCustomerMetric - 自定义指标列表(结构构造)",
+    "description": "单接口测试：POST /api/Profile/v3/GetProfilePageDataForCustomerMetric。带自定义指标的Profile列表。近90天ES无真实流量样本，复用ProfilePerfInput结构(ytd)构造Happy Path。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfilePageDataForCustomerMetric",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/v3/GetProfilePageDataForCustomerMetric",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "dim": "ytd",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "toMarket": "US",
+          "MetricIds": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Profile/GetAmazonProfileCountryCode/{userId} - 查询用户Profile国家码(结构构造)",
+    "description": "单接口测试：GET /api/Profile/GetAmazonProfileCountryCode/{userId}。按userId查询其Amazon Profile国家码。近90天ES无真实流量样本，按Swagger路径参数(userId)构造Happy Path。",
+    "module": "Profile",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAmazonProfileCountryCode",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Profile/GetAmazonProfileCountryCode/{{user_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

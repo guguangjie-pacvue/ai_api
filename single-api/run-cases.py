@@ -92,7 +92,8 @@ for i,c in enumerate(cases,1):
     cres={"name":c["name"],"status":"passed","pass":True,"steps":[]}
     for s in c["steps"]:
         base=cfg["base_urls"][s["base_url"].strip("{} ")]
-        url=base.rstrip("/")+"/"+s["path"].lstrip("/")
+        path=subst(s["path"],V)
+        url=base.rstrip("/")+"/"+path.lstrip("/")
         headers=subst(cfg["headers"],V); headers.setdefault("Content-Type","application/json")
         body=subst(s["request_body"],V)
         method=s.get("method","POST").upper()
@@ -102,6 +103,12 @@ for i,c in enumerate(cases,1):
         t0=time.time(); st,resp=post(req_url, body, headers, method=method)
         if st==401:
             login(); V=cfg["variables"]; headers=subst(cfg["headers"],V)
+            st,resp=post(req_url, body, headers, method=method)
+        extract_vars=s.get("extract_vars") or {}
+        for _retry in range(3):
+            if not extract_vars or all(get_path(resp, p) is not None for p in extract_vars.values()):
+                break
+            time.sleep(3)
             st,resp=post(req_url, body, headers, method=method)
         fails=check(s["expected_response"], resp) if st and st<500 else [f"http {st}"]
         if st>=400: fails.append(f"http {st} {json.dumps(resp,ensure_ascii=False)[:200]}")

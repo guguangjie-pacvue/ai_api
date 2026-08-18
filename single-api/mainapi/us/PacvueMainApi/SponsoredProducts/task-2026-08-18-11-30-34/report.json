@@ -1,0 +1,264 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-18T03:37:30.346532+00:00",
+  "total": 7,
+  "passed": 5,
+  "failed": 0,
+  "skipped": 2,
+  "cases": [
+    {
+      "name": "POST /api/SponsoredProducts/CreateCampaign - 创建SP手动投放Campaign(含后置归档,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建SP Campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SponsoredProducts/CreateCampaign",
+          "status_code": 200,
+          "ms": 3830,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:ProfileId,CampaignId,AdGroupId,CampaignResponse,AdGroupResponse,AdResponse,TargetAutoResponse,Message",
+          "data_len": 8,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档新建的Campaign",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/V4/Update",
+          "status_code": 200,
+          "ms": 2447,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SponsoredProducts/CreateAdGroup - 在已有Campaign下创建AdGroup(含后置归档,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建AdGroup",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SponsoredProducts/CreateAdGroup",
+          "status_code": 200,
+          "ms": 2968,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:ProfileId,CampaignId,AdGroupId,AdGroupResponse,AdResponse,TargetAutoResponse,Message",
+          "data_len": 7,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档新建的AdGroup",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Adgroup/v3/BulkUpdataAdgroupState",
+          "status_code": 200,
+          "ms": 1758,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SponsoredProducts/CreateAd - 在已有AdGroup下创建Ad(含后置归档,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建Ad",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SponsoredProducts/CreateAd",
+          "status_code": 200,
+          "ms": 1228,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:ProfileId,CampaignId,AdGroupId,AdResponse,Message",
+          "data_len": 5,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档新建的Ad",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/ProductAd/v3/BulkChangeState",
+          "status_code": 200,
+          "ms": 1080,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SponsoredProducts/CopyCampaign - 复制SP Campaign到同profile(含后置归档,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "复制Campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SponsoredProducts/CopyCampaign",
+          "status_code": 200,
+          "ms": 5912,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:ProfileId,Code,CampaignId,BatchId,CampaignBatchId,Message",
+          "data_len": 6,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档复制出的新Campaign",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/V4/Update",
+          "status_code": 200,
+          "ms": 1832,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SponsoredProducts/CopyCampaignV2 - 复制SP Campaign并指定AdGroup ASIN(含后置归档,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "复制Campaign(V2,含AdGroupAsins)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SponsoredProducts/CopyCampaignV2",
+          "status_code": 200,
+          "ms": 2778,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:ProfileId,Code,CampaignId,BatchId,CampaignBatchId,Message",
+          "data_len": 6,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档复制出的新Campaign",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Campaign/V4/Update",
+          "status_code": 200,
+          "ms": 2235,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "【高风险-仅生成不执行】POST /api/SponsoredProducts/UpdateAdVideo - 更新广告视频素材",
+      "status": "skipped",
+      "pass": null,
+      "reason": "用户确认此接口涉及真实数据写入风险且无法安全创建后归档清理，仅生成case定义，不在Phase4实际执行",
+      "steps": [
+        {
+          "name": "调用 UpdateAdVideo",
+          "method": "POST",
+          "path": "SponsoredProducts/UpdateAdVideo",
+          "status": "skipped"
+        }
+      ]
+    },
+    {
+      "name": "【高风险-仅生成不执行】POST /api/SponsoredProducts/UpdateCampaignBidding - 批量调整Campaign出价策略",
+      "status": "skipped",
+      "pass": null,
+      "reason": "用户确认此接口涉及真实数据写入风险且无法安全创建后归档清理，仅生成case定义，不在Phase4实际执行",
+      "steps": [
+        {
+          "name": "调用 UpdateCampaignBidding",
+          "method": "POST",
+          "path": "SponsoredProducts/UpdateCampaignBidding",
+          "status": "skipped"
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-08-18T03:37:56.421510+00:00"
+}
