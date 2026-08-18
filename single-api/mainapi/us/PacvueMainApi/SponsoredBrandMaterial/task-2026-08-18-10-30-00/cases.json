@@ -1,0 +1,817 @@
+[
+  {
+    "name": "POST /api/SponsoredBrandMaterial/Campaign/Create - SB ProductCollection活动+KW关键词定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/Campaign/Create。创建SB ProductCollection类型广告活动，包含关键词定向(exact/phrase)和ManualCollection广告素材，第2步后置归档保证用例可重复执行。500条随机样本中占比约60%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建SB ProductCollection活动",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Campaign/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "autocase_sb_pc_create",
+          "State": "PAUSED",
+          "DailyBudget": "1",
+          "BudgetType": "daily",
+          "StartDate": "{{date_start}}",
+          "SalesChannel": "AMAZON",
+          "CostType": "CPC",
+          "Goal": "CLICKS",
+          "SmartDefault": [
+            "MANUAL"
+          ],
+          "AdGroup": {
+            "Name": "autocase_ag_pc_create",
+            "State": "ENABLED",
+            "ProfileId": "{{profile_id}}"
+          },
+          "Ads": [
+            {
+              "Name": "autocase_ad_pc_create",
+              "State": "ENABLED",
+              "ProfileId": "{{profile_id}}",
+              "ProductCollectionSettings": {
+                "Brand": "TestBrand",
+                "Headlines": [
+                  "Test product collection headline"
+                ],
+                "Products": [
+                  {
+                    "ProductId": "B07XVWZQ8N",
+                    "ProductIdType": "ASIN"
+                  }
+                ],
+                "LandingPage": {
+                  "LandingPageType": "STORE",
+                  "LandingPageUrl": "https://www.amazon.com/stores/page/2E6C613B-6B23-4793-8F00-16F79B5EB110"
+                },
+                "BrandLogos": [],
+                "CustomImages": []
+              }
+            }
+          ],
+          "Keywords": [
+            {
+              "keywordText": "organic coffee",
+              "matchType": "exact",
+              "bid": 1
+            },
+            {
+              "keywordText": "coffee beans",
+              "matchType": "phrase",
+              "bid": 1
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sb_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建SB ProductCollection活动",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "headlineSearch",
+              "campaignId": "{{created_sb_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/Campaign/Create - SB Video活动+KW关键词定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/Campaign/Create。创建SB Video类型广告活动，包含关键词定向(exact)和ProductVideo广告素材，第2步后置归档保证用例可重复执行。注：Videos[].AssetId需填入测试账号下有效视频AssetId后才可通过。500条随机样本中占比约40%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建SB Video活动",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Campaign/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "autocase_sb_video_create",
+          "State": "PAUSED",
+          "DailyBudget": "10",
+          "BudgetType": "DAILY",
+          "StartDate": "{{date_start}}",
+          "SalesChannel": "AMAZON",
+          "CostType": "CPC",
+          "Goal": "CLICKS",
+          "SmartDefault": [
+            "MANUAL"
+          ],
+          "AdGroup": {
+            "Name": "autocase_ag_video_create",
+            "State": "ENABLED",
+            "ProfileId": "{{profile_id}}"
+          },
+          "Ads": [
+            {
+              "Name": "autocase_ad_video_create",
+              "State": "ENABLED",
+              "ProductVideoSettings": {
+                "Products": [
+                  {
+                    "ProductId": "B07XVWZQ8N",
+                    "ProductIdType": "ASIN"
+                  }
+                ],
+                "Videos": [
+                  {
+                    "AssetId": "[NEEDS_REAL_VALUE: 测试账号下有效视频素材AssetId，格式 amzn1.assetlibrary.asset1.xxx]",
+                    "AssetVersion": "version_v1"
+                  }
+                ]
+              }
+            }
+          ],
+          "CampaignTagIds": [],
+          "Keywords": [
+            {
+              "keywordText": "coffee",
+              "matchType": "exact",
+              "bid": 1.5
+            },
+            {
+              "keywordText": "coffee beans",
+              "matchType": "exact",
+              "bid": 1.5
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sb_video_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建SB Video活动",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "headlineSearch",
+              "campaignId": "{{created_sb_video_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/Campaign/Copy - 基本SB活动复制同profile(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/Campaign/Copy。将已有SB活动复制到同一profile，第2步后置归档复制出的活动保证用例可重复执行。500条随机样本中占比约70%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SB活动到同profile",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Campaign/Copy",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "ToProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sb_campaign_id}}",
+          "CampaignName": "autocase_copy_sb_basic",
+          "DailyBudget": "1",
+          "totalBudget": 0,
+          "StartDate": "{{date_start}}",
+          "EndDate": null,
+          "Tags": [],
+          "portfolioId": "",
+          "State": "paused"
+        },
+        "extract_vars": {
+          "copied_sb_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档复制的SB活动",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "headlineSearch",
+              "campaignId": "{{copied_sb_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/Campaign/Copy - B2B站点限制SB活动复制(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/Campaign/Copy。复制SB活动并指定B2B站点限制(siteRestrictions:AMAZON_BUSINESS)，第2步后置归档保证用例可重复执行。500条随机样本中占比约15%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SB活动并设置B2B站点限制",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Campaign/Copy",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "ToProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sb_campaign_id}}",
+          "CampaignName": "autocase_copy_sb_b2b",
+          "DailyBudget": "5",
+          "totalBudget": 0,
+          "StartDate": "{{date_start}}",
+          "EndDate": null,
+          "Tags": [],
+          "portfolioId": "",
+          "State": "paused",
+          "siteRestrictions": [
+            "AMAZON_BUSINESS"
+          ]
+        },
+        "extract_vars": {
+          "copied_sb_b2b_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档B2B复制的SB活动",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "headlineSearch",
+              "campaignId": "{{copied_sb_b2b_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/Campaign/Copy - SB活动复制含portfolio和终止日(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/Campaign/Copy。复制SB活动并指定portfolioId和EndDate，第2步后置归档保证用例可重复执行。500条随机样本中占比约15%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制SB活动并指定portfolio和终止日",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Campaign/Copy",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "ToProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sb_campaign_id}}",
+          "CampaignName": "autocase_copy_sb_portfolio",
+          "DailyBudget": "20",
+          "totalBudget": 0,
+          "StartDate": "{{date_start}}",
+          "EndDate": "2026-12-31",
+          "Tags": [],
+          "portfolioId": "{{test_portfolio_id}}",
+          "State": "paused"
+        },
+        "extract_vars": {
+          "copied_sb_portfolio_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档含portfolio复制的SB活动",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/v4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "headlineSearch",
+              "campaignId": "{{copied_sb_portfolio_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/AdGroup/Create - SB广告组+ProductCollection+phrase关键词(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/AdGroup/Create。在已有SB活动下创建广告组，附带ProductCollection广告素材(含BrandLogos/CustomImages)和phrase关键词定向，第2步后置归档广告组保证用例可重复执行。500条随机样本中占比约70%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建SB广告组+ProductCollection广告+phrase关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/AdGroup/Create",
+        "request_body": {
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sb_campaign_id}}",
+            "Name": "autocase_ag_pc_phrase",
+            "State": "ENABLED"
+          },
+          "Ads": [
+            {
+              "Name": "autocase_ad_pc_phrase",
+              "ProfileId": "{{profile_id}}",
+              "State": "ENABLED",
+              "ProductCollectionSettings": {
+                "Brand": "TestBrand",
+                "Headlines": [
+                  "Test product collection ad"
+                ],
+                "LandingPage": {
+                  "LandingPageType": "STORE",
+                  "LandingPageUrl": "https://www.amazon.com/stores/page/2E6C613B-6B23-4793-8F00-16F79B5EB110"
+                },
+                "Products": [
+                  {
+                    "ProductId": "B07XVWZQ8N",
+                    "ProductIdType": "ASIN"
+                  }
+                ],
+                "BrandLogos": [],
+                "CustomImages": []
+              }
+            }
+          ],
+          "Keywords": [
+            {
+              "keywordText": "security system",
+              "matchType": "phrase",
+              "bid": 1.0
+            },
+            {
+              "keywordText": "home security",
+              "matchType": "phrase",
+              "bid": 1.0
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sb_adgroup_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建SB广告组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "headlineSearch",
+              "campaignId": "{{exist_sb_campaign_id}}",
+              "adGroupId": "{{created_sb_adgroup_id}}"
+            }
+          ],
+          "state": "archived",
+          "notEmpty": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/AdGroup/Create - SB广告组+exact关键词+NegativeKeywords(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/AdGroup/Create。在已有SB活动下创建广告组，包含exact关键词定向和否定关键词，第2步后置归档广告组保证用例可重复执行。500条随机样本中占比约30%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建SB广告组+exact关键词+NegativeKeywords",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/AdGroup/Create",
+        "request_body": {
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sb_campaign_id}}",
+            "Name": "autocase_ag_pc_exact_neg",
+            "State": "ENABLED"
+          },
+          "Ads": [
+            {
+              "Name": "autocase_ad_pc_exact",
+              "ProfileId": "{{profile_id}}",
+              "State": "ENABLED",
+              "ProductCollectionSettings": {
+                "Brand": "TestBrand",
+                "Headlines": [
+                  "Test product collection ad exact"
+                ],
+                "LandingPage": {
+                  "LandingPageType": "CUSTOM_URL",
+                  "LandingPageUrl": "https://www.amazon.com/dp/B07XVWZQ8N"
+                },
+                "Products": [
+                  {
+                    "ProductId": "B07XVWZQ8N",
+                    "ProductIdType": "ASIN"
+                  }
+                ],
+                "BrandLogos": [],
+                "CustomImages": []
+              }
+            }
+          ],
+          "Keywords": [
+            {
+              "keywordText": "coffee maker",
+              "matchType": "exact",
+              "bid": 1.5
+            },
+            {
+              "keywordText": "espresso machine",
+              "matchType": "exact",
+              "bid": 1.5
+            }
+          ],
+          "NegativeKeywords": [
+            {
+              "keywordText": "cheap",
+              "matchType": "negativePhrase"
+            },
+            {
+              "keywordText": "used",
+              "matchType": "negativeExact"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sb_adgroup_exact_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建SB广告组(exact+neg)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "headlineSearch",
+              "campaignId": "{{exist_sb_campaign_id}}",
+              "adGroupId": "{{created_sb_adgroup_exact_id}}"
+            }
+          ],
+          "state": "archived",
+          "notEmpty": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/Ad/Create - SB Video广告-简单结构(仅Products+Videos)(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/Ad/Create。在已有SB活动的广告组下创建Video广告，最简结构仅含Products和Videos。第1步先建临时广告组，第2步创建广告，第3步归档广告组清理残留。注：Videos[].AssetId需填入测试账号下有效视频AssetId后才可通过。500条随机样本中占比约60%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "预备-创建临时SB广告组(用于Ad/Create测试)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/AdGroup/Create",
+        "request_body": {
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sb_campaign_id}}",
+            "Name": "autocase_ag_for_ad_simple",
+            "State": "ENABLED"
+          },
+          "Ads": [],
+          "Keywords": [
+            {
+              "keywordText": "test keyword",
+              "matchType": "exact",
+              "bid": 1.0
+            }
+          ]
+        },
+        "extract_vars": {
+          "temp_sb_adgroup_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "在SB广告组下创建Video广告(简单结构)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Ad/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Ads": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdgroupId": "{{temp_sb_adgroup_id}}",
+              "Name": "autocase_ad_video_simple",
+              "State": "ENABLED",
+              "ProductVideoSettings": {
+                "Products": [
+                  {
+                    "ProductId": "B07XVWZQ8N",
+                    "ProductIdType": "ASIN"
+                  }
+                ],
+                "Videos": [
+                  {
+                    "AssetId": "[NEEDS_REAL_VALUE: 测试账号下有效视频素材AssetId，格式 amzn1.assetlibrary.asset1.xxx]",
+                    "AssetVersion": "version_v1"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档临时SB广告组(连同其下广告)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "headlineSearch",
+              "campaignId": "{{exist_sb_campaign_id}}",
+              "adGroupId": "{{temp_sb_adgroup_id}}"
+            }
+          ],
+          "state": "archived",
+          "notEmpty": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredBrandMaterial/Ad/Create - SB Video广告-完整结构(Brand+LandingPage+BrandLogos)(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredBrandMaterial/Ad/Create。在已有SB活动的广告组下创建Video广告，完整结构含Brand/BrandLogos/LandingPage/Headlines。第1步先建临时广告组，第3步归档清理。注：需填入有效视频AssetId和BrandLogo AssetId。500条随机样本中占比约40%(样本较少)。",
+    "module": "SponsoredBrandMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "预备-创建临时SB广告组(用于Ad/Create完整结构测试)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/AdGroup/Create",
+        "request_body": {
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sb_campaign_id}}",
+            "Name": "autocase_ag_for_ad_full",
+            "State": "ENABLED"
+          },
+          "Ads": [],
+          "Keywords": [
+            {
+              "keywordText": "test keyword full",
+              "matchType": "exact",
+              "bid": 1.0
+            }
+          ]
+        },
+        "extract_vars": {
+          "temp_sb_adgroup_full_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "在SB广告组下创建Video广告(完整结构含Brand+LandingPage+BrandLogos)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Ad/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Ads": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{exist_sb_campaign_id}}",
+              "AdgroupId": "{{temp_sb_adgroup_full_id}}",
+              "Name": "autocase_ad_video_full",
+              "State": "ENABLED",
+              "ProductVideoSettings": {
+                "Brand": "TestBrand",
+                "Headlines": [
+                  "Test video ad headline"
+                ],
+                "LandingPage": {
+                  "LandingPageType": "STORE",
+                  "LandingPageUrl": "https://www.amazon.com/stores/page/2E6C613B-6B23-4793-8F00-16F79B5EB110"
+                },
+                "BrandLogos": [
+                  {
+                    "AssetId": "[NEEDS_REAL_VALUE: 测试账号下有效BrandLogo AssetId，格式 amzn1.assetlibrary.asset1.xxx]",
+                    "AssetVersion": "version_v1",
+                    "FormatProperties": [
+                      {
+                        "Height": 400,
+                        "Left": 0,
+                        "Top": 0,
+                        "Width": 400
+                      }
+                    ]
+                  }
+                ],
+                "Products": [
+                  {
+                    "ProductId": "B07XVWZQ8N",
+                    "ProductIdType": "ASIN"
+                  }
+                ],
+                "Videos": [
+                  {
+                    "AssetId": "[NEEDS_REAL_VALUE: 测试账号下有效视频素材AssetId，格式 amzn1.assetlibrary.asset1.xxx]",
+                    "AssetVersion": "version_v1"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档临时SB广告组(完整结构测试后)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "headlineSearch",
+              "campaignId": "{{exist_sb_campaign_id}}",
+              "adGroupId": "{{temp_sb_adgroup_full_id}}"
+            }
+          ],
+          "state": "archived",
+          "notEmpty": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
