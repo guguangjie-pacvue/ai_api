@@ -41,14 +41,41 @@ def _find_or_create_col(ws, col_name, header_font=None, header_fill=None, width=
         ws.column_dimensions[get_column_letter(col_idx)].width = width
     return col_idx
 
+def norm_path(p, base_url=''):
+    """把 cases.json 里的相对 path（不含/api前缀，走ROOTURL的接口也不含）补全成
+    与 endpoints-*.json 的 path 同格式的绝对路径，便于跨数据源匹配。"""
+    if not p:
+        return p
+    p = p.split('?', 1)[0]
+    if p.startswith('/api/') or p.startswith('/'):
+        return p if p.startswith('/api/') or 'ROOTURL' in base_url else '/api' + p
+    if 'ROOTURL' in base_url:
+        return '/' + p
+    return '/api/' + p
+
+def _canon(p):
+    # 归一化：去 query、去 /api/ 前缀、数字ID/{占位} 段统一为 * ，以便按端点模板匹配
+    if not p:
+        return ''
+    p = p.split('?', 1)[0]
+    p = p.split('/api/', 1)[-1] if '/api/' in p else p.lstrip('/')
+    segs = ['*' if (s.isdigit() or (s.startswith('{') and s.endswith('}'))) else s.lower()
+            for s in p.split('/')]
+    return '/'.join(segs)
+
 # ── Phase 5.1 — 模块汇总 ─────────────────────────────────────────────────────
-def update_summary(wb, swagger_title, module, env, report, endpoints):
+def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
     ws = wb['模块汇总']
 
-    api_total   = len([e for e in endpoints if e.get('tag') == module])
-    case_paths  = {s.get('path') or s.get('url', '').split('/api/', 1)[-1]
-                   for c in report['cases'] for s in c.get('steps', [])}
-    api_covered = len(case_paths)
+    module_eps  = [e for e in endpoints if e.get('tag') == module]
+    api_total   = len(module_eps)
+    # cases.json 的 step 只有相对 path（不含/api前缀），先用 norm_path 按 base_url 补全成
+    # 绝对路径，再归一化按 (方法, 端点模板) 去重匹配；report.json 里的 step 只有完整 url
+    # （含域名/服务前缀），不能直接拿来做路径匹配，因此改用 cases.json 作为匹配数据源。
+    case_keys   = {((s.get('method') or '').upper(), _canon(norm_path(s.get('path', ''), s.get('base_url', ''))))
+                   for c in cases for s in c.get('steps', [])}
+    api_covered = len({((e.get('method') or '').upper(), _canon(e.get('path', ''))) for e in module_eps
+                       if ((e.get('method') or '').upper(), _canon(e.get('path', ''))) in case_keys})
 
     summary_font = Font(bold=True)
     summary_fill = PatternFill('solid', fgColor='D9E1F2')
@@ -94,14 +121,7 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
     h_font = Font(bold=True, color='FFFFFF')
     h_fill = PatternFill('solid', fgColor='2E5F8A')
 
-    def norm(p):
-        if not p:
-            return p
-        if p.startswith('/api/'):
-            return p
-        if p.startswith('/'):
-            return '/api' + p
-        return '/api/' + p
+    norm = norm_path
 
     # Build path → scenario lines（从 cases 的 name/description 提取）
     path_scenarios = defaultdict(list)
@@ -109,8 +129,16 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
         steps = c.get('steps', [])
         if not steps:
             continue
-        raw_path  = steps[0].get('path', '')
-        full_path = norm(raw_path)
+        # 优先从 case name 提取路径（格式："{METHOD} /api/xxx - desc"）
+        # 避免多步骤 case 的前置步骤路径干扰归属
+        name_path_m = re.match(r'^[A-Z]+\s+(/\S+)', c.get('name', ''))
+        if name_path_m:
+            raw_path = name_path_m.group(1)
+            ref_step = steps[0]
+        else:
+            raw_path = steps[-1].get('path', '')  # fallback: 取最后一步（实际被测接口）
+            ref_step = steps[-1]
+        full_path = norm(raw_path, ref_step.get('base_url', ''))
         name = c.get('name', '')
         desc = c.get('description', '')
         label_raw = name.split(' - ', 1)[1] if ' - ' in name else name
@@ -164,7 +192,7 @@ def main():
     with open(args.endpoints, encoding='utf-8-sig') as f: endpoints = json.load(f)
 
     wb = openpyxl.load_workbook(args.excel)
-    update_summary(wb, args.swagger_title, args.module, args.env, report, endpoints)
+    update_summary(wb, args.swagger_title, args.module, args.env, cases, report, endpoints)
     update_scenario_col(wb, args.swagger_title, args.env, cases, report)
     # 原文件常被 Excel 打开占用：先存 tmp，再尝试替换；替换失败则保留 tmp 供手动合并
     import os, shutil
