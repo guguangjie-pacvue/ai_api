@@ -1,0 +1,977 @@
+[
+  {
+    "name": "GET /api/MedianPlan/listByUser - 按用户查询媒体计划列表",
+    "description": "单接口测试：GET /api/MedianPlan/listByUser。按 userId 查询当前用户创建的全部媒体计划列表（前端默认列表入口）。500条随机样本中占比约100%（797次）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按用户查询媒体计划列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/listByUser?userId={{user_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/MedianPlan/list - 按 Profile 查询媒体计划列表",
+    "description": "单接口测试：GET /api/MedianPlan/list。按 profileId 查询该广告主下的媒体计划列表。该接口 ES 无独立流量（前端列表走 listByUser），此处覆盖 profile 维度查询，接口有效。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按 Profile 查询媒体计划列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/list?profileId={{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/MedianPlan/save - 新建SP零售媒体计划（含后置清理,可重复）",
+    "description": "单接口测试：POST /api/MedianPlan/save。新建一个 SPONSORED_PRODUCTS 零售媒体计划（关键词+CLICK 优化目标），第2步后置删除新建计划保证用例可重复执行。500条随机样本中占比约85%（save 82条样本中70条为SP零售计划）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "新建SP零售媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-save",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[{\"keywordText\":\"sunscreen\",\"matchType\":\"exact\",\"bid\":2,\"suggestedBid\":null}],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[{\"negative\":\"false\",\"targetDetails\":{\"keywordTarget\":{\"keyword\":\"sunscreen\",\"matchType\":\"EXACT\",\"targetType\":\"KEYWORD\"}},\"bid\":{\"bid\":2,\"currencyCode\":\"USD\"}}]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/MedianPlan/{id} - 查询计划详情及全部Cards（含前置建/后置删,可重复）",
+    "description": "单接口测试：GET /api/MedianPlan/{id}。查询单个媒体计划详情（含 Cards 列表）。第1步前置新建计划，第3步后置删除保证可重复执行。500条随机样本中占比约100%（该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-get",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询计划详情",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/MedianPlan/{id} - 更新媒体计划字段（含前置建/后置删,可重复）",
+    "description": "单接口测试：PUT /api/MedianPlan/{id}。更新已存在媒体计划的名称、总预算等字段。第1步前置新建，第3步后置删除保证可重复执行。500条随机样本中占比约100%（该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-put",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "更新媒体计划字段",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-put-EDIT",
+          "TotalBudget": 6000,
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "BudgetType": "auto"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/MedianPlan/{id}/budgetType - 切换计划预算类型（含前置建/后置删,可重复）",
+    "description": "单接口测试：PUT /api/MedianPlan/{id}/budgetType。将计划预算类型由 auto 切换为 manual。第1步前置新建，第3步后置删除保证可重复执行。500条随机样本中占比约100%（该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-budgetType",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "切换预算类型为manual",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}/budgetType",
+        "request_body": {
+          "BudgetType": "manual"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "DELETE /api/MedianPlan/{id} - 删除媒体计划及全部Cards（含前置建,可重复）",
+    "description": "单接口测试：DELETE /api/MedianPlan/{id}。删除计划及其所有 Cards（仅创建者可删）。第1步前置新建，删除操作本身即为清理，天然可重复。500条随机样本中占比约100%（该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-delete",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/MedianPlan/{planId}/cards - 新增Card到计划（含前置建/后置删,可重复）",
+    "description": "单接口测试：POST /api/MedianPlan/{planId}/cards。向已存在计划新增一个 SPONSORED_BRANDS Card。第1步前置新建计划，第3步后置删除计划（连带清理新增Card）保证可重复执行。500条随机样本中占比约100%（该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-addcard",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "新增Card",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}/cards",
+        "request_body": [
+          {
+            "SupplyPackage": "SPONSORED_BRANDS",
+            "IsLock": false,
+            "SortOrder": 2,
+            "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+            "TargetRequest": "{\"targets\":[]}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "DELETE /api/MedianPlan/{planId}/cards - 删除指定Card（含前置建/后置删,可重复）",
+    "description": "单接口测试：DELETE /api/MedianPlan/{planId}/cards。删除计划下指定的 Card（body 为 cardId 数组）。第1步前置新建带Card计划，第2步取 cardId，第3步删除该Card，第4步后置删除计划保证可重复执行。500条随机样本中占比约100%（该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-delcard",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询计划取cardId",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {
+          "card_id": "data.Cards[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除指定Card",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}/cards",
+        "request_body": [
+          "{{card_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/MedianPlan/{planId}/cards/updateWithSplit - 按定向类型拆分更新Card（含前置建/后置删,可重复）",
+    "description": "单接口测试：PUT /api/MedianPlan/{planId}/cards/updateWithSplit。更新计划下 Card 的预算与定向（按 TargetType 拆分)。第1步前置新建，第2步取 cardId，第3步更新，第4步后置删除保证可重复执行。500条随机样本中占比约100%（该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-split",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询计划取cardId",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {
+          "card_id": "data.Cards[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "拆分更新Card",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}/cards/updateWithSplit",
+        "request_body": [
+          {
+            "cardId": "{{card_id}}",
+            "data": {
+              "Budget": 4000,
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "TargetJson": "{\"keywords\":[{\"keywordText\":\"sunscreen\",\"matchType\":\"exact\",\"bid\":3,\"suggestedBid\":null}],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[{\"negative\":\"false\",\"targetDetails\":{\"keywordTarget\":{\"keyword\":\"sunscreen\",\"matchType\":\"EXACT\",\"targetType\":\"KEYWORD\"}},\"bid\":{\"bid\":3,\"currencyCode\":\"USD\"}}]}"
+            }
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/MedianPlan/cards/budgets - 批量更新Card预算与锁定（含前置建/后置删,可重复）",
+    "description": "单接口测试：PUT /api/MedianPlan/cards/budgets。批量更新 Card 的 Budget 与 IsLock 字段。第1步前置新建，第2步取 cardId，第3步更新预算，第4步后置删除保证可重复执行。500条随机样本中占比约100%（308次,该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-budgets",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询计划取cardId",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {
+          "card_id": "data.Cards[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量更新Card预算",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/cards/budgets",
+        "request_body": [
+          {
+            "CardId": "{{card_id}}",
+            "Budget": 3000,
+            "IsLock": false
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/MedianPlan/cards/updateWithSplitMultiPlan - 跨计划批量拆分更新Card（含前置建/后置删,可重复）",
+    "description": "单接口测试：PUT /api/MedianPlan/cards/updateWithSplitMultiPlan。跨多个计划批量拆分更新 Card（此处覆盖单计划一条）。第1步前置新建，第2步取 cardId，第3步更新，第4步后置删除保证可重复执行。500条随机样本中占比约100%（57次,该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-multiplan",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询计划取cardId",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {
+          "card_id": "data.Cards[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "跨计划批量拆分更新Card",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/cards/updateWithSplitMultiPlan",
+        "request_body": [
+          {
+            "PlanId": "{{plan_id}}",
+            "Cards": [
+              {
+                "cardId": "{{card_id}}",
+                "data": {
+                  "Budget": 4500,
+                  "SupplyPackage": "SPONSORED_PRODUCTS",
+                  "TargetJson": "{\"keywords\":[{\"keywordText\":\"sunscreen\",\"matchType\":\"exact\",\"bid\":3,\"suggestedBid\":null}],\"targets\":[],\"audiences\":[]}",
+                  "TargetRequest": "{\"targets\":[{\"negative\":\"false\",\"targetDetails\":{\"keywordTarget\":{\"keyword\":\"sunscreen\",\"matchType\":\"EXACT\",\"targetType\":\"KEYWORD\"}},\"bid\":{\"bid\":3,\"currencyCode\":\"USD\"}}]}"
+                }
+              }
+            ]
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/MedianPlan/recommend/deals/batch - 批量推荐Deals（含前置建/后置删,可重复）",
+    "description": "单接口测试：POST /api/MedianPlan/recommend/deals/batch。为指定计划批量拉取 Deal 推荐（body 仅含 AmazonMediaPlanId）。第1步前置新建，第2步推荐，第3步后置删除保证可重复执行。500条随机样本中占比约100%（1449次,该接口调用量最高且模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-deals",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量推荐Deals",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/recommend/deals/batch",
+        "request_body": {
+          "AmazonMediaPlanId": "{{plan_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/MedianPlan/fetchForecasts - 拉取Reach与Performance预测（含前置建/后置删,可重复）",
+    "description": "单接口测试：POST /api/MedianPlan/fetchForecasts。为计划下各 Card 调用 Amazon Reach/Performance 预测并回写（body 仅含 AmazonMediaPlanId）。第1步前置新建，第2步拉取预测，第3步后置删除保证可重复执行。500条随机样本中占比约100%（313次,该接口调用模式单一）。",
+    "module": "MedianPlan",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新建媒体计划",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/save",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "APICASE-MedianPlan-forecast",
+          "TotalBudget": 5000,
+          "BudgetType": "auto",
+          "OptimizationGoal": "CLICK",
+          "CountryCode": "US",
+          "PerformanceMetric": "CLICK",
+          "StartDate": "2026-09-01T00:00:00.000Z",
+          "EndDate": "2026-09-30T00:00:00.000Z",
+          "FrequencyCapJson": "{\"type\":\"CUSTOM\",\"maxImpressions\":3,\"timeUnit\":\"DAYS\",\"timeUnitCount\":1}",
+          "Cards": [
+            {
+              "SupplyPackage": "SPONSORED_PRODUCTS",
+              "SupplyNum": 1,
+              "TargetJson": "{\"keywords\":[],\"targets\":[],\"audiences\":[]}",
+              "TargetRequest": "{\"targets\":[]}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "plan_id": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "拉取Reach与Performance预测",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/fetchForecasts",
+        "request_body": {
+          "AmazonMediaPlanId": "{{plan_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除媒体计划",
+        "method": "DELETE",
+        "base_url": "{{BASEURL}}",
+        "path": "/MedianPlan/{{plan_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,226 @@
+[
+  {
+    "name": "POST /api/Fead/v3/GetMaxDateTimeOlap - 场景1_单Profile取实时数据最大时间(OLAP)",
+    "description": "单接口测试：POST /api/Fead/v3/GetMaxDateTimeOlap。Fead实时看板打开时取该Profile已入库数据的最大时间点(OLAP链路)。单Profile查询是主流形态。500条随机样本中占比约78.6%(392次)，多Profile批量为同形态占比21.4%。",
+    "module": "Fead",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetMaxDateTimeOlap",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Fead/v3/GetMaxDateTimeOlap",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "shareId": "",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Fead/v3/GetMaxDateTime - 场景1_单Profile取实时数据最大时间",
+    "description": "单接口测试：POST /api/Fead/v3/GetMaxDateTime。Fead实时看板取该Profile已入库数据的最大时间点(非OLAP链路)。500条随机样本中占比约35.2%(25次,单Profile)，多Profile批量为同形态占比64.8%。",
+    "module": "Fead",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetMaxDateTime",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Fead/v3/GetMaxDateTime",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "shareId": "",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Fead/v3/GetFeadHourlyDataForWidgetOlap - 场景1_单Profile无过滤查小时级数据(OLAP)",
+    "description": "单接口测试：POST /api/Fead/v3/GetFeadHourlyDataForWidgetOlap。Fead实时看板Widget按小时拉取指定时间窗内的表现数据(OLAP链路)，无Campaign/Tag/Portfolio过滤为绝对主流。500条随机样本中占比约62.1%(单Profile+无过滤,即65.1%单Profile×95.4%无过滤)；多Profile无过滤同形态约33%；带CampaignTag过滤占比4.4%。",
+    "module": "Fead",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetFeadHourlyDataForWidgetOlap",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Fead/v3/GetFeadHourlyDataForWidgetOlap",
+        "request_body": {
+          "start": "{{date_end_mdy}} 00:00:00",
+          "end": "{{date_end_mdy}} 23:00:00",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "shareId": "",
+          "toMarket": "US",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Fead/v3/GetFeadHourlyDataForWidget - 场景1_单Profile默认窗口查小时级数据",
+    "description": "单接口测试：POST /api/Fead/v3/GetFeadHourlyDataForWidget。Fead实时看板Widget按小时拉取指定时间窗内的表现数据(非OLAP链路)。ES样本多为end=null(占比91.9%)，但当前部署模型校验要求end为非空DateTime，故改用有效小时窗口。500条随机样本中占比约37.1%(单Profile)；多Profile同形态约62.9%。",
+    "module": "Fead",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetFeadHourlyDataForWidget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Fead/v3/GetFeadHourlyDataForWidget",
+        "request_body": {
+          "start": "{{date_end_mdy}} 00:00:00",
+          "end": "{{date_end_mdy}} 23:00:00",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [],
+          "amzPortfolioIds": [],
+          "campaignIds": [],
+          "shareId": "",
+          "toMarket": "US",
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Fead/v3/GetCampaignChart - 场景1_指定Campaign查实时趋势图(不带对比)",
+    "description": "单接口测试：POST /api/Fead/v3/GetCampaignChart。Fead实时看板下Campaign维度趋势图，指定具体campaignIds、不带同环比对比，是最主流的图表请求。500条随机样本中占比约86.1%(142次,shape B+无对比)。",
+    "module": "Fead",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Fead/v3/GetCampaignChart",
+        "request_body": {
+          "start": "{{date_end}}",
+          "end": "{{date_end}}",
+          "startCompar": "",
+          "endCompar": "",
+          "kindType": "Default",
+          "toMarket": "US",
+          "isExchange": 1,
+          "isFead": 1,
+          "dim": "ytd",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}",
+            "{{exist_sb_campaign_id}}"
+          ],
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "groupByCampaignType": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Fead/v3/GetCampaignChart - 场景2_指定Campaign查实时趋势图(带同环比对比)",
+    "description": "单接口测试：POST /api/Fead/v3/GetCampaignChart。Fead实时看板Campaign趋势图叠加对比区间(startCompar/endCompar非空)，用于同环比展示。500条随机样本中占比约13.9%(23次,带对比)。",
+    "module": "Fead",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Fead/v3/GetCampaignChart",
+        "request_body": {
+          "start": "{{date_end}}",
+          "end": "{{date_end}}",
+          "startCompar": "{{compare_end}}",
+          "endCompar": "{{compare_end}}",
+          "kindType": "Default",
+          "toMarket": "US",
+          "isExchange": 1,
+          "isFead": 1,
+          "dim": "ytd",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}",
+            "{{exist_sb_campaign_id}}"
+          ],
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "groupByCampaignType": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -45,10 +45,24 @@ def _find_or_create_col(ws, col_name, header_font=None, header_fill=None, width=
 def update_summary(wb, swagger_title, module, env, report, endpoints):
     ws = wb['模块汇总']
 
-    api_total   = len([e for e in endpoints if e.get('tag') == module])
-    case_paths  = {s.get('path') or s.get('url', '').split('/api/', 1)[-1]
+    def _canon(p):
+        # 归一化：去 query、去 /api/ 前缀，数字ID/{占位} 段统一为 * ，以便按端点模板匹配
+        if not p:
+            return ''
+        p = p.split('?', 1)[0]
+        p = p.split('/api/', 1)[-1] if '/api/' in p else p.lstrip('/')
+        segs = ['*' if (s.isdigit() or (s.startswith('{') and s.endswith('}'))) else s.lower()
+                for s in p.split('/')]
+        return '/'.join(segs)
+
+    module_eps  = [e for e in endpoints if e.get('tag') == module]
+    api_total   = len(module_eps)
+    # 报告里的 step path 已把 {id} 解析成真实ID，需归一化后再按 (方法, 端点模板) 去重匹配，
+    # 否则每个用例生成的不同ID会被当成不同端点、且同路径不同方法会被误合并，导致覆盖率失真。
+    case_keys   = {((s.get('method') or '').upper(), _canon(s.get('path') or s.get('url', '')))
                    for c in report['cases'] for s in c.get('steps', [])}
-    api_covered = len(case_paths)
+    api_covered = len({((e.get('method') or '').upper(), _canon(e.get('path', ''))) for e in module_eps
+                       if ((e.get('method') or '').upper(), _canon(e.get('path', ''))) in case_keys})
 
     summary_font = Font(bold=True)
     summary_fill = PatternFill('solid', fgColor='D9E1F2')
@@ -109,7 +123,13 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
         steps = c.get('steps', [])
         if not steps:
             continue
-        raw_path  = steps[0].get('path', '')
+        # 优先从 case name 提取路径（格式："{METHOD} /api/xxx - desc"）
+        # 避免多步骤 case 的前置步骤路径干扰归属
+        name_path_m = re.match(r'^[A-Z]+\s+(/\S+)', c.get('name', ''))
+        if name_path_m:
+            raw_path = name_path_m.group(1)
+        else:
+            raw_path = steps[-1].get('path', '')  # fallback: 取最后一步（实际被测接口）
         full_path = norm(raw_path)
         name = c.get('name', '')
         desc = c.get('description', '')
