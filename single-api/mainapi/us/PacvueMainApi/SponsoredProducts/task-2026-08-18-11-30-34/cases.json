@@ -1,0 +1,418 @@
+[
+  {
+    "name": "POST /api/SponsoredProducts/CreateCampaign - 创建SP手动投放Campaign(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredProducts/CreateCampaign 创建一次性SP手动投放Campaign(paused状态,不产生真实曝光/花费) + PUT Campaign/V4/Update 后置归档清理,保证用例可重复执行,不污染共享测试数据。500条随机样本中占比约100.0%（500次）。",
+    "module": "SponsoredProducts",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建SP Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredProducts/CreateCampaign",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "TargetingType": "MANUAL",
+          "Name": "TC-SponsoredProducts-CreateCampaign-AutoTest",
+          "DailyBudget": "10",
+          "State": "ENABLED",
+          "StartDate": "{{date_start_mdy}}",
+          "EndDate": "",
+          "BidStrategy": "legacyForSales",
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "Name": "TC-SP-CreateCampaign-AG",
+            "DefaultBid": "0.5",
+            "State": "ENABLED"
+          },
+          "Ads": [
+            {
+              "State": "ENABLED",
+              "ProductType": "ASIN",
+              "Product": "{{target_asin}}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建的Campaign",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/V4/Update",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignId": "{{created_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredProducts/CreateAdGroup - 在已有Campaign下创建AdGroup(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredProducts/CreateAdGroup 在测试账号已有SP Campaign下新建AdGroup + Adgroup/v3/BulkUpdataAdgroupState 后置归档清理,保证用例可重复执行。500条随机样本中占比约100.0%（500次）。",
+    "module": "SponsoredProducts",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredProducts/CreateAdGroup",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{exist_sp_campaign_id}}",
+          "Name": "TC-SponsoredProducts-CreateAdGroup-AutoTest",
+          "DefaultBid": "0.5",
+          "State": "ENABLED",
+          "TargetingType": "MANUAL",
+          "Ads": [
+            {
+              "State": "ENABLED",
+              "ProductType": "ASIN",
+              "Product": "{{target_asin}}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_adgroup_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建的AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Adgroup/v3/BulkUpdataAdgroupState",
+        "request_body": {
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "adGroupId": "{{created_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredProducts/CreateAd - 在已有AdGroup下创建Ad(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredProducts/CreateAd 在测试账号已有SP手动投放AdGroup下新建Ad + ProductAd/v3/BulkChangeState 后置归档清理,保证用例可重复执行。500条随机样本中占比约81.8%（36次,单Ad场景）。",
+    "module": "SponsoredProducts",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Ad",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredProducts/CreateAd",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "UserId": "{{user_id}}",
+          "Ads": [
+            {
+              "CampaignId": "{{sp_manual_pat_campaign_id}}",
+              "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "State": "ENABLED",
+              "ProductType": "ASIN",
+              "Product": "{{target_asin}}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_ad_id": "data.AdResponse.APIResult[0].EntityID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建的Ad",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductAd/v3/BulkChangeState",
+        "request_body": {
+          "adIds": [
+            {
+              "entityID": "{{created_ad_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredProducts/CopyCampaign - 复制SP Campaign到同profile(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredProducts/CopyCampaign 复制测试账号已有SP Campaign + PUT Campaign/V4/Update 后置归档清理新生成的副本,保证用例可重复执行。500条随机样本中占比约100.0%（500次,复制到不同profile均为同一业务场景,归一为复制到测试账号自身profile）。",
+    "module": "SponsoredProducts",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredProducts/CopyCampaign",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "Campaign": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "CampaignName": "copy of autoTest_CopyCampaign",
+            "DailyBudget": "10",
+            "StartDate": "{{date_start_mdy}}",
+            "EndDate": "",
+            "State": "paused"
+          },
+          "CopySdCreative": 0
+        },
+        "extract_vars": {
+          "created_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档复制出的新Campaign",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/V4/Update",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignId": "{{created_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredProducts/CopyCampaignV2 - 复制SP Campaign并指定AdGroup ASIN(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredProducts/CopyCampaignV2 复制测试账号已有SP Campaign并指定AdGroup下ASIN + PUT Campaign/V4/Update 后置归档清理,保证用例可重复执行。500条随机样本中占比约100.0%（500次,均为AdGroupAsins单/多元素两种,合并为同一业务场景）。",
+    "module": "SponsoredProducts",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制Campaign(V2,含AdGroupAsins)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredProducts/CopyCampaignV2",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "Campaign": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "CampaignName": "copy of autoTest_CopyCampaignV2",
+            "DailyBudget": "10",
+            "StartDate": "{{date_start_mdy}}",
+            "EndDate": "",
+            "State": "paused"
+          },
+          "CopySdCreative": 0,
+          "AdGroupAsins": [
+            {
+              "AdGroupId": "{{adgroup_id}}",
+              "Name": "TC-CopyCampaignV2-AG",
+              "Asins": [
+                "{{target_asin}}"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档复制出的新Campaign",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/V4/Update",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignId": "{{created_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived",
+              "campaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SponsoredProducts/UpdateAdVideo - 更新广告视频素材",
+    "description": "【高风险-仅生成不执行】单接口测试：POST /api/SponsoredProducts/UpdateAdVideo。直接修改已有真实广告的视频创意素材绑定,不是创建操作,无法通过\"创建后归档\"的方式清理,原始素材绑定难以准确还原。按用户要求(写操作若无法创建后归档则仅生成用例不执行)仅生成case定义。500条随机样本中占比约53.5%（259次,批量场景）。",
+    "module": "SponsoredProducts",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateAdVideo",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredProducts/UpdateAdVideo",
+        "request_body": {
+          "UserId": "{{user_id}}",
+          "Ads": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{sp_manual_pat_campaign_id}}",
+              "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "AdId": "{{test_ad_id}}",
+              "OptimizeText": false,
+              "AddAssert": [],
+              "RemoveAssert": [],
+              "UpdateAssert": [],
+              "State": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SponsoredProducts/UpdateCampaignBidding - 批量调整Campaign出价策略",
+    "description": "【高风险-仅生成不执行】单接口测试：POST /api/SponsoredProducts/UpdateCampaignBidding。直接修改已有真实Campaign的出价调整策略(如CreativeBidAdjustmentsDetail),不是创建操作,原始出价配置未知无法准确还原。按用户要求(写操作若无法创建后归档则仅生成用例不执行)仅生成case定义。500条随机样本中占比约76.8%（258次,单Campaign+创意出价调整场景）。",
+    "module": "SponsoredProducts",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateCampaignBidding",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredProducts/UpdateCampaignBidding",
+        "request_body": {
+          "CampaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "EventType": 0,
+          "CreativeBidAdjustmentsDetail": {
+            "KindType": 0,
+            "IsIncrease": false,
+            "AdjustPercentage": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,714 @@
+[
+  {
+    "name": "POST /api/SearchTerm/v3/GetKeywordQueryChart - 默认聚合图表(无文本过滤)",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetKeywordQueryChart。不带具体query文本过滤,查看聚合趋势图,带adGroupStates/campaignStates/campaignTypeItems完整过滤维度。500条随机样本中占比约7.0%（35次,该分支最高频）。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordQueryChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetKeywordQueryChart",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1
+          },
+          "toMarket": "US",
+          "campaignTypeItems": [
+            {
+              "CampaignType": "sponsoredProducts",
+              "items": []
+            }
+          ],
+          "campaignStates": [
+            "enabled",
+            "paused"
+          ],
+          "adGroupStates": [
+            "enabled",
+            "paused"
+          ],
+          "export": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetKeywordQueryChart - 按query文本过滤图表",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetKeywordQueryChart。按具体query文本(Operand=Equal)过滤查看单个搜索词趋势图。500条随机样本中该分支合计占比约9%以上(多个toMarket/日期子集合并,均为同一业务意图:按query钻取)。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordQueryChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetKeywordQueryChart",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [
+            {
+              "Field": "query",
+              "Operand": "Equal",
+              "Value": "{{searchterm_query_text}}"
+            }
+          ],
+          "isAnd": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1
+          },
+          "toMarket": "US",
+          "campaignTypeItems": [],
+          "export": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetKeywordQueryReport - 默认聚合报表(无文本过滤)",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetKeywordQueryReport。byQuery=1,不带query文本过滤,查看聚合分页报表。500条随机样本中占比约2.4%（12次,该分支最高频）。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordQueryReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetKeywordQueryReport",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20,
+            "PageCount": 0,
+            "TotalDataCount": 0
+          },
+          "byQuery": 1,
+          "dim": "ytd",
+          "filter": [],
+          "textFilters": [],
+          "campaignTypeItems": [],
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetKeywordQueryReport - 按query文本过滤报表",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetKeywordQueryReport。byQuery=1,按具体query文本过滤查看单个搜索词分页报表。500条随机样本中占比约1.4%（7次）。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordQueryReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetKeywordQueryReport",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20,
+            "PageCount": 0,
+            "TotalDataCount": 0
+          },
+          "byQuery": 1,
+          "dim": "ytd",
+          "filter": [
+            {
+              "Field": "query",
+              "Operand": "Equal",
+              "Value": "{{searchterm_query_text}}"
+            }
+          ],
+          "textFilters": [],
+          "campaignTypeItems": [],
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetKeywordQuerySelectAll - 全选查询词",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetKeywordQuerySelectAll。近90天ES无真实调用记录,按GetKeywordQueryReport同构规则构造。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordQuerySelectAll",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetKeywordQuerySelectAll",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "dim": "ytd",
+          "filter": [],
+          "campaignTypeItems": [],
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetKeywordQueryTotal - 默认聚合汇总(无文本过滤)",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetKeywordQueryTotal。byQuery=1,fromType=1,不带query文本过滤的聚合汇总。500条随机样本中占比约3.4%（17次,该分支最高频）。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordQueryTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetKeywordQueryTotal",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "byQuery": 1,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "fromType": 1,
+          "nonbid": false,
+          "export": false,
+          "dynamicQuery": [
+            "query"
+          ],
+          "textFilters": [],
+          "campaignTypeItems": [],
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetKeywordQueryTotal - 按query文本过滤汇总",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetKeywordQueryTotal。byQuery=1,fromType=1,按具体query文本过滤汇总。500条随机样本中占比约1.6%（8次）。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordQueryTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetKeywordQueryTotal",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [
+            {
+              "Field": "query",
+              "Operand": "Equal",
+              "Value": "{{searchterm_query_text}}"
+            }
+          ],
+          "isAnd": 0,
+          "byQuery": 1,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "fromType": 1,
+          "nonbid": false,
+          "export": false,
+          "dynamicQuery": [
+            "query"
+          ],
+          "textFilters": [],
+          "campaignTypeItems": [],
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20
+          },
+          "toMarket": "US",
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetPATQueryChart - PAT查询词趋势图",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetPATQueryChart。近90天ES无真实调用记录,按Swagger结构+同模块GetPATQueryReport真实字段规律构造。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPATQueryChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetPATQueryChart",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "dim": "ytd",
+          "filters": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "filter": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "byQuery": 1,
+          "groupBy": 1,
+          "isExchange": 0,
+          "kindType": "",
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetPATQueryReport - 按Metric条件过滤PAT报表",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetPATQueryReport。byQuery=1,按Click等Metric条件过滤PAT查询词分页报表(4条真实样本均为此类Metric过滤形态,已全覆盖)。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPATQueryReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetPATQueryReport",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "dim": "ytd",
+          "filters": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "filter": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "byQuery": 1,
+          "groupBy": 1,
+          "isExchange": 0,
+          "kindType": "",
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetPATQuerySelectAll - PAT全选查询词",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetPATQuerySelectAll。近90天ES无真实调用记录,按GetPATQueryReport同构规则构造。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPATQuerySelectAll",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetPATQuerySelectAll",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "dim": "ytd",
+          "filters": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "filter": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "byQuery": 1,
+          "groupBy": 1,
+          "isExchange": 0,
+          "kindType": "",
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/GetPATQueryTotal - PAT查询词汇总",
+    "description": "单接口测试：POST /api/SearchTerm/v3/GetPATQueryTotal。近90天ES无真实调用记录,按GetPATQueryReport同构规则构造聚合汇总请求。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPATQueryTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/GetPATQueryTotal",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "dim": "ytd",
+          "filters": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "filter": [
+            {
+              "field": "Click",
+              "operand": 0,
+              "value": "0",
+              "isNot": 0
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "byQuery": 1,
+          "groupBy": 1,
+          "isExchange": 0,
+          "kindType": "",
+          "toMarket": "US",
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageIndex": 1,
+            "PageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SearchTerm/v3/BulkSaveKeywordsTags - 批量添加关键词标签(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/SearchTerm/v3/BulkSaveKeywordsTags。近90天ES无真实调用记录。限定campaignIds/adgroupIds+query文本过滤到测试专用SearchTerm campaign,第1步添加测试标签,第2步删除同一标签还原,保证用例可重复且不影响其他真实关键词标签。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "为受控搜索词添加测试标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/BulkSaveKeywordsTags",
+        "request_body": {
+          "editKeywordTagIds": [
+            "{{test_keyword_tag_id}}"
+          ],
+          "deleteKeywordTagIds": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{searchterm_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{searchterm_adgroup_id}}"
+          ],
+          "filters": [
+            {
+              "Field": "query",
+              "Operand": "LikeOr",
+              "Value": "{{searchterm_query_text}}",
+              "isNot": 0
+            }
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除本次添加的测试标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/BulkSaveKeywordsTags",
+        "request_body": {
+          "editKeywordTagIds": [],
+          "deleteKeywordTagIds": [
+            "{{test_keyword_tag_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{searchterm_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{searchterm_adgroup_id}}"
+          ],
+          "filters": [
+            {
+              "Field": "query",
+              "Operand": "LikeOr",
+              "Value": "{{searchterm_query_text}}",
+              "isNot": 0
+            }
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SearchTerm/v3/BulkAllUpdateKeywords - 按条件批量调整关键词出价",
+    "description": "【高风险-仅生成不执行】单接口测试：POST /api/SearchTerm/v3/BulkAllUpdateKeywords。按campaignIds/adgroupIds/filters条件批量修改匹配到的所有关键词出价(bids/bidPercent),该接口无单一keywordId/targetId字段可精确限定单个实体,一次调用可能影响筛选范围内的多个真实关键词且各自原始出价未知,无法安全地\"改完就还原\"。近90天ES无真实调用记录。按用户要求(写操作若无法安全创建/还原则仅生成用例不执行)仅生成case定义。",
+    "module": "SearchTerm",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkAllUpdateKeywords",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SearchTerm/v3/BulkAllUpdateKeywords",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{sp_manual_pat_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{sp_manual_pat_adgroup_id}}"
+          ],
+          "matchType": [
+            "exact"
+          ],
+          "type": 1,
+          "bidPercent": 5,
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

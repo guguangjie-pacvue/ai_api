@@ -1,0 +1,280 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-18T03:32:35.350255+00:00",
+  "total": 10,
+  "passed": 7,
+  "failed": 3,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/SyncData/v3/BulkSyncData - 按日期范围同步Campaign数据",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 BulkSyncData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/BulkSyncData",
+          "status_code": 200,
+          "ms": 1339,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/BulkSyncDspData - 同步DSP数据",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 BulkSyncDspData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/BulkSyncDspData",
+          "status_code": 200,
+          "ms": 1076,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "Unexpected character encountered while parsing value: <. Path '', line 0, position 0.   at Newtonsoft.Json.JsonTextReader.ParseValue()\n   at Newtonsoft.Json.JsonReader.ReadAndMoveToContent()\n   at Newtonsoft.Json.Serialization.JsonSerializerInternalReader.Deserialize(JsonReader reader, Type objectType, Boolean checkAdditionalContent)\n   at Newtonsoft.Json.JsonSerializer.DeserializeInternal(JsonReader reader, Type objectType)\n   at Newtonsoft.Json.JsonConvert.DeserializeObject(String value, Type type, JsonSerializerSettings settings)\n   at Newtonsoft.Json.JsonConvert.DeserializeObject[T](String value, JsonSerializerSettings settings)\n   at Pacvue.MainApi.Domain.Services.SyncDataService.SyncSetting(Int64 profileId, Int64 userId, String type) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/SyncDataService.cs:line 762\n   at Pacvue.MainApi.Domain.Services.SyncDataService.BulkSyncDspData(SyncDataParam input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/SyncDataService.cs:line 790\n   at Pacvue.MainApi.Core.Controllers.SyncDataController.BulkSyncDspData(SyncDataInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/SyncDataController.cs:line 120\n   at lambda_method20913(Closure, Object)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/GetDspPerformanceSyncDatas - 查DSP表现同步数据",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 GetDspPerformanceSyncDatas",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/GetDspPerformanceSyncDatas",
+          "status_code": 200,
+          "ms": 961,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "Incorrect syntax near ')'.\nIncorrect syntax near ')'.\nIncorrect syntax near ')'.\nIncorrect syntax near ')'.   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\n   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\n   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()\n   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\n   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\n   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)\n   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)\n   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)\n   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior) in /_/Dapper/SqlMapper.cs:line 1066\n   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1094\n   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\n   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 734\n   at Pacvue.MainApi.Repository.SyncData.SyncDataRepository.GetDSPReportSyncDataOutPut(List`1 proIds, String minDate) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Repository/SyncData/SyncDataRepository.cs:line 170\n   at Castle.Proxies.Invocations.ISyncDataRepository_GetDSPReportSyncDataOutPut.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.IBaseRepository`2Proxy_41.GetDSPReportSyncDataOutPut(List`1 proIds, String minDate)\n   at Pacvue.MainApi.Domain.Services.SyncDataService.GetDspReportSyncDataOutPut(SyncDataPageParam input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/SyncDataService.cs:line 335\n   at Pacvue.MainApi.Core.Controllers.SyncDataController.GetDspPerformanceSyncDatas(SyncDataPageInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/SyncDataController.cs:line 96\n   at lambda_method20921(Closure, Object)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/GetDspSettingSyncDatas - 查DSP设置同步数据",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 GetDspSettingSyncDatas",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/GetDspSettingSyncDatas",
+          "status_code": 200,
+          "ms": 1263,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "Incorrect syntax near ')'.\nIncorrect syntax near ')'.   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\n   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\n   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()\n   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\n   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\n   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)\n   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)\n   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)\n   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior) in /_/Dapper/SqlMapper.cs:line 1066\n   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1094\n   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\n   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 734\n   at Pacvue.MainApi.Repository.SyncData.SyncDataRepository.GetDspSyncDataOutPut(List`1 proIds) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Repository/SyncData/SyncDataRepository.cs:line 212\n   at Castle.Proxies.Invocations.ISyncDataRepository_GetDspSyncDataOutPut.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.IBaseRepository`2Proxy_40.GetDspSyncDataOutPut(List`1 proIds)\n   at Pacvue.MainApi.Domain.Services.SyncDataService.GetDspSyncDataOutPut(SyncDataPageParam input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/SyncDataService.cs:line 422\n   at Pacvue.MainApi.Core.Controllers.SyncDataController.GetDspSettingSyncDatas(SyncDataPageInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/SyncDataController.cs:line 84\n   at lambda_method25117(Closure, Object)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/GetLastAMSSyncData - 查最近AMS同步时间",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetLastAMSSyncData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/GetLastAMSSyncData",
+          "status_code": 200,
+          "ms": 1133,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 5,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/GetLastDSPSyncData - 查最近DSP同步时间",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetLastDSPSyncData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/GetLastDSPSyncData",
+          "status_code": 200,
+          "ms": 2427,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 5,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/GetLastEligibilitySyncData - 查最近Eligibility同步时间",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetLastEligibilitySyncData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/GetLastEligibilitySyncData",
+          "status_code": 200,
+          "ms": 2525,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:LastUpdate,LastUpdateTimezone,SyncingProfiles,SyncedProfiles",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/GetSyncDatas - 分页查询同步数据",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSyncDatas",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/GetSyncDatas",
+          "status_code": 200,
+          "ms": 1160,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/GetSyncInfoDatas - 分页查询同步信息数据",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSyncInfoDatas",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/GetSyncInfoDatas",
+          "status_code": 200,
+          "ms": 1388,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/SyncData/v3/SyncEligibility - 触发Eligibility同步",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SyncEligibility",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/SyncData/v3/SyncEligibility",
+          "status_code": 200,
+          "ms": 1045,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-08-18T03:32:49.674438+00:00"
+}
