@@ -15,7 +15,7 @@ from collections import defaultdict
 
 ES_URL   = "https://logs.pacvue.com/internal/search/es"
 ES_AUTH  = base64.b64encode(b"watcher:kY9GErML%luQTorm").decode()
-ES_INDEX = "amazon-access-*"
+ES_INDEX = "amazon-access-*"  # 默认值，可通过 --es-index 覆盖
 NOISE_FILTERS = {'ReportDateTime', 'AdGroupState', 'CampaignState', 'State',
                  'ServingStatus', 'TargetState', 'KeywordState', 'AdState'}
 
@@ -163,7 +163,10 @@ def _write_pct(case, n, total):
     case['description'] = desc + f'500条随机样本中占比约{pct}%（{n}次）。'
     return pct
 
-def backfill_file(cases_path):
+def backfill_file(cases_path, es_index=None):
+    global ES_INDEX
+    if es_index:
+        ES_INDEX = es_index
     with open(cases_path, encoding='utf-8-sig') as f:
         cases = json.load(f)
 
@@ -214,7 +217,11 @@ def backfill_file(cases_path):
     return summary
 
 if __name__ == '__main__':
-    import sys
-    for name, n, pct in backfill_file(sys.argv[1]):
+    import sys, argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument('cases_path')
+    ap.add_argument('--es-index', default=None, help='ES 索引，默认 amazon-access-*，rule-api 传 rule-access-*')
+    args = ap.parse_args()
+    for name, n, pct in backfill_file(args.cases_path, args.es_index):
         pcts = f'{pct:>5}%' if pct is not None else '  N/A'
         print(f'    {n:>3} ({pcts})  {name[:55]}')

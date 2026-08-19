@@ -20,6 +20,7 @@ description: 单接口测试 case 生成。以 Swagger 为接口定义基线，�
 
 ## 🔴 目录结构（强制）
 
+**标准服务**（如 mainapi）：
 ```
 single-api/
 ├── endpoints-<info.title>.json              # 每个 Swagger 一份全量接口列表（放根目录）
@@ -33,11 +34,25 @@ single-api/
                     └── report.json
 ```
 
-- **五层：服务 / 环境 / swagger / 模块 / task**。环境层（us/cn/eu）将三个独立部署的用户数据和配置隔离，同一接口在不同环境的用户行为差异显著，必须分开生成 case。
+**多平台服务**（如 rule-api，平台参数存在时多加一层）：
+```
+single-api/
+└── rule-api/
+    └── <平台>/                               # 🔴 平台层：amazon / tiktok / walmart 等
+        └── <环境>/                           # 环境层：us / cn / eu
+            ├── config.json                   # 环境+平台级配置
+            └── <模块>/                       # 模块目录，如 Definition / Template / History
+                └── task-<YYYY-MM-DD-HH-MM-SS>/
+                    ├── cases.json
+                    └── report.json
+```
+
+- **标准服务五层：服务 / 环境 / swagger / 模块 / task**。环境层（us/cn/eu）将三个独立部署的用户数据和配置隔离，同一接口在不同环境的用户行为差异显著，必须分开生成 case。
+- **多平台服务六层：服务 / 平台 / 环境 / 模块 / task**。平台在环境之上，因为不同平台的规则逻辑和测试数据完全不同，是比环境更高维度的划分。调用 skill 时若传入平台参数，自动使用多平台目录结构；无平台参数则使用标准结构。
 - **按服务组织，不是按平台**：一个服务可能对应**多个 Swagger**（如 mainapi 服务下同时有 `Amazon.Advertising.Api` 和 `PacvueMainApi` 两个 Swagger）。
-- **config.json 是环境级**：每个环境有独立的 `single-api/<服务>/<环境>/config.json`，含该环境的 token、profile_id、base_urls 等；不同环境的 base_url 域名不同，不能共用。
+- **config.json 是环境级**：每个环境有独立的 `single-api/<服务>/<环境>/config.json`（标准）或 `single-api/<服务>/<平台>/<环境>/config.json`（多平台），含该环境的 token、profile_id、base_urls 等；不同环境的 base_url 域名不同，不能共用。
 - **服务名**先查 `single-api/services.json` 反查（见"输入"第二步）：命中用表里的名，未命中问用户后回写；默认一 swagger 一服务、名=`info.title`。
-- **swagger 层名**取该接口来源 spec 的 `info.title`（也是 `endpoints-<title>.json` 的 title）。
+- **swagger 层名**取该接口来源 spec 的 `info.title`（也是 `endpoints-<title>.json` 的 title）。多平台服务无 swagger 层，模块名直接取接口 tag。
 - **模块名**取接口路径首段（如 `/api/Target/*` → `Target`，`/api/Targeting/V3/*` → `Targeting`）。
 - **endpoints-*.json 放 `single-api/` 根**，文件名取各 Swagger 的 `info.title`（一个 Swagger 一份，与环境/服务/模块正交，Swagger 结构不分环境）。
 
@@ -69,8 +84,10 @@ single-api/
 {
   "<服务名>": {
     "github_repo": "<仓库名>",
-    "swagger_titles": ["<info.title>", "..."],
-    "swagger_urls": ["<swagger json url>", "..."],
+    "swaggers": [
+      { "title": "<info.title>", "url": "<swagger json url>" }
+    ],
+    "platforms": ["amazon", "tiktok", "walmart"],
     "es_index": {
       "us": "<US ES 索引，如 amazon-access-*>",
       "cn": "<CN ES 索引，如 cn-amazon-access-*>",
@@ -81,13 +98,17 @@ single-api/
 }
 ```
 
+- `swaggers`：title 和 url 配对，取代原来的 `swagger_titles` + `swagger_urls` 两个并列数组
+- `platforms`：仅多平台服务有此字段（如 rule-api）；无此字段则走标准目录结构，config 路径含 `{env}`；有此字段则走多平台目录结构，config 路径含 `{platform}/{env}`
+
 **流程**：
 1. 读 `single-api/services.json`（不存在则视为空表）
-2. 用用户给的 swagger URL / 扫描出的 `info.title` 去匹配某条目的 `swagger_urls` / `swagger_titles`
+2. 用用户给的 swagger URL / 扫描出的 `info.title` 去匹配某条目的 `swaggers[].url` / `swaggers[].title`
    - **命中** → 直接得到服务名、`es_index`（对象）、`config` 路径模板，**不再向用户提问服务归属**，进环境确认
    - **未命中** → 只问一次：`"这些 swagger 属于哪个服务？(默认按各自 info.title 分开；若同属一个服务请给统一名，如 mainapi)"`，收到后**追加/更新 `services.json`**，下次自动命中
-3. **确认目标环境**：若用户请求中已明确环境（如"CN 环境"、"eu"），直接使用；否则反问一次：`"为哪个环境生成 case？us / cn / eu"`。根据环境从 `es_index.<env>` 取对应索引，config 路径替换 `{env}` 为实际环境名
-4. 默认规则：一个 swagger 一个服务，服务名 = `info.title`；仅当用户显式归并时才多 swagger 合一
+3. **确认目标平台**（仅多平台服务）：若服务含 `platforms` 字段且用户请求中已明确平台，直接使用；否则反问一次列出可选项。config 路径替换 `{platform}` 为实际平台名
+4. **确认目标环境**：若用户请求中已明确环境（如"CN 环境"、"eu"），直接使用；否则反问一次：`"为哪个环境生成 case？us / cn / eu"`。根据环境从 `es_index.<env>` 取对应索引，config 路径替换 `{env}` 为实际环境名
+5. 默认规则：一个 swagger 一个服务，服务名 = `info.title`；仅当用户显式归并时才多 swagger 合一
 
 ES 连接信息已固定，无需用户提供：
 - **Kibana 地址**：`https://logs.pacvue.com`
@@ -275,8 +296,14 @@ $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-J
 **旧 case 占比补算（`scripts/backfill_pct.py`）**：若已有 cases.json 缺占比，用此脚本按现有 case 的判别签名重新查 ES 统计并回填：
 
 ```powershell
+# 标准服务（mainapi，默认 amazon-access-*）
 python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
-  "single-api/<服务>/<swagger>/<模块>/task-<timestamp>/cases.json"
+  "single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json"
+
+# 多平台服务（rule-api，需指定 ES 索引）
+python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
+  "single-api/rule-api/<平台>/<环境>/<模块>/task-<timestamp>/cases.json" `
+  --es-index "rule-access-*"
 ```
 
 **🔴 增/查/改/删全部统计**，脚本按 `(接口路径, HTTP方法)` 分组，各组独立查 ES：
@@ -500,6 +527,8 @@ for api,v in sorted(by_api.items()):
 
 ## Phase 5 — 写入 Excel 统计表（🔴 每次执行后必做）
 
+Excel 文件按服务独立存放：`single-api/<服务>/swagger_modules.xlsx`（update_excel.py 从 cases 路径自动推断，无需手动指定）。
+
 同时写入两个目标：
 
 | 目标 | Sheet | 内容 |
@@ -547,6 +576,6 @@ python ".claude/skills/swagger-api-case/scripts/update_excel.py" `
 | `single-api/<服务>/<环境>/config.json` | 🔴 环境级执行配置（token、profile_id、base_urls 等），us/cn/eu 各一份 |
 | `single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
 | `single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
-| `single-api/swagger_modules.xlsx`（`模块汇总` sheet） | 更新 Case数 / 通过率 / 接口覆盖率三列 |
+| `single-api/<服务>/swagger_modules.xlsx`（`模块汇总` sheet） | 更新 Case数 / 通过率 / 接口覆盖率三列，每个服务独立一份 |
 
 对话中额外输出**待补清单**（若有 `[NEEDS_REAL_VALUE]` 字段）。

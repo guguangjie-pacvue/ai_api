@@ -20,7 +20,7 @@ import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
-EXCEL_PATH = 'single-api/swagger_modules.xlsx'
+EXCEL_PATH = None  # 从 cases 路径自动推断：single-api/<服务>/swagger_modules.xlsx
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 def _thin_border():
@@ -184,8 +184,15 @@ def main():
     ap.add_argument('--swagger-title',  required=True, dest='swagger_title')
     ap.add_argument('--module',         required=True)
     ap.add_argument('--env',            default='us', choices=['us', 'cn', 'eu'])
-    ap.add_argument('--excel',          default=EXCEL_PATH)
+    ap.add_argument('--excel',          default=None,
+                    help='Excel 路径，默认从 cases 路径推断：single-api/<服务>/swagger_modules.xlsx')
     args = ap.parse_args()
+
+    # 自动推断 excel 路径：取 cases 路径中 single-api/<服务> 部分
+    if not args.excel:
+        import re as _re
+        m = _re.match(r'(.*?single-api/[^/]+)/', args.cases.replace('\\', '/'))
+        args.excel = (m.group(1) + '/swagger_modules.xlsx') if m else 'single-api/swagger_modules.xlsx'
 
     with open(args.cases,     encoding='utf-8-sig') as f: cases     = json.load(f)
     with open(args.report,    encoding='utf-8-sig') as f: report    = json.load(f)
