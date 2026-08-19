@@ -1,0 +1,2445 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-19T03:00:05.914607+00:00",
+  "total": 90,
+  "passed": 83,
+  "failed": 7,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Budget/v1/GetPortfolioForecastSpendAndSales - 按profile列表获取组合预测支出与销售额",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetPortfolioForecastSpendAndSales",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v1/GetPortfolioForecastSpendAndSales",
+          "status_code": 200,
+          "ms": 828,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:data,tbdata,forecast,totalData",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v1/GetPredictAcosAndSales - 基于历史预测数据推算新增花费下的ACOS与销售额",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetPredictAcosAndSales",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v1/GetPredictAcosAndSales",
+          "status_code": 200,
+          "ms": 994,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:newACOS,newSales",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v1/GetProfileBudgetMode - 获取profile当前预算管理模式",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetProfileBudgetMode",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v1/GetProfileBudgetMode?profileId=2755545444012419",
+          "status_code": 200,
+          "ms": 1045,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/Analysis - 获取指定tag指定月份的预算分析",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 Analysis",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/Analysis",
+          "status_code": 200,
+          "ms": 1761,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "Object reference not set to an instance of an object.   at Pacvue.MainApi.Domain.Services.BudgetManagerService.Analysis(BudgetAnalysisInput input, String token) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/BudgetManagerService.cs:line 4326\n   at Castle.Proxies.Invocations.IBudgetManagerService_Analysis.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.IBudgetManagerServiceProxy.Analysis(BudgetAnalysisInput input, String token)\n   at Pacvue.MainApi.Core.Controllers.BudgetController.<>c__DisplayClass97_0.<Analysis>b__0() in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 2037\n   at Pacvue.MainApi.Core.Controllers.BudgetController.ExecuteWithMessage[T](Func`1 func) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 2381\n   at Pacvue.MainApi.Core.Controllers.BudgetController.Analysis(BudgetAnalysisInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 2037\n   at lambda_method6829(Closure, Object, Object[])\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()\n--- End of stack trace from previous location ---\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/BatchSetCalendar - 批量为BudgetLine绑定Calendar",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 BatchSetCalendar",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/BatchSetCalendar",
+          "status_code": 200,
+          "ms": 2416,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/BudgetLevelSetting - 设置profile预算管理级别(SubTagging)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 BudgetLevelSetting",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/BudgetLevelSetting",
+          "status_code": 200,
+          "ms": 2389,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 500",
+            "success expected True, got false"
+          ],
+          "resp_code": 500,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "All the tags selected have already been added before."
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/BudgetLevelSettingCheck - 校验预算级别设置前的冲突情况",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 BudgetLevelSettingCheck",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/BudgetLevelSettingCheck",
+          "status_code": 200,
+          "ms": 10435,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:duplicatedCampaigns,otherCampaignsSpend,otherCampaignsSpendTotal,managedTagIds,showDuplicatedCampaigns",
+          "data_len": 5,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/BudgetLevelSettingV3 - 设置预算级别V3(含pacing/控制/预算集)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 BudgetLevelSettingV3",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/BudgetLevelSettingV3",
+          "status_code": 200,
+          "ms": 1677,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/BudgetNotificationEmailSetting - 设置预算通知邮件规则",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 BudgetNotificationEmailSetting",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/BudgetNotificationEmailSetting",
+          "status_code": 200,
+          "ms": 2137,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/CheckIsBudgetManaged - 检查tag是否已被预算管理",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 CheckIsBudgetManaged",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/CheckIsBudgetManaged",
+          "status_code": 200,
+          "ms": 2002,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/CreateOrEditCalendar - 新建Calendar(含后置删除,可重复执行)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建Calendar",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/CreateOrEditCalendar",
+          "status_code": 200,
+          "ms": 2498,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询Calendar列表提取新建id",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetCalendarNames",
+          "status_code": 200,
+          "ms": 1926,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建Calendar",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/DeleteCalendar",
+          "status_code": 200,
+          "ms": 3050,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/DailyGoalData - 获取每日预算目标数据",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 DailyGoalData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/DailyGoalData",
+          "status_code": 200,
+          "ms": 1855,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 18,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/DownloadBudgetOperateLog - 下载预算操作日志Excel",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 DownloadBudgetOperateLog",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/DownloadBudgetOperateLog",
+          "status_code": 200,
+          "ms": 2205,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "__binary__",
+            "content_type",
+            "size"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/DownloadBudgetTemple - 下载预算导入模板Excel",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 DownloadBudgetTemple",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/DownloadBudgetTemple",
+          "status_code": 200,
+          "ms": 1290,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "__binary__",
+            "content_type",
+            "size"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Budget/v3/DownloadBulkBudgetSettingsTemple - 下载批量预算设置模板Excel",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 DownloadBulkBudgetSettingsTemple",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/DownloadBulkBudgetSettingsTemple?profileId=2755545444012419&start=07/18/2026&end=08/17/2026&term=0&impr=0",
+          "status_code": 200,
+          "ms": 5578,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "__binary__",
+            "content_type",
+            "size"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/DownloadCampaingsBudgetSuggestion - 下载campaign预算建议Excel",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 DownloadCampaingsBudgetSuggestion",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/DownloadCampaingsBudgetSuggestion",
+          "status_code": 200,
+          "ms": 1725,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "__binary__",
+            "content_type",
+            "size"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetBudgetCampaignTag - 获取profile下预算相关campaign标签",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetCampaignTag",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetCampaignTag",
+          "status_code": 200,
+          "ms": 845,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetBudgetDashboard - 获取预算仪表盘数据",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetDashboard",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetDashboard",
+          "status_code": 200,
+          "ms": 4887,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:budgets,totalBudgets,totalSpends,totalSales,ROAS,ACOS,totalDeliveryRate,CurrentTime",
+          "data_len": 8,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetBudgetInsight - 获取预算洞察",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetInsight",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetInsight",
+          "status_code": 200,
+          "ms": 963,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "No performance data found"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetBudgetLog - 获取预算变更日志(分页)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 GetBudgetLog",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetLog",
+          "status_code": 0,
+          "ms": 120667,
+          "pass": false,
+          "failures": [
+            "http 0"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "__err__"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "The read operation timed out"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetBudgetLogDetails - 获取预算变更日志详情(分页)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetLogDetails",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetLogDetails",
+          "status_code": 200,
+          "ms": 1076,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Budget/v3/GetBudgetNotificationEmailSetting - 获取当前用户预算通知邮件设置",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetNotificationEmailSetting",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetNotificationEmailSetting",
+          "status_code": 200,
+          "ms": 1006,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,UserId,status,greaterSDR,lessSDR,isSOS,isReenable,emails",
+          "data_len": 11,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetBudgetOperateLog - 获取预算操作日志(分页)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetOperateLog",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetOperateLog",
+          "status_code": 200,
+          "ms": 1035,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetBudgetWidget - 获取预算小组件汇总数据",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetWidget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetBudgetWidget",
+          "status_code": 200,
+          "ms": 7202,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:profiles,totalCount,totalBudgets,totalSpends,CurrentDays,top4tag",
+          "data_len": 6,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetCalendarLog - 获取Calendar变更日志(分页)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetCalendarLog",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetCalendarLog",
+          "status_code": 200,
+          "ms": 875,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetCalendarManagement - 获取Calendar管理列表(分页)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetCalendarManagement",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetCalendarManagement",
+          "status_code": 200,
+          "ms": 995,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Budget/v3/GetCalendarNames - 获取Calendar名称列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetCalendarNames",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetCalendarNames",
+          "status_code": 200,
+          "ms": 842,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Budget/v3/GetCampaignBudgetBatchLog - 获取campaign预算批量操作日志",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetCampaignBudgetBatchLog",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetCampaignBudgetBatchLog?start=07/18/2026&end=08/17/2026",
+          "status_code": 200,
+          "ms": 834,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetCampaingsBudgetSuggestion - 获取campaign预算建议(分页)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetCampaingsBudgetSuggestion",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetCampaingsBudgetSuggestion",
+          "status_code": 200,
+          "ms": 962,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:start,end,Data,Total,minBudgetPct,pageInfo",
+          "data_len": 6,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetDailyBudgetData - 获取每日预算数据",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetDailyBudgetData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetDailyBudgetData",
+          "status_code": 200,
+          "ms": 1254,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:profileId,tagId,monthOfYear,date,DailyMode2,CalendarId,CalendarName,Rollover",
+          "data_len": 10,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetEditCalendar - 获取Calendar编辑详情",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetEditCalendar",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetEditCalendar",
+          "status_code": 200,
+          "ms": 1306,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,Name,MonthData",
+          "data_len": 3,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Budget/v3/GetFiscalYear - 获取当前财年设置",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetFiscalYear",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetFiscalYear",
+          "status_code": 200,
+          "ms": 1078,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:start,end,CurrentTime,MonthOfPassed",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetForecastSpendAndSales - 获取预测支出与销售",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetForecastSpendAndSales",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetForecastSpendAndSales",
+          "status_code": 200,
+          "ms": 3384,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:chartData,monthData,monthAvgData,forecastData",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetLastMonthSpendsV3 - 获取上月花费(tag/subtag级)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetLastMonthSpendsV3",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetLastMonthSpendsV3",
+          "status_code": 200,
+          "ms": 2139,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetMonthOfDailyBudget - 获取按月每日预算启用情况",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetMonthOfDailyBudget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetMonthOfDailyBudget",
+          "status_code": 200,
+          "ms": 1154,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 24,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetOtherCampaignInfoV2 - 获取未选中tag之外的其他campaign信息",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetOtherCampaignInfoV2",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetOtherCampaignInfoV2",
+          "status_code": 200,
+          "ms": 2687,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetPacingTrend - 获取预算配速趋势(分页)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetPacingTrend",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetPacingTrend",
+          "status_code": 200,
+          "ms": 1060,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetParentTags - 获取父级标签列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetParentTags",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetParentTags",
+          "status_code": 200,
+          "ms": 1341,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 154,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetProfileBudgetVsActualSpends - 获取profile预算与实际花费对比",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetProfileBudgetVsActualSpends",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetProfileBudgetVsActualSpends",
+          "status_code": 200,
+          "ms": 3726,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 6,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetSettingBudgetLineInfo - 获取预算设置行详情",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSettingBudgetLineInfo",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetSettingBudgetLineInfo",
+          "status_code": 200,
+          "ms": 993,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetSettingBudgetLines - 获取预算设置行列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSettingBudgetLines",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetSettingBudgetLines",
+          "status_code": 200,
+          "ms": 1053,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetSubTagDefaultBudget - 获取子标签默认预算",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSubTagDefaultBudget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetSubTagDefaultBudget",
+          "status_code": 200,
+          "ms": 1480,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetSubTagMonthlyBudget - 获取子标签月度预算",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSubTagMonthlyBudget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetSubTagMonthlyBudget",
+          "status_code": 200,
+          "ms": 934,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 12,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetSubTagSuggestAllocation - 获取子标签建议分配额度",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSubTagSuggestAllocation",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetSubTagSuggestAllocation",
+          "status_code": 200,
+          "ms": 881,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetSubTags - 获取标签下的子标签列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetSubTags",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetSubTags",
+          "status_code": 200,
+          "ms": 3540,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 10,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetTagBudgetSets - 获取标签预算集合",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTagBudgetSets",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetTagBudgetSets",
+          "status_code": 200,
+          "ms": 941,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetTagBudgetVsActualSpends - 获取标签预算与实际花费对比",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTagBudgetVsActualSpends",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetTagBudgetVsActualSpends",
+          "status_code": 200,
+          "ms": 1127,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 6,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetTop5CampaignDailySpend - 获取花费Top5的campaign每日花费",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTop5CampaignDailySpend",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetTop5CampaignDailySpend",
+          "status_code": 200,
+          "ms": 831,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetTopUnderPacingTags - 获取配速不足标签Top列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTopUnderPacingTags",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetTopUnderPacingTags",
+          "status_code": 200,
+          "ms": 1840,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,yData,msg",
+          "data_len": 3,
+          "msg": "No tag is under pacing, every tag is good"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetTopUnderPacingTagsInsight - 获取配速不足标签洞察",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTopUnderPacingTagsInsight",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetTopUnderPacingTagsInsight",
+          "status_code": 200,
+          "ms": 1220,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": "No tag is under pacing, every tag is good"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/GetYearBudgetSetting - 获取年度预算设置",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetYearBudgetSetting",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetYearBudgetSetting",
+          "status_code": 200,
+          "ms": 2399,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:profileId,ProfileName,ParentTag,SubTag,FiscalYear,FiscalYearBudget,allocatingType,isControl",
+          "data_len": 15,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/GetBudgetCampaignHasEnableAdgroup - 获取含启用广告组的campaign列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetCampaignHasEnableAdgroup",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/GetBudgetCampaignHasEnableAdgroup",
+          "status_code": 200,
+          "ms": 1592,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/GetBudgetNotificationSettings - 获取预算通知设置(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetBudgetNotificationSettings",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/GetBudgetNotificationSettings",
+          "status_code": 200,
+          "ms": 1063,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/GetTagAiInfo - 获取标签AI信息(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTagAiInfo",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/GetTagAiInfo",
+          "status_code": 200,
+          "ms": 1353,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/budgetCampaignReport - 获取campaign预算报表(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 budgetCampaignReport",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/budgetCampaignReport",
+          "status_code": 200,
+          "ms": 1231,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "records",
+            "total",
+            "size",
+            "current"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/budgetCampaignReportV1 - 获取campaign预算报表V1(含avgSpend,中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 budgetCampaignReportV1",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/budgetCampaignReportV1",
+          "status_code": 200,
+          "ms": 859,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "records",
+            "total",
+            "size",
+            "current"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/budgetCampaignReportV2 - 获取campaign预算报表V2(含avgSpend与hasEnableAdgroup,中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 budgetCampaignReportV2",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/budgetCampaignReportV2",
+          "status_code": 200,
+          "ms": 2083,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "records",
+            "total",
+            "size",
+            "current"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/budgetCampaignTagReport - 获取campaign标签预算报表(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 budgetCampaignTagReport",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/budgetCampaignTagReport",
+          "status_code": 200,
+          "ms": 1252,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "records",
+            "total",
+            "size",
+            "current"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/budgetProfileReport - 获取profile预算报表(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 budgetProfileReport",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/budgetProfileReport",
+          "status_code": 200,
+          "ms": 909,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/getBudgetInsight - 获取预算洞察(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 getBudgetInsight",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/getBudgetInsight",
+          "status_code": 200,
+          "ms": 905,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/getNoDailyBudgetCampaigns - 获取无每日预算设置的campaign列表(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 getNoDailyBudgetCampaigns",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/getNoDailyBudgetCampaigns",
+          "status_code": 200,
+          "ms": 2951,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/getProfiles - 按clientId/userId获取profile列表(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 getProfiles",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/getProfiles?clientId=3186&userId=18183",
+          "status_code": 200,
+          "ms": 898,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/getProfilesByUser - 按userId数组获取profile列表(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 getProfilesByUser",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/getProfilesByUser",
+          "status_code": 200,
+          "ms": 885,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/getUserList - 获取用户列表(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 getUserList",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/getUserList",
+          "status_code": 200,
+          "ms": 2020,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/getUsersByIds - 按用户id数组批量获取用户信息(中台集成)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 getUsersByIds",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/getUsersByIds",
+          "status_code": 200,
+          "ms": 867,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/integration/updateCampaignStateOrDailyBudget - 更新campaign状态或每日预算(页面操作调用)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 updateCampaignStateOrDailyBudget(改为11)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/updateCampaignStateOrDailyBudget",
+          "status_code": 200,
+          "ms": 2230,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "totalCount",
+            "successCount",
+            "ErrorMessages"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "调用 updateCampaignStateOrDailyBudget(恢复为10)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/integration/updateCampaignStateOrDailyBudget",
+          "status_code": 200,
+          "ms": 2557,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "totalCount",
+            "successCount",
+            "ErrorMessages"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/RemoveBudgetSetting - 移除profile预算设置(含后置恢复,保证可重复执行)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "移除profile预算设置",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/RemoveBudgetSetting",
+          "status_code": 200,
+          "ms": 1860,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置恢复-重新设置profile预算模式",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/BudgetLevelSettingV3",
+          "status_code": 200,
+          "ms": 932,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/ResetDefaultSubTagTarget - 重置子标签默认目标",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 ResetDefaultSubTagTarget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/ResetDefaultSubTagTarget",
+          "status_code": 200,
+          "ms": 1084,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetAllocatingType - 设置预算分配类型",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetAllocatingType",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetAllocatingType",
+          "status_code": 200,
+          "ms": 929,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetAutoReenable - 设置自动重新启用",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetAutoReenable",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetAutoReenable",
+          "status_code": 200,
+          "ms": 888,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetAutomateBudgetControl - 设置自动预算控制",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetAutomateBudgetControl",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetAutomateBudgetControl",
+          "status_code": 200,
+          "ms": 1337,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetAutomateBudgetPacing - 设置自动预算配速",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetAutomateBudgetPacing",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetAutomateBudgetPacing",
+          "status_code": 200,
+          "ms": 882,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetBudgetControlSetting - 设置完整自动预算配置",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetBudgetControlSetting",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetBudgetControlSetting",
+          "status_code": 200,
+          "ms": 1074,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetBudgetRollover - 设置预算结转",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetBudgetRollover",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetBudgetRollover",
+          "status_code": 200,
+          "ms": 1452,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetDefaultSubTagTarget - 设置子标签默认目标",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetDefaultSubTagTarget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetDefaultSubTagTarget",
+          "status_code": 200,
+          "ms": 879,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetFiscalYear - 设置财年起止月份",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetFiscalYear",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetFiscalYear",
+          "status_code": 200,
+          "ms": 917,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetFiscalYearBudget - 设置财年预算",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetFiscalYearBudget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetFiscalYearBudget",
+          "status_code": 200,
+          "ms": 1099,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetMonthlyBudget - 设置月度预算",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 SetMonthlyBudget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetMonthlyBudget",
+          "status_code": 200,
+          "ms": 881,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "Object reference not set to an instance of an object.   at Pacvue.MainApi.Domain.Services.BudgetManagerService.SetMonthlyBudget(MonthlyBudgetInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/BudgetManagerService.cs:line 5207\n   at Castle.Proxies.Invocations.IBudgetManagerService_SetMonthlyBudget.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.IBudgetManagerServiceProxy.SetMonthlyBudget(MonthlyBudgetInput input)\n   at Pacvue.MainApi.Core.Controllers.BudgetController.SetMonthlyBudget(MonthlyBudgetInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 252\n   at lambda_method4768(Closure, Object, Object[])\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()\n--- End of stack trace from previous location ---\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetSubTagBudget - 设置子标签预算",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 SetSubTagBudget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetSubTagBudget",
+          "status_code": 200,
+          "ms": 2014,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 500",
+            "success expected True, got false"
+          ],
+          "resp_code": 500,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "please set subtag budget"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetSubTagMonthlyTarget - 设置子标签月度目标",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 SetSubTagMonthlyTarget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetSubTagMonthlyTarget",
+          "status_code": 200,
+          "ms": 918,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "Object reference not set to an instance of an object.   at Pacvue.MainApi.Domain.Services.BudgetManagerService.SetSubTagMonthlyTarget(List`1 input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/BudgetManagerService.cs:line 5695\n   at Castle.Proxies.Invocations.IBudgetManagerService_SetSubTagMonthlyTarget.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.IBudgetManagerServiceProxy.SetSubTagMonthlyTarget(List`1 input)\n   at Pacvue.MainApi.Core.Controllers.BudgetController.SetSubTagMonthlyTarget(List`1 input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 361\n   at lambda_method6407(Closure, Object, Object[])\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()\n--- End of stack trace from previous location ---\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetTargetACOS - 设置目标ACOS",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetTargetACOS",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetTargetACOS",
+          "status_code": 200,
+          "ms": 1540,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SetTargetROAS - 设置目标ROAS",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 SetTargetROAS",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SetTargetROAS",
+          "status_code": 200,
+          "ms": 1541,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/SubmitDailyBudgetSetting - 提交每日预算设置(含前置创建Calendar+后置清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置创建临时Calendar",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/CreateOrEditCalendar",
+          "status_code": 200,
+          "ms": 1206,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询Calendar列表提取新建id",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/GetCalendarNames",
+          "status_code": 200,
+          "ms": 837,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "提交每日预算设置",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/SubmitDailyBudgetSetting",
+          "status_code": 200,
+          "ms": 931,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除临时Calendar",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/DeleteCalendar",
+          "status_code": 200,
+          "ms": 2959,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/UpdateBatchCampaignMaxSpend - 批量更新campaign最大花费",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 UpdateBatchCampaignMaxSpend",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/UpdateBatchCampaignMaxSpend",
+          "status_code": 200,
+          "ms": 1667,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/UpdateBatchCampaignMinSpend - 批量更新campaign最小花费",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 UpdateBatchCampaignMinSpend",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/UpdateBatchCampaignMinSpend",
+          "status_code": 200,
+          "ms": 975,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/UpdateBudgetMode - 更新profile预算模式",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 UpdateBudgetMode",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/UpdateBudgetMode",
+          "status_code": 200,
+          "ms": 994,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/UpdateCampaignDailyBudget - 更新campaign每日预算(批量,含checking)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 UpdateCampaignDailyBudget",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/UpdateCampaignDailyBudget?checking=true",
+          "status_code": 200,
+          "ms": 1572,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/UpdateCampaignMaxSpend - 更新单个campaign最大花费",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 UpdateCampaignMaxSpend",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/UpdateCampaignMaxSpend",
+          "status_code": 200,
+          "ms": 1048,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/UpdateCampaignMinSpend - 更新单个campaign最小花费",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 UpdateCampaignMinSpend",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/UpdateCampaignMinSpend",
+          "status_code": 200,
+          "ms": 2152,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Budget/v3/UpdateMinBudgetPercent - 更新最小预算百分比",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 UpdateMinBudgetPercent",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Budget/v3/UpdateMinBudgetPercent",
+          "status_code": 200,
+          "ms": 992,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "This tag is not managed by budget manager   at Pacvue.MainApi.Domain.Services.BudgetManagerService.UpdateMinBudgetPercent(CampaignMinDailyBudgetPctInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/BudgetManagerService.cs:line 6520\n   at Castle.Proxies.Invocations.IBudgetManagerService_UpdateMinBudgetPercent.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.IBudgetManagerServiceProxy.UpdateMinBudgetPercent(CampaignMinDailyBudgetPctInput input)\n   at Pacvue.MainApi.Core.Controllers.BudgetController.<>c__DisplayClass49_0.<UpdateMinBudgetPercent>b__0() in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 677\n   at Pacvue.MainApi.Core.Controllers.BudgetController.<>c__DisplayClass120_0.<ExecuteWithMessage>b__0() in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 2372\n   at Pacvue.MainApi.Core.Controllers.BudgetController.ExecuteWithMessage[T](Func`1 func) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 2381\n   at Pacvue.MainApi.Core.Controllers.BudgetController.ExecuteWithMessage(Action act) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 2370\n   at Pacvue.MainApi.Core.Controllers.BudgetController.UpdateMinBudgetPercent(CampaignMinDailyBudgetPctInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/BudgetController.cs:line 675\n   at lambda_method5821(Closure, Object, Object[])\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()\n--- End of stack trace from previous location ---\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-08-19T03:04:49.554637+00:00"
+}
