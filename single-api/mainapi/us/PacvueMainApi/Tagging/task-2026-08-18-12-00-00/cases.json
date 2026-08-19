@@ -1,0 +1,102 @@
+[
+  {
+    "name": "POST /api/Tagging/v3/GetMutilCampaignMatchRuleDiff - 查询多标签匹配规则差异",
+    "description": "单接口测试：POST /api/Tagging/v3/GetMutilCampaignMatchRuleDiff。查询多个Campaign标签的匹配规则差异，用于批量规则管理时对比各标签规则状态。500条随机样本中占比约100%(107次，均为portfolioIds+profileIds模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询多标签匹配规则差异",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetMutilCampaignMatchRuleDiff",
+        "request_body": {
+          "portfolioIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/GetAdGroupTagByAdgroupForPermission - 按广告组查其标签（权限模式）",
+    "description": "单接口测试：POST /api/Tagging/v3/GetAdGroupTagByAdgroupForPermission。根据广告组ID列表查询各广告组所属标签，isCheckEdit=true为权限过滤模式，ES样本全部为该模式。500条随机样本中占比约100%(16次，单一场景)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按广告组查询所属标签（权限模式）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAdGroupTagByAdgroupForPermission",
+        "request_body": {
+          "adgroups": [
+            {
+              "adGroupId": "{{adgroup_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "isCheckEdit": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CheckCampaignTagsHasMatchRule - 检查标签是否有匹配规则",
+    "description": "单接口测试：POST /api/Tagging/v3/CheckCampaignTagsHasMatchRule。批量检查指定Campaign标签是否配置了匹配规则，用于前端显示规则图标。500条随机样本中占比约100%(9次，均为tagIds数组模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "检查Campaign标签是否有匹配规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CheckCampaignTagsHasMatchRule",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

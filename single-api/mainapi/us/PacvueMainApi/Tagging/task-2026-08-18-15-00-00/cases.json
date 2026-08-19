@@ -1,0 +1,65 @@
+[
+  {
+    "name": "POST /api/Tagging/v3/AddAdGroupsToTags - 添加广告组到标签（含后置清理,可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/AddAdGroupsToTags。将广告组列表添加到指定广告组标签，removeTag=false为添加模式。第2步用DeleteAdGroupFromTag移除（同步覆盖DeleteAdGroupFromTag接口），保证幂等可重复。500条随机样本中占比约100%(1976次)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "添加广告组到标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/AddAdGroupsToTags",
+        "request_body": {
+          "adGroupTagName": "",
+          "userId": "{{user_id}}",
+          "tagIds": [
+            "{{test_adgroup_tag_id}}"
+          ],
+          "removeTag": false,
+          "isSaveValid": false,
+          "clientId": "{{client_id}}",
+          "adgroup_check": [
+            {
+              "adgroupId": "{{adgroup_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-DeleteAdGroupFromTag移除广告组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAdGroupFromTag",
+        "request_body": {
+          "tagIds": [
+            "{{test_adgroup_tag_id}}"
+          ],
+          "adGroupIds": [
+            "{{adgroup_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,571 @@
+[
+  {
+    "name": "POST /api/SponsoredTelevision/Campaign/Create - enabled持续投放(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredTelevision/Campaign/Create。创建STV广告活动，State=enabled，无EndDate，立即开始投放。第2步后置调用Campaign/V4/Update归档活动。500条随机样本中占比约25%(7次)。",
+    "module": "SponsoredTeleviseMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建STV Campaign(enabled,持续投放)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Campaign/Create",
+        "request_body": {
+          "Name": "autocase_stv_campaign_enabled",
+          "State": "enabled",
+          "StartDate": "2026/09/01 00:15:00",
+          "ProfileId": "{{profile_id}}",
+          "DailyBudget": 21,
+          "CampaignTagIds": []
+        },
+        "extract_vars": {
+          "created_stv_campaign_id_1": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建STV活动(enabled持续)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "sponsoredTelevision",
+              "campaignId": "{{created_stv_campaign_id_1}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevision/Campaign/Create - enabled限时投放(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredTelevision/Campaign/Create。创建STV广告活动，State=enabled，有EndDate限定投放区间。第2步后置归档活动。500条随机样本中占比约21%(6次)。",
+    "module": "SponsoredTeleviseMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建STV Campaign(enabled,限时投放)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Campaign/Create",
+        "request_body": {
+          "Name": "autocase_stv_campaign_enabled_enddate",
+          "State": "enabled",
+          "StartDate": "2026/09/01 00:15:00",
+          "EndDate": "2026/12/31 00:15:00",
+          "ProfileId": "{{profile_id}}",
+          "DailyBudget": 21,
+          "CampaignTagIds": []
+        },
+        "extract_vars": {
+          "created_stv_campaign_id_2": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建STV活动(enabled限时)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "sponsoredTelevision",
+              "campaignId": "{{created_stv_campaign_id_2}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevision/Campaign/Create - paused暂停建单(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredTelevision/Campaign/Create。创建STV广告活动，State=paused，先建后手动开启，无EndDate。第2步后置归档活动。500条随机样本中占比约45%(13次)。",
+    "module": "SponsoredTeleviseMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建STV Campaign(paused,无EndDate)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Campaign/Create",
+        "request_body": {
+          "Name": "autocase_stv_campaign_paused",
+          "State": "paused",
+          "StartDate": "2026/09/01 00:15:00",
+          "ProfileId": "{{profile_id}}",
+          "DailyBudget": 21,
+          "CampaignTagIds": []
+        },
+        "extract_vars": {
+          "created_stv_campaign_id_3": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建STV活动(paused无EndDate)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "sponsoredTelevision",
+              "campaignId": "{{created_stv_campaign_id_3}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevision/Campaign/Create - paused限时暂停(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredTelevision/Campaign/Create。创建STV广告活动，State=paused，有EndDate指定投放截止日期。第2步后置归档活动。500条随机样本中占比约7%(2次)。",
+    "module": "SponsoredTeleviseMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建STV Campaign(paused,有EndDate)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Campaign/Create",
+        "request_body": {
+          "Name": "autocase_stv_campaign_paused_enddate",
+          "State": "paused",
+          "StartDate": "2026/09/01 00:15:00",
+          "EndDate": "2026/12/31 00:15:00",
+          "ProfileId": "{{profile_id}}",
+          "DailyBudget": 21,
+          "CampaignTagIds": []
+        },
+        "extract_vars": {
+          "created_stv_campaign_id_4": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建STV活动(paused有EndDate)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "sponsoredTelevision",
+              "campaignId": "{{created_stv_campaign_id_4}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevision/AdGroup/Create - 标准STV广告组(含前置建Campaign+后置清理,可重复)",
+    "description": "单接口测试：POST /api/SponsoredTelevision/AdGroup/Create。先建临时STV Campaign，再在其下创建enabled广告组(DefaultBid=10)，第3步归档活动(Campaign归档可级联归档其下AdGroup)，保证用例可重复执行。注：BulkUpdataAdgroupState不支持sponsoredTelevision类型，改用Campaign级联归档。23条样本均为enabled+DefaultBid 10-12，为单一模式。500条随机样本中占比约100%(23次)。",
+    "module": "SponsoredTeleviseMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "预备-创建临时STV Campaign(用于AdGroup/Create测试)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Campaign/Create",
+        "request_body": {
+          "Name": "autocase_stv_campaign_for_ag",
+          "State": "paused",
+          "StartDate": "2026/09/01 00:15:00",
+          "ProfileId": "{{profile_id}}",
+          "DailyBudget": 21,
+          "CampaignTagIds": []
+        },
+        "extract_vars": {
+          "temp_stv_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "在STV Campaign下创建AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/AdGroup/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{temp_stv_campaign_id}}",
+          "Name": "autocase_stv_adgroup",
+          "State": "enabled",
+          "DefaultBid": 10
+        },
+        "extract_vars": {
+          "created_stv_adgroup_id": "data.AdgroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true,
+            "AdgroupId": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档临时STV Campaign(级联归档其下AdGroup)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "sponsoredTelevision",
+              "campaignId": "{{temp_stv_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevision/Ad/Create - 标准STV素材无LandingPage(含前置建层级+后置清理,可重复)",
+    "description": "单接口测试：POST /api/SponsoredTelevision/Ad/Create。先建临时Campaign和AdGroup，在其下创建STV素材(ASIN B07PGC6XV9 + 视频资产{{stv_asset_id_original}}，无LandingPage)，第4步归档Campaign(级联归档AdGroup和Ad)，保证用例可重复执行。⚠️ 执行前需将config.json中stv_asset_id_original更新为测试账号当前有效的STV合规视频AssetId，历史AssetId均已失效。500条随机样本中占比约96%(22次)。",
+    "module": "SponsoredTeleviseMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "预备-创建临时STV Campaign(用于Ad/Create测试)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Campaign/Create",
+        "request_body": {
+          "Name": "autocase_stv_campaign_for_ad",
+          "State": "paused",
+          "StartDate": "2026/09/01 00:15:00",
+          "ProfileId": "{{profile_id}}",
+          "DailyBudget": 21,
+          "CampaignTagIds": []
+        },
+        "extract_vars": {
+          "temp_stv_campaign_for_ad_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "预备-创建临时STV AdGroup(用于Ad/Create测试)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/AdGroup/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{temp_stv_campaign_for_ad_id}}",
+          "Name": "autocase_stv_ag_for_ad",
+          "State": "enabled",
+          "DefaultBid": 10
+        },
+        "extract_vars": {
+          "temp_stv_adgroup_for_ad_id": "data.AdgroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "创建STV Ad(无LandingPage,ASIN+视频)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Ad/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{temp_stv_campaign_for_ad_id}}",
+          "AdgroupId": "{{temp_stv_adgroup_for_ad_id}}",
+          "Name": "autocase_stv_ad_no_landing",
+          "State": "ENABLED",
+          "Products": [
+            {
+              "ProductIdType": "ASIN",
+              "ProductId": "B07PGC6XV9"
+            }
+          ],
+          "Videos": {
+            "AssetId": "{{stv_asset_id_original}}",
+            "AssetVersion": "version_v1"
+          }
+        },
+        "extract_vars": {
+          "created_stv_ad_id": "data.AdId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true,
+            "AdId": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档临时STV Campaign(级联归档AdGroup和Ad)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "sponsoredTelevision",
+              "campaignId": "{{temp_stv_campaign_for_ad_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevision/Ad/Create - STV素材含LandingPage=OFF_AMAZON_LINK(含前置建层级+后置清理,可重复)",
+    "description": "单接口测试：POST /api/SponsoredTelevision/Ad/Create。先建临时Campaign和AdGroup，在其下创建STV素材，LandingPage.LandingPageType=OFF_AMAZON_LINK，第4步归档Campaign(级联归档AdGroup和Ad)，保证用例可重复执行。⚠️ 执行前需将config.json中stv_asset_id_original更新为有效STV合规视频AssetId。500条随机样本中占比约4%(1次)。",
+    "module": "SponsoredTeleviseMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "预备-创建临时STV Campaign(用于Ad/Create OFF_AMAZON_LINK测试)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Campaign/Create",
+        "request_body": {
+          "Name": "autocase_stv_campaign_for_ad_offamz",
+          "State": "paused",
+          "StartDate": "2026/09/01 00:15:00",
+          "ProfileId": "{{profile_id}}",
+          "DailyBudget": 21,
+          "CampaignTagIds": []
+        },
+        "extract_vars": {
+          "temp_stv_campaign_offamz_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "预备-创建临时STV AdGroup(用于Ad/Create OFF_AMAZON_LINK测试)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/AdGroup/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{temp_stv_campaign_offamz_id}}",
+          "Name": "autocase_stv_ag_for_ad_offamz",
+          "State": "enabled",
+          "DefaultBid": 10
+        },
+        "extract_vars": {
+          "temp_stv_adgroup_offamz_id": "data.AdgroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true
+          }
+        }
+      },
+      {
+        "name": "创建STV Ad(LandingPage=OFF_AMAZON_LINK+ASIN+视频)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevision/Ad/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "CampaignId": "{{temp_stv_campaign_offamz_id}}",
+          "AdgroupId": "{{temp_stv_adgroup_offamz_id}}",
+          "Name": "autocase_stv_ad_off_amazon",
+          "State": "ENABLED",
+          "LandingPage": {
+            "LandingPageType": "OFF_AMAZON_LINK"
+          },
+          "Products": [
+            {
+              "ProductIdType": "ASIN",
+              "ProductId": "B07PGC6XV9"
+            }
+          ],
+          "Videos": {
+            "AssetId": "{{stv_asset_id_original}}",
+            "AssetVersion": "version_v1"
+          }
+        },
+        "extract_vars": {
+          "created_stv_ad_offamz_id": "data.AdId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "IsSuccess": true,
+            "AdId": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档临时STV Campaign(OFF_AMAZON_LINK,级联归档AdGroup和Ad)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "sponsoredTelevision",
+              "campaignId": "{{temp_stv_campaign_offamz_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-19T08:53:52.242Z",
+  "finished_at": "2026-08-19T08:53:59.312Z",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Tagging/v3/DeleteCampaignsFromTag - 从标签删除Campaign（含前置添加,可重复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-UpdateCampaignTag将测试Campaign加入测试标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/UpdateCampaignTag",
+          "request_body": {
+            "portfolioId": "4623520",
+            "tagIds": [
+              "4623520"
+            ],
+            "portfolioName": "autotest_tag_v2",
+            "campaigns": [
+              {
+                "campaignId": "154528180950009",
+                "profileId": "2755545444012419"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": "Sucess",
+            "msg": ""
+          }
+        },
+        {
+          "name": "从标签删除Campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/DeleteCampaignsFromTag",
+          "request_body": {
+            "profileIds": [
+              "2755545444012419"
+            ],
+            "campaignIds": [
+              "154528180950009"
+            ],
+            "tagIds": [
+              "4623520"
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Success",
+              "result": [],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        }
+      ]
+    }
+  ]
+}

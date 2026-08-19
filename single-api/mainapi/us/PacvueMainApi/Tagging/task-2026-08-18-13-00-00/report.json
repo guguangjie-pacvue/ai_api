@@ -1,0 +1,176 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-19T02:32:29.634Z",
+  "finished_at": "2026-08-19T02:32:49.661Z",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Tagging/v3/AddAsinsToAsinTagging - 添加ASIN到标签（含后置清理,可重复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "添加ASIN到标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/AddAsinsToAsinTagging",
+          "request_body": {
+            "tagIds": [
+              "75707"
+            ],
+            "asins": [
+              "B0FJYJRM8J"
+            ],
+            "toMarket": "US"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {
+              "id": 0,
+              "ids": [],
+              "message": "Total:1,Success:1,Failed:0",
+              "result": [],
+              "code": 200,
+              "successCount": 1,
+              "insertCount": null,
+              "removeCount": null,
+              "totalCount": 1,
+              "failedCount": 0,
+              "IsBackground": 0,
+              "success": true,
+              "description": null
+            },
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置清理-从标签移除ASIN（同步覆盖RemoveAsinsToAsinTagging）",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/RemoveAsinsToAsinTagging",
+          "request_body": {
+            "tagIds": [
+              "75707"
+            ],
+            "asins": [
+              "B0FJYJRM8J"
+            ],
+            "toMarket": "US"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": "",
+            "msg": "success"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Tagging/v3/SaveAsinToTag - 保存ASIN到标签（含后置清理,可重复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "保存ASIN到标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/SaveAsinToTag",
+          "request_body": {
+            "tagId": "257577",
+            "asins": [
+              "B0FJYJRM8J"
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": "successfully",
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置清理-从标签移除ASIN",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/RemoveAsinsToAsinTagging",
+          "request_body": {
+            "tagIds": [
+              "257577"
+            ],
+            "asins": [
+              "B0FJYJRM8J"
+            ],
+            "toMarket": "US"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": "",
+            "msg": "success"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Tagging/v3/EditAsinTag - 重命名ASIN标签（含后置还原,可重复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "将ASIN标签重命名为autotest_asin_v1",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/EditAsinTag",
+          "request_body": {
+            "tagId": "257577",
+            "asinTagName": "autotest_asin_v1",
+            "parent": "75707"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {},
+            "msg": "success"
+          }
+        },
+        {
+          "name": "后置还原-将ASIN标签名改回autotest_asin_v2",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tagging/v3/EditAsinTag",
+          "request_body": {
+            "tagId": "257577",
+            "asinTagName": "autotest_asin_v2",
+            "parent": "75707"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "success": true,
+            "data": {},
+            "msg": "success"
+          }
+        }
+      ]
+    }
+  ]
+}
