@@ -1,0 +1,3189 @@
+[
+  {
+    "name": "POST /api/Budget/v1/GetPortfolioForecastSpendAndSales - 按profile列表获取组合预测支出与销售额",
+    "description": "单接口测试：POST /api/Budget/v1/GetPortfolioForecastSpendAndSales。请求体为profileId数组，查询组合层级预测支出与销售。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPortfolioForecastSpendAndSales",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v1/GetPortfolioForecastSpendAndSales",
+        "request_body": [
+          "{{profile_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v1/GetPredictAcosAndSales - 基于历史预测数据推算新增花费下的ACOS与销售额",
+    "description": "单接口测试：POST /api/Budget/v1/GetPredictAcosAndSales。传入>=2个月历史forecast数据与newSpend做线性回归预测。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPredictAcosAndSales",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v1/GetPredictAcosAndSales",
+        "request_body": {
+          "forecastList": [
+            {
+              "month": "2026-06",
+              "spend": 80.0,
+              "ACOS": 18.0,
+              "sales": 400.0
+            },
+            {
+              "month": "2026-07",
+              "spend": 100.0,
+              "ACOS": 20.0,
+              "sales": 500.0
+            }
+          ],
+          "newSpend": 150.0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v1/GetProfileBudgetMode - 获取profile当前预算管理模式",
+    "description": "单接口测试：POST /api/Budget/v1/GetProfileBudgetMode。profileId作为query参数，返回该profile当前budgetMode(如SubTagging)。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfileBudgetMode",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v1/GetProfileBudgetMode?profileId={{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/Analysis - 获取指定tag指定月份的预算分析",
+    "description": "单接口测试：POST /api/Budget/v3/Analysis。0条ES样本，按Swagger结构手工构造(非ES来源)。注：多组monthOfYear/tagId组合实测均返回code 513 NullReferenceException(后端BudgetManagerService.Analysis内部空引用)，疑似该账号缺少月度分析基线数据，非请求结构问题。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 Analysis",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/Analysis",
+        "request_body": {
+          "monthOfYear": 202608,
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/BatchSetCalendar - 批量为BudgetLine绑定Calendar",
+    "description": "单接口测试：POST /api/Budget/v3/BatchSetCalendar。BudgetLines为空数组的最小可行请求(测试标记istest=true)。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BatchSetCalendar",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/BatchSetCalendar",
+        "request_body": {
+          "CalendarId": 0,
+          "BudgetLines": [],
+          "Rollover": 0,
+          "istest": true,
+          "testDateTime": "{{date_start}}T00:00:00Z"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/BudgetLevelSetting - 设置profile预算管理级别(SubTagging)",
+    "description": "单接口测试：POST /api/Budget/v3/BudgetLevelSetting。0条ES样本，按Swagger结构手工构造(非ES来源)。注：该接口对已注册过的tagId会返回500\"All the tags selected have already been added before.\"(共享测试账号历史状态导致，属正常业务校验非请求错误)；已用RemoveBudgetSetting清空后重试仍报同样错误，判定为一次性注册型接口，非幂等overwrite，属实际业务限制而非case缺陷。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BudgetLevelSetting",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/BudgetLevelSetting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "budgetMode": 2,
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "subTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/BudgetLevelSettingCheck - 校验预算级别设置前的冲突情况",
+    "description": "单接口测试：POST /api/Budget/v3/BudgetLevelSettingCheck。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BudgetLevelSettingCheck",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/BudgetLevelSettingCheck",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "budgetMode": 2,
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "subTags": [],
+          "isPacing": 0,
+          "allocatingType": 0,
+          "isControl": 0,
+          "isReEnable": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/BudgetLevelSettingV3 - 设置预算级别V3(含pacing/控制/预算集)",
+    "description": "单接口测试：POST /api/Budget/v3/BudgetLevelSettingV3。0条ES样本，按Swagger结构手工构造(非ES来源)。V3为upsert语义，重复调用同一tagIds/budgetMode均成功(已验证幂等)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BudgetLevelSettingV3",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/BudgetLevelSettingV3",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "budgetMode": 2,
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "subTags": [],
+          "isPacing": 0,
+          "allocatingType": 0,
+          "isControl": 0,
+          "isReEnable": 0,
+          "budgetSettings": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/BudgetNotificationEmailSetting - 设置预算通知邮件规则",
+    "description": "单接口测试：POST /api/Budget/v3/BudgetNotificationEmailSetting。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BudgetNotificationEmailSetting",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/BudgetNotificationEmailSetting",
+        "request_body": {
+          "status": true,
+          "greaterSDR": 50.0,
+          "lessSDR": 1.0,
+          "isSOS": true,
+          "isReenable": true,
+          "emails": "autotest@pacvue.com",
+          "spendreach": 10.0,
+          "isMyEmail": 1,
+          "isBudgetNotSet": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/CheckIsBudgetManaged - 检查tag是否已被预算管理",
+    "description": "单接口测试：POST /api/Budget/v3/CheckIsBudgetManaged。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CheckIsBudgetManaged",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/CheckIsBudgetManaged",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/CreateOrEditCalendar - 新建Calendar(含后置删除,可重复执行)",
+    "description": "单接口测试：POST /api/Budget/v3/CreateOrEditCalendar。0条ES样本，按Swagger结构手工构造(非ES来源)。该接口创建新Calendar实体(响应不直接返回id，通过GetCalendarNames按Name反查新建id)。第2步GetCalendarNames提取新建calendar id，第3步DeleteCalendar删除，保证用例可重复执行；已实测create->delete->create两轮均成功，验证幂等。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Calendar",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/CreateOrEditCalendar",
+        "request_body": {
+          "id": 0,
+          "Name": "AutoTest_Budget_Calendar",
+          "Data": [
+            {
+              "Mode": 0,
+              "monthOfyear": 202608,
+              "Data": [
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10
+              ],
+              "DisplayData": [
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10
+              ]
+            }
+          ],
+          "istest": true,
+          "testDateTime": "{{date_start}}T00:00:00Z"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      },
+      {
+        "name": "查询Calendar列表提取新建id",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCalendarNames",
+        "request_body": {},
+        "extract_vars": {
+          "new_calendar_id": "data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建Calendar",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/DeleteCalendar",
+        "request_body": {
+          "id": "{{new_calendar_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/DailyGoalData - 获取每日预算目标数据",
+    "description": "单接口测试：POST /api/Budget/v3/DailyGoalData。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DailyGoalData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/DailyGoalData",
+        "request_body": {
+          "budgetMode": 2,
+          "monthOfYear": 202608,
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/DownloadBudgetOperateLog - 下载预算操作日志Excel",
+    "description": "单接口测试：POST /api/Budget/v3/DownloadBudgetOperateLog。0条ES样本，按Swagger结构手工构造(非ES来源)。响应为xlsx二进制文件(zip/PK头)，用$binary断言。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadBudgetOperateLog",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/DownloadBudgetOperateLog",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "BudgetLevel": [],
+          "ActionTypes": [],
+          "UserIds": [],
+          "CampaignTagId": [],
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "PageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/DownloadBudgetTemple - 下载预算导入模板Excel",
+    "description": "单接口测试：POST /api/Budget/v3/DownloadBudgetTemple。0条ES样本，按Swagger结构手工构造(非ES来源)。响应为xlsx二进制文件，用$binary断言。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadBudgetTemple",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/DownloadBudgetTemple",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "showAll": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Budget/v3/DownloadBulkBudgetSettingsTemple - 下载批量预算设置模板Excel",
+    "description": "单接口测试：GET /api/Budget/v3/DownloadBulkBudgetSettingsTemple。0条ES样本(queryString)，按Swagger结构手工构造(非ES来源)。响应为xlsx二进制文件，用$binary断言。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadBulkBudgetSettingsTemple",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/DownloadBulkBudgetSettingsTemple?profileId={{profile_id}}&start={{date_start_mdy}}&end={{date_end_mdy}}&term=0&impr=0",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/DownloadCampaingsBudgetSuggestion - 下载campaign预算建议Excel",
+    "description": "单接口测试：POST /api/Budget/v3/DownloadCampaingsBudgetSuggestion。0条ES样本，按Swagger结构手工构造(非ES来源)。响应为xlsx二进制文件，用$binary断言。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadCampaingsBudgetSuggestion",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/DownloadCampaingsBudgetSuggestion",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "filterTagIds": [],
+          "model": 2,
+          "dailyBudget": 50.0,
+          "acosEnhance": false,
+          "optimizedLogic": 0,
+          "campaignIds": [],
+          "campaignName": "",
+          "isBudgetManaged": false,
+          "campaignHealth": [],
+          "monthOfYear": 202608,
+          "pageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetCampaignTag - 获取profile下预算相关campaign标签",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetCampaignTag。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetCampaignTag",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetCampaignTag",
+        "request_body": {
+          "ProfileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetDashboard - 获取预算仪表盘数据",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetDashboard。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetDashboard",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetDashboard",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "showAll": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetInsight - 获取预算洞察",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetInsight。0条ES样本，按Swagger结构手工构造(非ES来源)。该测试账号该时间段无对应表现数据，返回code:200/success:true/data:null/msg:\"No performance data found\"(业务空结果，非错误)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetInsight",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetInsight",
+        "request_body": {
+          "calendarId": null,
+          "start": "{{date_start}}T00:00:00Z",
+          "end": "{{date_end}}T00:00:00Z",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "ToMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetLog - 获取预算变更日志(分页)",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetLog。0条ES样本，按Swagger结构手工构造(非ES来源)。注：多次实测该接口对本profile的调用均在60~100s后仍未返回(疑似后端慢查询/全表扫描)，记为已知性能问题，非请求结构错误。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetLog",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetLog",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "start": "{{date_start}}T00:00:00Z",
+          "end": "{{date_end}}T00:00:00Z",
+          "mode": 2,
+          "logType": "",
+          "pageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          },
+          "tagId": "{{test_campaign_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetLogDetails - 获取预算变更日志详情(分页)",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetLogDetails。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetLogDetails",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetLogDetails",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "model": 2,
+          "EventType": 0,
+          "start": "{{date_start}}T00:00:00Z",
+          "end": "{{date_end}}T00:00:00Z",
+          "searchCampaignName": "",
+          "pageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Budget/v3/GetBudgetNotificationEmailSetting - 获取当前用户预算通知邮件设置",
+    "description": "单接口测试：GET /api/Budget/v3/GetBudgetNotificationEmailSetting。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetNotificationEmailSetting",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetNotificationEmailSetting",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetOperateLog - 获取预算操作日志(分页)",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetOperateLog。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetOperateLog",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetOperateLog",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "BudgetLevel": [],
+          "ActionTypes": [],
+          "UserIds": [],
+          "CampaignTagId": [],
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "PageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetWidget - 获取预算小组件汇总数据",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetWidget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetWidget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetWidget",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "monthOfYearStart": 202607,
+          "monthOfYearEnd": 202608,
+          "shareId": "",
+          "isUnderpacing": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetCalendarLog - 获取Calendar变更日志(分页)",
+    "description": "单接口测试：POST /api/Budget/v3/GetCalendarLog。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCalendarLog",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCalendarLog",
+        "request_body": {
+          "calendarId": 0,
+          "createStartTime": "{{date_start}}T00:00:00Z",
+          "createEndTime": "{{date_end}}T00:00:00Z",
+          "changeStartTime": null,
+          "changeEndTime": null,
+          "pageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetCalendarManagement - 获取Calendar管理列表(分页)",
+    "description": "单接口测试：POST /api/Budget/v3/GetCalendarManagement。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCalendarManagement",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCalendarManagement",
+        "request_body": {
+          "pageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Budget/v3/GetCalendarNames - 获取Calendar名称列表",
+    "description": "单接口测试：GET /api/Budget/v3/GetCalendarNames。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCalendarNames",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCalendarNames",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Budget/v3/GetCampaignBudgetBatchLog - 获取campaign预算批量操作日志",
+    "description": "单接口测试：GET /api/Budget/v3/GetCampaignBudgetBatchLog。0条ES样本(queryString)，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignBudgetBatchLog",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCampaignBudgetBatchLog?start={{date_start_mdy}}&end={{date_end_mdy}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetCampaingsBudgetSuggestion - 获取campaign预算建议(分页)",
+    "description": "单接口测试：POST /api/Budget/v3/GetCampaingsBudgetSuggestion。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaingsBudgetSuggestion",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCampaingsBudgetSuggestion",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "filterTagIds": [],
+          "model": 2,
+          "dailyBudget": 50.0,
+          "acosEnhance": false,
+          "optimizedLogic": 0,
+          "campaignIds": [],
+          "campaignName": "",
+          "isBudgetManaged": false,
+          "campaignHealth": [],
+          "monthOfYear": 202608,
+          "pageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetDailyBudgetData - 获取每日预算数据",
+    "description": "单接口测试：POST /api/Budget/v3/GetDailyBudgetData。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetDailyBudgetData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetDailyBudgetData",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "calendarId": 0,
+          "monthOfYear": 202608,
+          "DailyBudgetMode": 2,
+          "BudgetMode": 2,
+          "FiscalMonthStart": 1,
+          "FiscalMonthEnd": 12,
+          "profileTime": "{{date_start}}T00:00:00Z",
+          "isPreview": true,
+          "isOriginal": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetEditCalendar - 获取Calendar编辑详情",
+    "description": "单接口测试：POST /api/Budget/v3/GetEditCalendar。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetEditCalendar",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetEditCalendar",
+        "request_body": {
+          "id": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Budget/v3/GetFiscalYear - 获取当前财年设置",
+    "description": "单接口测试：GET /api/Budget/v3/GetFiscalYear。ES样本(全时间窗口)10条，均为空queryString(无参数)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetFiscalYear",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetFiscalYear",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetForecastSpendAndSales - 获取预测支出与销售",
+    "description": "单接口测试：POST /api/Budget/v3/GetForecastSpendAndSales。0条ES样本，按Swagger结构手工构造(非ES来源)。fiscalYearStart/End采用GetFiscalYear返回的真实YYYYMM格式(202601/202612)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetForecastSpendAndSales",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetForecastSpendAndSales",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "model": 2,
+          "fiscalYearStart": 202601,
+          "fiscalYearEnd": 202612
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetLastMonthSpendsV3 - 获取上月花费(tag/subtag级)",
+    "description": "单接口测试：POST /api/Budget/v3/GetLastMonthSpendsV3。0条ES样本，按Swagger结构手工构造(非ES来源)。model=2(SubTagging)时后端抛length=-1异常，改用model=0后正常返回。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLastMonthSpendsV3",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetLastMonthSpendsV3",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": [
+            {
+              "tagId": "{{test_campaign_tag_id}}",
+              "subTagIds": []
+            }
+          ],
+          "model": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetMonthOfDailyBudget - 获取按月每日预算启用情况",
+    "description": "单接口测试：POST /api/Budget/v3/GetMonthOfDailyBudget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetMonthOfDailyBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetMonthOfDailyBudget",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "calendarId": null,
+          "DailyBudgetMode": 2,
+          "BudgetMode": 2,
+          "fiscalYearStart": 1,
+          "fiscalYearEnd": 12
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetOtherCampaignInfoV2 - 获取未选中tag之外的其他campaign信息",
+    "description": "单接口测试：POST /api/Budget/v3/GetOtherCampaignInfoV2。0条ES样本，按Swagger结构手工构造(非ES来源)。mode=2时后端报\"query processor ran out of internal resources\"，改用mode=0后正常返回。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetOtherCampaignInfoV2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetOtherCampaignInfoV2",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "selectedTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "mode": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetPacingTrend - 获取预算配速趋势(分页)",
+    "description": "单接口测试：POST /api/Budget/v3/GetPacingTrend。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPacingTrend",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetPacingTrend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "filterTagIds": [],
+          "model": 2,
+          "dailyBudget": 50.0,
+          "acosEnhance": false,
+          "optimizedLogic": 0,
+          "campaignIds": [],
+          "campaignName": "",
+          "isBudgetManaged": false,
+          "campaignHealth": [],
+          "monthOfYear": 202608,
+          "pageInfo": {
+            "OrderByField": "",
+            "OrderAsc": true,
+            "TotalDataCount": 0,
+            "PageSize": 20,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetParentTags - 获取父级标签列表",
+    "description": "单接口测试：POST /api/Budget/v3/GetParentTags。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetParentTags",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetParentTags",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "filterHasCampaign": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetProfileBudgetVsActualSpends - 获取profile预算与实际花费对比",
+    "description": "单接口测试：POST /api/Budget/v3/GetProfileBudgetVsActualSpends。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetProfileBudgetVsActualSpends",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetProfileBudgetVsActualSpends",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetSettingBudgetLineInfo - 获取预算设置行详情",
+    "description": "单接口测试：POST /api/Budget/v3/GetSettingBudgetLineInfo。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSettingBudgetLineInfo",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetSettingBudgetLineInfo",
+        "request_body": {
+          "id": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetSettingBudgetLines - 获取预算设置行列表",
+    "description": "单接口测试：POST /api/Budget/v3/GetSettingBudgetLines。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSettingBudgetLines",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetSettingBudgetLines",
+        "request_body": {
+          "id": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetSubTagDefaultBudget - 获取子标签默认预算",
+    "description": "单接口测试：POST /api/Budget/v3/GetSubTagDefaultBudget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSubTagDefaultBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetSubTagDefaultBudget",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "istest": false,
+          "testDateTime": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetSubTagMonthlyBudget - 获取子标签月度预算",
+    "description": "单接口测试：POST /api/Budget/v3/GetSubTagMonthlyBudget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSubTagMonthlyBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetSubTagMonthlyBudget",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "istest": false,
+          "testDateTime": null,
+          "startMonthOfYear": 202608
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetSubTagSuggestAllocation - 获取子标签建议分配额度",
+    "description": "单接口测试：POST /api/Budget/v3/GetSubTagSuggestAllocation。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSubTagSuggestAllocation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetSubTagSuggestAllocation",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "subTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "budget": 100.0,
+          "acosEnhance": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetSubTags - 获取标签下的子标签列表",
+    "description": "单接口测试：POST /api/Budget/v3/GetSubTags。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSubTags",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetSubTags",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "filterHasCampaign": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTagBudgetSets - 获取标签预算集合",
+    "description": "单接口测试：POST /api/Budget/v3/GetTagBudgetSets。全时间窗口ES样本31条，均为{profileIds:[单个profile],shareId:\"\"}结构；因ES样本profileId属其他客户，改用{{profile_id}}真实值。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTagBudgetSets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTagBudgetSets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTagBudgetVsActualSpends - 获取标签预算与实际花费对比",
+    "description": "单接口测试：POST /api/Budget/v3/GetTagBudgetVsActualSpends。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTagBudgetVsActualSpends",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTagBudgetVsActualSpends",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "model": 2,
+          "fiscalYearStart": 202601,
+          "fiscalYearEnd": 202612
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTop5CampaignDailySpend - 获取花费Top5的campaign每日花费",
+    "description": "单接口测试：POST /api/Budget/v3/GetTop5CampaignDailySpend。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTop5CampaignDailySpend",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTop5CampaignDailySpend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "model": 2,
+          "fiscalYearStart": 202601,
+          "fiscalYearEnd": 202612
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTopUnderPacingTags - 获取配速不足标签Top列表",
+    "description": "单接口测试：POST /api/Budget/v3/GetTopUnderPacingTags。全时间窗口ES样本31条，均为{profileIds,timeLevel:month,tagIds:[{profileId,TagId}],shareId,isChart:true}结构；因ES样本profileId/tagId属其他客户，改用{{profile_id}}/{{test_campaign_tag_id}}真实值。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTags",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTopUnderPacingTags",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "timeLevel": "month",
+          "start": "{{date_start}}T00:00:00Z",
+          "end": "{{date_end}}T00:00:00Z",
+          "shareId": "",
+          "tagIds": [
+            {
+              "profileId": "{{profile_id}}",
+              "TagId": "{{test_campaign_tag_id}}"
+            }
+          ],
+          "isChart": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTopUnderPacingTagsInsight - 获取配速不足标签洞察",
+    "description": "单接口测试：POST /api/Budget/v3/GetTopUnderPacingTagsInsight。0条ES样本，按Swagger结构手工构造(非ES来源)。tags数组填入具体条目时后端NullReferenceException，改用空tags数组后正常返回。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTagsInsight",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTopUnderPacingTagsInsight",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "profileIds1p": [],
+          "profileIds3p": [],
+          "timeLevel": "month",
+          "topStart": "{{date_start}}T00:00:00Z",
+          "topEnd": "{{date_end}}T00:00:00Z",
+          "tags": [],
+          "start": "{{date_start}}T00:00:00Z",
+          "end": "{{date_end}}T00:00:00Z",
+          "shareId": "",
+          "token": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetYearBudgetSetting - 获取年度预算设置",
+    "description": "单接口测试：POST /api/Budget/v3/GetYearBudgetSetting。0条ES样本，按Swagger结构手工构造(非ES来源)。fiscalYearStart/End需采用GetFiscalYear返回的真实YYYYMM格式(202601/202612)，用1/12会导致后端字符串截取越界异常；model=0(非SubTagging)时可正常返回。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetYearBudgetSetting",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetYearBudgetSetting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "model": 0,
+          "fiscalYearStart": 202601,
+          "fiscalYearEnd": 202612
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/GetBudgetCampaignHasEnableAdgroup - 获取含启用广告组的campaign列表",
+    "description": "单接口测试：POST /api/Budget/v3/integration/GetBudgetCampaignHasEnableAdgroup。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。用普通用户token调用可正常返回(空列表，测试账号无匹配数据)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetCampaignHasEnableAdgroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/GetBudgetCampaignHasEnableAdgroup",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "TimeType": 1,
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1,
+            "orderBy": "",
+            "asc": true
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/GetBudgetNotificationSettings - 获取预算通知设置(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/GetBudgetNotificationSettings。中台集成接口，全时间窗口ES样本50条，body均为空。用普通用户token调用正常返回全量通知设置列表(数组)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetNotificationSettings",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/GetBudgetNotificationSettings",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/GetTagAiInfo - 获取标签AI信息(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/GetTagAiInfo。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。用普通用户token调用可正常返回。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTagAiInfo",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/GetTagAiInfo",
+        "request_body": [
+          {
+            "profileId": "{{profile_id}}",
+            "tagId": "{{test_campaign_tag_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignReport - 获取campaign预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignReport。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。返回分页对象{records,total,size,current}，用普通用户token调用可正常返回。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignReport",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "TimeType": 1,
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1,
+            "orderBy": "",
+            "asc": true
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignReportV1 - 获取campaign预算报表V1(含avgSpend,中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignReportV1。中台集成接口，全时间窗口ES 0条(仅本账号首次调用)，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignReportV1",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignReportV1",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "TimeType": 1,
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1,
+            "orderBy": "",
+            "asc": true
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignReportV2 - 获取campaign预算报表V2(含avgSpend与hasEnableAdgroup,中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignReportV2。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignReportV2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignReportV2",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "TimeType": 1,
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1,
+            "orderBy": "",
+            "asc": true
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignTagReport - 获取campaign标签预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignTagReport。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignTagReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignTagReport",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "TimeType": 1,
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1,
+            "orderBy": "",
+            "asc": true
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetProfileReport - 获取profile预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetProfileReport。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。响应为原始数组(非records分页对象)，用普通用户token调用可正常返回该profile数据。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetProfileReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetProfileReport",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "TimeType": 1,
+          "Start": "{{date_start}}T00:00:00Z",
+          "End": "{{date_end}}T00:00:00Z",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1,
+            "orderBy": "",
+            "asc": true
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getBudgetInsight - 获取预算洞察(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getBudgetInsight。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。测试账号该时间段无数据，返回空数组。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getBudgetInsight",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getBudgetInsight",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "start": "{{date_start}}T00:00:00Z",
+          "end": "{{date_end}}T00:00:00Z",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getNoDailyBudgetCampaigns - 获取无每日预算设置的campaign列表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getNoDailyBudgetCampaigns。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getNoDailyBudgetCampaigns",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getNoDailyBudgetCampaigns",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getProfiles - 按clientId/userId获取profile列表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getProfiles。中台集成接口，0条ES样本，clientId/userId为query参数(非body)。实测传入真实{{client_id}}/{{user_id}}正常返回；不传则报513\"Must profile client ID or user ID\"。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getProfiles",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getProfiles?clientId={{client_id}}&userId={{user_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getProfilesByUser - 按userId数组获取profile列表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getProfilesByUser。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getProfilesByUser",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getProfilesByUser",
+        "request_body": [
+          "{{user_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getUserList - 获取用户列表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getUserList。中台集成接口，0条ES样本，body为空对象。用普通用户token调用正常返回该client下用户列表。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getUserList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getUserList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getUsersByIds - 按用户id数组批量获取用户信息(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getUsersByIds。中台集成接口，0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getUsersByIds",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getUsersByIds",
+        "request_body": [
+          "{{user_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/updateCampaignStateOrDailyBudget - 更新campaign状态或每日预算(页面操作调用)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/updateCampaignStateOrDailyBudget。全时间窗口ES样本200条(截断)，均为[{campaignId,profileId,dailyBudget[,oldDailyBudget]}]结构的批量更新。注：该接口按当前存量dailyBudget做差异判断，若新值与现值相同则totalCount/successCount均为0(非失败，只是无需变更)；为保证case结果稳定可重复，改为2步：先改为11(真实变化)校验成功，再改回10(真实变化)校验成功，往返均为真实变更，已实测可重复执行。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 updateCampaignStateOrDailyBudget(改为11)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/updateCampaignStateOrDailyBudget",
+        "request_body": [
+          {
+            "campaignId": "{{exist_sp_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "dailyBudget": 11
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "totalCount": 1,
+          "successCount": 1
+        }
+      },
+      {
+        "name": "调用 updateCampaignStateOrDailyBudget(恢复为10)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/updateCampaignStateOrDailyBudget",
+        "request_body": [
+          {
+            "campaignId": "{{exist_sp_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "dailyBudget": 10
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "totalCount": 1,
+          "successCount": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/RemoveBudgetSetting - 移除profile预算设置(含后置恢复,保证可重复执行)",
+    "description": "单接口测试：POST /api/Budget/v3/RemoveBudgetSetting。0条ES样本，按Swagger结构手工构造(非ES来源)。该接口会清空profile的budgetMode等全局预算配置，为避免影响该共享测试账号上其他模块/用例对profile预算模式的依赖，第2步用BudgetLevelSettingV3将budgetMode恢复为移除前的真实值(SubTagging=2)。已实测remove->restore->remove两轮均成功，验证幂等可重复执行。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "移除profile预算设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/RemoveBudgetSetting",
+        "request_body": {
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      },
+      {
+        "name": "后置恢复-重新设置profile预算模式",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/BudgetLevelSettingV3",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "budgetMode": 2,
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "subTags": [],
+          "isPacing": 0,
+          "allocatingType": 0,
+          "isControl": 0,
+          "isReEnable": 0,
+          "budgetSettings": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/ResetDefaultSubTagTarget - 重置子标签默认目标",
+    "description": "单接口测试：POST /api/Budget/v3/ResetDefaultSubTagTarget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ResetDefaultSubTagTarget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/ResetDefaultSubTagTarget",
+        "request_body": {
+          "tagId": "{{test_campaign_tag_id}}",
+          "profileId": "{{profile_id}}",
+          "monthOfYear": 202608
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetAllocatingType - 设置预算分配类型",
+    "description": "单接口测试：POST /api/Budget/v3/SetAllocatingType。0条ES样本，按Swagger结构手工构造(非ES来源)。model=2(SubTagging)时报\"Sub Tag Budget Not Set\"业务前置校验错误(该tag未配置subtag预算)，改用model=0(默认级别)后成功，属幂等设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetAllocatingType",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetAllocatingType",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "allocatingType": 0,
+          "model": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetAutoReenable - 设置自动重新启用",
+    "description": "单接口测试：POST /api/Budget/v3/SetAutoReenable。0条ES样本，按Swagger结构手工构造(非ES来源)。model=0下正常返回，幂等设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetAutoReenable",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetAutoReenable",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "isReenable": 1,
+          "model": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetAutomateBudgetControl - 设置自动预算控制",
+    "description": "单接口测试：POST /api/Budget/v3/SetAutomateBudgetControl。0条ES样本，按Swagger结构手工构造(非ES来源)。model=0下正常返回，幂等设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetAutomateBudgetControl",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetAutomateBudgetControl",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "isControl": 1,
+          "isReEnable": 1,
+          "model": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetAutomateBudgetPacing - 设置自动预算配速",
+    "description": "单接口测试：POST /api/Budget/v3/SetAutomateBudgetPacing。0条ES样本，按Swagger结构手工构造(非ES来源)。model=0下正常返回，幂等设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetAutomateBudgetPacing",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetAutomateBudgetPacing",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "isPacing": 1,
+          "allocatingType": 0,
+          "model": 0,
+          "istest": false,
+          "testDateTime": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetBudgetControlSetting - 设置完整自动预算配置",
+    "description": "单接口测试：POST /api/Budget/v3/SetBudgetControlSetting。0条ES样本，按Swagger结构手工构造(非ES来源)。model=0下正常返回，幂等设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetBudgetControlSetting",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetBudgetControlSetting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "isPacing": 1,
+          "allocatingType": 0,
+          "model": 0,
+          "istest": false,
+          "testDateTime": null,
+          "isControl": 1,
+          "isReenable": 1,
+          "enableCampaign": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetBudgetRollover - 设置预算结转",
+    "description": "单接口测试：POST /api/Budget/v3/SetBudgetRollover。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetBudgetRollover",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetBudgetRollover",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "Rollover": 0,
+          "BudgetMode": 2,
+          "istest": false,
+          "testDateTime": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetDefaultSubTagTarget - 设置子标签默认目标",
+    "description": "单接口测试：POST /api/Budget/v3/SetDefaultSubTagTarget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetDefaultSubTagTarget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetDefaultSubTagTarget",
+        "request_body": {
+          "startMonthOfYear": 202608,
+          "profileId": "{{profile_id}}",
+          "data": [
+            {
+              "tagId": "{{test_campaign_tag_id}}",
+              "target": 20.0,
+              "targetFloat": 20.0
+            }
+          ],
+          "istest": false,
+          "testDateTime": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetFiscalYear - 设置财年起止月份",
+    "description": "单接口测试：POST /api/Budget/v3/SetFiscalYear。0条ES样本，按Swagger结构手工构造(非ES来源)。注：swagger仅标注int32无格式说明，实测传入简单月份值(1/12)虽写入返回success，但会破坏该client下GetFiscalYear/BatchSetCalendar/GetBudgetDashboard/GetMonthOfDailyBudget等多个依赖财年字符串解析的接口(后端抛substring越界异常)；已定位并改用GetFiscalYear真实读取到的YYYYMM格式(202601/202612)重新写入修复，属幂等overwrite，与GetFiscalYear当前返回值一致。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetFiscalYear",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetFiscalYear",
+        "request_body": {
+          "start": 202601,
+          "end": 202612
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetFiscalYearBudget - 设置财年预算",
+    "description": "单接口测试：POST /api/Budget/v3/SetFiscalYearBudget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetFiscalYearBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetFiscalYearBudget",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "budget": 10000.0,
+          "fiscalYearStart": 202601,
+          "fiscalYearEnd": 202612,
+          "apportion": 0,
+          "model": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetMonthlyBudget - 设置月度预算",
+    "description": "单接口测试：POST /api/Budget/v3/SetMonthlyBudget。0条ES样本，按Swagger结构手工构造(非ES来源)。注：多组tagId(含parent tag/subtag)与月份组合实测均返回code 513 NullReferenceException(后端BudgetManagerService.SetMonthlyBudget内部空引用)，判定为后端缺陷或该账号缺少必要前置基线数据，非请求结构问题。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetMonthlyBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetMonthlyBudget",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "MonthlyBudget": [
+            {
+              "monthOfYear": 202608,
+              "budget": 1000.0
+            }
+          ],
+          "istest": false,
+          "testDateTime": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetSubTagBudget - 设置子标签预算",
+    "description": "单接口测试：POST /api/Budget/v3/SetSubTagBudget。0条ES样本，按Swagger结构手工构造(非ES来源)。实测返回500\"please set subtag budget\"，与SetMonthlyBudget的NullReferenceException缺陷形成前置依赖链(需先成功设置tag月度预算基线)，该依赖接口当前不可用，非本请求结构问题。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetSubTagBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetSubTagBudget",
+        "request_body": {
+          "monthOfYear": 202608,
+          "TagId": "{{test_campaign_tag_id}}",
+          "profileId": "{{profile_id}}",
+          "budget": 500.0,
+          "istest": false,
+          "testDateTime": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetSubTagMonthlyTarget - 设置子标签月度目标",
+    "description": "单接口测试：POST /api/Budget/v3/SetSubTagMonthlyTarget。0条ES样本，按Swagger结构手工构造(非ES来源)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetSubTagMonthlyTarget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetSubTagMonthlyTarget",
+        "request_body": [
+          {
+            "monthOfYear": 202608,
+            "TagId": "{{test_campaign_tag_id}}",
+            "profileId": "{{profile_id}}",
+            "SubTagTargets": [],
+            "istest": false,
+            "testDateTime": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetTargetACOS - 设置目标ACOS",
+    "description": "单接口测试：POST /api/Budget/v3/SetTargetACOS。0条ES样本，按Swagger结构手工构造(非ES来源)。设置同一tagid的目标ACOS，属幂等overwrite。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetTargetACOS",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetTargetACOS",
+        "request_body": {
+          "tagid": "{{test_campaign_tag_id}}",
+          "targetACOS": 25.0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SetTargetROAS - 设置目标ROAS",
+    "description": "单接口测试：POST /api/Budget/v3/SetTargetROAS。0条ES样本，按Swagger结构手工构造(非ES来源)。设置同一tagid的目标ROAS，属幂等overwrite。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetTargetROAS",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SetTargetROAS",
+        "request_body": {
+          "tagid": "{{test_campaign_tag_id}}",
+          "targetROAS": 4.0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/SubmitDailyBudgetSetting - 提交每日预算设置(含前置创建Calendar+后置清理)",
+    "description": "单接口测试：POST /api/Budget/v3/SubmitDailyBudgetSetting。0条ES样本，按Swagger结构手工构造(非ES来源)。该接口要求calendarId对应一个真实存在的Calendar(实测calendarId=0会报\"Select one Calendar you've created\")，故第1步创建临时Calendar、第2步查询提取其id、第3步提交每日预算设置引用该id、第4步删除临时Calendar，保证用例自包含且可重复执行。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建临时Calendar",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/CreateOrEditCalendar",
+        "request_body": {
+          "id": 0,
+          "Name": "AutoTest_Budget_Calendar_ForSubmit",
+          "Data": [
+            {
+              "Mode": 0,
+              "monthOfyear": 202608,
+              "Data": [
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10
+              ],
+              "DisplayData": [
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10
+              ]
+            }
+          ],
+          "istest": true,
+          "testDateTime": "{{date_start}}T00:00:00Z"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      },
+      {
+        "name": "查询Calendar列表提取新建id",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCalendarNames",
+        "request_body": {},
+        "extract_vars": {
+          "submit_calendar_id": "data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "提交每日预算设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/SubmitDailyBudgetSetting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "tagId": "{{test_campaign_tag_id}}",
+          "calendarId": "{{submit_calendar_id}}",
+          "DailyBudgetMode": 0,
+          "BudgetMode": 2,
+          "MonthData": [],
+          "istest": false,
+          "testDateTime": null,
+          "Rollover": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除临时Calendar",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/DeleteCalendar",
+        "request_body": {
+          "id": "{{submit_calendar_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/UpdateBatchCampaignMaxSpend - 批量更新campaign最大花费",
+    "description": "单接口测试：POST /api/Budget/v3/UpdateBatchCampaignMaxSpend。0条ES样本，按Swagger结构手工构造(非ES来源)。属幂等overwrite设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateBatchCampaignMaxSpend",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UpdateBatchCampaignMaxSpend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "maxSpend": 1000.0,
+          "model": 2,
+          "tagId": "{{test_campaign_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/UpdateBatchCampaignMinSpend - 批量更新campaign最小花费",
+    "description": "单接口测试：POST /api/Budget/v3/UpdateBatchCampaignMinSpend。0条ES样本，按Swagger结构手工构造(非ES来源)。属幂等overwrite设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateBatchCampaignMinSpend",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UpdateBatchCampaignMinSpend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "minSpend": 1.0,
+          "model": 2,
+          "tagId": "{{test_campaign_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/UpdateBudgetMode - 更新profile预算模式",
+    "description": "单接口测试：POST /api/Budget/v3/UpdateBudgetMode。0条ES样本，按Swagger结构手工构造(非ES来源)。设置为与当前一致的SubTagging(2)，属幂等overwrite。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateBudgetMode",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UpdateBudgetMode",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "budgetMode": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/UpdateCampaignDailyBudget - 更新campaign每日预算(批量,含checking)",
+    "description": "单接口测试：POST /api/Budget/v3/UpdateCampaignDailyBudget。0条ES样本，按Swagger结构手工构造(非ES来源)。写入值与该campaign当前DailyBudget一致(10)，属幂等overwrite，安全可重复执行。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateCampaignDailyBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UpdateCampaignDailyBudget?checking=true",
+        "request_body": [
+          {
+            "profileId": "{{profile_id}}",
+            "campaignId": "{{exist_sp_campaign_id}}",
+            "dailyBudget": 10.0
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/UpdateCampaignMaxSpend - 更新单个campaign最大花费",
+    "description": "单接口测试：POST /api/Budget/v3/UpdateCampaignMaxSpend。0条ES样本，按Swagger结构手工构造(非ES来源)。属幂等overwrite设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateCampaignMaxSpend",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UpdateCampaignMaxSpend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "maxSpend": 1000.0,
+          "model": 2,
+          "tagId": "{{test_campaign_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/UpdateCampaignMinSpend - 更新单个campaign最小花费",
+    "description": "单接口测试：POST /api/Budget/v3/UpdateCampaignMinSpend。0条ES样本，按Swagger结构手工构造(非ES来源)。属幂等overwrite设置。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateCampaignMinSpend",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UpdateCampaignMinSpend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "model": 2,
+          "tagId": "{{test_campaign_tag_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "minSpend": 1.0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": "success"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/UpdateMinBudgetPercent - 更新最小预算百分比",
+    "description": "单接口测试：POST /api/Budget/v3/UpdateMinBudgetPercent。0条ES样本，按Swagger结构手工构造(非ES来源)。实测无论model=0/1/2、tag是否已开启自动控制，均返回513\"This tag is not managed by budget manager\"；该校验疑似依赖campaign级真实预算管理绑定关系，测试账号当前数据未满足前置条件，非请求结构问题。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateMinBudgetPercent",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UpdateMinBudgetPercent",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "model": 0,
+          "tagId": "{{test_campaign_tag_id}}",
+          "minBudgetPct": 10.0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,791 @@
+[
+  {
+    "name": "POST /api/CampaignCreate/V3/BrandHome/ListPages - 按ENTITY_ID查询品牌StorePage列表",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/BrandHome/ListPages。使用真实存在Brand Registry关联的profileId+identifier(ENTITY_ID)组合查询该品牌下的Store Page列表（测试账号自身profile无品牌注册数据，故使用ES真实流量中完整配对的一组真实值，非编造）。500条随机样本中占比约99.6%（498次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用BrandHome/ListPages",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/BrandHome/ListPages",
+        "request_body": {
+          "profileId": 2329201658806110,
+          "identifier": "ENTITY2Q2PI2CLSEIZ",
+          "identifierType": "ENTITY_ID"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/BrandHome/ListStores - 按profileId查询Store列表",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/BrandHome/ListStores。真实流量100%仅传profileId，不带identifier过滤，直接返回该advertiser下的store列表（测试账号无关联Store，返回空列表也是合法成功响应）。500条随机样本中占比约100%（500次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用BrandHome/ListStores",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/BrandHome/ListStores",
+        "request_body": {
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinKeywordList - 空ASIN列表查询",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinKeywordList。真实场景1：asins传空数组（用户尚未选择ASIN时的默认查询）。500条随机样本中占比约35.0%（175次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetAsinKeywordList(空ASIN)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetAsinKeywordList",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [],
+          "isVerifyDuplicate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinKeywordList - 按真实ASIN获取推荐关键词",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinKeywordList。真实场景2：asins传入具体ASIN值，获取该商品关联的推荐关键词列表。500条随机样本中占比约65.0%（325次，1-5个ASIN不等，取最常见的单ASIN模式）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetAsinKeywordList(真实ASIN)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetAsinKeywordList",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "{{target_asin}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignCreate/V3/GetAssets - brandEntityId缺省(undefined)查询素材列表",
+    "description": "单接口测试：GET /api/CampaignCreate/V3/GetAssets。真实流量中最高频模式：前端brandEntityId尚未加载完成时以字面量\"undefined\"发起请求，后端仍按profileId正常返回素材列表（已实测：测试账号使用该参数组合可正常返回真实素材数据）。500条随机样本中占比约79.6%（398次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetAssets",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetAssets?profileId={{profile_id}}&brandEntityId=undefined",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignCreate/V3/GetAssetsById - 按assetId查询单个素材详情",
+    "description": "单接口测试：GET /api/CampaignCreate/V3/GetAssetsById。使用ES真实流量中完整配对的profileId+assetId(资源为账号私有,跨账号会返回500,故使用真实配对值而非本测试账号占位符)。500条随机样本中占比约100%（500次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetAssetsById",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/v3/GetAssetsById?profileId=1891683808833451&assetId=amzn1.assetlibrary.asset1.d7819bb210a96f01341ec88f6623d090",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAssetsByIds - 批量按assetIds查询素材详情",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAssetsByIds。使用ES真实流量中完整配对的profileId+assetIds(资源为账号私有,跨账号会返回500,故使用真实配对值)。500条随机样本中占比约100%（500次，均为单元素数组这一形态最常见）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetAssetsByIds",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/v3/GetAssetsByIds",
+        "request_body": {
+          "profileId": 1246121393427628,
+          "assetIds": [
+            "amzn1.assetlibrary.asset1.216a9d6fe97412c147be31c1528b3574"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignCreate/V3/GetBrands/{profileId} - 查询profile关联品牌列表",
+    "description": "单接口测试：GET /api/CampaignCreate/V3/GetBrands/{profileId}。按路径参数profileId查询该advertiser关联的Brand Registry品牌列表（测试账号无品牌注册，返回空列表也是合法成功响应）。真实流量：该接口为路径参数型GET，逐profileId调用，抽样500次。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetBrands",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/v3/GetBrands/{{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetCategoryAll - 查询全量商品类目树",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetCategoryAll。真实流量100%传countryCode=US、name为空字符串，获取美国站点全量类目树。500条随机样本中占比约100%（42次，样本较少但形态单一）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetCategoryAll",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetCategoryAll",
+        "request_body": {
+          "countryCode": "US",
+          "name": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetPageAsins - 按Store页面URL获取页面内ASIN列表",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetPageAsins。传入真实Store Page URL，返回该页面下展示的ASIN及其评分信息（该URL为公开Amazon Store页面,不依赖advertiser自身所有权,任意profileId均可正常查询）。500条随机样本中占比约100%（500次，均为profileId+url两字段形态）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetPageAsins",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetPageAsins",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "url": "https://www.amazon.com/stores/page/2077C806-1CAC-495C-B1A8-97D6E87AB8EA"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetProductAdFromProfile - SP广告类型按SKU查询商品广告",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetProductAdFromProfile。真实场景1：adType=SP，按skus查询商品广告信息，为最主流场景。500条随机样本中占比约82.4%（412次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetProductAdFromProfile(SP)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetProductAdFromProfile",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "is1P": 0,
+          "countryCode": "US",
+          "adType": "SP",
+          "skus": [
+            "B0GCCRSLLF"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetProductAdFromProfile - SB广告类型按ASIN查询商品广告",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetProductAdFromProfile。真实场景2：adType=SB，按asins查询商品广告信息。500条随机样本中占比约12.0%（60次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetProductAdFromProfile(SB)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetProductAdFromProfile",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "is1P": 0,
+          "adType": "SB",
+          "asins": [
+            "B08Y66H6B7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetProductAdFromProfile - SD广告类型查询商品广告",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetProductAdFromProfile。真实场景3：adType=SD，为第三常见广告类型。500条随机样本中占比约5.6%（28次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetProductAdFromProfile(SD)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetProductAdFromProfile",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "is1P": 0,
+          "countryCode": "US",
+          "adType": "SD",
+          "asins": [
+            "B0FJYJRM8J"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetRecommendedCategories - 按ASIN获取推荐类目",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetRecommendedCategories。传入真实ASIN，获取Amazon推荐的商品类目定向列表。500条随机样本中占比约100%（500次，均为profileId+asins+skus=[]形态）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetRecommendedCategories",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetRecommendedCategories",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "{{target_asin}}"
+          ],
+          "skus": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSBBidRecommend - productCollection广告格式关键词出价推荐",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSBBidRecommend。真实场景1：adFormat=productCollection，goal=PAGE_VISIT，按关键词请求出价推荐。500条随机样本中占比约49.0%（245次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetSBBidRecommend(productCollection)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetSBBidRecommend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "costType": "CPC",
+          "goal": "PAGE_VISIT",
+          "adFormat": "productCollection",
+          "request": {
+            "keywords": [
+              {
+                "matchType": "phrase",
+                "keywordText": "organic coffee"
+              }
+            ],
+            "costType": "CPC",
+            "goal": "PAGE_VISIT",
+            "adFormat": "productCollection"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSBBidRecommend - video广告格式关键词出价推荐",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSBBidRecommend。真实场景2：adFormat=video，goal=PAGE_VISIT，按关键词请求出价推荐。500条随机样本中占比约33.4%（167次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetSBBidRecommend(video)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetSBBidRecommend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "costType": "CPC",
+          "goal": "PAGE_VISIT",
+          "adFormat": "video",
+          "request": {
+            "keywords": [
+              {
+                "matchType": "phrase",
+                "keywordText": "laundry pods"
+              }
+            ],
+            "costType": "CPC",
+            "goal": "PAGE_VISIT",
+            "adFormat": "video"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSponsoredBrandsCampaignAsins - SB活动可选ASIN分页查询",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSponsoredBrandsCampaignAsins。真实流量中type=sb占比100%，asin过滤条件为空(即不过滤，仅分页浏览)为最主流模式。500条随机样本中占比约96.2%（481次不带asin过滤）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetSponsoredBrandsCampaignAsins",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/GetSponsoredBrandsCampaignAsins",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "pageInfo": {
+            "OrderByField": "title",
+            "OrderAsc": false,
+            "PageSize": 5,
+            "PageIndex": 1
+          },
+          "asin": "",
+          "type": "sb"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignCreate/V3/GetStores/{profileId} - 查询profile关联Store列表",
+    "description": "单接口测试：GET /api/CampaignCreate/V3/GetStores/{profileId}。按路径参数profileId查询该advertiser关联的Amazon Store列表（测试账号无关联Store，实测返回data:null也是合法成功响应，故仅断言L1业务成功标志，不对data做结构断言）。真实流量：路径参数型GET，抽样500次。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetStores",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/v3/GetStores/{{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/SuggestedProduct - 按ASIN列表获取推荐商品",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/SuggestedProduct。传入以逗号分隔的ASIN字符串，获取推荐关联商品（本测试账号真实历史流量中即存在该调用模式）。500条随机样本中占比约100%（500次，均为profileId+asinstr形态）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用SuggestedProduct",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/SuggestedProduct",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asinstr": "B001PO6GTY,B01M2CNB2F,B09FPWN9B8"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAmazonCategories - 按关键词搜索类目",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAmazonCategories。生产环境90天内ES真实流量为0次，按Swagger字段结构+已验证真实profileId手工构造最小有效请求，并已实测确认返回200成功及真实类目数据。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetAmazonCategories",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/v3/GetAmazonCategories",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "name": "coffee",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinByUrl - 按商品URL解析ASIN",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinByUrl。生产环境90天内ES真实流量为0次，按Swagger字段结构+已验证真实ASIN对应的Amazon商品详情页URL手工构造最小有效请求，并已实测确认返回200成功及正确解析出的ASIN。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetAsinByUrl",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/v3/GetAsinByUrl",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "url": "https://www.amazon.com/dp/{{target_asin}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/CreateCollection - 手动ProductCollection广告创建(含前置建活动+后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateCollection。isAutoCollection=false手动指定ASIN+落地页的Collection广告创建为真实流量主流场景(占比63.4%)。由于该接口依赖已存在的campaignId+adGroupId，第1步先通过已验证可用的/api/SponsoredBrandMaterial/Campaign/Create创建一个全新的一次性SB活动作为前置依赖，提取其CampaignId/AdGroupId；第2步调用CreateCollection创建Collection广告(brandLogoAssetID复用ES真实素材ID，已实测跨账号可用；ASIN数量需≥3个，已实测验证)；第3步后置将整个一次性活动归档以清理数据，保证用例可重复执行。500条随机样本(180天)中占比约63.4%（52次，isAutoCollection=false）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建一次性SB活动(含AdGroup)作为CreateCollection的依赖",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredBrandMaterial/Campaign/Create",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "Name": "autocase_precreate_for_collection",
+          "State": "PAUSED",
+          "DailyBudget": "10",
+          "BudgetType": "daily",
+          "StartDate": "{{date_start}}",
+          "SalesChannel": "AMAZON",
+          "CostType": "CPC",
+          "Goal": "CLICKS",
+          "AdGroup": {
+            "Name": "autocase_precreate_ag",
+            "State": "ENABLED",
+            "ProfileId": "{{profile_id}}"
+          },
+          "Ads": []
+        },
+        "extract_vars": {
+          "created_sb_campaign_id": "data.CampaignId",
+          "created_sb_adgroup_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "创建手动ProductCollection(Manual Collection)广告",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignCreate/V3/CreateCollection",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{created_sb_campaign_id}}",
+          "isAutoCollection": false,
+          "collectionAds": [
+            {
+              "adGroupId": "{{created_sb_adgroup_id}}",
+              "creative": {
+                "asins": [
+                  "{{target_asin}}",
+                  "B00K6B1Z9S",
+                  "B000MXB3JW"
+                ],
+                "brandLogoAssetID": "amzn1.assetlibrary.asset1.90f3478ac1da00907d4ca12702b25595",
+                "brandLogoCrop": {
+                  "top": 0,
+                  "left": 0,
+                  "width": 400,
+                  "height": 400
+                },
+                "brandName": "AutoCaseTestBrand",
+                "landingPage": {
+                  "asins": [
+                    "{{target_asin}}",
+                    "B00K6B1Z9S",
+                    "B000MXB3JW"
+                  ],
+                  "pageType": "PRODUCT_LIST"
+                }
+              },
+              "name": "autocase_collection_ad_manual",
+              "state": "ENABLED"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_collection_ad_id": "data.Data.ads.success[0].adId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data.ads.success": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档一次性SB活动(同时清理其下Collection广告)",
+        "method": "PUT",
+        "base_url": "{{BASEURL}}",
+        "path": "/Campaign/V4/Update",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignType": "headlineSearch",
+              "campaignId": "{{created_sb_campaign_id}}",
+              "profileId": "{{profile_id}}",
+              "state": "archived"
+            }
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
