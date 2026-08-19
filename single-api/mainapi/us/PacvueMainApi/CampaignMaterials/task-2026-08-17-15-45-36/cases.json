@@ -1,0 +1,92 @@
+[
+  {
+    "name": "POST /api/CampaignMaterials/GetCampaignByCampaignType - keyword搜索模式",
+    "description": "单接口测试：POST /api/CampaignMaterials/GetCampaignByCampaignType。前端通过搜索框（关键词为空）查询campaign列表，请求体携带keyword字段。50条随机样本中占比约58.0%（29次）。",
+    "module": "CampaignMaterials",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignByCampaignType",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignMaterials/GetCampaignByCampaignType",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTypes": [
+            "sponsoredProducts",
+            "SponsoredDisplay"
+          ],
+          "keyword": "",
+          "pageInfo": {
+            "OrderByField": "name",
+            "OrderAsc": true,
+            "PageIndex": 1,
+            "PageSize": 500
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          },
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignMaterials/GetCampaignByCampaignType - dimNames维度模式",
+    "description": "单接口测试：POST /api/CampaignMaterials/GetCampaignByCampaignType。前端通过维度筛选面板（未选维度）查询campaign列表，请求体携带dimNames字段（空数组），不带keyword。50条随机样本中占比约42.0%（21次）。",
+    "module": "CampaignMaterials",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignByCampaignType",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/CampaignMaterials/GetCampaignByCampaignType",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignTypes": [
+            "sponsoredProducts",
+            "SponsoredDisplay"
+          ],
+          "dimNames": [],
+          "pageInfo": {
+            "OrderByField": "name",
+            "OrderAsc": true,
+            "PageIndex": 1,
+            "PageSize": 500
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          },
+          "data.PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
