@@ -1,0 +1,1033 @@
+[
+  {
+    "name": "POST /definition/getRule - Auto模式默认规则列表",
+    "description": "单接口测试：POST /definition/getRule。Auto模式、无状态过滤、按创建时间倒序分页查询规则列表（默认视图）。500条随机样本中占比约53%（53次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Auto模式规则列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": ["{{user_id}}"],
+          "pageInfo": {
+            "pageIndex": 1,
+            "multiSort": [{"sortType": "desc", "sortData": "createdAt"}],
+            "pageSize": 20,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "ruleNameSearchOperand": "LikeOr",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getRule - 按ruleIds精确查询(创建临时规则,可重复)",
+    "description": "单接口测试：POST /definition/getRule。通过ruleIds列表精确查询特定规则（用于规则详情定位场景）。第1步创建临时规则，第2步按名称查出ruleId，第3步按ruleIds精确查，第4步删除清理。500条随机样本中占比约22%（22次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "tiktok",
+          "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
+          "dayOfWeek": 4,
+          "automation": [
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+          ],
+          "hour": 0,
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_GetByRuleId_Cleanup",
+          "ruleNames": ["TC_TikTok_GetByRuleId_Cleanup"],
+          "startDate": "2026-08-20T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "前置-按名称查询并提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_GetByRuleId_Cleanup"],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {"tmp_rule_id_getrule": "data.list[0].id"},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "按ruleIds精确查询规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ruleIds": ["{{tmp_rule_id_getrule}}"],
+          "download": false,
+          "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 10},
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "managedProfileIds": ["{{profile_id}}"],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$not_empty": true}
+        }
+      },
+      {
+        "name": "后置清理-删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{tmp_rule_id_getrule}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getRule - Manual模式规则列表",
+    "description": "单接口测试：POST /definition/getRule。Manual模式下查询手动规则列表（对应前端手动规则Tab）。500条随机样本中占比约12%（12次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Manual模式规则列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": ["{{user_id}}"],
+          "pageInfo": {
+            "pageIndex": 1,
+            "multiSort": [{"sortType": "desc", "sortData": "createdAt"}],
+            "pageSize": 20,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "mode": "Manual",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "ruleNameSearchOperand": "LikeOr",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$not_empty": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getOwners - Auto模式获取规则负责人",
+    "description": "单接口测试：POST /definition/getOwners。Auto模式下获取规则负责人列表，用于规则列表筛选器初始化。500条随机样本中占比约42%（8次/20样本）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Auto模式规则负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getOwners",
+        "request_body": {
+          "removeApplied": false,
+          "mode": "Auto",
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getOwners - Manual模式获取规则负责人",
+    "description": "单接口测试：POST /definition/getOwners。Manual模式下获取手动规则负责人列表。500条随机样本中占比约30%（6次/20样本）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Manual模式规则负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getOwners",
+        "request_body": {
+          "removeApplied": false,
+          "mode": "Manual",
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getOwners - AutoCommerce模式获取规则负责人",
+    "description": "单接口测试：POST /definition/getOwners。AutoCommerce模式下获取商业化规则负责人。500条随机样本中占比约20%（4次/20样本）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取AutoCommerce模式规则负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getOwners",
+        "request_body": {
+          "removeApplied": false,
+          "mode": "AutoCommerce",
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/checkRuleName - 新建规则名称重复校验",
+    "description": "单接口测试：POST /definition/checkRuleName。新建规则时检查名称是否已存在（无id字段）。500条随机样本中占比约80%（16次/20样本）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "校验新规则名称",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/checkRuleName",
+        "request_body": {
+          "emailOption": "NoEmails",
+          "ruleName": "TikTok Test Rule Name Check",
+          "ruleNames": ["TikTok Test Rule Name Check"]
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/checkRuleName - 编辑规则名称重复校验(创建临时规则,可重复)",
+    "description": "单接口测试：POST /definition/checkRuleName。编辑已有规则时检查新名称是否重复（携带id字段排除自身）。第1步创建临时规则，第2步查出ID，第3步checkRuleName，第4步清理。500条随机样本中占比约20%（4次/20样本）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
+          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
+          "applyTarget": {"clientId": "62", "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}], "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false, "targetLevel": "CampaignProductCreative"},
+          "dayOfWeek": 4,
+          "automation": [
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+          ],
+          "hour": 0, "ruleType": "BudgetBoost", "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
+          "ruleNames": ["TC_TikTok_CheckName_Edit_Cleanup"], "startDate": "2026-08-20T00:00:00", "isPaused": false, "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false, "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_CheckName_Edit_Cleanup"], "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+        },
+        "extract_vars": {"tmp_rule_id_checkname": "data.list[0].id"},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "编辑规则时校验名称（携带id排除自身）",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/checkRuleName",
+        "request_body": {
+          "emailOption": "NoEmails",
+          "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
+          "ruleNames": ["TC_TikTok_CheckName_Edit_Cleanup"],
+          "id": "{{tmp_rule_id_checkname}}"
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "后置清理-删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{tmp_rule_id_checkname}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/hasClickHitMode - 查询是否支持ClickHit模式",
+    "description": "单接口测试：GET /definition/hasClickHitMode。查询账号是否支持ClickHit触发模式，规则频次设置页面初始化调用。500条随机样本中占比约100%（4149次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ClickHit模式支持情况",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/hasClickHitMode",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getApplyRule - 查询规则应用列表",
+    "description": "单接口测试：POST /definition/getApplyRule。查询已应用状态的规则列表，用于规则应用管理页面。测试账号TikTok下暂无应用规则，返回空数组为正常。500条随机样本中占比约100%（3177次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则应用列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getApplyRule",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": ["{{user_id}}"],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/getAutoRefillRuleProfileIds - 查询AutoRefill规则关联profile",
+    "description": "单接口测试：GET /definition/getAutoRefillRuleProfileIds。查询已配置AutoRefill规则的profile ID列表，用于AutoRefill功能检测。500条随机样本中占比约100%（3093次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AutoRefill规则关联profile列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getAutoRefillRuleProfileIds",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/transferableOwnerList - 查询可转移规则的负责人列表",
+    "description": "单接口测试：GET /definition/transferableOwnerList。查询可作为规则转移目标的负责人列表，用于规则所有权转移功能。500条随机样本中占比约100%（1041次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询可转移规则负责人列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/transferableOwnerList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 暂停/恢复规则(创建临时规则,可重复)",
+    "description": "单接口测试：POST /definition/changeStatus。先创建临时规则，再测试isPaused=true暂停和isPaused=false恢复两个场景，最后删除清理，保证用例可重复执行。500条随机样本中占比约40%（8次/20样本）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
+          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
+          "applyTarget": {"clientId": "62", "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}], "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false, "targetLevel": "CampaignProductCreative"},
+          "dayOfWeek": 4,
+          "automation": [
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+          ],
+          "hour": 0, "ruleType": "BudgetBoost", "ruleName": "TC_TikTok_ChangeStatus_Cleanup",
+          "ruleNames": ["TC_TikTok_ChangeStatus_Cleanup"], "startDate": "2026-08-20T00:00:00", "isPaused": false, "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false, "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_ChangeStatus_Cleanup"], "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+        },
+        "extract_vars": {"tmp_rule_id_cstatus": "data.list[0].id"},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "暂停规则（isPaused=true）",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"isPaused": true, "ruleIds": ["{{tmp_rule_id_cstatus}}"]},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "恢复规则（isPaused=false）",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"isPaused": false, "ruleIds": ["{{tmp_rule_id_cstatus}}"]},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "后置清理-删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{tmp_rule_id_cstatus}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 创建TikTok BudgetBoost规则(含后置删除,可重复)",
+    "description": "单接口测试：POST /definition。创建TikTok平台CampaignProductCreative级BudgetBoost（智能预算加速）规则，第2步查出规则ID，第3步删除清理，保证用例可重复执行。500条随机样本中占比约100%（2986次，含各平台）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建TikTok BudgetBoost规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "tiktok",
+          "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
+          "dayOfWeek": 4,
+          "automation": [
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+          ],
+          "hour": 0,
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_Create_Cleanup",
+          "ruleNames": ["TC_TikTok_Create_Cleanup"],
+          "startDate": "2026-08-20T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "查询新建规则以验证创建成功并提取ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false, "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_Create_Cleanup"], "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+        },
+        "extract_vars": {"created_rule_id": "data.list[0].id"},
+        "expected_response": {
+          "code": 200,
+          "data": {"$not_empty": true}
+        }
+      },
+      {
+        "name": "后置清理-删除新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{created_rule_id}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑TikTok Campaign级规则(创建临时规则,可重复)",
+    "description": "单接口测试：POST /definition/editRule。创建临时Campaign级Auto规则，查出ID和automationId，编辑规则频次和名称，最后删除清理。500条随机样本中占比约100%（4326次，含各平台）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建临时BudgetBoost规则（TikTok不支持Campaign类型）",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
+          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
+          "dayOfWeek": 4, "hour": 0,
+          "automation": [
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+          ],
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_EditRule_Cleanup",
+          "ruleNames": ["TC_TikTok_EditRule_Cleanup"],
+          "startDate": "2026-08-20T00:00:00",
+          "isPaused": false, "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false, "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_EditRule_Cleanup"], "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+        },
+        "extract_vars": {
+          "tmp_rule_id_edit": "data.list[0].id"
+        },
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "前置-GET /definition/{ruleId}获取完整规则提取automationId",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{tmp_rule_id_edit}}",
+        "request_body": {},
+        "extract_vars": {
+          "tmp_automation_id": "data.automation[0].automationId"
+        },
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "编辑BudgetBoost规则-修改执行频次为Every3days",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "id": "{{tmp_rule_id_edit}}",
+          "isPaused": false,
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{user_id}}",
+          "frequency": "Every3days",
+          "productLine": "tiktok",
+          "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
+          "dayOfWeek": 4,
+          "hour": 1,
+          "automation": [
+            {
+              "automationId": "{{tmp_automation_id}}",
+              "requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]],
+              "dateIndex": {"length": 7, "index": 0},
+              "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}
+            }
+          ],
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_EditRule_Cleanup",
+          "ruleNames": ["TC_TikTok_EditRule_Cleanup"],
+          "startDate": "2026-08-20T00:00:00",
+          "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "后置清理-删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{tmp_rule_id_edit}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/updateAppliedObj - 更新规则应用对象(创建临时规则,可重复)",
+    "description": "单接口测试：POST /definition/updateAppliedObj。更新已有规则的应用目标对象列表。第1步创建临时规则，第2步查出ID，第3步更新应用对象，第4步删除清理。500条随机样本中占比约100%（1411次，含各平台）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
+          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
+          "applyTarget": {"clientId": "62", "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}], "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false, "targetLevel": "CampaignProductCreative"},
+          "dayOfWeek": 4,
+          "automation": [
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+          ],
+          "hour": 0, "ruleType": "BudgetBoost", "ruleName": "TC_TikTok_UpdateApplied_Cleanup",
+          "ruleNames": ["TC_TikTok_UpdateApplied_Cleanup"], "startDate": "2026-08-20T00:00:00", "isPaused": false, "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false, "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_UpdateApplied_Cleanup"], "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+        },
+        "extract_vars": {"tmp_rule_id_update": "data.list[0].id"},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "更新规则应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/updateAppliedObj",
+        "request_body": {
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
+          "ruleType": "BudgetBoost",
+          "emailOption": "NoEmails",
+          "id": "{{tmp_rule_id_update}}",
+          "sovKeywordList": [],
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "后置清理-删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{tmp_rule_id_update}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /query-rule-ids/tiktok/roas-explorer - 查询Campaign级RoasExplorer规则ID",
+    "description": "单接口测试：POST /query-rule-ids/tiktok/roas-explorer。查询TikTok平台Campaign级已配置RoasExplorer规则的规则ID列表，用于Campaign列表行展示规则状态。500条随机样本中占比约100%（752次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign级RoasExplorer规则ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/query-rule-ids/tiktok/roas-explorer",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "targetLevels": ["Campaign"],
+          "targetIds": ["1869461375946946", "1868989261580450"],
+          "queryRuleType": "RoasExplorer",
+          "timeZone": "America/Los_Angeles",
+          "profileIds": ["{{profile_id}}"],
+          "ignore": false,
+          "currency": "$",
+          "targetLevel": "Campaign",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /query-rule-ids/tiktok/smart-budget-boost - 查询CampaignProduct级BudgetBoost规则ID",
+    "description": "单接口测试：POST /query-rule-ids/tiktok/smart-budget-boost。查询TikTok平台CampaignProduct级已配置BudgetBoost规则的规则ID列表，用于Campaign商品列表行展示规则状态。500条随机样本中占比约60%（327次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询CampaignProduct级BudgetBoost规则ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/query-rule-ids/tiktok/smart-budget-boost",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "targetLevels": ["CampaignProduct"],
+          "targetIds": [
+            "1861337972421745,1732182496994103705",
+            "1867057928434850,1731795620550578585"
+          ],
+          "queryRuleType": "BudgetBoost",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "profileIds": ["{{profile_id}}"],
+          "currency": "$",
+          "targetLevel": "CampaignProduct",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /query-rule-ids/tiktok/smart-budget-boost - 查询CampaignProductCreative级BudgetBoost规则ID",
+    "description": "单接口测试：POST /query-rule-ids/tiktok/smart-budget-boost。查询TikTok平台CampaignProductCreative（广告级）已配置BudgetBoost规则的规则ID列表。500条随机样本中占比约35%（191次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询CampaignProductCreative级BudgetBoost规则ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/query-rule-ids/tiktok/smart-budget-boost",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "targetLevels": ["CampaignProductCreative"],
+          "targetIds": [
+            "1853469417438225,1732182487156167065,7552800357299145998",
+            "1850915249103889,1731795605504627097,7552802593487998222",
+            "1850287108818177,1731795626434204057,7552808136235617550"
+          ],
+          "queryRuleType": "BudgetBoost",
+          "timeZone": "America/Los_Angeles",
+          "profileIds": ["{{profile_id}}"],
+          "ignore": false,
+          "currency": "$",
+          "targetLevel": "CampaignProductCreative",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk-create/tiktok/roas-explorer - 批量创建TikTok RoasExplorer规则(含后置删除,可重复)",
+    "description": "单接口测试：POST /bulk-create/tiktok/roas-explorer。为TikTok Campaign批量创建RoasExplorer（智能ROAS探索）规则。若Campaign已有规则则返回data[0].success=false（errorMessage: Target info already has rule），API仍返回code:200。第2步用getRule按名称查出ID，第3步删除清理。500条随机样本中占比约100%（7次）。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建TikTok RoasExplorer规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/bulk-create/tiktok/roas-explorer",
+        "request_body": {
+          "ruleRequests": [
+            {
+              "isPaused": false,
+              "clientId": "62",
+              "emailSettings": [],
+              "emailOption": "NoEmails",
+              "timeZone": "America/Los_Angeles",
+              "userName": "superAdmin0913",
+              "userId": "{{user_id}}",
+              "frequency": "Every3days",
+              "productLine": "tiktok",
+              "mode": "Auto",
+              "applyTarget": {
+                "nonnullFrequencyCap": false,
+                "targetInfo": [{"targetId": "1866507316811025", "profileId": "{{profile_id}}"}],
+                "nonnullMaxCpc": false,
+                "nonnullDailyBudget": false,
+                "targetLevel": "Campaign"
+              },
+              "automation": [
+                {
+                  "requirements": [[]],
+                  "dateIndex": {"length": 3, "days": 14, "index": 0},
+                  "action": {"settings": "{\"maxBudget\":500,\"maxTargetRoas\":20,\"minBudget\":10,\"minTargetRoas\":0.1}", "action": "RoasExplorer", "budgetRate": 100, "actionName": "RoasExplorer"}
+                }
+              ],
+              "hour": 1,
+              "ruleType": "RoasExplorer",
+              "ruleName": "TC_TikTok_BulkCreate_RoasExplorer_Cleanup",
+              "ruleNames": ["TC_TikTok_BulkCreate_RoasExplorer_Cleanup"],
+              "startDate": "2026-08-20T00:00:00"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$is_array": true}
+        }
+      },
+      {
+        "name": "查询新建规则提取ID（若创建成功）",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false, "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_BulkCreate_RoasExplorer_Cleanup"], "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+        },
+        "extract_vars": {"bulk_roas_rule_id": "data.list[0].id"},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "后置清理-删除批量创建的规则（若存在）",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{bulk_roas_rule_id}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  }
+]

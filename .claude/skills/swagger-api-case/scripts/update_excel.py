@@ -84,11 +84,16 @@ def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
     col_idx = {}
     for c in range(1, ws.max_column + 1):
         v = ws.cell(1, c).value or ''
-        if '环境' in v:       col_idx['env']      = c
-        if 'Swagger' in v:   col_idx['swagger']   = c
-        if 'Tag' in v:       col_idx['module']    = c
+        if '环境' in v:        col_idx['env']      = c
+        if 'Swagger' in v:    col_idx['swagger']   = c
+        if 'Platform' in v:   col_idx['platform']  = c  # rule-api 多平台结构
+        if 'Tag' in v:        col_idx['module']    = c
     for name in ('Case数', '通过率', '接口覆盖率'):
         col_idx[name] = _find_or_create_col(ws, name, summary_font, summary_fill)
+
+    # 兼容两种结构：标准服务用 swagger 列，多平台服务（rule-api）用 platform 列
+    has_swagger  = 'swagger'  in col_idx
+    has_platform = 'platform' in col_idx
 
     total  = report['total']
     passed = report['passed']
@@ -100,9 +105,15 @@ def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
         # 环境列常为合并单元格（仅块首行有值，其余为 None）；None 视为继承块环境，不作否决
         env_val = ws.cell(r, col_idx['env']).value if 'env' in col_idx else None
         env_ok = env_val in (env, None, '')
-        if (env_ok
-                and ws.cell(r, col_idx['swagger']).value == swagger_title
-                and ws.cell(r, col_idx['module']).value == module):
+        mod_ok  = 'module' in col_idx and ws.cell(r, col_idx['module']).value == module
+        if has_swagger:
+            key_ok = ws.cell(r, col_idx['swagger']).value == swagger_title
+        elif has_platform:
+            # 多平台服务：swagger_title 传平台名（如 tiktok）
+            key_ok = ws.cell(r, col_idx['platform']).value == swagger_title
+        else:
+            key_ok = True  # 无 swagger/platform 列时仅按 module 匹配
+        if env_ok and key_ok and mod_ok:
             ws.cell(r, col_idx['Case数'],    total).alignment    = Alignment(horizontal='center')
             ws.cell(r, col_idx['通过率'],    pass_rate).alignment = Alignment(horizontal='center')
             ws.cell(r, col_idx['接口覆盖率'], coverage).alignment  = Alignment(horizontal='center')
@@ -123,21 +134,24 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
 
     norm = norm_path
 
-    # Build path → scenario lines（从 cases 的 name/description 提取）
-    path_scenarios = defaultdict(list)
+    # Build (method, path) → scenario lines（从 cases 的 name/description 提取）
+    method_path_scenarios = defaultdict(list)
     for c in cases:
         steps = c.get('steps', [])
         if not steps:
             continue
-        # 优先从 case name 提取路径（格式："{METHOD} /api/xxx - desc"）
-        # 避免多步骤 case 的前置步骤路径干扰归属
-        name_path_m = re.match(r'^[A-Z]+\s+(/\S+)', c.get('name', ''))
-        if name_path_m:
-            raw_path = name_path_m.group(1)
-            ref_step = steps[0]
+        # 优先从 case name 提取方法和路径（格式："{METHOD} /api/xxx - desc"）
+        name_m = re.match(r'^([A-Z]+)\s+(/\S+)', c.get('name', ''))
+        if name_m:
+            case_method = name_m.group(1).upper()
+            raw_path    = name_m.group(2)
+            ref_step    = steps[0]
         else:
-            raw_path = steps[-1].get('path', '')  # fallback: 取最后一步（实际被测接口）
-            ref_step = steps[-1]
+            # fallback: 取最后一步（实际被测接口）
+            last = steps[-1]
+            case_method = (last.get('method') or '').upper()
+            raw_path    = last.get('path', '')
+            ref_step    = last
         full_path = norm(raw_path, ref_step.get('base_url', ''))
         name = c.get('name', '')
         desc = c.get('description', '')
@@ -145,29 +159,51 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
         m = re.match(r'^(场景\d+)[_\-](.+)$', label_raw)
         label = (m.group(1) + ': ' + m.group(2).replace('_', ' ')) if m else label_raw.replace('_', ' ')
         pct_m = re.search(r'占比约([\d.]+%)', desc)
-        # 零流量端点（构造场景，无真实占比）只显示场景标签，不拼接占比
-        entry = label + ' — ' + pct_m.group(1) if pct_m else label
-        path_scenarios[full_path].append(entry)
+        if pct_m:
+            entry = label + ' — ' + pct_m.group(1)
+        elif '无ES流量' in desc or 'xx%' in desc:
+            entry = label + '（无ES流量）'
+        else:
+            entry = label
+        method_path_scenarios[(case_method, full_path)].append(entry)
 
-    # 找列位置：接口路径列 + 既有「场景覆盖」列（无则新建，不加环境后缀，与既定格式一致）
+    # 找列位置：方法列 + 接口路径列 + 既有「场景覆盖」列
     env_col  = next((c for c in range(1, ws.max_column + 1) if '环境' in str(ws.cell(1, c).value or '')), None)
     path_col = next((c for c in range(1, ws.max_column + 1)
                      if '路径' in str(ws.cell(1, c).value or '') or
                         'path' in str(ws.cell(1, c).value or '').lower()), None)
+    method_col = next((c for c in range(1, ws.max_column + 1)
+                       if str(ws.cell(1, c).value or '').strip().lower() in ('method', '方法', 'http方法')), None)
     if path_col is None:
         print(f'[场景覆盖] path column not found in {swagger_sheet}'); return
 
     scene_col = _find_or_create_col(ws, '场景覆盖', h_font, h_fill, width=72)
 
+    # 归一化索引：(method, canon_path) → entries
+    canon_scenarios = {(meth, _canon(p)): v for (meth, p), v in method_path_scenarios.items()}
+
     updated = 0
     for r in range(2, ws.max_row + 1):
-        # 有环境列则只更新匹配环境的行；无环境列则全部更新
         if env_col and ws.cell(r, env_col).value not in (env, None, ''):
             continue
         path = ws.cell(r, path_col).value
-        if path in path_scenarios:
-            lines = path_scenarios[path]
-            cell  = ws.cell(r, scene_col, '\n'.join(lines))
+        if not path:
+            continue
+        row_method = (ws.cell(r, method_col).value or '').strip().upper() if method_col else ''
+        # 优先按 (method, path) 精确匹配；无方法列时退化为只按路径匹配
+        lines = None
+        if row_method:
+            lines = (method_path_scenarios.get((row_method, path))
+                     or canon_scenarios.get((row_method, _canon(path))))
+        if lines is None:
+            # 兼容无方法列的 sheet：合并所有方法的场景
+            all_lines = []
+            for (meth, p), v in method_path_scenarios.items():
+                if p == path or _canon(p) == _canon(path):
+                    all_lines.extend(v)
+            lines = all_lines or None
+        if lines:
+            cell = ws.cell(r, scene_col, '\n'.join(lines))
             cell.alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
             cell.border    = bdr
             ws.row_dimensions[r].height = max(ws.row_dimensions[r].height or 15, len(lines) * 16)
@@ -182,11 +218,15 @@ def main():
     ap.add_argument('--report',         required=True)
     ap.add_argument('--endpoints',      required=True)
     ap.add_argument('--swagger-title',  required=True, dest='swagger_title')
+    ap.add_argument('--sheet-name',     default=None,  dest='sheet_name',
+                    help='场景覆盖 sheet 名，默认与 swagger-title 相同；多平台服务可单独指定（如 RuleApi）')
     ap.add_argument('--module',         required=True)
     ap.add_argument('--env',            default='us', choices=['us', 'cn', 'eu'])
     ap.add_argument('--excel',          default=None,
                     help='Excel 路径，默认从 cases 路径推断：single-api/<服务>/swagger_modules.xlsx')
     args = ap.parse_args()
+    if not args.sheet_name:
+        args.sheet_name = args.swagger_title
 
     # 自动推断 excel 路径：取 cases 路径中 single-api/<服务> 部分
     if not args.excel:
@@ -200,7 +240,7 @@ def main():
 
     wb = openpyxl.load_workbook(args.excel)
     update_summary(wb, args.swagger_title, args.module, args.env, cases, report, endpoints)
-    update_scenario_col(wb, args.swagger_title, args.env, cases, report)
+    update_scenario_col(wb, args.sheet_name, args.env, cases, report)
     # 原文件常被 Excel 打开占用：先存 tmp，再尝试替换；替换失败则保留 tmp 供手动合并
     import os, shutil
     tmp = args.excel.replace('.xlsx', '_tmp.xlsx')

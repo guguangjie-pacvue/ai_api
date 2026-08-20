@@ -1,0 +1,239 @@
+[
+  {
+    "name": "POST /sharePass/list - amazon平台分页查询共享通行证列表",
+    "description": "单接口测试：POST /sharePass/list。amazon平台、ownerIds+userIds过滤、按created_at倒序分页查询共享通行证列表。500条随机样本中占比约24%（41次）。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询共享通行证列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/list",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "orderBy": "created_at desc",
+            "pageSize": 20
+          },
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /sharePass/getAccounts - 获取可共享账户列表",
+    "description": "单接口测试：GET /sharePass/getAccounts。无参数，获取当前用户可用于共享的账户列表。500条随机样本中占比约25%（42次）。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取可共享账户列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/getAccounts",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /sharePass/creators - 获取创建者列表",
+    "description": "单接口测试：GET /sharePass/creators。无参数，获取共享通行证创建者列表。500条随机样本中占比约23%（39次）。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取创建者列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/creators",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /sharePass/check - 校验共享通行证有效性",
+    "description": "单接口测试：POST /sharePass/check。amazon平台、指定sharePassId+targetProductLine，校验共享通行证是否有效。500条随机样本中占比约12%（20次）。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "校验共享通行证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/check",
+        "request_body": {
+          "clientId": "515",
+          "sharePassId": "58ad5b66-65e3-4f76-a4df-80023a0899b0",
+          "targetProductLine": "amazon"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /sharePass/create + DELETE - 创建共享通行证后删除（可重复）",
+    "description": "单接口测试：POST /sharePass/create（写操作）。amazon平台、targetType=rule、创建规则共享通行证，第2步删除清理，保证可重复执行。500条随机样本中占比约8%（14次）。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建共享通行证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/create",
+        "request_body": {
+          "targetType": "template",
+          "list": [
+            {
+              "type": 1,
+              "templateId": "2084723524626800642"
+            }
+          ],
+          "timeZone": "America/Los_Angeles",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "created_share_pass_id": "data[0]"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除创建的共享通行证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/delete",
+        "request_body": ["{{created_share_pass_id}}"],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /sharePass/getSharePlatforms - 获取可共享平台列表",
+    "description": "单接口测试：POST /sharePass/getSharePlatforms。amazon平台、指定userIds查询可共享的平台列表。500条随机样本中占比约8%（14次）。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取可共享平台列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/getSharePlatforms",
+        "request_body": {
+          "productLine": "amazon",
+          "userIds": ["27440"],
+          "userId": "2962"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /sharePass/getRuleIdsFromSharePass - 通过共享通行证获取规则ID列表",
+    "description": "单接口测试：POST /sharePass/getRuleIdsFromSharePass。指定clientId+sharePassId，获取共享通行证关联的规则ID列表。500条随机样本中占比未统计（待补查）。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取共享通行证关联规则ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/getRuleIdsFromSharePass",
+        "request_body": {
+          "clientId": "3925",
+          "sharePassId": "0b637c97-066a-4c20-867c-50d8ff7b3c8e"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /sharePass/edit - 编辑共享通行证",
+    "description": "单接口测试：POST /sharePass/edit（写操作）。编辑已有共享通行证的配置。该接口无ES流量记录。[NEEDS_REAL_VALUE: sharePassId需使用真实共享通行证ID，name/list需按实际业务填充]",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "编辑共享通行证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/edit",
+        "request_body": {
+          "id": "[NEEDS_REAL_VALUE]",
+          "productLine": "amazon",
+          "targetType": "rule",
+          "list": [
+            {
+              "type": 1,
+              "ruleId": "[NEEDS_REAL_VALUE]"
+            }
+          ],
+          "timeZone": "America/Los_Angeles",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

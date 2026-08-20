@@ -1,0 +1,2813 @@
+{
+  "config": "rule-api (tiktok, us)",
+  "started_at": "2026-08-20T06:21:01.076Z",
+  "finished_at": "2026-08-20T06:21:33.872Z",
+  "total": 20,
+  "passed": 20,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /definition/getRule - Auto模式默认规则列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询Auto模式规则列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "targetLevels": [],
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "multiSort": [
+                {
+                  "sortType": "desc",
+                  "sortData": "createdAt"
+                }
+              ],
+              "pageSize": 20,
+              "orderBy": "createdAt desc"
+            },
+            "profileIds": [],
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [],
+            "frequency": [],
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "ruleNameSearchOperand": "LikeOr",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [],
+              "pageInfo": {
+                "multiSort": [
+                  {
+                    "sortData": "createdAt",
+                    "sortType": "desc"
+                  }
+                ],
+                "orderBy": "createdAt desc",
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 20
+              },
+              "total": null,
+              "totalCount": 0
+            },
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/getRule - 按ruleIds精确查询(创建临时规则,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "request_body": {
+            "clientId": "62",
+            "emailSettings": [],
+            "emailOption": "NoEmails",
+            "timeZone": "America/Los_Angeles",
+            "userName": "superAdmin0913",
+            "userId": "18183",
+            "frequency": "Weekly",
+            "productLine": "tiktok",
+            "mode": "Auto",
+            "applyTarget": {
+              "clientId": "62",
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "dayOfWeek": 4,
+            "automation": [
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req1",
+                      "value": "0",
+                      "operand": "GreaterOrEqual"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "SetCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "value": 111,
+                  "actionName": "SetCreativeBudgetBoost"
+                }
+              },
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req2",
+                      "value": "0",
+                      "operand": "Less"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "StopCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "actionName": "StopCreativeBudgetBoost"
+                }
+              }
+            ],
+            "hour": 0,
+            "ruleType": "BudgetBoost",
+            "ruleName": "TC_TikTok_GetByRuleId_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_GetByRuleId_Cleanup"
+            ],
+            "startDate": "2026-08-20T00:00:00",
+            "isPaused": false,
+            "sendFailEmail": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "前置-按名称查询并提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 5
+            },
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [
+              "TC_TikTok_GetByRuleId_Cleanup"
+            ],
+            "ruleNameSearchOperand": "Equal",
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:04",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Weekly",
+                  "id": "2090323209453649922",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 00:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_GetByRuleId_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "BudgetBoost",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 5
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "按ruleIds精确查询规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ruleIds": [
+              "2090323209453649922"
+            ],
+            "download": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 10
+            },
+            "timeZone": "America/Los_Angeles",
+            "ignore": false,
+            "currency": "$",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:04",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Weekly",
+                  "id": "2090323209453649922",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 00:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_GetByRuleId_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "BudgetBoost",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 10
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "后置清理-删除临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "ruleIds": [
+              "2090323209453649922"
+            ],
+            "isDelete": true
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/getRule - Manual模式规则列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询Manual模式规则列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "targetLevels": [],
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "multiSort": [
+                {
+                  "sortType": "desc",
+                  "sortData": "createdAt"
+                }
+              ],
+              "pageSize": 20,
+              "orderBy": "createdAt desc"
+            },
+            "profileIds": [],
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [],
+            "frequency": [],
+            "fromSnapShot": false,
+            "mode": "Manual",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "ruleNameSearchOperand": "LikeOr",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [],
+              "pageInfo": {
+                "multiSort": [
+                  {
+                    "sortData": "createdAt",
+                    "sortType": "desc"
+                  }
+                ],
+                "orderBy": "createdAt desc",
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 20
+              },
+              "total": null,
+              "totalCount": 0
+            },
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/getOwners - Auto模式获取规则负责人",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取Auto模式规则负责人",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getOwners",
+          "request_body": {
+            "removeApplied": false,
+            "mode": "Auto",
+            "download": false,
+            "timeZone": "America/Los_Angeles",
+            "ignore": false,
+            "currency": "$",
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/getOwners - Manual模式获取规则负责人",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取Manual模式规则负责人",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getOwners",
+          "request_body": {
+            "removeApplied": false,
+            "mode": "Manual",
+            "download": false,
+            "timeZone": "America/Los_Angeles",
+            "ignore": false,
+            "currency": "$",
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/getOwners - AutoCommerce模式获取规则负责人",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取AutoCommerce模式规则负责人",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getOwners",
+          "request_body": {
+            "removeApplied": false,
+            "mode": "AutoCommerce",
+            "download": false,
+            "timeZone": "America/Los_Angeles",
+            "ignore": false,
+            "currency": "$",
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/checkRuleName - 新建规则名称重复校验",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "校验新规则名称",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/checkRuleName",
+          "request_body": {
+            "emailOption": "NoEmails",
+            "ruleName": "TikTok Test Rule Name Check",
+            "ruleNames": [
+              "TikTok Test Rule Name Check"
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/checkRuleName - 编辑规则名称重复校验(创建临时规则,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "request_body": {
+            "clientId": "62",
+            "emailSettings": [],
+            "emailOption": "NoEmails",
+            "timeZone": "America/Los_Angeles",
+            "userName": "superAdmin0913",
+            "userId": "18183",
+            "frequency": "Weekly",
+            "productLine": "tiktok",
+            "mode": "Auto",
+            "applyTarget": {
+              "clientId": "62",
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "dayOfWeek": 4,
+            "automation": [
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req1",
+                      "value": "0",
+                      "operand": "GreaterOrEqual"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "SetCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "value": 111,
+                  "actionName": "SetCreativeBudgetBoost"
+                }
+              },
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req2",
+                      "value": "0",
+                      "operand": "Less"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "StopCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "actionName": "StopCreativeBudgetBoost"
+                }
+              }
+            ],
+            "hour": 0,
+            "ruleType": "BudgetBoost",
+            "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_CheckName_Edit_Cleanup"
+            ],
+            "startDate": "2026-08-20T00:00:00",
+            "isPaused": false,
+            "sendFailEmail": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 5
+            },
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [
+              "TC_TikTok_CheckName_Edit_Cleanup"
+            ],
+            "ruleNameSearchOperand": "Equal",
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:11",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Weekly",
+                  "id": "2090323238679560193",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 00:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "BudgetBoost",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 5
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "编辑规则时校验名称（携带id排除自身）",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/checkRuleName",
+          "request_body": {
+            "emailOption": "NoEmails",
+            "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_CheckName_Edit_Cleanup"
+            ],
+            "id": "2090323238679560193"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": ""
+          }
+        },
+        {
+          "name": "后置清理-删除临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "ruleIds": [
+              "2090323238679560193"
+            ],
+            "isDelete": true
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /definition/hasClickHitMode - 查询是否支持ClickHit模式",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询ClickHit模式支持情况",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/hasClickHitMode",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": false,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/getApplyRule - 查询规则应用列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询规则应用列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getApplyRule",
+          "request_body": {
+            "removeApplied": false,
+            "download": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "timeZone": "America/Los_Angeles",
+            "ignore": false,
+            "currency": "$",
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /definition/getAutoRefillRuleProfileIds - 查询AutoRefill规则关联profile",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询AutoRefill规则关联profile列表",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/getAutoRefillRuleProfileIds",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [
+              "895218402425905",
+              "3168533844884272",
+              "2134665760189477",
+              "1595696937834003",
+              "3070798222221384",
+              "4480101329001115",
+              "2697109952847017",
+              "4323205097955879",
+              "1377609371136764",
+              "2038484693145845",
+              "2826095641264620",
+              "3889600936829634",
+              "568038951492514",
+              "3269586051784055",
+              "1856983977675943",
+              "891896696601329",
+              "3359327586442606",
+              "3862239180648499",
+              "616127846974959",
+              "3516147693981570",
+              "2366507444291977",
+              "3811988943951642",
+              "3535068794605232",
+              "861299536122827",
+              "1114658929872906",
+              "938894458833308",
+              "1206820891639788",
+              "1039858195590456",
+              "2718450749096683",
+              "4402616381107910",
+              "1107845918690496",
+              "3587292495670865",
+              "1921159520999498",
+              "3712761096386653",
+              "3845743223670914",
+              "1897378386127678",
+              "2034027075357151",
+              "4469587054639927",
+              "2778526269014143",
+              "1090924669715459",
+              "4120085395494672",
+              "2414995457541945",
+              "1888785327484140",
+              "92412054997075",
+              "4140186288891810",
+              "178380760884962",
+              "1666276783594194",
+              "566537990422749",
+              "3075381432741808",
+              "2869055981179836",
+              "3085464851988680",
+              "4429103626831552",
+              "361624049668226",
+              "3576289182055477",
+              "4046390477739112",
+              "1320575820695786",
+              "2532916813420825",
+              "3732046693361679",
+              "2047440662389406",
+              "760334362293493",
+              "928261922941764",
+              "3194890559745389",
+              "2682740637630827",
+              "3536177939148215",
+              "169988911050793",
+              "2866235016898390",
+              "4270068149410241",
+              "1413615157797096",
+              "1127245162427362",
+              "3728329233932075",
+              "3641970855679665",
+              "1888915867188409",
+              "1077264155799173",
+              "2868855626063874",
+              "1095573689229146",
+              "2953633629713185",
+              "3851564024359009",
+              "1552351128690187",
+              "4302038012681863",
+              "3270676575658446",
+              "3944315781345547",
+              "107933643761627",
+              "3362204749341407",
+              "199922766688628",
+              "3570911769936103",
+              "2527265360251004",
+              "1366723526953126",
+              "821855922019971",
+              "3605558127888405",
+              "3001310557667403",
+              "3061893633607739",
+              "2858428642541203",
+              "1102948516680003",
+              "1195271755726400",
+              "118789583430062",
+              "4000177876123293",
+              "3010432772905722",
+              "3320337756712001",
+              "720648521392675",
+              "2702986257196675",
+              "4279262722889162",
+              "2175627097779926",
+              "1259097509783266",
+              "1407586571851315",
+              "2120625391863405",
+              "2168827624266707",
+              "2178344267378492",
+              "3251783253901336",
+              "4028420221932849",
+              "3613225451813819",
+              "1742134230074788",
+              "832956503275280",
+              "181713186365263",
+              "4199865034121204",
+              "1254032282378175",
+              "329333564670132",
+              "2799398354963855",
+              "87588230470038",
+              "4447426583836424",
+              "3918131759517762",
+              "3853428597029613",
+              "1209494013738245",
+              "3485154324366951",
+              "2834565624116114",
+              "1702032554289354",
+              "1862377748625834",
+              "1028370272495229",
+              "2693003904797124",
+              "1699255013256457",
+              "1114688751823307",
+              "3355756896701430",
+              "1324013299876278",
+              "3664024334610328",
+              "474539855510250",
+              "3508444903272211",
+              "2417967577318440",
+              "3952696688680950",
+              "4485883513678609",
+              "1874792282942631",
+              "3817082700324998",
+              "375426817947904",
+              "4230746468316595",
+              "2022401393052982",
+              "1651954747806325",
+              "3194577320222553",
+              "950078915410067",
+              "609542643015859",
+              "126287756362223",
+              "2681196876077646",
+              "3165352785218616",
+              "4427026066757423",
+              "614698750655456",
+              "3167953955671772",
+              "4010095194319404",
+              "2653622993464965",
+              "4097260570761106",
+              "3066187330889754",
+              "13939403421086",
+              "226375808147236",
+              "233686485606788",
+              "232078866654534",
+              "269593858241041",
+              "329810101486483",
+              "451268434417672",
+              "655390453627574",
+              "659896087168724",
+              "802619736887472",
+              "919019207581190",
+              "872571687221437",
+              "1083623091936587",
+              "1194254970116916",
+              "1285337300610627",
+              "1332869426177566",
+              "1349870625603653",
+              "1428495808736443",
+              "1491195136344965",
+              "1643825253506116",
+              "2001466735767203",
+              "2090705858216026",
+              "2157740969896923",
+              "2318221101983117",
+              "2326302431473407",
+              "2369072087832013",
+              "2549502841684222",
+              "2800796978491982",
+              "2858638054889779",
+              "2965939688911817",
+              "3132009700459419",
+              "3190462638005991",
+              "3259326445328867",
+              "3263087400181244",
+              "3321028350850579",
+              "3361855170784047",
+              "3368024281719461",
+              "3353830583471582",
+              "3462257073921114",
+              "3626409113505303",
+              "3584131606961912",
+              "3742325327593215",
+              "3943743821325624",
+              "3975710753183309",
+              "4006243290862223",
+              "4033513753556829",
+              "4164774653945058",
+              "4376777767155322",
+              "4405402417619210",
+              "4495213976214635",
+              "3226655008426748",
+              "3946426342106985",
+              "1698553183232935",
+              "1968345255788768",
+              "1550585435326890",
+              "1431321217997150",
+              "1129471624572813",
+              "1199413368624780",
+              "1200539577746159",
+              "3832956142043724",
+              "2320083199098746",
+              "1943578450250633",
+              "1651059285973766",
+              "2411111609572577",
+              "623931950174771",
+              "1345491986970297",
+              "3169807889041928",
+              "499708699317970",
+              "373617516420654",
+              "3169987980833272",
+              "949173195343144",
+              "894705751725856",
+              "3281463030219274",
+              "1061223229192080",
+              "3063358359474198",
+              "2301552052163993",
+              "3308130768332971",
+              "3396312220307420",
+              "347303397664882",
+              "1148218000448412",
+              "1829579344669528",
+              "1540746094536085",
+              "1600937274892808",
+              "4144185174748061",
+              "654796816109418",
+              "1439636426932184",
+              "843529997625586",
+              "3015308475231512",
+              "1610398020586608",
+              "1616792172374809",
+              "925325216147857",
+              "499416225325059",
+              "910928585176369",
+              "1523089195121176",
+              "1289908789356305",
+              "2399251065513105",
+              "252269583327062",
+              "86197628780026",
+              "358855321065123",
+              "557245242458538",
+              "581800816365017",
+              "977141941996584",
+              "1245644781996738",
+              "1257618776218440",
+              "1309420324757610",
+              "1906774391629913",
+              "2244443564033251",
+              "2322594512557155",
+              "2495954150785201",
+              "3205253240072295",
+              "3383166518201844",
+              "3387053211312351",
+              "3766597914504162",
+              "3779542804819104",
+              "3944335710442362",
+              "4103869118941119",
+              "4125648561729622",
+              "4136715834220856",
+              "4231372746864644",
+              "4435904420821076",
+              "855880376285637",
+              "3030975245535867",
+              "2648256954274761",
+              "233672363344699",
+              "617324551837823",
+              "2638626548371376",
+              "2896443742112998",
+              "3943755601370643",
+              "3720360359792832",
+              "2017959790167849",
+              "456228372813589",
+              "2470603351335856",
+              "758679178345402"
+            ],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /definition/transferableOwnerList - 查询可转移规则的负责人列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询可转移规则负责人列表",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/transferableOwnerList",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [
+              {
+                "ClientId": "3186",
+                "adtomicUserId": null,
+                "location": "America/New_York",
+                "userId": "18183",
+                "userName": "superAdmin0913",
+                "userRole": "Admin"
+              },
+              {
+                "ClientId": "3186",
+                "adtomicUserId": null,
+                "location": "America/New_York",
+                "userId": "18186",
+                "userName": "user0913",
+                "userRole": "User"
+              },
+              {
+                "ClientId": "3186",
+                "adtomicUserId": null,
+                "location": "America/New_York",
+                "userId": "20586",
+                "userName": "hontaotao",
+                "userRole": "User"
+              },
+              {
+                "ClientId": "3186",
+                "adtomicUserId": null,
+                "location": "America/New_York",
+                "userId": "20977",
+                "userName": "zy1634",
+                "userRole": "User"
+              }
+            ],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/changeStatus - 暂停/恢复规则(创建临时规则,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "request_body": {
+            "clientId": "62",
+            "emailSettings": [],
+            "emailOption": "NoEmails",
+            "timeZone": "America/Los_Angeles",
+            "userName": "superAdmin0913",
+            "userId": "18183",
+            "frequency": "Weekly",
+            "productLine": "tiktok",
+            "mode": "Auto",
+            "applyTarget": {
+              "clientId": "62",
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "dayOfWeek": 4,
+            "automation": [
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req1",
+                      "value": "0",
+                      "operand": "GreaterOrEqual"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "SetCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "value": 111,
+                  "actionName": "SetCreativeBudgetBoost"
+                }
+              },
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req2",
+                      "value": "0",
+                      "operand": "Less"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "StopCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "actionName": "StopCreativeBudgetBoost"
+                }
+              }
+            ],
+            "hour": 0,
+            "ruleType": "BudgetBoost",
+            "ruleName": "TC_TikTok_ChangeStatus_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_ChangeStatus_Cleanup"
+            ],
+            "startDate": "2026-08-20T00:00:00",
+            "isPaused": false,
+            "sendFailEmail": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 5
+            },
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [
+              "TC_TikTok_ChangeStatus_Cleanup"
+            ],
+            "ruleNameSearchOperand": "Equal",
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:18",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Weekly",
+                  "id": "2090323266596421633",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 00:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_ChangeStatus_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "BudgetBoost",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 5
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "暂停规则（isPaused=true）",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "isPaused": true,
+            "ruleIds": [
+              "2090323266596421633"
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "恢复规则（isPaused=false）",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "isPaused": false,
+            "ruleIds": [
+              "2090323266596421633"
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "后置清理-删除临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "ruleIds": [
+              "2090323266596421633"
+            ],
+            "isDelete": true
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition - 创建TikTok BudgetBoost规则(含后置删除,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建TikTok BudgetBoost规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "request_body": {
+            "clientId": "62",
+            "emailSettings": [],
+            "emailOption": "NoEmails",
+            "timeZone": "America/Los_Angeles",
+            "userName": "superAdmin0913",
+            "userId": "18183",
+            "frequency": "Weekly",
+            "productLine": "tiktok",
+            "mode": "Auto",
+            "applyTarget": {
+              "clientId": "62",
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "dayOfWeek": 4,
+            "automation": [
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req1",
+                      "value": "0",
+                      "operand": "GreaterOrEqual"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "SetCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "value": 111,
+                  "actionName": "SetCreativeBudgetBoost"
+                }
+              },
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req2",
+                      "value": "0",
+                      "operand": "Less"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "StopCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "actionName": "StopCreativeBudgetBoost"
+                }
+              }
+            ],
+            "hour": 0,
+            "ruleType": "BudgetBoost",
+            "ruleName": "TC_TikTok_Create_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_Create_Cleanup"
+            ],
+            "startDate": "2026-08-20T00:00:00",
+            "isPaused": false,
+            "sendFailEmail": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "查询新建规则以验证创建成功并提取ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 5
+            },
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [
+              "TC_TikTok_Create_Cleanup"
+            ],
+            "ruleNameSearchOperand": "Equal",
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:21",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Weekly",
+                  "id": "2090323280534519810",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 00:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_Create_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "BudgetBoost",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 5
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "后置清理-删除新建规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "ruleIds": [
+              "2090323280534519810"
+            ],
+            "isDelete": true
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/editRule - 编辑TikTok Campaign级规则(创建临时规则,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建临时BudgetBoost规则（TikTok不支持Campaign类型）",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "request_body": {
+            "clientId": "62",
+            "emailSettings": [],
+            "emailOption": "NoEmails",
+            "timeZone": "America/Los_Angeles",
+            "userName": "superAdmin0913",
+            "userId": "18183",
+            "frequency": "Weekly",
+            "productLine": "tiktok",
+            "mode": "Auto",
+            "applyTarget": {
+              "clientId": "62",
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "dayOfWeek": 4,
+            "hour": 0,
+            "automation": [
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req1",
+                      "value": "0",
+                      "operand": "GreaterOrEqual"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "SetCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "value": 111,
+                  "actionName": "SetCreativeBudgetBoost"
+                }
+              },
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req2",
+                      "value": "0",
+                      "operand": "Less"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "StopCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "actionName": "StopCreativeBudgetBoost"
+                }
+              }
+            ],
+            "ruleType": "BudgetBoost",
+            "ruleName": "TC_TikTok_EditRule_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_EditRule_Cleanup"
+            ],
+            "startDate": "2026-08-20T00:00:00",
+            "isPaused": false,
+            "sendFailEmail": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 5
+            },
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [
+              "TC_TikTok_EditRule_Cleanup"
+            ],
+            "ruleNameSearchOperand": "Equal",
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:23",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Weekly",
+                  "id": "2090323289845448705",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 00:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_EditRule_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "BudgetBoost",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 5
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "前置-GET /definition/{ruleId}获取完整规则提取automationId",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/2090323289845448705",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "adGroupViewList": null,
+              "adtomicAdGroups": null,
+              "adtomicMappingId": null,
+              "adtomicRuleType": null,
+              "applyTarget": {
+                "applyTo": null,
+                "bidAdjustmentKeywords": null,
+                "campaignTagProfileIds": null,
+                "clientId": null,
+                "competitorBrandInfoList": [],
+                "excludeAutoBidding": null,
+                "excludePausedCampaigns": null,
+                "excludePausedItems": null,
+                "excludePausedKeywords": null,
+                "excludePausedLineItems": null,
+                "excludePausedTargetings": null,
+                "excludeSBCampaigns": null,
+                "isAllApplyTarget": null,
+                "matchTypes": null,
+                "nonnullDailyBudget": false,
+                "nonnullFrequencyCap": false,
+                "nonnullMaxCpc": false,
+                "profileId": null,
+                "profiteroBrandInfoList": [],
+                "relationShipForAnd": null,
+                "ruleTargetOperandType": null,
+                "ruleTargetType": null,
+                "states": null,
+                "targetInfo": [
+                  {
+                    "applyTo": null,
+                    "countryCode": null,
+                    "profileId": "7551300708960862209",
+                    "ruleName": null,
+                    "sku": null,
+                    "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                    "userBrandId": null
+                  }
+                ],
+                "targetLevel": "CampaignProductCreative",
+                "userId": null
+              },
+              "asinTagProfileIds": null,
+              "automation": [
+                {
+                  "action": {
+                    "action": "SetCreativeBudgetBoost",
+                    "actionName": "SetCreativeBudgetBoost",
+                    "budgetRate": 100,
+                    "cap": null,
+                    "capMode": null,
+                    "capPercentage": null,
+                    "capTypeVal": null,
+                    "exploreCap": null,
+                    "exploreFloor": null,
+                    "floor": null,
+                    "isRemove": null,
+                    "isReplace": null,
+                    "offset": null,
+                    "percentage": null,
+                    "settings": null,
+                    "switchList": null,
+                    "targetType": null,
+                    "value": 111
+                  },
+                  "adGroupPlacement": null,
+                  "aspDataIndex": null,
+                  "automationId": "2090323289862225921",
+                  "bidMultiplierRequirementType": null,
+                  "buyBoxDataIndex": null,
+                  "commerceAction": null,
+                  "dateIndex": {
+                    "attributionModel": null,
+                    "days": null,
+                    "index": 0,
+                    "length": 7,
+                    "timeZone": null
+                  },
+                  "harvestAction": null,
+                  "isSingleKeyword": null,
+                  "marginDataIndex": null,
+                  "multiAction": null,
+                  "negativeTargetingAction": null,
+                  "offsetTargetAction": null,
+                  "practiceType": null,
+                  "prerequisites": null,
+                  "relatedAutomationId": null,
+                  "requirements": [
+                    [
+                      {
+                        "addOperand": null,
+                        "category": null,
+                        "compareField": null,
+                        "field": "spend",
+                        "id": "req1",
+                        "index": null,
+                        "isRemove": null,
+                        "isReplace": null,
+                        "isSameSKU": null,
+                        "length": null,
+                        "operand": "GreaterOrEqual",
+                        "secondValue": null,
+                        "sovGroup": null,
+                        "value": "0",
+                        "valueType": "Custom"
+                      }
+                    ]
+                  ],
+                  "secondDateIndex": null,
+                  "sourceAction": null,
+                  "sourceRequirements": null
+                },
+                {
+                  "action": {
+                    "action": "StopCreativeBudgetBoost",
+                    "actionName": "StopCreativeBudgetBoost",
+                    "budgetRate": 100,
+                    "cap": null,
+                    "capMode": null,
+                    "capPercentage": null,
+                    "capTypeVal": null,
+                    "exploreCap": null,
+                    "exploreFloor": null,
+                    "floor": null,
+                    "isRemove": null,
+                    "isReplace": null,
+                    "offset": null,
+                    "percentage": null,
+                    "settings": null,
+                    "switchList": null,
+                    "targetType": null,
+                    "value": null
+                  },
+                  "adGroupPlacement": null,
+                  "aspDataIndex": null,
+                  "automationId": "2090323289866420226",
+                  "bidMultiplierRequirementType": null,
+                  "buyBoxDataIndex": null,
+                  "commerceAction": null,
+                  "dateIndex": {
+                    "attributionModel": null,
+                    "days": null,
+                    "index": 0,
+                    "length": 7,
+                    "timeZone": null
+                  },
+                  "harvestAction": null,
+                  "isSingleKeyword": null,
+                  "marginDataIndex": null,
+                  "multiAction": null,
+                  "negativeTargetingAction": null,
+                  "offsetTargetAction": null,
+                  "practiceType": null,
+                  "prerequisites": null,
+                  "relatedAutomationId": null,
+                  "requirements": [
+                    [
+                      {
+                        "addOperand": null,
+                        "category": null,
+                        "compareField": null,
+                        "field": "spend",
+                        "id": "req2",
+                        "index": null,
+                        "isRemove": null,
+                        "isReplace": null,
+                        "isSameSKU": null,
+                        "length": null,
+                        "operand": "Less",
+                        "secondValue": null,
+                        "sovGroup": null,
+                        "value": "0",
+                        "valueType": "Custom"
+                      }
+                    ]
+                  ],
+                  "secondDateIndex": null,
+                  "sourceAction": null,
+                  "sourceRequirements": null
+                }
+              ],
+              "blackListId": null,
+              "campaignTagProfileIds": null,
+              "clickHitValue": null,
+              "clientId": "3186",
+              "commerceAsinProfileIds": null,
+              "createdAt": "2026-08-20 06:21:23",
+              "dayOfMonth": null,
+              "dayOfWeek": 4,
+              "emailOption": "NoEmails",
+              "emailSettings": [],
+              "endDate": null,
+              "excludeEndDate": null,
+              "excludePausedCampaigns": null,
+              "excludePausedTargetings": null,
+              "excludeStartDate": null,
+              "filePrefix": null,
+              "frequency": "Weekly",
+              "hour": 0,
+              "id": "2090323289845448705",
+              "is1p": null,
+              "isCustomize": null,
+              "isDeleted": false,
+              "isPaused": false,
+              "isSingleKeyword": null,
+              "lastExecutedAt": null,
+              "mode": "Auto",
+              "productLine": "tiktok",
+              "profiteroBrand": null,
+              "profiteroCategory": null,
+              "profiteroCountry": null,
+              "requirements": null,
+              "ruleAdtomicId": null,
+              "ruleAdtomicName": null,
+              "ruleName": "TC_TikTok_EditRule_Cleanup",
+              "ruleTemplateId": null,
+              "ruleType": "BudgetBoost",
+              "sendFailEmail": false,
+              "sovAsinApplyTarget": {
+                "applyTo": null,
+                "bidAdjustmentKeywords": null,
+                "campaignTagProfileIds": null,
+                "clientId": null,
+                "competitorBrandInfoList": [],
+                "excludeAutoBidding": null,
+                "excludePausedCampaigns": null,
+                "excludePausedItems": null,
+                "excludePausedKeywords": null,
+                "excludePausedLineItems": null,
+                "excludePausedTargetings": null,
+                "excludeSBCampaigns": null,
+                "isAllApplyTarget": null,
+                "matchTypes": null,
+                "nonnullDailyBudget": false,
+                "nonnullFrequencyCap": false,
+                "nonnullMaxCpc": false,
+                "profileId": null,
+                "profiteroBrandInfoList": [],
+                "relationShipForAnd": null,
+                "ruleTargetOperandType": null,
+                "ruleTargetType": null,
+                "states": null,
+                "targetInfo": [],
+                "targetLevel": null,
+                "userId": null
+              },
+              "sovCategory": null,
+              "sovKeywordList": null,
+              "sovKeywordStringList": null,
+              "sovKeywordTag": null,
+              "startDate": "2026-08-20 00:00:00",
+              "targetType": null,
+              "timeZone": "America/Los_Angeles",
+              "userId": "18183",
+              "weekOfMonth": null
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "编辑BudgetBoost规则-修改执行频次为Every3days",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/editRule",
+          "request_body": {
+            "id": "2090323289845448705",
+            "isPaused": false,
+            "clientId": "62",
+            "emailSettings": [],
+            "emailOption": "NoEmails",
+            "timeZone": "America/Los_Angeles",
+            "userName": "superAdmin0913",
+            "userId": "18183",
+            "frequency": "Every3days",
+            "productLine": "tiktok",
+            "mode": "Auto",
+            "applyTarget": {
+              "clientId": "62",
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "dayOfWeek": 4,
+            "hour": 1,
+            "automation": [
+              {
+                "automationId": "2090323289862225921",
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req1",
+                      "value": "0",
+                      "operand": "GreaterOrEqual"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "SetCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "value": 111,
+                  "actionName": "SetCreativeBudgetBoost"
+                }
+              }
+            ],
+            "ruleType": "BudgetBoost",
+            "ruleName": "TC_TikTok_EditRule_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_EditRule_Cleanup"
+            ],
+            "startDate": "2026-08-20T00:00:00",
+            "sendFailEmail": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "后置清理-删除临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "ruleIds": [
+              "2090323289845448705"
+            ],
+            "isDelete": true
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/updateAppliedObj - 更新规则应用对象(创建临时规则,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "request_body": {
+            "clientId": "62",
+            "emailSettings": [],
+            "emailOption": "NoEmails",
+            "timeZone": "America/Los_Angeles",
+            "userName": "superAdmin0913",
+            "userId": "18183",
+            "frequency": "Weekly",
+            "productLine": "tiktok",
+            "mode": "Auto",
+            "applyTarget": {
+              "clientId": "62",
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "dayOfWeek": 4,
+            "automation": [
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req1",
+                      "value": "0",
+                      "operand": "GreaterOrEqual"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "SetCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "value": 111,
+                  "actionName": "SetCreativeBudgetBoost"
+                }
+              },
+              {
+                "requirements": [
+                  [
+                    {
+                      "field": "spend",
+                      "valueType": "Custom",
+                      "id": "req2",
+                      "value": "0",
+                      "operand": "Less"
+                    }
+                  ]
+                ],
+                "dateIndex": {
+                  "length": 7,
+                  "index": 0
+                },
+                "action": {
+                  "action": "StopCreativeBudgetBoost",
+                  "budgetRate": 100,
+                  "actionName": "StopCreativeBudgetBoost"
+                }
+              }
+            ],
+            "hour": 0,
+            "ruleType": "BudgetBoost",
+            "ruleName": "TC_TikTok_UpdateApplied_Cleanup",
+            "ruleNames": [
+              "TC_TikTok_UpdateApplied_Cleanup"
+            ],
+            "startDate": "2026-08-20T00:00:00",
+            "isPaused": false,
+            "sendFailEmail": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 5
+            },
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [
+              "TC_TikTok_UpdateApplied_Cleanup"
+            ],
+            "ruleNameSearchOperand": "Equal",
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:27",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Weekly",
+                  "id": "2090323304525938690",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 00:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_UpdateApplied_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "BudgetBoost",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 5
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "更新规则应用对象",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/updateAppliedObj",
+          "request_body": {
+            "applyTarget": {
+              "relationShipForAnd": false,
+              "targetInfo": [
+                {
+                  "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                  "profileId": "7551300708960862209"
+                }
+              ],
+              "nonnullFrequencyCap": false,
+              "nonnullMaxCpc": false,
+              "nonnullDailyBudget": false,
+              "targetLevel": "CampaignProductCreative"
+            },
+            "ruleType": "BudgetBoost",
+            "emailOption": "NoEmails",
+            "id": "2090323304525938690",
+            "sovKeywordList": [],
+            "campaignTagProfileIds": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        },
+        {
+          "name": "后置清理-删除临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "ruleIds": [
+              "2090323304525938690"
+            ],
+            "isDelete": true
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /query-rule-ids/tiktok/roas-explorer - 查询Campaign级RoasExplorer规则ID",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询Campaign级RoasExplorer规则ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/query-rule-ids/tiktok/roas-explorer",
+          "request_body": {
+            "removeApplied": false,
+            "download": false,
+            "targetLevels": [
+              "Campaign"
+            ],
+            "targetIds": [
+              "1869461375946946",
+              "1868989261580450"
+            ],
+            "queryRuleType": "RoasExplorer",
+            "timeZone": "America/Los_Angeles",
+            "profileIds": [
+              "7551300708960862209"
+            ],
+            "ignore": false,
+            "currency": "$",
+            "targetLevel": "Campaign",
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /query-rule-ids/tiktok/smart-budget-boost - 查询CampaignProduct级BudgetBoost规则ID",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询CampaignProduct级BudgetBoost规则ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/query-rule-ids/tiktok/smart-budget-boost",
+          "request_body": {
+            "removeApplied": false,
+            "download": false,
+            "targetLevels": [
+              "CampaignProduct"
+            ],
+            "targetIds": [
+              "1861337972421745,1732182496994103705",
+              "1867057928434850,1731795620550578585"
+            ],
+            "queryRuleType": "BudgetBoost",
+            "timeZone": "America/Los_Angeles",
+            "ignore": false,
+            "profileIds": [
+              "7551300708960862209"
+            ],
+            "currency": "$",
+            "targetLevel": "CampaignProduct",
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /query-rule-ids/tiktok/smart-budget-boost - 查询CampaignProductCreative级BudgetBoost规则ID",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询CampaignProductCreative级BudgetBoost规则ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/query-rule-ids/tiktok/smart-budget-boost",
+          "request_body": {
+            "removeApplied": false,
+            "download": false,
+            "targetLevels": [
+              "CampaignProductCreative"
+            ],
+            "targetIds": [
+              "1853469417438225,1732182487156167065,7552800357299145998",
+              "1850915249103889,1731795605504627097,7552802593487998222",
+              "1850287108818177,1731795626434204057,7552808136235617550"
+            ],
+            "queryRuleType": "BudgetBoost",
+            "timeZone": "America/Los_Angeles",
+            "profileIds": [
+              "7551300708960862209"
+            ],
+            "ignore": false,
+            "currency": "$",
+            "targetLevel": "CampaignProductCreative",
+            "fromSnapShot": false
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /bulk-create/tiktok/roas-explorer - 批量创建TikTok RoasExplorer规则(含后置删除,可重复)",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "批量创建TikTok RoasExplorer规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/bulk-create/tiktok/roas-explorer",
+          "request_body": {
+            "ruleRequests": [
+              {
+                "isPaused": false,
+                "clientId": "62",
+                "emailSettings": [],
+                "emailOption": "NoEmails",
+                "timeZone": "America/Los_Angeles",
+                "userName": "superAdmin0913",
+                "userId": "18183",
+                "frequency": "Every3days",
+                "productLine": "tiktok",
+                "mode": "Auto",
+                "applyTarget": {
+                  "nonnullFrequencyCap": false,
+                  "targetInfo": [
+                    {
+                      "targetId": "1866507316811025",
+                      "profileId": "7551300708960862209"
+                    }
+                  ],
+                  "nonnullMaxCpc": false,
+                  "nonnullDailyBudget": false,
+                  "targetLevel": "Campaign"
+                },
+                "automation": [
+                  {
+                    "requirements": [
+                      []
+                    ],
+                    "dateIndex": {
+                      "length": 3,
+                      "days": 14,
+                      "index": 0
+                    },
+                    "action": {
+                      "settings": "{\"maxBudget\":500,\"maxTargetRoas\":20,\"minBudget\":10,\"minTargetRoas\":0.1}",
+                      "action": "RoasExplorer",
+                      "budgetRate": 100,
+                      "actionName": "RoasExplorer"
+                    }
+                  }
+                ],
+                "hour": 1,
+                "ruleType": "RoasExplorer",
+                "ruleName": "TC_TikTok_BulkCreate_RoasExplorer_Cleanup",
+                "ruleNames": [
+                  "TC_TikTok_BulkCreate_RoasExplorer_Cleanup"
+                ],
+                "startDate": "2026-08-20T00:00:00"
+              }
+            ]
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [
+              {
+                "endDate": null,
+                "errorMessage": null,
+                "id": "2090323324591489026",
+                "maxBudget": null,
+                "maxTargetRoas": null,
+                "minBudget": null,
+                "minTargetRoas": null,
+                "operationType": "create",
+                "paused": null,
+                "profileId": null,
+                "startDate": null,
+                "success": true,
+                "targetId": null,
+                "targetInfo": {
+                  "applyTo": null,
+                  "countryCode": null,
+                  "profileId": "7551300708960862209",
+                  "ruleName": null,
+                  "sku": null,
+                  "targetId": "1866507316811025",
+                  "userBrandId": null
+                },
+                "targetLevel": "Campaign",
+                "timeZone": null
+              }
+            ],
+            "msg": null
+          }
+        },
+        {
+          "name": "查询新建规则提取ID（若创建成功）",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "request_body": {
+            "removeApplied": false,
+            "ownerIds": [
+              "18183"
+            ],
+            "pageInfo": {
+              "pageIndex": 1,
+              "pageSize": 5
+            },
+            "timeZone": "America/Los_Angeles",
+            "managedProfileIds": [
+              "7551300708960862209"
+            ],
+            "ruleNameList": [
+              "TC_TikTok_BulkCreate_RoasExplorer_Cleanup"
+            ],
+            "ruleNameSearchOperand": "Equal",
+            "fromSnapShot": false,
+            "mode": "Auto",
+            "download": false,
+            "ruleType": [],
+            "ignore": false,
+            "currency": "$",
+            "status": []
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "adtomicRuleType": null,
+                  "appliedObjects": "--",
+                  "countNum": 0,
+                  "createdAt": "2026-08-19 23:21:32",
+                  "endDate": null,
+                  "endDateStr": "--",
+                  "frequency": "Every 3 days",
+                  "id": "2090323324591489026",
+                  "is1p": null,
+                  "isCustomize": false,
+                  "lastExecutedAt": null,
+                  "lastExecutionRes": [],
+                  "lastExecutionResStr": null,
+                  "mode": "Auto",
+                  "nextExecutedAt": "2026-08-20 01:00:00",
+                  "productLine": "tiktok",
+                  "profileId": null,
+                  "readOnly": false,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleAutomationId": null,
+                  "ruleName": "TC_TikTok_BulkCreate_RoasExplorer_Cleanup",
+                  "ruleTargetType": null,
+                  "ruleTargetTypeStr": null,
+                  "ruleTemplateId": null,
+                  "ruleType": "RoasExplorer",
+                  "showApply": false,
+                  "startDate": "2026-08-20 00:00:00",
+                  "startDateStr": "08/20/2026 00:00:00 PST/PDT",
+                  "status": "2",
+                  "statusName": "Scheduled",
+                  "suggestionCount": "0",
+                  "targetLevel": null,
+                  "targetLevelName": null,
+                  "timeName": "PST/PDT",
+                  "timezone": "America/Los_Angeles",
+                  "userId": "18183",
+                  "userName": "superAdmin0913"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": null,
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 5
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        },
+        {
+          "name": "后置清理-删除批量创建的规则（若存在）",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "request_body": {
+            "ruleIds": [
+              "2090323324591489026"
+            ],
+            "isDelete": true
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": null,
+            "msg": null
+          }
+        }
+      ]
+    }
+  ]
+}

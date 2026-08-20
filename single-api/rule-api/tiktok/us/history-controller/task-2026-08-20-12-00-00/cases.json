@@ -1,0 +1,449 @@
+[
+  {
+    "name": "POST /history/getRuleAlertCount - 标准告警计数查询",
+    "description": "单接口测试：POST /history/getRuleAlertCount。查询规则告警执行计数，页面进入时初始化调用。500条随机样本中占比约100%（239742次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询规则告警计数",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/history/getRuleAlertCount",
+      "request_body": {
+        "removeApplied": false, "download": false, "ownerIds": ["{{user_id}}"],
+        "dismissedRuleIds": [], "timeZone": "America/Los_Angeles",
+        "ignore": false, "currency": "$", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$not_empty": true}}
+    }]
+  },
+  {
+    "name": "POST /history/getRuleAlertDetail - 规则告警详情列表",
+    "description": "单接口测试：POST /history/getRuleAlertDetail。查询规则告警详情，用于历史执行记录页面展示。500条随机样本中占比约100%（130次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询规则告警详情",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/history/getRuleAlertDetail",
+      "request_body": {
+        "removeApplied": false, "ownerIds": ["{{user_id}}"],
+        "pageInfo": {"pageIndex": 1, "pageSize": 20},
+        "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
+        "userId": "{{user_id}}", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$not_empty": true}}
+    }]
+  },
+  {
+    "name": "POST /getPendingList - 待处理规则列表",
+    "description": "单接口测试：POST /getPendingList。查询待处理（建议操作未确认）的规则执行记录列表。500条随机样本中占比约100%（3933次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询待处理规则列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getPendingList",
+      "request_body": {
+        "removeApplied": false, "download": false, "ownerIds": ["{{user_id}}"],
+        "ruleType": [], "pageInfo": {"pageIndex": 1, "pageSize": 50},
+        "timeZone": "America/Los_Angeles", "ignore": false, "currency": "$", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$not_empty": true}}
+    }]
+  },
+  {
+    "name": "POST /getPendingRuleNum - 待处理规则数量",
+    "description": "单接口测试：POST /getPendingRuleNum。查询当前待处理规则的数量，用于badge展示。500条随机样本中占比约100%（720次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询待处理规则数量",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getPendingRuleNum",
+      "request_body": {
+        "removeApplied": false, "ownerIds": ["{{user_id}}"],
+        "timeZone": "America/Los_Angeles", "ignore": false, "currency": "$", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getHistoryList - 历史执行记录列表",
+    "description": "单接口测试：POST /getHistoryList。查询规则历史执行记录列表，含日期范围过滤。测试账号TikTok暂无历史记录，返回空列表为正常。500条随机样本中占比约100%（597次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询历史执行记录列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getHistoryList",
+      "request_body": {
+        "removeApplied": false, "ownerIds": ["{{user_id}}"],
+        "startDate": "2026-07-01", "endDate": "2026-08-20",
+        "prevStartDate": "2026-06-17", "prevEndDate": "2026-08-06",
+        "pageInfo": {"pageIndex": 1, "pageSize": 50},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false,
+        "download": false, "ignore": false, "currency": "$"
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$not_empty": true}}
+    }]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - 规则快照查询",
+    "description": "单接口测试：POST /queryRuleSnapshots。按规则ID+batchId+entityId查询规则执行快照。500条随机样本中占比约100%（2762次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询规则执行快照",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/queryRuleSnapshots",
+      "request_body": {
+        "ruleIds": ["1983417891745345538"],
+        "profileIds": ["1148218000448412"],
+        "batchIds": ["2c4bce02-bda4-4c63-b375-b8b256c03b95"],
+        "entityIds": ["82898520802565", "55459851356730"]
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$is_array": true}}
+    }]
+  },
+  {
+    "name": "POST /getProfiles - 执行日志Profile列表",
+    "description": "单接口测试：POST /getProfiles。查询指定执行日志下的Profile列表，用于历史详情页筛选器。500条随机样本中占比约100%（5335次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询执行日志Profile列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getProfiles",
+      "request_body": {
+        "removeApplied": false, "download": false,
+        "ruleExecutionLogId": 41252012,
+        "timeZone": "America/Los_Angeles", "ignore": false, "currency": "$", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$is_array": true}}
+    }]
+  },
+  {
+    "name": "POST /getCampaigns/{ruleExecutionLogId} - 执行日志Campaign列表",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。查询指定执行日志下的Campaign列表，用于历史详情筛选。500条随机样本中占比约100%（311次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询执行日志Campaign列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getCampaigns/41252012",
+      "request_body": {
+        "removeApplied": false, "pageInfo": {"pageIndex": 1, "pageSize": 20},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$is_array": true}}
+    }]
+  },
+  {
+    "name": "POST /getCampaignTags/{ruleExecutionLogId} - 执行日志CampaignTag列表",
+    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。查询指定执行日志下的CampaignTag列表。500条随机样本中占比约100%（235次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询执行日志CampaignTag列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getCampaignTags/41252012",
+      "request_body": {
+        "removeApplied": false, "pageInfo": {"pageIndex": 1, "pageSize": 20},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200, "data": {"$is_array": true}}
+    }]
+  },
+  {
+    "name": "POST /getAdGroups/{ruleExecutionLogId} - 执行日志AdGroup列表",
+    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。查询指定执行日志下的AdGroup列表。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询执行日志AdGroup列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getAdGroups/41252012",
+      "request_body": {
+        "removeApplied": false, "pageInfo": {"pageIndex": 1, "pageSize": 20},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getAdtomicSuggestions - Adtomic建议操作列表",
+    "description": "单接口测试：POST /getAdtomicSuggestions。查询Adtomic规则产生的建议操作列表。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询Adtomic建议列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getAdtomicSuggestions",
+      "request_body": {
+        "removeApplied": false, "ownerIds": ["{{user_id}}"],
+        "pageInfo": {"pageIndex": 1, "pageSize": 20},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /history/getRuleDeadDetail - 规则失效详情",
+    "description": "单接口测试：POST /history/getRuleDeadDetail。查询已失效规则的详细信息。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询规则失效详情",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/history/getRuleDeadDetail",
+      "request_body": {
+        "ruleId": "{{rule_id}}",
+        "pageInfo": {"pageIndex": 1, "pageSize": 20}
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /history/getLastPauseAsins/{ruleId} - 规则最近暂停ASIN列表",
+    "description": "单接口测试：POST /history/getLastPauseAsins/{ruleId}。查询规则最近一次执行暂停的ASIN列表。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询最近暂停ASIN列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/history/getLastPauseAsins/1983417891745345538",
+      "request_body": {},
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "GET /history/deleteHistoryData/{tableName} - 清理历史数据（运维接口）",
+    "description": "单接口测试：GET /history/deleteHistoryData/{tableName}。清理指定表的历史归档数据，内部运维接口。500条随机样本中占比约100%（160次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "清理历史数据",
+      "method": "GET", "base_url": "{{RULEBASEURL}}", "path": "/history/deleteHistoryData/rule_snapshot_detail",
+      "request_body": {},
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /history/archiveOldLogsTask - 归档旧日志（运维接口）",
+    "description": "单接口测试：POST /history/archiveOldLogsTask。触发旧日志归档任务，内部定时任务接口。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "触发旧日志归档任务",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/history/archiveOldLogsTask",
+      "request_body": {},
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 执行日志详情[需TikTok执行历史]",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。查询执行日志详情。注意：该接口需要TikTok平台的真实ruleExecutionLogId，测试账号暂无TikTok执行历史，当前以Amazon执行日志ID测试（预期405）。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询执行日志详情",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getDetail/41252012",
+      "request_body": {
+        "removeApplied": false, "applyStatusList": ["Applied", "Not_Applied"],
+        "ownerIds": ["{{user_id}}"], "pageInfo": {"pageIndex": 1, "pageSize": 50},
+        "timeZone": "America/Los_Angeles", "profileIds": [], "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /setIgnored - 设置忽略操作[需TikTok执行历史]",
+    "description": "单接口测试：POST /setIgnored。对执行日志记录设置忽略/取消忽略操作。注意：需要TikTok平台真实ruleExecutionLogId和detail记录ID，测试账号暂无TikTok执行历史。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "设置忽略",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/setIgnored",
+      "request_body": {
+        "ruleExecutionLogId": 41252012,
+        "ids": [0],
+        "operation": "add"
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /setRemarks - 设置执行日志备注[需TikTok执行历史]",
+    "description": "单接口测试：POST /setRemarks。为执行日志记录添加备注。注意：需要TikTok平台真实ruleExecutionLogId和detail记录ID。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "设置执行日志备注",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/setRemarks",
+      "request_body": {
+        "ruleExecutionLogId": 41252012,
+        "ids": [0],
+        "remarks": "Test remark - automated test"
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /history/export/{ruleExecutionLogId} - 导出执行日志[需TikTok执行历史]",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。导出规则执行日志数据。注意：需要TikTok平台真实ruleExecutionLogId。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "导出执行日志",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/history/export/41252012",
+      "request_body": {
+        "removeApplied": false, "applyStatusList": [],
+        "pageInfo": {"pageIndex": 1, "pageSize": -1},
+        "timeZone": "America/Los_Angeles", "profileIds": [], "language": "EN", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /pending/export/{ruleExecutionLogId} - 导出待处理列表[需TikTok执行历史]",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。导出待处理规则执行列表。注意：需要TikTok平台真实ruleExecutionLogId。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "导出待处理列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/pending/export/41252012",
+      "request_body": {
+        "removeApplied": false, "applyStatusList": [],
+        "pageInfo": {"pageIndex": 1, "pageSize": -1},
+        "timeZone": "America/Los_Angeles", "profileIds": [], "language": "EN", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /changeSuggestionStatus - 变更建议操作状态[需实际建议记录]",
+    "description": "单接口测试：POST /changeSuggestionStatus。批量变更Adtomic建议操作的处理状态。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "变更建议操作状态",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/changeSuggestionStatus",
+      "request_body": [{"ruleExecutionLogId": 41252012, "status": "accepted"}],
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getAutoRuleLogList - 自动规则执行日志列表[Amazon专属]",
+    "description": "单接口测试：POST /getAutoRuleLogList。查询自动化规则的执行日志列表。该接口为Amazon专属（需传rule id），TikTok平台预期返回405。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询自动规则执行日志列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getAutoRuleLogList",
+      "request_body": {
+        "id": 1983417891745345538,
+        "removeApplied": false, "ownerIds": ["{{user_id}}"],
+        "pageInfo": {"pageIndex": 1, "pageSize": 10},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLog - 自动规则详情日志[Amazon专属]",
+    "description": "单接口测试：POST /getAutoRuleDetailLog。查询Amazon自动化规则的详细执行日志，TikTok平台不支持。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询自动规则详细日志",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getAutoRuleDetailLog",
+      "request_body": {
+        "ruleExecutionLogId": 41252012,
+        "pageInfo": {"pageIndex": 1, "pageSize": 10},
+        "newLog": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLogFilter - 自动规则日志过滤器[Amazon专属]",
+    "description": "单接口测试：POST /getAutoRuleDetailLogFilter。获取Amazon自动化规则日志筛选选项。TikTok平台不支持。该接口无ES流量记录（TikTok平台）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询自动规则日志过滤器",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getAutoRuleDetailLogFilter",
+      "request_body": {"ruleExecutionLogId": 41252012},
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getLineItems/{ruleExecutionLogId} - 执行日志LineItem列表",
+    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}。查询指定执行日志下的LineItem列表（DSP广告相关）。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询执行日志LineItem列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getLineItems/41252012",
+      "request_body": {
+        "removeApplied": false, "pageInfo": {"pageIndex": 1, "pageSize": 20},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  },
+  {
+    "name": "POST /getProducts/{ruleExecutionLogId} - 执行日志Product列表",
+    "description": "单接口测试：POST /getProducts/{ruleExecutionLogId}。查询指定执行日志下的Product/ASIN列表。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init", "last_modified": "init", "change_type": "NEW", "generated_by": "swagger-api-case",
+    "steps": [{
+      "name": "查询执行日志Product列表",
+      "method": "POST", "base_url": "{{RULEBASEURL}}", "path": "/getProducts/41252012",
+      "request_body": {
+        "removeApplied": false, "pageInfo": {"pageIndex": 1, "pageSize": 20},
+        "timeZone": "America/Los_Angeles", "fromSnapShot": false
+      },
+      "extract_vars": {},
+      "expected_response": {"code": 200}
+    }]
+  }
+]

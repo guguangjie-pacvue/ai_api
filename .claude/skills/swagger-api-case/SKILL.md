@@ -93,13 +93,28 @@ single-api/
       "cn": "<CN ES 索引，如 cn-amazon-access-*>",
       "eu": "<EU ES 索引，如 eu-amazon-access-*>"
     },
-    "config": "single-api/<服务名>/{env}/config.json"
+    "config": "single-api/<服务名>/{env}/config.json",
+    "es": {
+      "path_field": "<接口路径字段，如 apiEndpoint.keyword / urlReferrer.keyword>",
+      "method_field": "method.keyword",
+      "body_field": "body",
+      "body_is_json_string": true,
+      "clientid_exclude": [62, 3186],
+      "assertion_l1": { "code": 200, "success": true },
+      "platform_filter": null
+    }
   }
 }
 ```
 
 - `swaggers`：title 和 url 配对，取代原来的 `swagger_titles` + `swagger_urls` 两个并列数组
 - `platforms`：仅多平台服务有此字段（如 rule-api）；无此字段则走标准目录结构，config 路径含 `{env}`；有此字段则走多平台目录结构，config 路径含 `{platform}/{env}`
+- 🔴 `es`：**该服务所有 ES 查询差异集中在此块**（详见 Phase 2.1），新增服务只需填这里，正文不再逐服务列举：
+  - `path_field` / `method_field` / `body_field`：ES 索引里对应的字段名（服务间不通用，首次接入需探测确认）
+  - `body_is_json_string`：`body` 是 JSON 字符串（需二次 `ConvertFrom-Json`，如 mainapi）还是已是对象（`_source` 直接取，如 rule-api）
+  - `clientid_exclude`：查询时固定 `must_not` 排除的测试账号 clientId
+  - `assertion_l1`：该服务 Happy Path 的 L1 断言模板（mainapi 有 `success` 字段，rule-api 只有 `code`）
+  - `platform_filter`：多平台服务的平台过滤方式（单平台服务为 `null`）。`{"get":"all","post":"queryString:productLine=<platform>"}` 表示 GET 用全平台流量、POST 按 `queryString` 过滤当前平台
 
 **流程**：
 1. 读 `single-api/services.json`（不存在则视为空表）
@@ -193,75 +208,53 @@ node ".claude/skills/swagger-api-case/scripts/parse_swagger.js" `
 
 **目标**：从生产日志中拿近 30 天用户的真实请求体，直接作为 case 的 `request_body`，不推断、不猜值。Swagger 负责结构校验，ES 负责提供真实数据。
 
-### 2.1 已确认字段映射
+### 2.1 ES 字段与查询参数（读 services.json.es）
 
-不同服务的 ES 索引字段名不通用，**每个新索引必须先探测，不能直接套用别的服务的字段名**：
+🔴 **服务间的 ES 差异全部读 `services.json.<服务>.es`，本文不再逐服务列举**。查询前从该块取：`path_field`（接口路径字段）、`method_field`、`body_field`、`body_is_json_string`、`clientid_exclude`、`assertion_l1`、`platform_filter`。字段含义见"输入"章节的 schema 说明。
 
-| 用途 | amazon-access-*（mainapi 已验证） | rule-api-access-*（rule-api 已验证） |
-|------|------|------|
-| 接口路径 | `apiEndpoint.keyword` | `urlReferrer.keyword` |
-| HTTP 方法 | `method.keyword` | `method.keyword` |
-| 请求体 | `body`（JSON 字符串） | `body`（JSON 对象，非字符串，`_source` 直接取即可） |
-| 时间戳 | `@timestamp` | `@timestamp` |
+- mainapi：`path_field=apiEndpoint.keyword`、`body_is_json_string=true`（body 是字符串，需二次 `ConvertFrom-Json`）
+- rule-api：`path_field=urlReferrer.keyword`、`body_is_json_string=false`（body 已是对象，`_source` 直接取）
 
-🔴 **rule-api 场景下 productLine 不在请求体/ES 里体现**：多平台服务（如 rule-api）用请求 header `productline` 区分平台，但 ES access log **不索引请求 header**（探测过 `debugInfo` 字段，实际内容为空数组），所以：
-- 2.3 的场景挖掘只能挖出 body 内部的字段差异（如 ruleType、filter 组合等），**挖不出"这个接口在生产里被哪些平台调用过、各占多少"**——ES 样本里看不到 productLine 分布。
-- **不能靠 ES 频率来决定要不要覆盖某个平台**。多平台服务的平台覆盖是**强制枚举**，不是频率驱动：以 `services.json.<服务>.platforms` 的清单为准，每个平台都要单独生成一遍 case（同一份 cases.json，指向该平台的 `config.json`，通过 `config.json.headers.productline` 切换），跟 ES 里这个接口 productLine=xxx 出现过多少次无关。
-- body 内部场景挖掘（Phase 2.3 原有逻辑）照常按 ≥1% 规则跑，只是这个规则管的是"同一 productLine 内部的入参差异"，不管平台覆盖。
-
-其他服务索引首次使用时，通过以下方式探测字段：
+**新服务首次接入**：`es` 块为空时先探测字段，确认后**回写 `services.json.<服务>.es`**，下次直接读：
 ```powershell
 $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("watcher:kY9GErML%luQTorm"))
 $headers = @{ "Authorization" = "Basic $b64"; "kbn-xsrf" = "true" }
 Invoke-RestMethod -Uri "https://logs.pacvue.com/api/index_patterns/_fields_for_wildcard?pattern=<索引名>&meta_fields=_source" -Headers $headers | ConvertTo-Json -Depth 3
 ```
 
+🔴 **多平台服务的场景挖掘按 HTTP 方法分治**（由 `es.platform_filter` 驱动）：这类服务用请求 header 区分平台，ES access log **不索引请求 header**，但 **POST 请求会把 productLine 带在 query string 上**（ES `queryString` 字段可见，如 `productLine=tiktok`），GET 请求则 `queryString` 为空——两类接口场景来源不同：
+
+| 方法 | ES 能否区分平台 | 场景挖掘用的样本范围 |
+|------|------|------|
+| **GET** | ❌ 不能（productLine 只在 header，ES 未索引，`queryString` 为空） | **全平台流量**：不加 productLine 过滤，用该接口在 ES 里的全部真实调用挖场景 |
+| **POST** | ✅ 能（`queryString` 含 `productLine=xxx`） | **当前测试平台的流量**：加 `{"match_phrase":{"queryString":"productLine=<当前平台>"}}` 过滤，只用该平台的真实调用挖场景 |
+
+- **POST 接口**该平台若无流量则按"无 ES 流量"处理（见 2.3 / Phase 4 占位规则）。
+- **平台覆盖仍是强制枚举，与 ES 频率无关**：无论 GET/POST，`services.json.<服务>.platforms` 里的每个平台都要单独生成一遍 case（同一份 cases.json 指向该平台的 `config.json`）。ES 频率只决定"某个接口/某个平台下写哪几条 body 场景"，不决定"要不要覆盖这个平台"。
+
 ### 2.2 查询目标接口日志
 
-🔴 **必须走 `/internal/search/es`，直接访问 `/elasticsearch/` 会 404**
-
-🔴 **接口路径字段名按服务不同**（见 2.1 字段映射表）：mainapi 用 `apiEndpoint.keyword`，rule-api 用 `urlReferrer.keyword`。查询前先确认当前服务对应哪个字段。
+🔴 **统一用 `scripts/query_es.ps1`**（内建 `/internal/search/es` 调用 + GET/POST 平台过滤 + clientId 排除，避免手写查询出错）。参数从 `services.json.<服务>.es` 取：
 
 ```powershell
-$b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("watcher:kY9GErML%luQTorm"))
-$headers = @{ "Authorization" = "Basic $b64"; "kbn-xsrf" = "true"; "Content-Type" = "application/json" }
-$body = @"
-{"params":{"index":"<索引名，如 amazon-access-* / rule-api-access-*>","body":{
-  "query":{"bool":{"must":[
-    {"function_score":{
-      "query":{"bool":{
-        "must":[
-          {"term":{"<路径字段，如 apiEndpoint.keyword / urlReferrer.keyword>":"<endpoint_path>"}},
-          {"term":{"method.keyword":"<METHOD>"}}
-        ],
-        "must_not":[{"term":{"userId.keyword":"18183"}}],
-        "filter":[{"range":{"@timestamp":{"gte":"now-90d"}}}]
-      }},
-      "functions":[{"random_score":{}}],
-      "boost_mode":"replace"
-    }}
-  ]}},
-  "size":500,
-  "_source":["body","@timestamp"],
-  "sort":["_score"]
-}}}
-"@
-$result = Invoke-RestMethod -Uri "https://logs.pacvue.com/internal/search/es" -Method POST -Headers $headers -Body $body -TimeoutSec 30
-$result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-Json }
+pwsh ".claude/skills/swagger-api-case/scripts/query_es.ps1" `
+  -Index     <es_index.<env>，如 rule-api-access-*> `
+  -Path      <endpoint_path> `
+  -Method    <GET|POST> `
+  -PathField <es.path_field，如 urlReferrer.keyword> `
+  [-Platform <当前平台，仅多平台服务传>]
+# 只要命中数加 -CountOnly；默认返回 500 条样本的 body
 ```
 
-**rule-api 示例**（查 `/template/getTemplate` 的 POST 调用）：
-```
-{"term":{"urlReferrer.keyword":"/template/getTemplate"}},
-{"term":{"method.keyword":"POST"}}
-```
-且 `_source` 里 `body` 已是 JSON 对象（非字符串），无需 `ConvertFrom-Json` 二次解析，直接用即可；rule-api 响应体也没有 `success` 字段，只有 `code`/`msg`/`data`，L1 断言只写 `{"code": 200}`，不要照抄 mainapi 的 `{"code":200,"success":true}`。
+脚本已内建两条关键规则，无需手动处理：
+- **平台过滤**（`es.platform_filter`）：POST + `-Platform` → 自动加 `queryString: productLine=<平台>`；GET 或未传平台 → 不加（GET 的 `queryString` 为空，加了会误判零流量）。
+- **clientId 排除**（`es.clientid_exclude`，默认 `62,3186`）：clientId=3186（superAdmin0913 等测试账号）、62（内部研发账号）为纯测试 client，固定排除防污染。
 
-🔴 **`must_not userId=18183` 固定保留**，过滤测试账号数据，防止污染场景分析。
+🔴 **body 解析看 `es.body_is_json_string`**：`true`（mainapi）需对返回的 body 再 `ConvertFrom-Json`；`false`（rule-api）已是对象直接用。**L1 断言用 `es.assertion_l1`**：mainapi=`{"code":200,"success":true}`，rule-api=`{"code":200}`（无 `success`），不要跨服务照抄。
 
 取出的每条记录即为真实入参，进入 2.3 分析。
 
-**🔴 若 500 条样本中命中数 < 10**：先扩大时间窗口至 `now-90d` 再试；仍不足则用全部命中条数，并在对话中注明"样本较少，场景覆盖可能不全"。
+**🔴 若命中数 < 10**：脚本默认已用 `now-90d`；仍不足则用全部命中条数，并在对话中注明"样本较少，场景覆盖可能不全"。
 
 ### 2.3 分析真实入参，归纳用户场景
 
@@ -322,17 +315,7 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
   --es-index "rule-access-*"
 ```
 
-**🔴 增/查/改/删全部统计**，脚本按 `(接口路径, HTTP方法)` 分组，各组独立查 ES：
-
-| 接口类型 | 判别方式 | 说明 |
-|---|---|---|
-| **POST/PUT/DELETE 有 body** | `body` 签名 | `(Dim, 非US市场, filter字段集, 对比列startCompare, MetricIds, IsGroupByProfile, isSameSku/AsinGroupBy, matchType, type, state, 是否adGroup级)` |
-| **GET 无 body** | `queryString` 签名 | 参数集合；动态 id/日期只留参数名，枚举/布尔留 `名=值`。空 queryString（布尔默认如 `isCheckEdit=0` 不带参）→ 归 query 最简的 case |
-| **写操作（增/改/删）** | body 签名 + 均摊 | 能按 matchType/层级/state 区分的拆开；**构造场景 body 完全相同无法区分的，按该 endpoint 真实调用量在同签名场景间平均分摊**（而非全塞第一个） |
-
-- 归类规则：完全相等 → 判别维度全等且 filter/query 子集最具体 → 兜底默认场景；算占比回填 description（幂等可重跑）。
-- **Health / ES 无记录端点**：无流量则不写占比（Excel 场景覆盖只显示场景标签，不显示 `— xx%`）。
-- ES 字段：body 在 `body`、GET 参数在 `queryString`、方法在 `method.keyword`、路径在 `apiEndpoint.keyword`。
+脚本按 `(接口路径, HTTP方法)` 分组、增/查/改/删全部统计，判别签名与归类规则见脚本 docstring。**Health / ES 无记录端点**无流量则不写占比（Excel 场景覆盖只显示场景标签，不显示 `— xx%`）。
 
 ---
 
@@ -413,8 +396,6 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 
 🔴 **生成前先确认**：该 endpoint 在哪个 `endpoints-<title>.json` 里 → 对应 base_url 变量 → config.json 的 `base_urls` 里必须有这个变量。
 
-**断言规则**：见上方"Phase 3 断言规则"，`status_code` 已移除，以 `code: 200` + `success: true` 为接口成功标准。
-
 ---
 
 ## Phase 3.5 — 写操作类 case 必须自清理 + 可重复（🔴 强制）
@@ -442,40 +423,9 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
    - 编辑类：先在前置/主步骤存原值，后置步骤还原
    - 生成后**连跑 2 次**验证全 PASS，才算通过
 
-### 写操作 case 模板（创建+后置归档）
+### case 模板与值探测
 
-```json
-{
-  "name": "POST /api/xxx/CreateXxx - <场景>(含后置清理,可重复)",
-  "description": "...第2步后置操作将新建实体归档,保证用例可重复执行。",
-  "module": "<模块>",
-  "granularity": "API",
-  "since": "init", "last_modified": "init",
-  "change_type": "NEW", "generated_by": "swagger-api-case",
-  "steps": [
-    {
-      "name": "创建 <实体>",
-      "method": "POST", "base_url": "{{BASEURL}}", "path": "/xxx/CreateXxx",
-      "request_body": { "...": "..." },
-      "extract_vars": { "created_entity_id": "data.result[0].APIResult[0].entityId" },
-      "expected_response": { "code": 200, "success": true, "data": { "successCount": { "$gte": 1 } } }
-    },
-    {
-      "name": "后置清理-归档新建实体",
-      "method": "POST", "base_url": "{{BASEURL}}", "path": "/xxx/UpdateXxxStatus",
-      "request_body": { "Item": [ { "TargetId": "{{created_entity_id}}", "...": "..." } ], "state": "archived" },
-      "extract_vars": {},
-      "expected_response": { "code": 200, "success": true, "data": { "successCount": { "$gte": 1 } } }
-    }
-  ]
-}
-```
-
-### 写操作类值探测（因涉及真实写库，主动排查再定稿）
-
-- **写操作必须落到能接收的真实层级**：从测试账号真实数据里找有效 campaign/adgroup（如 SP 手动-PAT 广告组、SD 广告组），不可用查询类 case 的 profile 直接套。规则托管广告组可能拒绝手动写入。
-- **bid 类约束**：Amazon 常见 `bid < 日预算的一半`，先查目标 campaign 的 DailyBudget 再定 bid。
-- **枚举/类型值以 ES 真实样本为准**：如 SD 商品定向 clause `type` 真实值为空串 `""`（不是猜的 `T00030`）。无样本不猜。
+🔴 可直接套用的**写操作 case JSON 模板**（创建 + 后置归档）与**写操作值探测清单**（真实层级 / bid 约束 / 枚举值以 ES 为准）见 `references/write-case-template.md`，生成写操作 case 前先读该文件。
 
 ---
 
@@ -483,16 +433,12 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 
 ### 4.1 前置：去除 BOM
 
-PowerShell 生成的文件带 UTF-8 BOM，Python 的 `json.load` 会报错，执行前必须先修复：
+PowerShell 生成的文件带 UTF-8 BOM，`json.load` 会报错，执行前先修复（脚本见 `scripts/fix_bom.py`）：
 
 ```bash
-python -c "
-import json
-for f in ['single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json', 'single-api/<服务>/<环境>/config.json']:
-    with open(f, encoding='utf-8-sig') as r: d = json.load(r)
-    with open(f, 'w', encoding='utf-8') as w: json.dump(d, w, ensure_ascii=False, indent=2)
-    print('Fixed:', f)
-"
+python ".claude/skills/swagger-api-case/scripts/fix_bom.py" \
+  single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json \
+  single-api/<服务>/<环境>/config.json
 ```
 
 ### 4.2 执行
@@ -511,21 +457,11 @@ python "C:/AI engineering/rule-modules-web-master/rule-modules-web-master/.claud
 
 ### 4.3 分析结果
 
+按接口聚合 PASS/FAIL（脚本见 `scripts/summarize_report.py`）：
+
 ```bash
-python -c "
-import json
-with open('single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json', encoding='utf-8') as f:
-    r = json.load(f)
-print(f'总计:{r[\"total\"]}  PASS:{r[\"passed\"]}  FAIL:{r[\"failed\"]}')
-from collections import defaultdict
-by_api = defaultdict(lambda: {'p':0,'f':0})
-for c in r['cases']:
-    api = c['name'].split(' - ')[0].replace('POST /api/','')
-    if c['status']=='passed': by_api[api]['p']+=1
-    else: by_api[api]['f']+=1
-for api,v in sorted(by_api.items()):
-    print(f\"{api:<55} PASS:{v['p']:>3}  FAIL:{v['f']:>3}\")
-"
+python ".claude/skills/swagger-api-case/scripts/summarize_report.py" \
+  single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json
 ```
 
 **常见失败原因**：

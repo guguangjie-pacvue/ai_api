@@ -16,7 +16,16 @@
       "cn": "cn-amazon-access-*",
       "eu": "eu-amazon-access-*"
     },
-    "config": "single-api/mainapi/{env}/config.json"
+    "config": "single-api/mainapi/{env}/config.json",
+    "es": {
+      "path_field": "apiEndpoint.keyword",
+      "method_field": "method.keyword",
+      "body_field": "body",
+      "body_is_json_string": true,
+      "clientid_exclude": [62, 3186],
+      "assertion_l1": { "code": 200, "success": true },
+      "platform_filter": null
+    }
   },
   "rule-api": {
     "github_repo": "pacvue/rule-api",
@@ -30,6 +39,15 @@
     "es_index": {
       "us": "rule-api-access-*"
     },
-    "config": "single-api/rule-api/{platform}/{env}/config.json"
+    "config": "single-api/rule-api/{platform}/{env}/config.json",
+    "es": {
+      "path_field": "urlReferrer.keyword",
+      "method_field": "method.keyword",
+      "body_field": "body",
+      "body_is_json_string": false,
+      "clientid_exclude": [62, 3186],
+      "assertion_l1": { "code": 200 },
+      "platform_filter": { "get": "all", "post": "queryString:productLine=<platform>" }
+    }
   }
 }

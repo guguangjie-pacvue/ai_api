@@ -1,0 +1,406 @@
+{
+  "config": "rule-api (tiktok, us)",
+  "started_at": "2026-08-20T08:27:27.570Z",
+  "finished_at": "2026-08-20T08:27:37.478Z",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /sharePass/list - amazon平台分页查询共享通行证列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询共享通行证列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/list",
+          "request_body": {
+            "pageInfo": {
+              "pageIndex": 1,
+              "orderBy": "created_at desc",
+              "pageSize": 20
+            },
+            "userId": "18183"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "list": [
+                {
+                  "clientId": null,
+                  "createDate": "2026-08-20 08:25:31",
+                  "creator": "superAdmin0913",
+                  "dateRange": "--",
+                  "endDate": null,
+                  "name": "Incremental Automation - Bidding Automation",
+                  "productLine": null,
+                  "ruleType": null,
+                  "sharePassId": "7397294c-daf6-4a2f-a56c-7d359aa2354c",
+                  "startDate": null,
+                  "status": "Active",
+                  "targetType": "template",
+                  "templateId": null,
+                  "userId": "18183"
+                }
+              ],
+              "pageInfo": {
+                "multiSort": null,
+                "orderBy": "created_at desc",
+                "orders": null,
+                "pageIndex": 1,
+                "pageSize": 20
+              },
+              "total": null,
+              "totalCount": 1
+            },
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /sharePass/getAccounts - 获取可共享账户列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取可共享账户列表",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/sharePass/getAccounts",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /sharePass/creators - 获取创建者列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取创建者列表",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/sharePass/creators",
+          "request_body": {},
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [
+              {
+                "id": "18183",
+                "name": "superAdmin0913",
+                "pId": null,
+                "pName": null,
+                "countryCode": null,
+                "categoryId": null,
+                "children": null,
+                "adgroupCount": null
+              }
+            ],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /sharePass/check - 校验共享通行证有效性",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "校验共享通行证",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/check",
+          "request_body": {
+            "clientId": "515",
+            "sharePassId": "58ad5b66-65e3-4f76-a4df-80023a0899b0",
+            "targetProductLine": "amazon"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "msg": null,
+              "ruleViewList": null,
+              "templateNameList": [
+                "Buybox Ownership - Pause ASINs"
+              ]
+            },
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /sharePass/create + DELETE - 创建共享通行证后删除（可重复）",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建共享通行证",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/create",
+          "request_body": {
+            "targetType": "template",
+            "list": [
+              {
+                "type": 1,
+                "templateId": "2084723524626800642"
+              }
+            ],
+            "timeZone": "America/Los_Angeles",
+            "userId": "18183"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [
+              "afa8f43d-732c-4e78-84d7-59a3c71dace6"
+            ],
+            "msg": null
+          }
+        },
+        {
+          "name": "后置清理-删除创建的共享通行证",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/delete",
+          "request_body": [
+            "afa8f43d-732c-4e78-84d7-59a3c71dace6"
+          ],
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": true,
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /sharePass/getSharePlatforms - 获取可共享平台列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取可共享平台列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/getSharePlatforms",
+          "request_body": {
+            "productLine": "amazon",
+            "userIds": [
+              "27440"
+            ],
+            "userId": "2962"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": [
+              {
+                "clientId": null,
+                "productLine": "amazon",
+                "userId": null,
+                "userList": [
+                  {
+                    "clientId": "4126",
+                    "productLine": null,
+                    "userId": "27440",
+                    "userList": null
+                  }
+                ]
+              },
+              {
+                "clientId": null,
+                "productLine": "criteo",
+                "userId": null,
+                "userList": [
+                  {
+                    "clientId": "4126",
+                    "productLine": null,
+                    "userId": "27440",
+                    "userList": null
+                  }
+                ]
+              },
+              {
+                "clientId": null,
+                "productLine": "walmart",
+                "userId": null,
+                "userList": [
+                  {
+                    "clientId": "4126",
+                    "productLine": null,
+                    "userId": "27440",
+                    "userList": null
+                  }
+                ]
+              },
+              {
+                "clientId": null,
+                "productLine": "instacart",
+                "userId": null,
+                "userList": [
+                  {
+                    "clientId": "4126",
+                    "productLine": null,
+                    "userId": "27440",
+                    "userList": null
+                  }
+                ]
+              }
+            ],
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /sharePass/getRuleIdsFromSharePass - 通过共享通行证获取规则ID列表",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取共享通行证关联规则ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/getRuleIdsFromSharePass",
+          "request_body": {
+            "clientId": "3925",
+            "sharePassId": "0b637c97-066a-4c20-867c-50d8ff7b3c8e"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": {
+              "msg": null,
+              "ruleViewList": [
+                {
+                  "adGroupViewList": null,
+                  "adtomicAdGroups": null,
+                  "adtomicMappingId": null,
+                  "adtomicRuleType": null,
+                  "applyTarget": null,
+                  "asinTagProfileIds": null,
+                  "automation": null,
+                  "blackListId": null,
+                  "campaignTagProfileIds": null,
+                  "clickHitValue": null,
+                  "clientId": null,
+                  "commerceAsinProfileIds": null,
+                  "createdAt": null,
+                  "dayOfMonth": null,
+                  "dayOfWeek": null,
+                  "emailOption": null,
+                  "emailSettings": null,
+                  "endDate": null,
+                  "excludeEndDate": null,
+                  "excludePausedCampaigns": null,
+                  "excludePausedTargetings": null,
+                  "excludeStartDate": null,
+                  "filePrefix": null,
+                  "frequency": null,
+                  "hour": null,
+                  "id": "2072081894192885761",
+                  "is1p": null,
+                  "isCustomize": null,
+                  "isDeleted": null,
+                  "isPaused": null,
+                  "isSingleKeyword": null,
+                  "lastExecutedAt": null,
+                  "mode": null,
+                  "productLine": null,
+                  "profiteroBrand": null,
+                  "profiteroCategory": null,
+                  "profiteroCountry": null,
+                  "requirements": null,
+                  "ruleAdtomicId": null,
+                  "ruleAdtomicName": null,
+                  "ruleName": "Scott Bath Category except \"toilet paper\" ToS SP SOV target 13%",
+                  "ruleTemplateId": null,
+                  "ruleType": "SOV Bid",
+                  "sendFailEmail": null,
+                  "sovAsinApplyTarget": null,
+                  "sovCategory": null,
+                  "sovKeywordList": null,
+                  "sovKeywordStringList": null,
+                  "sovKeywordTag": null,
+                  "startDate": null,
+                  "targetType": null,
+                  "timeZone": null,
+                  "userId": null,
+                  "weekOfMonth": null
+                }
+              ],
+              "templateNameList": null
+            },
+            "msg": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /sharePass/edit - 编辑共享通行证",
+      "excel_keys": null,
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "编辑共享通行证",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/edit",
+          "request_body": {
+            "id": "[NEEDS_REAL_VALUE]",
+            "productLine": "amazon",
+            "targetType": "rule",
+            "list": [
+              {
+                "type": 1,
+                "ruleId": "[NEEDS_REAL_VALUE]"
+              }
+            ],
+            "timeZone": "America/Los_Angeles",
+            "userId": "18183"
+          },
+          "status_code": 200,
+          "pass": true,
+          "failures": [],
+          "response_preview": {
+            "code": 200,
+            "data": false,
+            "msg": null
+          }
+        }
+      ]
+    }
+  ]
+}

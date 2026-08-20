@@ -1,0 +1,204 @@
+[
+  {
+    "name": "POST /event/getRuleDefinition - 按ruleIds批量获取规则定义(创建临时规则,可重复)",
+    "description": "单接口测试：POST /event/getRuleDefinition。按ruleIds批量查询规则完整定义，供事件消费方使用。第1步创建临时规则，第2步按名称查出ruleId，第3步调用getRuleDefinition，第4步删除清理，保证用例可重复执行。500条随机样本中占比约100%（1,371,016次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建临时BudgetBoost规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "tiktok",
+          "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
+          "dayOfWeek": 4,
+          "automation": [
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
+            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+          ],
+          "hour": 0,
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_GetRuleDefinition_Cleanup",
+          "ruleNames": ["TC_TikTok_GetRuleDefinition_Cleanup"],
+          "startDate": "2026-08-20T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false
+        },
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": ["{{user_id}}"],
+          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": ["{{profile_id}}"],
+          "ruleNameList": ["TC_TikTok_GetRuleDefinition_Cleanup"],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {"tmp_rule_id_def": "data.list[0].id"},
+        "expected_response": {"code": 200}
+      },
+      {
+        "name": "按ruleIds批量获取规则定义",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleDefinition",
+        "request_body": {
+          "ruleIds": ["{{tmp_rule_id_def}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$is_array": true}
+        }
+      },
+      {
+        "name": "后置清理-删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {"ruleIds": ["{{tmp_rule_id_def}}"], "isDelete": true},
+        "extract_vars": {},
+        "expected_response": {"code": 200}
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleCountByUserIds - 按userId统计TikTok规则数量",
+    "description": "单接口测试：POST /event/getRuleCountByUserIds。按用户ID列表统计各用户在指定时间范围内的规则数量，供事件消费方聚合使用。500条随机样本中占比约100%（1,212次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按userId统计规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByUserIds",
+        "request_body": {
+          "productLine": "tiktok",
+          "clientId": "62",
+          "userIds": ["{{user_id}}"],
+          "start": "2026-08-01 07:00:00",
+          "profileIds": ["{{profile_id}}"],
+          "end": "2026-09-01 06:59:59"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleTypes - 获取规则类型列表",
+    "description": "单接口测试：POST /event/getRuleTypes。获取系统支持的规则类型枚举列表，供事件消费方或前端初始化使用。请求body为空。500条随机样本中占比约100%（129次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取规则类型列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {"$is_array": true}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/clearCacheTypes - 清除规则缓存类型(无ES流量)",
+    "description": "单接口测试：POST /event/clearCacheTypes。触发清除规则相关缓存，供内部事件消费方调用。请求body为空。该接口无ES流量记录。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "清除规则缓存类型",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/clearCacheTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleCountByCampaignIds - 按campaignId统计规则数量(无ES流量,TikTok返回405)",
+    "description": "单接口测试：POST /event/getRuleCountByCampaignIds。按Campaign ID列表统计各Campaign关联的规则数量，供事件消费方使用。实测TikTok环境返回业务code:405（Method Not Allowed），该接口对TikTok平台不支持。该接口无ES流量记录。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按campaignId统计规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByCampaignIds",
+        "request_body": {
+          "productLine": "tiktok",
+          "profileIds": ["{{profile_id}}"],
+          "campaignIds": ["1852465957222417", "1869461375946946", "1866507316811025"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  }
+]
