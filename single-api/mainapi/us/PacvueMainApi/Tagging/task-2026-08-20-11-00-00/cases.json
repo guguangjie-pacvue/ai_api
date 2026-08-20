@@ -1,0 +1,2098 @@
+[
+  {
+    "name": "GET /api/Tagging/v3/GetAllKeywordTags - 获取全部关键词标签列表",
+    "description": "单接口测试：GET /api/Tagging/v3/GetAllKeywordTags。获取当前用户所有关键词标签（含子标签）的树形列表，无需请求体。30天内调用量104394次，为Tagging模块最高频GET接口。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取全部关键词标签列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAllKeywordTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetAllAsinTags - 获取全部ASIN标签列表",
+    "description": "单接口测试：GET /api/Tagging/v3/GetAllAsinTags。获取当前用户所有ASIN标签（含子标签）的树形列表，无需请求体。30天内调用量45428次，为第二高频GET接口。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取全部ASIN标签列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAllAsinTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/GetCampaignTag - 获取Campaign标签（按Profile过滤）",
+    "description": "单接口测试：POST /api/Tagging/v3/GetCampaignTag。profileIds传入特定Profile ID，只返回该Profile下的Campaign标签；用于多Profile账号场景下的标签隔离查看。500条随机样本中占比约30%（60次）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Campaign标签列表（按Profile过滤）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetCampaignTag",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CheckCampaignToTagV2 - 检查Campaign是否可被加入标签",
+    "description": "单接口测试：POST /api/Tagging/v3/CheckCampaignToTagV2。检查指定campaign能否加入target tag（校验冲突、权限等），返回失败列表和异步标记。30天调用7061次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "检查Campaign可否加入标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CheckCampaignToTagV2",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "type": 0,
+          "afterParam": {
+            "campaign_check": [
+              "@{adgroupId={{exist_sp_campaign_id}}; Pid={{profile_id}}}"
+            ],
+            "userID": 18183,
+            "cgIDs": [
+              "{{test_campaign_tag_id}}"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetAdGroupTag - 获取所有AdGroup标签列表",
+    "description": "单接口测试：GET /api/Tagging/v3/GetAdGroupTag。获取当前用户所有AdGroup维度的标签列表，无需参数，30天调用2655次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取AdGroup标签列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAdGroupTag",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetKeywordsByTag - 根据标签获取关键词列表",
+    "description": "单接口测试：GET /api/Tagging/v3/GetKeywordsByTag。按tagId查询该关键词标签下归属的所有关键词，30天调用74次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "根据关键词标签ID获取关键词列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetKeywordsByTag?tagId={{test_keyword_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetAsinByTag/{tagId} - 根据ASIN标签获取ASIN列表",
+    "description": "单接口测试：GET /api/Tagging/v3/GetAsinByTag/{tagId}。按tagId查询该ASIN标签下所有关联的ASIN，path参数传入test_asin_tag_id。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "根据ASIN标签ID获取ASIN列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAsinByTag/{{test_asin_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetAdGroupByAdGroupTag/{tagId} - 根据AdGroup标签获取广告组列表",
+    "description": "单接口测试：GET /api/Tagging/v3/GetAdGroupByAdGroupTag/{tagId}。按tagId查询该AdGroup标签下关联的所有广告组，path参数传入test_adgroup_tag_id。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "根据AdGroup标签ID获取广告组列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAdGroupByAdGroupTag/{{test_adgroup_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/GetMutilCampaignByCampaignTag - 批量查询Campaign标签下的Campaign",
+    "description": "单接口测试：POST /api/Tagging/v3/GetMutilCampaignByCampaignTag。按portfolioId（Campaign标签ID）和profileIds查询该标签下的campaigns，30天调用1400次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Campaign标签查询Campaign列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetMutilCampaignByCampaignTag",
+        "request_body": {
+          "portfolioId": "{{test_campaign_tag_id}}",
+          "profileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/GetAmazonTagNote - 查询标签备注信息",
+    "description": "单接口测试：POST /api/Tagging/v3/GetAmazonTagNote。查询指定用户+标签的备注内容，TagType支持campaign类型，30天调用386次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign标签的备注信息",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAmazonTagNote",
+        "request_body": {
+          "UserId": 18183,
+          "TagId": "{{test_campaign_tag_id}}",
+          "TagType": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/GetMutilCampaignMatchRuleDiff - 查询Campaign标签匹配规则差异",
+    "description": "单接口测试：POST /api/Tagging/v3/GetMutilCampaignMatchRuleDiff。批量查询多个portfolio（Campaign标签）当前match rule与实际campaign的差异，用于规则自动同步前的预览，30天调用113次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign标签匹配规则差异",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetMutilCampaignMatchRuleDiff",
+        "request_body": {
+          "portfolioIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "profileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateTagName - 创建Campaign标签（含后置清理，可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateTagName。创建一个新的Campaign标签，response包含data.ids数组；第2步后置操作将新建标签删除（BulkDeleteCampaignTag），保证用例可重复执行。30天调用988次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Campaign标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateTagName",
+        "request_body": {
+          "portfolioId": 0,
+          "names": [
+            "autotest_campaign_tag_20260820"
+          ]
+        },
+        "extract_vars": {
+          "created_campaign_tag_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建Campaign标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BulkDeleteCampaignTag",
+        "request_body": {
+          "tagIds": [
+            "{{created_campaign_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/UpdateCampaignTagName - 修改Campaign标签名称（含后置还原，可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/UpdateCampaignTagName。修改指定Campaign标签（portfolioId）的名称；第2步后置还原为另一固定名称，保证用例可重复执行。30天调用463次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改Campaign标签名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateCampaignTagName",
+        "request_body": {
+          "portfolioId": "{{test_campaign_tag_id}}",
+          "name": "autotest_tag_renamed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置还原-将标签名称改回",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateCampaignTagName",
+        "request_body": {
+          "portfolioId": "{{test_campaign_tag_id}}",
+          "name": "autotest_tag_restored"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/AddMatchRule - 为Campaign标签新增匹配规则",
+    "description": "单接口测试：POST /api/Tagging/v3/AddMatchRule。为指定Campaign标签（matchRuleTaggingId）创建基于关键词的campaign名称匹配规则，response包含data.id（新规则ID）。注：当前Swagger无DeleteMatchRule接口，此case不含后置清理。30天调用865次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "为Campaign标签新增匹配规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/AddMatchRule",
+        "request_body": {
+          "id": 0,
+          "isPause": false,
+          "matchRuleState": [
+            "enabled",
+            "paused"
+          ],
+          "matchRuleTaggingId": "{{test_campaign_tag_id}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "matchRuleType": "campaign",
+          "requirements": {
+            "filter": [
+              {
+                "keyworld": "autotest_rule_20260820",
+                "operation": "contains"
+              }
+            ],
+            "filterOr": null,
+            "filtersOther": null,
+            "campaignTypeItems": []
+          },
+          "sourceType": null
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        },
+        "extract_vars": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/AddAsinsToAsinTagging - 将ASIN加入ASIN标签（含后置移除，可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/AddAsinsToAsinTagging。将指定ASIN列表加入目标ASIN标签，toMarket指定市场；第2步后置调用RemoveAsinsToAsinTagging移除相同ASIN，保证用例可重复执行。30天调用840次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "将ASIN加入ASIN标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/AddAsinsToAsinTagging",
+        "request_body": {
+          "tagIds": [
+            "{{asin_tag_id}}"
+          ],
+          "asins": [
+            "{{target_asin}}"
+          ],
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-从ASIN标签移除ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/RemoveAsinsToAsinTagging",
+        "request_body": {
+          "tagIds": [
+            "{{asin_tag_id}}"
+          ],
+          "asins": [
+            "{{target_asin}}"
+          ],
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/EditAsinTag - 修改ASIN子标签名称（含后置还原，可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/EditAsinTag。修改指定ASIN标签的名称（tagId + 新名称 + 市场）；第2步后置还原为另一固定名称，保证用例可重复执行。30天调用377次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改ASIN子标签名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/EditAsinTag",
+        "request_body": {
+          "tagId": "{{asin_sub_tag_id}}",
+          "asinTagName": "autotest_asin_subtag_renamed",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置还原-将ASIN子标签名称改回",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/EditAsinTag",
+        "request_body": {
+          "tagId": "{{asin_sub_tag_id}}",
+          "asinTagName": "autotest_asin_subtag_restored",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/BatchUpdateCampaignTagTarget - 批量设置Campaign标签ACOS/ROAS目标",
+    "description": "单接口测试：POST /api/Tagging/v3/BatchUpdateCampaignTagTarget。为Campaign标签设ACOS目标。经探测：ACOS/ROAS互斥；且设置与当前相同的值返回failedCount=1(幂等无变化)。故采用两步交替不同值(30→25)，第2步相对第1步必变化，断言successCount>=1恒成立、可重复。30天调用301次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设ACOS目标=30",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BatchUpdateCampaignTagTarget",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "ACOS": 30
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "设ACOS目标=25(相对上步必变化,验证successCount)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BatchUpdateCampaignTagTarget",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "ACOS": 25
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/BatchCreateKeywordTagging - 批量创建关键词标签",
+    "description": "单接口测试：POST /api/Tagging/v3/BatchCreateKeywordTagging。批量创建一个或多个关键词标签，response包含data.id。注：BatchCreate创建的标签类型与BulkDeleteKeywordTag不兼容（403），无法自动清理，需手动删除残留测试标签。30天调用41次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建关键词标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BatchCreateKeywordTagging",
+        "request_body": {
+          "tagNames": [
+            "autotest_batch_kw_20260820"
+          ],
+          "keywordTags": [
+            {
+              "tagName": "autotest_batch_kw_20260820",
+              "description": "autotest keyword tag created by swagger-api-case"
+            }
+          ],
+          "parent": null
+        },
+        "extract_vars": {
+          "created_kw_tag_id": "data.id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateKeywordTagging - 创建关键词标签（含后置清理，可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateKeywordTagging。创建单个关键词标签，支持指定市场和父标签；response包含data.id；第2步后置删除新建标签，保证可重复执行。30天调用90次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建关键词标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateKeywordTagging",
+        "request_body": {
+          "keywordTags": [
+            {
+              "tagId": 0,
+              "parent": null,
+              "tagName": "autotest_kw_tag_20260820",
+              "description": "autotest keyword tag"
+            }
+          ],
+          "toMarket": "US",
+          "isMove": "0"
+        },
+        "extract_vars": {
+          "created_kw_tag_id2": "data.id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建关键词标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BulkDeleteKeywordTag",
+        "request_body": {
+          "tagIds": [
+            "{{created_kw_tag_id2}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/UpdateKeywordTagging - 修改关键词标签名称和描述（含后置还原，可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/UpdateKeywordTagging。修改已有关键词标签的名称和描述；第2步后置还原为另一固定名称，保证用例可重复执行。30天调用51次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改关键词标签名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateKeywordTagging",
+        "request_body": {
+          "tagId": "{{test_keyword_tag_id}}",
+          "tagName": "autotest_kw_renamed",
+          "description": "autotest updated by swagger-api-case"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置还原-将关键词标签名称改回",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateKeywordTagging",
+        "request_body": {
+          "tagId": "{{test_keyword_tag_id}}",
+          "tagName": "autotest_kw_restored",
+          "description": "autotest restored by swagger-api-case"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/UpdateTagOwner - 修改Campaign标签所有者（含后置还原，可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/UpdateTagOwner。修改Campaign标签的所有者userId；第2步后置还原为测试账号自身userId（18183），保证用例可重复执行。30天调用42次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改Campaign标签所有者",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateTagOwner",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "userId": "{{adgroup_tag_owner_user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置还原-将标签所有者改回测试账号",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateTagOwner",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/AddAdGroupsToTags - 将广告组加入AdGroup标签",
+    "description": "单接口测试：POST /api/Tagging/v3/AddAdGroupsToTags。将adgroup_check列表中的广告组加入指定tagIds的AdGroup标签，30天调用1976次。500条随机样本中占比约100%（单一调用模式）。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "将广告组加入AdGroup标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/AddAdGroupsToTags",
+        "request_body": {
+          "adgroup_check": [
+            {
+              "adgroupId": "{{adgroup_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "tagIds": [
+            "{{test_adgroup_tag_id}}"
+          ],
+          "userID": 18183
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetMatchRuleDetail - id=0（新建/初始化）",
+    "description": "单接口测试：GET /api/Tagging/v3/GetMatchRuleDetail。获取匹配规则详情，id=0表示查询初始状态或新建规则（无现有规则时的默认入参）。500条随机样本中占比约18.8%(537次)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取匹配规则详情（id=0）",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetMatchRuleDetail",
+        "query_params": {
+          "id": "0"
+        },
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 201,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateAsinTag - 创建父级ASIN标签",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateAsinTag。创建新的父级ASIN标签（parent=null），ES样本中isMove=1为主流场景。注意：API响应不返回创建ID，无法自动清理；标签名已存在时successCount=0（非错误），仅断言接口通达。500条随机样本中占比约100%(393次)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建父级ASIN标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAsinTag",
+        "request_body": {
+          "isMove": 1,
+          "asinTags": [
+            {
+              "asinTagName": "autotest_asin_tag_20260818",
+              "parent": null,
+              "tagId": 0
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateAsinTag - 创建子级ASIN标签",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateAsinTag。在指定父标签下创建子ASIN标签（parent=asin_tag_id），ES样本中isMove=1+有parent为主流场景。注意：API不返回创建ID，无法自动清理；标签名已存在时successCount=0（非错误），仅断言接口通达。500条随机样本中占比约100%(该接口实际调用均为isMove=1模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "在父标签下创建子ASIN标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAsinTag",
+        "request_body": {
+          "isMove": 1,
+          "asinTags": [
+            {
+              "asinTagName": "autotest_asin_subtag_20260818",
+              "parent": "{{asin_tag_id}}",
+              "tagId": 0
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/SaveAsinToTag - 保存ASIN到标签（含后置清理,可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/SaveAsinToTag。将ASIN列表保存到指定ASIN标签（单标签版本，body使用tagId而非tagIds）。第2步用RemoveAsinsToAsinTagging清理，保证幂等可重复。500条随机样本中占比约100%(227次)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存ASIN到标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/SaveAsinToTag",
+        "request_body": {
+          "tagId": "{{asin_sub_tag_id}}",
+          "asins": [
+            "{{target_asin}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-从标签移除ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/RemoveAsinsToAsinTagging",
+        "request_body": {
+          "tagIds": [
+            "{{asin_sub_tag_id}}"
+          ],
+          "asins": [
+            "{{target_asin}}"
+          ],
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/DeleteCampaignsFromTag - 从标签删除Campaign（含前置添加,可重复）",
+    "description": "单接口测试：POST /api/Tagging/v3/DeleteCampaignsFromTag。从Campaign标签中移除指定Campaign。第1步用UpdateCampaignTag将测试Campaign加入测试标签（同步覆盖UpdateCampaignTag接口），第2步DeleteCampaignsFromTag执行删除，保证幂等可重复。500条随机样本中占比约100%(774次)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-UpdateCampaignTag将测试Campaign加入测试标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateCampaignTag",
+        "request_body": {
+          "portfolioId": "{{test_campaign_tag_id}}",
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "portfolioName": "autotest_tag_v2",
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "从标签删除Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteCampaignsFromTag",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetKeywordsByTag - 按标签查关键词",
+    "description": "单接口测试：GET /api/Tagging/v3/GetKeywordsByTag。前置步骤先将测试关键词写入test_keyword_tag_id（SaveKeywordToTag幂等，重复调用不重复添加），确保标签非空后再查询。500条随机样本中占比约100%(66次，单一入参模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-SaveKeywordToTag确保测试关键词存在",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/SaveKeywordToTag",
+        "request_body": {
+          "tagId": "{{test_keyword_tag_id}}",
+          "keywords": [
+            "autotest_query_001",
+            "autotest_query_002"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "按标签ID获取关键词列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetKeywordsByTag?tagId={{test_keyword_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Tagging/v3/GetAdGroupTagByCampaignMapping - 获取广告组标签映射",
+    "description": "单接口测试：GET /api/Tagging/v3/GetAdGroupTagByCampaignMapping。获取当前用户所有相关的AdGroupTag（按campaign映射），无需入参。500条随机样本中占比约100%(27次，无参数调用)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取广告组标签Campaign映射",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAdGroupTagByCampaignMapping",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/GetAdGroupTagByAdgroupForPermission - 按广告组查其标签（权限模式）",
+    "description": "单接口测试：POST /api/Tagging/v3/GetAdGroupTagByAdgroupForPermission。根据广告组ID列表查询各广告组所属标签，isCheckEdit=true为权限过滤模式，ES样本全部为该模式。500条随机样本中占比约100%(16次，单一场景)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按广告组查询所属标签（权限模式）",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/GetAdGroupTagByAdgroupForPermission",
+        "request_body": {
+          "adgroups": [
+            {
+              "adGroupId": "{{adgroup_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "isCheckEdit": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CheckCampaignTagsHasMatchRule - 检查标签是否有匹配规则",
+    "description": "单接口测试：POST /api/Tagging/v3/CheckCampaignTagsHasMatchRule。批量检查指定Campaign标签是否配置了匹配规则，用于前端显示规则图标。500条随机样本中占比约100%(9次，均为tagIds数组模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "检查Campaign标签是否有匹配规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CheckCampaignTagsHasMatchRule",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/UpdateMatchRule - 修改Campaign标签匹配规则(自清理临时标签,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/UpdateMatchRule。match rule唯一性按标签判定(一标签一规则)，故采用自清理链路：step1建临时标签→step2在其上建规则抓rule_id→step3用真实rule_id更新规则关键词→step4删除临时标签(连带清理规则)，全程可重复不污染他人数据。30天调用970次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-建临时Campaign标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateTagName",
+        "request_body": {
+          "portfolioId": 0,
+          "names": [
+            "autotest_umr_temp_tag"
+          ]
+        },
+        "extract_vars": {
+          "umr_temp_tag_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-在临时标签上建匹配规则",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/AddMatchRule",
+        "request_body": {
+          "id": 0,
+          "isPause": false,
+          "matchRuleState": [
+            "enabled",
+            "paused"
+          ],
+          "matchRuleTaggingId": "{{umr_temp_tag_id}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "matchRuleType": "campaign",
+          "requirements": {
+            "filter": [
+              {
+                "keyworld": "autotest_umr",
+                "operation": "contains"
+              }
+            ],
+            "filterOr": null,
+            "filtersOther": null,
+            "campaignTypeItems": []
+          },
+          "sourceType": null
+        },
+        "extract_vars": {
+          "umr_rule_id": "data.id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改匹配规则关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateMatchRule",
+        "request_body": {
+          "Id": "{{umr_rule_id}}",
+          "IsPause": false,
+          "MatchRuleState": [
+            "enabled",
+            "paused"
+          ],
+          "MatchRuleTaggingId": "{{umr_temp_tag_id}}",
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "MatchRuleType": "campaign",
+          "Requirements": {
+            "Filter": [
+              {
+                "Keyworld": "autotest_umr_updated",
+                "Operation": "contains"
+              }
+            ],
+            "FilterOr": null,
+            "FiltersOther": null,
+            "CampaignTypeItems": []
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除临时标签(连带清理规则)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BulkDeleteCampaignTag",
+        "request_body": {
+          "tagIds": [
+            "{{umr_temp_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/ApplyCampaignMatchRuleDiff - 应用匹配规则差异(加入后还原,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/ApplyCampaignMatchRuleDiff。按匹配规则diff将campaign批量加入/移出Campaign标签。step1用campaignsToAdd将测试campaign加入测试标签(insertCount=1)，step2用campaignsToRemove移出还原(removeCount=1)，加了又删不留残留。30天调用45次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "将Campaign加入标签(campaignsToAdd)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/ApplyCampaignMatchRuleDiff",
+        "request_body": {
+          "campaignsToAdd": [
+            {
+              "portfolioId": "{{test_campaign_tag_id}}",
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}"
+            }
+          ],
+          "campaignsToRemove": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "insertCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置还原-将Campaign移出标签(campaignsToRemove)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/ApplyCampaignMatchRuleDiff",
+        "request_body": {
+          "campaignsToAdd": [],
+          "campaignsToRemove": [
+            {
+              "portfolioId": "{{test_campaign_tag_id}}",
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "removeCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/BulkDeleteCampaignsFromTag - 批量从标签删除Campaign(含前置加入,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/BulkDeleteCampaignsFromTag。step1用UpdateCampaignTag将测试campaign加入测试标签，step2用BulkDeleteCampaignsFromTag按campaignIds批量删除，加了又删保证可重复。body已精简至核心字段(filter/profileIds/tagIds/campaignIds/states/dim/日期/toMarket)。30天调用114次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-UpdateCampaignTag将Campaign加入标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateCampaignTag",
+        "request_body": {
+          "portfolioId": "{{test_campaign_tag_id}}",
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "portfolioName": "autotest_tag_v2",
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量从标签删除Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BulkDeleteCampaignsFromTag",
+        "request_body": {
+          "filter": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "campaignName": [],
+          "groupBy": "campaign",
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "dim": "ytd",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateCampaignSubTag - 创建Campaign子标签(自清理临时父标签,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateCampaignSubTag。在Campaign标签下创建子标签。response不返回子标签id，故采用自清理临时父标签链路：step1建临时父标签→step2在其下建子标签(在干净父标签下仅0.7s，避免在大标签下触发campaign重算超时)→step3删临时父标签(连带清理子标签)，可重复不留残留。30天调用1570次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-建临时父Campaign标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateTagName",
+        "request_body": {
+          "portfolioId": 0,
+          "names": [
+            "autotest_ccs_parent"
+          ]
+        },
+        "extract_vars": {
+          "ccs_parent_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "在临时父标签下创建子标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateCampaignSubTag",
+        "request_body": {
+          "portfolioId": "{{ccs_parent_id}}",
+          "subPortfolioNames": [
+            "autotest_ccs_sub"
+          ],
+          "isChecked": false,
+          "campaigns": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时父标签(连带清理子标签)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BulkDeleteCampaignTag",
+        "request_body": {
+          "tagIds": [
+            "{{ccs_parent_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/DeleteAsinTag - 删除ASIN标签(专属fixture,幂等可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/DeleteAsinTag。删除指定ASIN标签。因CreateAsinTag不返回新建id且extract不支持按名过滤，无法构造建→查id→删自动闭环，故预置专属可删fixture(test_deletable_asin_tag_id=297125，仅供删除测试)：首次运行真实删除该fixture，后续幂等(删不存在id同样返回code:200 success:true)，可重复不污染他人数据。30天调用290次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "删除专属fixture ASIN标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAsinTag",
+        "request_body": {
+          "tagIds": [
+            "{{test_deletable_asin_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateAdGroupTag - 创建AdGroup标签(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateAdGroupTag。创建AdGroup维度标签，response返回data.ids；第2步后置DeleteAdGroupTag删除，保证可重复。30天调用7次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建AdGroup标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAdGroupTag",
+        "request_body": {
+          "names": [
+            "autotest_adg_tag"
+          ]
+        },
+        "extract_vars": {
+          "adg_tag_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除AdGroup标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAdGroupTag",
+        "request_body": {
+          "tagId": "{{adg_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateAdGroupSubTag - 创建AdGroup子标签(自清理父标签,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateAdGroupSubTag。在AdGroup标签下建子标签(response不返回子标签id)；采用自清理链路：建父标签→建子标签→删父标签(连带清理子标签,tagCount验证连带删除)。30天调用4次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-建AdGroup父标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAdGroupTag",
+        "request_body": {
+          "names": [
+            "autotest_adg_parent"
+          ]
+        },
+        "extract_vars": {
+          "adg_parent_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "在父标签下建子标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAdGroupSubTag",
+        "request_body": {
+          "parentTagId": "{{adg_parent_id}}",
+          "names": [
+            "autotest_adg_sub"
+          ],
+          "isChecked": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除父标签(连带清理子标签)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAdGroupTag",
+        "request_body": {
+          "tagId": "{{adg_parent_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/UpdateAdGroupTagName - 修改AdGroup标签名称(自清理,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/UpdateAdGroupTagName。修改AdGroup标签名称；采用自清理链路：建临时标签→改名→删标签。30天调用2次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-建临时AdGroup标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAdGroupTag",
+        "request_body": {
+          "names": [
+            "autotest_adg_rename_src"
+          ]
+        },
+        "extract_vars": {
+          "adg_rename_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改AdGroup标签名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateAdGroupTagName",
+        "request_body": {
+          "tagId": "{{adg_rename_id}}",
+          "name": "autotest_adg_renamed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除临时标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAdGroupTag",
+        "request_body": {
+          "tagId": "{{adg_rename_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/DeleteAdGroupFromTag - 从AdGroup标签移除广告组(含前置,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/DeleteAdGroupFromTag。从AdGroup标签移除广告组。自清理链路：建临时标签→AddAdGroupsToTags加入广告组→DeleteAdGroupFromTag移除→删临时标签。30天调用5次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-建临时AdGroup标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAdGroupTag",
+        "request_body": {
+          "names": [
+            "autotest_adg_del_tag"
+          ]
+        },
+        "extract_vars": {
+          "adg_del_tag_id": "data.ids[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-将广告组加入标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/AddAdGroupsToTags",
+        "request_body": {
+          "adgroup_check": [
+            {
+              "adgroupId": "{{adgroup_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "tagIds": [
+            "{{adg_del_tag_id}}"
+          ],
+          "userID": 18183
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "从标签移除广告组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAdGroupFromTag",
+        "request_body": {
+          "tagIds": [
+            "{{adg_del_tag_id}}"
+          ],
+          "adGroupIds": [
+            "{{adgroup_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除临时标签",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAdGroupTag",
+        "request_body": {
+          "tagId": "{{adg_del_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/CreateAmazonTagNote - 创建标签备注(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/CreateAmazonTagNote。为Campaign标签创建备注，response返回data.Id；第2步后置DeleteAmazonTagNote删除，保证可重复。30天调用2次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建标签备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAmazonTagNote",
+        "request_body": {
+          "UserId": 18183,
+          "TagId": "{{test_campaign_tag_id}}",
+          "Note": "autotest_note",
+          "TagType": "campaign"
+        },
+        "extract_vars": {
+          "created_note_id": "data.Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "Id": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAmazonTagNote",
+        "request_body": {
+          "Ids": [
+            "{{created_note_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/UpdateAmazonTagNote - 修改标签备注(自清理,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/UpdateAmazonTagNote。修改标签备注内容；自清理链路：建备注→改备注→删备注。30天调用2次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-建标签备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAmazonTagNote",
+        "request_body": {
+          "UserId": 18183,
+          "TagId": "{{test_campaign_tag_id}}",
+          "Note": "autotest_note",
+          "TagType": "campaign"
+        },
+        "extract_vars": {
+          "upd_note_id": "data.Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改标签备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/UpdateAmazonTagNote",
+        "request_body": {
+          "Id": "{{upd_note_id}}",
+          "Note": "autotest_note_updated"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAmazonTagNote",
+        "request_body": {
+          "Ids": [
+            "{{upd_note_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/DeleteAmazonTagNote - 删除标签备注(含前置,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/DeleteAmazonTagNote。删除标签备注；自清理链路：前置建备注抓Id→DeleteAmazonTagNote删除。30天调用2次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-建标签备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/CreateAmazonTagNote",
+        "request_body": {
+          "UserId": 18183,
+          "TagId": "{{test_campaign_tag_id}}",
+          "Note": "autotest_note_todelete",
+          "TagType": "campaign"
+        },
+        "extract_vars": {
+          "del_note_id": "data.Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除标签备注",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/DeleteAmazonTagNote",
+        "request_body": {
+          "Ids": [
+            "{{del_note_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/ChangeAsinTagOwner - 修改ASIN标签所有者(含后置还原,可重复)",
+    "description": "单接口测试：POST /api/Tagging/v3/ChangeAsinTagOwner。修改ASIN标签所有者userId；step1改为其他用户(successCount=1)，step2还原为测试账号18183。30天调用4次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改ASIN标签所有者",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/ChangeAsinTagOwner",
+        "request_body": {
+          "userId": "{{adgroup_tag_owner_user_id}}",
+          "tagIds": [
+            "{{asin_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置还原-所有者改回测试账号",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/ChangeAsinTagOwner",
+        "request_body": {
+          "userId": "{{user_id}}",
+          "tagIds": [
+            "{{asin_tag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Tagging/v3/BulkUpdateCampaignTagTargetSupportFormula - 公式版设置Campaign标签目标",
+    "description": "单接口测试：POST /api/Tagging/v3/BulkUpdateCampaignTagTargetSupportFormula。BatchUpdateCampaignTagTarget公式增强版，为Campaign标签设ACOS目标(targetACOSType=0固定值)。经探测：ACOS/ROAS互斥；设相同值返回failedCount=1(幂等无变化)。故两步交替值(30→25)，第2步必变化，断言successCount>=1恒成立、可重复。30天调用3次。500条随机样本中占比约100%(单一调用模式)。",
+    "module": "Tagging",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "公式版设ACOS目标=30",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BulkUpdateCampaignTagTargetSupportFormula",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "campaignTagInput": {
+            "profileIds": [
+              "{{profile_id}}"
+            ],
+            "dim": "ytd",
+            "taggingIds": [
+              "{{test_campaign_tag_id}}"
+            ],
+            "campaignTagIds": [
+              "{{test_campaign_tag_id}}"
+            ],
+            "start": "{{date_start_mdy}}",
+            "end": "{{date_end_mdy}}",
+            "toMarket": "US",
+            "states": [],
+            "isFead": 0,
+            "OutPutFields": [
+              "Spend",
+              "ACOS",
+              "ROAS",
+              "CampaignTagName",
+              "PortfolioId",
+              "ProfileId",
+              "TargetACOS",
+              "TargetROAS"
+            ]
+          },
+          "targetACOSType": 0,
+          "targetACOS": 30
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "公式版设ACOS目标=25(相对上步必变化,验证successCount)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Tagging/v3/BulkUpdateCampaignTagTargetSupportFormula",
+        "request_body": {
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "campaignTagInput": {
+            "profileIds": [
+              "{{profile_id}}"
+            ],
+            "dim": "ytd",
+            "taggingIds": [
+              "{{test_campaign_tag_id}}"
+            ],
+            "campaignTagIds": [
+              "{{test_campaign_tag_id}}"
+            ],
+            "start": "{{date_start_mdy}}",
+            "end": "{{date_end_mdy}}",
+            "toMarket": "US",
+            "states": [],
+            "isFead": 0,
+            "OutPutFields": [
+              "Spend",
+              "ACOS",
+              "ROAS",
+              "CampaignTagName",
+              "PortfolioId",
+              "ProfileId",
+              "TargetACOS",
+              "TargetROAS"
+            ]
+          },
+          "targetACOSType": 0,
+          "targetACOS": 25
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  }
+]
