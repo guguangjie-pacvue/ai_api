@@ -193,14 +193,21 @@ node ".claude/skills/swagger-api-case/scripts/parse_swagger.js" `
 
 **目标**：从生产日志中拿近 30 天用户的真实请求体，直接作为 case 的 `request_body`，不推断、不猜值。Swagger 负责结构校验，ES 负责提供真实数据。
 
-### 2.1 已确认字段映射（amazon-access-* 已验证）
+### 2.1 已确认字段映射
 
-| 用途 | 字段名 |
-|------|--------|
-| 接口路径 | `apiEndpoint.keyword` |
-| HTTP 方法 | `method.keyword` |
-| 请求体 | `body`（JSON 字符串） |
-| 时间戳 | `@timestamp` |
+不同服务的 ES 索引字段名不通用，**每个新索引必须先探测，不能直接套用别的服务的字段名**：
+
+| 用途 | amazon-access-*（mainapi 已验证） | rule-api-access-*（rule-api 已验证） |
+|------|------|------|
+| 接口路径 | `apiEndpoint.keyword` | `urlReferrer.keyword` |
+| HTTP 方法 | `method.keyword` | `method.keyword` |
+| 请求体 | `body`（JSON 字符串） | `body`（JSON 对象，非字符串，`_source` 直接取即可） |
+| 时间戳 | `@timestamp` | `@timestamp` |
+
+🔴 **rule-api 场景下 productLine 不在请求体/ES 里体现**：多平台服务（如 rule-api）用请求 header `productline` 区分平台，但 ES access log **不索引请求 header**（探测过 `debugInfo` 字段，实际内容为空数组），所以：
+- 2.3 的场景挖掘只能挖出 body 内部的字段差异（如 ruleType、filter 组合等），**挖不出"这个接口在生产里被哪些平台调用过、各占多少"**——ES 样本里看不到 productLine 分布。
+- **不能靠 ES 频率来决定要不要覆盖某个平台**。多平台服务的平台覆盖是**强制枚举**，不是频率驱动：以 `services.json.<服务>.platforms` 的清单为准，每个平台都要单独生成一遍 case（同一份 cases.json，指向该平台的 `config.json`，通过 `config.json.headers.productline` 切换），跟 ES 里这个接口 productLine=xxx 出现过多少次无关。
+- body 内部场景挖掘（Phase 2.3 原有逻辑）照常按 ≥1% 规则跑，只是这个规则管的是"同一 productLine 内部的入参差异"，不管平台覆盖。
 
 其他服务索引首次使用时，通过以下方式探测字段：
 ```powershell
@@ -213,16 +220,18 @@ Invoke-RestMethod -Uri "https://logs.pacvue.com/api/index_patterns/_fields_for_w
 
 🔴 **必须走 `/internal/search/es`，直接访问 `/elasticsearch/` 会 404**
 
+🔴 **接口路径字段名按服务不同**（见 2.1 字段映射表）：mainapi 用 `apiEndpoint.keyword`，rule-api 用 `urlReferrer.keyword`。查询前先确认当前服务对应哪个字段。
+
 ```powershell
 $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("watcher:kY9GErML%luQTorm"))
 $headers = @{ "Authorization" = "Basic $b64"; "kbn-xsrf" = "true"; "Content-Type" = "application/json" }
 $body = @"
-{"params":{"index":"<索引名，如 amazon-access-*>","body":{
+{"params":{"index":"<索引名，如 amazon-access-* / rule-api-access-*>","body":{
   "query":{"bool":{"must":[
     {"function_score":{
       "query":{"bool":{
         "must":[
-          {"term":{"apiEndpoint.keyword":"<endpoint_path>"}},
+          {"term":{"<路径字段，如 apiEndpoint.keyword / urlReferrer.keyword>":"<endpoint_path>"}},
           {"term":{"method.keyword":"<METHOD>"}}
         ],
         "must_not":[{"term":{"userId.keyword":"18183"}}],
@@ -240,6 +249,13 @@ $body = @"
 $result = Invoke-RestMethod -Uri "https://logs.pacvue.com/internal/search/es" -Method POST -Headers $headers -Body $body -TimeoutSec 30
 $result.rawResponse.hits.hits | ForEach-Object { $_._source.body | ConvertFrom-Json }
 ```
+
+**rule-api 示例**（查 `/template/getTemplate` 的 POST 调用）：
+```
+{"term":{"urlReferrer.keyword":"/template/getTemplate"}},
+{"term":{"method.keyword":"POST"}}
+```
+且 `_source` 里 `body` 已是 JSON 对象（非字符串），无需 `ConvertFrom-Json` 二次解析，直接用即可；rule-api 响应体也没有 `success` 字段，只有 `code`/`msg`/`data`，L1 断言只写 `{"code": 200}`，不要照抄 mainapi 的 `{"code":200,"success":true}`。
 
 🔴 **`must_not userId=18183` 固定保留**，过滤测试账号数据，防止污染场景分析。
 
@@ -393,7 +409,7 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 | `Amazon.Advertising.Api` | `{{INDBASEURL}}` | `amazon-advertising-api/api/` |
 | `PacvueMainApi` | `{{BASEURL}}` | `pacvuemainapiv2/api/` |
 
-其他服务的 base_url 变量（按需在 config.json 的 `base_urls` 里补充）：`{{META}}`(meta-api)、`{{DAYPARTING}}`(micro-api-v2)、`{{FILTER_COLUMN}}`(filter-column)、`{{AIURL}}`(ai-api)。
+其他服务的 base_url 变量（按需在 config.json 的 `base_urls` 里补充）：`{{META}}`(meta-api)、`{{DAYPARTING}}`(micro-api-v2)、`{{FILTER_COLUMN}}`(filter-column)、`{{AIURL}}`(ai-api)、`{{RULEBASEURL}}`(rule-api，实际地址 `rule-api/`，路径不带 `/api/` 前缀，直接拼 `RULEBASEURL` + path)。
 
 🔴 **生成前先确认**：该 endpoint 在哪个 `endpoints-<title>.json` 里 → 对应 base_url 变量 → config.json 的 `base_urls` 里必须有这个变量。
 
