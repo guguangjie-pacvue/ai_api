@@ -14,7 +14,7 @@ Usage:
   1. [模块汇总] sheet：Case数 / 通过率 / 接口覆盖率
   2. [Amazon.Advertising.Api] / [PacvueMainApi] 等 swagger sheet：场景覆盖列
 """
-import argparse, json, re
+import argparse, json, re, os, glob
 from collections import defaultdict
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -141,7 +141,11 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
         if not steps:
             continue
         # 优先从 case name 提取方法和路径（格式："{METHOD} /api/xxx - desc"）
-        name_m = re.match(r'^([A-Z]+)\s+(/\S+)', c.get('name', ''))
+        # 避免多步骤 case 的前置步骤路径干扰归属
+        # 【高风险-仅生成不执行】等前缀会挡在 METHOD 前面，先去掉再匹配，
+        # 否则会 fallback 到 steps[-1]（多为后置清理步骤），把场景挂到错误的接口上
+        name_no_prefix = re.sub(r'^【[^】]*】', '', c.get('name', ''))
+        name_m = re.match(r'^([A-Z]+)\s+(/\S+)', name_no_prefix)
         if name_m:
             case_method = name_m.group(1).upper()
             raw_path    = name_m.group(2)
@@ -158,7 +162,7 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
         label_raw = name.split(' - ', 1)[1] if ' - ' in name else name
         m = re.match(r'^(场景\d+)[_\-](.+)$', label_raw)
         label = (m.group(1) + ': ' + m.group(2).replace('_', ' ')) if m else label_raw.replace('_', ' ')
-        pct_m = re.search(r'占比约([\d.]+%)', desc)
+        pct_m = re.search(r'占(?:比)?(?:约)?\s*([\d.]+%)', desc)
         if pct_m:
             entry = label + ' — ' + pct_m.group(1)
         elif '无ES流量' in desc or 'xx%' in desc:
@@ -211,6 +215,38 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
 
     print(f'[场景覆盖] {swagger_sheet}[{env}]: updated {updated} rows')
 
+# ── 跨轮次累计 ─────────────────────────────────────────────────────────────────
+def _module_dir_from_cases_path(cases_path):
+    # single-api/mainapi/<env>/<swagger>/<module>/task-*/cases.json -> .../<module>
+    return os.path.dirname(os.path.dirname(os.path.abspath(cases_path)))
+
+def load_all_tasks_for_module(cases_path, fallback_cases, fallback_report):
+    """一个模块通常会分多轮（多个 task-* 目录）生成 case。模块汇总的 Case数/通过率/
+    接口覆盖率如果只用本次传入的单轮 cases/report 计算，会被最后一轮覆盖，看不出
+    真实累计进度。这里改为扫描该模块目录下所有 task-*/cases.json + report.json，
+    合并后再统计，使结果与实际累计覆盖一致。"""
+    module_dir = _module_dir_from_cases_path(cases_path)
+    task_dirs = sorted(glob.glob(os.path.join(module_dir, 'task-*')))
+    all_cases, total, passed, failed, skipped = [], 0, 0, 0, 0
+    found_any = False
+    for td in task_dirs:
+        cp = os.path.join(td, 'cases.json')
+        rp = os.path.join(td, 'report.json')
+        if not (os.path.exists(cp) and os.path.exists(rp)):
+            continue
+        with open(cp, encoding='utf-8-sig') as f: c = json.load(f)
+        with open(rp, encoding='utf-8-sig') as f: r = json.load(f)
+        all_cases.extend(c)
+        total   += r.get('total', len(c))
+        passed  += r.get('passed', 0)
+        failed  += r.get('failed', 0)
+        skipped += r.get('skipped', 0)
+        found_any = True
+    if not found_any:
+        return fallback_cases, fallback_report
+    merged_report = {'total': total, 'passed': passed, 'failed': failed, 'skipped': skipped}
+    return all_cases, merged_report
+
 # ── main ─────────────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser()
@@ -237,6 +273,8 @@ def main():
     with open(args.cases,     encoding='utf-8-sig') as f: cases     = json.load(f)
     with open(args.report,    encoding='utf-8-sig') as f: report    = json.load(f)
     with open(args.endpoints, encoding='utf-8-sig') as f: endpoints = json.load(f)
+
+    cases, report = load_all_tasks_for_module(args.cases, cases, report)
 
     wb = openpyxl.load_workbook(args.excel)
     update_summary(wb, args.swagger_title, args.module, args.env, cases, report, endpoints)
