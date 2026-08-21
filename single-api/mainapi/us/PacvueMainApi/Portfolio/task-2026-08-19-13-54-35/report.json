@@ -1,0 +1,345 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-19T05:58:24.481303+00:00",
+  "total": 9,
+  "passed": 5,
+  "failed": 4,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景1:仅名称+启用状态(无预算无预算控制)(含后置清理,可重复)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建Portfolio-仅名称",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/CreatePortfolio",
+          "status_code": 200,
+          "ms": 16874,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:datas,code,description,isSuccess",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档新建Portfolio",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/UpdataPortfolio",
+          "status_code": 400,
+          "ms": 695,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "success expected True, got null",
+            "data.isSuccess expected True, got null",
+            "http 400 {\"errors\": {\"input\": [\"The input field is required.\"], \"infos[0].portfolioId\": [\"Error converting value \\\"{{created_portfolio_id_s1}}\\\" to type 'System.Int64'. Path 'infos[0].portfolioId', line 1, pos"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景2:名称+启用状态+预算共享控制(无预算)(含后置清理,可重复)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建Portfolio-预算共享控制",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/CreatePortfolio",
+          "status_code": 200,
+          "ms": 13739,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:datas,code,description,isSuccess",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档新建Portfolio",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/UpdataPortfolio",
+          "status_code": 400,
+          "ms": 969,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "success expected True, got null",
+            "data.isSuccess expected True, got null",
+            "http 400 {\"errors\": {\"input\": [\"The input field is required.\"], \"infos[0].portfolioId\": [\"Error converting value \\\"{{created_portfolio_id_s2}}\\\" to type 'System.Int64'. Path 'infos[0].portfolioId', line 1, pos"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景3:名称+启用状态+日期区间预算+预算共享控制(含后置清理,可重复)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建Portfolio-日期区间预算",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/CreatePortfolio",
+          "status_code": 200,
+          "ms": 14576,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:datas,code,description,isSuccess",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档新建Portfolio",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/UpdataPortfolio",
+          "status_code": 400,
+          "ms": 659,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "success expected True, got null",
+            "data.isSuccess expected True, got null",
+            "http 400 {\"errors\": {\"input\": [\"The input field is required.\"], \"infos[0].portfolioId\": [\"Error converting value \\\"{{created_portfolio_id_s3}}\\\" to type 'System.Int64'. Path 'infos[0].portfolioId', line 1, pos"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景4:名称+启用状态+不限预算(NO_CAP)(含后置清理,可重复)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建Portfolio-不限预算",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/CreatePortfolio",
+          "status_code": 200,
+          "ms": 13143,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:datas,code,description,isSuccess",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "后置清理-归档新建Portfolio",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/UpdataPortfolio",
+          "status_code": 400,
+          "ms": 677,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "success expected True, got null",
+            "data.isSuccess expected True, got null",
+            "http 400 {\"errors\": {\"input\": [\"The input field is required.\"], \"infos[0].portfolioId\": [\"Error converting value \\\"{{created_portfolio_id_s4}}\\\" to type 'System.Int64'. Path 'infos[0].portfolioId', line 1, pos"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/AddCampaignToPortfolio - 场景1:单个广告活动加入Portfolio",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "关联广告活动到Portfolio",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/AddCampaignToPortfolio",
+          "status_code": 200,
+          "ms": 875,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/BulkUpdatePortfolio - 场景1:单个Portfolio仅改名(不涉及预算/状态)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "批量更新Portfolio-单个改名",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/BulkUpdatePortfolio",
+          "status_code": 200,
+          "ms": 1192,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/BulkUpdatePortfolio - 场景2:批量更新多个Portfolio的预算+预算共享控制+启用状态",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "批量更新Portfolio-预算+状态",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/BulkUpdatePortfolio",
+          "status_code": 200,
+          "ms": 1369,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/BulkUpdatePortfolio - 场景3:批量重命名多个Portfolio(不涉及预算/状态)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "批量更新Portfolio-批量改名",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/BulkUpdatePortfolio",
+          "status_code": 200,
+          "ms": 1134,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:id,ids,message,result,code,successCount,insertCount,removeCount",
+          "data_len": 13,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Portfolio/v3/UpdataPortfolio - 场景1:单个Portfolio设置预算+预算共享控制+启用状态",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "更新Portfolio-预算+预算共享控制",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Portfolio/v3/UpdataPortfolio",
+          "status_code": 200,
+          "ms": 1254,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:datas,code,description,isSuccess",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-08-19T05:59:31.644575+00:00"
+}

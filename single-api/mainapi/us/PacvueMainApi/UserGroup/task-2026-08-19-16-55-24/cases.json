@@ -1,0 +1,304 @@
+[
+  {
+    "name": "POST /api/UserGroup/V3/GetAllUserGroups - 查询当前账号全部用户组",
+    "description": "单接口测试：POST /api/UserGroup/V3/GetAllUserGroups。无请求体，仅依赖登录态查询当前账号下全部用户组列表。ES 近90天无该接口调用记录（0次），无法进行真实场景占比归纳，本 case 为基于 Swagger 结构的唯一 Happy Path 场景。",
+    "module": "UserGroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询全部用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/GetAllUserGroups",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/UserGroup/V3/CreateUserGroup - 创建用户组(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/UserGroup/V3/CreateUserGroup。ES 近90天无该接口调用记录（0次），无法归纳真实场景，GroupName 按约定命名规则 test+当前时分秒 生成（test170340）。第2步查询定位新建记录的真实 GroupId（接口本身仅返回 int），第3步用 DeleteGroups 删除该记录，保证用例可重复执行。",
+    "module": "UserGroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/CreateUserGroup",
+        "request_body": {
+          "GroupName": [
+            "test170340"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "定位新建用户组的真实GroupId",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/GetAllUserGroups",
+        "request_body": {},
+        "extract_vars": {
+          "created_group_id": "data[0].GroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除新建用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/DeleteGroups",
+        "request_body": {
+          "groupIds": [
+            "{{created_group_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/UserGroup/V3/DeleteGroups - 删除用户组(含前置创建,可重复)",
+    "description": "单接口测试：POST /api/UserGroup/V3/DeleteGroups。ES 近90天无该接口调用记录（0次），无法归纳真实场景。第1步先创建一个临时用户组作为待删除对象，第2步查询定位其真实 GroupId，第3步调用 DeleteGroups 删除，验证删除本身的 Happy Path。删除后数据已清理，用例可重复执行。",
+    "module": "UserGroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待删除用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/CreateUserGroup",
+        "request_body": {
+          "GroupName": [
+            "test170340"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "定位新建用户组的真实GroupId",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/GetAllUserGroups",
+        "request_body": {},
+        "extract_vars": {
+          "delete_target_group_id": "data[0].GroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/DeleteGroups",
+        "request_body": {
+          "groupIds": [
+            "{{delete_target_group_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/UserGroup/V3/EditGroup - 重命名用户组(含前置创建+后置清理,可重复)",
+    "description": "单接口测试：POST /api/UserGroup/V3/EditGroup。ES 近90天无该接口调用记录（0次），无法归纳真实场景，组名按约定命名规则 test+当前时分秒 生成（test170340 → 重命名为 test170340_edited）。第1步创建临时用户组，第2步查询定位真实 GroupId，第3步调用 EditGroup 重命名，第4步用 DeleteGroups 清理，保证用例可重复执行。",
+    "module": "UserGroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/CreateUserGroup",
+        "request_body": {
+          "GroupName": [
+            "test170340"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "定位新建用户组的真实GroupId",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/GetAllUserGroups",
+        "request_body": {},
+        "extract_vars": {
+          "edit_target_group_id": "data[0].GroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "重命名用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/EditGroup",
+        "request_body": {
+          "GroupId": "{{edit_target_group_id}}",
+          "GroupName": "test170340_edited"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/DeleteGroups",
+        "request_body": {
+          "groupIds": [
+            "{{edit_target_group_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/UserGroup/V3/EditUserGroup - 为用户组分配成员(含前置创建+后置清理,可重复)",
+    "description": "单接口测试：POST /api/UserGroup/V3/EditUserGroup。ES 近90天无该接口调用记录（0次），无法归纳真实场景。UserIds 使用当前登录账号自身真实 user_id（非猜测值）分配至用户组。第1步创建临时用户组，第2步查询定位真实 GroupId，第3步调用 EditUserGroup 分配成员，第4步用 DeleteGroups 清理，保证用例可重复执行。",
+    "module": "UserGroup",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/CreateUserGroup",
+        "request_body": {
+          "GroupName": [
+            "test170340"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "定位新建用户组的真实GroupId",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/GetAllUserGroups",
+        "request_body": {},
+        "extract_vars": {
+          "assign_target_group_id": "data[0].GroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "为用户组分配成员",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/EditUserGroup",
+        "request_body": {
+          "UserGroups": [
+            {
+              "GroupId": "{{assign_target_group_id}}",
+              "UserIds": [
+                "{{user_id}}"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除用户组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "UserGroup/V3/DeleteGroups",
+        "request_body": {
+          "groupIds": [
+            "{{assign_target_group_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

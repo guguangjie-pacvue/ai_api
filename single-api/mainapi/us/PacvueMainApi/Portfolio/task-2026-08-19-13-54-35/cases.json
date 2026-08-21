@@ -1,0 +1,452 @@
+[
+  {
+    "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景1:仅名称+启用状态(无预算无预算控制)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/Portfolio/v3/CreatePortfolio。用户仅填写Portfolio名称并保持启用状态，不设置预算和预算共享控制，是最简单的建组合操作。500条随机样本中占比约50.8%（254次，注：ES样本state字段原始值为小写enabled，经真实调用验证Amazon侧枚举要求为大写ENABLED，故case中已按真实生效值修正，否则会被Amazon直接拒绝创建）。第2步后置操作将新建实体归档，保证用例可重复执行。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Portfolio-仅名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/CreatePortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "info": {
+            "name": "zz_autotest_portfolio_create_s1_{{today}}",
+            "state": "ENABLED"
+          }
+        },
+        "extract_vars": {
+          "created_portfolio_id_s1": "data.datas.portfolios.success[0].portfolioId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/UpdataPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "infos": [
+            {
+              "portfolioId": "{{created_portfolio_id_s1}}",
+              "name": "zz_autotest_portfolio_create_s1_{{today}}",
+              "state": "ARCHIVED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景2:名称+启用状态+预算共享控制(无预算)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/Portfolio/v3/CreatePortfolio。用户在建组合时额外设置了campaignUnspentBudgetSharing预算共享控制开关（DISABLED），但未设置具体预算金额。500条随机样本中占比约22.4%（112次）。第2步后置操作将新建实体归档，保证用例可重复执行。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Portfolio-预算共享控制",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/CreatePortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "info": {
+            "name": "zz_autotest_portfolio_create_s2_{{today}}",
+            "state": "ENABLED",
+            "budgetControls": {
+              "campaignUnspentBudgetSharing": {
+                "featureState": "DISABLED"
+              }
+            }
+          }
+        },
+        "extract_vars": {
+          "created_portfolio_id_s2": "data.datas.portfolios.success[0].portfolioId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/UpdataPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "infos": [
+            {
+              "portfolioId": "{{created_portfolio_id_s2}}",
+              "name": "zz_autotest_portfolio_create_s2_{{today}}",
+              "state": "ARCHIVED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景3:名称+启用状态+日期区间预算+预算共享控制(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/Portfolio/v3/CreatePortfolio。用户设置了完整的日期区间预算(DATE_RANGE策略,含起止日期和金额)并开启campaignUnspentBudgetSharing。500条随机样本中占比约16.6%（83次）。第2步后置操作将新建实体归档，保证用例可重复执行。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Portfolio-日期区间预算",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/CreatePortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "info": {
+            "name": "zz_autotest_portfolio_create_s3_{{today}}",
+            "state": "ENABLED",
+            "budget": {
+              "amount": 10000.0,
+              "policy": "DATE_RANGE",
+              "startDate": "{{date_start}}",
+              "endDate": "{{date_end}}"
+            },
+            "budgetControls": {
+              "campaignUnspentBudgetSharing": {
+                "featureState": "ENABLED"
+              }
+            }
+          }
+        },
+        "extract_vars": {
+          "created_portfolio_id_s3": "data.datas.portfolios.success[0].portfolioId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/UpdataPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "infos": [
+            {
+              "portfolioId": "{{created_portfolio_id_s3}}",
+              "name": "zz_autotest_portfolio_create_s3_{{today}}",
+              "state": "ARCHIVED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/CreatePortfolio - 场景4:名称+启用状态+不限预算(NO_CAP)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/Portfolio/v3/CreatePortfolio。用户设置预算策略为NO_CAP(不限预算)，不填金额和日期区间，未设置预算共享控制。500条随机样本中占比约6.2%（31次）。第2步后置操作将新建实体归档，保证用例可重复执行。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Portfolio-不限预算",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/CreatePortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "info": {
+            "name": "zz_autotest_portfolio_create_s4_{{today}}",
+            "state": "ENABLED",
+            "budget": {
+              "amount": null,
+              "currencyCode": "USD",
+              "endDate": null,
+              "policy": "NO_CAP",
+              "startDate": null
+            }
+          }
+        },
+        "extract_vars": {
+          "created_portfolio_id_s4": "data.datas.portfolios.success[0].portfolioId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/UpdataPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "infos": [
+            {
+              "portfolioId": "{{created_portfolio_id_s4}}",
+              "name": "zz_autotest_portfolio_create_s4_{{today}}",
+              "state": "ARCHIVED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/AddCampaignToPortfolio - 场景1:单个广告活动加入Portfolio",
+    "description": "单接口测试：POST /api/Portfolio/v3/AddCampaignToPortfolio。将单个SP广告活动关联到指定Portfolio。ES近90天日志中该接口apiEndpoint.keyword命中0条记录，判断为当前生产环境无真实调用（可能已被/api/Campaign/v3/CampaignPortfolioSave等接口替代），无法从真实流量归纳场景占比，campaignType枚举值缺少真实样本佐证，按[NEEDS_REAL_VALUE]标注，case使用config现有真实campaign_id构造，仅验证接口结构可用性。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "关联广告活动到Portfolio",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/AddCampaignToPortfolio",
+        "request_body": {
+          "info": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "campaignType": "[NEEDS_REAL_VALUE]"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/BulkUpdatePortfolio - 场景1:单个Portfolio仅改名(不涉及预算/状态)",
+    "description": "单接口测试：POST /api/Portfolio/v3/BulkUpdatePortfolio。批量更新接口收到单个Portfolio的改名请求，不涉及state/budget/budgetControls字段。432条随机样本中占比约68.8%（297次）。使用账号内既有的自动化测试Portfolio(auytotest_createportfolio_*)执行幂等改名(名称写回原值)，不影响真实业务数据，可重复执行。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量更新Portfolio-单个改名",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/BulkUpdatePortfolio",
+        "request_body": [
+          {
+            "portfolioId": "270171711307093",
+            "name": "auytotest_createportfolio_20240430091523",
+            "profileId": "{{profile_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/BulkUpdatePortfolio - 场景2:批量更新多个Portfolio的预算+预算共享控制+启用状态",
+    "description": "单接口测试：POST /api/Portfolio/v3/BulkUpdatePortfolio。批量更新接口一次性对多个Portfolio同时设置预算(DATE_RANGE)、预算共享控制(campaignUnspentBudgetSharing)和启用状态ENABLED，是批量预算调整的典型操作。432条随机样本中占比约28.9%（125次，覆盖批量条数2~100不等的所有batch size）。使用账号内既有的自动化测试Portfolio执行，budget设置为短期区间，不影响真实业务数据。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量更新Portfolio-预算+状态",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/BulkUpdatePortfolio",
+        "request_body": [
+          {
+            "portfolioId": "270194280438742",
+            "name": "auytotest_createportfolio_20250710181356",
+            "state": "ENABLED",
+            "profileId": "{{profile_id}}",
+            "budgetControls": {
+              "campaignUnspentBudgetSharing": {
+                "featureState": "DISABLED"
+              }
+            },
+            "budget": {
+              "amount": 168,
+              "policy": "DATE_RANGE",
+              "startDate": "{{date_start}}",
+              "endDate": "{{date_end}}",
+              "currencyCode": "USD"
+            }
+          },
+          {
+            "portfolioId": "270212642535058",
+            "name": "auytotest_createportfolio_20250612183238",
+            "state": "ENABLED",
+            "profileId": "{{profile_id}}",
+            "budgetControls": {
+              "campaignUnspentBudgetSharing": {
+                "featureState": "DISABLED"
+              }
+            },
+            "budget": {
+              "amount": 168,
+              "policy": "DATE_RANGE",
+              "startDate": "{{date_start}}",
+              "endDate": "{{date_end}}",
+              "currencyCode": "USD"
+            }
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/BulkUpdatePortfolio - 场景3:批量重命名多个Portfolio(不涉及预算/状态)",
+    "description": "单接口测试：POST /api/Portfolio/v3/BulkUpdatePortfolio。批量更新接口一次性对多个Portfolio仅做改名，不涉及state/budget/budgetControls字段。432条随机样本中占比约2.3%（10次）。使用账号内既有的自动化测试Portfolio执行幂等改名(名称写回原值)。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量更新Portfolio-批量改名",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/BulkUpdatePortfolio",
+        "request_body": [
+          {
+            "portfolioId": "270227704486601",
+            "name": "auytotest_createportfolio_20251126051104",
+            "profileId": "{{profile_id}}"
+          },
+          {
+            "portfolioId": "270318071000797",
+            "name": "auytotest_createportfolio_20241004053215",
+            "profileId": "{{profile_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Portfolio/v3/UpdataPortfolio - 场景1:单个Portfolio设置预算+预算共享控制+启用状态",
+    "description": "单接口测试：POST /api/Portfolio/v3/UpdataPortfolio。用户对单个Portfolio同时设置日期区间预算(DATE_RANGE)、预算共享控制(campaignUnspentBudgetSharing设为DISABLED)并保持启用状态，是该接口压倒性的主流调用形态。500条随机样本中占比约99.6%（498次）。使用账号内既有的自动化测试Portfolio执行，不影响真实业务数据，可重复执行。",
+    "module": "Portfolio",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新Portfolio-预算+预算共享控制",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Portfolio/v3/UpdataPortfolio",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "infos": [
+            {
+              "portfolioId": "270359085212917",
+              "name": "auytotest_createportfolio_20240723135906",
+              "state": "ENABLED",
+              "budget": {
+                "amount": 70,
+                "policy": "DATE_RANGE",
+                "startDate": "{{date_start}}",
+                "endDate": "{{date_end}}",
+                "currencyCode": "USD"
+              },
+              "budgetControls": {
+                "campaignUnspentBudgetSharing": {
+                  "featureState": "DISABLED"
+                }
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.isSuccess": true
+        }
+      }
+    ]
+  }
+]

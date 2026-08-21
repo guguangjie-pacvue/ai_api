@@ -1,0 +1,947 @@
+[
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignTagUsers - 查询CampaignTag相关用户列表",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignTagUsers。请求体固定为空对象。500条随机样本中占比约100%（500次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignTagUsers",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignTagUsers",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignTagByCampaign - 查询单个Campaign的标签",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignTagByCampaign。按单个campaign查询其CampaignTag。500条随机样本中占比约48%（240次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignTagByCampaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignTagByCampaign",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "isCheckEdit": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignTagByCampaign - 批量查询多个Campaign的标签",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignTagByCampaign。按批量campaign(50个左右)查询CampaignTag。500条随机样本中占比约5.2%（26次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignTagByCampaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignTagByCampaign",
+        "request_body": {
+          "campaigns": [
+            {
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "profileId": "{{profile_id}}"
+            },
+            {
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "profileId": "{{profile_id}}"
+            },
+            {
+              "campaignId": "{{sd_campaign_id}}",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "isCheckEdit": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignTagPageData - 按CampaignTagId过滤查看标签列表页",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignTagPageData。按campaignTagIds过滤查询标签列表页数据。500条随机样本中占比约21.6%（108次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignTagPageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "userIds": [],
+          "taggingIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "taggingSubIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "isShowTopOfSearchIS": 1,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignTagPageData - 不筛选标签查看全部标签列表页",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignTagPageData。不筛选campaignTagIds，查看全部标签列表页数据。500条随机样本中占比约78.4%（392次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignTagPageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignTagPageData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "userIds": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "isShowTopOfSearchIS": 0,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignTagPageDataTotal - 按CampaignTagId过滤查看标签汇总",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignTagPageDataTotal。按多个campaignTagIds过滤查询汇总合计数据。500条随机样本中占比约22.5%（111次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignTagPageDataTotal",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "campaignIds": [],
+          "userIds": [],
+          "taggingIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "taggingSubIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "isShowTopOfSearchIS": 0,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignTagPageDataTotal - 不筛选标签查看全部标签汇总",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignTagPageDataTotal。不筛选campaignTagIds，查看全部标签汇总合计数据。500条随机样本中占比约77.5%（382次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignTagPageDataTotal",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignTagPageDataTotal",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "userIds": [],
+          "taggingIds": [],
+          "taggingSubIds": [],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "isShowTopOfSearchIS": 0,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "Spend",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSort": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignSubTagData - 按SubTagId过滤查看子标签数据",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignSubTagData。按taggingSubIds过滤查询子标签数据。500条随机样本中占比约55.9%（210/376次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignSubTagData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignSubTagData",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "NewToBrandOrders",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "userIds": [],
+          "taggingIds": [],
+          "taggingSubIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "states": [],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "NewToBrandOrders",
+            "pageIndex": 1,
+            "pageSize": 25,
+            "multiSortList": [
+              {
+                "sortData": "NewToBrandOrders",
+                "sortType": "desc"
+              }
+            ]
+          },
+          "isShowTopOfSearchIS": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignSubTagData - 旧版结构按CampaignTagId过滤汇总(不含SubTag)",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignSubTagData。真实调用中还存在一种旧版请求结构(Dim/ProfileIds/Filters大写字段，按CampaignTagId过滤，不含SubTagId筛选)，与主结构并存。500条随机样本中占比约44.1%（166/376次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignSubTagData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignSubTagData",
+        "request_body": {
+          "Dim": "ytd",
+          "isFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            },
+            {
+              "filterFieldName": "CampaignTagId",
+              "filterType": 11,
+              "filterContent": "{\"CustomizeType\":\"102\",\"Values\":[{{test_campaign_tag_id}}],\"IsNum\":true}"
+            }
+          ],
+          "OutPutFields": [
+            "CampaignTagName",
+            "UserName",
+            "CampaignCount",
+            "Impression",
+            "Click",
+            "CTR",
+            "Spend",
+            "CPC",
+            "Sales",
+            "Conversion",
+            "SaleUnits",
+            "CVR",
+            "ACOS"
+          ],
+          "IsShowNTB": 0,
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 25,
+            "pageIndex": 1,
+            "IsJustOrderby": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignSubTagGroupByData - 按date维度分组查询子标签数据",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignSubTagGroupByData。按dim=date维度分组查询子标签趋势数据。126条随机样本中占比约71.4%（90次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignSubTagGroupByData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignSubTagGroupByData",
+        "request_body": {
+          "taggingSubIds": [],
+          "start": "2026-06-18T00:00:00",
+          "end": "2026-06-25T00:00:00",
+          "dim": "date",
+          "toMarket": "US",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [],
+          "isFead": 0,
+          "pageInfo": {
+            "orderByField": "Spend",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 3000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "spend desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignSubTagGroupByData - 按week维度分组查询子标签数据",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignSubTagGroupByData。按dim=week维度分组查询子标签趋势数据。126条随机样本中占比约19%（24次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignSubTagGroupByData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignSubTagGroupByData",
+        "request_body": {
+          "taggingSubIds": [],
+          "start": "2026-06-18T00:00:00",
+          "end": "2026-06-25T00:00:00",
+          "dim": "week",
+          "toMarket": "US",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [],
+          "isFead": 0,
+          "pageInfo": {
+            "orderByField": "Spend",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 3000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "spend desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetCampaignSubTagGroupByData - 按month维度分组查询子标签数据",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetCampaignSubTagGroupByData。按dim=month维度分组查询子标签趋势数据。126条随机样本中占比约9.5%（12次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetCampaignSubTagGroupByData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetCampaignSubTagGroupByData",
+        "request_body": {
+          "taggingSubIds": [],
+          "start": "2026-06-18T00:00:00",
+          "end": "2026-06-25T00:00:00",
+          "dim": "month",
+          "toMarket": "US",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "taggingIds": [],
+          "isFead": 0,
+          "pageInfo": {
+            "orderByField": "Spend",
+            "orderAsc": false,
+            "totalDataCount": 0,
+            "pageSize": 3000,
+            "pageIndex": 1,
+            "pageCount": 0,
+            "orderString": "spend desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetTaggingChartV2 - 按date维度查看标签趋势图",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetTaggingChartV2。按taggingIds+dim=date查询标签趋势图。335条随机样本中占比约51%（171次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetTaggingChartV2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetTaggingChartV2",
+        "request_body": {
+          "start": "{{date_start}}T00:00:00",
+          "end": "{{date_end}}T00:00:00",
+          "dim": "date",
+          "Dim": "date",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "isFead": 0,
+          "toMarket": "US",
+          "isExchange": 1,
+          "taggingIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "taggingSubIds": [],
+          "isDetail": true,
+          "fieldSet": {
+            "isShowTopOfSearchIS": 1
+          },
+          "Columns": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/GetTaggingChartV2 - 按ytd维度查看子标签趋势图",
+    "description": "单接口测试：POST /api/CampaignTag/v3/GetTaggingChartV2。按taggingIds+dim=ytd(campaignTag层级)查询趋势图。335条随机样本中占比约46%（154次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetTaggingChartV2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetTaggingChartV2",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "Level": "campaignTag",
+          "taggingIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "taggingSubIds": [],
+          "subTagCount": 1,
+          "portfolioName": "Tag 0415 A003",
+          "isEdit": 1,
+          "menu": "CampaignSubTag",
+          "multiSortList": [
+            {
+              "sortData": "Spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "dim": "ytd",
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "userIds": [],
+          "states": [],
+          "isFead": 0,
+          "isExchange": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/AddTagToCampaignPageDataSelectAll - 带过滤条件全选待打标Campaign",
+    "description": "单接口测试：POST /api/CampaignTag/v3/AddTagToCampaignPageDataSelectAll。带dailyBudget等filter条件，全选符合条件的Campaign用于批量打标。500条随机样本中占比约60.6%（303次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/AddTagToCampaignPageDataSelectAll",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/AddTagToCampaignPageDataSelectAll",
+        "request_body": {
+          "SearchQuery": {
+            "filter": [
+              {
+                "Field": "dailyBudget",
+                "Operand": "LessOrEqual",
+                "Value": "25.00",
+                "isNot": 0
+              }
+            ],
+            "profileIds": [
+              "{{profile_id}}"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "dim": "ytd",
+            "campaignTagIds": [],
+            "campaignIds": [],
+            "campaignName": [],
+            "CampaignTypeItems": [
+              {
+                "CampaignType": "sponsoredProducts",
+                "items": [
+                  "manual",
+                  "auto"
+                ]
+              }
+            ],
+            "states": [
+              "enabled",
+              "paused"
+            ],
+            "groupBy": "campaign",
+            "asins": [],
+            "taggingIds": [],
+            "taggingSubIds": [],
+            "campaignNameOperand": "LikeOr",
+            "isAnd": "0",
+            "start": "{{date_start_mdy}}",
+            "end": "{{date_end_mdy}}",
+            "toMarket": "US",
+            "pageInfo": {
+              "orderAsc": true,
+              "orderByField": "CampaignName",
+              "pageIndex": 1,
+              "pageSize": 5357,
+              "multiSort": [
+                {
+                  "sortType": "asc",
+                  "sortData": "CampaignName"
+                }
+              ]
+            }
+          },
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "userID": "{{user_id}}",
+          "type": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTag/v3/AddTagToCampaignPageDataSelectAll - 不带过滤条件全选全部Campaign",
+    "description": "单接口测试：POST /api/CampaignTag/v3/AddTagToCampaignPageDataSelectAll。不带filter条件，全选全部Campaign用于批量打标。500条随机样本中占比约39.4%（197次）。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/AddTagToCampaignPageDataSelectAll",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/AddTagToCampaignPageDataSelectAll",
+        "request_body": {
+          "SearchQuery": {
+            "profileIds": [
+              "{{profile_id}}"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "Spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "dim": "ytd",
+            "campaignTagIds": [],
+            "campaignIds": [],
+            "campaignName": [],
+            "CampaignTypeItems": [
+              {
+                "CampaignType": "sponsoredProducts",
+                "items": [
+                  "auto"
+                ]
+              }
+            ],
+            "states": [],
+            "groupBy": "campaign",
+            "asins": [],
+            "taggingIds": [],
+            "taggingSubIds": [],
+            "campaignNameOperand": "LikeOr",
+            "isAnd": "0",
+            "start": "{{date_start_mdy}}",
+            "end": "{{date_end_mdy}}",
+            "toMarket": "US",
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "Spend",
+              "pageIndex": 1,
+              "pageSize": 1051,
+              "multiSort": [
+                {
+                  "sortData": "Spend",
+                  "sortType": "desc"
+                }
+              ]
+            }
+          },
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "userID": "{{user_id}}",
+          "type": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignTag/v3/GetAutomationAutoTagging/{campaignTag} - 按campaignTag查询自动打标规则",
+    "description": "单接口测试：GET /api/CampaignTag/v3/GetAutomationAutoTagging/{campaignTag}。ES按apiEndpoint精确匹配无样本(因path含真实动态值)，改用通配符前缀匹配定位到真实高频campaignTag=5661，为该接口唯一真实模式(path参数变量化)。",
+    "module": "CampaignTag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignTag/v3/GetAutomationAutoTagging/{campaignTag}",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignTag/v3/GetAutomationAutoTagging/{{test_campaign_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
