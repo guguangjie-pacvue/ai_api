@@ -1,0 +1,109 @@
+[
+  {
+    "name": "POST /getProfiles - Kevel 平台 Profile 列表连通",
+    "description": "版本变更(1f18987)：新平台 Kevel 接入连通性验证。确认 productLine=kevel 路由通、返回 code:200、data 为数组。新平台无托管 profile 时 data 为空属正常。",
+    "module": "smoke",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getProfiles",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "productLine": "kevel"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getProfile - Kevel Profile 查询连通",
+    "description": "版本变更(1f18987)：新平台 Kevel 接入连通性验证。确认 definition/getProfile 对 kevel 返回 code:200。",
+    "module": "smoke",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getProfile",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getProfile",
+        "request_body": {
+          "productLine": "kevel"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getRuleViewList - Kevel 规则列表连通",
+    "description": "版本变更(1f18987)：新平台 Kevel 接入连通性验证。确认 getRuleViewList 对 kevel 返回 code:200。新平台无规则时 data 为空属正常。注：ruleIds 必传（后端对 null 直接 NPE，健壮性缺陷已记录）。",
+    "module": "smoke",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRuleViewList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getRuleViewList",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "{{profile_id}}",
+          "ruleIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getTarget - Kevel Apply-to 候选连通",
+    "description": "版本变更(1f18987)：新平台 Kevel 接入连通性验证。确认 getTarget 对 kevel+targetLevel=Flight 返回 code:200。⚠️ 当前 profile(6274332) 下无 Campaign/Flight 数据(count=0)，是本批测试的核心卡点。",
+    "module": "smoke",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getTarget-Flight",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getTarget",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "{{profile_id}}",
+          "targetLevel": "Flight"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

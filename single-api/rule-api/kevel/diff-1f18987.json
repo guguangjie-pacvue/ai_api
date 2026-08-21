@@ -1,0 +1,113 @@
+{
+  "version": "1f18987c806f481e8e52a474",
+  "ticket": "CP-47435",
+  "platform": "kevel",
+  "diff_source": "git-commit + swagger",
+  "merge_base": "616b05d07c1d280288cfdb1a75b28dce4ecefb13",
+  "change_nature": "NEW_FEATURE",
+  "summary_text": "新增 Kevel 平台 Flight 层级规则支持（全新功能，非行为微调）。73 文件 / +6461 行。所有改动对 Kevel 为新增，对既有平台为纯增量（无破坏）。",
+  "code_change_stats": { "files": 73, "insertions": 6461, "deletions": 38 },
+  "enum_additions": [
+    { "enum": "ProductLine", "value": "Kevel(\"kevel\")", "note": "新增 Kevel 产品线" },
+    { "enum": "RuleTargetLevel", "value": "Flight", "note": "新增 Flight 目标层级" },
+    { "enum": "RuleType", "value": "KevelFlight(\"Flight\", Kevel)", "note": "Flight ≈ 其它平台 AdGroup，可调 Daily Budget Cap / Bid" },
+    { "enum": "RuleEntityType", "value": "flight", "note": "Kevel 广告组层级，数据表 ad_group / 字段 adGroupId" }
+  ],
+  "new_capabilities": {
+    "actions": ["Bid 调整", "Daily Budget Cap 调整", "State 状态变更"],
+    "action_managers": [
+      "KevelFlightBidEntityManager",
+      "KevelFlightDailyBudgetEntityManager",
+      "KevelFlightStateEntityManager"
+    ],
+    "handlers": [
+      "KevelExecutionHandler (执行下发)",
+      "KevelFilterHandler (过滤)",
+      "KevelPreviewHandler (预览)",
+      "KevelFlightTemplate (执行邮件模板)"
+    ],
+    "filter_columns": "KevelBaseColumn + KevelCalColumn（自成一套，不合并 Generic）"
+  },
+  "affected_endpoints": [
+    { "method": "POST", "path": "/definition/createRule", "impact": "支持创建 productLine=kevel、targetLevel=Flight 的规则" },
+    { "method": "POST", "path": "/definition/editRule", "impact": "支持编辑 Kevel Flight 规则" },
+    { "method": "POST", "path": "/definition/getRule", "impact": "返回含 targetLevel=Flight" },
+    { "method": "POST", "path": "/definition/getAdtomicRules", "impact": "返回含 targetLevel=Flight" },
+    { "method": "GET",  "path": "/definition/getRuleTargetInfo", "impact": "Flight 目标信息查询" },
+    { "method": "POST", "path": "/definition/getRuleTargetInfoByRuleIds", "impact": "Flight 目标批量查询" },
+    { "method": "POST", "path": "/definition/getTarget", "impact": "Kevel 过滤列 + Flight 目标" },
+    { "method": "POST", "path": "/getAutoRuleDetailLogFilter", "impact": "Kevel 历史记录过滤" },
+    { "method": "POST", "path": "/history/*", "impact": "Run Record 走 DETAIL_V2 取名路径（getCampaignNames case kevel），Flight 名称正常显示" }
+  ],
+  "behavior_details": [
+    {
+      "file": "KevelFlightEntity.java",
+      "description": "Bid 精度统一 2 位小数（HALF_UP）；Daily Budget 取整 FLOOR→HALF_UP + 小百分比被抹平时补偿 ±1；实现 IMinUnit（minUnit=0.01 防小额出价零变化）",
+      "test_focus": "Bid/Budget 调整下发值精度正确、小百分比不被抹平、Run Record 与实际下发一致"
+    },
+    {
+      "file": "EmailTemplateUtils.java + KevelFlightTemplate.java",
+      "description": "Kevel 平台执行邮件中 AdGroups 显示为 Flights",
+      "test_focus": "Kevel 规则执行邮件实体名显示为 Flights"
+    }
+  ],
+  "intra_platform_impact": {
+    "note": "D2：同平台(Kevel)内被改接口的调用/被调用链 + 模块连锁。源码调用图推导。之前只测了 definition 建/查，本块列出的执行/历史/邮件/报表连锁基本未测。",
+    "callers_upstream": [
+      { "changed": "POST /definition (createRule, Kevel Flight)", "callers": ["DefinitionController.create()", "bulkCreateRule()", "updateAppliedObj()", "addAppliedObj()"], "regression": "Kevel 走这些共享建规则入口时是否正常" },
+      { "changed": "EmailTemplateUtils.content()", "callers_in_kevel": ["KevelFlightTemplate"], "note": "Kevel 内调用方是 KevelFlightTemplate；全平台调用方见 cross_platform_risk" },
+      { "changed": "HistoryManager.getAdGroups()/getCampaignNames()", "callers": ["历史明细流程 getDetail / getAutoRuleDetailLogFilter"], "regression": "Kevel 历史 Run Record 名称回填" }
+    ],
+    "callees_downstream": [
+      { "stage": "Filter/Preview", "chain": "KevelFilterHandler → KevelFilterFeignClient.flightFilter → kevel-provider /filter/flight/filter", "tested": false },
+      { "stage": "Execution", "chain": "KevelExecutionHandler → KevelFlight{Bid,DailyBudget,State}EntityManager → kevel-sdk /campaign/bulkUpdate/ad_group_{bid,dailyBudget,state}；并复用共享 ActionHandlerFactory/IActionHandler", "tested": false },
+      { "stage": "名称回填", "chain": "HistoryManager → kevelEntityController.getCampaignNames/getFlightNames → kevel-provider", "tested": false }
+    ],
+    "module_chain": {
+      "desc": "Kevel Flight 规则同平台模块连锁，一条链任何一环都可能受影响",
+      "chain": "definition(建规则) → engine.Filter(候选/预览) → engine.Execution(下发 sdk) → history(名称回填) → email(KevelFlightTemplate→content) → report(KevelBaseColumn/KevelCalColumn)",
+      "coverage": { "definition": "已测(建/查)", "filter_preview": "未测", "execution": "未测(涉及真实下发)", "history": "未测(依赖执行历史)", "email": "未测", "report": "未测" }
+    }
+  },
+  "cross_platform_risk": {
+    "level": "中",
+    "reason": "枚举/Columns 为追加式（低风险），但有两处平台包外的【共享方法】被改动，构成其它平台的真实回归面。之前误判为“低”，已修正。",
+    "shared_code_changes": [
+      {
+        "file": "rule-engine/.../EmailTemplate/EmailTemplateUtils.java",
+        "method": "content()",
+        "shared_by": "所有平台的规则执行/预览邮件",
+        "change": "新增 productLine==Kevel && entityType==Adgroups ? Flights : entityType.text 三元判断",
+        "regression_target": "各既有平台（amazon/tiktok/walmart...）规则执行/预览后邮件的实体名渲染是否仍正确",
+        "risk": "非 Kevel 走 entityType.text 行为不变，但共享方法被改，需回归确认无副作用"
+      },
+      {
+        "file": "rule-service/.../manager/HistoryManager.java",
+        "method": "getAdGroups()",
+        "shared_by": "所有平台历史 Run Record 广告组名回填",
+        "change": "EntityParam entityParam 声明从 case 块提到方法作用域，跨 case 复用同一实例",
+        "regression_target": "各既有平台历史明细（getAutoRuleDetailLogFilter / 历史详情）广告组名回填是否正确",
+        "risk": "共享实例跨 case 复用，有状态串用风险，须回归"
+      },
+      {
+        "file": "rule-meta/.../enums/ProductLine.java 等 4 个枚举 + Columns.java",
+        "change": "纯追加（Kevel/Flight/KevelFlight/flight + Kevel 列）",
+        "regression_target": "抽查即可",
+        "risk": "低，除非有按 ordinal 序列化的逻辑"
+      }
+    ],
+    "regression_scope": "既有平台回归精确到走过上述共享方法的接口：邮件渲染 + 历史 getAdGroups，非全平台全接口"
+  },
+  "test_plan": {
+    "new_feature": "Kevel Flight 规则全链路：创建/编辑/查询/预览/执行/历史 + 三类动作(Bid/Budget/State)",
+    "regression": "其它平台针对性回归：① 规则执行/预览邮件实体名（EmailTemplateUtils.content）；② 历史 Run Record 广告组名（HistoryManager.getAdGroups）",
+    "note": "Kevel 为新平台，无线上 ES 流量与既有 cases.json，首次需按 swagger-api-case 全量生成基线 case"
+  },
+  "excluded_from_scope": [
+    {
+      "type": "swagger_noise",
+      "detail": "valueType 新增 6 枚举(ProfileCPAResult/CampaignCPAResult/ProfileCVRResult/CampaignCVRResult/ProfileAvgPlayTime/CampaignAvgPlayTime)",
+      "reason": "本 commit 代码中无对应来源，测试环境混入其他分支，排除 CP-47435 范围"
+    }
+  ]
+}

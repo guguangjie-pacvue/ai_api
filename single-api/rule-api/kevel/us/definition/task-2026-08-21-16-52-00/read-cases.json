@@ -1,0 +1,88 @@
+[
+  {
+    "name": "POST /definition/getRule - Kevel 规则列表(PageResult)",
+    "description": "版本变更(1f18987)：查规则列表，验证 code:200 且返回 PageResult 结构(data.list)。RuleListView 引用了变更 schema(targetLevel 含 Flight)。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRule",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "{{profile_id}}",
+          "pageInfo": {
+            "pageNo": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/getRuleTargetInfo - Flight 目标信息回显",
+    "description": "版本变更(1f18987)：AppliedInfo 引用变更 schema(targetLevel 含 Flight)。用已有 QA 规则 id 作 fixture 验证 code:200。⚠️ ruleId 为 QA 库固定规则，若被删需换。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRuleTargetInfo",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfo?productLine=kevel&ruleId=2090008196405604354",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getRuleTargetInfoByRuleIds - 按ruleId批量查目标(裸数组body)",
+    "description": "版本变更(1f18987)：RuleTarget 引用变更 schema。🔴 body 是裸数组[ruleId]，非对象。用 QA 规则 id fixture 验证 code:200 且 data 非空。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRuleTargetInfoByRuleIds",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfoByRuleIds",
+        "request_body": [
+          2090008196405604354
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

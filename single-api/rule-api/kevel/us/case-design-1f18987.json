@@ -1,0 +1,73 @@
+{
+  "version": "1f18987",
+  "ticket": "CP-47435",
+  "platform": "kevel",
+  "design_source": "swagger(结构) + 源码(契约权威) + requirements.md(FR-1~FR-5，独立设计)",
+  "design_note": "case 数=设计意图数；status: PASS/FAIL/BLOCKED/TODO。真实契约/数据经源码+provider 实测确认，见 test-data-1f18987.md。",
+  "contract_note": "创建规则=POST /definition(RuleRequest, ruleType=Flight)；删除=POST /definition/changeStatus{ruleIds,isDelete}；getRuleTargetInfoByRuleIds body=裸数组。",
+  "endpoints": [
+    {
+      "method": "POST", "path": "/getProfiles", "module": "profile", "change_type": "SUPPORT", "req_ref": "FR-2b",
+      "cases": [ { "id": "PROF-1", "scenario": "Kevel profile 列表连通", "assert": "code:200, data is_array", "status": "PASS" } ]
+    },
+    {
+      "method": "POST", "path": "/definition/getProfile", "module": "definition", "change_type": "SUPPORT", "req_ref": "FR-2b",
+      "cases": [ { "id": "PROF-2", "scenario": "Kevel profile 查询连通", "assert": "code:200", "status": "PASS" } ]
+    },
+    {
+      "method": "POST", "path": "/getRuleViewList", "module": "definition", "change_type": "SUPPORT", "req_ref": "规则视图",
+      "cases": [ { "id": "GRV-1", "scenario": "规则视图连通(ruleIds=[])", "assert": "code:200", "status": "PASS", "note": "ruleIds 必传，null NPE" } ]
+    },
+    {
+      "method": "POST", "path": "/definition/getTarget", "module": "definition", "change_type": "MODIFIED", "req_ref": "FR-2 Apply to",
+      "cases": [
+        { "id": "TGT-0", "scenario": "接口连通(kevel+Flight)", "assert": "code:200", "status": "PASS" },
+        { "id": "TGT-1", "scenario": "Campaign 候选列表含真实 campaignId", "assert": "data 非空", "status": "BLOCKED", "blocker": "rule 侧候选查询按 clientId/managed 过滤返回 0；真实实体走 provider getCampaigns 自举，createRule 直接用" },
+        { "id": "TGT-2", "scenario": "Flight 候选列表含真实 flightId", "assert": "data 非空", "status": "BLOCKED", "blocker": "同上" }
+      ]
+    },
+    {
+      "method": "GET", "path": "/definition/getRuleTargetInfo", "module": "definition", "change_type": "MODIFIED", "req_ref": "AppliedInfo 含 Flight",
+      "cases": [ { "id": "RTI-1", "scenario": "Flight 目标信息回显(QA规则fixture)", "assert": "code:200", "status": "PASS" } ]
+    },
+    {
+      "method": "POST", "path": "/definition/getRuleTargetInfoByRuleIds", "module": "definition", "change_type": "MODIFIED", "req_ref": "RuleTarget 含 Flight",
+      "cases": [ { "id": "RTIR-1", "scenario": "按 ruleId 批量查目标(裸数组body)", "assert": "code:200, data is_array", "status": "PASS", "note": "body 是裸数组，非对象" } ]
+    },
+    {
+      "method": "POST", "path": "/definition/getRule", "module": "definition", "change_type": "MODIFIED", "req_ref": "RuleListView.targetLevel 含 Flight",
+      "cases": [ { "id": "GR-1", "scenario": "规则列表(PageResult, 含 targetLevel)", "assert": "code:200, data.list is_array", "status": "PASS" } ]
+    },
+    {
+      "method": "POST", "path": "/definition/getAdtomicRules", "module": "definition", "change_type": "MODIFIED", "req_ref": "RuleListView",
+      "cases": [ { "id": "GAR-1", "scenario": "Adtomic 规则列表", "assert": "code:200", "status": "NA", "blocker": "Adtomic 为 Amazon 专属，Kevel 无此场景(缺 adtomicProfileIds 直接 NPE)，功能上不适用" } ]
+    },
+    {
+      "method": "POST", "path": "/getAutoRuleDetailLogFilter", "module": "history", "change_type": "MODIFIED", "req_ref": "HistoryManager case kevel",
+      "cases": [ { "id": "HIST-1", "scenario": "历史记录过滤 + Flight 名称回填", "assert": "code:200, Flight名非'--'", "status": "BLOCKED", "blocker": "依赖已执行的规则历史(需规则实际跑过)" } ]
+    },
+    {
+      "method": "POST", "path": "/definition", "module": "definition", "change_type": "NEW", "req_ref": "FR-2/3/4/5 核心功能",
+      "cases": [
+        { "id": "CR-A4", "scenario": "Apply Flight + Bid条件 + Pause", "assert": "code:200 + 自清理", "status": "PASS" },
+        { "id": "CR-A1", "scenario": "Apply Campaign + Bid条件 + Pause", "assert": "code:200 + 自清理", "status": "PASS" },
+        { "id": "CR-F2", "scenario": "动作 Increase Bid 10%", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-F5", "scenario": "动作 IncreaseDailyBudget 10%", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-R2", "scenario": "无budget Flight + DailyBudgetCap条件(边界)", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-F3", "scenario": "动作 Decrease Bid", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-F4", "scenario": "动作 Set Bid", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-F6", "scenario": "动作 DecreaseDailyBudget", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-F7", "scenario": "动作 SetDailyBudget(从无到有)", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-R3", "scenario": "12 绩效指标条件各一条(Impr/Clicks/CTR/Spend/CPC/CPA/CVR/ACOS/ROAS/Sales/Orders/SaleUnits)", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-R4", "scenario": "Avg 基线条件(CTR<ProfileCTR)", "assert": "code:200", "status": "PASS" },
+        { "id": "CR-B1", "scenario": "边界: frequency=hourly 应被拒", "assert": "创建应失败", "status": "FAIL", "finding": "🔴 缺陷: FR-5.3 规定不支持 hourly，但 createRule 接受 frequency=hourly 返回 code:200，未做校验。需提开发确认。" },
+        { "id": "CR-A2", "scenario": "Apply CampaignTag(OR)", "assert": "code:200", "status": "TODO", "blocker": "需真实 tagId(provider 有 tag 接口，未测)" },
+        { "id": "CR-A3", "scenario": "Apply CampaignTag(AND)", "assert": "code:200", "status": "TODO", "blocker": "同上" }
+      ]
+    },
+    {
+      "method": "POST", "path": "/definition/editRule", "module": "definition", "change_type": "NEW", "req_ref": "编辑",
+      "cases": [ { "id": "ER-1", "scenario": "编辑已建 Flight 规则", "assert": "code:200", "status": "TODO", "blocker": "create 不返回 ruleId，run-cases.py by_path 不支持按 ruleName 过滤提取；需框架增强或独立脚本" } ]
+    }
+  ]
+}

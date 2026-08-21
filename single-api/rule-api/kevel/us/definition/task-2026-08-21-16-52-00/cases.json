@@ -1,0 +1,314 @@
+[
+  {
+    "name": "POST /definition - 建规则 Apply-to Flight + Bid条件 + Pause动作",
+    "description": "版本变更(1f18987) Kevel Flight 核心功能：按 Flight 圈选、Bid>0.5 条件、Pause 动作。isPaused=true 不执行不碰真实实体，按前缀自清理。CR-A4+CR-R1+CR-F1。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-applyFlight-pause",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-A4-flight-pause",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "operand": "Greater",
+                    "value": "0.5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 Apply-to Campaign + Bid条件 + Pause动作",
+    "description": "版本变更(1f18987)：按 Campaign 圈选(命中其下全部 Flight)、Bid>0.5、Pause。isPaused=true。CR-A1。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-applyCampaign-pause",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-A1-campaign-pause",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "659202073"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "operand": "Greater",
+                    "value": "0.5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 Increase Bid 动作(百分比)",
+    "description": "版本变更(1f18987)：动作 Increase Bid 10%。验证 Bid 调整类动作可建。isPaused=true。CR-F2。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-increaseBid",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-F2-increaseBid",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "operand": "Greater",
+                    "value": "0.1",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Increase",
+                "percentage": 10
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 Increase Daily Budget 动作",
+    "description": "版本变更(1f18987)：动作 IncreaseDailyBudget 10%。验证 Budget 调整类动作可建。isPaused=true。CR-F5。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-increaseDailyBudget",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-F5-increaseBudget",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "DailyBudgetCap",
+                    "operand": "Greater",
+                    "value": "5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "IncreaseDailyBudget",
+                "percentage": 10
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 无Budget Flight + DailyBudgetCap条件(边界)",
+    "description": "版本变更(1f18987)：Apply 到未设 dailyCap 的 Flight(863280894)，条件 DailyBudgetCap>5。验证规则可建(执行时未设值 Flight 判不命中，属执行期语义)。isPaused=true。CR-R2。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-noBudgetFlight",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-R2-noBudget",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863280894"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "DailyBudgetCap",
+                    "operand": "Greater",
+                    "value": "5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
