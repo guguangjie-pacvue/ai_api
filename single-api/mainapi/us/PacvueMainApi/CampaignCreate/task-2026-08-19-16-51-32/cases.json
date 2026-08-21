@@ -1,0 +1,1941 @@
+[
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinInfoFromSOV - 单ASIN查询SOV信息",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinInfoFromSOV。查询单个ASIN的SOV相关信息，分页默认50条。500条随机样本中占比约100%（500次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetAsinInfoFromSOV",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetAsinInfoFromSOV",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "adgroupIds": [],
+          "searchKeyword": "",
+          "pageInfo": {
+            "OrderByField": "title",
+            "OrderAsc": true,
+            "PageSize": 50,
+            "PageIndex": 1
+          },
+          "asins": [
+            "{{ASIN}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetProductAdFromCampaign - 按ASIN查询广告下商品广告",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetProductAdFromCampaign。与GetAsinInfoFromSOV共用请求结构(SDCampaignProductAdOrKeywordInput)，该接口本身ES 90天/365天窗口内无真实调用样本，入参复用同结构兄弟接口的真实值。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetProductAdFromCampaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetProductAdFromCampaign",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "adgroupIds": [],
+          "searchKeyword": "",
+          "pageInfo": {
+            "OrderByField": "title",
+            "OrderAsc": true,
+            "PageSize": 50,
+            "PageIndex": 1
+          },
+          "asins": [
+            "{{ASIN}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAssets - 按assetId批量查询素材",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAssets。按assetId数组批量查询素材详情(数量1~8不等，属同一操作，取典型2个)。500条随机样本中占比约100%（500次，均为同一按id查询操作）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetAssets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetAssets",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "assetIds": [
+            "{{stv_asset_id_original}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDAudiencesRecommendations - 按ASIN列表获取SD受众推荐",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDAudiencesRecommendations。按profileId+asins获取SD受众推荐。500条随机样本中占比约100%（500次，均为同一按asins查询操作，数量不等属同操作）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDAudiencesRecommendations",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDAudiencesRecommendations",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "{{ASIN}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDBidRecommend - T00030相似商品定向出价推荐",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDBidRecommend。SD tactic=T00030(相似商品)场景下按clicks优化+cpc计费获取出价推荐。该接口近365天ES窗口内仅36条样本，均为T00030+similarProduct场景，已全覆盖。占比约100%（36次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDBidRecommend",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDBidRecommend",
+        "request_body": {
+          "profileld": "{{profile_id}}",
+          "tactic": "T00030",
+          "requestT00030": {
+            "bidOptimization": "clicks",
+            "costType": "cpc",
+            "targetingClauses": [
+              {
+                "targetingClause": {
+                  "expressionType": "manual",
+                  "expression": [
+                    {
+                      "type": "similarProduct"
+                    }
+                  ]
+                }
+              }
+            ],
+            "products": [
+              {
+                "asin": "{{ASIN}}"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDRecommendCategorysPost - T00030商品类目推荐",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDRecommendCategorysPost。SD tactic=T00030+is1P=1场景下按ASIN获取类目定向推荐。该接口近365天ES窗口内仅18条样本，均为同一参数组合，已全覆盖。占比约100%（18次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDRecommendCategorysPost",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDRecommendCategorysPost",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "{{ASIN}}"
+          ],
+          "typeFilter": [
+            "CATEGORY"
+          ],
+          "tactic": "T00030",
+          "is1P": 1,
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDTargetingRecommendations - T00030商品定向推荐",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDTargetingRecommendations。与GetSDRecommendCategorysPost共用请求结构(SDRecommendedProductInput)，该接口本身ES 90天/365天窗口内无真实调用样本，入参复用同结构兄弟接口的真实值。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDTargetingRecommendations",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDTargetingRecommendations",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "{{ASIN}}"
+          ],
+          "typeFilter": [
+            "CATEGORY"
+          ],
+          "tactic": "T00030",
+          "is1P": 1,
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDCreativePreview - IMAGE创意预览",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDCreativePreview。IMAGE类型创意(headline文案)在指定尺寸下的预览。500条随机样本中占比约90%（450次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDCreativePreview",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDCreativePreview",
+        "request_body": {
+          "request": {
+            "creative": {
+              "creativeType": "IMAGE",
+              "properties": {
+                "headline": "Great deal on this product"
+              }
+            },
+            "previewConfiguration": {
+              "size": {
+                "width": 245,
+                "height": 250
+              },
+              "products": [
+                {
+                  "asin": "{{ASIN}}"
+                }
+              ],
+              "isMobile": false,
+              "isOnAmazon": true
+            }
+          },
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDCreativePreview - VIDEO创意预览",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDCreativePreview。VIDEO类型创意在指定尺寸下的预览。500条随机样本中占比约9.8%（49次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDCreativePreview",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDCreativePreview",
+        "request_body": {
+          "request": {
+            "creative": {
+              "creativeType": "VIDEO",
+              "properties": {
+                "headline": "Watch our new product video"
+              }
+            },
+            "previewConfiguration": {
+              "size": {
+                "width": 650,
+                "height": 130
+              },
+              "products": [
+                {
+                  "asin": "{{ASIN}}"
+                }
+              ],
+              "isMobile": false,
+              "isOnAmazon": true
+            }
+          },
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSearchAssets - 按LOGO类型搜索素材",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSearchAssets。按Types=[LOGO]搜索素材库。500条随机样本中占比约59.4%（297次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSearchAssets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "Types": [
+            "LOGO"
+          ],
+          "Search": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSearchAssets - 按BACKGROUND_VIDEO类型搜索素材",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSearchAssets。按Types=[BACKGROUND_VIDEO]搜索素材库。500条随机样本中占比约25.2%（126次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSearchAssets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "Types": [
+            "BACKGROUND_VIDEO"
+          ],
+          "Search": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSearchAssets - 多类型组合搜索素材(图文混合)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSearchAssets。按多个Types(AUTHOR_IMAGE/LIFESTYLE_IMAGE/OTHER_IMAGE/PRODUCT_IMAGE)组合搜索素材库。500条随机样本中占比约11.2%（56次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSearchAssets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "Types": [
+            "AUTHOR_IMAGE",
+            "LIFESTYLE_IMAGE",
+            "OTHER_IMAGE",
+            "PRODUCT_IMAGE"
+          ],
+          "Search": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSearchAssets - 不限类型浏览全部素材",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSearchAssets。Types为空数组，浏览素材库全部素材。500条随机样本中占比约3.2%（16次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSearchAssets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "Types": [],
+          "Search": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/KeywordSuggestBid - 关键词批量建议出价",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/KeywordSuggestBid。对广告组下多个exact匹配关键词批量获取建议出价(type=0)。500条随机样本中占比约100%（500次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/KeywordSuggestBid",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/KeywordSuggestBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "keywords": [
+            {
+              "keywordText": "wireless bluetooth speaker",
+              "matchType": "exact"
+            },
+            {
+              "keywordText": "portable speaker waterproof",
+              "matchType": "exact"
+            }
+          ],
+          "type": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/KeywordSuggestBidV4 - 关键词/PAT批量建议出价(V4)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/KeywordSuggestBidV4。与KeywordSuggestBid共用请求结构(SPKeywordSuggestBidInput)，currently support keyword and PAT。该接口本身ES 90天/365天窗口内无真实调用样本，入参复用同结构兄弟接口的真实值。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/KeywordSuggestBidV4",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/KeywordSuggestBidV4",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "keywords": [
+            {
+              "keywordText": "wireless bluetooth speaker",
+              "matchType": "exact"
+            },
+            {
+              "keywordText": "portable speaker waterproof",
+              "matchType": "exact"
+            }
+          ],
+          "type": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/KeywordSuggestBidNewAdGroup - 新建广告组ASIN定向建议出价(legacyForSales)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/KeywordSuggestBidNewAdGroup。新建广告组场景下按ASIN+竞价策略legacyForSales获取PAT建议出价。500条随机样本中占比约48.6%（243次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/KeywordSuggestBidNewAdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/KeywordSuggestBidNewAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "request": {
+            "asins": [
+              "{{ASIN}}"
+            ],
+            "targetingExpressions": [
+              {
+                "type": "CLOSE_MATCH",
+                "value": ""
+              },
+              {
+                "type": "LOOSE_MATCH",
+                "value": ""
+              },
+              {
+                "type": "SUBSTITUTES",
+                "value": ""
+              },
+              {
+                "type": "COMPLEMENTS",
+                "value": ""
+              }
+            ],
+            "bidding": {
+              "adjustments": [],
+              "strategy": "LEGACY_FOR_SALES"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/KeywordSuggestBidNewAdGroup - 新建广告组ASIN定向建议出价(autoForSales)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/KeywordSuggestBidNewAdGroup。新建广告组场景下按ASIN+竞价策略autoForSales获取PAT建议出价。500条随机样本中占比约42.6%（213次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/KeywordSuggestBidNewAdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/KeywordSuggestBidNewAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "request": {
+            "asins": [
+              "{{ASIN}}"
+            ],
+            "targetingExpressions": [
+              {
+                "type": "CLOSE_MATCH",
+                "value": ""
+              },
+              {
+                "type": "LOOSE_MATCH",
+                "value": ""
+              },
+              {
+                "type": "SUBSTITUTES",
+                "value": ""
+              },
+              {
+                "type": "COMPLEMENTS",
+                "value": ""
+              }
+            ],
+            "bidding": {
+              "adjustments": [],
+              "strategy": "AUTO_FOR_SALES"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/KeywordSuggestBidNewAdGroup - 新建广告组ASIN定向建议出价(manual)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/KeywordSuggestBidNewAdGroup。新建广告组场景下按ASIN+竞价策略manual获取PAT建议出价。500条随机样本中占比约8.6%（43次）。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/KeywordSuggestBidNewAdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/KeywordSuggestBidNewAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "request": {
+            "asins": [
+              "{{ASIN}}"
+            ],
+            "targetingExpressions": [
+              {
+                "type": "CLOSE_MATCH",
+                "value": ""
+              },
+              {
+                "type": "LOOSE_MATCH",
+                "value": ""
+              },
+              {
+                "type": "SUBSTITUTES",
+                "value": ""
+              },
+              {
+                "type": "COMPLEMENTS",
+                "value": ""
+              }
+            ],
+            "bidding": {
+              "adjustments": [],
+              "strategy": "MANUAL"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinOrSkuEligibilityStatusFromAmazon - 查询ASIN广告资质状态",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinOrSkuEligibilityStatusFromAmazon。该接口ES 90天/365天窗口内无真实调用样本，Swagger亦无example，productDetail.sku等业务专属字段无法从结构推断真实值。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetAsinOrSkuEligibilityStatusFromAmazon",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetAsinOrSkuEligibilityStatusFromAmazon",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "productDetail": [
+            {
+              "asin": "{{ASIN}}",
+              "sku": "[NEEDS_REAL_VALUE]"
+            }
+          ],
+          "type": "asin"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinPageDataForTagWin - ASIN标签维度效果数据分页查询",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinPageDataForTagWin。该接口ES 90天/365天窗口内无真实调用样本，Swagger亦无example，filter/dim字段已由用户确认真实枚举值为ytd(其余候选:date/week/month/quarter/year)。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetAsinPageDataForTagWin",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetAsinPageDataForTagWin",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": "ytd",
+          "filter": [],
+          "isExport": false,
+          "isAnd": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDCreativeModerations - 查询SD创意审核状态",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDCreativeModerations。该接口ES 90天/365天窗口内无真实调用样本，creativeId已由用户提供真实值593460190340902401。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDCreativeModerations",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDCreativeModerations",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adgroupId": "{{sd_adgroup_id}}",
+          "creativeId": "{{stv_moderation_creative_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSDHeadlineRecommendation - 按ASIN获取SD创意标题推荐",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSDHeadlineRecommendation。该接口ES 90天/365天窗口内无真实调用样本，Swagger亦无example，adFormat枚举值无法从结构推断真实值。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/CampaignCreate/V3/GetSDHeadlineRecommendation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSDHeadlineRecommendation",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "{{ASIN}}"
+          ],
+          "maxNumRecommendations": 3,
+          "adFormat": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateCampaignandAdGroup - 创建SP手动广告系列+广告组(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateCampaignandAdGroup。创建SP manual广告系列及广告组。500条随机样本中占比约60.7%（17/28次）。该接口涉及真实创建广告实体产生潜在广告花费，仅生成case供人工评估，不自动执行；如需执行须人工确认预算/状态后手动运行，并对新建campaign执行归档清理。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateCampaignandAdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaign": {
+            "campaignType": "sponsoredProducts",
+            "targetingType": "manual",
+            "name": "autoTest_SP_Campaign_{{today}}",
+            "dailyBudget": "10",
+            "state": "enabled",
+            "startDate": "{{today}}",
+            "endDate": "",
+            "costType": "",
+            "bidding": {
+              "Strategy": "autoForSales",
+              "Adjustments": []
+            }
+          },
+          "duration": 0,
+          "adgroupName": "autoTest_SP_adg_{{today}}",
+          "asinstr": "",
+          "autoBid": "1",
+          "campaignTagIds": [],
+          "targetingClauseMutableModels": [
+            {
+              "state": "enabled",
+              "expression": [
+                {
+                  "type": "asinSameAs",
+                  "value": "{{ASIN}}"
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_campaign_id": "data.campaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{created_campaign_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateCampaignandAdGroup - 创建SP自动广告系列+广告组(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateCampaignandAdGroup。创建SP auto定向广告系列及广告组。500条随机样本中占比约39.3%（11/28次）。同上，涉及真实广告实体创建，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateCampaignandAdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaign": {
+            "campaignType": "sponsoredProducts",
+            "targetingType": "auto",
+            "name": "autoTestCreate_SP_auto_{{today}}",
+            "dailyBudget": "10",
+            "state": "enabled",
+            "startDate": "{{today}}",
+            "endDate": "",
+            "costType": "",
+            "bidding": {
+              "Strategy": "legacyForSales",
+              "Adjustments": []
+            }
+          },
+          "duration": 0,
+          "adgroupName": "autoTestCreate_SP_auto_adg_{{today}}",
+          "asinstr": "",
+          "autoBid": "1",
+          "campaignTagIds": [],
+          "targetingClauseMutableModels": []
+        },
+        "extract_vars": {
+          "created_campaign_id2": "data.campaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{created_campaign_id2}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateJustAdGroup - 在已有Campaign下新建广告组(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateJustAdGroup。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(JustAdGroupMaterialTargetingClauseCreateEntity)构造。涉及真实创建广告组，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateJustAdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateJustAdGroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}",
+          "adgroupName": "autoTest_JustAdGroup_{{today}}",
+          "autoBid": 1,
+          "bidOptimization": "clicks",
+          "asins": [
+            "{{ASIN}}"
+          ],
+          "isAudience": 0,
+          "targets": []
+        },
+        "extract_vars": {
+          "created_adgroup_id": "data.adGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupUpdate/V3/UpdateAdGroupsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{created_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargeting - 批量创建exact匹配关键词(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargeting。为已有campaign/adgroup批量创建exact匹配关键词。500条随机样本中占比约39.2%（196次）。涉及真实创建关键词，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargeting",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargeting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "keywords": [
+            {
+              "keywordText": "autotest exact keyword one",
+              "matchType": "exact",
+              "bid": "0.5",
+              "state": "enabled"
+            },
+            {
+              "keywordText": "autotest exact keyword two",
+              "matchType": "exact",
+              "bid": "0.5",
+              "state": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_kw_ids_exact": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Keyword/UpdateKeywordsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "keywordId": "{{created_kw_ids_exact}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargeting - 批量创建phrase匹配关键词(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargeting。为已有campaign/adgroup批量创建phrase匹配关键词。500条随机样本中占比约22.2%（111次）。涉及真实创建关键词，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargeting",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargeting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "keywords": [
+            {
+              "keywordText": "autotest phrase keyword one",
+              "matchType": "phrase",
+              "bid": "0.5",
+              "state": "enabled"
+            },
+            {
+              "keywordText": "autotest phrase keyword two",
+              "matchType": "phrase",
+              "bid": "0.5",
+              "state": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_kw_ids_phrase": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Keyword/UpdateKeywordsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "keywordId": "{{created_kw_ids_phrase}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargeting - 批量创建broad匹配关键词(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargeting。为已有campaign/adgroup批量创建broad匹配关键词。500条随机样本中占比约11%（55次）。涉及真实创建关键词，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargeting",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargeting",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sp_manual_pat_campaign_id}}",
+          "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+          "keywords": [
+            {
+              "keywordText": "autotest broad keyword one",
+              "matchType": "broad",
+              "bid": "0.5",
+              "state": "enabled"
+            },
+            {
+              "keywordText": "autotest broad keyword two",
+              "matchType": "broad",
+              "bid": "0.5",
+              "state": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_kw_ids_broad": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Keyword/UpdateKeywordsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "keywordId": "{{created_kw_ids_broad}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargetingMult - 跨广告组批量创建关键词(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargetingMult。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(MaterialTargetingClauseCreateAndKeywordWithIdsEntity)构造，涉及真实创建关键词，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargetingMult",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargetingMult",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "isAudience": 0,
+          "keywords": [
+            {
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "keywordText": "autotest mult keyword",
+              "matchType": "exact",
+              "bid": "0.5",
+              "state": "enabled"
+            }
+          ],
+          "targets": []
+        },
+        "extract_vars": {
+          "created_kw_ids_mult": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Keyword/UpdateKeywordsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "keywordId": "{{created_kw_ids_mult}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargetingMultProfile - 跨Profile批量创建ASIN定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargetingMultProfile。与CreateKeywordsandTargetingOnlyTargetClause共用请求结构(MaterialTargetingClauseCreateAndKeywordMultEntity)，该接口本身无真实调用样本，入参复用同结构兄弟接口的真实值。涉及真实创建定向，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargetingMultProfile",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargetingMultProfile",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "targets": [
+            {
+              "expression": [
+                {
+                  "type": "asinSameAs",
+                  "value": "{{ASIN}}"
+                }
+              ],
+              "bid": "0.5",
+              "expressionType": "manual",
+              "state": "enabled",
+              "targetingType": "",
+              "type": ""
+            }
+          ],
+          "isAudience": 0,
+          "pcaInfos": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_ids_mp": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/UpdateTargetsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "targetId": "{{created_target_ids_mp}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause - 创建asinSameAs定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause。对应接口CreateKeywordsandTargetingV2，创建asinSameAs类型ASIN定向。500条随机样本中占比约79.8%（399次）。涉及真实创建定向，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "targets": [
+            {
+              "expression": [
+                {
+                  "type": "asinSameAs",
+                  "value": "{{ASIN}}"
+                }
+              ],
+              "bid": "0.5",
+              "expressionType": "manual",
+              "state": "enabled",
+              "targetingType": "",
+              "type": ""
+            }
+          ],
+          "isAudience": 0,
+          "pcaInfos": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_ids_asinSameAs": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/UpdateTargetsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "targetId": "{{created_target_ids_asinSameAs}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause - 创建asinCategorySameAs定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause。对应接口CreateKeywordsandTargetingV2，创建asinCategorySameAs类型ASIN定向。500条随机样本中占比约12.8%（64次）。涉及真实创建定向，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "targets": [
+            {
+              "expression": [
+                {
+                  "type": "asinCategorySameAs",
+                  "value": "{{ASIN}}"
+                }
+              ],
+              "bid": "0.5",
+              "expressionType": "manual",
+              "state": "enabled",
+              "targetingType": "",
+              "type": ""
+            }
+          ],
+          "isAudience": 0,
+          "pcaInfos": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_ids_asinCategorySameAs": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/UpdateTargetsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "targetId": "{{created_target_ids_asinCategorySameAs}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause - 创建asinExpandedFrom定向(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause。对应接口CreateKeywordsandTargetingV2，创建asinExpandedFrom类型ASIN定向。500条随机样本中占比约7.4%（37次）。涉及真实创建定向，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateKeywordsandTargetingOnlyTargetClause",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "targets": [
+            {
+              "expression": [
+                {
+                  "type": "asinExpandedFrom",
+                  "value": "{{ASIN}}"
+                }
+              ],
+              "bid": "0.5",
+              "expressionType": "manual",
+              "state": "enabled",
+              "targetingType": "",
+              "type": ""
+            }
+          ],
+          "isAudience": 0,
+          "pcaInfos": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_ids_asinExpandedFrom": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/UpdateTargetsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "targetId": "{{created_target_ids_asinExpandedFrom}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateSDCampaigns - 创建SD广告系列(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateSDCampaigns。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(SDCampaignInput)构造，涉及真实创建广告系列，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateSDCampaigns",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateSDCampaigns",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "isAudience": 0,
+          "campaign": {
+            "campaignType": "sponsoredDisplay",
+            "name": "autoTest_SD_Campaign_{{today}}",
+            "dailyBudget": "10",
+            "state": "enabled",
+            "startDate": "{{today}}",
+            "endDate": ""
+          },
+          "adgroup": {
+            "name": "autoTest_SD_adg_{{today}}",
+            "state": "enabled",
+            "bid": "0.5"
+          },
+          "targetingClause": [
+            {
+              "expression": [
+                {
+                  "type": "asinSameAs",
+                  "value": "{{ASIN}}"
+                }
+              ],
+              "expressionType": "manual",
+              "state": "enabled",
+              "bid": "0.5"
+            }
+          ],
+          "productAds": [
+            {
+              "asin": "{{ASIN}}",
+              "state": "enabled"
+            }
+          ],
+          "isCreatedAsinLandPage": false
+        },
+        "extract_vars": {
+          "created_sd_campaign_id": "data.campaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建SD Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{created_sd_campaign_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateSDCampaignsForAdgroup - 在已有SD Campaign下创建广告组(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/CreateSDCampaignsForAdgroup。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(CreateSDCampaignsForAdgroupInput)构造，涉及真实创建广告组，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/CreateSDCampaignsForAdgroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateSDCampaignsForAdgroup",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{sd_campaign_id}}",
+          "adgroupName": "autoTest_SDForAdg_{{today}}",
+          "asinstr": "{{ASIN}}",
+          "autoBid": 0.5,
+          "targets": [
+            {
+              "expression": [
+                {
+                  "type": "asinSameAs",
+                  "value": "{{ASIN}}"
+                }
+              ],
+              "expressionType": "manual",
+              "state": "enabled",
+              "bid": "0.5"
+            }
+          ],
+          "isAudience": 0,
+          "bidOptimization": "clicks",
+          "creativeType": "IMAGE",
+          "costControlEnabled": false
+        },
+        "extract_vars": {
+          "created_sd_adgroup_id": "data.adGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建SD AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupUpdate/V3/UpdateAdGroupsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{created_sd_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/UploadAIAsset - 通过URL上传AI生成素材",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/UploadAIAsset。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(CreateAIAssetInput)构造，fileUrl需为真实可访问的AI生成图片地址，涉及真实创建素材资源，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/UploadAIAsset",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/UploadAIAsset",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "type": "IMAGE",
+          "fileUrl": "[NEEDS_REAL_VALUE]",
+          "fileName": "autotest_ai_asset.png",
+          "tag": "autotest",
+          "assetSubType": "PRODUCT_IMAGE"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/UploadCreativeAsset - 上传素材文件(multipart)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/UploadCreativeAsset。请求为multipart/form-data文件上传(query: profileId/assetSubType/tag + body: files二进制)，当前run-cases.py执行器仅支持JSON请求体，无法自动化执行；500条随机样本中真实调用占比100%（500次，均为图片文件上传），文件二进制内容标记为待补。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/UploadCreativeAsset",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/UploadCreativeAsset",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "assetSubType": "PRODUCT_IMAGE",
+          "tag": "autotest",
+          "files": "[NEEDS_REAL_VALUE]（multipart文件二进制，需人工上传测试图片）"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/UploadCreativeAssetByUrl - 通过URL上传素材(含后置说明,可重复)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/UploadCreativeAssetByUrl。按url+profileId上传视频素材至素材库。500条随机样本中占比约100%（19次，均为.mp4视频url上传）。涉及真实创建素材资源且尚未确认对应删除接口，仅生成不自动执行。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/UploadCreativeAssetByUrl",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/UploadCreativeAssetByUrl",
+        "request_body": {
+          "url": "https://file.pacvue.com/public/creative-management-api/3d/d6bdec791fc34655bd4184738c562524.mp4",
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/UploadSDCreativeImage - 上传SD创意图片(multipart)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/UploadSDCreativeImage。该接口ES 90天/365天窗口内无真实调用样本，请求为multipart/form-data文件上传(query: profileId/imageType + body: files二进制)，当前run-cases.py执行器仅支持JSON请求体，无法自动化执行，文件二进制内容标记为待补。",
+    "module": "CampaignCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】/CampaignCreate/V3/UploadSDCreativeImage",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/UploadSDCreativeImage",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "imageType": "LOGO",
+          "files": "[NEEDS_REAL_VALUE]（multipart文件二进制，需人工上传测试图片）"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

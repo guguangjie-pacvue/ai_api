@@ -1,0 +1,669 @@
+[
+  {
+    "name": "POST /api/ProductTracking/v3/AddShopName - 场景1_按店铺名批量添加追踪ASIN(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ProductTracking/v3/AddShopName。以店铺分组(shopName)方式添加一个ASIN进行商品追踪，edits为待追踪ASIN+国家列表。5条随机样本中占比约100%（5次），样本较少，场景覆盖可能不全。第2步搜索定位新建的追踪记录并提取id，第3步归档清理保证用例可重复执行。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按店铺名添加追踪ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddShopName",
+        "request_body": {
+          "edits": [
+            {
+              "countryCode": "US",
+              "asin": "B0CHBNXW73"
+            }
+          ],
+          "shopName": "autoTest_shop"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "搜索定位新建追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0CHBNXW73",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "shop_track_id": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{shop_track_id}}"
+          ],
+          "status": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/AddTrackAsin - 场景1_单ASIN添加追踪(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ProductTracking/v3/AddTrackAsin。对单个ASIN发起商品追踪，一次仅传一个asin。108条随机样本中占比约75.0%（81次）。第2步搜索提取新建记录id，第3步归档清理保证用例可重复执行。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "添加单个追踪ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddTrackAsin",
+        "request_body": {
+          "countryCode": "US",
+          "asin": "B0CHBNXW73"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "搜索定位新建追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0CHBNXW73",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "add_single_track_id": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{add_single_track_id}}"
+          ],
+          "status": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/AddTrackAsin - 场景2_批量ASIN添加追踪(逗号拼接,含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ProductTracking/v3/AddTrackAsin。批量添加追踪，多个ASIN以逗号拼接传入同一asin字段（真实样本达14个ASIN一次提交）。108条随机样本中占比约25.0%（27次）。第2步仅对批次中首个ASIN(B0B7P68P66)做搜索+归档清理示例，验证批量创建成功即为通过，其余13个ASIN一并随本记录归档时不涉及（真实生产场景批量ASIN通常长期追踪，不做逐一归档）。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量添加追踪ASIN(逗号拼接)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddTrackAsin",
+        "request_body": {
+          "countryCode": "US",
+          "asin": "B0B7P68P66,B08NZVLMBH,B0F6ZPZ5ZD,B0DP3K76XJ,B0DN5S6NZP,B0F1DPLCZB,B0BCJTY1M2,B0F85X248Q,B0G2D28QVL,B0DQ2H855G,B0GKCHWW4C,B0B458N6WK,B0B323J4VL,B0B8KVFBZ7"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "搜索定位批次首个ASIN的追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0B7P68P66",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "add_batch_track_id": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档批次首个ASIN追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{add_batch_track_id}}"
+          ],
+          "status": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/PageTrackAsins - 场景1_无关键词分页浏览追踪列表",
+    "description": "单接口测试：POST /api/ProductTracking/v3/PageTrackAsins。不传搜索关键词，按默认stars降序分页浏览追踪ASIN列表(pageSize=10)。500条随机样本中占比约81.2%（406次）。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "分页浏览追踪列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "data": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/PageTrackAsins - 场景2_按关键词搜索追踪ASIN",
+    "description": "单接口测试：POST /api/ProductTracking/v3/PageTrackAsins。传入searchKeyword按ASIN关键词过滤追踪列表。500条随机样本中占比约18.8%（94次）。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按关键词搜索追踪列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0GW91NK1K",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "data": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/TrackAsinDetail - 场景1_按日期区间查看追踪ASIN详情(含前置创建与后置清理,可重复)",
+    "description": "单接口测试：POST /api/ProductTracking/v3/TrackAsinDetail。按trackId+日期区间(start/end)查看单个追踪ASIN的价格/BSR/星级/评论走势详情。251条随机样本中均为此结构，占比约100.0%（251次）。第1步创建一条追踪记录并搜索提取trackId作为前置准备，第2步查看详情为主断言，第3步归档清理保证用例可重复执行。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-添加待查看的追踪ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddTrackAsin",
+        "request_body": {
+          "countryCode": "US",
+          "asin": "B08D3YC5CW"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-搜索定位新建追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B08D3YC5CW",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "detail_track_id": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查看追踪ASIN详情",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/TrackAsinDetail",
+        "request_body": {
+          "trackId": "{{detail_track_id}}",
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{detail_track_id}}"
+          ],
+          "status": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/TrackingAsinSellerInfo - 场景1_查看ASIN卖家信息",
+    "description": "单接口测试：POST /api/ProductTracking/v3/TrackingAsinSellerInfo。按asin+countryCode查看该商品的卖家信息，无需先创建追踪记录(独立查询接口)。59条随机样本中占比约74.6%（44次）。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查看ASIN卖家信息",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/TrackingAsinSellerInfo",
+        "request_body": {
+          "asin": "B0815LX9XX",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "data": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/UpdateTrackAsinStatus - 场景1_单个追踪ASIN归档(含前置创建,可重复)",
+    "description": "单接口测试：POST /api/ProductTracking/v3/UpdateTrackAsinStatus。对单个trackId设置状态为archived。43条随机样本中占比约46.5%（20次）。第1步创建一条追踪记录并提取trackId作为前置准备，第2步归档即为该记录的最终清理状态，可重复执行。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-添加待归档的追踪ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddTrackAsin",
+        "request_body": {
+          "countryCode": "IN",
+          "asin": "B0CFR5SPG2"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-搜索定位新建追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0CFR5SPG2",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "upd_single_archive_id": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "单个追踪ASIN归档",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{upd_single_archive_id}}"
+          ],
+          "status": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/UpdateTrackAsinStatus - 场景2_批量追踪ASIN归档(含前置创建,可重复)",
+    "description": "单接口测试：POST /api/ProductTracking/v3/UpdateTrackAsinStatus。对多个trackId一次性批量设置状态为archived。43条随机样本中占比约27.9%（12次）。第1-2步分别创建两条追踪记录并各自提取trackId作为前置准备，第3步批量归档即为最终清理状态，可重复执行。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-添加追踪ASIN1",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddTrackAsin",
+        "request_body": {
+          "countryCode": "IN",
+          "asin": "B0DFMFYZYS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-搜索定位追踪ASIN1记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0DFMFYZYS",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "upd_batch_id_1": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-添加追踪ASIN2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddTrackAsin",
+        "request_body": {
+          "countryCode": "IN",
+          "asin": "B0DJJSM9PQ"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-搜索定位追踪ASIN2记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0DJJSM9PQ",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "upd_batch_id_2": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量追踪ASIN归档",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{upd_batch_id_1}}",
+            "{{upd_batch_id_2}}"
+          ],
+          "status": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTracking/v3/UpdateTrackAsinStatus - 场景3_单个追踪ASIN暂停(含前置创建与后置归档清理,可重复)",
+    "description": "单接口测试：POST /api/ProductTracking/v3/UpdateTrackAsinStatus。对单个trackId设置状态为paused。43条随机样本中占比约2.3%（1次），样本较少，真实调用中该状态极少见但仍需覆盖。第1-2步创建追踪记录并提取trackId，第3步设为paused为主断言，第4步归档收尾保证用例可重复执行。",
+    "module": "ProductTracking",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-添加待暂停的追踪ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/AddTrackAsin",
+        "request_body": {
+          "countryCode": "IN",
+          "asin": "B0GW91NK1K"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-搜索定位新建追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/PageTrackAsins",
+        "request_body": {
+          "pageinfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "stars"
+          },
+          "searchKeyword": "B0GW91NK1K",
+          "toMarket": "US",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "upd_paused_id": "data.data[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "单个追踪ASIN暂停",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{upd_paused_id}}"
+          ],
+          "status": "paused"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档追踪记录",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "ProductTracking/v3/UpdateTrackAsinStatus",
+        "request_body": {
+          "trackId": [
+            "{{upd_paused_id}}"
+          ],
+          "status": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

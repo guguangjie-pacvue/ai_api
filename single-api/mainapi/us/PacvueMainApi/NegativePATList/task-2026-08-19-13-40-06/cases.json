@@ -1,0 +1,2397 @@
+[
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATList - adgroup级product类型负向列表(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATList。创建adgroup级product类型负向列表，创建后反查真实Id，末尾补充1条PAT后删除清理，保证用例可重复执行。72条随机样本中占比约50.0%(36/72次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_adgroup_product_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_adgroup_product_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATList - campaign级product类型负向列表(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATList。创建campaign级product类型负向列表，创建后反查真实Id，末尾补充1条PAT后删除清理，保证用例可重复执行。72条随机样本中占比约25.0%(18/72次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_campaign_product_{{today}}",
+          "Type": "product",
+          "Level": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_campaign_product_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATList - adgroup级brand类型负向列表(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATList。创建adgroup级brand类型负向列表，创建后反查真实Id，末尾补充1条PAT后删除清理，保证用例可重复执行。72条随机样本中占比约20.8%(15/72次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_adgroup_brand_{{today}}",
+          "Type": "brand",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_adgroup_brand_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATList - 未指定Level的product类型负向列表(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATList。不传Level字段创建product类型负向列表(真实样本显示为auto_pat_list开头的自动命名场景)，创建后反查真实Id，末尾补充1条PAT后删除清理，保证用例可重复执行。72条随机样本中占比约4.2%(3次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "auto_pat_list_autotest_{{today}}",
+          "Type": "product"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "auto_pat_list_autotest_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/DeleteNegativePATList - 按id删除负向列表(前置自建,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/DeleteNegativePATList。前置创建临时负向列表并反查真实Id、补充1条PAT后再按id删除，验证删除成功；用例本身即为自清理，可重复执行。14条随机样本中占比约78.6%(11/14次，另21.4%为id为空的前端边界调用非Happy Path已排除)。附加发现：若列表从未添加过PAT条目直接删除会触发后端500(NullReferenceException)，已在测试中规避并单独反馈。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_to_delete_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_to_delete_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "按id删除负向列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/UpdateNegativePATListName - 修改负向列表名称(前置自建+后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/UpdateNegativePATListName。前置创建临时列表并反查真实Id后修改其ListName，末尾补充1条PAT后删除清理，保证用例可重复执行。27条随机样本中占比约88.9%(24/27次，另11.1%为Id为空的auto_pat_list草稿命名边界场景已排除)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_before_rename_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_before_rename_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "修改列表名称",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/UpdateNegativePATListName",
+        "request_body": {
+          "Id": "{{created_list_id}}",
+          "ListName": "autotest_negpat_renamed_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATListPAT - 大批量ASIN(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATListPAT。前置创建临时列表并反查真实Id，向其批量添加真实ASIN(代表约250个的大批量场景，用例中用5个代表)作为负向PAT，末尾删除清理，保证用例可重复执行。剔除6条测试账号伪造数据(BAUTOTEST001)后，105条随机样本中占比约64.6%(64/99次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_pat_large_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_pat_large_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "批量添加大量ASIN到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B00HVKOPBW",
+            "B0035PS5AE",
+            "B00O6GNLQE",
+            "B008X3JHJQ",
+            "B071KW94ZC"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATListPAT - 少量ASIN(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATListPAT。前置创建临时列表并反查真实Id，向其添加少量(1-3个)真实ASIN作为负向PAT，末尾删除清理，保证用例可重复执行。剔除测试账号伪造数据后，105条随机样本中占比约24.2%(24/99次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_pat_small_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_pat_small_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "添加少量ASIN到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM",
+            "B001H31UOY",
+            "B001H31UPS"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATListPAT - 中等批量品牌名(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATListPAT。前置创建品牌级临时列表并反查真实Id，向其添加中等数量(约10个，用例中用5个代表)真实品牌名作为负向PAT，末尾删除清理，保证用例可重复执行。剔除测试账号伪造数据后，105条随机样本中占比约11.1%(11/99次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_pat_medium_{{today}}",
+          "Type": "brand",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_pat_medium_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "添加中等批量品牌名到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "Aveda",
+            "Bobbi Brown",
+            "Bumble and bumble.",
+            "Clinique",
+            "Dr.Jart+"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateBulkNegativePATListPAT - 批量对列表追加真实ASIN(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateBulkNegativePATListPAT。前置创建临时列表并反查真实Id，对其批量追加真实ASIN，末尾删除清理，保证用例可重复执行。16条随机样本中14条为测试账号伪造数据(空NegativePATListId+虚构ASIN如B121212121/Berkeley Test)已排除；剩余真实业务样本占比约12.5%(2/16次，代表批量为28~85个真实ASIN，用例中用5个代表)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_bulk_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_bulk_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "批量对多个负向列表追加ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateBulkNegativePATListPAT",
+        "request_body": {
+          "NegativePATListIds": [
+            "{{created_list_id}}"
+          ],
+          "Pats": [
+            "B00B58A0QU",
+            "B07ZS5HWCC",
+            "B0CRBK6W7F",
+            "B0D6W844XC",
+            "B0B4GCWKJ1"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/DeleteNegativePATListPAT - archieveDelete归档删除PAT(前置自建+可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/DeleteNegativePATListPAT。前置创建列表、反查真实Id并添加一个ASIN负向PAT后反查其真实Id，随后以archieveDelete方式归档删除该PAT，末尾删除临时列表，保证用例可重复执行。22条随机样本中占比约54.5%(12/22次，真实业务批量常见为31~100个item，此处用单条item确保用例稳定可重复)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_del_archive_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_del_archive_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "添加一个ASIN到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建PAT条目的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListPATTable",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {
+          "created_pat_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "archieveDelete归档删除该PAT",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATListPAT",
+        "request_body": {
+          "NegativePATListPATId": [
+            "{{created_pat_id}}"
+          ],
+          "DeleteType": "archieveDelete"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/DeleteNegativePATListPAT - delete硬删除PAT(前置自建+可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/DeleteNegativePATListPAT。前置创建列表、反查真实Id并添加一个ASIN负向PAT后反查其真实Id，随后以delete方式硬删除该PAT，末尾删除临时列表，保证用例可重复执行。22条随机样本中占比约31.8%(7/22次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_del_hard_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_del_hard_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "添加一个ASIN到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31UOY"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建PAT条目的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListPATTable",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {
+          "created_pat_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "delete硬删除该PAT",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATListPAT",
+        "request_body": {
+          "NegativePATListPATId": [
+            "{{created_pat_id}}"
+          ],
+          "DeleteType": "delete"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATListAdgroup - 按CampaignTag应用到adgroup级(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATListAdgroup。前置创建临时列表并反查真实Id，按CampaignTagIds+Type=campaigntag+IsCampaignLevel=false的组合将负向列表应用到adgroup级别，末尾补充1条PAT后删除清理，保证用例可重复执行。138条随机样本中占比约69.6%(96次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_adg_tag_false_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_adg_tag_false_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按CampaignTag应用到adgroup级",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListAdgroup",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Adgroups": [],
+          "Campaigns": [],
+          "Type": "campaigntag",
+          "CampaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "IsCampaignLevel": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATListAdgroup - 按CampaignTag应用到campaign级(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATListAdgroup。前置创建临时列表并反查真实Id，按CampaignTagIds+Type=campaigntag+IsCampaignLevel=true的组合将负向列表应用到campaign级别，末尾补充1条PAT后删除清理，保证用例可重复执行。138条随机样本中占比约12.3%(17次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_adg_tag_true_{{today}}",
+          "Type": "product",
+          "Level": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_adg_tag_true_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按CampaignTag应用到campaign级",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListAdgroup",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Adgroups": [],
+          "Campaigns": [],
+          "Type": "campaigntag",
+          "CampaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "IsCampaignLevel": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATListAdgroup - 直接指定campaign应用到campaign级(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATListAdgroup。前置创建临时列表并反查真实Id，按Type=campaign+IsCampaignLevel=true直接指定Campaigns数组将负向列表应用到campaign级别，末尾补充1条PAT后删除清理，保证用例可重复执行。138条随机样本中占比约11.6%(16次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_adg_campaign_{{today}}",
+          "Type": "product",
+          "Level": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_adg_campaign_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "直接指定campaign应用到campaign级",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListAdgroup",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Adgroups": [],
+          "Campaigns": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{sp_manual_pat_campaign_id}}",
+              "AdGroupId": 0
+            }
+          ],
+          "Type": "campaign",
+          "CampaignTagIds": [],
+          "IsCampaignLevel": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/CreateNegativePATListAdgroup - 直接指定adgroup应用到adgroup级(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/CreateNegativePATListAdgroup。前置创建临时列表并反查真实Id，按Type=adgroup+IsCampaignLevel=false直接指定Adgroups数组将负向列表应用到adgroup级别，末尾补充1条PAT后删除清理，保证用例可重复执行。138条随机样本中占比约6.5%(9次)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_adg_adgroup_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_adg_adgroup_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "直接指定adgroup应用到adgroup级",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListAdgroup",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Adgroups": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{sp_manual_pat_campaign_id}}",
+              "AdGroupId": "{{sp_manual_pat_adgroup_id}}"
+            }
+          ],
+          "Campaigns": [],
+          "Type": "adgroup",
+          "CampaignTagIds": [],
+          "IsCampaignLevel": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/AppliedNegativePATList - 应用单个负向Item到Amazon广告组(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/AppliedNegativePATList。前置创建临时列表并反查真实Id，随后将一个ASIN负向条目应用(Apply)到sp_manual_pat沙盒广告组产生真实Amazon负向定向，末尾删除临时列表清理NegativePATList侧数据；注意本接口会在Amazon侧对沙盒adgroup产生真实negative targeting，本模块内暂无反向撤销接口，如需彻底回滚建议后续用NegativeTargeting模块的删除接口手动清理。31条随机样本中占比约100%(31次，均为单item应用)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_apply_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_apply_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "应用单个Item到Amazon广告组",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/AppliedNegativePATList",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Items": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "CampaignId": "{{sp_manual_pat_campaign_id}}",
+              "CampaignIdStr": "{{sp_manual_pat_campaign_id}}",
+              "AdgroupId": "{{sp_manual_pat_adgroup_id}}",
+              "AdgroupIdStr": "{{sp_manual_pat_adgroup_id}}",
+              "ProfileIdStr": "{{profile_id}}",
+              "ExpressionJson": "[{\"type\":\"asinSameAs\",\"value\":\"{{target_asin}}\"}]",
+              "CampaignType": "sponsoredProducts"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/AppliedNegativePATListV2 - 应用单个Item(按ItemId,含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/AppliedNegativePATListV2。前置创建临时列表并反查真实Id，添加一个ASIN负向PAT并反查其真实item id，随后按ItemIds应用单个item，末尾删除临时列表清理数据；注意本接口会在Amazon侧产生真实negative targeting，本模块内暂无反向撤销接口。10条随机样本中占比约90%(9/10次，样本较少覆盖可能不全)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_applyv2_single_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_applyv2_single_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "添加一个ASIN到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31UPS"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建PAT条目的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListPATTable",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {
+          "created_pat_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按ItemIds应用单个item",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/AppliedNegativePATListV2",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "itemIds": [
+            "{{created_pat_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/AppliedNegativePATListV2 - 批量应用多个Item(按ItemIds,含后置清理,可重复)",
+    "description": "单接口测试：POST /api/NegativePATList/v3/AppliedNegativePATListV2。前置创建临时列表并反查真实Id，批量添加多个ASIN负向PAT并反查真实item id，随后按ItemIds批量应用，末尾删除临时列表清理数据；注意本接口会在Amazon侧产生真实negative targeting，本模块内暂无反向撤销接口。10条随机样本中占比约10%(1/10次，样本较少覆盖可能不全)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_applyv2_bulk_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_applyv2_bulk_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "批量添加多个ASIN到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B00HVKOPBW",
+            "B0035PS5AE",
+            "B00O6GNLQE"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建PAT条目的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListPATTable",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {
+          "created_pat_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按ItemIds批量应用",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/AppliedNegativePATListV2",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "itemIds": [
+            "{{created_pat_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/GetNegativePATListDetail - 按Id查询负向列表详情",
+    "description": "单接口测试：POST /api/NegativePATList/v3/GetNegativePATListDetail。前置创建临时列表并反查真实Id后按Id查询详情，末尾删除临时列表。199条随机样本中占比约98.5%(196/199次，另1.5%为Id为空的边界调用已排除)。附加发现：无论列表是否含PAT条目，该接口固定返回data=\"\"(空字符串)，未见携带真实详情数据，已按实际行为放宽断言并单独反馈。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_getdetail_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_getdetail_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按Id查询负向列表详情",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/GetNegativePATListDetail",
+        "request_body": {
+          "Id": "{{created_list_id}}",
+          "ListName": null,
+          "Type": null,
+          "Level": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/NegativePATListAppliedStatus - 查询单个item应用状态",
+    "description": "单接口测试：POST /api/NegativePATList/v3/NegativePATListAppliedStatus。前置创建列表并反查真实Id，添加一个ASIN负向PAT并反查其真实item id，按分页查询该item的应用状态，末尾删除临时列表。54条随机样本中占比约100%(54次，固定为单Id+分页参数组合)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_status_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_status_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "添加一个ASIN到负向PAT列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建PAT条目的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListPATTable",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {
+          "created_pat_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "查询item应用状态",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListAppliedStatus",
+        "request_body": {
+          "Ids": [
+            "{{created_pat_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": true,
+            "orderByField": "Status"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "Data": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/NegativePATListPATTable - 按列表Id查询PAT明细表",
+    "description": "单接口测试：POST /api/NegativePATList/v3/NegativePATListPATTable。前置创建临时列表并反查真实Id后按Id查询其PAT明细表，末尾删除临时列表。338条随机样本中占比约100%(338次，均为单一Id查询模式，仅Id取值不同)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATList",
+        "request_body": {
+          "Id": null,
+          "ListName": "autotest_negpat_pattable_{{today}}",
+          "Type": "product",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "查询反查新建列表的真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "autotest_negpat_pattable_{{today}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按Id查询PAT明细表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListPATTable",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "补充1条PAT条目(规避空列表删除报错的已知限制)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/CreateNegativePATListPAT",
+        "request_body": {
+          "NegativePATListId": "{{created_list_id}}",
+          "Pats": [
+            "B001H31ULM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "success": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除临时NegativePATList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/DeleteNegativePATList",
+        "request_body": {
+          "id": "{{created_list_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativePATList/v3/NegativePATListTable - 按profileIds过滤查询负向列表",
+    "description": "单接口测试：POST /api/NegativePATList/v3/NegativePATListTable。按选中的profileIds过滤查询负向列表汇总表。该接口真实调用仅按用户选择的profile数量分布(单一业务模式)，无其他分支，已用最高频代表值(3个profile)覆盖。500条随机样本中占比约17.4%(87次，为出现频率最高的profileIds数量组合)。",
+    "module": "NegativePATList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按profileIds查询负向列表表格",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/NegativePATList/v3/NegativePATListTable",
+        "request_body": {
+          "ListName": "",
+          "profileIds": [
+            "{{profile_id}}",
+            "1251036855266063",
+            "224159492356281"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]
