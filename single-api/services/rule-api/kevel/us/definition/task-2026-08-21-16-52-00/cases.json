@@ -1,5 +1,960 @@
 [
   {
+    "name": "POST /definition - 建规则 Apply-to Flight + Bid条件 + Pause动作",
+    "description": "版本变更(1f18987) Kevel Flight 核心功能：按 Flight 圈选、Bid>0.5 条件、Pause 动作。isPaused=true 不执行不碰真实实体，按前缀自清理。CR-A4+CR-R1+CR-F1。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-applyFlight-pause",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-A4-flight-pause",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "operand": "Greater",
+                    "value": "0.5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 Apply-to Campaign + Bid条件 + Pause动作",
+    "description": "版本变更(1f18987)：按 Campaign 圈选(命中其下全部 Flight)、Bid>0.5、Pause。isPaused=true。CR-A1。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-applyCampaign-pause",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-A1-campaign-pause",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "659202073"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "operand": "Greater",
+                    "value": "0.5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 Increase Bid 动作(百分比)",
+    "description": "版本变更(1f18987)：动作 Increase Bid 10%。验证 Bid 调整类动作可建。isPaused=true。CR-F2。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-increaseBid",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-F2-increaseBid",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "operand": "Greater",
+                    "value": "0.1",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Increase",
+                "percentage": 10
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 Increase Daily Budget 动作",
+    "description": "版本变更(1f18987)：动作 IncreaseDailyBudget 10%。验证 Budget 调整类动作可建。isPaused=true。CR-F5。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-increaseDailyBudget",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-F5-increaseBudget",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "DailyBudgetCap",
+                    "operand": "Greater",
+                    "value": "5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "IncreaseDailyBudget",
+                "percentage": 10
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 建规则 无Budget Flight + DailyBudgetCap条件(边界)",
+    "description": "版本变更(1f18987)：Apply 到未设 dailyCap 的 Flight(863280894)，条件 DailyBudgetCap>5。验证规则可建(执行时未设值 Flight 判不命中，属执行期语义)。isPaused=true。CR-R2。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "createRule-noBudgetFlight",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-R2-noBudget",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863280894"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "DailyBudgetCap",
+                    "operand": "Greater",
+                    "value": "5",
+                    "valueType": "Custom"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑 Kevel Flight 规则（阈值 0.5→0.8）",
+    "description": "版本变更(1f18987)：editRule 四步链路。步骤1 创建唯一名规则；步骤2 getRule 按 ruleName 精确查回提取 ruleId；步骤3 editRule 修改 Bid 阈值 0.5→0.8 断言 code:200；步骤4 changeStatus 删除自清理。ER-1。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "step1-createRule",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-EDIT-{{timestamp}}",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "valueType": "Custom",
+                    "operand": "Greater",
+                    "value": "0.5"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step2-getRule-extractId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "6274332",
+          "ruleName": "vdiff-1f18987-EDIT-{{timestamp}}",
+          "pageInfo": {
+            "pageNo": 1,
+            "pageSize": 5
+          }
+        },
+        "extract_vars": {
+          "rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "step3-editRule",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "id": "{{rule_id}}",
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-EDIT-{{timestamp}}",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "Flight",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "6274332",
+                "targetId": "863338711"
+              }
+            ]
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "valueType": "Custom",
+                    "operand": "Greater",
+                    "value": "0.8"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step4-changeStatus-delete",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - Apply CampaignTag(OR) Kevel Flight 规则",
+    "description": "版本变更(1f18987)：CampaignTag OR 逻辑。步骤1 getRuleTargetInfo 提取现有 CampaignTag 规则的真实 tagId；步骤2 createRule(targetLevel=CampaignTag, OR)；步骤3 changeStatus 自清理。CR-A2。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "step1-getTagId",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfo?productLine=kevel&ruleId=2090398925222965250",
+        "request_body": {},
+        "extract_vars": {
+          "tag_id_1": "data.targetInfo[0].targetId",
+          "tag_profile_id": "data.targetInfo[0].profileId"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step2-createRule-campaignTag-or",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-A2-tag-or-{{timestamp}}",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "CampaignTag",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "{{tag_profile_id}}",
+                "targetId": "{{tag_id_1}}"
+              }
+            ],
+            "relationShipForAnd": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "valueType": "Custom",
+                    "operand": "Greater",
+                    "value": "0.1"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step3-getRule-extractId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "6274332",
+          "ruleName": "vdiff-1f18987-A2-tag-or-{{timestamp}}",
+          "pageInfo": {
+            "pageNo": 1,
+            "pageSize": 5
+          }
+        },
+        "extract_vars": {
+          "new_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step4-changeStatus-delete",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{new_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - Apply CampaignTag(AND) Kevel Flight 规则",
+    "description": "版本变更(1f18987)：CampaignTag AND 逻辑（两个 tag 同时满足）。步骤1 getRuleTargetInfo 提取两个真实 tagId；步骤2 createRule(targetLevel=CampaignTag, AND)；步骤3 getRule 提取 ruleId；步骤4 changeStatus 自清理。CR-A3。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "NEW",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "step1-getTagIds",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfo?productLine=kevel&ruleId=2090398925222965250",
+        "request_body": {},
+        "extract_vars": {
+          "tag_id_1": "data.targetInfo[0].targetId",
+          "tag_id_2": "data.targetInfo[1].targetId",
+          "tag_profile_id": "data.targetInfo[0].profileId"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step2-createRule-campaignTag-and",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "ruleType": "Flight",
+          "ruleName": "vdiff-1f18987-A3-tag-and-{{timestamp}}",
+          "productLine": "kevel",
+          "mode": "Auto",
+          "frequency": "daily",
+          "timeZone": "America/Los_Angeles",
+          "isPaused": true,
+          "startDate": "2026-08-22 00:00:00",
+          "endDate": "2026-12-31 23:59:59",
+          "applyTarget": {
+            "targetLevel": "CampaignTag",
+            "profileId": [
+              6274332
+            ],
+            "targetInfo": [
+              {
+                "profileId": "{{tag_profile_id}}",
+                "targetId": "{{tag_id_1}}"
+              },
+              {
+                "profileId": "{{tag_profile_id}}",
+                "targetId": "{{tag_id_2}}"
+              }
+            ],
+            "relationShipForAnd": true
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "Bid",
+                    "valueType": "Custom",
+                    "operand": "Greater",
+                    "value": "0.1"
+                  }
+                ]
+              ],
+              "action": {
+                "action": "Pause"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step3-getRule-extractId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "6274332",
+          "ruleName": "vdiff-1f18987-A3-tag-and-{{timestamp}}",
+          "pageInfo": {
+            "pageNo": 1,
+            "pageSize": 5
+          }
+        },
+        "extract_vars": {
+          "new_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "step4-changeStatus-delete",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{new_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - Kevel 平台 Profile 列表连通",
+    "description": "版本变更(1f18987)：新平台 Kevel 接入连通性验证。确认 productLine=kevel 路由通、返回 code:200、data 为数组。新平台无托管 profile 时 data 为空属正常。(原 smoke 目录迁入)",
+    "module": "profile",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "SUPPORT",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getProfiles",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "productLine": "kevel"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getProfile - Kevel Profile 查询连通",
+    "description": "版本变更(1f18987)：新平台 Kevel 接入连通性验证。确认 definition/getProfile 对 kevel 返回 code:200。(原 smoke 目录迁入)",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "SUPPORT",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getProfile",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getProfile",
+        "request_body": {
+          "productLine": "kevel"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getRuleViewList - Kevel 规则列表连通",
+    "description": "版本变更(1f18987)：新平台 Kevel 接入连通性验证。确认 getRuleViewList 对 kevel 返回 code:200。注：ruleIds 必传（后端对 null 直接 NPE）。(原 smoke 目录迁入)",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "SUPPORT",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRuleViewList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getRuleViewList",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "{{profile_id}}",
+          "ruleIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getRule - Kevel 规则列表(PageResult)",
+    "description": "版本变更(1f18987)：查规则列表，验证 code:200 且返回 PageResult 结构(data.list)。RuleListView 引用了变更 schema(targetLevel 含 Flight)。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRule",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "{{profile_id}}",
+          "pageInfo": {
+            "pageNo": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/getRuleTargetInfo - Flight 目标信息回显",
+    "description": "版本变更(1f18987)：AppliedInfo 引用变更 schema(targetLevel 含 Flight)。用已有 QA 规则 id 作 fixture 验证 code:200。⚠️ ruleId 为 QA 库固定规则，若被删需换。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRuleTargetInfo",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfo?productLine=kevel&ruleId=2090008196405604354",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getRuleTargetInfoByRuleIds - 按ruleId批量查目标(裸数组body)",
+    "description": "版本变更(1f18987)：RuleTarget 引用变更 schema。🔴 body 是裸数组[ruleId]，非对象。用 QA 规则 id fixture 验证 code:200 且 data 非空。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getRuleTargetInfoByRuleIds",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfoByRuleIds",
+        "request_body": [
+          2090008196405604354
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLogFilter - Kevel Flight 历史记录过滤(HIST-1)",
+    "description": "版本变更(1f18987)：HistoryManager getAdGroups/getCampaignNames kevel case。用已有执行历史的规则 fltest_Flight_0821_stop(id=2090706304099545090)作 fixture，验证 code:200、Flight 名称回填正常。HIST-1。",
+    "module": "history",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getAutoRuleDetailLogFilter",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleDetailLogFilter",
+        "request_body": {
+          "ruleId": 2090706304099545090,
+          "pageInfo": {
+            "pageNo": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getTarget - Campaign 已应用目标非空(TGT-1)",
+    "description": "版本变更(1f18987)：getTarget 返回已有 Kevel 规则的 Campaign 目标信息。依赖 createRule cases 已执行（rule 表有 kevel/Campaign 记录）。data 应非空。TGT-1。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getTarget-Campaign",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getTarget",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "6274332",
+          "targetLevel": "Campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getTarget - Flight 已应用目标非空(TGT-2)",
+    "description": "版本变更(1f18987)：getTarget 返回已有 Kevel 规则的 Flight 目标信息。依赖 createRule cases 已执行（rule 表有 kevel/Flight 记录）。data 应非空。TGT-2。",
+    "module": "definition",
+    "granularity": "API",
+    "since": "1f18987",
+    "last_modified": "1f18987",
+    "change_type": "MODIFIED",
+    "generated_by": "swagger-version-diff",
+    "steps": [
+      {
+        "name": "getTarget-Flight",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getTarget",
+        "request_body": {
+          "productLine": "kevel",
+          "profileId": "6274332",
+          "targetLevel": "Flight"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
     "name": "POST /definition - 动作 Decrease Bid 10%",
     "description": "版本变更(1f18987) Kevel Flight 补充：动作 Decrease Bid 10%。isPaused=true 自清理。F3-decreaseBid。",
     "module": "definition",

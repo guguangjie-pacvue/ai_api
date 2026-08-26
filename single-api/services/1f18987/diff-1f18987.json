@@ -70,24 +70,26 @@
     }
   },
   "cross_platform_risk": {
-    "level": "中",
-    "reason": "枚举/Columns 为追加式（低风险），但有两处平台包外的【共享方法】被改动，构成其它平台的真实回归面。之前误判为“低”，已修正。",
+    "level": "无",
+    "reason": "🔴 读源码修正：两处共享方法的改动均为纯追加式（加 productLine==Kevel 新分支/三元条件），非 Kevel 平台走原路径、行为逐字不变，对既有平台零影响。之前标'中'是基于'共享方法被改动'的保守假设，读实际代码后推翻，不需要补既有平台回归 case。",
     "shared_code_changes": [
       {
         "file": "rule-engine/.../EmailTemplate/EmailTemplateUtils.java",
         "method": "content()",
         "shared_by": "所有平台的规则执行/预览邮件",
-        "change": "新增 productLine==Kevel && entityType==Adgroups ? Flights : entityType.text 三元判断",
-        "regression_target": "各既有平台（amazon/tiktok/walmart...）规则执行/预览后邮件的实体名渲染是否仍正确",
-        "risk": "非 Kevel 走 entityType.text 行为不变，但共享方法被改，需回归确认无副作用"
+        "change": "productLine==Kevel && entityType==Adgroups ? Flights : entityType.text 三元判断",
+        "regression_target": "各既有平台邮件实体名渲染",
+        "risk": "无。非 Kevel 时 productLine==Kevel 为 false 短路，直接走 entityType.text，与改动前逐字一致。",
+        "source_verified": true
       },
       {
         "file": "rule-service/.../manager/HistoryManager.java",
         "method": "getAdGroups()",
         "shared_by": "所有平台历史 Run Record 广告组名回填",
-        "change": "EntityParam entityParam 声明从 case 块提到方法作用域，跨 case 复用同一实例",
-        "regression_target": "各既有平台历史明细（getAutoRuleDetailLogFilter / 历史详情）广告组名回填是否正确",
-        "risk": "共享实例跨 case 复用，有状态串用风险，须回归"
+        "change": "EntityParam entityParam 声明提到方法作用域，仅 dsp/kevel 分支用其 setEntityIds",
+        "regression_target": "各既有平台历史明细广告组名回填",
+        "risk": "无。entityParam 是方法局部变量每次调用 new，无跨请求串用；amazon/walmart 等分支走 getAdGroupNames(adGroupIds) 根本不使用 entityParam，行为不变。仅新增 kevel 分支使用它。",
+        "source_verified": true
       },
       {
         "file": "rule-meta/.../enums/ProductLine.java 等 4 个枚举 + Columns.java",
@@ -96,7 +98,7 @@
         "risk": "低，除非有按 ordinal 序列化的逻辑"
       }
     ],
-    "regression_scope": "既有平台回归精确到走过上述共享方法的接口：邮件渲染 + 历史 getAdGroups，非全平台全接口"
+    "regression_scope": "读源码确认后：既有平台无回归面，D3 跨平台不需补 case。回归范围收敛为 Kevel 自身新功能（D1）+ 同平台链路（D2）。"
   },
   "test_plan": {
     "new_feature": "Kevel Flight 规则全链路：创建/编辑/查询/预览/执行/历史 + 三类动作(Bid/Budget/State)",

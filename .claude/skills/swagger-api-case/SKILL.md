@@ -37,14 +37,15 @@ single-api/
 **多平台服务**（如 rule-api，平台参数存在时多加一层）：
 ```
 single-api/
-└── rule-api/
-    └── <平台>/                               # 🔴 平台层：amazon / tiktok / walmart 等
-        └── <环境>/                           # 环境层：us / cn / eu
-            ├── config.json                   # 环境+平台级配置
-            └── <模块>/                       # 模块目录，如 Definition / Template / History
-                └── task-<YYYY-MM-DD-HH-MM-SS>/
-                    ├── cases.json
-                    └── report.json
+└── services/
+    └── rule-api/
+        └── <平台>/                               # 🔴 平台层：amazon / tiktok / walmart 等
+            └── <环境>/                           # 环境层：us / cn / eu
+                ├── config.json                   # 环境+平台级配置
+                └── <模块>/                       # 模块目录，如 Definition / Template / History
+                    └── task-<YYYY-MM-DD-HH-MM-SS>/
+                        ├── cases.json
+                        └── report.json
 ```
 
 - **标准服务五层：服务 / 环境 / swagger / 模块 / task**。环境层（us/cn/eu）将三个独立部署的用户数据和配置隔离，同一接口在不同环境的用户行为差异显著，必须分开生成 case。
@@ -311,7 +312,7 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 
 # 多平台服务（rule-api，需指定 ES 索引）
 python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
-  "single-api/rule-api/<平台>/<环境>/<模块>/task-<timestamp>/cases.json" `
+  "single-api/services/rule-api/<平台>/<环境>/<模块>/task-<timestamp>/cases.json" `
   --es-index "rule-access-*"
 ```
 

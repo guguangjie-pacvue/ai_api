@@ -22,10 +22,10 @@ description: 接口版本变更测试。对比基线 Swagger（线上）与目�
 
 ```
 main 分支
-└── single-api/rule-api/<平台>/us/<模块>/task-xxx/cases.json   ← 线上回归基线
+└── single-api/services/rule-api/<平台>/us/<模块>/task-xxx/cases.json   ← 线上回归基线
 
 test/CP-47435 分支（对应开发的 ai/delivery/1f18987 分支）
-└── single-api/rule-api/<平台>/us/<模块>/task-xxx/cases.json   ← 基线 + delta（直接追加）
+└── single-api/services/rule-api/<平台>/us/<模块>/task-xxx/cases.json   ← 基线 + delta（直接追加）
 ```
 
 | 阶段 | 操作 |
@@ -39,6 +39,10 @@ test/CP-47435 分支（对应开发的 ai/delivery/1f18987 分支）
 ---
 
 ## 🔴 铁律
+
+0a. 🔴 **接口语义不确定时，第一步读 Controller 源码，不猜**：接口名听起来像"获取候选"的不一定是候选接口（如 `getTarget` 实为"查已有规则的 apply 目标"），靠名字猜用途必然误判阻塞原因。遇到任何不确定的接口行为，先 `git show` 读 Controller + Manager 实现，再下结论。**没读源码不得标 BLOCKED。**
+
+0b. 🔴 **需要上一步结果的 case，优先多步链路设计，不得直接标 BLOCKED**：框架支持多步 step + `extract_vars`，遇到"createRule 不返回 id → editRule 无法执行"此类情况，解法是：step1 createRule → step2 getRule(按 ruleName 过滤)提取 id → step3 目标操作 → step4 自清理。只有框架能力本身无法实现（如依赖外部系统异步结果）才允许标 BLOCKED，并必须在 `blocker` 字段写明具体卡点。
 
 1. **基线 = 线上 Swagger，目标 = 测试环境 Swagger**：diff 方向固定，不反转
 2. **Git commit 优先，swagger diff 做校验**：两者冲突时：
@@ -66,7 +70,7 @@ test/CP-47435 分支（对应开发的 ai/delivery/1f18987 分支）
 
 自动推断：
 - **平台**：从 git commit 改动文件的 package 路径推断
-- **测试环境 config**：从 `single-api/<服务>/<平台>/us/config.test.json` 读（同目录下 `config.json`=线上、`config.test.json`=测试，仅文件名区分环境）；不存在则复制 `config.json` 改 `RULEBASEURL` 生成
+- **测试环境 config**：从 `single-api/services/<服务>/<平台>/us/config.test.json` 读（同目录下 `config.json`=线上、`config.test.json`=测试，仅文件名区分环境）；不存在则复制 `config.json` 改 `RULEBASEURL` 生成
 
 ---
 
@@ -109,6 +113,11 @@ git diff <merge-base>..FETCH_HEAD --name-status
    对每个被改的共享方法，追问「哪些平台调用它、走哪个接口」，把这些**其它平台的接口纳入影响范围**，记录到 `diff.json.cross_platform_risk.shared_code_changes`（含 file/method/shared_by/regression_target）。
    - 判定共享：改动文件路径**不在**任何单一平台 package 下，或方法签名被所有平台复用（switch-case 加分支属于共享方法被改）。
    - 回归精确到「走过该共享方法的接口」，不是「全平台全接口」。纯追加式改动（枚举/列新增）风险低，除非有按 ordinal 序列化。
+   - 🔴 **共享方法被改 ≠ 既有平台一定有回归面：必须读方法源码确认改动是否真的碰既有平台的执行路径，否则会写出「假覆盖」case**。判定标准：
+     - **纯追加式**（加 `if productLine==新平台` 新分支、三元条件、switch 新 case）→ 非新平台走原路径、逐字不变 → **既有平台零影响，不补回归 case**。
+     - **改动既有分支/共享状态**（改了所有平台都走的公共代码行、共享字段而非方法局部变量）→ 才是真回归面。
+     - 反例（本 skill 踩过并修正）：`EmailTemplateUtils.content()` 加 `productLine==Kevel?Flights:entityType.text` 三元、`HistoryManager.getAdGroups()` 把 `EntityParam` 提到方法作用域——读源码后确认非 Kevel 平台短路走原逻辑、`EntityParam` 是每次 new 的方法局部变量无串用，**既有平台零影响**。若不读源码、按「共享方法被改」保守标风险，会写 amazon 回归 case，跑出来必 PASS（因行为本就没变），误判为「回归通过有覆盖」，实为**测了一个不会坏的点**。
+     - **风险真实性存疑时，`source_verified` 标 true 并在 `risk` 字段写清源码依据；确认无影响的，从回归范围正当移除，不硬造 case**。
 
 **🔴 merge-base 要用与 production 的真实分叉点**（`git merge-base FETCH_HEAD origin/production`），不能用中间的 "Merge production" 提交，否则漏掉合并前的改动（本 skill 踩过：错用后 73 文件只看到 4 个）。partial-clone 下先 `--depth=100` 加深两分支再求 merge-base。
 
@@ -136,17 +145,34 @@ git show "_target:<改动文件>" | Select-String "<changedMethod>" -Context 0,3
 
 ---
 
+## Phase 0.7 — 🔴 资产 vs 清单：两个正交概念，别混
+
+本 skill 只管**「生成 case」和「产出本版本测试集清单」，不管「怎么编排执行」**（执行交给 `run-cases.py` 和测试人员）。生成物有两种性质，归档规则不同：
+
+| 概念 | 单位 | 归档规则 | 载体 |
+|------|------|---------|------|
+| **case 资产** | 接口 × 场景 | **按被测接口所属平台归档**——case 跟着被测接口走，不跟着「谁触发了这次测试」走 | `single-api/services/rule-api/<被测平台>/us/<模块>/task-xxx/cases.json` |
+| **版本测试集清单** | 本次变更要跑哪些 case | 对已有 case 资产的**引用集合，不复制 case 本身** | `case-design-<commit>.json` / `coverage-<commit>.xlsx` |
+
+**为什么正交**：D3 跨平台回归若确有其事（读源码确认改动碰了既有平台执行路径），要测的是 amazon 等**其它平台**的接口——
+- 那条 amazon case 是**资产**，归 `amazon/us/history/`（因为它测 amazon 接口，任何版本可复用），**不是** 1f18987 专属，**不放 kevel 目录**。
+- 「1f18987 这次要跑它」是**清单**关系，在 `case-design-1f18987.json` 里加一条**引用**（标 `platform: amazon`, `reason: kevel 改了共享方法 xxx`），coverage 表列一行。
+
+混淆的后果：把跨平台回归 case 塞进变更来源平台（kevel）目录，会让一次变更的测试打散、amazon 的历史回归无法被其它版本复用。**记住：资产按被测平台归档，清单按变更版本引用。**
+
+---
+
 ## Phase 1 — Diff 两个 Swagger
 
 ### 1.1 运行 diff 脚本
 
-diff.json 存放在平台目录下，按版本命名：
+diff.json 存放在版本分析目录下，按版本命名：
 
 ```powershell
 node ".claude/skills/swagger-version-diff/scripts/diff_swagger.js" `
   "$env:TEMP\swagger_baseline.json" `
   "$env:TEMP\swagger_target.json" `
-  "single-api/<服务>/<平台>/diff-<commit短码>.json"
+  "single-api/services/<commit短码>/diff-<commit短码>.json"
 ```
 
 ### 1.2 结合 git 分析，输出确认表
@@ -192,13 +218,18 @@ git show "_target:<Controller 路径>" | Select-String "@PostMapping|@GetMapping
 
 🔴 **契约表没确认完，不许进 Phase 2 设计**。路径/参数一律以源码为准，swagger 只用来看字段结构。
 
+🔴 **契约表是过程产物，不落独立文件**（不要生成 `test-data-<commit>.md` 之类）。确认结果就地内联：
+- **实际 mapping / 隐性必填 / body 类型** → 写进 `diff.json.affected_endpoints[].contract` 和对应 case 的 `description`。
+- **真实实体 ID（profileId/flightId/tagId）** → 直接写进 case 的 `request_body`，ID 来源在 `description` 里注明。
+- 独立契约文档易过时、与 case 脱节（本 skill 踩过：test-data.md 里 getTarget 判断过时未同步，误导后续），一律不产出。
+
 **数据来源同理**：接口要真实实体 ID 时，先找该服务的 provider/实体查询接口（读源码或 provider swagger），从 provider 自举真实 ID，不猜、不硬造。
 
 ---
 
 ## Phase 2 — 接口 case 设计（🔴 先设计，后写码）
 
-**🔴 拿到影响范围后不要直接写 case，先出一份对齐 swagger 的设计矩阵**，落成 `single-api/<服务>/<平台>/case-design-<commit>.json`。这是后续执行与覆盖统计的**基准**。
+**🔴 拿到影响范围后不要直接写 case，先出一份对齐 swagger 的设计矩阵**，落成 `single-api/services/<commit>/case-design-<commit>.json`。这是后续执行与覆盖统计的**基准**。
 
 设计矩阵结构（`endpoints[]`，每接口一条）：
 ```json
@@ -342,17 +373,17 @@ delta case 直接追加到 Phase 2 定位的 cases.json 末尾（JSON 数组 pus
 
 ```bash
 python ".claude/skills/swagger-api-case/scripts/fix_bom.py" \
-  single-api/<服务>/<平台>/us/<模块>/task-<timestamp>/cases.json \
-  single-api/<服务>/<平台>/us/config.test.json
+  single-api/services/rule-api/<平台>/us/<模块>/task-<timestamp>/cases.json \
+  single-api/services/rule-api/<平台>/us/config.test.json
 ```
 
 ### 5.2 执行（用 config.test.json）
 
 ```bash
 python "C:/AI engineering/rule-modules-web-master/rule-modules-web-master/.claude/skills/api-case-generate/api-case-run/scripts/run-cases.py" \
-  --cases  single-api/<服务>/<平台>/us/<模块>/task-<timestamp>/cases.json \
-  --config single-api/<服务>/<平台>/us/config.test.json \
-  --out    single-api/<服务>/<平台>/us/<模块>/task-<timestamp>/report-<commit短码>.json
+  --cases  single-api/services/rule-api/<平台>/us/<模块>/task-<timestamp>/cases.json \
+  --config single-api/services/rule-api/<平台>/us/config.test.json \
+  --out    single-api/services/rule-api/<平台>/us/<模块>/task-<timestamp>/report-<commit短码>.json
 ```
 
 🔴 **config 用 `config.test.json`，cases 和 report 均在 `us` 目录下**：cases.json 是环境无关的（所有 URL 都是 `{{RULEBASEURL}}`），切 config 文件即切环境，目录结构本身不体现环境（同目录 `config.json`=线上、`config.test.json`=测试）。
@@ -361,7 +392,7 @@ python "C:/AI engineering/rule-modules-web-master/rule-modules-web-master/.claud
 
 ```bash
 python ".claude/skills/swagger-api-case/scripts/summarize_report.py" \
-  single-api/<服务>/<平台>/us/<模块>/task-<timestamp>/report-<commit短码>.json
+  single-api/services/rule-api/<平台>/us/<模块>/task-<timestamp>/report-<commit短码>.json
 ```
 
 按 `change_type` 和 `since` 分组输出：
@@ -390,10 +421,10 @@ FAIL：MODIFIED POST /definition/getRule 兼容性 case → Breaking Change！
 
 ```bash
 python ".claude/skills/swagger-version-diff/scripts/coverage_baseline.py" \
-  --design single-api/<服务>/<平台>/case-design-<commit>.json \
-  --report single-api/<服务>/<平台>/us/<模块>/task-<timestamp>/report-<commit短码>.json \
+  --design single-api/services/<commit>/case-design-<commit>.json \
+  --report single-api/services/rule-api/<平台>/us/<模块>/task-<timestamp>/report-<commit短码>.json \
   [--report ...可多次，合并多模块结果] \
-  --out    single-api/<服务>/<平台>/coverage-<commit>.xlsx
+  --out    single-api/services/<commit>/coverage-<commit>.xlsx
 ```
 
 产出一行一接口，列：`Method | Path | 模块 | 变更类型 | 设计case数 | 已执行 | 通过 | 失败 | 阻塞 | 覆盖率 | 状态 | 卡点/失败原因`。状态色：全通过=绿、有失败=红、全阻塞=灰、部分=黄。
@@ -407,14 +438,14 @@ python ".claude/skills/swagger-version-diff/scripts/coverage_baseline.py" \
 
 | 文件 | 说明 |
 |------|------|
-| `single-api/<服务>/<平台>/diff-<commit>.json` | 版本 diff 记录（git + swagger 双来源） |
-| `single-api/<服务>/<平台>/case-design-<commit>.json` | 🔴 接口 case 设计矩阵（对齐 swagger，覆盖统计基准） |
-| `single-api/<服务>/<平台>/us/<模块>/task-xxx/cases.json` | 追加了 delta case（git 分支上） |
-| `single-api/<服务>/<平台>/us/<模块>/task-xxx/report-<commit>.json` | 执行报告（report 按 commit 命名，同一 task 可多次执行） |
-| `single-api/<服务>/<平台>/coverage-<commit>.xlsx` | 🔴 覆盖基准（一行一接口：设计/执行/通过/失败/阻塞/卡点） |
+| `single-api/services/<commit>/diff-<commit>.json` | 版本 diff 记录（git + swagger 双来源） |
+| `single-api/services/<commit>/case-design-<commit>.json` | 🔴 接口 case 设计矩阵（对齐 swagger，覆盖统计基准） |
+| `single-api/services/<commit>/coverage-<commit>.xlsx` | 🔴 覆盖基准（一行一接口：设计/执行/通过/失败/阻塞/卡点） |
+| `single-api/services/rule-api/<平台>/us/<模块>/task-xxx/cases.json` | 追加了 delta case（git 分支上） |
+| `single-api/services/rule-api/<平台>/us/<模块>/task-xxx/report-<commit>.json` | 执行报告（report 按 commit 命名，同一 task 可多次执行） |
 
 目录结构与环境无关，`us` 表示数据来源（ES 抽样自 US 环境），执行环境由 config.json 决定：
-- 打线上：`--config single-api/<服务>/<平台>/us/config.json`
-- 打测试：`--config single-api/<服务>/<平台>/us/config.test.json`
+- 打线上：`--config single-api/services/rule-api/<平台>/us/config.json`
+- 打测试：`--config single-api/services/rule-api/<平台>/us/config.test.json`
 
 merge 到 main 后：cases.json 携带完整历史（含本版本 delta），下个版本继续追加。

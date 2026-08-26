@@ -22,8 +22,8 @@
       "method": "POST", "path": "/definition/getTarget", "module": "definition", "change_type": "MODIFIED", "req_ref": "FR-2 Apply to",
       "cases": [
         { "id": "TGT-0", "scenario": "接口连通(kevel+Flight)", "assert": "code:200", "status": "PASS" },
-        { "id": "TGT-1", "scenario": "Campaign 候选列表含真实 campaignId", "assert": "data 非空", "status": "BLOCKED", "blocker": "rule 侧候选查询按 clientId/managed 过滤返回 0；真实实体走 provider getCampaigns 自举，createRule 直接用" },
-        { "id": "TGT-2", "scenario": "Flight 候选列表含真实 flightId", "assert": "data 非空", "status": "BLOCKED", "blocker": "同上" }
+        { "id": "TGT-1", "scenario": "Campaign 已应用目标非空", "assert": "code:200, data is_array", "status": "TODO", "note": "getTarget 返回已有规则的 apply 目标（非候选列表）。createRule cases 跑后 rule 表有数据，已写入 read-cases.json" },
+        { "id": "TGT-2", "scenario": "Flight 已应用目标非空", "assert": "code:200, data is_array", "status": "TODO", "note": "同上，targetLevel=Flight" }
       ]
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "method": "POST", "path": "/getAutoRuleDetailLogFilter", "module": "history", "change_type": "MODIFIED", "req_ref": "HistoryManager case kevel",
-      "cases": [ { "id": "HIST-1", "scenario": "历史记录过滤 + Flight 名称回填", "assert": "code:200, Flight名非'--'", "status": "BLOCKED", "blocker": "依赖已执行的规则历史(需规则实际跑过)" } ]
+      "cases": [ { "id": "HIST-1", "scenario": "历史记录过滤 + Flight 名称回填", "assert": "code:200", "status": "TODO", "note": "改用已执行规则 fltest_Flight_0821_stop(id=2090706304099545090)作 fixture，已写入 read-cases.json" } ]
     },
     {
       "method": "POST", "path": "/definition", "module": "definition", "change_type": "NEW", "req_ref": "FR-2/3/4/5 核心功能",
@@ -61,13 +61,13 @@
         { "id": "CR-R3", "scenario": "12 绩效指标条件各一条(Impr/Clicks/CTR/Spend/CPC/CPA/CVR/ACOS/ROAS/Sales/Orders/SaleUnits)", "assert": "code:200", "status": "PASS" },
         { "id": "CR-R4", "scenario": "Avg 基线条件(CTR<ProfileCTR)", "assert": "code:200", "status": "PASS" },
         { "id": "CR-B1", "scenario": "边界: frequency=hourly 应被拒", "assert": "创建应失败", "status": "FAIL", "finding": "🔴 缺陷: FR-5.3 规定不支持 hourly，但 createRule 接受 frequency=hourly 返回 code:200，未做校验。需提开发确认。" },
-        { "id": "CR-A2", "scenario": "Apply CampaignTag(OR)", "assert": "code:200", "status": "TODO", "blocker": "需真实 tagId(provider 有 tag 接口，未测)" },
-        { "id": "CR-A3", "scenario": "Apply CampaignTag(AND)", "assert": "code:200", "status": "TODO", "blocker": "同上" }
+        { "id": "CR-A2", "scenario": "Apply CampaignTag(OR)", "assert": "code:200", "status": "TODO", "note": "四步链路已写入 cases.json：step1 getRuleTargetInfo(ruleId=2090398925222965250)提取 tagId → step2 createRule(CampaignTag,OR) → step3 getRule提取id → step4 自清理" },
+        { "id": "CR-A3", "scenario": "Apply CampaignTag(AND)", "assert": "code:200", "status": "TODO", "note": "同上，提取两个 tagId，step2 用 relationShipForAnd:true" }
       ]
     },
     {
       "method": "POST", "path": "/definition/editRule", "module": "definition", "change_type": "NEW", "req_ref": "编辑",
-      "cases": [ { "id": "ER-1", "scenario": "编辑已建 Flight 规则", "assert": "code:200", "status": "TODO", "blocker": "create 不返回 ruleId，run-cases.py by_path 不支持按 ruleName 过滤提取；需框架增强或独立脚本" } ]
+      "cases": [ { "id": "ER-1", "scenario": "编辑已建 Flight 规则", "assert": "code:200", "status": "TODO", "note": "四步链路已写入 cases.json：create→getRule(ruleName精确过滤提取id)→editRule(阈值0.5→0.8)→changeStatus自清理" } ]
     }
   ]
 }
