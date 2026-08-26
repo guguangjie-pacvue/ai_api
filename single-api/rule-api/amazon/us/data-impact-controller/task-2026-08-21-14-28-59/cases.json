@@ -1,0 +1,193 @@
+[
+  {
+    "name": "POST /dataImpact/brandOrManufacturers - productLine=amazon默认场景",
+    "description": "单接口测试：POST /dataImpact/brandOrManufacturers。该接口近90天ES样本(排除测试账号后)真实客户调用为0条，仅有内部账号(clientId=62)访问记录，形态为{'category':..,'metric':'soa','country':'US'}；无真实客户流量，按该内部样本结构+Swagger定义构造默认场景。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 brandOrManufacturers",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/brandOrManufacturers",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "amazon",
+          "metric": "soa",
+          "category": "BODY",
+          "country": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/categories - productLine=amazon",
+    "description": "单接口测试：POST /dataImpact/categories。该接口近90天ES真实客户样本(排除测试账号)仅1条：{'country':'US','metric':'oos'}，已是该接口真实调用的全部真实模式，1条/100%已全覆盖。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 categories",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/categories",
+        "request_body": {
+          "country": "US",
+          "metric": "oos",
+          "productLine": "amazon"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/oos/asinList - 默认查询(不筛选retailer)",
+    "description": "单接口测试：POST /dataImpact/oos/asinList。真实样本1：{'productLine':'amazon','country':'US','period':'2026-xx-xx','brands':[],'selectedAsins':[]}(clientId替换为测试账号)，即不做retailer/品牌筛选的默认列表查询，该接口2条真实样本中的1种模式。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 oos/asinList(默认)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/oos/asinList",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "amazon",
+          "country": "US",
+          "period": "{{period_date}}",
+          "brands": [],
+          "selectedAsins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/oos/asinList - 按retailer筛选",
+    "description": "单接口测试：POST /dataImpact/oos/asinList。真实样本2：{'retailers':[164],'productLine':'amazon','country':'US','period':'2026-xx-xx','brands':[]}(clientId替换为测试账号，retailers保留真实取值)，即按retailer筛选的查询模式，该接口2条真实样本中的另1种模式。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 oos/asinList(retailer筛选)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/oos/asinList",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "amazon",
+          "country": "US",
+          "period": "{{period_date}}",
+          "brands": [],
+          "retailers": [
+            164
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/oos/brandList - productLine=amazon",
+    "description": "单接口测试：POST /dataImpact/oos/brandList。该接口90天内14条真实客户样本(排除测试账号)形态一致：{'productLine':'amazon','period':'2026-xx-xx','clientId':..}，占比100%（14次），已全覆盖唯一真实模式。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 oos/brandList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/oos/brandList",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "amazon",
+          "period": "{{period_date}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/price/asinList - productLine=amazon",
+    "description": "单接口测试：POST /dataImpact/price/asinList。该接口90天内14条真实客户样本(排除测试账号)形态一致：{'productLine':'amazon','period':'2026-xx-xx','brands':[],'clientId':..}，占比100%（14次），已全覆盖唯一真实模式。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 price/asinList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/price/asinList",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "amazon",
+          "period": "{{period_date}}",
+          "brands": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

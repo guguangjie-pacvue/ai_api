@@ -1,0 +1,160 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-08-19T09:10:09.792463+00:00",
+  "total": 6,
+  "passed": 5,
+  "failed": 1,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Tag/GetKeywordTagKeywordText - 按keywordTagId查询关键词标签文本",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetKeywordTagKeywordText",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tag/GetKeywordTagKeywordText",
+          "status_code": 200,
+          "ms": 766,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Tag/GetTagPivotReportPageData - 场景1:type=1按标签汇总透视报表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTagPivotReportPageData(type=1)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tag/GetTagPivotReportPageData",
+          "status_code": 200,
+          "ms": 1082,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Tag/GetTagPivotReportPageData - 场景2:type=2按标签汇总透视报表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetTagPivotReportPageData(type=2)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tag/GetTagPivotReportPageData",
+          "status_code": 200,
+          "ms": 1067,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Data,PageInfo",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Tag/GetTagPivotReportTagData - 查询全部标签树(不限profile)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 GetTagPivotReportTagData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tag/GetTagPivotReportTagData",
+          "status_code": 200,
+          "ms": 949,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 513",
+            "success expected True, got false",
+            "data expected array, got str"
+          ],
+          "resp_code": 513,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": "Incorrect syntax near ')'.   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\n   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\n   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)\n   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()\n   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)\n   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)\n   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)\n   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)\n   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)\n   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior) in /_/Dapper/SqlMapper.cs:line 1066\n   at Dapper.SqlMapper.QueryImpl[T](IDbConnection cnn, CommandDefinition command, Type effectiveType)+MoveNext() in /_/Dapper/SqlMapper.cs:line 1094\n   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\n   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.cs:line 734\n   at Pacvue.MainApi.Repository.Tags.TagRepository.GetSubTagList(List`1 portfolioIds) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Repository/Tags/TagRepository.cs:line 631\n   at Castle.Proxies.Invocations.ITagRepository_GetSubTagList.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.IBaseRepository`2Proxy_25.GetSubTagList(List`1 portfolioIds)\n   at Pacvue.MainApi.Domain.Services.TagService.GetSubTagList(List`1 portfolioIds) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Domain/Services/TagService.cs:line 434\n   at Castle.Proxies.Invocations.ITagService_GetSubTagList.InvokeMethodOnTarget()\n   at Castle.DynamicProxy.AbstractInvocation.Proceed()\n   at Castle.Proxies.ITagServiceProxy.GetSubTagList(List`1 portfolioIds)\n   at Pacvue.MainApi.Core.Controllers.TagController.GetTagPivotReportTagData(BaseInput input) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Controllers/TagController.cs:line 179\n   at lambda_method15386(Closure, Object)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)\n   at Pacvue.MainApi.Core.Middleware.UserDataPermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserDataPermissionMiddleware.cs:line 156\n   at Pacvue.MainApi.Core.Middleware.PermissionMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/PermissionMiddleware.cs:line 193\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 38\n   at Pacvue.MainApi.Core.Middleware.UserOperateMiddleware.Invoke(HttpContext context) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/UserOperateMiddleware.cs:line 100\n   at Elastic.Apm.AspNetCore.ApmMiddleware.InvokeAsync(HttpContext context)\n   at Pacvue.MainApi.Core.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext httpContext) in /home/runner/work/pacvue.api.core/pacvue.api.core/src/Pacvue.MainApi.Core/Pacvue.MainApi.Core/Middleware/GlobalExceptionMiddleware.cs:line 20"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Tag/v3/DownloadTagPivotReportPageData - 下载标签透视报表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 DownloadTagPivotReportPageData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tag/v3/DownloadTagPivotReportPageData",
+          "status_code": 200,
+          "ms": 1183,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "__binary__",
+            "content_type",
+            "size"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Tag/v3/GetAsinFromTag - 按asinTagId查询ASIN列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetAsinFromTag",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/Tag/v3/GetAsinFromTag",
+          "status_code": 200,
+          "ms": 667,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": null,
+          "data_shape": null,
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-08-19T09:10:15.509968+00:00"
+}

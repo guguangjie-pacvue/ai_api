@@ -1,0 +1,289 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AdvertisingDeal/CreateAdvertisingDeal/{profileId} - 创建广告交易(Deal)",
+    "description": "单接口测试：POST /api/AdvertisingDeal/CreateAdvertisingDeal/{profileId}。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(AdvertisingDealRequest/AdvertisingDealDetail)构造。涉及真实创建Amazon广告交易(Deal)实体，仅生成不自动执行。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建广告交易",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/CreateAdvertisingDeal/{{profile_id}}",
+        "request_body": {
+          "advertisingDeals": [
+            {
+              "name": "autoTest_Deal_{{today}}",
+              "state": "enabled",
+              "startDateTime": "{{date_start}}T00:00:00",
+              "endDateTime": "{{date_end}}T00:00:00",
+              "price": {
+                "NEEDS_REAL_VALUE": "[NEEDS_REAL_VALUE]"
+              }
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_deal_id": "data[0].advertisingDealId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除新建广告交易",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/DeleteAdvertisingDeal/{{profile_id}}",
+        "request_body": {
+          "advertisingDealIds": [
+            "{{created_deal_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AdvertisingDeal/UpdateAdvertisingDeal/{profileId} - 更新广告交易",
+    "description": "单接口测试：POST /api/AdvertisingDeal/UpdateAdvertisingDeal/{profileId}。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(UpdateAdvertisingDealDetail)构造。advertisingDealId需为真实存在的Deal，当前无测试账号真实Deal数据来源，仅生成不自动执行。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新广告交易",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/UpdateAdvertisingDeal/{{profile_id}}",
+        "request_body": {
+          "advertisingDeals": [
+            {
+              "advertisingDealId": "[NEEDS_REAL_VALUE]",
+              "name": "autoTest_Deal_updated_{{today}}",
+              "state": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AdvertisingDeal/DeleteAdvertisingDeal/{profileId} - 删除广告交易",
+    "description": "单接口测试：POST /api/AdvertisingDeal/DeleteAdvertisingDeal/{profileId}。该接口ES 90天/365天窗口内无真实调用样本，需先有真实存在的advertisingDealId才能验证删除，通常作为CreateAdvertisingDeal的后置清理步骤使用，此处单独生成占位，仅生成不自动执行。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "删除广告交易",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/DeleteAdvertisingDeal/{{profile_id}}",
+        "request_body": {
+          "advertisingDealIds": [
+            "[NEEDS_REAL_VALUE]"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AdvertisingDeal/BatchDeleteAdvertisingDeal - 批量删除广告交易",
+    "description": "单接口测试：POST /api/AdvertisingDeal/BatchDeleteAdvertisingDeal。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(DeleteAdvertisingDealInput数组)构造，需真实存在的advertisingDealIds，仅生成不自动执行。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量删除广告交易",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/BatchDeleteAdvertisingDeal",
+        "request_body": [
+          {
+            "profileId": "{{profile_id}}",
+            "campaignIds": [],
+            "advertisingDealIds": [
+              "[NEEDS_REAL_VALUE]"
+            ]
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AdvertisingDeal/CreateAdvertisingDealTarget/{profileId} - 创建广告交易并关联品牌关键词目标(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/AdvertisingDeal/CreateAdvertisingDealTarget/{profileId}。先创建Deal再创建DealTarget，按品牌关键词批量关联。40条真实ES样本(通配符匹配path中profileId)，占比100%。涉及真实创建广告交易及关联品牌关键词，仅生成不自动执行。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建广告交易并关联品牌关键词目标",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/CreateAdvertisingDealTarget/{{profile_id}}",
+        "request_body": {
+          "price": 10.0,
+          "brandedKeywords": [
+            "autotest brand keyword one",
+            "autotest brand keyword two"
+          ],
+          "advertisingDealData": {
+            "advertisingDeals": [
+              {
+                "name": "autoTest_DealTarget_{{today}}",
+                "state": "enabled",
+                "startDateTime": "{{date_start}}T00:00:00",
+                "endDateTime": "{{date_end}}T00:00:00",
+                "price": {
+                  "NEEDS_REAL_VALUE": "[NEEDS_REAL_VALUE]"
+                }
+              }
+            ]
+          }
+        },
+        "extract_vars": {
+          "created_deal_target_id": "data[0].advertisingDealId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除新建广告交易",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/DeleteAdvertisingDeal/{{profile_id}}",
+        "request_body": {
+          "advertisingDealIds": [
+            "{{created_deal_target_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AdvertisingDeal/CreateSinglelAdvertisingDealTarget/{profileId} - 单条创建广告交易目标(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/AdvertisingDeal/CreateSinglelAdvertisingDealTarget/{profileId}。该接口ES 90天/365天窗口内无真实调用样本，按Swagger结构(CreateAdvertisingDealTargetModel/AdvertisingDealTargetDetails)构造，advertisingDealId需先有真实Deal，仅生成不自动执行。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "单条创建广告交易目标",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/CreateSinglelAdvertisingDealTarget/{{profile_id}}",
+        "request_body": {
+          "advertisingDealTargets": [
+            {
+              "advertisingDealId": "[NEEDS_REAL_VALUE]",
+              "targetType": "brandedKeyword",
+              "targetDetails": {
+                "NEEDS_REAL_VALUE": "[NEEDS_REAL_VALUE]"
+              }
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_deal_target_id2": "data[0].advertisingDealTargetId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除新建广告交易目标",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/DeleteAdvertisingDealTarget/{{profile_id}}",
+        "request_body": {
+          "advertisingDealTargetIds": [
+            "{{created_deal_target_id2}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AdvertisingDeal/DeleteAdvertisingDealTarget/{profileId} - 删除广告交易目标",
+    "description": "单接口测试：POST /api/AdvertisingDeal/DeleteAdvertisingDealTarget/{profileId}。该接口ES 90天/365天窗口内无真实调用样本，需先有真实存在的advertisingDealTargetId才能验证删除，通常作为CreateSinglelAdvertisingDealTarget的后置清理步骤使用，此处单独生成占位，仅生成不自动执行。",
+    "module": "AdvertisingDeal",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "删除广告交易目标",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdvertisingDeal/DeleteAdvertisingDealTarget/{{profile_id}}",
+        "request_body": {
+          "advertisingDealTargetIds": [
+            "[NEEDS_REAL_VALUE]"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

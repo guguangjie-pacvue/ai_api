@@ -1,0 +1,59 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Account/V3/PasswordForm - 用lmtesting111测试账号修改密码",
+    "description": "单接口测试：POST /api/Account/V3/PasswordForm。Swagger结构清楚(userid/newpwd/repeatpwd)，但ES近90天/365天窗口内无真实调用样本。用户确认lmtesting111(userId=39931)为可随便操作的测试账号，newpwd/repeatpwd暂用用户指定的占位测试密码Test@123456。⚠️仅生成不执行：一旦真正执行会把该账号密码改成此值，且无法从接口反查原密码做还原，执行前需用户再次确认。",
+    "module": "Account",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PasswordForm",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Account/V3/PasswordForm",
+        "request_body": {
+          "userid": 39931,
+          "newpwd": "Test@123456",
+          "repeatpwd": "Test@123456"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Account/V3/SetUserProfile - 给lmtesting111分配现有测试Profile权限",
+    "description": "单接口测试：POST /api/Account/V3/SetUserProfile。Swagger结构清楚(ProfileId/AmazonAdvertiserId/UserIds/AdminId)，ES近90天500条随机样本中命中249条真实调用，是常用功能。用户确认使用现有测试Profile(profile_id=2755545444012419, amazon_advertiser_id=amzn1.account.AETYTEA5UMU5AW6NEHKKZC5XN4ZQ)，UserIds加入lmtesting111(userId=39931)，AdminId暂用测试主账号18183(superAdmin0913)。⚠️仅生成不执行：从ES样本观察，UserIds很可能是该Profile的完整可访问用户列表(非增量追加)，若真执行且该测试Profile当前已有其他用户/case在依赖其访问权限，可能被整体覆盖；执行前需先确认该接口是覆盖式还是追加式，以及该测试Profile当前的真实UserIds列表，避免误删其他已有权限。",
+    "module": "Account",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetUserProfile",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Account/V3/SetUserProfile",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "AmazonAdvertiserId": "{{amazon_advertiser_id}}",
+          "UserIds": [39931],
+          "AdminId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

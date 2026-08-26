@@ -1,0 +1,110 @@
+[
+  {
+    "name": "POST /api/BulkCampaign/ExportAdgroupNameFailLog - 导出批量改名失败日志",
+    "description": "单接口测试：POST /api/BulkCampaign/ExportAdgroupNameFailLog。该接口ES 90天/365天窗口内无真实调用样本，Swagger结构仅BatchId一个字段。用真实存在的历史批次BatchId(62fd2a74-0df6-4113-b109-33967d830bae，来自GetCampaignChangeLog/name真实探测结果)验证接口可正常导出xlsx文件，不依赖ES样本。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ExportAdgroupNameFailLog",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/ExportAdgroupNameFailLog",
+        "request_body": {
+          "BatchId": "62fd2a74-0df6-4113-b109-33967d830bae"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 100
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/BulkCampaign/GetCampaignChangeLog/{kindType} - 获取Campaign改名类变更日志",
+    "description": "单接口测试：GET /api/BulkCampaign/GetCampaignChangeLog/{kindType}。该接口ES 90天/365天窗口内无真实调用样本，Swagger仅定义kindType为必填字符串path参数无枚举说明。实测探测出kindType合法真实值包括name/budget/adgroupname/state/target，其中name有真实历史批次数据返回，用name验证接口正常返回变更日志列表。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignChangeLog",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/GetCampaignChangeLog/name",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/VerifyCampaignChangeBudget - 校验批量改预算文件",
+    "description": "单接口测试：POST /api/BulkCampaign/VerifyCampaignChangeBudget。该接口ES 90天/365天窗口内无真实调用样本，Swagger结构为ExportBaseInput(filePath/profileId/profileIds)。复用同流程PreviewCampaignChangeBudget真实使用过的filePath(20260627_1b4dca54d53c452e9d1cc768beb41c27.xlsx)+真实profileId实测验证，返回data:0表示文件校验无错误行。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 VerifyCampaignChangeBudget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/VerifyCampaignChangeBudget",
+        "request_body": {
+          "filePath": "20260627_1b4dca54d53c452e9d1cc768beb41c27.xlsx",
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BulkCampaign/VerifyCampaignChangeName - 校验批量改名文件",
+    "description": "单接口测试：POST /api/BulkCampaign/VerifyCampaignChangeName。该接口ES 90天/365天窗口内无真实调用样本，Swagger结构为ExportBaseInput(filePath/profileId/profileIds)。复用同流程PreviewCampaignChangeName真实使用过的filePath(20260619_bbe56589b86140deac9b42a9718e5c9f.xlsx)+真实profileId实测验证，返回data:0表示文件校验无错误行。",
+    "module": "BulkCampaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 VerifyCampaignChangeName",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "BulkCampaign/VerifyCampaignChangeName",
+        "request_body": {
+          "filePath": "20260619_bbe56589b86140deac9b42a9718e5c9f.xlsx",
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

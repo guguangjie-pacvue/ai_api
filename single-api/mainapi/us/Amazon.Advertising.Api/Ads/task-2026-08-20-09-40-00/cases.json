@@ -1,0 +1,56 @@
+[
+  {
+    "name": "POST /api/Ads/GetPortfolioSingle - 按Profile+日期查询Portfolio广告主体明细",
+    "description": "单接口测试：POST /api/Ads/GetPortfolioSingle。该接口ES 90天/365天窗口内无真实调用样本，与同模块GetAdsPageData/GetAdsChart等共用请求结构(AdsEasySqlInput)，入参复用同结构兄弟接口的真实值(profileId/日期范围/分页)，OutPutFields留空使用后端默认字段集。",
+    "module": "Ads",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPortfolioSingle",
+        "method": "POST",
+        "base_url": "{{INDBASEURL}}",
+        "path": "Ads/GetPortfolioSingle",
+        "request_body": {
+          "Dim": "ytd",
+          "IsFead": 0,
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ToMarket": "US",
+          "MetricIds": [],
+          "Filters": [
+            {
+              "filterFieldName": "ReportDateTime",
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_start_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+            }
+          ],
+          "IsShowNTB": 0,
+          "IncludeZero": false,
+          "PageInfo": {
+            "orderByFields": [
+              {
+                "orderByField": "Spend",
+                "orderAsc": false
+              }
+            ],
+            "orderAsc": false,
+            "pageSize": 25,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

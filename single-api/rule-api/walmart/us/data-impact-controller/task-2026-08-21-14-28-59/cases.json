@@ -1,0 +1,158 @@
+[
+  {
+    "name": "POST /dataImpact/brandOrManufacturers - productLine=walmart默认场景",
+    "description": "单接口测试：POST /dataImpact/brandOrManufacturers。该接口近90天无真实客户流量(仅内部账号访问，且均为amazon)，无walmart真实调用依据；按amazon内部样本结构套用walmart构造该场景。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 brandOrManufacturers",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/brandOrManufacturers",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "walmart",
+          "metric": "soa",
+          "category": "BODY",
+          "country": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/categories - productLine=walmart",
+    "description": "单接口测试：POST /dataImpact/categories。该接口近90天ES真实客户样本仅1条且为amazon平台({'country':'US','metric':'oos'})，无walmart真实调用依据，按该结构套用walmart构造该场景。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 categories",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/categories",
+        "request_body": {
+          "country": "US",
+          "metric": "oos",
+          "productLine": "walmart"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/oos/asinList - 默认查询(walmart构造)",
+    "description": "单接口测试：POST /dataImpact/oos/asinList。该接口近90天真实客户流量(2条)全部为amazon平台，无walmart真实调用依据；按amazon默认查询样本结构({'country':'US','brands':[],'selectedAsins':[]})套用walmart构造该场景。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 oos/asinList(默认)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/oos/asinList",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "walmart",
+          "country": "US",
+          "period": "{{period_date}}",
+          "brands": [],
+          "selectedAsins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/oos/brandList - productLine=walmart",
+    "description": "单接口测试：POST /dataImpact/oos/brandList。该接口90天内14条真实客户样本全部为amazon平台，无walmart真实调用依据；按amazon唯一真实模式套用walmart构造该场景。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 oos/brandList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/oos/brandList",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "walmart",
+          "period": "{{period_date}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/price/asinList - productLine=walmart",
+    "description": "单接口测试：POST /dataImpact/price/asinList。该接口90天内14条真实客户样本全部为amazon平台，无walmart真实调用依据；按amazon唯一真实模式套用walmart构造该场景。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 price/asinList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/price/asinList",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "productLine": "walmart",
+          "period": "{{period_date}}",
+          "brands": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,368 @@
+[
+  {
+    "name": "POST /api/Setting/V3/BindVendorProfiles - 查询vendor未绑定profile状态",
+    "description": "单接口测试：POST /api/Setting/V3/BindVendorProfiles。用户查看某vendor账号，尚未绑定任何广告Profile（Profiles为空数组）。500条随机样本中占比约51.2%（111次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BindVendorProfiles",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/BindVendorProfiles",
+        "request_body": [
+          {
+            "VendorId": "{{setting_vendor_id_unbound}}",
+            "VendorAccount": "Amazon US",
+            "Market": "US",
+            "Profiles": []
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/BindVendorProfiles - 绑定vendor到广告Profile",
+    "description": "单接口测试：POST /api/Setting/V3/BindVendorProfiles。用户为vendor账号绑定一个或多个广告Profile。500条随机样本中占比约28.6%（62次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BindVendorProfiles",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/BindVendorProfiles",
+        "request_body": [
+          {
+            "VendorId": "{{setting_vendor_id_with_profile}}",
+            "VendorAccount": null,
+            "Market": "US",
+            "Profiles": [
+              {
+                "ProfileId": "{{setting_profile_id_bound}}",
+                "ProfileName": "GoSports"
+              }
+            ]
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/BindVendorProfiles - 空数组请求",
+    "description": "单接口测试：POST /api/Setting/V3/BindVendorProfiles。请求体为空数组（前端未选中任何vendor时的调用形态）。500条随机样本中占比约20.3%（44次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BindVendorProfiles",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/BindVendorProfiles",
+        "request_body": [],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/GetMyWidgets - 查询用户已选widget列表",
+    "description": "单接口测试：POST /api/Setting/V3/GetMyWidgets。用户查询自己Dashboard已选中的widget id列表。ES amazon-access-*索引近1年无该接口调用记录，request_body取自用户在设置页面实际操作时抓包捕获的已勾选（isCheck=true）widget id，非本接口日志样本但为生产真实存在的widget id值。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetMyWidgets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/GetMyWidgets",
+        "request_body": "{{setting_widget_ids_checked}}",
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Setting/V3/GetUserPrefer - 查询用户偏好设置",
+    "description": "单接口测试：GET /api/Setting/V3/GetUserPrefer。用户查询自己的偏好设置（货币/时区/汇率展示方式/日期格式），接口无参数。ES amazon-access-*索引近1年无该接口调用记录，可能为登录时前端只调用一次或已被其他缓存机制替代，样本较少覆盖可能不全。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetUserPrefer",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/GetUserPrefer",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/GetVendorBindModel - 空VendorId查询",
+    "description": "单接口测试：POST /api/Setting/V3/GetVendorBindModel。VendorIds传入空字符串数组（前端尚未选中具体vendor时的初始化查询）。500条随机样本中占比约63.8%（319次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetVendorBindModel",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/GetVendorBindModel",
+        "request_body": {
+          "VendorIds": [
+            ""
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/GetVendorBindModel - 按真实VendorId查询绑定情况",
+    "description": "单接口测试：POST /api/Setting/V3/GetVendorBindModel。VendorIds传入单个真实vendor id，查询该vendor的绑定详情。500条随机样本中占比约36.2%（181次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetVendorBindModel",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/GetVendorBindModel",
+        "request_body": {
+          "VendorIds": [
+            "{{setting_vendor_id_query}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Setting/V3/IsAuthorizedByAmazon - 查询Amazon授权状态",
+    "description": "单接口测试：GET /api/Setting/V3/IsAuthorizedByAmazon。用户查询当前账号是否已完成Amazon授权，接口无参数。500条随机样本中占比约100%（500次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 IsAuthorizedByAmazon",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/IsAuthorizedByAmazon",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/SaveUserWidgets - 保存用户widget偏好",
+    "description": "单接口测试：POST /api/Setting/V3/SaveUserWidgets。用户保存Dashboard widget分类及勾选状态。ES amazon-access-*索引近1年无该接口调用记录；Category/Sub[].Id/IsCheck/Index均已用widget元数据抓包中widget id=1101（type/name=\"Performance\"，sort=0）的真实值填充，不再有待补字段。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SaveUserWidgets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/SaveUserWidgets",
+        "request_body": [
+          {
+            "Category": "{{setting_widget_category}}",
+            "Sub": [
+              {
+                "Id": "{{setting_widget_id_for_save}}",
+                "IsCheck": 1,
+                "Index": "{{setting_widget_sort_index}}"
+              }
+            ]
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/SaveVendorProfiles - 保存vendor绑定关系(含Profile)",
+    "description": "单接口测试：POST /api/Setting/V3/SaveVendorProfiles。用户为vendor账号保存绑定的广告Profile。90天窗口内样本较少（16次），场景覆盖可能不全。样本中占比约93.75%（15次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SaveVendorProfiles",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/SaveVendorProfiles",
+        "request_body": [
+          {
+            "VendorId": "{{setting_vendor_id_tnc}}",
+            "VendorAccount": "TNC",
+            "Market": "US",
+            "Profiles": [
+              {
+                "ProfileId": "{{setting_profile_id_tnc}}",
+                "ProfileName": "Town and Country Living"
+              }
+            ]
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/SaveVendorProfiles - 保存vendor绑定关系(Profiles为空)",
+    "description": "单接口测试：POST /api/Setting/V3/SaveVendorProfiles。用户保存vendor账号但未绑定任何广告Profile。90天窗口内样本较少（16次），场景覆盖可能不全。样本中占比约6.25%（1次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SaveVendorProfiles",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/SaveVendorProfiles",
+        "request_body": [
+          {
+            "VendorId": "6251152",
+            "VendorAccount": "Nattou UK (andere retailer)",
+            "Market": "UK",
+            "Profiles": []
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Setting/V3/UpdateUserPrefer - 更新用户偏好设置",
+    "description": "单接口测试：POST /api/Setting/V3/UpdateUserPrefer。用户更新货币/汇率展示方式/时区/日期格式偏好。ES amazon-access-*索引近1年无该接口调用记录，request_body无真实样本可取，各枚举字段按Swagger定义标注待补真实值。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateUserPrefer",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/Setting/V3/UpdateUserPrefer",
+        "request_body": {
+          "Currency": "[NEEDS_REAL_VALUE]",
+          "IsExchange": "[NEEDS_REAL_VALUE]",
+          "TimeZone": "[NEEDS_REAL_VALUE]",
+          "RorA": "[NEEDS_REAL_VALUE]",
+          "DateFormat": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

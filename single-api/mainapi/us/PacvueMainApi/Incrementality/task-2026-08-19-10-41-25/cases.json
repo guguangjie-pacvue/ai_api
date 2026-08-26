@@ -1,0 +1,642 @@
+[
+  {
+    "name": "POST /api/Incrementality/v3/CalcAsinIncrementality - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/CalcAsinIncrementality。ES近90/365天及全部历史范围命中0条，Incrementality模块在生产环境无真实调用流量（对照组/api/Ad/v3/GetAdByAdgroup同法可查到19216条，证明查询方式无误）。本case基于Swagger结构+config已验证真实变量(toMarket沿用其他模块真实值US)生成结构性Happy Path，覆盖唯一可确定的调用场景：按Profile计算ASIN维度增量效果。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "计算ASIN维度增量数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/CalcAsinIncrementality",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/CalcCampIncrementality - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/CalcCampIncrementality。ES查询0命中，Incrementality模块生产环境无真实流量。基于Swagger结构+真实config变量生成Happy Path，覆盖按Profile计算Campaign维度增量效果的唯一可确定场景。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "计算Campaign维度增量数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/CalcCampIncrementality",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/ExportIncrementalityAsin - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/ExportIncrementalityAsin。ES查询0命中，无真实流量。该接口Swagger未定义200响应schema（推断为文件流下载），断言改用$binary校验响应为非空二进制文件。可选过滤字段Asins/budget/UserId/IsTop10为nullable，Happy Path场景为不过滤导出全部ASIN数据。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出ASIN维度增量数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/ExportIncrementalityAsin",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "pageinfo": {
+            "OrderByField": "IncrementalSpend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/ExportIncrementalityCamp - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/ExportIncrementalityCamp。ES查询0命中，无真实流量。Swagger未定义200响应schema（推断为文件流下载），断言改用$binary校验。CampaignIds/CampaignTagIds/states为空数组表示不过滤，导出全部Campaign维度数据，是最典型的默认落地场景。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出Campaign维度增量数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/ExportIncrementalityCamp",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "CampaignIds": [],
+          "CampaignTagIds": [],
+          "states": [],
+          "pageinfo": {
+            "OrderByField": "IncrementalSpend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementalityCampaignPageData - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementalityCampaignPageData。ES查询0命中，无真实流量。空数组过滤条件代表默认落地页无筛选场景，分页查询Campaign维度增量列表。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Campaign增量分页数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementalityCampaignPageData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "CampaignIds": [],
+          "CampaignTagIds": [],
+          "states": [],
+          "pageinfo": {
+            "OrderByField": "IncrementalSpend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "Data": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementalityMax - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementalityMax。ES查询0命中，无真实流量。查询Profile可投放的最大增量预算上限，唯一可确定的基础查询场景。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取增量预算上限",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementalityMax",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementalityProfileDatas - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementalityProfileDatas。ES查询0命中，无真实流量。TotalBudget为nullable的what-if模拟参数，Happy Path省略即为默认无模拟浏览场景，查询Profile整体增量汇总数据。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Profile增量汇总数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementalityProfileDatas",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementalitySet - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementalitySet。ES查询0命中，无真实流量。AsinsSearch为nullable搜索过滤字段，省略即为默认查看当前Profile已保存的增量设置（含已选Campaign/ASIN列表）场景。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取已保存的增量设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementalitySet",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementAsinChartData - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementAsinChartData。ES查询0命中，无真实流量。默认无过滤，查看ASIN维度增量图表数据的基础场景。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取ASIN增量图表数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementAsinChartData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "pageinfo": {
+            "OrderByField": "IncrementalSpend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementAsinPageData - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementAsinPageData。ES查询0命中，无真实流量。默认无过滤分页查询ASIN维度增量列表，最典型的落地页浏览场景。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ASIN增量分页数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementAsinPageData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "pageinfo": {
+            "OrderByField": "IncrementalSpend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "Data": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementCampaignTag - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementCampaignTag。ES查询0命中，无真实流量。查询该Profile下用于Incrementality模块的Campaign标签树，基础只读场景。执行验证：测试账号该Profile尚未创建Campaign标签，data返回null属真实业务状态（非缺陷），断言仅校验code/success。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Campaign标签树",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementCampaignTag",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementCampChartData - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementCampChartData。ES查询0命中，无真实流量。默认无过滤查看Campaign维度增量图表数据。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Campaign增量图表数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementCampChartData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}",
+          "CampaignIds": [],
+          "CampaignTagIds": [],
+          "states": [],
+          "pageinfo": {
+            "OrderByField": "IncrementalSpend",
+            "OrderAsc": false,
+            "PageIndex": 1,
+            "PageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementSelectAsinData - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementSelectAsinData。ES查询0命中，无真实流量。AsinsSearch为nullable搜索过滤字段，省略即为查看ASIN候选/已选列表（AllData+SelectedData）的默认场景，用于增量设置页的ASIN选择器。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取ASIN选择器候选数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementSelectAsinData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetIncrementSelectCampData - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetIncrementSelectCampData。ES查询0命中，无真实流量。查看Campaign候选/已选列表（AllData+SelectedData）的默认场景，用于增量设置页的Campaign选择器。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取Campaign选择器候选数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetIncrementSelectCampData",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ],
+          "toMarket": "US",
+          "start": "{{date_start_mdy}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/GetUpdateDate - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/GetUpdateDate。ES查询0命中，无真实流量。查询Profile增量数据的最近更新时间，最简单的元数据查询场景。执行验证：测试账号该Profile尚无历史增量计算记录，data返回null属真实业务状态（非缺陷），断言仅校验code/success。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取增量数据更新时间",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/GetUpdateDate",
+        "request_body": {
+          "ProfileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/SaveIncrementalitySet - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/SaveIncrementalitySet。ES查询0命中，无真实流量。该接口为按Profile维度保存增量设置（幂等覆盖式写操作，非新建独立实体，无需归档清理，可重复执行）。IncTotalBudget为必填double且Swagger无示例/ES无样本，已按用户确认使用测试值20；DataType为nullable枚举无样本，Happy Path省略。Campaigns/Asins使用config中已验证的真实Campaign/ASIN。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存增量设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/SaveIncrementalitySet",
+        "request_body": {
+          "IncTotalBudget": "{{incrementality_test_budget}}",
+          "ProfileId": "{{profile_id}}",
+          "Campaigns": [
+            {
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "ProfileId": "{{profile_id}}"
+            }
+          ],
+          "Asins": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "Asin": "{{target_asin}}"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/SaveIncrementalityTableSet - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/SaveIncrementalityTableSet。ES查询0命中，无真实流量。该接口用于表格行内联编辑单个Campaign或ASIN的模拟预算（Pacvue分析层数据，非直接同步Amazon真实广告活动预算），幂等覆盖式写操作。Camp.Budget为必填double且Swagger无示例/ES无样本，已按用户确认使用测试值20。仅提供Camp对象（Asin对象为同级可选字段，Happy Path按单一Campaign行编辑场景省略Asin）。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存单行Campaign模拟预算",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/SaveIncrementalityTableSet",
+        "request_body": {
+          "Camp": {
+            "CampaignId": "{{exist_sp_campaign_id}}",
+            "ProfileId": "{{profile_id}}",
+            "Budget": "{{incrementality_test_budget}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Incrementality/v3/UpdateIncrementalitySet - Happy Path",
+    "description": "单接口测试：POST /api/Incrementality/v3/UpdateIncrementalitySet。ES查询0命中，无真实流量。与SaveIncrementalitySet同结构的按Profile维度更新增量设置（幂等覆盖式写操作，可重复执行）。IncTotalBudget为必填double且Swagger无示例/ES无样本，已按用户确认使用测试值20；DataType为nullable枚举无样本，Happy Path省略。",
+    "module": "Incrementality",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新增量设置",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Incrementality/v3/UpdateIncrementalitySet",
+        "request_body": {
+          "IncTotalBudget": "{{incrementality_test_budget}}",
+          "ProfileId": "{{profile_id}}",
+          "Campaigns": [
+            {
+              "CampaignId": "{{exist_sp_campaign_id}}",
+              "ProfileId": "{{profile_id}}"
+            }
+          ],
+          "Asins": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "Asin": "{{target_asin}}"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

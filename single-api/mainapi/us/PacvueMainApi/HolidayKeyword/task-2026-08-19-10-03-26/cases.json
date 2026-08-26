@@ -1,0 +1,242 @@
+[
+  {
+    "name": "GET /api/HolidayKeyword/GetAmazonCategory - 按国家查询亚马逊类目树",
+    "description": "单接口测试：GET /api/HolidayKeyword/GetAmazonCategory。查询指定国家下的亚马逊商品类目树，用于假日关键词的类目筛选。该接口90天内ES日志中无真实用户调用记录（仅有countryCode这一个query参数），Happy Path按Swagger结构构造，countryCode取值参考同模块其他接口(GetHolidayCategory/GetHotvaluePageData)真实样本均为US。",
+    "module": "HolidayKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAmazonCategory",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "/HolidayKeyword/GetAmazonCategory",
+        "request_body": {
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/HolidayKeyword/GetHolidayCategory - 按profileId查询假日类目分组",
+    "description": "单接口测试：POST /api/HolidayKeyword/GetHolidayCategory。按profileIds+countryCode查询假日关键词的类目分组数据。500条随机样本中占比约100%（1次，剔除测试账号18183后90天内仅1条真实调用，来自userId 20121）。",
+    "module": "HolidayKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetHolidayCategory",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/HolidayKeyword/GetHolidayCategory",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/HolidayKeyword/GetHotvaluePageData - 按类目+年份分页查询假日关键词热度数据",
+    "description": "单接口测试：POST /api/HolidayKeyword/GetHotvaluePageData。按profileId+年份+一级/二级类目+分页信息查询假日关键词热度榜单(Arts, Crafts & Sewing类目, holidayType=5, year=2024)。500条随机样本中占比约100%（11次，剔除测试账号18183后90天内全部11条真实调用body完全一致）。",
+    "module": "HolidayKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetHotvaluePageData",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/HolidayKeyword/GetHotvaluePageData",
+        "request_body": {
+          "countryCode": "US",
+          "holidayType": 5,
+          "year": 2024,
+          "isnoneBid": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "filterType": 0,
+          "keywordTagIds": [],
+          "pageInfo": {
+            "OrderByField": "hotValue",
+            "OrderAsc": false,
+            "PageSize": 25,
+            "PageIndex": 1
+          },
+          "firstCategoryName": "Arts, Crafts & Sewing",
+          "secondCategory": [
+            {
+              "secondCategoryName": "Crafting",
+              "thirdCategoryName": [
+                "Paper & Paper Crafts",
+                "Woodcrafts"
+              ],
+              "fourCategoryName": [
+                "Paper",
+                "Unfinished Wood"
+              ]
+            },
+            {
+              "secondCategoryName": "Arts",
+              "thirdCategoryName": [],
+              "fourCategoryName": []
+            },
+            {
+              "secondCategoryName": "Beading & Jewelry Making",
+              "thirdCategoryName": [
+                "Beading Supplies",
+                "Jewelry Making Tools & Accessories"
+              ],
+              "fourCategoryName": [
+                "Jewelry Sizers & Mandrels"
+              ]
+            },
+            {
+              "secondCategoryName": "Scrapbooking & Stamping",
+              "thirdCategoryName": [
+                "Albums & Refills"
+              ],
+              "fourCategoryName": [
+                "Albums"
+              ]
+            },
+            {
+              "secondCategoryName": "Printmaking",
+              "thirdCategoryName": [],
+              "fourCategoryName": []
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/HolidayKeyword/GetLastWeekAsin - 按搜索词+起始日期查询上周ASIN",
+    "description": "单接口测试：POST /api/HolidayKeyword/GetLastWeekAsin。按searchTerm+startDate+countryCode查询该搜索词上周关联的ASIN列表。该接口90天内ES日志中无真实用户调用记录，Happy Path按Swagger结构构造，countryCode参考同模块真实样本取US，startDate复用项目通用日期变量；searchTerm由用户确认使用真实购物场景词\"Sheets\"。",
+    "module": "HolidayKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLastWeekAsin",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/HolidayKeyword/GetLastWeekAsin",
+        "request_body": {
+          "searchTerm": "{{holiday_search_term}}",
+          "startDate": "{{date_start_mdy}}",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/HolidayKeyword/GetLatestAsin - 按搜索词查询最新ASIN",
+    "description": "单接口测试：POST /api/HolidayKeyword/GetLatestAsin。按searchTerm+countryCode查询该搜索词最新关联的ASIN列表。该接口90天内ES日志中无真实用户调用记录，Happy Path按Swagger结构构造，countryCode参考同模块真实样本取US；searchTerm由用户确认使用真实购物场景词\"Sheets\"。",
+    "module": "HolidayKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLatestAsin",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/HolidayKeyword/GetLatestAsin",
+        "request_body": {
+          "searchTerm": "{{holiday_search_term}}",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/HolidayKeyword/GetLatestSearchTermRank - 按搜索词批量查询最新搜索排名",
+    "description": "单接口测试：POST /api/HolidayKeyword/GetLatestSearchTermRank。按searchTerms数组+countryCode批量查询搜索词最新排名。90天内ES共111次调用，但全部来自测试账号userId 18183，剔除测试账号后无真实用户调用记录，故searchTerms数组内容由用户确认使用真实购物场景词\"Sheets\"；countryCode参考同模块真实样本取US。",
+    "module": "HolidayKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLatestSearchTermRank",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/HolidayKeyword/GetLatestSearchTermRank",
+        "request_body": {
+          "searchTerms": [
+            "{{holiday_search_term}}"
+          ],
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

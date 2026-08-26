@@ -1,0 +1,573 @@
+[
+  {
+    "name": "POST /api/SponsoredTelevsion/CreateTargeting - 内容分类定向(contentCategorySimilarTo)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/CreateTargeting。用户为STV广告组新增单条内容分类相似定向(contentCategorySimilarTo)，含后置清理(重新提交state=archived归档新建定向)，保证用例可重复执行。74条随机样本中占比约48.6%（36次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建内容分类定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "contentCategorySimilarTo",
+                  "Value": "{{stv_content_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_entity_id": "data.result[0].APIResult[0].EntityID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建内容分类定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "contentCategorySimilarTo",
+                  "Value": "{{stv_content_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/CreateTargeting - 受众定向(AUDIENCE_SAME_AS_INTEREST等)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/CreateTargeting。用户为STV广告组新增单条受众定向(AUDIENCE_SAME_AS_*系列)，含后置清理(重新提交state=archived归档新建定向)，保证用例可重复执行。74条随机样本中占比约40.5%（30次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建受众定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "AUDIENCE_SAME_AS_INTEREST",
+                  "Value": "{{stv_audience_value}}"
+                }
+              ],
+              "Bid": 12.2,
+              "State": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_entity_id": "data.result[0].APIResult[0].EntityID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建受众定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "AUDIENCE_SAME_AS_INTEREST",
+                  "Value": "{{stv_audience_value}}"
+                }
+              ],
+              "Bid": 12.2,
+              "State": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/CreateTargeting - 商品分类+内容分类混合定向",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/CreateTargeting。用户在同一广告组内同时新增asinCategorySimilarTo与contentCategorySimilarTo两类定向表达式，含后置清理(重新提交state=archived归档新建定向)，保证用例可重复执行。74条随机样本中占比约8.1%（6次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建商品分类+内容分类混合定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "asinCategorySimilarTo",
+                  "Value": "{{stv_asin_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "enabled"
+            },
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "contentCategorySimilarTo",
+                  "Value": "{{stv_content_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_entity_id": "data.result[0].APIResult[0].EntityID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建混合定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "asinCategorySimilarTo",
+                  "Value": "{{stv_asin_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "archived"
+            },
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "contentCategorySimilarTo",
+                  "Value": "{{stv_content_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/CreateTargeting - 单独商品分类定向(asinCategorySimilarTo)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/CreateTargeting。用户为STV广告组新增单条商品分类相似定向(asinCategorySimilarTo)，含后置清理(重新提交state=archived归档新建定向)，保证用例可重复执行。74条随机样本中占比约2.7%（2次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建商品分类定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "asinCategorySimilarTo",
+                  "Value": "{{stv_asin_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_target_entity_id": "data.result[0].APIResult[0].EntityID"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建商品分类定向",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreateTargeting",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "Targert": [
+            {
+              "CampaignId": "{{stv_campaign_id}}",
+              "AdgroupId": "{{stv_adgroup_id}}",
+              "Expressions": [
+                {
+                  "Type": "asinCategorySimilarTo",
+                  "Value": "{{stv_asin_category_value}}"
+                }
+              ],
+              "Bid": 10,
+              "State": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/GetCreative - 单广告组查询(不含CreativeIds字段)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/GetCreative。用户按单个广告组ID查询该广告组下所有创意，请求体不携带CreativeIds字段。190条随机样本中占比约92.6%（176次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetCreative",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/GetCreative",
+        "request_body": {
+          "profileId": "{{stv_profile_id}}",
+          "adgroupIds": [
+            "{{stv_adgroup_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/GetCreative - 单广告组查询(显式空CreativeIds数组)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/GetCreative。用户按单个广告组ID查询创意，请求体显式携带空CreativeIds数组(PascalCase字段命名，疑似来自另一前端调用路径)。190条随机样本中占比约7.4%（14次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用GetCreative(带空CreativeIds)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/GetCreative",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "AdgroupIds": [
+            "{{stv_adgroup_id}}"
+          ],
+          "CreativeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/PreviewCreative - 预览创意(PascalCase+真实Asin)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/PreviewCreative。用户按AssetId+AssetVersion+真实Asin预览STV创意，请求体为PascalCase字段命名。133条随机样本中占比约50.4%（67次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用PreviewCreative(PascalCase)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/PreviewCreative",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "AssetProperties": {
+            "AssetId": "{{stv_asset_id_original}}",
+            "AssetVersion": "{{stv_asset_version}}"
+          },
+          "PreviewConfiguration": {
+            "Asin": "{{stv_asin}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/PreviewCreative - 预览创意(camelCase+真实Asin)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/PreviewCreative。用户按AssetId+AssetVersion+真实Asin预览STV创意，请求体为camelCase字段命名(疑似来自另一前端调用路径)。133条随机样本中占比约45.9%（61次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用PreviewCreative(camelCase)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/PreviewCreative",
+        "request_body": {
+          "profileId": "{{stv_profile_id}}",
+          "assetProperties": {
+            "assetId": "{{stv_asset_id_original}}",
+            "assetVersion": "{{stv_asset_version}}"
+          },
+          "previewConfiguration": {
+            "asin": "{{stv_asin}}"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/PreviewCreative - 预览创意(不指定Asin,仅按AssetId预览)",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/PreviewCreative。用户仅按AssetId+AssetVersion预览创意，不指定具体Asin(previewConfiguration为空对象)。133条随机样本中占比约3.8%（5次）。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用PreviewCreative(不指定Asin)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/PreviewCreative",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "AssetProperties": {
+            "AssetId": "{{stv_asset_id_original}}",
+            "AssetVersion": "{{stv_asset_version}}"
+          },
+          "PreviewConfiguration": {}
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/AdgroupCreativeModerationViolation - 查询广告组创意审核违规",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/AdgroupCreativeModerationViolation。查询指定广告组下创意的审核违规信息。ES 90天/365天窗口内共命中2条样本且均未携带有效AdgroupId(仅profileId为空字符串)，判定为真实调用量极低的接口；ProfileId借用同STV场景下的真实值，AdgroupId由用户提供真实值(591443851785859485)补全。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用AdgroupCreativeModerationViolation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/AdgroupCreativeModerationViolation",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "AdgroupId": "{{stv_moderation_adgroup_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/SponsoredTelevsion/CreativeModerationsPolicyViolation - 查询创意审核政策违规",
+    "description": "单接口测试：POST /api/SponsoredTelevsion/CreativeModerationsPolicyViolation。按CreativeId查询创意的审核政策违规详情。ES 90天/365天窗口内命中0条样本，该接口真实调用量为0；ProfileId借用同STV场景下的真实值，CreativeId由用户提供真实值(593460190340902401)补全。",
+    "module": "SponsoredTelevise",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用CreativeModerationsPolicyViolation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "/SponsoredTelevsion/CreativeModerationsPolicyViolation",
+        "request_body": {
+          "ProfileId": "{{stv_profile_id}}",
+          "CreativeId": [
+            "{{stv_moderation_creative_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
