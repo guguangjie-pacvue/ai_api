@@ -1,0 +1,570 @@
+[
+  {
+    "name": "POST /template/getCategory - 默认查询",
+    "description": "单接口测试：POST /template/getCategory。请求体结构取自既有task-experiment真实验证样本。walmart平台。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultCategory - 默认查询",
+    "description": "单接口测试：POST /template/getDefaultCategory。与getCategory同结构，defaultCategory=true查询系统默认分类。walmart平台。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": true,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultTemplate - 默认查询",
+    "description": "单接口测试：POST /template/getDefaultTemplate。查询系统默认模板。walmart平台。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": true,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /template/getOwners - 默认调用(无入参)",
+    "description": "单接口测试：GET /template/getOwners。Swagger无声明参数。walmart平台。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询模板所有者列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getOwners",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getRecommendation - 默认查询",
+    "description": "单接口测试：POST /template/getRecommendation。与getCategory同结构的请求体。walmart平台。 实测发现不传templateId时服务端拼接SQL会生成非法的\"IN()\"语句报SQL语法错误(code:405，与前述几处空数组SQL缺陷同源)，改为传入测试账号真实模板ID后可正常返回。 复核：即使传入真实templateId仍复现同一SQL错误，与我的测试构造无关，是walmart平台该接口的既有真实缺陷(服务端内部计算出的rule_template_id列表为空导致SQL \"IN()\"语法错误)。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询推荐模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getRecommendation",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [],
+          "templateId": "{{fixture_template_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - 按ruleType筛选",
+    "description": "单接口测试：POST /template/getTemplate。请求体结构取自既有task-experiment真实验证样本(ruleType=Campaign)。walmart平台。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Campaign"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板",
+    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。该接口近90天ES样本仅2条(amazon平台)。使用测试账号真实模板({{fixture_template_id}})构造该场景，验证接口基础可用性。walmart平台。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询DirectShare模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromDirectShare",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sourceProductLine": "walmart",
+          "targetProductLine": "walmart",
+          "templateIds": [
+            "{{fixture_template_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "模板生命周期(创建/编辑/收藏/移动/删除) - walmart",
+    "description": "【运维事故记录，非常规测试结果】本case执行中产生了一个无法通过API清理的脏数据：第一次尝试时误用了amazon的ruleType取值\"Targeting\"创建模板(walmart平台真实枚举值应为Keyword/Item/Campaign/SOV Bid，不包含Targeting)，创建请求本身返回200成功，但该模板的ruleType在walmart下不存在有效元数据映射，导致后续任何不带ruleType过滤(或过滤条件包含Targeting)的 POST /template/getTemplate 调用都会抛服务端异常\"productLine: walmart, rule type: Targeting not exists\"(code:405)——这本身也是一个真实缺陷：接口对无效ruleType的历史/异常数据没有容错，应返回该记录的降级展示而不是让整个列表查询失败。由于getTemplate现在对walmart无过滤/或按categoryId={{fixture_category_id}}过滤时必现500风格错误，我无法再通过API查询到该脏模板的templateId，因此无法调用DELETE清理，此模板会长期滞留在测试账号(clientId=3186)的walmart数据下。标识信息：productLine=walmart, clientId=3186, categoryId=1912039549025972226(Rule Kickstart), templateName=\"autotest_lifecycle_template\", ruleType=\"Targeting\"(无效值)。需要有数据库访问权限的同学手动定位并删除该条rule_template记录(以及关联的rule_automation记录)才能恢复walmart测试账号的getTemplate(无ruleType过滤)接口可用性。第二次改用正确的ruleType=\"Keyword\"重试创建时，因同名被服务端判重(code:10002 \"Rule Template Name Repeat\")而未再产生第二条脏数据，未造成二次污染。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template",
+        "request_body": {
+          "templateName": "autotest_lifecycle_template",
+          "description": "自动化测试用临时模板，用例结束后会被删除",
+          "categoryId": "{{fixture_category_id}}",
+          "ruleType": "Keyword",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_autotest",
+                    "value": "4",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 10,
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建模板的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_template_id": "data[templateName=autotest_lifecycle_template].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "templateName": "autotest_lifecycle_template_edited",
+          "description": "自动化测试用临时模板(已编辑)",
+          "categoryId": "{{fixture_category_id}}",
+          "ruleType": "Keyword",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_autotest",
+                    "value": "5",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 12,
+                "percentage": 12,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "收藏模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/addFavorite",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "addFavorite": true,
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "移动模板到另一分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/moveTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "categoryId": "{{fixture_category_id_2}}",
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "分类生命周期(创建/编辑/删除) - walmart",
+    "description": "单接口测试：串联 POST /template/category(创建) → POST /template/getCategory(查询新建ID，创建接口本身不返回ID) → POST /template/editCategory → DELETE /template/category/{categoryId}。创建一个临时测试分类，验证编辑后，后置步骤删除，保证用例可重复执行。请求体结构取自ES真实样本。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "autotest_lifecycle_category",
+          "description": "自动化测试用临时分类，用例结束后会被删除",
+          "ruleType": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "is1p": 0,
+          "isChild": false,
+          "clientId": "{{client_id}}",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建分类的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_category_id": "data[name=autotest_lifecycle_category].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editCategory",
+        "request_body": {
+          "categoryId": "{{created_category_id}}",
+          "name": "autotest_lifecycle_category_edited",
+          "description": "自动化测试用临时分类(已编辑)",
+          "ruleType": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "is1p": 0,
+          "isChild": false,
+          "clientId": "{{client_id}}",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "批量创建模板(bulk)+清理 - walmart",
+    "description": "【清理状态未知，与上面的脏数据事故相关】本case使用正确的ruleType=\"Keyword\"通过 POST /template/bulk 创建了1个临时模板(templateName=\"autotest_bulk_template\")，创建请求本身返回200成功；但用于查找其templateId以便DELETE清理的 POST /template/getTemplate 调用，因walmart测试账号中存在另一条无效ruleType=\"Targeting\"的脏模板(见同模块的\"模板生命周期\"case说明)导致该接口对walmart的无过滤查询必现405异常，本case因此也未能完成清理步骤——\"autotest_bulk_template\"这条数据当前很可能仍滞留在测试账号(clientId=3186, walmart, categoryId=1912039549025972226)下未删除，需要与上述脏数据一并由有数据库权限的同学核实处理。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/bulk",
+        "request_body": {
+          "templateRequestList": [
+            {
+              "templateName": "autotest_bulk_template",
+              "description": "自动化测试用临时模板(bulk创建)，用例结束后会被删除",
+              "categoryId": "{{fixture_category_id}}",
+              "ruleType": "Keyword",
+              "isFavorite": false,
+              "defaultTemplate": false,
+              "frequency": "Weekly",
+              "dayOfWeek": 7,
+              "hour": 0,
+              "automation": [
+                {
+                  "requirements": [
+                    [
+                      {
+                        "field": "ROAS",
+                        "valueType": "Custom",
+                        "id": "requirement_0_0_autotest_bulk",
+                        "value": "4",
+                        "operand": "Greater"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "length": 7,
+                    "index": 1,
+                    "days": 14
+                  },
+                  "action": {
+                    "cap": 10,
+                    "percentage": 10,
+                    "action": "Increase",
+                    "budgetRate": 100,
+                    "actionName": "Increase"
+                  },
+                  "secondDateIndex": {}
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "查询bulk新建模板的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_bulk_template_id": "data[templateName=autotest_bulk_template].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-删除bulk创建的模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_bulk_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

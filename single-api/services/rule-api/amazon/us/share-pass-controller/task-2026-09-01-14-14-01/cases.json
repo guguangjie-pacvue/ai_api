@@ -1,0 +1,224 @@
+[
+  {
+    "name": "GET /sharePass/creators - 默认调用(无入参)",
+    "description": "单接口测试：GET /sharePass/creators。Swagger无声明参数。amazon平台。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询创建者列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/creators",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /sharePass/getAccounts - 默认调用(无入参)",
+    "description": "单接口测试：GET /sharePass/getAccounts。Swagger无声明参数。amazon平台。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询账号列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/getAccounts",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /sharePass/getSharePlatforms - 默认查询",
+    "description": "单接口测试：POST /sharePass/getSharePlatforms。请求体结构取自ES真实样本(90天46条)。amazon平台，使用测试账号真实userId。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询可分享平台列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/getSharePlatforms",
+        "request_body": {
+          "productLine": "amazon",
+          "userIds": [],
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /sharePass/list - 默认查询",
+    "description": "单接口测试：POST /sharePass/list。请求体结构取自ES真实样本(90天149条)。amazon平台，使用测试账号真实userId/clientId。 实测发现传入ownerIds/userIds过滤数组会导致服务端\"Long cannot be cast to String\"(code:405)——与history-controller的getOwners同源的真实缺陷，不传该过滤条件可正常返回。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询SharePass列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/list",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20,
+            "orderBy": "created_at desc"
+          },
+          "timeZone": "America/Los_Angeles",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "SharePass生命周期(创建/check/查规则ID/查模板列表/编辑/删除) - amazon",
+    "description": "单接口测试：串联 POST /sharePass/create → POST /sharePass/check → POST /sharePass/getRuleIdsFromSharePass → POST /template/getTemplateListFromSharePass → POST /sharePass/edit → POST /sharePass/delete。使用测试账号真实模板({{fixture_template_id}})创建一个临时SharePass，验证后置步骤删除，保证用例可重复执行。请求体结构取自ES真实样本(amazon平台)。",
+    "module": "share-pass-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/create",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "timeZone": "America/Los_Angeles",
+          "targetType": "template",
+          "list": [
+            {
+              "templateId": "{{fixture_template_id}}",
+              "type": 1
+            }
+          ],
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "created_share_pass_id": "data[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "check SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/check",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sharePassId": "{{created_share_pass_id}}",
+          "targetProductLine": "amazon"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询SharePass关联规则ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/getRuleIdsFromSharePass",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sharePassId": "{{created_share_pass_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询SharePass模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromSharePass",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sharePassId": "{{created_share_pass_id}}",
+          "sourceProductLine": "amazon",
+          "targetProductLine": "amazon"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "编辑SharePass状态",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/edit",
+        "request_body": {
+          "sharePassId": "{{created_share_pass_id}}",
+          "timeZone": "America/Los_Angeles",
+          "status": "Inactive"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/delete",
+        "request_body": [
+          "{{created_share_pass_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

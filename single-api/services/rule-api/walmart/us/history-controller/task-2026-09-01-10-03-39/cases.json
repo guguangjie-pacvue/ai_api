@@ -1,0 +1,890 @@
+[
+  {
+    "name": "POST /history/getRuleAlertCount - 标准告警计数查询",
+    "description": "单接口测试：POST /history/getRuleAlertCount。请求体结构取自ES真实样本(90天734861条，排除测试账号)最常见模式。walmart平台。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警计数",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertCount",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "dismissedRuleIds": [],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertDetail - 规则告警详情列表",
+    "description": "单接口测试：POST /history/getRuleAlertDetail。请求体结构取自ES真实样本(90天290条)。walmart平台。测试账号可能暂无告警记录，返回空列表属真实预期结果，实测返回结构为分页包装对象{list:[],pageInfo:{...}}而非裸数组，断言改为$not_empty。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertDetail",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "userId": "{{user_id}}",
+          "fromSnapShot": false,
+          "productLine": "walmart"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingList - 待处理规则列表",
+    "description": "单接口测试：POST /getPendingList。请求体结构取自ES真实样本(90天10535条)。walmart平台。测试账号暂无待处理规则，返回结构为分页包装对象{list:[],pageInfo:{...}}(list为空)而非裸数组，断言改为$not_empty。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理规则列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleType": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingRuleNum - 待处理规则数量",
+    "description": "单接口测试：POST /getPendingRuleNum。请求体结构取自ES真实样本(90天2160条)。walmart平台。测试账号暂无待处理规则，实测返回空数组。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingRuleNum",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getHistoryList - 历史执行记录列表",
+    "description": "单接口测试：POST /getHistoryList。请求体结构取自ES真实样本(90天1630条)，含日期范围过滤。walmart平台。测试账号暂无历史执行记录，返回结构为分页包装对象{list:[],pageInfo:{...}}(list为空)而非裸数组，断言改为$not_empty。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询历史执行记录列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "prevStartDate": "2026-07-01",
+          "prevEndDate": "2026-07-31",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - walmart构造(测试账号无真实规则)",
+    "description": "单接口测试：POST /queryRuleSnapshots。测试账号在walmart平台无任何真实规则/执行数据，ruleIds/profileIds/entityIds借用amazon平台真实存在的值仅用于规避空数组导致的SQL语法错误(见amazon平台case的缺陷说明)，验证接口在walmart productline下的基础可用性，实际不代表walmart真实业务数据。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则执行快照",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/queryRuleSnapshots",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "batchIds": [
+            "00000000-0000-0000-0000-000000000000"
+          ],
+          "entityIds": [
+            "{{real_campaign_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - 执行日志Profile列表",
+    "description": "单接口测试：POST /getProfiles。请求体结构取自ES真实样本(90天13566条)。使用测试账号真实执行日志({{real_execution_log_id}})。walmart平台该执行日志下暂无Profile数据，返回空列表属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Profile列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaigns/{ruleExecutionLogId} - 执行日志Campaign列表",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。使用测试账号真实执行日志({{real_execution_log_id}})。该执行日志下暂无Campaign数据，返回空列表属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Campaign列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaignTags/{ruleExecutionLogId} - 执行日志CampaignTag列表",
+    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。使用测试账号真实执行日志({{real_execution_log_id}})。该执行日志下暂无CampaignTag数据，返回空列表属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志CampaignTag列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaignTags/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAdGroups/{ruleExecutionLogId} - 执行日志AdGroup列表",
+    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。使用测试账号真实执行日志({{real_execution_log_id}})。实测该接口在无关联AdGroup数据时返回data:null(而非空数组)，故仅断言code:200，不做data结构断言。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志AdGroup列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAdGroups/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProducts/{ruleExecutionLogId} - 执行日志Product列表",
+    "description": "单接口测试：POST /getProducts/{ruleExecutionLogId}。使用测试账号真实执行日志({{real_execution_log_id}})。实测该接口在无关联Product数据时返回data:null，故仅断言code:200。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Product列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProducts/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getLineItems/{ruleExecutionLogId} - 执行日志LineItem列表",
+    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}(DSP LineItem)。使用测试账号真实执行日志({{real_execution_log_id}})。实测该接口在无关联LineItem数据时返回data:null，故仅断言code:200。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志LineItem列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getLineItems/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 执行日志详情",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。使用测试账号真实执行日志({{real_execution_log_id}})。该执行日志下暂无被处理实体明细，返回空列表属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAdtomicSuggestions - Adtomic建议操作列表",
+    "description": "单接口测试：POST /getAdtomicSuggestions。该接口近90天ES无调用记录。walmart平台，测试账号暂无Adtomic建议记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Adtomic建议列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAdtomicSuggestions",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleDeadDetail - 规则失效详情",
+    "description": "单接口测试：POST /history/getRuleDeadDetail。该接口近90天ES无调用记录。walmart平台。实测该接口返回跨客户的全局失效规则列表(未按ruleId严格过滤)，属服务端真实行为，断言仅做结构校验。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则失效详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleDeadDetail",
+        "request_body": {
+          "ruleId": "{{real_rule_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getLastPauseAsins/{ruleId} - 规则最近暂停ASIN列表",
+    "description": "单接口测试：POST /history/getLastPauseAsins/{ruleId}。该接口近90天ES无调用记录。使用测试账号真实存在的规则({{real_rule_id}})，暂无暂停ASIN记录，返回空列表属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询最近暂停ASIN列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getLastPauseAsins/{{real_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /history/deleteHistoryData/rule_snapshot_detail - 清理历史快照数据",
+    "description": "单接口测试：GET /history/deleteHistoryData/{tableName}。该接口近90天ES真实样本达15484次(排除测试账号)，tableName均为rule_snapshot_detail，属前端routine自动触发的高频清理调用，非危险运维操作。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "清理历史数据",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/deleteHistoryData/rule_snapshot_detail",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/archiveOldLogsTask - 归档旧日志（运维接口）",
+    "description": "单接口测试：POST /history/archiveOldLogsTask。该接口全量ES记录仅2次调用(均为测试账号此前手动触发)，无真实客户/定时任务通过该HTTP路径调用的证据，可能另有内部cron触发机制；此次调用延续既有测试实践。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "触发旧日志归档任务",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/archiveOldLogsTask",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /setIgnored - 设置忽略操作",
+    "description": "单接口测试：POST /setIgnored。使用测试账号真实执行日志({{real_execution_log_id}})+占位detail id(0，测试账号暂无真实detail记录)。实测服务端不校验id是否存在，返回data:true视为接口契约验证通过（未真实修改任何存在的记录）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置忽略",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setIgnored",
+        "request_body": {
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "operation": "add"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /setRemarks - 设置执行日志备注",
+    "description": "单接口测试：POST /setRemarks。使用测试账号真实执行日志({{real_execution_log_id}})+占位detail id(0，测试账号暂无真实detail记录)。实测服务端不校验id是否存在，返回data:true视为接口契约验证通过（未真实修改任何存在的记录）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置执行日志备注",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setRemarks",
+        "request_body": {
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "remarks": "autotest remark - not a real record"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/export/{ruleExecutionLogId} - 导出执行日志",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。请求体结构(含exportHeaders/campaignTagIds/adGroupIds/campaignIds)取自ES真实样本(90天362条)。使用测试账号真实执行日志({{real_execution_log_id}})。该接口返回二进制文件流，断言改为$binary。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出执行日志",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "EN",
+          "exportHeaders": [
+            "Campaign",
+            "Profile",
+            "ROAS",
+            "Impressions",
+            "Sales",
+            "Change Result"
+          ],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /pending/export/{ruleExecutionLogId} - 导出待处理列表",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。请求体结构(含exportHeaders等)取自ES真实样本(90天361条)。使用测试账号真实执行日志({{real_execution_log_id}})。该接口返回二进制文件流，断言改为$binary。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出待处理列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/pending/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "EN",
+          "exportHeaders": [
+            "Campaign",
+            "Profile",
+            "ROAS",
+            "Impressions",
+            "Sales",
+            "Change Result"
+          ],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /changeSuggestionStatus - 变更建议操作状态",
+    "description": "单接口测试：POST /changeSuggestionStatus。使用测试账号真实执行日志({{real_execution_log_id}})，该接口无ES流量记录。返回data:true视为接口契约验证通过。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "变更建议操作状态",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/changeSuggestionStatus",
+        "request_body": [
+          {
+            "ruleExecutionLogId": "{{real_execution_log_id}}",
+            "status": "accepted"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleLogList - Amazon专属，walmart预期不支持",
+    "description": "单接口测试：POST /getAutoRuleLogList。该接口为Amazon专属功能。walmart平台实测返回code:405\"begin 5, end 1, length 1\"——服务端对非Amazon平台调用该接口处理不当(应返回业务错误码/空结果而非抛未捕获异常)，如实保留FAIL状态以记录该跨平台边界情况。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则执行日志列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleLogList",
+        "request_body": {
+          "id": "{{real_rule_id}}",
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLog - Amazon专属，walmart预期不支持",
+    "description": "单接口测试：POST /getAutoRuleDetailLog。该接口为Amazon专属功能，walmart平台预期不可用(与getAutoRuleLogList同理)。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则详细日志",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleDetailLog",
+        "request_body": {
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ruleId": "{{real_rule_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          },
+          "newLog": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLogFilter - Amazon专属，walmart预期不支持",
+    "description": "单接口测试：POST /getAutoRuleDetailLogFilter。该接口为Amazon专属功能，walmart平台预期不可用。该接口无ES流量记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则日志过滤器",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleDetailLogFilter",
+        "request_body": {
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ruleId": "{{real_rule_id}}",
+          "newLog": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
