@@ -1,0 +1,850 @@
+[
+  {
+    "name": "GET /api/Budget/v3/GetBudgetNotificationEmailSetting - 查询当前用户预算通知邮件设置",
+    "description": "单接口测试：GET /api/Budget/v3/GetBudgetNotificationEmailSetting。365天内2次真实调用，该接口无query/body参数，clientId/userId取自JWT。真实调用仅1种模式，已全覆盖。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetNotificationEmailSetting",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetNotificationEmailSetting",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetWidget - 单Profile+品类份额(SOV)过滤查看预算Widget",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetWidget。按单个profile+品类份额分类过滤(sovCategoryFilter)查看预算widget，isUnderpacing=0。30条随机样本中占比约50%(15次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetWidget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetWidget",
+        "request_body": {
+          "amzPortfolioIds": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "sovCategoryFilter": [
+            {
+              "userBrandId": 152517,
+              "categoryName": "NonBrand",
+              "deviceTypes": [
+                0,
+                1
+              ]
+            }
+          ],
+          "monthOfYearEnd": "202609",
+          "monthOfYearStart": "202609",
+          "isUnderpacing": 0,
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetBudgetWidget - 多Profile+欠花(Underpacing)视图查看预算Widget",
+    "description": "单接口测试：POST /api/Budget/v3/GetBudgetWidget。不带SOV过滤，isUnderpacing=1查看欠花predget widget，多profile批量查询。30条随机样本中占比约50%(15次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetWidget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetBudgetWidget",
+        "request_body": {
+          "amzPortfolioIds": [],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "monthOfYearEnd": "202609",
+          "monthOfYearStart": "202609",
+          "isUnderpacing": 1,
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Budget/v3/GetCalendarNames - 查询当前用户预算日历名称列表",
+    "description": "单接口测试：GET /api/Budget/v3/GetCalendarNames。365天内4次真实调用，无query/body参数，clientId取自JWT。真实调用仅1种模式，已全覆盖。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCalendarNames",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetCalendarNames",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTagBudgetSets - 按Profile查询标签预算设置",
+    "description": "单接口测试：POST /api/Budget/v3/GetTagBudgetSets。按profileIds查询标签(Tag)预算设置列表。30条随机样本中占比100%(30次)，真实调用仅此1种模式，已全覆盖。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTagBudgetSets",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTagBudgetSets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTopUnderPacingTags - 按Profile+月度维度查询欠花Top标签趋势图",
+    "description": "单接口测试：POST /api/Budget/v3/GetTopUnderPacingTags。按profileIds+timeLevel=month+tagIds查询欠花Top标签图表数据(isChart=true)。30条随机样本中占比100%(30次)，真实调用仅此1种模式，已全覆盖。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTags",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTopUnderPacingTags",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "timeLevel": "month",
+          "tagIds": [
+            {
+              "profileId": "{{profile_id}}",
+              "TagId": "0"
+            }
+          ],
+          "shareId": "",
+          "isChart": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/GetTopUnderPacingTagsInsight - 按Profile+日期区间查询欠花标签Insight",
+    "description": "单接口测试：POST /api/Budget/v3/GetTopUnderPacingTagsInsight。按profileIds+start/end日期区间查询欠花标签insight。30条随机样本中占比100%(30次)，真实调用仅此1种模式，已全覆盖。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTopUnderPacingTagsInsight",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/GetTopUnderPacingTagsInsight",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "shareId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignReport - 按CampaignTag筛选Campaign预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignReport。中台集成接口，按campaignTagIds筛选campaign预算报表，timeType=ytd。500条随机样本中占比约80%(24/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignReport",
+        "request_body": {
+          "apiVersion": 1,
+          "campaignIds": [],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "end": "{{date_end}}",
+          "filters": [],
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignReport - 按CampaignIds直接查询Campaign预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignReport。中台集成接口，直接按campaignIds查询campaign预算报表(不经过tag筛选)，timeType=ytd。500条随机样本中占比约20%(6/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignReport",
+        "request_body": {
+          "apiVersion": 1,
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "campaignTagIds": [],
+          "end": "{{date_end}}",
+          "filters": [],
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignReportV2 - 按CampaignTag筛选Campaign预算报表V2(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignReportV2。中台集成接口V2版本，按campaignTagIds筛选，timeType=ytd。500条随机样本中占比约93%(28/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignReportV2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignReportV2",
+        "request_body": {
+          "apiVersion": 2,
+          "campaignIds": [],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "end": "{{date_end}}",
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignReportV2 - 不带CampaignTag查询Profile全量Campaign预算报表V2(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignReportV2。中台集成接口V2版本，campaignTagIds为空，按profileIds查询全量campaign预算报表，timeType=ytd。500条随机样本中占比约7%(2/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignReportV2",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignReportV2",
+        "request_body": {
+          "apiVersion": 2,
+          "campaignIds": [],
+          "campaignTagIds": [],
+          "end": "{{date_end}}",
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignTagReport - YTD维度查询CampaignTag预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignTagReport。中台集成接口，按campaignTagIds查询，timeType=ytd。500条随机样本中占比约83%(25/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignTagReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignTagReport",
+        "request_body": {
+          "apiVersion": 1,
+          "campaignIds": [],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "end": "{{date_end}}",
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetCampaignTagReport - 自定义日期区间(date)查询CampaignTag预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetCampaignTagReport。中台集成接口，timeType=date，自定义start/end日期区间查询。500条随机样本中占比约17%(5/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetCampaignTagReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetCampaignTagReport",
+        "request_body": {
+          "apiVersion": 1,
+          "campaignIds": [],
+          "campaignTagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "end": "{{date_end}}",
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "date"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "records": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetProfileReport - YTD维度查询Profile预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetProfileReport。中台集成接口，timeType=ytd查询profile维度预算报表。500条随机样本中占比约63%(19/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetProfileReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetProfileReport",
+        "request_body": {
+          "apiVersion": 1,
+          "campaignIds": [],
+          "campaignTagIds": [],
+          "end": "{{date_end}}",
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "ytd"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetProfileReport - 按月(monthOfYear)维度查询Profile预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetProfileReport。中台集成接口，timeType=monthOfYear按月查询profile维度预算报表。500条随机样本中占比约20%(6/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetProfileReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetProfileReport",
+        "request_body": {
+          "apiVersion": 1,
+          "campaignIds": [],
+          "campaignTagIds": [],
+          "end": "{{date_end}}",
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "monthOfYear"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/budgetProfileReport - 自定义日期区间(date)查询Profile预算报表(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/budgetProfileReport。中台集成接口，timeType=date自定义日期区间查询profile维度预算报表。500条随机样本中占比约17%(5/30次)。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetProfileReport",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/budgetProfileReport",
+        "request_body": {
+          "apiVersion": 1,
+          "campaignIds": [],
+          "campaignTagIds": [],
+          "end": "{{date_end}}",
+          "pageInfo": {
+            "asc": true,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 50
+            },
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}",
+          "timeType": "date"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getBudgetInsight - 按Profile+Tag+日期区间查询预算Insight(中台集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getBudgetInsight。中台集成接口，按profileIds+tagIds+start/end日期区间+toMarket查询预算insight。30条随机样本中占比100%(30次)，真实调用仅此1种模式(toMarket分布真实值有US/JP等)，已全覆盖。样本toMarket取真实值US，与profileId等无绑定关系，保留真实分布。该接口响应为原始数组(无code/success包装)，断言按实际返回结构调整为$root数组校验。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getBudgetInsight",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getBudgetInsight",
+        "request_body": {
+          "end": "{{date_end}}T00:00:00.000000000",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{date_start}}T00:00:00.000000000",
+          "tagIds": [
+            "{{test_campaign_tag_id}}"
+          ],
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/GetBudgetNotificationSettings - 查询预算通知设置(中台集成,clientId取自JWT)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/GetBudgetNotificationSettings。中台集成接口，clientId取自JWT，无请求体。365天内1473次真实调用，ES真实样本body均为null，真实调用仅此1种模式，已全覆盖。该接口响应为原始数组(无code/success包装)，断言按实际返回结构调整为$root数组校验。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBudgetNotificationSettings",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/GetBudgetNotificationSettings",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getProfiles - 按ClientId查询Profile列表(中台Budget引擎集成)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getProfiles。用于中台budget manager引擎，clientId/userId为query参数，不确保JWT中含正确clientId/userId；实测不带clientId会返回513 Must profile client ID or user ID，故必须显式带上clientId={{client_id}}查询参数。30条随机样本中body均为{}(query参数未被ES记录)，真实调用仅此1种模式，已全覆盖。该接口响应为原始数组(无code/success包装)，断言按实际返回结构调整为$root数组校验。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getProfiles?clientId={{client_id}}",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getProfiles?clientId={{client_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getProfilesByUser - 查询当前用户可用Profile列表(中台集成,dashboard展示)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getProfilesByUser。用于中台集成展示dashboard，clientId/userId取自JWT，请求体为userId数组。30条随机样本中body均为空数组[]，真实调用仅此1种模式，已全覆盖。该接口响应为原始数组(无code/success包装)，断言按实际返回结构调整为$root数组校验。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getProfilesByUser",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getProfilesByUser",
+        "request_body": [],
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Budget/v3/integration/getUserList - 查询ClientId下用户列表(中台集成,clientId取自JWT)",
+    "description": "单接口测试：POST /api/Budget/v3/integration/getUserList。中台集成接口，clientId取自JWT，无请求体。365天内1152次真实调用，30条随机样本body均为空(无参数)，真实调用仅此1种模式，已全覆盖。该接口响应为原始数组(无code/success包装)，断言按实际返回结构调整为$root数组校验。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getUserList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/getUserList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

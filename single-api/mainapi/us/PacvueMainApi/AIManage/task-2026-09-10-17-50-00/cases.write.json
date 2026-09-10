@@ -1,0 +1,30 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/AIManage/V3/UpdateKeywordBid - AI推荐关键词调价(单个)",
+    "description": "单接口测试：POST /api/AIManage/V3/UpdateKeywordBid。AI托管功能页面对单个AI推荐关键词修改出价(bid)，请求体结构与v3/Keyword/UpdateKeywordBid相同({profileId,keywordId,bid})。ES 365天0命中，且本模块其余4个已生成的case在当前测试账号下实测均返回403(该功能模块可能需要额外AI功能授权/白名单，测试账号暂不具备)，因此本接口若真实执行大概率同样403，且会真实修改关键词出价、缺少可靠的读取原值+自动还原机制。写操作类接口：仅生成case不执行，原因=1)会真实修改测试账号关键词出价且无法安全还原；2)该模块其余接口在本测试账号下均无AI功能访问权限(403)，执行意义存疑；需人工确认账号具备AI托管权限后在专用关键词上验证。keywordId字段建议使用专用于AI托管测试的关键词ID，当前无样本可参考，标记为[NEEDS_REAL_VALUE]。",
+    "module": "AIManage",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateKeywordBid(AIManage)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AIManage/V3/UpdateKeywordBid",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "keywordId": "[NEEDS_REAL_VALUE]",
+          "bid": 0.75
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Campaign/BulkDayPartingSave - 按选中Campaign批量应用分时调度(单条真实样本简化)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Campaign/BulkDayPartingSave。会真实修改选中Campaign的dayparting调度配置，属写操作类不执行。基于90天ES真实样本(177次命中)简化为单条lineItem，字段结构取自真实请求。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkDayPartingSave",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/BulkDayPartingSave",
+        "request_body": {
+          "campaignCrontabForMicroApi": {
+            "id": 0,
+            "apply": true,
+            "lineItemIds": [
+              {
+                "applyLevel": 1,
+                "relId": "{{exist_sp_campaign_id}}",
+                "profileId": "{{profile_id}}",
+                "name": "test dayparting campaign",
+                "itemName": "test dayparting campaign"
+              }
+            ],
+            "lineItemTags": [],
+            "status": true,
+            "type": 2,
+            "daypartingType": 2
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Campaign/CreateCampaignForSimpleMode - SimpleMode创建SP自动投放Campaign(含ASIN+AdGroup)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Campaign/CreateCampaignForSimpleMode。真实创建SP Campaign+AdGroup，属写操作类不执行；建议人工执行后按Campaign V4/Update归档清理。基于90天ES真实样本(4次命中)。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateCampaignForSimpleMode",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/CreateCampaignForSimpleMode",
+        "request_body": {
+          "CampaignAndAsins": [
+            {
+              "Asins": [
+                "{{target_asin}}"
+              ],
+              "Campaign": "test_campaign_simplemode"
+            }
+          ],
+          "CampaignType": "sponsoredProducts",
+          "adGroups": [
+            {
+              "CampaignType": "sponsoredProducts",
+              "DefaultBid": "0.75",
+              "Name": "test_adgroup_simplemode",
+              "State": "enabled",
+              "profileId": "{{profile_id}}"
+            }
+          ],
+          "biddingStrategy": "legacyForSales",
+          "dailyBudget": "10",
+          "placementTopAdjustPercentage": 0,
+          "productPagesAdjustPercentage": 0,
+          "profileId": "{{profile_id}}",
+          "startDate": "{{date_start_mdy}}",
+          "state": "enabled",
+          "targetType": "auto"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Campaign/BulkUpdateCampaignTarget - 按campaignIds批量设置目标ACOS/ROAS(零流量,按Swagger结构构造)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Campaign/BulkUpdateCampaignTarget。365天ES流量为0，无真实样本可参照，按Swagger请求体结构(与同域UpdateCampaignTarget系列一致)构造最小有效请求；属写操作类不执行。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkUpdateCampaignTarget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/BulkUpdateCampaignTarget",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sp_campaign_id}}"
+          ],
+          "targetACOS": "30",
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Campaign/v3/BulkCampaignDaypartingRecommendation - 批量应用分时调度推荐(零流量,按Swagger结构构造)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Campaign/v3/BulkCampaignDaypartingRecommendation。365天ES流量为0，无真实样本；Swagger schema仅定义batchId/recordId两个字段，均为后台任务批次标识，无历史样本可参照，值标记待补。属写操作类不执行。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkCampaignDaypartingRecommendation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/v3/BulkCampaignDaypartingRecommendation",
+        "request_body": {
+          "batchId": "[NEEDS_REAL_VALUE]",
+          "recordId": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Campaign/v3/BulkOperateModelTest - 批量操作模型测试接口(零流量,无请求体)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Campaign/v3/BulkOperateModelTest。365天ES流量为0；Swagger未定义requestBody，判断为内部模型测试接口，使用空body调用。属写操作类不执行。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkOperateModelTest",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/v3/BulkOperateModelTest",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Campaign/v3/MutlExcelCampaignOperationCreate - Excel批量创建Campaign(零流量,按Swagger结构构造)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Campaign/v3/MutlExcelCampaignOperationCreate。365天ES流量为0，无真实样本；campaigns为MultiCampaignModel嵌套数组，Swagger无example，字段值待补。属写操作类不执行。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 MutlExcelCampaignOperationCreate",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/v3/MutlExcelCampaignOperationCreate",
+        "request_body": {
+          "sourceName": "[NEEDS_REAL_VALUE]",
+          "profileId": "{{profile_id}}",
+          "campaigns": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Campaign/v3/MutlExcelCampaignOperationUpdate - Excel批量更新Campaign(零流量,按Swagger结构构造)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Campaign/v3/MutlExcelCampaignOperationUpdate。365天ES流量为0，无真实样本；campaigns为MultiCampaignModel嵌套数组，Swagger无example，字段值待补。属写操作类不执行。",
+    "module": "Campaign",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 MutlExcelCampaignOperationUpdate",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Campaign/v3/MutlExcelCampaignOperationUpdate",
+        "request_body": {
+          "sourceName": "[NEEDS_REAL_VALUE]",
+          "profileId": "{{profile_id}}",
+          "campaigns": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

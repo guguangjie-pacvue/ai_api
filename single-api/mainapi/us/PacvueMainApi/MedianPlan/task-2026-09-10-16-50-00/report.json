@@ -1,0 +1,616 @@
+{
+  "config": "single-api (indapi)",
+  "started_at": "2026-09-10T09:19:27.636464+00:00",
+  "total": 9,
+  "passed": 5,
+  "failed": 4,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "GET /api/MedianPlan/UserToken/{userId} - 获取分享用Token",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "获取用户分享Token",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/UserToken/18183",
+          "status_code": 200,
+          "ms": 957,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:accessToken,identityToken,tokenType,refreshToken,errorDescription,expiresIn,raw,json",
+          "data_len": 14,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/MedianPlan/budgetType/batch - 批量切换计划预算类型（含前置建/后置删,可重复）",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-新建媒体计划1",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/save",
+          "status_code": 200,
+          "ms": 963,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-新建媒体计划2",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/save",
+          "status_code": 200,
+          "ms": 691,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "批量切换预算类型为manual",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/budgetType/batch",
+          "status_code": 200,
+          "ms": 709,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除媒体计划1",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2875",
+          "status_code": 200,
+          "ms": 654,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除媒体计划2",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2876",
+          "status_code": 200,
+          "ms": 709,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/MedianPlan/cards/batch - 批量更新Card字段（含前置建/后置删,可重复）",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-新建含2个Card的媒体计划",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/save",
+          "status_code": 200,
+          "ms": 664,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询计划取两个cardId",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2877",
+          "status_code": 200,
+          "ms": 645,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Id,ProfileId,ClientId,Name,TotalBudget,OptimizationGoal,CountryCode,FrequencyCapJson",
+          "data_len": 29,
+          "msg": null
+        },
+        {
+          "name": "批量更新Card字段",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/cards/batch",
+          "status_code": 200,
+          "ms": 874,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除媒体计划",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2877",
+          "status_code": 200,
+          "ms": 1407,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/MedianPlan/cards/{cardId} - 更新单个Card编辑字段（含前置建/后置删,可重复）",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-新建媒体计划",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/save",
+          "status_code": 200,
+          "ms": 1602,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询计划取cardId",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2878",
+          "status_code": 200,
+          "ms": 636,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Id,ProfileId,ClientId,Name,TotalBudget,OptimizationGoal,CountryCode,FrequencyCapJson",
+          "data_len": 29,
+          "msg": null
+        },
+        {
+          "name": "更新单个Card字段",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/cards/5653",
+          "status_code": 200,
+          "ms": 1910,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除媒体计划",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2878",
+          "status_code": 200,
+          "ms": 1292,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/MedianPlan/recommend/deals - 单Card推荐Deals（含前置建/后置删,可重复）",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "前置-新建媒体计划",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/save",
+          "status_code": 200,
+          "ms": 981,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询计划取cardId",
+          "method": "GET",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2879",
+          "status_code": 200,
+          "ms": 9516,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:Id,ProfileId,ClientId,Name,TotalBudget,OptimizationGoal,CountryCode,FrequencyCapJson",
+          "data_len": 29,
+          "msg": null
+        },
+        {
+          "name": "单Card推荐Deals",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/recommend/deals",
+          "status_code": 200,
+          "ms": 745,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 500",
+            "success expected True, got false"
+          ],
+          "resp_code": 500,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "SupplyPackage 'SPONSORED_PRODUCTS' is not a supported DSP type. Only DSP supply packages are eligible for deal recommendation."
+        },
+        {
+          "name": "后置清理-删除媒体计划",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2879",
+          "status_code": 200,
+          "ms": 673,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/MedianPlan/runForecast - 计算预算分配预测（含前置建/后置删,可重复）",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "前置-新建媒体计划",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/save",
+          "status_code": 200,
+          "ms": 712,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-拉取Reach与Performance预测",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/fetchForecasts",
+          "status_code": 200,
+          "ms": 1321,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "计算预算分配预测",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/runForecast",
+          "status_code": 200,
+          "ms": 635,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 500",
+            "success expected True, got false"
+          ],
+          "resp_code": 500,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "Card 5655 has no performance forecast data (PerformanceDataPoints)."
+        },
+        {
+          "name": "后置清理-删除媒体计划",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2880",
+          "status_code": 200,
+          "ms": 712,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/MedianPlan/v1/performanceForecasts - 代理调用Amazon Performance预测（需真实Amazon账号,仅生成不确保通过）",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "代理调用Amazon Performance预测",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/v1/performanceForecasts",
+          "status_code": 200,
+          "ms": 968,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 500",
+            "success expected True, got false"
+          ],
+          "resp_code": 500,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "The `Amazon-Ads-AccountId` request header is in an invalid format."
+        }
+      ]
+    },
+    {
+      "name": "POST /api/MedianPlan/v1/reachForecasts - 代理调用Amazon Reach预测（需真实Amazon账号,仅生成不确保通过）",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "代理调用Amazon Reach预测",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/v1/reachForecasts",
+          "status_code": 200,
+          "ms": 840,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 500",
+            "success expected True, got false"
+          ],
+          "resp_code": 500,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "The `Amazon-Ads-AccountId` request header is in an invalid format."
+        }
+      ]
+    },
+    {
+      "name": "POST /api/MedianPlan/{id}/copy - 复制媒体计划及全部Cards（含前置建/后置删,可重复）",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-新建源媒体计划",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/save",
+          "status_code": 200,
+          "ms": 681,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "复制媒体计划",
+          "method": "POST",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2881/copy",
+          "status_code": 200,
+          "ms": 683,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除复制出的新计划",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2882",
+          "status_code": 200,
+          "ms": 765,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除源媒体计划",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/pacvuemainapiv2/api/MedianPlan/2881",
+          "status_code": 200,
+          "ms": 998,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "success",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-10T09:20:01.599081+00:00"
+}

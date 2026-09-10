@@ -1627,8 +1627,22 @@
     "source": "PacvueMainApi",
     "tag": "Benchmark",
     "method": "POST",
+    "path": "/api/Benchmark/GetBenchmarkUserConfig",
+    "summary": "查询当前用户的 Benchmark 配置（目前含：是否关闭绩效过滤）"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "Benchmark",
+    "method": "POST",
     "path": "/api/Benchmark/GetProfilePATQueryAsin",
     "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "Benchmark",
+    "method": "POST",
+    "path": "/api/Benchmark/SaveBenchmarkUserConfig",
+    "summary": "保存当前用户的 Benchmark 配置。DisablePerformanceFilter：0 = 保持现有逻辑（使用绩效过滤），1 = 不使用绩效过滤"
   },
   {
     "source": "PacvueMainApi",
@@ -7032,7 +7046,7 @@
     "tag": "MarketplaceDashboard",
     "method": "POST",
     "path": "/api/MarketplaceDashboard/v3/GetOutofBudgetReport",
-    "summary": ""
+    "summary": "Out of Budget 报表（已迁 Doris；路由 / 入参 / 出参与迁移前完全一致，前端零改动）。\r\n迁移前的 SQL Server 版见 M:Pacvue.MainApi.Core.Controllers.MarketplaceDashboardController.GetOutofBudgetReportOldAsync(Pacvue.MainApi.Repository.MarketplaceDashboard.Dto.MarketplaceDashboardDefaultParams)（{v3/GetOutofBudgetReportOld}）。"
   },
   {
     "source": "PacvueMainApi",
@@ -9831,8 +9845,36 @@
     "source": "PacvueMainApi",
     "tag": "WarRoom",
     "method": "POST",
+    "path": "/api/WarRoom/v3/DeleteWarRoomEventComparison",
+    "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/DeleteWarRoomScheduledPushSetting",
+    "summary": "删除定时推送配置。⚠ **物理删除,不是软删**:\r\nUX_WRSPS_scope 没有过滤条件,软删行会永久占住该 scope 的唯一键,\r\n用户删了再想重新开推送就会撞唯一键。**只能删自己那份**。\r\n            \r\n历史推送记录**不跟着删**(WarRoomScheduledPushRecord 与配置表没有外键)。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/DeleteWarRoomSpendCurve",
+    "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
     "path": "/api/WarRoom/v3/DeleteWarRoomStrategy",
     "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/DeleteWarRoomStrategyNote",
+    "summary": "批量软删活动日备注,**只能删自己写的**。"
   },
   {
     "source": "PacvueMainApi",
@@ -9908,8 +9950,22 @@
     "source": "PacvueMainApi",
     "tag": "WarRoom",
     "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomBudgetOverview",
+    "summary": "当日预算总览(UI 的 Daily Budget Overview)。**不含 Total Daily Budget 与 Budget Scheduler 覆盖数**。\r\n时间按 Profile 所属市场时区;扫描范围受 CampaignTag 权限约束。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomBudgetSpendCurveChart",
+    "summary": "24 小时花费曲线(UI 的 Spend Curve):蓝色实际累计 + 红色预测 + Cap 横线 + 耗尽点。\r\n红色预测需要入参 hourlyShares(消耗曲线 24 点占比);耗尽点之后不返回预测点。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
     "path": "/api/WarRoom/v3/GetWarRoomCampaignTagData",
-    "summary": ""
+    "summary": "PP-64091:**已迁 Doris**(路由名与入参都没变,前端零改动)。\r\n迁 Doris 前的 ClickHouse 版本见 GetWarRoomCampaignTagDataOld —— 仅用于线上对数与免发版回滚,前端不要接入。"
   },
   {
     "source": "PacvueMainApi",
@@ -9924,6 +9980,27 @@
     "method": "POST",
     "path": "/api/WarRoom/v3/GetWarRoomCount",
     "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomEventComparison",
+    "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomEventTrendCompareData",
+    "summary": "PP-64153:活动趋势图的**对比期**那一路 —— 与 M:Pacvue.MainApi.Core.Controllers.WarRoomController.GetWarRoomEventTrendData(Pacvue.MainApi.Domain.Shared.WarRooms.Bos.WarRoomEventTrendInput)\r\n**除路由名外完全一样**:同一个服务方法、同一套入参出参、同一套口径 / 权限 / 汇率折算。\r\n            \r\n拆成两个路由是为了让前端**并行调用**:一个传当期的 start~end、一个传对比期的 start~end。\r\n⚠ 所以本接口的入参也是用 {start} / {end} 表达\"要查哪一段\",\r\n**不是** {compareStart} / {compareEnd}(那两个字段两个接口都不再使用)。\r\n⚠ 出参字段名同样是 {current} / {currentTotal} —— 装的是**本次传入那一段**的数据\r\n(保留这个字段名是为了让两个接口的读法完全一致、当期那一路的前端一行不用改)。\r\n            \r\n⚠ **前端拿到两份数组后必须按日期对齐,不能按数组下标配对** ——\r\n两段的天数可以不同,且缺数据的日期不补 0,按下标配对会让整条对比线错位。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomEventTrendData",
+    "summary": "活动趋势图 —— **返回 start ~ end 这一段**的日粒度序列 + 该段合计。按日期升序;\r\n缺数据的日期不补 0(前端列表显示 —、曲线断点)。\r\n            \r\n⚠ **PP-64153:对比值已拆成独立接口**。改动前本接口一次返回当期与对比期两份\r\n(`current` / `compare` / `currentTotal` / `compareTotal`),现在出参里**没有 compare 与 compareTotal** ——\r\n对比期请调 M:Pacvue.MainApi.Core.Controllers.WarRoomController.GetWarRoomEventTrendCompareData(Pacvue.MainApi.Domain.Shared.WarRooms.Bos.WarRoomEventTrendInput),它与本接口**除路由名外完全一样**\r\n(同一个服务方法、同一套入参出参与口径),由前端**并行调用两次**、各传一段日期。"
   },
   {
     "source": "PacvueMainApi",
@@ -9950,8 +10027,15 @@
     "source": "PacvueMainApi",
     "tag": "WarRoom",
     "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomLiveEventCount",
+    "summary": "PP-63855:房间列表的「进行中活动数」。**单独一个接口**,不并进 GetWarRooms —— 列表要先出来,\r\n这个数由前端懒加载后补。一个房间一条,值是它关联的 Shopping Event(status = 1)里 state == 1 的数量。\r\nwarRoomIds 不传则算当前用户能看到的全部房间。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
     "path": "/api/WarRoom/v3/GetWarRoomPlacementData",
-    "summary": ""
+    "summary": "PP-64091 第二轮:**已迁 Doris**(路由名与入参都没变,前端零改动)。\r\n迁 Doris 前的 ClickHouse 版本见 GetWarRoomPlacementDataOld —— 仅用于线上对数与免发版回滚,前端不要接入。"
   },
   {
     "source": "PacvueMainApi",
@@ -9966,6 +10050,34 @@
     "method": "POST",
     "path": "/api/WarRoom/v3/GetWarRoomSalesTrend",
     "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomScheduledPushRecord",
+    "summary": "取推送记录(**只读**)。插入与状态更新都在 am-pacvuecrontaskengine,本接口只查。\r\n**每人只看自己的**,按 scheduledTimeUtc 倒序、**分页**返回。\r\n            \r\n只看失败传 `statusList = [2]`;`lastError` 里若出现 `not_in_channel` / `channel_not_found` /\r\n`invalid_auth`,意味着原本配好的 Slack 频道权限后来变了 —— 这是本侧唯一能发现它的途径,\r\n建议前端把这几种显著提示出来。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomScheduledPushSetting",
+    "summary": "取当前用户的定时推送配置。**每人只看自己那份** ——\r\n库上 UX_WRSPS_scope UNIQUE(warRoomId, strategyId, userId) 保证传单个 strategyId 时结果是 0 或 1 条\r\n(所以前端打开面板时拿到空数组是正常的:还没配过)。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomSpendCurve",
+    "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/GetWarRoomStrategyNote",
+    "summary": "取活动日备注。**按登录用户过滤 —— 每人只看自己写的**,与 GetAllShoppingEvents 挂载的 notes 同口径。\r\n排序:noteDate 升序,同一天内 createDate 升序。"
   },
   {
     "source": "PacvueMainApi",
@@ -9986,7 +10098,7 @@
     "tag": "WarRoom",
     "method": "POST",
     "path": "/api/WarRoom/v3/GetWarRoomStrategyTreadTotalData",
-    "summary": ""
+    "summary": "PP-64091 第二轮:**已迁 Doris**(路由名与入参都没变,前端零改动)。\r\n迁 Doris 前的 ClickHouse 版本见 GetWarRoomStrategyTreadTotalDataOld —— 仅用于线上对数与免发版回滚,前端不要接入。"
   },
   {
     "source": "PacvueMainApi",
@@ -10006,6 +10118,34 @@
     "source": "PacvueMainApi",
     "tag": "WarRoom",
     "method": "POST",
+    "path": "/api/WarRoom/v3/InsertAndUpdateWarRoomEventComparison",
+    "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/InsertAndUpdateWarRoomScheduledPushSetting",
+    "summary": "定时推送配置的**新增/编辑二合一**,按 **scope(warRoomId + strategyId + userId)upsert**。\r\n            \r\n前端只需要把面板状态发过来(`id` 传不传都行)—— 一个 scope 最多一行,**天然幂等、不怕重复点**。\r\n`warRoomId` **不接受前端传值**,由后端按 `strategyId` 反查;活动不存在或已软删 → Success:0。\r\n            \r\n校验不通过时**直接把原因放在 message 里**(不是抛 500)——\r\n前端把 message 显示出来即可,不用再猜哪个字段不对。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/InsertAndUpdateWarRoomSpendCurve",
+    "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/InsertAndUpdateWarRoomStrategyNote",
+    "summary": "活动日备注的**新增/编辑二合一**:noteId 为空或 0 → 新增(warRoomId 由后端按 strategyId 反查写入);\r\n否则按该 id 编辑,**只能改自己写的那条、且只改 content**。"
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
     "path": "/api/WarRoom/v3/InsertWarRoomStrategy",
     "summary": ""
   },
@@ -10015,6 +10155,13 @@
     "method": "POST",
     "path": "/api/WarRoom/v3/UpdateRoomStrategy",
     "summary": ""
+  },
+  {
+    "source": "PacvueMainApi",
+    "tag": "WarRoom",
+    "method": "POST",
+    "path": "/api/WarRoom/v3/UpdateWarRoomStrategySpendCurve",
+    "summary": "PP-63858:**专门更新活动绑定的消耗曲线**,只改 {WarRoomStrategy.spendCurveId} 一列。\r\n            \r\n路由刻意不跟随既有的 {UpdateRoomStrategy}(那个路由名少了 \"War\"、\r\n与方法名 UpdateWarRoomStrategy 不一致,是既成事实的历史不一致)。\r\n            \r\n{spendCurveId} 传 null 或 0 = 解绑。校验失败时 {Success:0} + message 说明原因,不返回 500。"
   },
   {
     "source": "PacvueMainApi",
