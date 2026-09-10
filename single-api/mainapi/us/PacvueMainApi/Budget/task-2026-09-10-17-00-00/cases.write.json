@@ -1,0 +1,233 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Budget/v3/integration/updateCampaignStateOrDailyBudget - 中台批量更新Campaign每日预算(含建议后置还原)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Budget/v3/integration/updateCampaignStateOrDailyBudget。中台集成接口，按campaignId真实修改Campaign每日预算(dailyBudget)，365天内约4688次真实调用。字段结构取自ES真实样本(数组，每项含campaignId/dailyBudget/oldDailyBudget/profileId)。请求体已换成测试账号自身profileId/campaignId，dailyBudget/oldDailyBudget需执行前先查询该campaign当前真实预算值回填(标记[NEEDS_REAL_VALUE])，避免预算被误改。建议执行前先调用GetSettingBudgetLineInfo等查询接口获取当前真实dailyBudget，执行后用后置步骤还原为原值，保证可重复执行。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】批量更新Campaign每日预算",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/updateCampaignStateOrDailyBudget",
+        "request_body": [
+          {
+            "campaignId": "{{exist_sp_campaign_id}}",
+            "dailyBudget": "[NEEDS_REAL_VALUE]",
+            "oldDailyBudget": "[NEEDS_REAL_VALUE]",
+            "profileId": "{{profile_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-还原Campaign每日预算为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/updateCampaignStateOrDailyBudget",
+        "request_body": [
+          {
+            "campaignId": "{{exist_sp_campaign_id}}",
+            "dailyBudget": "[NEEDS_REAL_VALUE]",
+            "oldDailyBudget": "[NEEDS_REAL_VALUE]",
+            "profileId": "{{profile_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Budget/v3/integration/updateCampaignStateOrDailyBudgetForIntegration - 中台自动化批量更新Campaign预算/状态(含建议后置还原)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Budget/v3/integration/updateCampaignStateOrDailyBudgetForIntegration。中台自动化(如Incremental Automation)批量更新Campaign每日预算或状态(paused/enabled)，365天内约4010次真实调用。ES真实样本中同一sourceName下既有dailyBudget变更也有state=paused的调用模式，字段结构参照真实样本。请求体已换成测试账号自身profileId/campaignId，dailyBudget/oldDailyBudget需执行前查询真实当前值回填(标记[NEEDS_REAL_VALUE])。建议执行后用后置步骤还原原state/dailyBudget，保证可重复执行。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】自动化批量更新Campaign预算",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/updateCampaignStateOrDailyBudgetForIntegration",
+        "request_body": {
+          "sourceName": "swagger-api-case-test",
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "dailyBudget": "[NEEDS_REAL_VALUE]",
+              "oldDailyBudget": "[NEEDS_REAL_VALUE]"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-还原Campaign预算为原值",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/integration/updateCampaignStateOrDailyBudgetForIntegration",
+        "request_body": {
+          "sourceName": "swagger-api-case-test",
+          "datas": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{exist_sp_campaign_id}}",
+              "dailyBudget": "[NEEDS_REAL_VALUE]",
+              "oldDailyBudget": "[NEEDS_REAL_VALUE]"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Budget/v3/UploadBudget - 上传批量预算设置Excel模板(multipart文件上传)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Budget/v3/UploadBudget。multipart/form-data文件上传接口，上传批量预算设置Excel后会真实批量修改多个Campaign的预算设置，365天内3次真实调用。ES样本仅记录到multipart边界及文件名(probe.xlsx)，无法还原文件内容；Swagger仅声明files字段(binary数组)。执行前需人工用DownloadBulkBudgetSettingsTemple/DownloadBudgetTemple下载真实模板，用测试账号自身campaign数据填写后再上传，且需评估上传后对预算的真实影响及回滚方式，本case不生成可执行文件内容，仅记录接口结构待人工补充[NEEDS_REAL_VALUE]。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】上传批量预算设置文件",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/UploadBudget",
+        "request_body": {
+          "files": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Budget/v3/test/MakeFakeCampaignPerformance - 为测试账号Campaign生成月度模拟绩效数据",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Budget/v3/test/MakeFakeCampaignPerformance。测试/调试用接口，会真实向指定campaignId写入模拟的月度Spend/Impressions/Clicks/Conversions/Sales数据，365天内约23次真实调用，且真实样本profileId均为本测试账号(2755545444012419)，疑似其他QA同学用于造数。字段结构取自ES真实样本，campaignId换成测试账号自身exist_sp_campaign_id。由于会真实写入/污染绩效数据且暂无已知的删除/清理接口，仅生成case供人工评估，执行前需确认是否会影响其他依赖真实绩效数据的报表类case。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】生成模拟Campaign绩效数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/test/MakeFakeCampaignPerformance",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "Settings": [
+            {
+              "MontOfYear": 202609,
+              "DailySettings": [
+                {
+                  "Day": 1,
+                  "Spend": { "Value": 1 },
+                  "Impressions": { "Value": 1 },
+                  "Clicks": { "Value": 1 },
+                  "Conversions": { "Value": 1 },
+                  "Sales": { "Value": 1 }
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Budget/v3/test/MakeFakePerformanceLite - 为测试账号AdGroup/Keyword生成日级模拟绩效数据",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Budget/v3/test/MakeFakePerformanceLite。测试/调试用接口，会真实向指定campaignId/adGroupId/keywordId写入模拟的日级Spend/Impressions/Clicks/Order/Sales数据(按SearchTerm)，365天内约8次真实调用，且真实样本profileId均为本测试账号(2755545444012419)。字段结构取自ES真实样本，campaignId/adGroupId换成测试账号自身exist_sp_campaign_id/sp_manual_pat_adgroup_id，keywordId因无ES样本对应真实值标记为[NEEDS_REAL_VALUE]。由于会真实写入/污染绩效数据且暂无已知的删除/清理接口，仅生成case供人工评估。",
+    "module": "Budget",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】生成模拟AdGroup/Keyword绩效数据",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Budget/v3/test/MakeFakePerformanceLite",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sp_campaign_id}}",
+          "MonthOfYear": 202609,
+          "AdGroups": [
+            {
+              "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "Keywords": [
+                {
+                  "KeywordId": "[NEEDS_REAL_VALUE]",
+                  "SearchTerms": [
+                    {
+                      "Query": "test",
+                      "Settings": [
+                        {
+                          "Day": 1,
+                          "Spend": { "Value": 1 },
+                          "Impressions": { "Value": 1 },
+                          "Clicks": { "Value": 1 },
+                          "Order": { "Value": 1 },
+                          "Sales": { "Value": 1 }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,270 @@
+[
+  {
+    "name": "POST /api/Ad/v3/GetAdList - 场景1_按Profile+Adgroup查广告(占比100%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdList。仅传 profileId + adgroupIds，查询指定广告组下的广告列表。US环境。30条随机样本中占比约100%(30条)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdList",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adgroupIds": [
+            "{{ad_adgroup_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetAdVesions - 场景1_按Profile+AdId查广告版本(占比100%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetAdVesions。仅传 profileId + adId，查询指定广告的创意版本列表。US环境。30条随机样本中占比约100%(21条有效非空样本)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdVesions",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetAdVesions",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "adId": "{{ad_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetPagedAdByAdgroup - 场景1_按Profile+Campaign+Adgroup分页查广告(占比100%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetPagedAdByAdgroup。profileIds+campaignIds+adgroupIds+分页参数(pageSize=500，AdId升序)，adName为空表示不做名称过滤。US环境。30条随机样本中占比约100%(30条同结构，adName取值差异不影响结构)。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPagedAdByAdgroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetPagedAdByAdgroup",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{exist_sb_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{ad_adgroup_id}}"
+          ],
+          "adName": "",
+          "pageIndex": 1,
+          "pageSize": 500,
+          "pageInfo": {
+            "OrderByField": "AdId",
+            "OrderAsc": true,
+            "PageSize": 500,
+            "PageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetCrossRetailerCreativeChart - 场景1_逐日趋势(dim=date,占比97.5%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetCrossRetailerCreativeChart。跨零售商创意图表，dim=date按天出趋势，adFormat筛选PRODUCT_COLLECTION+SDImage。US环境。200条随机样本中占比约97.5%(195次)。样本非本账号profileId/creativeId，保留真实结构，需人工核实。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCrossRetailerCreativeChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetCrossRetailerCreativeChart",
+        "request_body": {
+          "startDate": "2025-12-25",
+          "endDate": "2026-01-23",
+          "dim": "date",
+          "profileIds": [
+            "27555454440124190"
+          ],
+          "campaignIds": [],
+          "adGroupIds": [],
+          "creativeIds": [
+            "136875702213421",
+            "89047443851696"
+          ],
+          "adFormat": [
+            "PRODUCT_COLLECTION",
+            "SDImage"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetCrossRetailerCreativeChart - 场景2_按周趋势(dim=week,占比2.5%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetCrossRetailerCreativeChart。跨零售商创意图表，dim=week按周聚合。US环境。200条随机样本中占比约2.5%(5次)。样本非本账号profileId/creativeId，保留真实结构，需人工核实。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCrossRetailerCreativeChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetCrossRetailerCreativeChart",
+        "request_body": {
+          "startDate": "03/01/2025",
+          "endDate": "02/12/2026",
+          "dim": "week",
+          "profileIds": [
+            "1313970269859952"
+          ],
+          "campaignIds": [],
+          "adGroupIds": [],
+          "creativeIds": [
+            "139153918410380",
+            "77563375148134"
+          ],
+          "adFormat": [
+            "PRODUCT_COLLECTION",
+            "SDImage"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetCrossRetailerCreativeList - 场景1_多创意类型列表(adFormat=PC+SDImage,占比96.5%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetCrossRetailerCreativeList。跨零售商创意列表，dim=ytd，adFormat筛选PRODUCT_COLLECTION+SDImage。US环境。200条随机样本中占比约96.5%(193次)。样本非本账号profileId/creativeId，保留真实结构，需人工核实。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCrossRetailerCreativeList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetCrossRetailerCreativeList",
+        "request_body": {
+          "startDate": "05/28/2025",
+          "endDate": "06/26/2025",
+          "dim": "ytd",
+          "profileIds": [
+            "908880919962334"
+          ],
+          "campaignIds": null,
+          "adGroupIds": null,
+          "creativeIds": [
+            "341409835175422",
+            "531090621838713"
+          ],
+          "adFormat": [
+            "PRODUCT_COLLECTION",
+            "SDImage"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Ad/v3/GetCrossRetailerCreativeList - 场景2_仅ProductCollection创意列表(adFormat=PC,占比3%)",
+    "description": "单接口测试：POST /api/Ad/v3/GetCrossRetailerCreativeList。跨零售商创意列表，dim=ytd，adFormat仅筛选PRODUCT_COLLECTION。US环境。200条随机样本中占比约3%(6次)。样本非本账号profileId/creativeId，保留真实结构，需人工核实。",
+    "module": "Ad",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCrossRetailerCreativeList",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/GetCrossRetailerCreativeList",
+        "request_body": {
+          "startDate": "01/01/2026",
+          "endDate": "03/13/2026",
+          "dim": "ytd",
+          "profileIds": [
+            "426138702379563"
+          ],
+          "campaignIds": null,
+          "adGroupIds": null,
+          "creativeIds": [
+            "488245146906972",
+            "375503731251826",
+            "377698757898861",
+            "259165553552074",
+            "354114858742972"
+          ],
+          "adFormat": [
+            "PRODUCT_COLLECTION"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

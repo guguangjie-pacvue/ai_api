@@ -1,0 +1,323 @@
+[
+  {
+    "name": "POST /api/Targeting/V3/GetTargetingPATChart - 列表页汇总趋势图(不筛选具体Target,全类型)",
+    "description": "单接口测试：POST /api/Targeting/V3/GetTargetingPATChart。用户在PAT列表页未勾选任何具体Target时查看整体汇总趋势图，dim=ytd，覆盖SP/SB/SD全部campaignType，不传keywordIds。500条随机样本中占比约37.8%（189次）。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTargetingPATChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/GetTargetingPATChart",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "states": [
+            "enabled",
+            "paused"
+          ],
+          "campaignStates": [
+            "enabled",
+            "paused"
+          ],
+          "adGroupStates": [
+            "enabled",
+            "paused"
+          ],
+          "toMarket": "US",
+          "countryCode": "US",
+          "includeZero": true,
+          "pageInfo": {
+            "OrderAsc": true,
+            "OrderByField": "Spend",
+            "PageCount": 0,
+            "PageIndex": 0,
+            "PageSize": 0,
+            "TotalDataCount": 0
+          },
+          "isBid": 0,
+          "campaignTypeItems": [
+            {
+              "items": [
+                "SP-Manual",
+                "SP-Auto"
+              ],
+              "CampaignType": "SP"
+            },
+            {
+              "items": [
+                "SB-Product",
+                "SB-Store",
+                "SB-Brand Video",
+                "SB-Video",
+                "SB-Multi"
+              ],
+              "CampaignType": "SB"
+            },
+            {
+              "items": [
+                "SD-Audience",
+                "SD-Product",
+                "SD-Interest",
+                "SD-Views"
+              ],
+              "CampaignType": "SD"
+            }
+          ],
+          "export": false,
+          "textFilters": [],
+          "hascampaignTag": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Targeting/V3/GetTargetingPATChart - 按勾选Target筛选的汇总趋势图",
+    "description": "单接口测试：POST /api/Targeting/V3/GetTargetingPATChart。用户在PAT列表页勾选一个或多个Target后查看筛选后的汇总趋势图，dim=ytd，传keywordIds，附加fieldSet展示开关。500条随机样本中占比约29.6%（148次）。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTargetingPATChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/GetTargetingPATChart",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "dim": "ytd",
+          "filter": [],
+          "isAnd": 0,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "keywordIds": [
+            "{{target_id}}"
+          ],
+          "keywordTypes": [],
+          "toMarket": "US",
+          "countryCode": "US",
+          "includeZero": true,
+          "pageInfo": {
+            "OrderAsc": false,
+            "OrderByField": "Spend",
+            "PageCount": 0,
+            "PageIndex": 0,
+            "PageSize": 25,
+            "TotalDataCount": 0
+          },
+          "isBid": 0,
+          "campaignTypeItems": [
+            {
+              "items": [
+                "SP-Manual",
+                "SP-Auto"
+              ],
+              "CampaignType": "SP"
+            },
+            {
+              "items": [
+                "SB-Product",
+                "SB-Store",
+                "SB-Brand Video",
+                "SB-Video",
+                "SB-Multi"
+              ],
+              "CampaignType": "SB"
+            },
+            {
+              "items": [
+                "SD-Audience",
+                "SD-Product",
+                "SD-Interest",
+                "SD-Views"
+              ],
+              "CampaignType": "SD"
+            }
+          ],
+          "fieldSet": {
+            "isShowNTB": 1,
+            "isActlBid": 1,
+            "isSameSku": 1,
+            "isShowTopOfSearchIS": 1
+          },
+          "export": false,
+          "textFilters": [],
+          "hascampaignTag": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Targeting/V3/GetTargetingPATChart - 单个PAT Target(SP)按天趋势图",
+    "description": "单接口测试：POST /api/Targeting/V3/GetTargetingPATChart。用户点开单个SP商品定向(PAT)Target的详情，查看该Target按天(dim=date)的趋势图，kindType=PAT。500条随机样本中占比约24.6%（123次）。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTargetingPATChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/GetTargetingPATChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{sp_manual_pat_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{sp_manual_pat_adgroup_id}}"
+          ],
+          "dim": "date",
+          "end": "{{date_end_mdy}}",
+          "start": "{{date_start_mdy}}",
+          "DDay": 30,
+          "keywordType": "Product",
+          "filter": [],
+          "kindType": "PAT",
+          "keywordIds": [
+            "{{target_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Targeting/V3/GetTargetingPATChart - 单个PAT Target(小写kindType=pat)按天趋势图",
+    "description": "单接口测试：POST /api/Targeting/V3/GetTargetingPATChart。同场景3但kindType传小写\"pat\"（前端历史遗留大小写不一致，ES样本中真实存在），验证接口对大小写不敏感。500条随机样本中占比约5.6%（28次）。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTargetingPATChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/GetTargetingPATChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{sp_manual_pat_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{sp_manual_pat_adgroup_id}}"
+          ],
+          "dim": "date",
+          "end": "{{date_end_mdy}}",
+          "start": "{{date_start_mdy}}",
+          "DDay": 30,
+          "keywordType": "Product",
+          "filter": [],
+          "kindType": "pat",
+          "keywordIds": [
+            "{{target_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Targeting/V3/GetTargetingPATChart - 单个SD Audience Target按天趋势图",
+    "description": "单接口测试：POST /api/Targeting/V3/GetTargetingPATChart。用户点开单个SD受众(Audience)定向Target的详情，查看该Target按天趋势图，kindType=Audience。500条随机样本中占比约2.4%（12次）。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTargetingPATChart",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/GetTargetingPATChart",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "campaignIds": [
+            "{{sd_campaign_id}}"
+          ],
+          "adgroupIds": [
+            "{{sd_adgroup_id}}"
+          ],
+          "dim": "date",
+          "end": "{{date_end_mdy}}",
+          "start": "{{date_start_mdy}}",
+          "DDay": 30,
+          "keywordType": "Product",
+          "filter": [],
+          "kindType": "Audience",
+          "keywordIds": [
+            "{{target_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]
