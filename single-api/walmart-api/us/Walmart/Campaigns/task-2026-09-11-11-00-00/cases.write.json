@@ -72,8 +72,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】POST /api/Campaigns - 创建/更新Campaign(单条，含campaignId表示更新)",
-    "description": "仅生成 case 供人工评估，不自动执行。创建/更新Campaign(单条，含campaignId表示更新)。365天流量约7437次。⚠️ 该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【高风险-仅生成不执行】POST /api/Campaigns - 创建新Campaign",
+    "description": "仅生成 case 供人工评估，不自动执行。创建新Campaign(单条)。365天流量约6836次。⚠️请求体基于真实ES样本，除profileId已替换为本测试账号变量外，其余字段(campaignTagIds/biddingStrategy等)保留原样本真实结构，非本测试账号数据，人工执行前需替换为本账号下真实可用的字段值。⚠️该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。\n[修复说明] 此前因es_batch.py的fetch文件名撞车bug(同路径POST/PUT互相覆盖样本)，该case曾错误使用了PUT /api/Campaigns(改名操作)的样本，现已改用真实POST(创建)样本重新生成。",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -82,17 +82,25 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] Campaigns - 创建/更新Campaign(单条，含campaignId表示更新)",
+        "name": "[未执行] Campaigns - 创建新Campaign",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns",
-        "request_body": [
-          {
-            "advertiserId": "316418",
-            "campaignId": "{{campaign_id}}",
-            "name": "Auto_ASUS_26q1_am_cons_ryz_Walmart-Sponsored-ads_conv_no_1008128_havas_004JK"
-          }
-        ],
+        "request_body": {
+          "name": "Mighty Paw | SP | 2769230151 | Manual | CB",
+          "startDate": "{{date_start}}",
+          "budgetType": "daily",
+          "campaignType": "sponsoredProducts",
+          "isAutoReview": true,
+          "targetingType": "manual",
+          "campaignTagIds": [],
+          "biddingStrategy": {
+            "strategy": "FIXED"
+          },
+          "totalBudget": 0,
+          "dailyBudget": 20,
+          "profileId": "{{profile_id_single}}"
+        },
         "extract_vars": {},
         "expected_response": {
           "code": 200
@@ -101,8 +109,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns - 更新Campaign(如结束日期/竞价策略)",
-    "description": "仅生成 case 供人工评估，不自动执行。更新Campaign(如结束日期/竞价策略)。365天流量约7437次。⚠️ 该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【高风险-仅生成不执行】PUT /api/Campaigns - 修改Campaign名称(Rename)",
+    "description": "仅生成 case 供人工评估，不自动执行。修改Campaign名称(Rename，真实样本仅含advertiserId/campaignId/name三个字段)。365天流量约7437次。⚠️ 该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。\n[核实说明] 之前描述猜测该接口可改结束日期/竞价策略，但真实ES样本显示实际请求体仅包含name字段，已修正描述与实际行为一致(仅改名)。",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
