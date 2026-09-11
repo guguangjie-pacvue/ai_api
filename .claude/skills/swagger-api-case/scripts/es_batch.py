@@ -64,9 +64,16 @@ def main():
         json.dump(result, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     elif mode == "fetch":
         out_dir = rest[0]; os.makedirs(out_dir, exist_ok=True)
+        seen = {}
         for ep in rest[1:]:
             method, path = ep.split(":", 1)
             safe = path.strip("/").replace("/", "_").replace("{", "").replace("}", "")
+            # 同路径不同method(如POST/PUT同一/api/Campaigns)文件名会撞车导致互相覆盖；
+            # 第二次及以后遇到同一safe名时加上method前缀区分，第一个仍保持原名以兼容按path查找的调用方
+            if safe in seen:
+                safe = f"{method}_{safe}"
+            else:
+                seen[safe] = method
             total, hits = es_search(path, method, opts, opts["size"])
             json.dump({"total": total, "hits": hits}, open(os.path.join(out_dir, safe + ".json"), "w", encoding="utf-8"), ensure_ascii=False)
             print(f"{method} {path} => total={total}, fetched={len(hits)}", flush=True)
