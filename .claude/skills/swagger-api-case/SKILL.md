@@ -68,6 +68,7 @@ single-api/
 5. **config.json 跟服务走**：位于 `single-api/<服务>/config.json`，一个服务一份（含该服务所有 base_url）
 6. **服务身份先查 `single-api/services.json`**：swagger→服务 的映射维护在此表，命中就不问用户；未命中才问并回写
 7. **产物只有 cases.json、endpoints.json、services.json**：禁止生成其他文件
+8. **ES 无流量禁止生成、禁止执行**：业务性零结果时**严禁**生成 cases.json 也**严禁**调用 run-cases.py；唯一动作是在 Excel `场景覆盖(env)` 填「ES 无流量」、`场景数` 填 0、`通过率` 留空，然后继续下一个接口
 
 ---
 
@@ -230,7 +231,7 @@ Invoke-RestMethod -Uri "https://logs.pacvue.com/api/index_patterns/_fields_for_w
 | **GET** | ❌ 不能（productLine 只在 header，ES 未索引，`queryString` 为空） | **全平台流量**：不加 productLine 过滤，用该接口在 ES 里的全部真实调用挖场景 |
 | **POST** | ✅ 能（`queryString` 含 `productLine=xxx`） | **当前测试平台的流量**：加 `{"match_phrase":{"queryString":"productLine=<当前平台>"}}` 过滤，只用该平台的真实调用挖场景 |
 
-- **POST 接口**该平台若无流量则按"无 ES 流量"处理（见 2.3 / Phase 4 占位规则）。
+- **POST 接口**该平台若无流量则跳过 case 生成，在 Excel `场景覆盖(env)` 列标注「ES 无流量」，`场景数` 填 0，`通过率` 留空。
 - **平台覆盖仍是强制枚举，与 ES 频率无关**：无论 GET/POST，`services.json.<服务>.platforms` 里的每个平台都要单独生成一遍 case（同一份 cases.json 指向该平台的 `config.json`）。ES 频率只决定"某个接口/某个平台下写哪几条 body 场景"，不决定"要不要覆盖这个平台"。
 
 ### 2.2 查询目标接口日志
@@ -299,7 +300,8 @@ pwsh ".claude/skills/swagger-api-case/scripts/query_es.ps1" `
 
 **归纳完成后**，每个场景对应一个 Happy Path case，用该场景的真实入参（动态字段变量化）填写 `request_body`。场景数即 Happy Path case 数，一一对应，不合并、不删减。
 
-- ES 查询失败或无结果：记录原因，告知用户，终止本次生成
+- ES **技术性失败**（连接超时、索引不存在、鉴权错误）：记录原因，告知用户，终止本次生成
+- 🔴 ES **业务性零结果**（接口存在但无调用记录）：**禁止生成 cases.json，禁止执行 run-cases.py**；直接跳到 Phase 5，在 Excel `场景覆盖(env)` 列填「ES 无流量」，`场景数` 填 0，`通过率` 留空，继续处理下一个接口
 
 **🔴 占比必须写进 case `description`**：每个 Happy Path case 的 `description` 末尾固定追加 `500条随机样本中占比约xx%（n次）。`，供 Phase 5 场景覆盖列提取。**漏写会导致 Excel 场景覆盖显示不出占比**。
 
@@ -492,8 +494,8 @@ Excel 文件按服务独立存放：`single-api/<服务>/swagger_modules.xlsx`�
 **5.2 三列含义**（env 后缀区分环境，如 `场景数(us)`）：
 - `场景数(env)`：该接口在本次生成的 case 数（= 场景数），从 report 按接口路径统计
 - `通过率(env)`：该接口所有 case 的通过率（passed/total）
-- `场景覆盖(env)`：多行文本，列出每个场景的标签 + 占比，格式 `场景N: 描述 — xx%`
-- 未生成 case 的接口三列留空，一眼可见哪些接口还没覆盖
+- `场景覆盖(env)`：多行文本，列出每个场景的标签 + 占比，格式 `场景N: 描述 — xx%`；**ES 无流量的接口填「ES 无流量」**（单行，无占比）
+- 未生成 case 的接口（非 ES 无流量原因）三列留空，一眼可见哪些接口还没覆盖
 
 **一条命令搞定**（脚本源码见 `scripts/update_excel.py`）：
 
