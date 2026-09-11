@@ -72,7 +72,12 @@ def label_for(dim, val):
             return f"无{n}过滤"
         if val == '<MISSING>' or val is None:
             return f"不传{leaf}"
-        return f"按{n}过滤"
+        if val == '[ids+]':
+            return f"按{n}过滤"
+        # 非纯数字ID列表(如含 -1 哨兵值)：与 [ids+] 是不同分组，标签必须区分，否则同一接口会出现重名 case
+        if '-1' in str(val):
+            return f"按{n}过滤(列表含-1)"
+        return f"按{n}过滤(含非数字ID)"
     if leaf == 'dim':
         try:
             return DIM_MAP.get(int(val), f"dim={val}")
@@ -184,6 +189,7 @@ def main():
         N = len(samples)
         ordered = sorted(groups.items(), key=lambda kv: -len(kv[1]))
         n_case = 0
+        used_labels = {}   # 同一接口内保证 case name 唯一：label 撞车时追加 ·变体N（report/enrich 都按 name 对应，重名会串）
 
         def full_sig(b):
             return json.dumps(variablize(copy.deepcopy(b), keep_dates=keep_dates), ensure_ascii=False, sort_keys=True)
@@ -201,6 +207,13 @@ def main():
             body = variablize(copy.deepcopy(rep), keep_dates=keep_dates, notes=notes)
             labels = [label_for(d, v) for d, v in sig] if dims else []
             label = '+'.join(labels) if labels else ep.get('single_label', '默认调用')
+            if label in used_labels:
+                used_labels[label] += 1
+                raw = ';'.join(f"{d}={v}" for d, v in sig)
+                notes.append(f"与同标签场景的维度原始取值差异: {raw[:120]}")
+                label = f"{label}·变体{used_labels[label]}"
+            else:
+                used_labels[label] = 1
             desc_notes = ('；'.join(sorted(set(notes))) + '。') if notes else ''
             name_leaf = path.rstrip('/').split('/')[-1]
             case = {
