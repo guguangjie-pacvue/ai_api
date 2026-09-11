@@ -32,7 +32,7 @@ def es_search(path, method, opts, size):
                 "must_not": [{"terms": {"clientId": opts["exclude"]}}],
                 "filter": [{"range": {"@timestamp": {"gte": f"now-{opts['days']}d"}}}]}},
             "functions": [{"random_score": {}}], "boost_mode": "replace"}}]}},
-        "size": size, "_source": ["body", "@timestamp", "clientId", "userId"], "sort": ["_score"]}}}
+        "size": size, "_source": ["body", "queryString", "@timestamp", "clientId", "userId"], "sort": ["_score"]}}}
     req = urllib.request.Request(ES_URL, data=json.dumps(body).encode(),
         headers={"Authorization": "Basic " + ES_AUTH, "kbn-xsrf": "true", "Content-Type": "application/json"}, method="POST")
     for attempt in range(3):
