@@ -1,9 +1,9 @@
 {
   "config": "walmart-api (us)",
-  "started_at": "2026-09-14T05:17:07.892077+00:00",
-  "total": 7,
-  "passed": 6,
-  "failed": 1,
+  "started_at": "2026-09-14T06:14:19.684906+00:00",
+  "total": 12,
+  "passed": 10,
+  "failed": 2,
   "skipped": 0,
   "cases": [
     {
@@ -16,7 +16,7 @@
           "method": "GET",
           "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
           "status_code": 200,
-          "ms": 1134,
+          "ms": 1127,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -40,7 +40,7 @@
           "method": "GET",
           "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/campaigns?id=10387",
           "status_code": 200,
-          "ms": 689,
+          "ms": 744,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -64,7 +64,7 @@
           "method": "GET",
           "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/ShareLink",
           "status_code": 200,
-          "ms": 1046,
+          "ms": 1189,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -88,7 +88,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/tagsByCampaignIds",
           "status_code": 400,
-          "ms": 616,
+          "ms": 748,
           "pass": false,
           "failures": [
             "code expected 200, got null",
@@ -119,7 +119,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/tagsByCampaignIds",
           "status_code": 200,
-          "ms": 773,
+          "ms": 894,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -143,7 +143,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/dailyBudgetCampaignWithPacingTagCheck",
           "status_code": 200,
-          "ms": 733,
+          "ms": 744,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -167,7 +167,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/SyncTagCampaignToCk",
           "status_code": 200,
-          "ms": 1107,
+          "ms": 1541,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -180,7 +180,401 @@
           "msg": null
         }
       ]
+    },
+    {
+      "name": "POST /api/CampaignTags - 创建标签→抓ID→删除(写操作·自清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建测试标签 000test140501",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 834,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount,totalCount,successCount,errorMessage",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "查列表抓新标签ID(000前缀保证排第一)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1018,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 250,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除自建标签",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags?id=49483",
+          "status_code": 200,
+          "ms": 1196,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PATCH /api/CampaignTags/name - 重命名标签(写操作·自清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建测试标签 000test140502",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1364,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount,totalCount,successCount,errorMessage",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "查列表抓新标签ID(000前缀保证排第一)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1449,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 250,
+          "msg": null
+        },
+        {
+          "name": "重命名",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/name?id=49484",
+          "status_code": 200,
+          "ms": 1220,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "查列表验证改名生效",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1066,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 250,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除自建标签",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags?id=49484",
+          "status_code": 200,
+          "ms": 1124,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/CampaignTags - 更新标签并绑定Campaign(写操作·自清理)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建测试标签 000test140503",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 923,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount,totalCount,successCount,errorMessage",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "查列表抓新标签ID(000前缀保证排第一)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1094,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 250,
+          "msg": null
+        },
+        {
+          "name": "更新标签绑定Campaign",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 812,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "System.InvalidOperationException: An exception was thrown while attempting to evaluate a LINQ query parameter expression. See the inner exception for more information. To show additional information call 'DbContextOptionsBuilder.EnableSensitiveDataLogging'.\n ---> System.NullReferenceException: Object reference not set to an instance of an object.\n   at lambda_method159245(Closure )\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.GetValue(Expression expression, String& parameterName)\n   --- End of inner exception stack trace ---\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.GetValue(Expression expression, String& parameterName)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Evaluate(Expression expression, Boolean generateParameter)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)\n   at System.Linq.Expressions.ExpressionVisitor.VisitBinary(BinaryExpression node)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.VisitBinary(BinaryExpression binaryExpression)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)\n   at System.Linq.Expressions.ExpressionVisitor.VisitLambda[T](Expression`1 node)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)\n   at System.Linq.Expressions.ExpressionVisitor.VisitUnary(UnaryExpression node)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)\n   at System.Dynamic.Utils.ExpressionVisitorUtils.VisitArguments(ExpressionVisitor visitor, IArgumentProvider nodes)\n   at System.Linq.Expressions.ExpressionVisitor.VisitMethodCall(MethodCallExpression node)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.Visit(Expression expression)\n   at Microsoft.EntityFrameworkCore.Query.Internal.ParameterExtractingExpressionVisitor.ExtractParameters(Expression expression, Boolean clearEvaluatedValues)\n   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)\n   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetEnumerator()\n   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\n   at pacvue.walmart.dal.Services.CampaignTagService.RenameTag(Int32 id, String tagName, Int64 clientId) in /home/runner/work/walmart-api/walmart-api/src/pacvue.walmart.dal/Services/CampaignTagService.cs:line 576\n   at pacvue.walmart.dal.Services.CampaignTagService.Update(Int32 id, TagUpdateRequest request, Int64 clientId, Int64 userId, String token) in /home/runner/work/walmart-api/walmart-api/src/pacvue.walmart.dal/Services/CampaignTagService.cs:line 454\n   at pacvue.walmart.api.Controllers.CampaignTagsController.Update(Int32 id, TagUpdateRequest request) in /home/runner/work/walmart-api/walmart-api/src/pacvue.walmart.api/Controllers/Campaigns/CampaignTagsController.cs:line 267"
+        },
+        {
+          "name": "验证绑定的Campaign列表",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/campaigns?id=49485",
+          "status_code": 200,
+          "ms": 894,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除自建标签",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags?id=49485",
+          "status_code": 200,
+          "ms": 1220,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/CampaignTags/targetSetting - 设置Tag目标ACOS/ROAS(写操作·自清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建测试标签 000test140504",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1049,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount,totalCount,successCount,errorMessage",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "查列表抓新标签ID(000前缀保证排第一)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1011,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 250,
+          "msg": null
+        },
+        {
+          "name": "设置目标ACOS/ROAS",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/targetSetting",
+          "status_code": 200,
+          "ms": 816,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "后置清理-删除自建标签",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags?id=49486",
+          "status_code": 200,
+          "ms": 1167,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "DELETE /api/CampaignTags/BulkCampaignTag - 批量删除标签(写操作·自建2个)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建测试标签 ['000test140505a', '000test140505b']",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 902,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount,totalCount,successCount,errorMessage",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "查列表抓2个新标签ID",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1069,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 251,
+          "msg": null
+        },
+        {
+          "name": "批量删除",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags/BulkCampaignTag",
+          "status_code": 200,
+          "ms": 1153,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:userTagTotalCount",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "验证已删除(首位不再是000test)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1277,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 249,
+          "msg": null
+        }
+      ]
     }
   ],
-  "finished_at": "2026-09-14T05:17:13.992952+00:00"
+  "finished_at": "2026-09-14T06:14:49.347338+00:00"
 }
