@@ -548,8 +548,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】POST /api/Media - 创建Media(发起上传)",
-    "description": "单接口测试：POST /api/Media。创建类写操作(发起媒体上传请求，生成mediaUploadRequestId供后续PUT complete完成上传)，仅生成case供人工评估，不自动执行。Swagger未声明响应体schema，无法编造extract_vars，需人工执行后确认响应结构。",
+    "name": "POST /api/Media + PUT /api/Media/complete - 上传视频素材(写操作·自清理，已用真实文件人工验证)",
+    "description": "单接口测试：媒体上传两步流程，2026-09-14起真实执行。POST /api/Media发起上传返回Azure Blob SAS临时链接(uploadUrl)，需要把视频文件字节PUT到该链接(run-cases.py框架不支持二进制文件上传步骤，此步骤已用用户提供的真实mp4文件通过一次性脚本人工验证成功，HTTP 201)。本case的自动化步骤只覆盖create+complete+DELETE清理(JSON调用)：已实测complete在真正未上传字节的情况下仍返回200+新mediaId(说明complete阶段不同步校验blob是否存在，可能是异步处理)，为避免污染账号，complete后立即用Swagger里发现的DELETE /api/Media/{advertiserId}/{mediaId}接口清理(此接口此前生成case时被遗漏)。真实上传全流程(含字节上传)已人工验证一次：mediaId 55092 created→completed→deleted 全部成功。",
     "module": "Media",
     "granularity": "API",
     "since": "init",
@@ -558,41 +558,48 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "创建 Media",
+        "name": "发起上传",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Media",
         "request_body": {
-          "advertiserId": 356009,
+          "advertiserId": 16274451,
           "mediaType": "video"
         },
-        "extract_vars": {},
+        "extract_vars": {
+          "media_upload_request_id": "data.mediaUploadRequestId"
+        },
         "expected_response": {
-          "code": 200
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
         }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】PUT /api/Media/complete - 完成媒体上传",
-    "description": "单接口测试：PUT /api/Media/complete。创建类写操作(与POST /api/Media配对，标记上传完成并命名，是同一上传流程的第二步)，仅生成case供人工评估，不自动执行。mediaUploadRequestId需与真实发起的上传请求ID配套，样本值来自其他账号无法直接复用。",
-    "module": "Media",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
+      },
       {
-        "name": "完成上传",
+        "name": "完成上传(未真实传字节，验证complete本身的JSON交互)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Media/complete",
         "request_body": {
-          "advertiserId": 234000,
-          "mediaUploadRequestId": 78531,
-          "mediaName": "test133754"
+          "advertiserId": 16274451,
+          "mediaUploadRequestId": "{{media_upload_request_id}}",
+          "mediaName": "000test_media_upload"
         },
+        "extract_vars": {
+          "new_media_id": "data.mediaId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.isSuccess": true
+        }
+      },
+      {
+        "name": "清理(DELETE，此接口原先生成case时遗漏)",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Media/16274451/{{new_media_id}}",
+        "request_body": {},
         "extract_vars": {},
         "expected_response": {
           "code": 200

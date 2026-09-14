@@ -1,8 +1,8 @@
 {
   "config": "walmart-api (us)",
-  "started_at": "2026-09-14T05:38:55.474296+00:00",
-  "total": 11,
-  "passed": 10,
+  "started_at": "2026-09-14T07:44:19.164526+00:00",
+  "total": 12,
+  "passed": 11,
   "failed": 1,
   "skipped": 0,
   "cases": [
@@ -16,7 +16,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/creative/list",
           "status_code": 200,
-          "ms": 2571,
+          "ms": 3772,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -40,7 +40,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/creative/list",
           "status_code": 200,
-          "ms": 3274,
+          "ms": 2730,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -64,7 +64,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/creative/list",
           "status_code": 200,
-          "ms": 805,
+          "ms": 855,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -88,7 +88,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/creative/list",
           "status_code": 200,
-          "ms": 952,
+          "ms": 791,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -112,7 +112,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/creative/list",
           "status_code": 200,
-          "ms": 1549,
+          "ms": 1748,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -136,7 +136,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/creative/list",
           "status_code": 500,
-          "ms": 845,
+          "ms": 875,
           "pass": false,
           "failures": [
             "http 500",
@@ -167,7 +167,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/MediaVideoManagement",
           "status_code": 200,
-          "ms": 1314,
+          "ms": 1343,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -191,7 +191,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/MediaVideoManagement",
           "status_code": 200,
-          "ms": 1495,
+          "ms": 1565,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -215,7 +215,7 @@
           "method": "GET",
           "url": "https://api.pacvue.com/walmart-newui/api/Media?profileId=16274451",
           "status_code": 200,
-          "ms": 1176,
+          "ms": 1063,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -239,7 +239,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/AsyncMedia",
           "status_code": 200,
-          "ms": 996,
+          "ms": 780,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -263,7 +263,7 @@
           "method": "POST",
           "url": "https://api.pacvue.com/walmart-newui/api/Media/MediaLastSyncData",
           "status_code": 200,
-          "ms": 905,
+          "ms": 724,
           "pass": true,
           "failures": [],
           "resp_code": 200,
@@ -276,7 +276,65 @@
           "msg": null
         }
       ]
+    },
+    {
+      "name": "POST /api/Media + PUT /api/Media/complete - 上传视频素材(写操作·自清理，已用真实文件人工验证)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "发起上传",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Media",
+          "status_code": 200,
+          "ms": 1326,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:mediaUploadRequestId,uploadUrl,captionUrl,mediaId,status,thumbnail,videoUrl,code",
+          "data_len": 10,
+          "msg": null
+        },
+        {
+          "name": "完成上传(未真实传字节，验证complete本身的JSON交互)",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/walmart-newui/api/Media/complete",
+          "status_code": 200,
+          "ms": 1341,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:mediaUploadRequestId,mediaId,status,thumbnail,videoUrl,code,details,isSuccess",
+          "data_len": 8,
+          "msg": null
+        },
+        {
+          "name": "清理(DELETE，此接口原先生成case时遗漏)",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Media/16274451/55095",
+          "status_code": 200,
+          "ms": 1049,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        }
+      ]
     }
   ],
-  "finished_at": "2026-09-14T05:39:11.364397+00:00"
+  "finished_at": "2026-09-14T07:44:39.132656+00:00"
 }
