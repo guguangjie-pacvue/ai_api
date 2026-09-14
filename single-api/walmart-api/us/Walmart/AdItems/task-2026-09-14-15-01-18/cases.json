@@ -1,0 +1,329 @@
+[
+  {
+    "name": "POST /api/AdItems/ByAdgroups - profileIds+adgroupIds对象形式",
+    "description": "单接口测试：POST /api/AdItems/ByAdgroups。按广告组查AdItem，对象形式请求体(80.6%真实流量)。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ByAdgroups(对象形式)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/ByAdgroups",
+        "request_body": {
+          "adgroupIds": [
+            "{{adgroup_id}}"
+          ],
+          "profileIds": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdItems/ByAdgroups - 纯数组形式(旧调用约定)",
+    "description": "单接口测试：POST /api/AdItems/ByAdgroups。请求体直接是adgroupId数组，无profileIds包裹(19.2%真实流量，疑似旧版前端调用方式)。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ByAdgroups(纯数组形式)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/ByAdgroups",
+        "request_body": [
+          "{{adgroup_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdItems/search - 默认调用(空搜索)",
+    "description": "单接口测试：POST /api/AdItems/search。默认空搜索场景(79%真实流量)。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 search(空搜索)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/search",
+        "request_body": {
+          "advertiserId": "{{profile_id_single}}",
+          "searchItemIds": [],
+          "searchText": "",
+          "categories": [],
+          "brands": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdItems/search - 按searchItemIds过滤",
+    "description": "单接口测试：POST /api/AdItems/search。按itemId数组过滤(18.6%真实流量)。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 search(按ID过滤)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/search",
+        "request_body": {
+          "advertiserId": "{{profile_id_single}}",
+          "searchItemIds": [
+            "559010244"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AdItems/searchItemCategroy - 默认调用",
+    "description": "单接口测试：GET /api/AdItems/searchItemCategroy。无参数，单一场景(100%流量)。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 searchItemCategroy",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/searchItemCategroy",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdItems - 创建AdItem(写操作·验证业务校验)",
+    "description": "单接口测试：POST /api/AdItems。创建类写操作，2026-09-14起真实执行。实测发现该接口对itemId做\"是否属于该campaign的商品池(item group)\"校验，即使itemId是本profile真实目录商品(通过byProfile查询确认存在)，只要不在目标campaign配置的商品池内就会被优雅拒绝(HTTP 200+successCount=0+errorMessage\"Item not found\")。已用profile 16274451下多个真实目录商品(10324542/100641496/10323754)尝试添加到campaign 426321/426323的广告组，均复现同一业务校验行为，非bug。受限于没有只读接口能查到某campaign的\"允许添加商品池\"，未能构造出真正成功的创建场景，仅验证接口可达+业务校验生效。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "尝试创建AdItem(itemId不在目标campaign商品池内)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems",
+        "request_body": [
+          {
+            "adGroupId": 770991126,
+            "bid": 0.5,
+            "campaignId": 426323,
+            "itemId": "10323754",
+            "profileId": 16274451,
+            "status": "0"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdItems/UpdateItemInfo - 刷新商品信息(写操作·幂等安全)",
+    "description": "单接口测试：POST /api/AdItems/UpdateItemInfo。名称含Update但实测是按itemId从Walmart目录刷新商品元数据(标题/图片等)到本地缓存的幂等操作，不修改业务实体(与Media模块AsyncMedia同类判断逻辑：看是否传入已存在实体ID去触发只读性质的刷新，而非新建/删除)，2026-09-14起真实执行。用profile 16274451真实目录商品10324542验证。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "刷新商品信息",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/UpdateItemInfo",
+        "request_body": {
+          "advertiserId": 16274451,
+          "searchText": "10324542"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PATCH /api/AdItems/bid - 修改AdItem出价",
+    "description": "单接口测试：PATCH /api/AdItems/bid。技术受限未执行：body只有ids(内部AdItem关联ID数组，如150727601类PK)，profile/campaign/adGroup信息均不在body内；已排查ByAdgroups/byProfile/adGroupsByItemId等全部只读接口，均不返回这个内部ID，无法安全获取测试账号自己的AdItem PK用于测试(不能猜测数字ID，可能误改到其他真实客户数据)。需人工从Pacvue前端UI页面查看广告组详情页的网络请求获取真实ids后再执行。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改出价(示例，ids需替换为真实值)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/bid",
+        "request_body": {
+          "ids": [
+            "[NEEDS_REAL_VALUE]"
+          ],
+          "setBidType": 0,
+          "targetBid": 0.5
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PATCH /api/AdItems/status - 修改AdItem状态",
+    "description": "单接口测试：PATCH /api/AdItems/status。技术受限未执行，原因同PATCH /api/AdItems/bid：body只有ids(内部AdItem PK)+status，无法通过只读接口安全获取测试账号真实ids。需人工从UI获取后执行。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改状态(示例，ids需替换为真实值)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/status",
+        "request_body": {
+          "ids": [
+            "[NEEDS_REAL_VALUE]"
+          ],
+          "status": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PATCH /api/AdItems/bid/byConditions - 按条件批量改出价",
+    "description": "单接口测试：PATCH /api/AdItems/bid/byConditions。ByCondition批量更新类，属项目高危清单(按筛选条件批量改)，仅生成不执行，需用户逐条确认。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按条件批量改出价(高危，不执行)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/bid/byConditions",
+        "request_body": {
+          "setBidType": 1,
+          "rate": 100,
+          "dValue": 0,
+          "max": 0,
+          "min": 0,
+          "excludedIds": [],
+          "conditions": {
+            "campaignIds": [
+              "{{campaign_id}}"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PATCH /api/AdItems/status/byConditions - 按条件批量改状态",
+    "description": "单接口测试：PATCH /api/AdItems/status/byConditions。ByCondition批量更新类，属项目高危清单，仅生成不执行，需用户逐条确认。",
+    "module": "AdItems",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按条件批量改状态(高危，不执行)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "AdItems/status/byConditions",
+        "request_body": {
+          "status": 1,
+          "excludedIds": [],
+          "conditions": {
+            "campaignIds": [
+              "{{campaign_id}}"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
