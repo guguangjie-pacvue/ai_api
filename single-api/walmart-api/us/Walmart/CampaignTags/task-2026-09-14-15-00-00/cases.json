@@ -1,0 +1,391 @@
+[
+  {
+    "name": "GET /api/CampaignTags - 默认调用",
+    "description": "单接口测试：GET /api/CampaignTags。获取全量CampaignTag标签列表。场景：默认调用(不传display参数，display=1仅占比0.6%<1%不单独覆盖)。500条随机样本中占比约99.4%(497次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CampaignTags - 默认调用",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignTags/campaigns - 默认调用",
+    "description": "单接口测试：GET /api/CampaignTags/campaigns。按TagId获取绑定的Campaign列表。场景：默认调用(id参数为唯一维度，100%样本仅此一种模式)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaigns - 默认调用",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/campaigns?id={{campaign_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignTags/ShareLink - 默认调用",
+    "description": "单接口测试：GET /api/CampaignTags/ShareLink。获取分享链接。场景：默认调用(无查询参数)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ShareLink - 默认调用",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/ShareLink",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/tagsByCampaignIds - 纯ID数组",
+    "description": "单接口测试：POST /api/CampaignTags/tagsByCampaignIds。按CampaignId批量查询关联的Tag。场景：纯campaignId字符串数组(不含profileId)。500条随机样本中占比约97.4%(487次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tagsByCampaignIds - 纯ID数组",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/tagsByCampaignIds",
+        "request_body": [
+          "{{campaign_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/tagsByCampaignIds - 含profileId的对象数组",
+    "description": "单接口测试：POST /api/CampaignTags/tagsByCampaignIds。按CampaignId批量查询关联的Tag。场景：{campaignId,profileId}对象数组(与纯ID数组是两种真实并存的调用形态)。500条随机样本中占比约2.4%(12次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tagsByCampaignIds - 含profileId的对象数组",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/tagsByCampaignIds",
+        "request_body": [
+          {
+            "profileId": "{{profile_id_single}}",
+            "campaignId": "{{campaign_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/dailyBudgetCampaignWithPacingTagCheck - 默认调用",
+    "description": "单接口测试：POST /api/CampaignTags/dailyBudgetCampaignWithPacingTagCheck。校验Campaign打Tag后与预算节奏(Pacing)是否冲突(只读校验类接口)。场景：默认调用(单一场景，500条样本结构一致)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dailyBudgetCampaignWithPacingTagCheck - 默认调用",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/dailyBudgetCampaignWithPacingTagCheck",
+        "request_body": {
+          "tagIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "campaignIds": [
+            "{{campaign_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/SyncTagCampaignToCk - 默认调用",
+    "description": "单接口测试：POST /api/CampaignTags/SyncTagCampaignToCk。将Tag-Campaign关联数据同步至ClickHouse供报表查询(仅刷新已有数据的分析副本，不创建/删除/修改业务实体，判定为安全可执行)。场景：默认调用(单一tagId)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SyncTagCampaignToCk - 默认调用",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/SyncTagCampaignToCk",
+        "request_body": [
+          "{{campaign_tag_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignTags - 创建标签",
+    "description": "单接口测试：POST /api/CampaignTags。创建类写操作(新建CampaignTag)，仅生成case供人工评估，不自动执行。Swagger仅描述Success无响应schema，无法编造extract_vars，需人工执行后确认响应结构再补充清理(删除)步骤。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建 CampaignTags",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "test131558"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】DELETE /api/CampaignTags - 删除标签",
+    "description": "单接口测试：DELETE /api/CampaignTags?id=xxx。删除类写操作且不可逆(直接删除Tag，非归档)，仅生成case供人工评估，不自动执行。id为真实样本值，执行前需替换为测试账号下可安全删除的Tag。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "删除 CampaignTags",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags?id={{campaign_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PUT /api/CampaignTags - 更新标签(改名/改绑定Campaign)",
+    "description": "单接口测试：PUT /api/CampaignTags。原地更新类写操作(修改Tag名称及绑定的Campaign列表)，仅生成case供人工评估，不自动执行。样本仅有变更后新值，无变更前原值，执行前需人工先查询该Tag当前tagName/campaignIds记录原值。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新 CampaignTags",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "tagName": "SS Shreds",
+          "campaignIds": [
+            "{{campaign_id}}"
+          ],
+          "id": "{{campaign_tag_id}}",
+          "parentId": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】DELETE /api/CampaignTags/BulkCampaignTag - 批量删除标签",
+    "description": "单接口测试：DELETE /api/CampaignTags/BulkCampaignTag。批量删除类写操作且不可逆，仅生成case供人工评估，不自动执行。body为真实样本Tag ID数组(其他账号)，执行前需替换为测试账号下可安全删除的Tag。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量删除 CampaignTags",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/BulkCampaignTag",
+        "request_body": [
+          "{{campaign_tag_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PATCH /api/CampaignTags/name - 重命名标签",
+    "description": "单接口测试：PATCH /api/CampaignTags/name?id=xxx。原地更新类写操作(重命名Tag)，仅生成case供人工评估，不自动执行。执行前需人工先查询该Tag当前tagName记录原值以便还原。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "重命名 CampaignTags",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/name?id={{campaign_tag_id}}",
+        "request_body": {
+          "tagName": "NB"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PUT /api/CampaignTags/targetSetting - 设置Tag目标ACOS/ROAS",
+    "description": "单接口测试：PUT /api/CampaignTags/targetSetting。原地更新类写操作(为Tag设置目标ACOS/ROAS及生效日期范围)，仅生成case供人工评估，不自动执行。执行前需人工先查询该Tag当前目标设置记录原值。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置目标ACOS/ROAS",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/targetSetting",
+        "request_body": {
+          "IsSetSalesConversionPercent": false,
+          "StartDate": "{{date_start_mdy}}",
+          "EndDate": "{{date_end_mdy}}",
+          "CPA": "",
+          "targetIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "acos": "12.50",
+          "roas": "8"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】PUT /api/CampaignTags/UpdateTagOwner - 变更标签负责人",
+    "description": "单接口测试：PUT /api/CampaignTags/UpdateTagOwner。原地更新类写操作(变更Tag的负责人/所有者)，仅生成case供人工评估，不自动执行。365天仅4次真实调用，样本较少；userName/userId为其他账号真实用户，执行前需替换为测试账号可用的用户。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "变更标签负责人",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/UpdateTagOwner",
+        "request_body": {
+          "parentTagIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "userName": "Aidan.Myers@reckitt.com",
+          "userId": "31554"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
