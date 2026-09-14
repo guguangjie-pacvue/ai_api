@@ -1,0 +1,809 @@
+[
+  {
+    "name": "POST /template/getCategory - 默认查询(无过滤)",
+    "description": "单接口测试：POST /template/getCategory。该POST接口无法用ES按bol平台过滤流量(body无productLine字段)，改为直接调用bol测试账号(client_id=62, header productline=bolv2)验证真实结构：code:200，返回10条真实分类记录(含全局默认分类如Rule Kickstart/Efficiency/Relevancy，以及client专属分类如test1212/ml-test/TEST等，defaultCategory字段区分全局与专属)。creator/onlyFavorite/ruleType在全平台500条ES样本中该组合(无过滤)占比约11.2%(56/500)，属真实高频场景。bol平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultCategory - 默认查询(真实body结构defaultCategory=false)",
+    "description": "单接口测试：POST /template/getDefaultCategory。该POST接口无法按bol平台过滤ES流量(body无productLine字段)。已实测确认：是否返回默认分类完全由URL路径决定，body里的defaultCategory字段(true/false均已实测)不影响结果。bol账号直接实测：code:200，返回7条全局默认分类(含accessibleClientIds限定为[\"62\"]的4条专属默认分类，以及Efficiency/Relevancy/Rule Kickstart等3条全局共享默认分类)。bol平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultTemplate - 默认查询(真实categoryId)",
+    "description": "单接口测试：POST /template/getDefaultTemplate。同样确认body.defaultCategory真实取值不影响结果，真实调用会带categoryId过滤到具体默认分类。bol账号直接实测：categoryId使用本账号真实默认分类id(1930933114109800449, \"test v2\")，code:200，返回该分类下1条全局共享默认模板(clientId为null，验证了该模板是全局共享实体，与Red Line#6一致)。bol平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [],
+          "categoryId": "1930933114109800449"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /template/getOwners - 默认调用(无入参)",
+    "description": "单接口测试：GET /template/getOwners。Swagger无声明参数，GET请求ES queryString恒为空、不区分平台，采用全平台真实调用模式(近90天1986次，均为无入参调用，参考citrus/kroger平台既有结论)。bol账号直接实测：code:200，返回2条真实owner记录(Pacvue Default/yinzixin)。该接口真实调用仅1种模式，已全覆盖。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询模板所有者列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getOwners",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getRecommendation - 默认查询(复现真实缺陷)",
+    "description": "【真实后端缺陷，非测试构造错误】单接口测试：POST /template/getRecommendation。全平台500条ES样本100%body为{\"defaultCategory\": false}(唯一模式)。bol账号直接实测：返回code:405，服务端SQL异常\"...java.sql.SQLSyntaxErrorException...near '))' at line 3...RuleAutomationMapper.java\"，SQL为\"...FROM rule_automation WHERE (rule_template_id IN ())\"——服务端在推荐模板候选集为空时拼接出了非法的SQL IN()语句。该缺陷已在walmart/instacart/target/kroger/chewy/citrus平台的既有case文件中复现过，本次在bol平台用真实ES body再次独立复现，确认是跨平台共性缺陷。断言按正确业务预期写(code:200)，实际会FAIL，如实记录缺陷，不修改断言掩盖问题。该接口真实调用仅1种模式，已全覆盖。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询推荐模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getRecommendation",
+        "request_body": {
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - ruleType=Targeting(bol账号真实存量)",
+    "description": "单接口测试：POST /template/getTemplate。该POST接口无法用ES按bol平台归因(body无productLine字段，全平台混合样本的ruleType字符串是各平台各自的枚举术语，不能直接套用到bol)，改为直接统计bol账号(client_id=62)当前全部15条非默认模板的真实ruleType分布：Targeting 11条(73.3%)、Harvest Keywords 2条(13.3%)、SOV Bid 1条(6.7%)、Campaign 1条(6.7%)，四种均≥1%需全覆盖。本场景ruleType=Targeting。bol测试账号直接实测：code:200，返回11条真实模板。bol平台，真实账号验证+账号真实数据统计。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Targeting"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - ruleType=Harvest Keywords(bol账号真实存量)",
+    "description": "单接口测试：POST /template/getTemplate。bol账号真实存量ruleType分布场景之二：Harvest Keywords占2/15(13.3%)。bol测试账号直接实测：code:200，返回2条真实模板。bol平台，真实账号验证+账号真实数据统计。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Harvest Keywords"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - ruleType=SOV Bid(bol账号真实存量)",
+    "description": "单接口测试：POST /template/getTemplate。bol账号真实存量ruleType分布场景之三：SOV Bid占1/15(6.7%)。bol测试账号直接实测：code:200，返回1条真实模板。bol平台，真实账号验证+账号真实数据统计。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "SOV Bid"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - ruleType=Campaign(bol账号真实存量)",
+    "description": "单接口测试：POST /template/getTemplate。bol账号真实存量ruleType分布场景之四：Campaign占1/15(6.7%)。bol测试账号直接实测：code:200，返回1条真实模板。bol平台，真实账号验证+账号真实数据统计。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Campaign"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板",
+    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。该接口ES近90天全平台仅2条命中(均属其他真实客户，不可挪用到bol测试账号)。改用bol测试账号自身真实模板(1878734202056781825)+真实client_id构造该场景验证接口基础可用性：bol测试账号直接实测code:200，返回空数组(该模板未配置任何direct share关系，属正常业务结果，与kroger平台同结论一致)。bol平台，真实账号验证+低流量接口按Swagger结构构造。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询DirectShare模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromDirectShare",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sourceProductLine": "{{platform}}",
+          "targetProductLine": "{{platform}}",
+          "templateIds": [
+            "1878734202056781825"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplateListFromSharePass - 创建真实SharePass后查询(可重复)",
+    "description": "单接口测试：POST /template/getTemplateListFromSharePass。全平台38条ES样本100%一致为{sharePassId, targetProductLine}两字段。该接口在bol平台ES本身命中为0，为避免使用自造/虚构sharePassId，串联同服务share-pass-controller模块的真实创建结构 POST /sharePass/create(targetType=rule，使用bol测试账号真实模板1878734202056781825)产生一个真实sharePassId，再用该真实ID+真实字段结构调用本接口，最后调用POST /sharePass/delete清理，保证用例可重复执行、不留残留分享记录(与citrus/kroger平台既有做法一致：create/delete仅作为本接口的fixture bootstrap，不代表share-pass-controller模块自身的create/delete已有真实bol流量覆盖)。已直接调用API验证整套流程可行且已清理。bol平台，真实sharePass生命周期验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建真实SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/create",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "timeZone": "America/Los_Angeles",
+          "targetType": "rule",
+          "list": [
+            {
+              "templateId": "1878734202056781825",
+              "type": 1
+            }
+          ],
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "tpl_share_pass_id": "data[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "通过分享密码获取模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromSharePass",
+        "request_body": {
+          "sharePassId": "{{tpl_share_pass_id}}",
+          "targetProductLine": "{{platform}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-删除SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/delete",
+        "request_body": [
+          "{{tpl_share_pass_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "模板生命周期(创建/编辑/收藏/移动/删除) - bol",
+    "description": "单接口测试：串联 POST /template/category(创建2个专属临时分类A/B) → POST /template(创建模板,ruleType使用bol账号已验证真实高频值Targeting) → POST /template/getTemplate(查询新建ID) → POST /template/editTemplate → POST /template/addFavorite(收藏自建模板) → POST /template/moveTemplate(移动到分类B) → DELETE /template/{templateId} → DELETE /template/category/{categoryId}(A) → DELETE /template/category/{categoryId}(B)。全程只使用本次自建的QA_Bol_Test_*临时模板/分类，不触碰既有真实存量数据(15模板/10分类)。已直接调用API验证整套流程可行且已清理，bol账号存量数据执行前后一致(15模板/10分类)。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时分类A(容纳新建模板)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "QA_Bol_Test_Category_A",
+          "description": "bol swagger-api-case throwaway category A (safe to delete)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "创建临时分类B(移动目的地)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "QA_Bol_Test_Category_B",
+          "description": "bol swagger-api-case throwaway category B (safe to delete)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询A/B分类的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_category_a_id": "data[name=QA_Bol_Test_Category_A].id",
+          "created_category_b_id": "data[name=QA_Bol_Test_Category_B].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "创建模板(ruleType=Targeting,放入分类A)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template",
+        "request_body": {
+          "templateName": "QA_Bol_Test_Template",
+          "description": "bol swagger-api-case throwaway template (safe to delete)",
+          "categoryId": "{{created_category_a_id}}",
+          "ruleType": "Targeting",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_qabol",
+                    "value": "4",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 10,
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建模板的ID(按ruleType=Targeting+分类A过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Targeting"
+          ],
+          "categoryId": "{{created_category_a_id}}"
+        },
+        "extract_vars": {
+          "created_template_id": "data[templateName=QA_Bol_Test_Template].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "templateName": "QA_Bol_Test_Template_Edited",
+          "description": "bol swagger-api-case throwaway template (edited)",
+          "categoryId": "{{created_category_a_id}}",
+          "ruleType": "Targeting",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_qabol",
+                    "value": "5",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 12,
+                "percentage": 12,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "收藏模板(自建模板,非默认模板)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/addFavorite",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "addFavorite": true,
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "移动模板到分类B",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/moveTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "categoryId": "{{created_category_b_id}}",
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类A",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_a_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类B",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_b_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "分类生命周期(创建/编辑/删除) - bol",
+    "description": "单接口测试：串联 POST /template/category(创建,真实ES body结构{name,description,defaultCategory}) → POST /template/getCategory(查询新建ID，创建接口本身不返回ID) → POST /template/editCategory → DELETE /template/category/{categoryId}。创建一个专属临时分类，验证编辑后，后置步骤删除，保证用例可重复执行。已直接调用API验证整套流程可行且已清理。bol平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "QA_Bol_Test_Category_Edit",
+          "description": "bol swagger-api-case throwaway category for editCategory test (safe to delete)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建分类的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_category_id": "data[name=QA_Bol_Test_Category_Edit].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editCategory",
+        "request_body": {
+          "categoryId": "{{created_category_id}}",
+          "name": "QA_Bol_Test_Category_Edit_Renamed",
+          "description": "bol swagger-api-case throwaway category (edited)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "批量创建模板(bulk)+清理 - bol",
+    "description": "单接口测试：POST /template/bulk。使用bol账号已验证真实高频ruleType=Targeting批量创建1个临时测试模板，容器分类使用只读fixture分类1759466225747152898(test1212)作临时挂载点(仅创建时挂靠，随后立即DELETE的是新建的模板本身，不对fixture分类做任何编辑/删除，countNum会短暂+1后立即恢复)。通过 POST /template/getTemplate(按ruleType=Targeting过滤)查询新建ID(bulk接口本身只返回{success:[],failed:[]}模板名称列表，不返回ID)，验证成功后DELETE清理，保证用例可重复执行。已直接调用API验证整套流程可行且已清理，fixture分类countNum验证前后一致(2)。bol平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/bulk",
+        "request_body": {
+          "templateRequestList": [
+            {
+              "templateName": "QA_Bol_Test_Bulk_Template",
+              "description": "bol swagger-api-case throwaway bulk template (safe to delete)",
+              "categoryId": "1759466225747152898",
+              "ruleType": "Targeting",
+              "isFavorite": false,
+              "defaultTemplate": false,
+              "frequency": "Weekly",
+              "dayOfWeek": 7,
+              "hour": 0,
+              "automation": [
+                {
+                  "requirements": [
+                    [
+                      {
+                        "field": "ROAS",
+                        "valueType": "Custom",
+                        "id": "requirement_0_0_qabol_bulk",
+                        "value": "4",
+                        "operand": "Greater"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "length": 7,
+                    "index": 1,
+                    "days": 14
+                  },
+                  "action": {
+                    "cap": 10,
+                    "percentage": 10,
+                    "action": "Increase",
+                    "budgetRate": 100,
+                    "actionName": "Increase"
+                  },
+                  "secondDateIndex": {}
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "success": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "查询bulk新建模板的ID(按ruleType=Targeting+fixture分类过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Targeting"
+          ],
+          "categoryId": "1759466225747152898"
+        },
+        "extract_vars": {
+          "created_bulk_template_id": "data[templateName=QA_Bol_Test_Bulk_Template].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-删除bulk创建的模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_bulk_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

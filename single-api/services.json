@@ -36,6 +36,12 @@
       }
     ],
     "platforms": ["amazon", "tiktok", "walmart","instacart","criteo","target","kroger","chewy","citrus","doordash","samsclub","bol","mercado","ebay"],
+    "platform_login_alias": {
+      "kroger": "krogerv3",
+      "bol": "bolv2",
+      "chewy": "chewyv2",
+      "_comment": "目录名/platforms 列表用业务名；实际登录 productline header 和 ES body.productLine.keyword 真实值需要用 alias（已验证：krogerv3/bolv2/chewyv2 才能登录成功且匹配真实流量，kroger/bol/chewy 登录返回406）。其余平台 alias=自身。"
+    },
     "es_index": {
       "us": "rule-api-access-*"
     },
@@ -47,7 +53,7 @@
       "body_is_json_string": false,
       "clientid_exclude": [62, 3186],
       "assertion_l1": { "code": 200 },
-      "platform_filter": { "get": "all", "post": "queryString:productLine=<platform>" }
+      "platform_filter": { "get": "all", "post": "body.productLine.keyword:<platform>", "post_fallback_no_productline_field": "all (endpoint request body has no productLine field, e.g. getHistoryList/getRuleViewList/template.getTemplate -- cannot attribute to a single platform via ES, treat like GET: use all-platform traffic as baseline)" }
     }
   },
   "walmart-api": {

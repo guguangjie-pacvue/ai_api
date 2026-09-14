@@ -1,0 +1,2414 @@
+[
+  {
+    "name": "POST /definition - 创建Line Item类型规则(自建账号内最高频模式,含后置删除,可重复)",
+    "description": "单接口测试：POST /definition。ES实测：target平台90天窗口内该接口command流量366条(clientId=62本账号历史流量单独查询另有579条/30天，其中ruleType=Line Item占比62.0%(359/579)为本账号最常见模式，与全平台366条样本中Negative Targeting最高频不同——因写操作只能安全落在本账号(clientId=62)自建数据上，故采用本账号真实占比最高的Line Item结构而非全平台结构，规避借用其他真实客户campaignId/adGroupId的风险。targetInfo使用config真实fixture(target_id/profile_id)。第2步查询提取ruleId，第3步changeStatus{isPaused:true,isDelete:true}清理，第4步GET验证isPaused=true，保证用例可重复执行。500条随机样本中占比约62.0%(359次，本账号维度)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建target Line Item规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_CreateLineItem_Cleanup",
+          "ruleNames": [
+            "TC_Target_CreateLineItem_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_CreateLineItem_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "li_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{li_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{li_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 创建Keyword类型规则(自建账号内第二高频模式,含后置删除,可重复)",
+    "description": "单接口测试：POST /definition。同上ES样本，clientId=62本账号30天窗口579条样本中ruleType=Keyword占比9.3%(54/579)，属≥1%的独立真实场景，且与Line Item结构差异明显(targetLevel=Campaign+ruleTargetType=[Manual])。第2步查询提取ruleId，第3步changeStatus{isPaused:true,isDelete:true}清理，第4步GET验证isPaused=true。500条随机样本中占比约9.3%(54次，本账号维度)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建target Keyword规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sovCategory": "",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "sovKeywordTag": [],
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "mode": "Auto",
+          "productLine": "target",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "cpc",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "1",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 100,
+                "action": "SetByMinBid",
+                "budgetRate": 100,
+                "actionName": "SetByMinBid"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "dayOfWeek": 7,
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Target_CreateKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Target_CreateKeyword_Cleanup"
+          ],
+          "campaignTagProfileIds": [],
+          "startDate": "2026-09-11T00:00:00",
+          "sovKeywordList": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_CreateKeyword_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "kw_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{kw_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{kw_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/{ruleId} - 查询自建规则详情(自包含,含后置删除,可重复)",
+    "description": "单接口测试：GET /definition/{ruleId}。该接口ES全平台90天真实调用量大(数万次)，但路径含动态ruleId，无法用ES term精确匹配；本case自包含创建一条本账号(clientId=62)临时Line Item规则，用其真实ruleId发起GET(读操作，结构与本账号历史GET /definition/{id}真实响应一致，返回data为规则详情对象)，验证data非空后归档清理，保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于GET验证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_GetById_Cleanup",
+          "ruleNames": [
+            "TC_Target_GetById_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_GetById_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "get_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "GET 定义详情",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{get_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{get_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/addAppliedObj - 追加应用对象到自建规则(自包含,含后置删除,可重复)",
+    "description": "单接口测试：POST /definition/addAppliedObj。ES target平台90天窗口该接口仅2条真实样本，均为targetLevel=LineItem+ruleTargetOperandType=COVERAGE的结构(100%占比)。样本中clientId/targetId均属真实客户数据不可直接复用；本case自建一条LineItem规则后，用config真实fixture(target_id/profile_id)按该真实结构对自建规则追加应用对象，验证成功后归档清理规则。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于追加应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_AddAppliedObj_Cleanup",
+          "ruleNames": [
+            "TC_Target_AddAppliedObj_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_AddAppliedObj_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "aao_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "追加应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/addAppliedObj",
+        "request_body": {
+          "productLine": "target",
+          "clientId": "{{client_id}}",
+          "ids": [
+            "{{aao_rule_id}}"
+          ],
+          "ruleTarget": {
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "ruleTargetOperandType": "COVERAGE",
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{aao_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/calculateNextExecutionTime - Daily频率计算",
+    "description": "单接口测试：POST /definition/calculateNextExecutionTime。该接口不含productLine顶层归属歧义字段外的持久化写入(纯计算,不落库)，target平台90天窗口真实样本7条中frequency=Daily占比57.1%(4/7)为最常见模式，直接使用该真实样本(变量占比标注),无需清理。500条随机样本中占比约57.1%(4次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 calculateNextExecutionTime(Daily)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/calculateNextExecutionTime",
+        "request_body": {
+          "productLine": "target",
+          "hour": 9,
+          "endDate": "2026-07-04T23:59:59",
+          "emailOption": "NoEmails",
+          "timeZone": "America/New_York",
+          "startDate": "2026-07-01T00:00:00",
+          "frequency": "Daily"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/calculateNextExecutionTime - Every3days频率计算",
+    "description": "单接口测试：POST /definition/calculateNextExecutionTime。target平台90天窗口7条真实样本中frequency=Every3days占比28.6%(2/7)，属≥1%真实场景。500条随机样本中占比约28.6%(2次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 calculateNextExecutionTime(Every3days)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/calculateNextExecutionTime",
+        "request_body": {
+          "productLine": "target",
+          "hour": 6,
+          "emailOption": "NoEmails",
+          "timeZone": "America/New_York",
+          "startDate": "2026-07-06T00:00:00",
+          "frequency": "Every3days"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/calculateNextExecutionTime - Weekly频率计算(带dayOfWeek)",
+    "description": "单接口测试：POST /definition/calculateNextExecutionTime。target平台90天窗口7条真实样本中frequency=Weekly占比14.3%(1/7)，属真实存在场景(样本量小于10，已在对话中说明样本较少)。500条随机样本中占比约14.3%(1次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 calculateNextExecutionTime(Weekly)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/calculateNextExecutionTime",
+        "request_body": {
+          "productLine": "target",
+          "dayOfWeek": 1,
+          "hour": 1,
+          "emailOption": "NoEmails",
+          "timeZone": "America/New_York",
+          "startDate": "2026-09-08T00:00:00",
+          "frequency": "Weekly"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeOwners - 变更自建规则负责人(自包含,可重复)",
+    "description": "单接口测试：POST /definition/changeOwners。该接口请求体不含productLine字段(session/JWT范围调用,无法按平台归因)，按GET同等对待使用全平台90天基线(67条样本，全部为{ruleIds,userName,userId}结构，单ruleId占比58.2%(39/67)为主，属≥1%场景)。本case自建临时规则后，将其owner显式设置为测试账号自身用户({{user_id}}/autoui_acount，与本账号真实历史/definition创建记录中的userId/userName完全一致)，验证成功后归档删除。500条随机样本中占比约58.2%(39次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于变更负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_ChangeOwners_Cleanup",
+          "ruleNames": [
+            "TC_Target_ChangeOwners_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_ChangeOwners_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "co_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "变更规则负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeOwners",
+        "request_body": {
+          "ruleIds": [
+            "{{co_rule_id}}"
+          ],
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{co_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 暂停自建规则(isPaused:true,自包含,可重复)",
+    "description": "单接口测试：POST /definition/changeStatus。该接口请求体不含productLine字段，按全平台90天基线(500条样本)统计：isPaused=true(单ruleId,非delete)占比51.2%(256/500)为最高频模式。本case自建临时规则后调用changeStatus{isPaused:true}使其暂停，GET验证isPaused=true后再调用isDelete:true彻底清理，保证可重复。500条随机样本中占比约51.2%(256次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于暂停测试",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_PauseStatus_Cleanup",
+          "ruleNames": [
+            "TC_Target_PauseStatus_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_PauseStatus_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "pause_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "暂停规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{pause_rule_id}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{pause_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-彻底删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{pause_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 恢复自建规则(isPaused:false,自包含,可重复)",
+    "description": "单接口测试：POST /definition/changeStatus。全平台90天基线中isPaused=false(单ruleId,非delete)占比22.8%(114/500)，属≥1%真实场景，代表'恢复运行'操作。本case自建规则->先暂停(前置)->再调用isPaused:false恢复->GET验证isPaused=false->最终isDelete:true彻底清理，保证可重复。500条随机样本中占比约22.8%(114次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于恢复测试",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_ResumeStatus_Cleanup",
+          "ruleNames": [
+            "TC_Target_ResumeStatus_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_ResumeStatus_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "resume_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "前置-先暂停规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "恢复规则(isPaused:false)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已恢复(isPaused:false)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{resume_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": false
+          }
+        }
+      },
+      {
+        "name": "后置清理-彻底删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/checkRuleName - 检查未占用规则名(不带id,可重复)",
+    "description": "单接口测试：POST /definition/checkRuleName。该接口纯校验、不写库。全平台90天基线500条样本中不带id(新建场景)占比39.4%(197/500)。使用未被占用的随机规则名验证接口可用性，无需清理。500条随机样本中占比约39.4%(197次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "检查规则名(新建场景)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/checkRuleName",
+        "request_body": {
+          "emailOption": "NoEmails",
+          "ruleName": "TC_Target_CheckRuleName_NotExist_Probe",
+          "ruleNames": [
+            "TC_Target_CheckRuleName_NotExist_Probe"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/checkRuleName - 检查规则名(带id排除自身,自包含,可重复)",
+    "description": "单接口测试：POST /definition/checkRuleName。全平台90天基线中带id(编辑场景,排除自身)占比60.6%(303/500)为最高频模式。本case自建临时规则后，用其真实ruleId+自身ruleName调用checkRuleName(验证'排除自身'逻辑不误判占用)，随后归档清理。500条随机样本中占比约60.6%(303次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于checkRuleName(带id)验证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_CheckRuleName_WithId_Cleanup",
+          "ruleNames": [
+            "TC_Target_CheckRuleName_WithId_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_CheckRuleName_WithId_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "crn_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "检查规则名(编辑场景,排除自身)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/checkRuleName",
+        "request_body": {
+          "emailOption": "NoEmails",
+          "ruleName": "TC_Target_CheckRuleName_WithId_Cleanup",
+          "ruleNames": [
+            "TC_Target_CheckRuleName_WithId_Cleanup"
+          ],
+          "id": "{{crn_rule_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{crn_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/commerceRuleClient - 默认调用(无入参)",
+    "description": "单接口测试：GET /definition/commerceRuleClient。Swagger无声明参数。该接口不带productLine字段，ES全平台90天样本(13条,已排除测试账号clientId 62/3186)均为相同调用形态，占比100%，已全覆盖。500条随机样本中占比约100%(13次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleClient",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleClient",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - 按Client维度报表(可重复)",
+    "description": "单接口测试：POST /definition/commerceRuleReport。该接口不含productLine字段，全平台90天基线16条样本中commerceRuleReportGroupBy=By Client占比87.5%(14/16)为最常见模式，纯读操作无需清理。500条随机样本中占比约87.5%(14次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleReport(By Client)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "endDate": "2026-08-08",
+          "prevEndDate": "2026-08-01",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Client",
+          "startDate": "2026-08-02",
+          "prevStartDate": "2026-07-26",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - 按Rule Name维度报表(真实缺陷,已复核确认)",
+    "description": "单接口测试：POST /definition/commerceRuleReport。全平台90天基线16条样本中commerceRuleReportGroupBy=By Rule Name占比12.5%(2/16)，属≥1%独立场景。实测发现真实缺陷：无论日期窗口取ES真实样本区间(2026-06-14~2026-06-20)还是当前最近7天窗口，测试账号(clientId=62)在该groupBy下均稳定复现服务端405: 'Cannot invoke \"String.contains(java.lang.CharSequence)\" because the return value of \"RuleView.getRequirements()\" is null'——即测试账号名下存在requirements为null的规则，By Rule Name分组代码路径未做空值检查。已用两个不同日期窗口复核确认为服务端真实缺陷而非本request构造问题，故本case按实际响应(code:405)固化为回归用例。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleReport(By Rule Name)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "endDate": "2026-06-20",
+          "prevEndDate": "2026-06-13",
+          "timeZone": "America/Los_Angeles",
+          "clientIds": [],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Rule Name",
+          "prevStartDate": "2026-06-07",
+          "startDate": "2026-06-14",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑自建Line Item规则(自包含,可重复)",
+    "description": "单接口测试：POST /definition/editRule。target平台90天窗口432条真实样本中ruleType=Line Item(mode=Auto,frequency=Daily)占比10.4%(45/432)为高频编辑模式。本case自建Line Item规则(frequency=Weekly)后，用相同请求体+id字段调用editRule将frequency改为Daily(与真实高频编辑目标态一致)，GET验证frequency已变更，随后归档删除。500条随机样本中占比约10.4%(45次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建待编辑的Line Item规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_EditLineItem_Cleanup",
+          "ruleNames": [
+            "TC_Target_EditLineItem_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_EditLineItem_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "er_li_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑规则(frequency: Weekly -> Daily)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Daily",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 6,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_EditLineItem_Cleanup",
+          "ruleNames": [
+            "TC_Target_EditLineItem_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": [],
+          "id": "{{er_li_rule_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证frequency已变更为Daily",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{er_li_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "frequency": "Daily"
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{er_li_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑自建Keyword规则(自包含,可重复)",
+    "description": "单接口测试：POST /definition/editRule。target平台90天窗口432条真实样本中ruleType=Keyword(mode=Auto,frequency=Every3days)占比20.4%(88/432)为最高频编辑模式。本case自建Keyword规则(frequency=Weekly)后调用editRule将frequency改为Every3days，GET验证已变更，随后归档删除。500条随机样本中占比约20.4%(88次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建待编辑的Keyword规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sovCategory": "",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "sovKeywordTag": [],
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "mode": "Auto",
+          "productLine": "target",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "cpc",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "1",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 100,
+                "action": "SetByMinBid",
+                "budgetRate": 100,
+                "actionName": "SetByMinBid"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "dayOfWeek": 7,
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Target_EditKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Target_EditKeyword_Cleanup"
+          ],
+          "campaignTagProfileIds": [],
+          "startDate": "2026-09-11T00:00:00",
+          "sovKeywordList": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_EditKeyword_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "er_kw_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑规则(frequency: Weekly -> Every3days)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sovCategory": "",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "sovKeywordTag": [],
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every3days",
+          "mode": "Auto",
+          "productLine": "target",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "cpc",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "1",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 100,
+                "action": "SetByMinBid",
+                "budgetRate": 100,
+                "actionName": "SetByMinBid"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "dayOfWeek": 7,
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Target_EditKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Target_EditKeyword_Cleanup"
+          ],
+          "campaignTagProfileIds": [],
+          "startDate": "2026-09-11T00:00:00",
+          "sovKeywordList": [],
+          "id": "{{er_kw_rule_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证frequency已变更为Every3days",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{er_kw_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "frequency": "Every3days"
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{er_kw_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Auto模式全量导出(不带ruleType/ruleIds过滤,可重复)",
+    "description": "单接口测试：POST /definition/export。该接口不含productLine字段，全平台90天基线132条样本中mode=Auto+不带ruleType/ruleIds过滤占比61.4%(81/132)为最常见模式。ownerIds/managedProfileIds使用config真实fixture(user_id/profile_id)替代样本中其他真实客户的owner/profile列表，纯读操作无需清理。500条随机样本中占比约61.4%(81次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(Auto,无过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": true,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 200
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Manual模式全量导出(可重复)",
+    "description": "单接口测试：POST /definition/export。全平台90天基线中mode=Manual+不带过滤占比12.9%(17/132)，属≥1%独立场景，纯读操作无需清理。500条随机样本中占比约12.9%(17次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(Manual,无过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "mode": "Manual",
+          "download": true,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 200
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Commerce类规则导出(ruleType过滤,可重复)",
+    "description": "单接口测试：POST /definition/export。全平台90天基线中ruleType=[Commerce,Inventory,Competitor]+mode=AutoCommerce占比3.0%(4/132)，属≥1%独立场景(与Auto/Manual结构差异明显)，纯读操作无需清理。500条随机样本中占比约3.0%(4次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(Commerce类,ruleType过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "mode": "AutoCommerce",
+          "download": true,
+          "ruleType": [
+            "Commerce",
+            "Inventory",
+            "Competitor"
+          ],
+          "ignore": false,
+          "currency": "￥",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 200
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Auto模式+ruleIds过滤导出(自包含,可重复)",
+    "description": "单接口测试：POST /definition/export。全平台90天基线中mode=Auto+带ruleIds过滤占比16.7%(22/132)，属≥1%独立场景。本case自建一条临时规则获取真实ruleId后按ruleIds过滤导出，验证成功后归档删除。500条随机样本中占比约16.7%(22次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于ruleIds过滤导出",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "target",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "LineItem"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "targetBid",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Line Item",
+          "ruleName": "TC_Target_ExportByIds_Cleanup",
+          "ruleNames": [
+            "TC_Target_ExportByIds_Cleanup"
+          ],
+          "startDate": "2026-09-11T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Target_ExportByIds_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "target",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "exp_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "导出规则列表(Auto,ruleIds过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": true,
+          "ruleType": [],
+          "ruleIds": [
+            "{{exp_rule_id}}"
+          ],
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 200
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{exp_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

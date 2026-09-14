@@ -1,0 +1,55 @@
+[
+  {
+    "name": "POST /event/getRuleDefinition - 测试账号真实citrus规则",
+    "description": "单接口测试：POST /event/getRuleDefinition。按ruleIds查询规则完整定义。ES近30天该接口调用量约168万次(排除测试账号)，但body只含ruleIds(雪花/自增ID)无productLine/平台标识字段(es_helper productline-agg与platform agg均确认bucket_sum=0)，按services.json post_fallback_no_productline_field约定用全平台基线；citrus无法被单独识别。真实样本中单ruleId查询与批量查询均存在，本场景用单ruleId查询(样本中大量出现的模式)，实参用测试账号下真实可查的citrus规则({{real_rule_id}}，已通过GET /definition/{id}验证为200真实数据)。响应体为裸数组(不含code/data/msg包装)，与Swagger声明的array-of-RuleDefinition返回类型一致。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则定义",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleDefinition",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$is_array": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleTypes - 默认调用(无入参)",
+    "description": "单接口测试：POST /event/getRuleTypes。获取系统支持的规则类型枚举列表。Swagger未声明requestBody，ES近90天真实样本(排除测试账号，309条)body均为空，与Swagger结构一致，跨平台通用(无productLine/platform字段可归因)，占比约100%(全部309条样本均为空body)。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则类型列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

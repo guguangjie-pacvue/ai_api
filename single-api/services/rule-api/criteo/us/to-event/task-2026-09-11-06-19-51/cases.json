@@ -1,0 +1,36 @@
+[
+  {
+    "name": "POST /event/getRuleCountByUserIds - 按clientId+userIds+月度时间窗查询规则数",
+    "description": "单接口测试：POST /event/getRuleCountByUserIds。真实ES样本(90天,已排除测试账号,productLine=criteo精确匹配)共13条，均为同一结构：按clientId+userIds列表+profileIds+start/end月度时间窗查询规则计数，占比100%（13次），已全覆盖。clientId/userIds/profileIds替换为测试账号(criteo)真实值。500条随机样本中占比约100%（13次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRuleCountByUserIds",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByUserIds",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{count_period_start}}",
+          "end": "{{count_period_end}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

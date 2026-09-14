@@ -1,0 +1,1738 @@
+[
+  {
+    "name": "POST /definition - 创建AdGroup类型规则(自建账号内最高频模式,含后置删除,可重复)",
+    "description": "单接口测试:POST /definition。ES实测:doordash平台90天窗口该接口共19条真实调用(clientId=62/3186已排除),ruleType=AdGroup+mode=Auto占比78.9%(15/19)为最高频模式,targetLevel=AdGroup,targetType=[\"Manual\"]。targetInfo使用config真实fixture(target_id/profile_id)。第2步查询提取ruleId,第3步changeStatus{isPaused:true,isDelete:true}清理,第4步GET验证isPaused=true,保证用例可重复执行。500条随机样本中占比约78.9%(15次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建doordash AdGroup规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "isPaused": false,
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "targetType": "[\"Manual\"]",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every2days",
+          "mode": "Auto",
+          "productLine": "doordash",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "AdGroup"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "3.5",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "adGroupPlacement": "Search"
+            }
+          ],
+          "hour": 0,
+          "ruleType": "AdGroup",
+          "ruleName": "TC_Doordash_CreateAdGroup_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_CreateAdGroup_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_CreateAdGroup_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "adg_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{adg_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{adg_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 创建Keyword类型规则(自建账号内第二高频模式,含后置删除,可重复)",
+    "description": "单接口测试:POST /definition。同上ES样本,doordash平台90天窗口19条真实调用中ruleType=Keyword+mode=Auto占比21.1%(4/19),属≥1%独立真实场景,targetLevel=Campaign,与AdGroup结构(targetLevel=AdGroup+targetType)明显不同。第2步查询提取ruleId,第3步changeStatus清理,第4步GET验证。500条随机样本中占比约21.1%(4次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建doordash Keyword规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every3days",
+          "productLine": "doordash",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "4.01",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Doordash_CreateKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_CreateKeyword_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_CreateKeyword_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "kw_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{kw_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{kw_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/{ruleId} - 查询自建规则详情(自包含,含后置删除,可重复)",
+    "description": "单接口测试:GET /definition/{ruleId}。该接口ES全平台90天真实调用量极大(53512次),但路径含动态ruleId,ES term精确匹配失效,无法用查询字符串区分平台归属;本case自建一条doordash账号(clientId=62)临时AdGroup规则,用其真实ruleId发起GET(读操作,结构与本账号历史GET /definition/{id}真实响应一致,返回data为规则详情对象),验证data非空后归档清理,保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于GET验证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "isPaused": false,
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "targetType": "[\"Manual\"]",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every2days",
+          "mode": "Auto",
+          "productLine": "doordash",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "AdGroup"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "3.5",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "adGroupPlacement": "Search"
+            }
+          ],
+          "hour": 0,
+          "ruleType": "AdGroup",
+          "ruleName": "TC_Doordash_GetById_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_GetById_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_GetById_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "get_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "GET 定义详情",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{get_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{get_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/addAppliedObj - 追加应用对象到自建规则(自包含,含后置删除,可重复)",
+    "description": "单接口测试:POST /definition/addAppliedObj。该接口有productLine字段可精确归因,doordash平台90/180/730天窗口内仅1条真实样本(极稀有但非零,已排除clientId 62/3186),结构为targetLevel=Campaign+ruleTargetOperandType=COVERAGE。样本中clientId/targetId为真实客户数据不可直接复用;本case自建一条Campaign级规则后,用config真实fixture(target_id/profile_id)按该真实结构追加应用对象,验证成功后归档清理规则,保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于追加应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every3days",
+          "productLine": "doordash",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "4.01",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Doordash_AddAppliedObj_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_AddAppliedObj_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_AddAppliedObj_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "aao_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "追加应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/addAppliedObj",
+        "request_body": {
+          "productLine": "doordash",
+          "clientId": "{{client_id}}",
+          "ids": [
+            "{{aao_rule_id}}"
+          ],
+          "ruleTarget": {
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "ruleTargetOperandType": "COVERAGE",
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{aao_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/calculateNextExecutionTime - Weekly频率计算(doordash真实样本)",
+    "description": "单接口测试:POST /definition/calculateNextExecutionTime。该接口不含productLine顶层归属歧义外的持久化写入(纯计算,不落库)。doordash平台90/180/730天窗口该接口仅1条真实样本,frequency=Weekly+dayOfWeek=1,直接使用该真实样本(变量占比标注),无需清理。500条随机样本中占比约100%(1次,doordash平台样本量小,已在对话中说明)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 calculateNextExecutionTime(Weekly)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/calculateNextExecutionTime",
+        "request_body": {
+          "productLine": "doordash",
+          "dayOfWeek": 1,
+          "hour": 0,
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "startDate": "2026-07-09T00:00:00",
+          "frequency": "Weekly"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeOwners - 变更自建规则负责人(自包含,可重复)",
+    "description": "单接口测试:POST /definition/changeOwners。该接口请求体不含productLine字段(session/JWT范围调用,无法按平台归因),按GET同等对待使用全平台90天基线(67条样本,单ruleId占比62.7%(42/67)为最高频模式,属≥1%场景)。本case自建临时规则后,将其owner显式设置为测试账号自身({{user_id}}/autoui_acount,与本账号真实创建记录中的userId/userName完全一致),验证成功后归档删除。500条随机样本中占比约62.7%(42次,全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于变更负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "isPaused": false,
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "targetType": "[\"Manual\"]",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every2days",
+          "mode": "Auto",
+          "productLine": "doordash",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "AdGroup"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "3.5",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "adGroupPlacement": "Search"
+            }
+          ],
+          "hour": 0,
+          "ruleType": "AdGroup",
+          "ruleName": "TC_Doordash_ChangeOwners_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_ChangeOwners_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_ChangeOwners_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "co_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "变更规则负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeOwners",
+        "request_body": {
+          "ruleIds": [
+            "{{co_rule_id}}"
+          ],
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{co_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 暂停自建规则(isPaused:true,自包含,可重复)",
+    "description": "单接口测试:POST /definition/changeStatus。该接口请求体不含productLine字段,按全平台90天基线(500条样本)统计:isPaused=true(单ruleId,非delete)占比51.2%(256/500)为最高频模式。本case自建临时规则后调用changeStatus{isPaused:true}使其暂停,GET验证isPaused=true后再调用isDelete:true彻底清理,保证可重复。500条随机样本中占比约51.2%(256次,全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于暂停测试",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "isPaused": false,
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "targetType": "[\"Manual\"]",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every2days",
+          "mode": "Auto",
+          "productLine": "doordash",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "AdGroup"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "3.5",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "adGroupPlacement": "Search"
+            }
+          ],
+          "hour": 0,
+          "ruleType": "AdGroup",
+          "ruleName": "TC_Doordash_PauseStatus_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_PauseStatus_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_PauseStatus_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "pause_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "暂停规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{pause_rule_id}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{pause_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-彻底删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{pause_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 恢复自建规则(isPaused:false,自包含,可重复)",
+    "description": "单接口测试:POST /definition/changeStatus。全平台90天基线中isPaused=false(单ruleId,非delete)占比22.8%(114/500),属≥1%真实场景,代表'恢复运行'操作。本case自建规则->先暂停(前置)->再调用isPaused:false恢复->GET验证isPaused=false->最终isDelete:true彻底清理,保证可重复。500条随机样本中占比约22.8%(114次,全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于恢复测试",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "isPaused": false,
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "targetType": "[\"Manual\"]",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every2days",
+          "mode": "Auto",
+          "productLine": "doordash",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "AdGroup"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "3.5",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "adGroupPlacement": "Search"
+            }
+          ],
+          "hour": 0,
+          "ruleType": "AdGroup",
+          "ruleName": "TC_Doordash_ResumeStatus_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_ResumeStatus_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_ResumeStatus_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "resume_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "前置-先暂停规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "恢复规则(isPaused:false)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已恢复(isPaused:false)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{resume_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": false
+          }
+        }
+      },
+      {
+        "name": "后置清理-彻底删除临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/commerceRuleClient - 默认调用(无入参)",
+    "description": "单接口测试:GET /definition/commerceRuleClient。接口无请求参数(Swagger parameters为空),ES该路径90天窗口13条真实调用(GET,不含productLine归属,按全平台基线对待)。直接调用验证返回code:200。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询commerceRuleClient",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleClient",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑自建AdGroup规则(自包含,可重复)",
+    "description": "单接口测试:POST /definition/editRule。ES实测:doordash平台90天窗口该接口共9条真实调用,ruleType=AdGroup占比88.9%(8/9)为最高频模式,请求体在原/definition结构基础上附带自身规则id进行整体覆盖式编辑。本case自建AdGroup规则后,editRule修改frequency字段,GET验证字段已变更,最终归档清理。500条随机样本中占比约88.9%(8次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建doordash AdGroup规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "isPaused": false,
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "targetType": "[\"Manual\"]",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "mode": "Auto",
+          "productLine": "doordash",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "AdGroup"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "2.5",
+                    "operand": "LessOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 1.5,
+                "percentage": 5,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "adGroupPlacement": "Search"
+            }
+          ],
+          "hour": 0,
+          "ruleType": "AdGroup",
+          "ruleName": "TC_Doordash_EditAdGroup_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_EditAdGroup_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "sendFailEmail": false,
+          "campaignTagProfileIds": [],
+          "dayOfWeek": 7
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_EditAdGroup_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "er_adg_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑规则(frequency->Daily)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "id": "{{er_adg_rule_id}}",
+          "isPaused": false,
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "targetType": "[\"Manual\"]",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Daily",
+          "mode": "Auto",
+          "productLine": "doordash",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Manual"
+            ],
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "AdGroup"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "2.5",
+                    "operand": "LessOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 1.5,
+                "percentage": 5,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "adGroupPlacement": "Search"
+            }
+          ],
+          "hour": 0,
+          "ruleType": "AdGroup",
+          "ruleName": "TC_Doordash_EditAdGroup_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_EditAdGroup_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证frequency已变更为Daily",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{er_adg_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "frequency": "Daily"
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{er_adg_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑自建Keyword规则(自包含,可重复)",
+    "description": "单接口测试:POST /definition/editRule。doordash平台90天窗口editRule共9条真实调用中ruleType=Keyword占比11.1%(1/9),属≥1%独立真实场景,与AdGroup编辑结构(targetLevel=AdGroup+targetType)不同(targetLevel=Campaign,无targetType)。本case自建Keyword规则后编辑frequency字段,GET验证变更,最终归档清理。500条随机样本中占比约11.1%(1次)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建doordash Keyword规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "doordash",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "4.01",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Doordash_EditKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_EditKeyword_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "campaignTagProfileIds": [],
+          "dayOfWeek": 7
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "UTC",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Doordash_EditKeyword_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "doordash",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "er_kw_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑规则(frequency->Every3days)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "id": "{{er_kw_rule_id}}",
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "UTC",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Every3days",
+          "productLine": "doordash",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "4.01",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 5,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Doordash_EditKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Doordash_EditKeyword_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证frequency已变更为Every3days",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{er_kw_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "frequency": "Every3days"
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{er_kw_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,397 @@
+[
+  {
+    "name": "GET /profitero/getProfiteroCountryList - 默认调用(无入参)",
+    "description": "单接口测试：GET /profitero/getProfiteroCountryList。Swagger无声明参数，GET请求不带productLine区分，ES按全平台流量统计（近90天185次调用，均无参数），接口结构与平台无关，跨平台通用，instacart直接复用该结构。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Profitero国家列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/profitero/getProfiteroCountryList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report/syncBrands - 同步品牌数据",
+    "description": "单接口测试：GET /report/syncBrands。触发品牌数据同步，Swagger无声明参数，GET请求不带productLine区分，ES按全平台流量统计（近90天90次调用，均无参数），接口结构与平台无关，跨平台通用，instacart直接复用该结构。该接口为同步触发类操作，幂等可重复调用，不产生需回滚的残留数据。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "同步品牌数据",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/syncBrands",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report/syncTables - 同步表格数据",
+    "description": "单接口测试：GET /report/syncTables。触发表格数据同步，Swagger无声明参数，GET请求不带productLine区分，ES按全平台流量统计（近90天90次调用，均无参数），接口结构与平台无关，跨平台通用，instacart直接复用该结构。该接口为同步触发类操作，幂等可重复调用，不产生需回滚的残留数据。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "同步表格数据",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/syncTables",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAllBrands - 默认查询",
+    "description": "单接口测试：POST /report/getAllBrands。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构（同接口walmart真实场景，query_es确认曾产生真实调用并在walmart环境执行通过）套用instacart构造，未传schema字段（该字段为客户已开通的Profitero数据源标识，测试账号未开通）。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询全部品牌",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAllBrands",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAllProfiteroRules - 默认查询",
+    "description": "单接口测试：POST /report/getAllProfiteroRules。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，未传schema字段。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询全部Profitero规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAllProfiteroRules",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAllProfiteroRulesApplies - 默认查询",
+    "description": "单接口测试：POST /report/getAllProfiteroRulesApplies。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，ruleIds传空数组。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Profitero规则应用情况",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAllProfiteroRulesApplies",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "ruleIds": [],
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAsins - 默认查询",
+    "description": "单接口测试：POST /report/getAsins。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造；walmart侧实测已确认start/end须用纯日期格式(YYYY-MM-DD)而非完整日期时间格式，此处沿用纯日期格式规避已知的405日期解析问题，myBrandList传空数组。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ASIN列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAsins",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "myBrandList": [],
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getSignals - 默认查询",
+    "description": "单接口测试：POST /report/getSignals。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，start/end为纯日期格式。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询信号列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getSignals",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getDailyRuleData - 默认查询",
+    "description": "单接口测试：POST /report/getDailyRuleData。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，ruleIds/profileIds/campaignIds传空数组，start/end为纯日期格式。该接口为数据量较大的报表查询，响应可能较慢（生产环境曾观测到超过100秒的响应时间），属正常现象非缺陷。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则每日数据",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getDailyRuleData",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "ruleIds": [],
+          "profileIds": [],
+          "campaignIds": [],
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/MyBrandCountSummary - 默认查询",
+    "description": "单接口测试：POST /report/MyBrandCountSummary。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，myBrandList传空数组。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询我的品牌数量汇总",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/MyBrandCountSummary",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "myBrandList": [],
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/BrandEventList - 默认查询",
+    "description": "单接口测试：POST /report/BrandEventList。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，分页参数pageIndex=1/pageSize=10。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询品牌事件列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/BrandEventList",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "searchAsin": [],
+          "myBrandList": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          },
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true,
+          "brand": [],
+          "signal": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/CompetitorBrandSummary - 默认查询",
+    "description": "单接口测试：POST /report/CompetitorBrandSummary。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，未传schema字段。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询竞品品牌汇总",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/CompetitorBrandSummary",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/ExecutionRecordSummary - 默认查询",
+    "description": "单接口测试：POST /report/ExecutionRecordSummary。该接口ES近90天在instacart平台无调用记录（body.productLine.keyword=instacart term查询0命中），按walmart已验证结构套用instacart构造，start/end为纯日期格式。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行记录汇总",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/ExecutionRecordSummary",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
