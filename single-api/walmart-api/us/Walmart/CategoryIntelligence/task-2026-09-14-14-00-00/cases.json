@@ -19300,8 +19300,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/CategoryIntelligence/followedKeyword - 关注搜索词",
-    "description": "单接口测试：PUT /api/CategoryIntelligence/followedKeyword。状态切换类写操作(添加关注关键词到监控列表)，仅生成case供人工评估，不自动执行。可逆(对应delete接口可取消关注)，但按项目规则统一不执行。",
+    "name": "PUT /api/CategoryIntelligence/followedKeyword - 关注搜索词(写操作·自清理)",
+    "description": "单接口测试：PUT /api/CategoryIntelligence/followedKeyword。状态切换类写操作，2026-09-14起真实执行。用自造无意义关键词\"zz000test144401 nonsense keyword\"关注后立即取消关注，避免污染真实关注列表(无独立GET列表接口可查，仅验证接口可达+互逆两步均成功)。",
     "module": "CategoryIntelligence",
     "granularity": "API",
     "since": "init",
@@ -19310,37 +19310,25 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "关注搜索词",
+        "name": "关注测试搜索词",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "CategoryIntelligence/followedKeyword",
         "request_body": {
-          "searchQuery": "twin xl sheets"
+          "searchQuery": "zz000test144401 nonsense keyword"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200
         }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】POST /api/CategoryIntelligence/followedKeyword/delete - 取消关注搜索词",
-    "description": "单接口测试：POST /api/CategoryIntelligence/followedKeyword/delete。状态切换类写操作(取消关注关键词，与PUT followedKeyword互为逆操作)，仅生成case供人工评估，不自动执行。searchQuery需与已关注的真实值一致才能生效，样本值来自其他账号，人工执行前需替换为测试账号已关注的关键词。",
-    "module": "CategoryIntelligence",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
+      },
       {
-        "name": "取消关注搜索词",
+        "name": "取消关注(清理)",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "CategoryIntelligence/followedKeyword/delete",
         "request_body": {
-          "searchQuery": "espresso pods"
+          "searchQuery": "zz000test144401 nonsense keyword"
         },
         "extract_vars": {},
         "expected_response": {
