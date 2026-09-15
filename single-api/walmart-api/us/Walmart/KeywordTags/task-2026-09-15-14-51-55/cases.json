@@ -1,0 +1,639 @@
+[
+  {
+    "name": "GET /api/KeywordTags - 获取全部KeywordTag树",
+    "description": "单接口测试：GET /api/KeywordTags。无查询参数，返回当前账号全部根Tag及子Tag。500条随机样本中占比约100%（500次）。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GET KeywordTags",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordTags/tagsByKeywordIds - 按KeywordId批量查Tag",
+    "description": "单接口测试：POST /api/KeywordTags/tagsByKeywordIds。请求体为keywordId字符串数组，查询这些keyword已打的Tag。42条全量样本中占比约100%（42次，365天内该接口共42次真实调用，已用全部命中记录，样本量<500）。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags/tagsByKeywordIds",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/tagsByKeywordIds",
+        "request_body": [
+          "139505067",
+          "139505068",
+          "139505069",
+          "139505070",
+          "139505071",
+          "139505072",
+          "139505073",
+          "139505074",
+          "139505075",
+          "139505076",
+          "139505077",
+          "139505078",
+          "139505079",
+          "139505080",
+          "139505081",
+          "139505082",
+          "139505083",
+          "139505084"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordTags/tagsByKeywords - 按KeywordText批量查Tag",
+    "description": "单接口测试：POST /api/KeywordTags/tagsByKeywords。请求体为keyword文本字符串数组，查询这些keyword文本已打的Tag。21条全量样本中占比约100%（21次，365天内该接口共21次真实调用，已用全部命中记录，样本量<500）。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags/tagsByKeywords",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/tagsByKeywords",
+        "request_body": [
+          "mayonesa supreme",
+          "mayonesa aurrera",
+          "mayonesa arrera",
+          "costena mayonesa"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordTags/tagsByQuery - 按SearchTerm批量查Tag",
+    "description": "单接口测试：POST /api/KeywordTags/tagsByQuery。用在SearchTerm(Query)上，请求体为搜索词字符串数组，查询这些搜索词已打的Tag。31条全量样本中占比约100%（31次，365天内该接口共31次真实调用，已用全部命中记录，样本量<500）。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags/tagsByQuery",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/tagsByQuery",
+        "request_body": [
+          "prime bulk"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordTags - 创建根Tag(自清理)",
+    "description": "单接口测试：POST /api/KeywordTags 创建根KeywordTag + GET提取新Tag真实id + DELETE /api/KeywordTags清理。248条随机样本中占比约100%（写操作类，单一创建模式）。写操作真实执行：账号当前固定有10个历史遗留Tag(其他自动化/工程师留存)，新建Tag经实测稳定追加在GET列表末尾(data[10])，故用该固定下标提取id；若执行窗口内账号Tag总数被他人变更，此下标假设可能失效。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test145155_w1"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET KeywordTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w1": "data[10].tagId"
+        },
+        "expected_response": {
+          "data[10].tagName": "000test145155_w1"
+        }
+      },
+      {
+        "name": "DELETE KeywordTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags?id={{new_tag_id_w1}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/KeywordTags - 修改Tag名称(改名后还原+自清理)",
+    "description": "单接口测试：PUT /api/KeywordTags 修改Tag名称。自建临时Tag→改名→改回原名→删除。205条随机样本中占比约100%（改名操作，还原后再删除）。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test145155_w2_orig"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET KeywordTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w2": "data[10].tagId"
+        },
+        "expected_response": {
+          "data[10].tagName": "000test145155_w2_orig"
+        }
+      },
+      {
+        "name": "PUT KeywordTags rename",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags?id={{new_tag_id_w2}}",
+        "request_body": {
+          "tagName": "000test145155_w2_renamed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "PUT KeywordTags rename back",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags?id={{new_tag_id_w2}}",
+        "request_body": {
+          "tagName": "000test145155_w2_orig"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE KeywordTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags?id={{new_tag_id_w2}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "DELETE /api/KeywordTags/BulkKeywordTag - 批量删除Tag(自建2条自清理)",
+    "description": "单接口测试：DELETE /api/KeywordTags/BulkKeywordTag。自建2个临时Tag后批量删除。15条随机样本中占比约100%（15次，样本量<500，已用全部命中记录）。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags create 2 tags",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test145155_w3_a",
+            "000test145155_w3_b"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET KeywordTags extract new ids",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w3a": "data[10].tagId",
+          "new_tag_id_w3b": "data[11].tagId"
+        },
+        "expected_response": {
+          "data[10].tagId": {"$not_empty": true},
+          "data[11].tagId": {"$not_empty": true}
+        }
+      },
+      {
+        "name": "DELETE KeywordTags/BulkKeywordTag",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/BulkKeywordTag",
+        "request_body": {
+          "tagIds": [
+            "{{new_tag_id_w3a}}",
+            "{{new_tag_id_w3b}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordTags/Keywords - 按KeywordId打Tag(自清理)",
+    "description": "单接口测试：POST /api/KeywordTags/Keywords 批量将Tag打到Keyword上(按真实keywordId) + DELETE /api/KeywordTags/Keywords移除关联 + 删除临时Tag。361条随机样本中占比约69%(keywordIds路径，249次)。目标keyword为测试账号profile 16274452/campaign 425817下的真实存量keyword(id 36519973571，text=ddd，历史自动化遗留的废弃测试关键词，仅做打标签/移除标签验证，不改动keyword本身的bid/state)。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test145155_w4"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET KeywordTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w4": "data[10].tagId"
+        },
+        "expected_response": {
+          "data[10].tagName": "000test145155_w4"
+        }
+      },
+      {
+        "name": "POST KeywordTags/Keywords attach",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/Keywords",
+        "request_body": {
+          "keywordTagIds": [
+            "{{new_tag_id_w4}}"
+          ],
+          "keywordIds": [
+            "36519973571"
+          ],
+          "profileIds": [
+            "16274452"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE KeywordTags/Keywords detach",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/Keywords",
+        "request_body": {
+          "keywordTagIds": [
+            "{{new_tag_id_w4}}"
+          ],
+          "keywordIds": [
+            "36519973571"
+          ],
+          "profileIds": [
+            "16274452"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE KeywordTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags?id={{new_tag_id_w4}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordTags/BulkTagsWithKeywords - 按KeywordText批量打Tag(isQuery=false,自清理)",
+    "description": "单接口测试：POST /api/KeywordTags/BulkTagsWithKeywords 批量给多个Tag添加KeywordText(isQuery=false，按文本非按Query)。349条随机样本中占比约55.6%(keyWordTexts+isQuery=true为主场景，本case取isQuery=false的文本打标场景)。用DELETE /api/KeywordTags/Keywords(按keywordTexts)反向清理关联，再删除临时Tag。文本复用测试keyword的真实text(ddd)。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test145155_w5"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET KeywordTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w5": "data[10].tagId"
+        },
+        "expected_response": {
+          "data[10].tagName": "000test145155_w5"
+        }
+      },
+      {
+        "name": "POST KeywordTags/BulkTagsWithKeywords attach by text",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/BulkTagsWithKeywords",
+        "request_body": {
+          "keywordTagIds": [
+            "{{new_tag_id_w5}}"
+          ],
+          "keyWordTexts": [
+            "ddd"
+          ],
+          "profileIds": [
+            "16274452"
+          ],
+          "isQuery": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE KeywordTags/Keywords detach by text",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/Keywords",
+        "request_body": {
+          "keywordTagIds": [
+            "{{new_tag_id_w5}}"
+          ],
+          "keywordTexts": [
+            "ddd"
+          ],
+          "profileIds": [
+            "16274452"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE KeywordTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags?id={{new_tag_id_w5}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordTags/BulkTagsWithKeywords - 按SearchTerm批量打Tag(isQuery=true,自清理)",
+    "description": "单接口测试：POST /api/KeywordTags/BulkTagsWithKeywords 批量给多个Tag添加SearchTerm(isQuery=true，按Query而非Keyword)。349条随机样本中占比约55.6%(该字段组合为最高频场景，isQuery=true)。用DELETE /api/KeywordTags/Query反向清理关联，再删除临时Tag。queryList用自建唯一测试词避免影响真实SearchTerm数据。",
+    "module": "KeywordTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST KeywordTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test145155_w6"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET KeywordTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w6": "data[10].tagId"
+        },
+        "expected_response": {
+          "data[10].tagName": "000test145155_w6"
+        }
+      },
+      {
+        "name": "POST KeywordTags/BulkTagsWithKeywords attach by query",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/BulkTagsWithKeywords",
+        "request_body": {
+          "keywordTagIds": [
+            "{{new_tag_id_w6}}"
+          ],
+          "keyWordTexts": [
+            "000testquery145155"
+          ],
+          "profileIds": [
+            "16274452"
+          ],
+          "isQuery": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE KeywordTags/Query detach",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags/Query",
+        "request_body": {
+          "keywordTagIds": [
+            "{{new_tag_id_w6}}"
+          ],
+          "queryList": [
+            "000testquery145155"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE KeywordTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordTags?id={{new_tag_id_w6}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
