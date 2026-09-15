@@ -261,8 +261,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/AdItems/bid/byConditions - 按条件批量改出价",
-    "description": "单接口测试：PATCH /api/AdItems/bid/byConditions。ByCondition批量更新类，属项目高危清单(按筛选条件批量改)，仅生成不执行，需用户逐条确认。",
+    "name": "【待执行-已改造为测试账号版本】PATCH /api/AdItems/bid/byConditions - 按条件批量改出价(限定测试账号campaign+adGroup)",
+    "description": "单接口测试：PATCH /api/AdItems/bid/byConditions。ByCondition批量更新类，按项目规则\"只允许限定在自建测试实体\"改造：conditions.profileIds/campaignIds/adGroupIds显式限定为测试账号profile 16274451下的campaign 426321(Brand-SP-Manual-Category)+adGroup 770991122(Brand-SP-Manual-Broad-Category-10324542，2个真实目录商品)，不再使用会命中全账号范围的空数组，也不再使用config默认的{{campaign_id}}(=3564，实际属于Display测试账号16354252，与AdItems/Sponsored场景不匹配，已通过只读接口Report/adgroup/list核实)。⚠️该操作为原地批量改价，无法可靠还原到\"改前值\"(byConditions场景下受影响AdItem集合可能不止一个，且bid/byConditions本身不含GET原值的配对读接口)，执行前需人工确认该campaign/adGroup下测试数据可被随意改价不影响其他验证。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "AdItems",
     "granularity": "API",
     "since": "init",
@@ -271,7 +271,7 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "按条件批量改出价(高危，不执行)",
+        "name": "按条件批量改出价(限定测试账号campaign 426321+adGroup 770991122)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "AdItems/bid/byConditions",
@@ -283,8 +283,14 @@
           "min": 0,
           "excludedIds": [],
           "conditions": {
+            "profileIds": [
+              "16274451"
+            ],
             "campaignIds": [
-              "{{campaign_id}}"
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
             ]
           }
         },
@@ -296,8 +302,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/AdItems/status/byConditions - 按条件批量改状态",
-    "description": "单接口测试：PATCH /api/AdItems/status/byConditions。ByCondition批量更新类，属项目高危清单，仅生成不执行，需用户逐条确认。",
+    "name": "【待执行-已改造为测试账号版本】PATCH /api/AdItems/status/byConditions - 按条件批量改状态(限定测试账号campaign+adGroup)",
+    "description": "单接口测试：PATCH /api/AdItems/status/byConditions。ByCondition批量更新类，按项目规则\"只允许限定在自建测试实体\"改造：conditions.profileIds/campaignIds/adGroupIds显式限定为测试账号profile 16274451下的campaign 426321(Brand-SP-Manual-Category)+adGroup 770991122(Brand-SP-Manual-Broad-Category-10324542)，不再使用空数组代表全账号范围。status=1(启用)对该campaign下AdItem做批量状态切换，⚠️同bid/byConditions，byConditions场景无配对的GET原值读接口，执行前需人工确认该campaign/adGroup下测试数据当前状态，评估状态切换是否可接受(如需还原可在执行时另发一次status=0的相同条件请求)。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "AdItems",
     "granularity": "API",
     "since": "init",
@@ -306,7 +312,7 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "按条件批量改状态(高危，不执行)",
+        "name": "按条件批量改状态(限定测试账号campaign 426321+adGroup 770991122)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "AdItems/status/byConditions",
@@ -314,8 +320,14 @@
           "status": 1,
           "excludedIds": [],
           "conditions": {
+            "profileIds": [
+              "16274451"
+            ],
             "campaignIds": [
-              "{{campaign_id}}"
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
             ]
           }
         },
