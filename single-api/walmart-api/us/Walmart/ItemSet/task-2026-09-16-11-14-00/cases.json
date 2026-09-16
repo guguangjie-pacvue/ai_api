@@ -1,0 +1,231 @@
+[
+  {
+    "name": "POST /api/ItemSet/CreateItemSet - 创建后修改+验证+查状态",
+    "description": "单接口测试：CreateItemSet创建+UpdateItemSet修改+GetItemSetItemList验证成员+DisplayItems验证+AsyncItemSet查状态，链式覆盖5个endpoint。写操作真实执行：在测试账号profile 16274451下用真实目录商品10324542(ONLINE)创建一个测试ItemSet，探测已确认创建响应返回真实data.itemsetId。全模块12接口中未发现对应的Delete接口(能创建不能删除，同AdGroups等模块先例)，接受残留固定命名(test+HHMMSS)的测试实体。⚠️ItemSet名称在账号内必须唯一(与Campaigns同类校验)，且无法删除，因此本case每次重跑前需要把body里的名称(当前test112054_ItemSet)手动改成新的时间戳后缀，否则会稳定命中\"DUPLICATE_ITEMSET_NAME_NOT_ALLOWED\"(已实测复现)——这是本轮'创建且不可删除类'接口里第一次明确记录\"2轮验证\"要求与\"无删除+强唯一性\"结构性冲突的案例，已用两个不同时间戳后缀分别验证过创建链路本身可重复执行、结果一致，只是名称本身不能字面相同。CreateItemSet(55次)/UpdateItemSet(20次)/GetItemSetItemList(218次)/DisplayItems(45次)/AsyncItemSet(18次)均为365天真实调用。UpdateItemSetsName单独成case，见下(FAIL)。",
+    "module": "ItemSet",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST CreateItemSet 创建测试ItemSet",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/CreateItemSet",
+        "request_body": [
+          {
+            "advertiserId": 16274451,
+            "name": "test112054_ItemSet",
+            "description": "swagger-api-case probe",
+            "class": "targeting",
+            "type": "item",
+            "editable": "true",
+            "items": [
+              {
+                "id": "10324542",
+                "itemType": "ONLINE"
+              }
+            ]
+          }
+        ],
+        "extract_vars": {
+          "new_itemset_id": "data.itemsetId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "POST UpdateItemSet 修改描述",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/UpdateItemSet",
+        "request_body": [
+          {
+            "advertiserId": "16274451",
+            "name": "test112054_ItemSet",
+            "description": "swagger-api-case probe (edited)",
+            "class": "targeting",
+            "type": "item",
+            "editable": "true",
+            "expression": {
+              "or": [
+                {
+                  "type": "item",
+                  "value": {
+                    "itemId": "10324542",
+                    "itemType": "ONLINE"
+                  }
+                }
+              ]
+            },
+            "itemSetId": "{{new_itemset_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "POST GetItemSetItemList 验证成员",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/GetItemSetItemList",
+        "request_body": {
+          "itemsetId": "{{new_itemset_id}}",
+          "profileId": "{{profile_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "GET DisplayItems 验证",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/DisplayItems?profileId={{profile_id_single}}&itemSetId={{new_itemset_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "POST AsyncItemSet 查状态",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/AsyncItemSet",
+        "request_body": [
+          "{{new_itemset_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemSet/UpdateItemSetsName - 改名(发现问题)",
+    "description": "单接口测试：POST /api/ItemSet/UpdateItemSetsName。给上一个case创建的测试ItemSet改名。365天仅1次真实调用(该样本body: itemsetId+profileId+advertiserId+name+type=ITEM)。🔴新发现疑似后端bug：调用稳定返回业务码405\"INVALID_ITEM_SET_TYPE\"(两次探测HTTP状态码分别是405和200，业务码在body里都是405，HTTP层表现不一致本身也是小瑕疵)；已排除是type取值错误的可能——分别尝试type=ITEM(与唯一真实样本一致)和type=TARGETING(取自该ItemSet实际class字段值)两种取值，结果完全相同都是405。怀疑真实原因是新创建的ItemSet当前status=PENDING(异步校验中，AsyncItemSet接口显示还在处理)，改名功能可能要求ItemSet必须先完成异步校验(status变为ACTIVE等)才允许重命名，Swagger文档未说明这个前置条件。断言code:200，如实保留FAIL，未强行凑一个能通过的假体。",
+    "module": "ItemSet",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST UpdateItemSetsName 改名(预期会遇到INVALID_ITEM_SET_TYPE)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/UpdateItemSetsName",
+        "request_body": {
+          "itemsetId": "{{new_itemset_id}}",
+          "profileId": 16274451,
+          "advertiserId": 16274451,
+          "name": "test112054_ItemSet_edited",
+          "type": "ITEM"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemSet/GetItemSetList - 默认场景(测量类型)",
+    "description": "单接口测试：POST /api/ItemSet/GetItemSetList。查询ItemSet列表。场景：purpose=MEASUREMENT+type全选+itemSetType=FEATURED，365天2002次真实调用中最高频组合。",
+    "module": "ItemSet",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetItemSetList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/GetItemSetList",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "purpose": [
+            "MEASUREMENT"
+          ],
+          "type": [
+            "ITEM",
+            "HYBRID",
+            "CATEGORY",
+            "BRAND"
+          ],
+          "itemSetType": [
+            "FEATURED"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemSet/GetItemSetPageData - 默认无过滤分页查询",
+    "description": "单接口测试：POST /api/ItemSet/GetItemSetPageData。分页查询ItemSet列表(管理页面)。场景：全部过滤条件为空数组的默认视图，365天1437次真实调用中占绝大多数。",
+    "module": "ItemSet",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetItemSetPageData",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemSet/GetItemSetPageData",
+        "request_body": {
+          "purpose": [],
+          "type": [],
+          "profileIds": [],
+          "status": [],
+          "creatorIds": [],
+          "searchName": "",
+          "pageInfo": {
+            "pageSize": 25,
+            "pageIndex": 1,
+            "orderBy": "lastUpdatedDate desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

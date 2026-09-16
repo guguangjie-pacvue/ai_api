@@ -1,0 +1,177 @@
+{
+  "config": "walmart-api (us)",
+  "started_at": "2026-09-16T03:21:11.775976+00:00",
+  "total": 4,
+  "passed": 3,
+  "failed": 1,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/ItemSet/CreateItemSet - 创建后修改+验证+查状态",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST CreateItemSet 创建测试ItemSet",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/CreateItemSet",
+          "status_code": 200,
+          "ms": 3655,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:itemsetId",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "POST UpdateItemSet 修改描述",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/UpdateItemSet",
+          "status_code": 200,
+          "ms": 3651,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:itemsetId",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "POST GetItemSetItemList 验证成员",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/GetItemSetItemList",
+          "status_code": 200,
+          "ms": 784,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:parentFeaturedItemsetName,itemSetTypeForDownload,itemSetId,profileId,name,description,status,class",
+          "data_len": 23,
+          "msg": null
+        },
+        {
+          "name": "GET DisplayItems 验证",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/DisplayItems?profileId=16274451&itemSetId=123639468",
+          "status_code": 200,
+          "ms": 1619,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        },
+        {
+          "name": "POST AsyncItemSet 查状态",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/AsyncItemSet",
+          "status_code": 200,
+          "ms": 751,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "str",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/ItemSet/UpdateItemSetsName - 改名(发现问题)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "POST UpdateItemSetsName 改名(预期会遇到INVALID_ITEM_SET_TYPE)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/UpdateItemSetsName",
+          "status_code": 200,
+          "ms": 1143,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "INVALID_ITEM_SET_TYPE"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/ItemSet/GetItemSetList - 默认场景(测量类型)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetItemSetList",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/GetItemSetList",
+          "status_code": 200,
+          "ms": 1060,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 526,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/ItemSet/GetItemSetPageData - 默认无过滤分页查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetItemSetPageData",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/ItemSet/GetItemSetPageData",
+          "status_code": 200,
+          "ms": 1011,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:totalCount,list,pageInfo",
+          "data_len": 3,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-16T03:21:25.453495+00:00"
+}
