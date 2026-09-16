@@ -1,0 +1,755 @@
+[
+  {
+    "name": "POST /bulk/verify/apply - 校验单campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)。90天内citrus平台该接口共93次真实调用(已排除clientId 62/3186噪音)，其中单campaign的校验请求占比约98.9%（92条，500条随机样本中）。注：campaignId/profileId已替换为测试账号自身(client 62/autoui_acount)可访问的真实值(real_campaign_id/profile_id)，避免ES样本为其他真实客户数据导致与当前会话client不匹配。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "citrus",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 校验两条campaign是否可应用dayparting(批量,不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否存在dayparting冲突标签(只读dry-run校验)。90天内citrus平台该接口共93次真实调用，批量(2条)校验请求占比约1.1%（1条，500条随机样本中）。注：campaignId/profileId已替换为测试账号自身真实值(real_campaign_id/profile_id)，为保留批量结构用同一真实campaign重复2次(测试账号仅有1个可用fixture campaign)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "citrus",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "citrus",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 多profile批量查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、多个profile批量查询campaign的dayparting应用列表。90天内citrus平台该接口共16次真实调用，此场景(applyLevel=2+多profile)占比约68.75%（11次）。注：profileIds替换为测试账号自身可访问的2个真实profileId(profile_ids_all)，tempId替换为本账号专用自动化fixture模板45061。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": null,
+          "states": null,
+          "productLine": "citrus",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 单profile查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、单个profile查询campaign的dayparting应用列表。90天内citrus平台该接口共16次真实调用，此场景占比约31.25%（5次）。注：profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号专用fixture模板45061。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "citrus",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 查询单target的dayparting应用汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询指定line item(target)的dayparting应用点位汇总(只读)。90天内citrus平台该接口仅2次真实调用，样本量过少不足以细分场景，已全覆盖唯一真实调用模式(单/多target的lineItemIds数组查询，结构一致)。注：relId/profileId替换为测试账号自身(client 62)历史真实调用/bulk/update/campaigns/bid涉及的真实target(a1c2047b-50f7-40a4-aa60-24959d0325e8)与profileId(profile_id)，已通过真实调用验证HTTP 200。relName字段非身份标识字段(仅展示用)，置null不影响功能验证。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "citrus",
+          "lineItemIds": [
+            {
+              "relId": "a1c2047b-50f7-40a4-aa60-24959d0325e8",
+              "relName": null,
+              "profileId": "{{profile_id}}",
+              "profileIdName": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 单profile查询campaign树(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按applyLevel=1(campaign级)、单个profile查询campaign树形结构(只读)。90天内citrus平台该接口共10次真实调用，单profile场景占比约60%（6次）。注：本接口测试账号自身(client 62)有历史真实调用记录，clientId/userIds/profileIds/tempId均直接来自本账号真实历史请求体(tempId=50690为本账号'test-11'模板)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "citrus",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 50690,
+          "states": [
+            "Enable"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 多profile查询campaign树(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按applyLevel=1(campaign级)、多个profile查询campaign树形结构(只读)。90天内citrus平台该接口共10次真实调用，多profile场景占比约40%（4次）。注：本接口测试账号自身(client 62)有历史真实调用记录，profileIds替换为本账号全部2个真实profile(profile_ids_all)，其余字段(clientId/userIds/tempId=50690)均直接来自本账号真实历史请求体。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "citrus",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": "{{profile_ids_all}}",
+          "tempId": 50690,
+          "states": [
+            "Enable",
+            "Paused"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。查询campaign存在冲突应用情况(只读)。90天内citrus平台该接口共3次真实调用，请求体结构单一(仅campaignId+profileId)，占比100%（3次）。注：campaignId/profileId替换为测试账号自身可访问的真实值(real_campaign_id/profile_id)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "citrus",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 多profile查询apply明细(pageSize=99999)",
+    "description": "单接口测试：POST /dayparting/detailApply。多个profile、大分页(99999)查询apply明细列表(只读)。90天内citrus平台该接口共36次真实调用，此场景占比约38.9%（14次）。注：profileIds替换为本账号全部2个真实profile(profile_ids_all)，tempId替换为本账号fixture模板45061。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": [],
+          "states": [],
+          "productLine": "citrus",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 单profile查询apply明细(pageSize=99999)",
+    "description": "单接口测试：POST /dayparting/detailApply。单个profile、大分页(99999)查询apply明细列表(只读)。90天内citrus平台该接口共36次真实调用，此场景占比约22.2%（8次）。注：profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号fixture模板45061。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "citrus",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 多profile分页查询apply明细(pageSize=10)",
+    "description": "单接口测试：POST /dayparting/detailApply。多个profile、常规分页(pageSize=10)查询apply明细列表(只读)。90天内citrus平台该接口共36次真实调用，此场景占比约19.4%（7次）。注：profileIds替换为本账号全部2个真实profile(profile_ids_all)，tempId替换为本账号fixture模板45061。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": [],
+          "states": [],
+          "productLine": "citrus",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 单profile分页查询apply明细(pageSize=10)",
+    "description": "单接口测试：POST /dayparting/detailApply。单个profile、常规分页(pageSize=10)查询apply明细列表(只读)。90天内citrus平台该接口共36次真实调用，此场景占比约19.4%（7次）。注：profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号fixture模板45061。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "citrus",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile的campaign标签树(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。按applyLevel=2查询profile维度的campaign标签树(只读)。90天内citrus平台该接口共4次真实调用，请求体结构单一，占比100%（4次）。注：本接口测试账号自身(client 62)有历史真实调用记录，clientId/userIds均直接来自本账号真实历史请求体。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "citrus",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询指定模板的操作变更日志(只读审计)。90天内citrus平台该接口仅1次真实调用，样本量过少不足以细分场景，已全覆盖唯一真实调用模式。注：templateId替换为测试账号自身专用fixture模板45061，已通过真实调用验证HTTP 200(返回53条本账号操作记录)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "citrus",
+          "preferenceZone": "America/Los_Angeles",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators - 查询模板可选操作人",
+    "description": "单接口测试：POST /dayparting/template/operators。查询指定模板可选的操作人列表(只读，参数走query string而非body)。90天内citrus平台该接口仅1次真实调用(body为空，参数在queryString中)，样本量过少不足以细分场景，已全覆盖唯一真实调用模式。注：tempId替换为测试账号自身专用fixture模板45061，已通过真实调用验证HTTP 200(返回本账号操作人autoui_acount)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=citrus&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 单profile查询模板列表",
+    "description": "单接口测试：POST /dayparting/templateNames。单个profile查询模板名称列表(只读)。90天内citrus平台该接口共46次真实调用，单profile场景占比约65.2%（30次）。注：clientId替换为测试账号(62)，profileIds替换为测试账号自身真实profileId(profile_id)，userIds替换为root_user_id。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "citrus",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 多profile批量查询模板列表",
+    "description": "单接口测试：POST /dayparting/templateNames。多个profile批量查询模板名称列表(只读)。90天内citrus平台该接口共46次真实调用，多profile场景占比约34.8%（16次）。注：clientId替换为测试账号(62)，profileIds替换为本账号全部2个真实profile(profile_ids_all)，userIds替换为root_user_id。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "productLine": "citrus",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 查询campaign的dayparting应用详情",
+    "description": "单接口测试：POST /findDayParting/campaign。查询单个campaign的dayparting应用详情(只读)。90天内citrus平台该接口共89次真实调用，请求体结构单一(仅campaignId+profileId)，占比100%（89次）。注：本接口测试账号自身(client 62)有21次历史真实调用，campaignId/profileId直接来自本账号真实历史请求体(real_campaign_id/profile_id)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "citrus",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

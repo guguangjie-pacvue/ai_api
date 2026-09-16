@@ -1,0 +1,96 @@
+[
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询指定模板的操作变更日志(只读审计)。90天内chewyv2平台该接口仅1次真实调用(clientId=4597真实客户,已排除clientId 62/3186噪音)，样本量过少不足以细分场景，已全覆盖唯一真实调用模式，占比100%(1次)。注：templateId(身份字段)替换为测试账号自身专用fixture模板(fixture_template_id=10993)，preferenceZone/pageInfo/userNames/actionTypes保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "preferenceZone": "PST8PDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators - 查询模板可选操作人",
+    "description": "单接口测试：POST /dayparting/template/operators。查询指定模板可选的操作人列表(只读，参数走query string而非body)。90天内chewyv2平台该接口仅1次真实调用(clientId=4597真实客户,已排除clientId 62/3186噪音，body为空,参数在queryString中)，样本量过少不足以细分场景，已全覆盖唯一真实调用模式，占比100%(1次)。注：tempId(身份字段)替换为测试账号自身专用fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine={{platform}}&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 查询campaign的dayparting应用详情",
+    "description": "单接口测试：POST /findDayParting/campaign。查询单个campaign的dayparting应用详情(只读)。90天内chewyv2平台该接口共21次真实调用(已排除clientId 62/3186噪音)，请求体结构单一(仅productLine+campaignId+profileId)，占比100%(21次)。注：ES样本中的campaignId/profileId均为其他真实客户数据(如profileId=Boxiecat/Coolaroo/Farnam等)，按安全规则替换为测试账号自身(client 62)可访问的真实值(real_campaign_id/profile_id)。实测该campaign当前未应用dayparting，data返回为null，属正常业务状态非错误，断言仅用code:200。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "name": "micro-api (bol, us)",
+  "variables": {
+    "platform": "bolv2",
+    "client_id": "62",
+    "profile_id": "218944",
+    "user_id": "18589",
+    "real_campaign_id": "1000000001398800",
+    "real_campaign_id_2": "1000000000001115",
+    "period_date": "2026-08-01",
+    "fixture_template_id": "10986",
+    "root_user_id": "93",
+    "profile_ids_all": [
+      "218944"
+    ],
+    "_note_platform_alias": "登录探测结论：productline=\"bol\" 登录返回 HTTP 200 但业务 code=406（\"Please reach to your Pacvue contacts to activate.\"），availablePlatforms 列表中根本没有 \"bol\" 只有 \"bolv2\"；改用 productline=\"bolv2\" 登录返回 code=200 成功拿到 token。同时用 query_es.py 分别以 --platform bol 和 --platform bolv2 查询 productLine.keyword，bol 恒为0命中、bolv2 有真实命中（如 /dayparting/updateTemplate 90天内 bolv2=7次(clientId=62)+7次(其他真实客户)，bol=0次）。结论：登录别名与ES真实productLine值统一为 \"bolv2\"，只有目录名固定用 \"bol\"，详见同目录 RISK_NOTES.md。",
+    "_note_profile_ids": "从ES查询clientId=62(autoui_acount本账号)近365天bolv2真实历史调用中提取的本账号自身可访问的profileId(纯数字，与citrus的UUID格式不同、与samsclub同为纯数字格式)。profile_id=218944出自POST /dayparting/templateNames(43次同款调用，profileIds数组恒为[\"218944\"])及POST /findDayParting/campaign、/bulk/verify/apply等接口本账号历史请求体，已通过POST /dayparting/templateNames真实调用验证可访问(HTTP 200)。bol平台下本账号只绑定了这1个profile，无第二个。",
+    "_note_fixture_template_id": "id=10986, tempName='auto自动化专用勿删'，是autoui_acount(client 62)在bolv2产品线下专用于自动化测试的模板(通过POST /dayparting/templateNames列表验证存在，且ES显示该账号历史上对此id反复调用updateTemplate 7次，lineItemIds关联relId=1000000001398800/profileId=218944/name='test1-Auto'，命名与用法均与instacart/samsclub/citrus侧的同名fixture模板一致)，可安全用于只读校验类接口。",
+    "_note_real_campaign_id": "real_campaign_id=1000000001398800 与 profile_id=218944 配对，来自本账号(client 62) POST /findDayParting/campaign历史请求体(27次同款调用样本中出现21次，最高频)，同一campaignId/profileId组合也出现在updateTemplate历史请求体lineItemIds字段的relId中。real_campaign_id_2=1000000000001115 为本账号该接口历史请求体中出现的第二常见campaignId(3次)。均为本账号(client 62)自身历史调用涉及的campaign，非其他真实客户数据。",
+    "_note_root_user_id": "root_user_id=93，来自本账号(client 62)登录JWT userInfo.RootUserId字段，及历史真实调用POST /dayparting/templateNames请求体userIds字段首位相邻值(52,93,390,...)，用于需要userIds过滤的查询类接口。",
+    "_note_profile_ids_all": "profile_ids_all为本账号(client 62)历史真实调用POST /dayparting/templateNames的完整profileIds数组(仅1个，bol平台下本账号只绑定了1个profile)，已通过该接口真实调用验证可访问(HTTP 200)。"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "bolv2"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "bolv2"
+  }
+}

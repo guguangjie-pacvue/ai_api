@@ -1,0 +1,47 @@
+{
+  "name": "micro-api (chewy, us)",
+  "variables": {
+    "platform": "chewyv2",
+    "client_id": "62",
+    "profile_id": "pacvue-test",
+    "profile_id_2": "Test111",
+    "profile_id_3": "american-journey",
+    "user_id": "18589",
+    "real_campaign_id": "658373364",
+    "period_date": "2026-08-01",
+    "fixture_template_id": "10993",
+    "root_user_id": "93",
+    "profile_ids_all": [
+      "pacvue-test",
+      "Test111",
+      "american-journey"
+    ],
+    "_note_login_alias": "🔴 探测结论：productline=\"chewy\" 登录返回 HTTP 406；productline=\"chewyv2\" 登录返回 HTTP 200（与 rule-api 侧的既有发现一致）。登录成功后 JWT userInfo.availablePlatforms 数组里也只含 \"chewyv2\"，不含 \"chewy\"，进一步印证该账号在 chewy 产品线下的真实标识就是 chewyv2。因此本环境所有 productline/productLine/platform/ES查询用值统一为 chewyv2，仅磁盘目录名固定用 chewy（与 services.json platforms 列表一致）。详见同目录 RISK_NOTES.md。",
+    "_note_profile_ids": "profile_id=pacvue-test / profile_id_2=Test111，从ES查询clientId=62(autoui_acount本账号)近365天chewyv2真实历史调用(POST /dayparting/templateNames、/findDayParting/campaign等)请求体的profileIds数组中提取(该账号在chewy产品线下仅绑定这2个profile)。注意chewy的profileId是普通字符串(非UUID、非纯数字)，与citrus/instacart(UUID)、samsclub(纯数字)均不同。profile_id=pacvue-test已通过POST /findDayParting/campaign真实调用验证可访问(HTTP 200)。",
+    "_note_fixture_template_id": "id=10993, tempName='auto自动化专用勿删'，是autoui_acount(client 62)在chewyv2产品线下专用于自动化测试的模板，已通过GET /dayparting/getTemplates真实调用验证存在(HTTP 200，返回该账号名下共3条模板，10993为其中之一，命名与用法均与instacart/samsclub/citrus侧同名fixture模板一致)，可安全用于只读校验类接口。",
+    "_note_real_campaign_id": "real_campaign_id=658373364 与 profile_id=pacvue-test 配对，来自本账号(client 62)POST /findDayParting/campaign历史请求体(21次同款调用中的样本，近365天)。已通过该接口真实调用验证可访问(HTTP 200，data目前为null，表示该campaign当前未应用dayparting，属于正常业务状态，非错误)。",
+    "_note_root_user_id": "root_user_id=93，来自本账号(client 62)登录JWT userInfo.RootUserId字段，与历史真实调用POST /dayparting/templateNames请求体userIds字段首位一致，用于需要userIds过滤的查询类接口。",
+    "_note_profile_ids_all": "profile_ids_all为本账号(client 62)历史真实调用POST /dayparting/templateNames的完整profileIds数组(仅2个，chewy平台下本账号只绑定了2个profile)，用于多profile查询场景。"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "chewyv2"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "chewyv2"
+  }
+}

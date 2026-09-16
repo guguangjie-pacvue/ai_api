@@ -1,0 +1,1617 @@
+[
+  {
+    "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaignId+profileId查询该campaign当前应用的dayparting配置。500条随机样本中占比约100.0%（500次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "amazon",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按profile/广告主过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按profileIds+advertiserIds+userIds过滤查询可用模板名称列表(分页拉取全量)。500条随机样本中占比约99.8%（499次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": 3186,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "1595390616637450",
+            "761464709158987",
+            "560077829525807",
+            "3663329330423553",
+            "61859608893551",
+            "1520591345178259",
+            "475956690520969",
+            "3205080169951985",
+            "81168330839925",
+            "3338139088020236"
+          ],
+          "productLine": "amazon",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            18183
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。该接口真实调用通过query string传参(productLine+tempId)，请求体为空。500条随机样本中占比约100%（251次，实际总命中251条）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators?productLine=amazon&tempId=472857",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=amazon&tempId=472857",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(不筛选操作类型)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。按templateId查询该模板全部操作日志，不筛选actionTypes。500条随机样本中占比约96.7%（260次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "amazon",
+          "preferenceZone": "PST8PDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": 450474,
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(按操作类型筛选)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。按templateId+actionTypes(多个操作类型枚举)筛选查询模板操作日志。500条随机样本中占比约2.6%（7次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "amazon",
+          "preferenceZone": "PST8PDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": 451155,
+          "actionTypes": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile维度campaign标签树",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。按advertiserIds+applyLevel+tempId查询profile维度的campaign分类标签树。500条随机样本中占比约100.0%（500次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "clientId": 3186,
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            18183
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 476910,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/getProfileInfos - 按广告主查询profile信息",
+    "description": "单接口测试：POST /dayparting/getProfileInfos。按advertiserIds+preferenceZone查询profile基本信息列表。500条随机样本中占比约100.0%（500次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/getProfileInfos",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/getProfileInfos",
+        "request_body": {
+          "clientId": 3186,
+          "pageInfo": null,
+          "profileIds": null,
+          "productLine": "amazon",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            18183
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/findAmazonCampaignRules - 查询campaign关联的规则(指定campaign列表)",
+    "description": "单接口测试：POST /dayparting/findAmazonCampaignRules。指定commonCampaignList(具体campaign+profile)查询关联的Amazon规则。500条随机样本中占比约90.8%（454次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/findAmazonCampaignRules",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/findAmazonCampaignRules",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "amzn1.account.AG6QWZQHFIBD7NIVCAHZCGM2MFWQ",
+            "amzn1.account.AGFX466QUQRV4NU45V6HAYDEDLQA",
+            "amzn1.account.AHDP4WBLZO272KTRXPWW7DSGWXRA",
+            "amzn1.account.AGZ3QBQ55CSQ4XUMFMHDAYTC5B4Q",
+            "amzn1.account.AH4HVS3OH5BSLAMNEZCAVBVDUXDQ",
+            "amzn1.account.AEOXBFGRPNOEA62ZKWYI675QB7ZA",
+            "amzn1.account.AF3GXCLO3I45PGZAV3RLMDT46TRQ"
+          ],
+          "sourceName": null,
+          "commonCampaignList": [
+            {
+              "campaignId": "547417018321041",
+              "profileId": "1382906466537453"
+            }
+          ],
+          "revertBid": true,
+          "status": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/findAmazonCampaignRules - 查询campaign关联的规则(按广告主不指定具体campaign)",
+    "description": "单接口测试：POST /dayparting/findAmazonCampaignRules。仅按advertiserIds查询(commonCampaignList为空)关联的Amazon规则。500条随机样本中占比约9.2%（46次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/findAmazonCampaignRules",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/findAmazonCampaignRules",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "amzn1.account.AFCP6EKCXMOQYXU7M3RX7CXQQR3A"
+          ],
+          "commonCampaignList": [],
+          "sourceName": null,
+          "revertBid": true,
+          "status": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(按applyLevels 1+2,不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：分页查询(按applyLevels 1+2,不筛选状态)。500条随机样本中占比约53.4%（267次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "1231189632384618",
+            "1911426479672572"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "amazon",
+          "preferenceZone": "Asia/Shanghai",
+          "advertiserIds": [
+            "amzn1.account.AFSI4XATDTJGJOEKFJNCYVVPTRHQ"
+          ],
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 466009,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile,不排序)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：分页查询(单profile,不排序)。500条随机样本中占比约33.2%（166次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "2029454870195369"
+          ],
+          "applyItems": null,
+          "states": [],
+          "productLine": "amazon",
+          "preferenceZone": null,
+          "advertiserIds": [
+            "amzn1.account.AH3UHTU5I6UIPVSOJMJMFOGGNPQA",
+            "amzn1.account.AGWSZANIKGU4FG2XGOTSLBFHGFKA",
+            "amzn1.account.AEUTP6P6MNKYWLAAQQ3L2E5QPHDA",
+            "amzn1.account.AFDTEKIP7ZI5FNUC4LSCB6EB6SYQ"
+          ],
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 460579,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(全量分页,按状态筛选states=[0])",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：分页查询(全量分页,按状态筛选states=[0])。500条随机样本中占比约4.0%（20次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "3597322256072035"
+          ],
+          "applyItems": [],
+          "states": [
+            0
+          ],
+          "productLine": "amazon",
+          "preferenceZone": "PST8PDT",
+          "advertiserIds": [
+            "amzn1.account.AHDEKEBXORR7EYBPJKPM2OT2QVPQ"
+          ],
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 465969,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(指定applyItems明细过滤)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：分页查询(指定applyItems明细过滤)。500条随机样本中占比约3.8%（19次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 100,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "3894361864646962",
+            "1872500437957164",
+            "3793738672811393",
+            "1926359604616205",
+            "3440630841455153",
+            "93522501407624",
+            "3433609511896480"
+          ],
+          "applyItems": [
+            {
+              "profileName": null,
+              "relId": "224597030176746",
+              "applyLevel": null,
+              "profileId": "3793738672811393",
+              "name": null,
+              "tempId": null,
+              "id": null
+            },
+            {
+              "profileName": null,
+              "relId": "23926471801061",
+              "applyLevel": null,
+              "profileId": "3793738672811393",
+              "name": null,
+              "tempId": null,
+              "id": null
+            }
+          ],
+          "states": [],
+          "productLine": "amazon",
+          "preferenceZone": "Asia/Kolkata",
+          "advertiserIds": [
+            "amzn1.account.AFERMFF5UY3545MXEJGBR6Y7S5SA"
+          ],
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 466741,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": [
+            3118235,
+            3118234
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(指定applyIds过滤)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：分页查询(指定applyIds过滤)。500条随机样本中占比约2.2%（11次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "184296538091846"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "amazon",
+          "preferenceZone": "EST5EDT",
+          "advertiserIds": [
+            "amzn1.account.AHF7FYQIG32WTF63RLR3NXFGCKIA"
+          ],
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 469777,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": [
+            3172843
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(按状态筛选states=[1])",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：分页查询(按状态筛选states=[1])。500条随机样本中占比约1.2%（6次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": null
+          },
+          "profileIds": [
+            "2023152872128922",
+            "2254316875428235",
+            "1656482435358194"
+          ],
+          "applyItems": null,
+          "states": [
+            1
+          ],
+          "productLine": "amazon",
+          "preferenceZone": null,
+          "advertiserIds": [
+            "amzn1.account.AGJSLSLPRFLRFE5TZ4QX5LUJ4TBA"
+          ],
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 444690,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。按profileIds+advertiserIds校验当前用户是否具有删除模板权限(只读校验,无副作用)。500条随机样本中占比约100.0%（436次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "amazon",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。campaign存在dayparting冲突应用时的查询接口，按campaignId+profileId查询。500条随机样本中占比约100.0%（500次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "amazon",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+states过滤(isFilter=true)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按profile+states过滤(isFilter=true)。500条随机样本中占比约85.0%（425次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "clientId": 3186,
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            18183
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "984786648626088",
+            "2714803451834524",
+            "1776293136613695",
+            "2287392223543319",
+            "884501978249197",
+            "2911151837197889",
+            "3371763303944663",
+            "493352034113455",
+            "3227732964973622",
+            "1660734943782367",
+            "3839723915705218",
+            "4430526282300382",
+            "1968473597013413",
+            "385713912610895",
+            "3821444488901180"
+          ],
+          "tempId": 0,
+          "states": [
+            "paused",
+            "enabled"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile查询(isFilter=false,不筛选states)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按单profile查询(isFilter=false,不筛选states)。500条随机样本中占比约11.8%（59次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "clientId": 3186,
+          "applyLevel": 1,
+          "isFilter": false,
+          "tagIds": [],
+          "userIds": [
+            18183
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "3108589487704064"
+          ],
+          "tempId": 0,
+          "states": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+tagIds+states过滤(isFilter=true)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按profile+tagIds+states过滤(isFilter=true)。500条随机样本中占比约1.6%（8次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "clientId": 3186,
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [
+            535253,
+            535254,
+            535255,
+            535256,
+            596480,
+            596481
+          ],
+          "userIds": [
+            18183
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "2163005891670353"
+          ],
+          "tempId": 473106,
+          "states": [
+            "enabled"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+tagIds过滤(isFilter=false,不筛选states)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按profile+tagIds过滤(isFilter=false,不筛选states)。500条随机样本中占比约1.6%（8次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "clientId": 3186,
+          "applyLevel": 1,
+          "isFilter": false,
+          "tagIds": [
+            164442,
+            164444,
+            164445,
+            166642,
+            178598,
+            548045,
+            559067,
+            592331,
+            617194,
+            4628596,
+            4630886,
+            4630887,
+            4630888,
+            4630889,
+            182069,
+            480504,
+            487828,
+            487829,
+            487830,
+            518175,
+            525711,
+            525712,
+            525714,
+            535560,
+            535561,
+            535562,
+            544881,
+            544882,
+            544883,
+            544884,
+            544885,
+            544886,
+            544887,
+            551647,
+            551648,
+            551649,
+            551650,
+            564496,
+            564498,
+            580697,
+            580698,
+            593683,
+            594819,
+            594820,
+            617144,
+            4620693,
+            4635485,
+            4635487,
+            4643163,
+            4636743,
+            4636744,
+            4636745,
+            4636747,
+            4642744,
+            4643348,
+            4643380
+          ],
+          "userIds": [
+            18183
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "27555454440124190"
+          ],
+          "tempId": 0,
+          "states": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 查询apply列表",
+    "description": "单接口测试：POST /dayparting/apply（operationId=getApplyList，实际是查询接口非创建接口）。按profileIds+tempId+applyLevel分页查询apply列表。500条随机样本中占比约100.0%（500次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "2175294081398785",
+            "600122362599096",
+            "2024628399284979",
+            "566917864705040"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "amazon",
+          "preferenceZone": null,
+          "advertiserIds": [
+            "amzn1.account.AGB7URFMTBRPJMPW4VZIOBN4KMQA"
+          ],
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 469766,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemIds查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：按lineItemIds查询targeting汇总。500条随机样本中占比约78.6%（393次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "amazon",
+          "lineItemIds": [
+            {
+              "relId": "183595204242011",
+              "relName": null,
+              "profileId": "4287626741457848",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemTags查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：按lineItemTags查询targeting汇总。500条随机样本中占比约13.2%（66次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "amazon",
+          "lineItemIds": [],
+          "lineItemTags": [
+            {
+              "relId": "539258",
+              "relName": "Monster Jam_Auto",
+              "profileId": "1448564796941110",
+              "profileIdName": "Monster Jam [US]"
+            },
+            {
+              "relId": "539259",
+              "relName": "Monster Jam_Branded",
+              "profileId": "1448564796941110",
+              "profileIdName": "Monster Jam [US]"
+            },
+            {
+              "relId": "539260",
+              "relName": "Monster Jam_Category",
+              "profileId": "1448564796941110",
+              "profileIdName": "Monster Jam [US]"
+            },
+            {
+              "relId": "539261",
+              "relName": "Monster Jam_Competitor",
+              "profileId": "1448564796941110",
+              "profileIdName": "Monster Jam [US]"
+            },
+            {
+              "relId": "539262",
+              "relName": "Monster Jam_Legacy",
+              "profileId": "1448564796941110",
+              "profileIdName": "Monster Jam [US]"
+            },
+            {
+              "relId": "539223",
+              "relName": "Hexbots_Auto",
+              "profileId": "2012403110109509",
+              "profileIdName": "HexBug [US]"
+            },
+            {
+              "relId": "539224",
+              "relName": "Hexbots_Branded",
+              "profileId": "2012403110109509",
+              "profileIdName": "HexBug [US]"
+            },
+            {
+              "relId": "539225",
+              "relName": "Hexbots_Category",
+              "profileId": "2012403110109509",
+              "profileIdName": "HexBug [US]"
+            },
+            {
+              "relId": "539226",
+              "relName": "Hexbots_Competitor",
+              "profileId": "2012403110109509",
+              "profileIdName": "HexBug [US]"
+            },
+            {
+              "relId": "539227",
+              "relName": "Hexbots_Legacy",
+              "profileId": "2012403110109509",
+              "profileIdName": "HexBug [US]"
+            },
+            {
+              "relId": "539201",
+              "relName": "Primal Hatch_Auto",
+              "profileId": "344548280578225",
+              "profileIdName": "Primal Hatch [US]"
+            },
+            {
+              "relId": "539202",
+              "relName": "Primal Hatch_Branded",
+              "profileId": "344548280578225",
+              "profileIdName": "Primal Hatch [US]"
+            },
+            {
+              "relId": "539203",
+              "relName": "Primal Hatch_Category",
+              "profileId": "344548280578225",
+              "profileIdName": "Primal Hatch [US]"
+            },
+            {
+              "relId": "539204",
+              "relName": "Primal Hatch_Competitor",
+              "profileId": "344548280578225",
+              "profileIdName": "Primal Hatch [US]"
+            },
+            {
+              "relId": "539195",
+              "relName": "Dragons_Auto",
+              "profileId": "2031270528934853",
+              "profileIdName": "Dreamworks Dragon [US]"
+            },
+            {
+              "relId": "539196",
+              "relName": "Dragons_Branded",
+              "profileId": "2031270528934853",
+              "profileIdName": "Dreamworks Dragon [US]"
+            },
+            {
+              "relId": "539197",
+              "relName": "Dragons_Category",
+              "profileId": "2031270528934853",
+              "profileIdName": "Dreamworks Dragon [US]"
+            },
+            {
+              "relId": "539198",
+              "relName": "Dragons_Competitor",
+              "profileId": "2031270528934853",
+              "profileIdName": "Dreamworks Dragon [US]"
+            },
+            {
+              "relId": "539199",
+              "relName": "Dragons_Legacy",
+              "profileId": "2031270528934853",
+              "profileIdName": "Dreamworks Dragon [US]"
+            },
+            {
+              "relId": "539270",
+              "relName": "Tech Deck_Auto",
+              "profileId": "334023938782002",
+              "profileIdName": "Tech Deck [US]"
+            },
+            {
+              "relId": "539271",
+              "relName": "Tech Deck_Branded",
+              "profileId": "334023938782002",
+              "profileIdName": "Tech Deck [US]"
+            },
+            {
+              "relId": "539272",
+              "relName": "Tech Deck_Category",
+              "profileId": "334023938782002",
+              "profileIdName": "Tech Deck [US]"
+            },
+            {
+              "relId": "539273",
+              "relName": "Tech Deck_Competitor",
+              "profileId": "334023938782002",
+              "profileIdName": "Tech Deck [US]"
+            },
+            {
+              "relId": "539274",
+              "relName": "Tech Deck_Legacy",
+              "profileId": "334023938782002",
+              "profileIdName": "Tech Deck [US]"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 不带任何过滤条件查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：不带任何过滤条件查询。500条随机样本中占比约4.6%（23次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "amazon",
+          "lineItemIds": [],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 同时按lineItemIds+lineItemTags查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：同时按lineItemIds+lineItemTags查询。500条随机样本中占比约3.6%（18次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "amazon",
+          "lineItemIds": [
+            {
+              "relId": "178455683449786",
+              "relName": "Scranton_Cubicles_SP",
+              "profileId": "2074518056002308",
+              "profileIdName": null
+            },
+            {
+              "relId": "274143506567476",
+              "relName": "Scranton_Cubicles_B2B",
+              "profileId": "2074518056002308",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": [
+            {
+              "relId": "589094",
+              "relName": "Hirsh Campaigns - Jan 2026",
+              "profileId": "2074518056002308",
+              "profileIdName": "Cymax"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/amazonCampaignTag/tree - 按广告主+profile查询(不筛选tagIds)",
+    "description": "单接口测试：POST /dayparting/amazonCampaignTag/tree。查询Amazon campaign标签树，场景：按广告主+profile查询(不筛选tagIds)。500条随机样本中占比约99.0%（495次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/amazonCampaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/amazonCampaignTag/tree",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "clientId": 3186,
+          "applyLevel": 2,
+          "isFilter": false,
+          "tagIds": [],
+          "userIds": [
+            18183
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "3175856146175498"
+          ],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/amazonCampaignTag/tree - 按广告主+profile+tagIds过滤查询",
+    "description": "单接口测试：POST /dayparting/amazonCampaignTag/tree。查询Amazon campaign标签树，场景：按广告主+profile+tagIds过滤查询。500条随机样本中占比约1.0%（5次）。 注：identity类字段(advertiserIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(已验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/amazonCampaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/amazonCampaignTag/tree",
+        "request_body": {
+          "productLine": "amazon",
+          "advertiserIds": [
+            "{{amazon_advertiser_id}}"
+          ],
+          "clientId": 3186,
+          "applyLevel": 2,
+          "isFilter": false,
+          "tagIds": [
+            null,
+            615593,
+            618433,
+            618441,
+            618442,
+            618443,
+            618444,
+            618445,
+            618446,
+            618447,
+            618448,
+            2618706,
+            2618707,
+            2618708,
+            2618709,
+            2618710,
+            2618711,
+            2618712,
+            2618713,
+            2618714,
+            2618715,
+            2618716,
+            2618717,
+            2618718,
+            2618719,
+            2618720,
+            2618721,
+            2618756,
+            4635191,
+            4635192,
+            4635193,
+            4635194,
+            4635195,
+            4643706,
+            4643711,
+            4643713,
+            4643716,
+            4643721,
+            4643725,
+            4643727,
+            4643760,
+            4643761,
+            4643762,
+            4643763,
+            4643764,
+            4643765,
+            4643766,
+            4643767,
+            4643768,
+            4643769,
+            4643770,
+            4643771,
+            4643772,
+            4643773,
+            4643774,
+            4643775,
+            4643776,
+            4643777,
+            4643778,
+            4643779,
+            4643780,
+            4643781,
+            4643782,
+            4643783,
+            4643784,
+            4643785,
+            4643786,
+            4643787,
+            4643788,
+            4643789,
+            4643790,
+            4643791,
+            4643792,
+            4643793,
+            4643794,
+            4643795,
+            4643796,
+            4643797,
+            4643798,
+            4643799,
+            4643800,
+            4643801,
+            4643802,
+            4643804,
+            4643805,
+            4643806,
+            4643807,
+            4643808,
+            4643809,
+            4643810,
+            4643811,
+            4643812,
+            4643813,
+            4643814,
+            4643815,
+            4643816,
+            4643817,
+            4643818,
+            4643819,
+            4643820,
+            4643821,
+            4643822,
+            4644047,
+            4644048,
+            4644049,
+            4644050,
+            4644051,
+            4644052,
+            4644053,
+            4644054,
+            4644057
+          ],
+          "userIds": [
+            18183
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "2023152872128922"
+          ],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 批量校验campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验campaign列表是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)。500条随机样本中占比约100.0%（500次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "amazon",
+            "campaignId": "229640775741260",
+            "profileId": "392214592285111",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

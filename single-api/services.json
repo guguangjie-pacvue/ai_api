@@ -56,6 +56,41 @@
       "platform_filter": { "get": "all", "post": "body.productLine.keyword:<platform>", "post_fallback_no_productline_field": "all (endpoint request body has no productLine field, e.g. getHistoryList/getRuleViewList/template.getTemplate -- cannot attribute to a single platform via ES, treat like GET: use all-platform traffic as baseline)" }
     }
   },
+  "micro-api": {
+    "github_repo": "pacvue/micro-server",
+    "swaggers": [
+      {
+        "title": "MicroApi",
+        "url": "https://api.pacvue.com/micro-api-v2/v3/api-docs",
+        "_note": "该 spec 的 info.title 字段本身就是字面量 \"Swagger\"（无实际业务含义），此处用 MicroApi 作为可读的服务标识，与 endpoints-MicroApi.json 文件名保持一致"
+      }
+    ],
+    "platforms": ["amazon", "tiktok", "walmart", "instacart", "criteo", "target", "kroger", "chewy", "citrus", "doordash", "samsclub", "bol", "mercado", "dsp", "ebay"],
+    "platform_login_alias": {
+      "kroger": "krogerv3",
+      "bol": "bolv2",
+      "chewy": "chewyv2",
+      "_comment": "跟 rule-api 一样的账号体系/登录接口(apiuser.pacvue.com)，别名同样适用：登录 productline header 和请求 productLine 真实值要用 krogerv3/bolv2/chewyv2，目录名/Excel Platform 列仍用业务名 kroger/bol/chewy。已在 kroger 上验证：productline=kroger 登录返回406，krogerv3才能登录成功且能查到真实数据。"
+    },
+    "es_index": {
+      "us": "dayparting-schedule-api-*"
+    },
+    "config": "single-api/micro-server/micro-api/{platform}/{env}/config.json",
+    "es": {
+      "path_field": "urlReferrer.keyword",
+      "method_field": "httpMethod.keyword",
+      "body_field": "body",
+      "body_is_json_string": false,
+      "clientid_exclude": [62, 3186],
+      "assertion_l1": { "code": 200 },
+      "platform_filter": {
+        "field": "productLine.keyword",
+        "applies_to": "all_methods",
+        "_note": "productLine 是该索引的顶层字段（不像 rule-api 那样嵌套在 body 里），POST/DELETE 实测均直接携带真实值（如 amazon/criteo/dsp/walmart），可对任意方法直接按 productLine.keyword 过滤平台，不需要像 rule-api 那样区分 GET/POST。实测该索引近180天内 GET 请求为 0 条（getTemplates/getOwners/getSetting 等 GET 接口目前无真实流量，按 ES 无流量规则处理，不代表该机制对 GET 无效，只是恰好无样本）。"
+      },
+      "_note": "dayparting-controller 共48个接口(tag=dayparting-controller)，另有1个 dayparting-migration-controller(/migrate/daypartingCommonAuto)按惯例应排除。注意 ES 中还存在一个相似但不同的索引 adtomic-dayparting-schedule-api-*（Adtomic 专属，非本服务），查询时不要混用。"
+    }
+  },
   "walmart-api": {
     "github_repo": "pacvue/walmart-api",
     "swaggers": [

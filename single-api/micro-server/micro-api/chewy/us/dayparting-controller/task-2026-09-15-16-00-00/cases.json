@@ -1,0 +1,941 @@
+[
+  {
+    "name": "POST /bulk/verify/apply - 校验单campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)。90天内chewyv2平台该接口共41次真实调用(已排除clientId 62/3186噪音)，其中单campaign的校验请求占比约85.4%（35次）。注：campaignId/profileId已替换为测试账号自身(client 62/autoui_acount)可访问的真实值(real_campaign_id/profile_id)，避免ES样本为其他真实客户数据。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "{{platform}}",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 校验多条campaign是否可应用dayparting(批量,不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否存在dayparting冲突标签(只读dry-run校验)。90天内chewyv2平台该接口共41次真实调用，批量校验请求(数组长度>1，含2/4/10条不等)合计占比约14.6%（6次），其中4条批量为最典型代表。注：campaignId/profileId已替换为测试账号自身真实值(real_campaign_id/profile_id)，为保留批量结构用同一真实campaign重复4次(测试账号仅有1个可用fixture campaign)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "{{platform}}",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "{{platform}}",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "{{platform}}",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "{{platform}}",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 单profile查询apply列表(applyLevel=2,大分页)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、单个profile、大分页(pageSize=99999,即前端'加载全部')查询campaign的dayparting应用列表。90天内chewyv2平台该接口共41次真实调用(已排除clientId 62/3186噪音)，此场景占比约36.6%（15次）。注：profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号专用fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "{{platform}}",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 多profile查询apply列表(applyLevel=2,大分页+排序)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、多个profile、大分页(pageSize=9999/99999合并统计,即'加载全部'类场景)+按createdAt排序查询campaign的dayparting应用列表。90天内chewyv2平台该接口共41次真实调用，此场景占比约26.8%（11次）。注：profileIds替换为测试账号自身全部2个真实profile(profile_ids_all)，tempId替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": null,
+          "states": null,
+          "productLine": "{{platform}}",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 多profile查询apply列表(applyLevel=1,大分页+排序)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=1(campaign级)、多个profile、大分页(pageSize=9999)+按createdAt排序查询campaign的dayparting应用列表。90天内chewyv2平台该接口共41次真实调用，此场景占比约24.4%（10次）。注：profileIds替换为测试账号自身全部2个真实profile(profile_ids_all)，tempId替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": null,
+          "states": null,
+          "productLine": "{{platform}}",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 1,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 多profile分页查询apply列表(applyLevel=2,pageSize=10)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、多个profile、常规分页(pageSize=10)查询campaign的dayparting应用列表。90天内chewyv2平台该接口共41次真实调用，此场景占比约7.3%（3次）。注：profileIds替换为测试账号自身全部2个真实profile(profile_ids_all)，tempId替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": null,
+          "states": null,
+          "productLine": "{{platform}}",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 单profile分页查询apply列表(applyLevel=2,pageSize=10)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、单个profile、常规分页(pageSize=10)查询campaign的dayparting应用列表。90天内chewyv2平台该接口共41次真实调用，此场景占比约4.9%（2次）。注：profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "{{platform}}",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 查询多target的dayparting应用汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询多个line item(target)的dayparting应用点位汇总(只读)。90天内chewyv2平台该接口共26次真实调用(已排除clientId 62/3186噪音)，多target场景占比约61.5%（16次）。注：relId/profileId替换为测试账号自身(client 62)历史真实调用本接口(近365天，非本次ES 90天噪音排除样本)涉及的真实target(relId=659249097/659236110/659250674/659261129)与profileId(american-journey)，已通过账号自身历史真实调用验证。发现：该profileId不在config.json的profile_ids_all(pacvue-test/Test111)中，说明账号62在chewyv2下实际绑定的profile可能不止2个，建议主任务核实。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "lineItemIds": [
+            {
+              "relId": "659249097",
+              "relName": null,
+              "profileId": "american-journey",
+              "profileIdName": null
+            },
+            {
+              "relId": "659236110",
+              "relName": null,
+              "profileId": "american-journey",
+              "profileIdName": null
+            },
+            {
+              "relId": "659250674",
+              "relName": null,
+              "profileId": "american-journey",
+              "profileIdName": null
+            },
+            {
+              "relId": "659261129",
+              "relName": null,
+              "profileId": "american-journey",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 查询单target的dayparting应用汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询单个line item(target)的dayparting应用点位汇总(只读)。90天内chewyv2平台该接口共26次真实调用，单target场景占比约38.5%（10次）。注：relId/profileId替换为测试账号自身(client 62)历史真实调用本接口涉及的真实target(relId=659249097)与profileId(american-journey)，已通过账号自身历史真实调用验证。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "lineItemIds": [
+            {
+              "relId": "659249097",
+              "relName": null,
+              "profileId": "american-journey",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 多profile查询campaign树(全部状态)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按applyLevel=1(campaign级)、多个profile、全部状态(QUEUED/ACTIVE/PAUSED)查询campaign树形结构(只读)。90天内chewyv2平台该接口共42次真实调用(已排除clientId 62/3186噪音)，此场景占比约28.6%（12次）。注：clientId/userIds/profileIds/tempId均为其他真实客户数据，已替换为测试账号自身可访问的真实值(client_id/root_user_id/profile_ids_all/fixture_template_id)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": "{{profile_ids_all}}",
+          "tempId": 0,
+          "states": [
+            "QUEUED",
+            "ACTIVE",
+            "PAUSED"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 多profile查询campaign树(仅ACTIVE状态)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按applyLevel=1、多个profile、仅ACTIVE状态查询campaign树形结构(只读)。90天内chewyv2平台该接口共42次真实调用，此场景占比约28.6%（12次）。注：clientId/userIds/profileIds均替换为测试账号自身真实值(client_id/root_user_id/profile_ids_all)，tempId=0为ES原值(表示不限模板，非身份字段，保留原值)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": "{{profile_ids_all}}",
+          "tempId": 0,
+          "states": [
+            "ACTIVE"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 单profile查询campaign树(全部状态)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按applyLevel=1、单个profile、全部状态查询campaign树形结构(只读)。90天内chewyv2平台该接口共42次真实调用，此场景占比约21.4%（9次）。注：clientId/userIds替换为测试账号自身真实值(client_id/root_user_id)，profileIds替换为测试账号自身真实profileId(profile_id)，tempId(原值为其他客户模板)替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": "{{fixture_template_id}}",
+          "states": [
+            "QUEUED",
+            "ACTIVE",
+            "PAUSED"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 单profile查询campaign树(仅ACTIVE状态)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按applyLevel=1、单个profile、仅ACTIVE状态查询campaign树形结构(只读)。90天内chewyv2平台该接口共42次真实调用，此场景占比约21.4%（9次）。注：clientId/userIds替换为测试账号自身真实值(client_id/root_user_id)，profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": "{{fixture_template_id}}",
+          "states": [
+            "ACTIVE"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。查询campaign存在冲突应用情况(只读)。90天内chewyv2平台该接口共16次真实调用(已排除clientId 62/3186噪音)，请求体结构单一(仅productLine+campaignId+profileId)，占比100%（16次）。注：campaignId/profileId替换为测试账号自身可访问的真实值(real_campaign_id/profile_id)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignTag/tree - 查询campaign标签树(applyLevel=2,不限profile)",
+    "description": "单接口测试：POST /dayparting/campaignTag/tree。按applyLevel=2、不限定profile(profileIds为空数组，即查询全部可见profile范围)查询campaign标签树(只读)。90天内chewyv2平台该接口共21次真实调用(已排除clientId 62/3186噪音)，请求体结构单一，占比100%（21次）。注：clientId/userIds替换为测试账号自身真实值(client_id/root_user_id)，profileIds=[]/tempId=0均为ES原始值(非身份字段，表示不限范围)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignTag/tree",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 校验单模板删除权限",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。校验单个模板是否可删除(只读权限校验，不产生实际删除)。90天内chewyv2平台该接口共7次真实调用(已排除clientId 62/3186噪音)，单模板场景占比约85.7%（6次）。注：ids(templateId)替换为测试账号自身专用fixture模板(fixture_template_id=10993)，profileIds替换为本账号全部2个真实profile(profile_ids_all)；clientId/userIds在ES原样本中即为null(服务端从token解析，非请求体传值)，保留原值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": "{{profile_ids_all}}",
+          "productLine": "{{platform}}",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 校验多模板删除权限(批量)",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。批量校验多个模板是否可删除(只读权限校验)。90天内chewyv2平台该接口共7次真实调用，批量场景占比约14.3%（1次）。注：ids替换为测试账号自身fixture模板(fixture_template_id=10993)重复2次以保留批量结构(测试账号仅有1个可用fixture模板)，profileIds替换为本账号全部2个真实profile(profile_ids_all)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": "{{profile_ids_all}}",
+          "productLine": "{{platform}}",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            "{{fixture_template_id}}",
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 单profile查询apply明细(大分页)",
+    "description": "单接口测试：POST /dayparting/detailApply。单个profile、大分页(pageSize=99999,即'加载全部')查询apply明细列表(只读)。90天内chewyv2平台该接口共84次真实调用(已排除clientId 62/3186噪音)，此场景占比约42.9%（36次）。注：profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "{{platform}}",
+          "preferenceZone": "PST8PDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 单profile分页查询apply明细(pageSize=10)",
+    "description": "单接口测试：POST /dayparting/detailApply。单个profile、常规分页(pageSize=10)+按createdAt排序查询apply明细列表(只读)。90天内chewyv2平台该接口共84次真实调用，此场景占比约35.7%（30次）。注：profileIds替换为测试账号自身真实profileId(profile_id)，tempId替换为本账号fixture模板(fixture_template_id=10993)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "{{platform}}",
+          "preferenceZone": "PST8PDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 多profile分页查询apply明细(pageSize=10)",
+    "description": "单接口测试：POST /dayparting/detailApply。多个profile、常规分页(pageSize=10)查询apply明细列表(只读)。90天内chewyv2平台该接口共84次真实调用，此场景占比约16.7%（14次）。注：profileIds替换为测试账号自身全部2个真实profile(profile_ids_all)，tempId替换为本账号fixture模板(fixture_template_id=10993)，applyLevels=[1]为ES原值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": [],
+          "states": [],
+          "productLine": "{{platform}}",
+          "preferenceZone": "PST8PDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 多profile查询apply明细(大分页)",
+    "description": "单接口测试：POST /dayparting/detailApply。多个profile、大分页(pageSize=99999)查询apply明细列表(只读)。90天内chewyv2平台该接口共84次真实调用，此场景占比约4.8%（4次）。注：profileIds替换为测试账号自身全部2个真实profile(profile_ids_all)，tempId替换为本账号fixture模板(fixture_template_id=10993)，applyLevels=[2]为ES原值；ES原样本中的applyIds字段为其他客户的apply记录ID(非本次替换清单中的6类身份字段，但仍属于其他客户实体标识)，出于谨慎已置空数组，不使用他人真实applyId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": [],
+          "states": [],
+          "productLine": "{{platform}}",
+          "preferenceZone": "PST8PDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  }
+]

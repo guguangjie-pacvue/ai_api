@@ -1,0 +1,66 @@
+{
+  "config": "micro-api (tiktok, us)",
+  "started_at": "2026-09-16T02:40:40.648922+00:00",
+  "finished_at": "2026-09-16T02:40:43.023785+00:00",
+  "total": 2,
+  "passed": 1,
+  "failed": 1,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /findDayParting/campaign - 按campaignId+profileId查询dayparting配置详情",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 /findDayParting/campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/micro-api-v2/findDayParting/campaign",
+          "status_code": 200,
+          "ms": 1208,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg",
+            "data",
+            "success"
+          ],
+          "data_shape": "dict",
+          "data_len": 50,
+          "msg": "success"
+        }
+      ]
+    },
+    {
+      "name": "POST /dayparting/templateNames - 按profileIds批量查询模板列表（确认后端缺陷复现）",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 /dayparting/templateNames",
+          "method": "POST",
+          "url": "https://api.pacvue.com/micro-api-v2/dayparting/templateNames",
+          "status_code": 500,
+          "ms": 1166,
+          "pass": false,
+          "failures": [
+            "resp.code: expected 200, got None",
+            "resp.data: expected $not_empty=True, got None"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "timestamp",
+            "status",
+            "error",
+            "path"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

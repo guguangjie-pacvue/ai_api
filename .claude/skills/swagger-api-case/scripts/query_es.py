@@ -7,9 +7,23 @@ Usage:
       --path-field urlReferrer.keyword [--platform instacart] [--client-id-exclude 62,3186] \
       [--size 500] [--days 90] [--count-only]
 
-Behavior mirrors query_es.ps1:
-  - Method=POST and --platform given -> add queryString: productLine=<platform> filter
-  - Method=GET or no --platform -> no platform filter (GET queryString is empty)
+  # micro-api (dayparting) example: httpMethod.keyword instead of method.keyword,
+  # and productLine is a top-level field (not nested under body), populated for
+  # every method (not just POST) -- see services.json micro-api.es block.
+  python3 query_es.py --index "dayparting-schedule-api-*" --path /dayparting/getCampaignsName \
+      --method POST --path-field urlReferrer.keyword --method-field httpMethod.keyword \
+      --platform amazon --platform-field productLine.keyword --platform-methods all
+
+Behavior (defaults mirror the original rule-api-only script):
+  - --method-field: field name for exact HTTP method match (default method.keyword;
+    micro-api needs httpMethod.keyword)
+  - --platform-field: field used for the platform/productLine filter (default
+    body.productLine.keyword, i.e. nested under the request body as in rule-api;
+    micro-api needs the top-level productLine.keyword)
+  - --platform-methods: which HTTP methods the platform filter applies to -- "post"
+    (default, matches rule-api where only POST bodies carry productLine) or "all"
+    (matches micro-api where productLine is a top-level field present regardless
+    of method)
 Output:
   - Prints hit count to stderr
   - Prints each hit's _source.body as one JSON line to stdout (unless --count-only)
@@ -31,7 +45,10 @@ def main():
     ap.add_argument("--path", required=True)
     ap.add_argument("--method", required=True)
     ap.add_argument("--path-field", required=True)
+    ap.add_argument("--method-field", default="method.keyword")
     ap.add_argument("--platform", default=None)
+    ap.add_argument("--platform-field", default="body.productLine.keyword")
+    ap.add_argument("--platform-methods", choices=["post", "all"], default="post")
     ap.add_argument("--client-id-exclude", default="62,3186")
     ap.add_argument("--size", type=int, default=500)
     ap.add_argument("--days", type=int, default=90)
@@ -43,18 +60,14 @@ def main():
 
     must = [
         {"term": {args.path_field: args.path}},
-        {"term": {"method.keyword": method_upper}},
+        {"term": {args.method_field: method_upper}},
     ]
-    if args.platform and method_upper == "POST":
-        # NOTE: the ES index has no `queryString` field (verified empty on every
-        # sampled doc), so the previously-documented `queryString:productLine=<platform>`
-        # filter always returns 0 hits regardless of real traffic. The request body
-        # itself carries `productLine` for endpoints where the platform is caller-supplied
-        # (e.g. rule create/report endpoints) -- use that instead.
-        must.append({"term": {"body.productLine.keyword": args.platform}})
-        print(f"[query_es] POST + platform={args.platform} -> add body.productLine.keyword filter", file=sys.stderr)
+    apply_platform_filter = args.platform and (args.platform_methods == "all" or method_upper == "POST")
+    if apply_platform_filter:
+        must.append({"term": {args.platform_field: args.platform}})
+        print(f"[query_es] {method_upper} + platform={args.platform} -> add {args.platform_field} filter", file=sys.stderr)
     elif args.platform:
-        print(f"[query_es] {method_upper} no platform filter (platform not distinguishable for GET) -> using all-platform traffic", file=sys.stderr)
+        print(f"[query_es] {method_upper} no platform filter (platform not distinguishable for this method) -> using all-platform traffic", file=sys.stderr)
 
     size = 0 if args.count_only else args.size
     body = {
