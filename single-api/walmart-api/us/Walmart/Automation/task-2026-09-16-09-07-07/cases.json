@@ -276,5 +276,38 @@
         }
       }
     ]
+  },
+  {
+    "name": "POST /api/Automation/UpdateTargeting - 按campaignIds设置targetROAS/targetACOS",
+    "description": "单接口测试：POST /api/Automation/UpdateTargeting。写操作：按Campaign维度设置targetROAS/targetACOS，365天352次真实调用中campaignIds+campaigns路径占比约84%。写操作真实执行：目标为测试账号campaign 426322(profile 16274451，Paused状态)，执行前实测该campaign的targetACOS/targetROAS均为null(从未设置过)。首轮探测已验证：设置为targetACOS=15.0/targetROAS=10后GetCampaign读取确认真实生效；随后尝试用targetACOS=null/targetROAS=null还原时收到HTTP 400 \"Error converting value {null} to type System.Decimal\"——后端模型这两个字段是非nullable的Decimal，一旦通过本接口设置过就无法再通过本接口还原为未设置状态(与Swagger声明的type:number但无nullable标记一致，且ES真实样本中这两个字段从未出现过null值，仅targetCPA字段是nullable)。按\"能设置不能撤销\"的既有先例(如AdGroups的ExecuteAdGroupAdditionalInfo/DisplayAdGroups的DELETE Creatives)处理：不强求还原，接受在完全自控的Paused测试campaign 426322上残留固定测试值(targetACOS=15.0/targetROAS=10)，每次重跑本case都会再次设置为同一组固定值，具有幂等性、可安全重复执行。tagIds/campaignTagIds路径(约16%流量)因未能在测试账号249条CampaignTags里确认归属，未强行使用不明归属的tag id执行写操作，本轮未覆盖。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST Automation/UpdateTargeting 设置测试campaign 426322",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/UpdateTargeting",
+        "request_body": {
+          "campaignIds": ["426322"],
+          "tagIds": [],
+          "campaignTagIds": [],
+          "targetROAS": 10,
+          "targetACOS": 15.0,
+          "targetCPA": null,
+          "profileId": "16274451",
+          "profileIds": ["16274451"],
+          "campaigns": [{"profileId": "16274451", "campaignId": "426322"}]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
   }
 ]
