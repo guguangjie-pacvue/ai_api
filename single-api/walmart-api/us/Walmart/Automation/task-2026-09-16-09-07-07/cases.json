@@ -1,0 +1,280 @@
+[
+  {
+    "name": "POST /api/Automation/GetActualSpend - 按campaignId查询实际花费",
+    "description": "单接口测试：POST /api/Automation/GetActualSpend。查询指定日期区间的实际花费。场景：按campaignId查询。365天275691次真实调用中占比约90%。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetActualSpend - 按campaignId查询",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/GetActualSpend",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "campaignId": "426321",
+          "campaignIds": null,
+          "start": "{{date_start}}",
+          "end": "{{date_end}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Automation/GetActualSpend - 按tagId查询实际花费",
+    "description": "单接口测试：POST /api/Automation/GetActualSpend。查询指定日期区间的实际花费。场景：按tagId(非campaignId)查询。365天275691次真实调用中占比约10%。profileId/tagId保留同一条真实样本原值(非本账号，只读安全，未做半替换以避免跨账号ID不配套)。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetActualSpend - 按tagId查询",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/GetActualSpend",
+        "request_body": {
+          "profileId": "245057",
+          "tagId": "37383",
+          "campaignIds": null,
+          "start": "2026-02-10",
+          "end": "2026-03-11"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Automation/GetActualSpend/v2 - 按profileIds+campaignIds批量查询",
+    "description": "单接口测试：POST /api/Automation/GetActualSpend/v2。GetActualSpend的批量(数组)版本。365天832次真实调用，100%为profileIds+campaignIds数组查询单一场景。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetActualSpend/v2",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/GetActualSpend/v2",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [
+            "{{campaign_id}}"
+          ],
+          "start": "{{date_start}}",
+          "end": "{{date_end}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Automation/getProfilesByUser - 查询当前用户可用Profile",
+    "description": "单接口测试：POST /api/Automation/getProfilesByUser。查询当前登录用户可用的Profile列表(由token内userId决定，与请求体无关)。365天13082次真实调用，100%请求体为空数组[]。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getProfilesByUser",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/getProfilesByUser",
+        "request_body": [],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Automation/tag - 按CampaignTag查询自动化报表",
+    "description": "单接口测试：POST /api/Automation/tag。Automation功能按CampaignTag维度的报表查询(与Automation/campaignReport等报表接口同族)。365天38312次真实调用，100%单一场景：profileIds+start+end+tagIds+clientId。Swagger声明的targetingTypes/toMarket/customMetricIds等字段均为可选，真实流量从未传递。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 Automation/tag",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/tag",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "tagIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "clientId": 62
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Automation/budgetTagReport - CampaignTag预算报表(timeType=ytd)",
+    "description": "单接口测试：POST /api/Automation/budgetTagReport。按CampaignTag维度的预算报表。365天仅8次真实调用(极小样本，同AdItemReport等模块先例，样本较少场景覆盖可能不全)，本场景(profileIds+campaignTagIds+timeType=ytd+简化pageInfo)占比约37.5%(3/8)。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetTagReport - timeType=ytd",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/budgetTagReport",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "campaignTagIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "timeType": "ytd",
+          "pageInfo": {
+            "pageSize": 10000,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Automation/budgetTagReport - CampaignTag预算报表(timeType=date)",
+    "description": "单接口测试：POST /api/Automation/budgetTagReport。365天仅8次真实调用，本场景(timeType=date+简化pageInfo)占比约37.5%(3/8)。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetTagReport - timeType=date",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/budgetTagReport",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "campaignTagIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "timeType": "date",
+          "pageInfo": {
+            "pageSize": 10000,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Automation/budgetTagReport - 旧版前端参数(citrus/criteoPageInfo)",
+    "description": "单接口测试：POST /api/Automation/budgetTagReport。365天仅8次真实调用，本场景(旧版前端：filters:[]+citrusPageInfo/criteoPageInfo复合pageInfo结构)占比约25%(2/8)，与另外两个场景是新旧前端版本并存(同BrandAsset模块新旧参数并存先例)，字段结构保留原始真实形态不合并。",
+    "module": "Automation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 budgetTagReport - 旧版citrus/criteoPageInfo",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Automation/budgetTagReport",
+        "request_body": {
+          "campaignTagIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "profileIds": "{{profile_id}}",
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "filters": [],
+          "timeType": "ytd",
+          "pageInfo": {
+            "asc": true,
+            "orderBy": "spend",
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "citrusPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 2147483647
+            },
+            "criteoPageInfo": {
+              "orderBy": "spend",
+              "pageIndex": 1,
+              "pageSize": 2147483647
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]
