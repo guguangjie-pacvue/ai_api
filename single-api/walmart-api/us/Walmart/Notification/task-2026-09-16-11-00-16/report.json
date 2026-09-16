@@ -1,0 +1,414 @@
+{
+  "config": "walmart-api (us)",
+  "started_at": "2026-09-16T03:02:07.389450+00:00",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "GET /api/Notification - 查询通知总览",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GET Notification",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification",
+          "status_code": 200,
+          "ms": 1690,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:result,performanceCount,performanceNotification,outOfBudget,dailyBudgetNotification,totalBudgetNotification,itemHealth,actualSpend",
+          "data_len": 9,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Notification/ActualSpend - 设置实际花费提醒后还原",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST ActualSpend 设置测试值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/ActualSpend",
+          "status_code": 200,
+          "ms": 1568,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "GET ActualSpend 验证生效",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/ActualSpend",
+          "status_code": 200,
+          "ms": 2954,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:status,includeDays,emailsJson,userId,userName,condition,sendTypes",
+          "data_len": 7,
+          "msg": null
+        },
+        {
+          "name": "POST ActualSpend 还原原值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/ActualSpend",
+          "status_code": 200,
+          "ms": 1941,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Notification/insufficientBudget - 首次设置预算不足提醒",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST insufficientBudget 设置测试值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/insufficientBudget",
+          "status_code": 200,
+          "ms": 3235,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:emails,profiles,tags,sendTypes,adGroupTagIds,adType,id,createTime",
+          "data_len": 20,
+          "msg": null
+        },
+        {
+          "name": "GET insufficientBudget 验证生效",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/insufficientBudget",
+          "status_code": 200,
+          "ms": 3194,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:emails,profiles,tags,sendTypes,adGroupTagIds,adType,id,createTime",
+          "data_len": 20,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Notification/ItemLowHealth - 设置商品健康度提醒后还原",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST ItemLowHealth 设置测试值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/ItemLowHealth",
+          "status_code": 200,
+          "ms": 1358,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "GET ItemLowHealth 验证生效",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/ItemLowHealth",
+          "status_code": 200,
+          "ms": 1798,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:status,frequency,emailsJson,userId,clientId,conditions,lowItemHealthSetting,sendTypes",
+          "data_len": 8,
+          "msg": null
+        },
+        {
+          "name": "POST ItemLowHealth 还原原值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/ItemLowHealth",
+          "status_code": 200,
+          "ms": 1481,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Notification/OutOfDailyBudget - 设置日预算耗尽提醒后还原",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST OutOfDailyBudget 设置测试值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/OutOfDailyBudget",
+          "status_code": 200,
+          "ms": 930,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "GET OutOfDailyBudget 验证生效",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/OutOfDailyBudget",
+          "status_code": 200,
+          "ms": 1502,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:status,frequency,emailsJson,userId,clientId,conditions,sendTypes",
+          "data_len": 7,
+          "msg": null
+        },
+        {
+          "name": "POST OutOfDailyBudget 还原原值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/OutOfDailyBudget",
+          "status_code": 200,
+          "ms": 1200,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Notification/Recommendation - 切换推荐提醒开关",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST Recommendation 关闭",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Recommendation",
+          "status_code": 200,
+          "ms": 1232,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "POST Recommendation 重新开启",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Recommendation",
+          "status_code": 200,
+          "ms": 1033,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Notification/Performance/WithTargetType - 按targetType查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 Performance/WithTargetType",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Performance/WithTargetType",
+          "status_code": 200,
+          "ms": 1016,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Notification/Performance - 创建自定义提醒规则后清理",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST Performance 创建",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Performance",
+          "status_code": 200,
+          "ms": 1125,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:id,name,userId,clientId,targetType,targetIds,dataRangeJson,requirementsJson",
+          "data_len": 15,
+          "msg": null
+        },
+        {
+          "name": "PATCH Performance 切换暂停",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Performance/139/status?status=true",
+          "status_code": 200,
+          "ms": 1080,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "DELETE Performance 清理",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Performance/139",
+          "status_code": 200,
+          "ms": 1764,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        }
+      ]
+    },
+    {
+      "name": "PATCH /api/Notification/Status - 切换分类通知开关后还原",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "PATCH Status 关闭caseType=1",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Status?status=false&caseType=1",
+          "status_code": 200,
+          "ms": 1070,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "PATCH Status 重新开启caseType=1",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/Notification/Status?status=true&caseType=1",
+          "status_code": 200,
+          "ms": 1392,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-16T03:02:39.963690+00:00"
+}
