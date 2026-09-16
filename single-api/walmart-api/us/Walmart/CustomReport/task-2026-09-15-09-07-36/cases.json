@@ -1284,8 +1284,14 @@
         "request_body": {
           "reportType": [],
           "scheduleType": [],
-          "userId": [18589],
-          "pageInfo": {"pageSize": 5, "pageIndex": 1, "orderBy": "createdTime desc"},
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
           "searchKeyword": "qa-test-campaignperformance-create"
         },
         "extract_vars": {
@@ -1293,7 +1299,11 @@
         },
         "expected_response": {
           "code": 200,
-          "data": {"reports": {"$is_array": true}}
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
         }
       },
       {
@@ -1311,7 +1321,7 @@
   },
   {
     "name": "PUT /api/Report/custom/campaignPerformance/{id} - 更新Campaign Performance报表(含后置清理)",
-    "description": "单接口测试：PUT /api/Report/custom/campaignPerformance/{id}。更新类写操作。ES该端点365天0次真实调用(PUT本身无流量，但同名POST创建端点流量很高，故沿用其真实body结构)。先创建再更新再删除，保证可重复执行。[2026-09-15修复] 创建响应体只有{code,msg}，不含新报表id，改用POST /Report/custom/reports的searchKeyword字段按报表名精确查找(已实测确认该字段真实生效，能精确定位)获取id，不再假设响应体含data字段。⚠️疑似限流/并发缺陷：同批次里POST /Report/custom/campaignPerformance若不是当次批次第一次调用，稳定复现500(NullReferenceException)，本case因排在同模块另一条campaignPerformance创建case之后而受影响，非本case设计问题，需要间隔调用或单独执行验证。",
+    "description": "单接口测试：PUT /api/Report/custom/campaignPerformance/{id}。更新类写操作。ES该端点365天0次真实调用(PUT本身无流量，但同名POST创建端点流量很高，故沿用其真实body结构)。先创建再更新再删除，保证可重复执行。[2026-09-15修复] 创建响应体只有{code,msg}，不含新报表id，改用POST /Report/custom/reports的searchKeyword字段按报表名精确查找(已实测确认该字段真实生效，能精确定位)获取id，不再假设响应体含data字段。⚠️疑似限流/并发缺陷：同批次里POST /Report/custom/campaignPerformance若不是当次批次第一次调用，稳定复现500(NullReferenceException)，本case因排在同模块另一条campaignPerformance创建case之后而受影响，非本case设计问题，需要间隔调用或单独执行验证。[2026-09-16 补执行] 数据库恢复后单独重跑(非同批次首次调用问题)：前置 POST /Report/custom/campaignPerformance 创建步骤连续 4 次(间隔 25~60 秒)稳定 HTTP 500 NullReferenceException(\"Object reference not set to an instance of an object.\")，与 2026-09-15 同批次首次调用曾成功(报表 33212)的表现不同，疑似该创建接口已退化为稳定 500；创建失败导致本 case 的 PUT/DELETE 步骤无有效 id，如实记录 FAIL，未改断言。",
     "module": "CustomReport",
     "granularity": "API",
     "since": "init",
@@ -1366,8 +1376,14 @@
         "request_body": {
           "reportType": [],
           "scheduleType": [],
-          "userId": [18589],
-          "pageInfo": {"pageSize": 5, "pageIndex": 1, "orderBy": "createdTime desc"},
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
           "searchKeyword": "qa-test-cp-forupdate"
         },
         "extract_vars": {
@@ -1375,7 +1391,11 @@
         },
         "expected_response": {
           "code": 200,
-          "data": {"reports": {"$is_array": true}}
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
         }
       },
       {
@@ -1432,7 +1452,7 @@
   },
   {
     "name": "DELETE /api/Report/custom/campaignPerformance/{id} - 删除Campaign Performance报表",
-    "description": "单接口测试：DELETE /api/Report/custom/campaignPerformance/{id}。删除类写操作。ES该端点365天0次真实调用。先创建测试报表再删除，天然自清理。[2026-09-15修复] 创建响应体只有{code,msg}，不含新报表id，改用POST /Report/custom/reports的searchKeyword字段按报表名精确查找获取id。⚠️疑似限流/并发缺陷：同上一条PUT campaignPerformance case，同批次非第一次调用POST /Report/custom/campaignPerformance稳定复现500，非本case设计问题。",
+    "description": "单接口测试：DELETE /api/Report/custom/campaignPerformance/{id}。删除类写操作。ES该端点365天0次真实调用。先创建测试报表再删除，天然自清理。[2026-09-15修复] 创建响应体只有{code,msg}，不含新报表id，改用POST /Report/custom/reports的searchKeyword字段按报表名精确查找获取id。⚠️疑似限流/并发缺陷：同上一条PUT campaignPerformance case，同批次非第一次调用POST /Report/custom/campaignPerformance稳定复现500，非本case设计问题。[2026-09-16 补执行] 数据库恢复后单独重跑(非同批次首次调用问题)：前置 POST /Report/custom/campaignPerformance 创建步骤连续 4 次(间隔 25~60 秒)稳定 HTTP 500 NullReferenceException(\"Object reference not set to an instance of an object.\")，与 2026-09-15 同批次首次调用曾成功(报表 33212)的表现不同，疑似该创建接口已退化为稳定 500；创建失败导致本 case 的 PUT/DELETE 步骤无有效 id，如实记录 FAIL，未改断言。",
     "module": "CustomReport",
     "granularity": "API",
     "since": "init",
@@ -1483,8 +1503,14 @@
         "request_body": {
           "reportType": [],
           "scheduleType": [],
-          "userId": [18589],
-          "pageInfo": {"pageSize": 5, "pageIndex": 1, "orderBy": "createdTime desc"},
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
           "searchKeyword": "qa-test-cp-fordelete"
         },
         "extract_vars": {
@@ -1492,7 +1518,11 @@
         },
         "expected_response": {
           "code": 200,
-          "data": {"reports": {"$is_array": true}}
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
         }
       },
       {
@@ -1557,8 +1587,14 @@
         "request_body": {
           "reportType": [],
           "scheduleType": [],
-          "userId": [18589],
-          "pageInfo": {"pageSize": 5, "pageIndex": 1, "orderBy": "createdTime desc"},
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
           "searchKeyword": "qa-test-cp-forchangeowner"
         },
         "extract_vars": {
@@ -1566,7 +1602,11 @@
         },
         "expected_response": {
           "code": 200,
-          "data": {"reports": {"$is_array": true}}
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
         }
       },
       {
@@ -1642,8 +1682,14 @@
         "request_body": {
           "reportType": [],
           "scheduleType": [],
-          "userId": [18589],
-          "pageInfo": {"pageSize": 5, "pageIndex": 1, "orderBy": "createdTime desc"},
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
           "searchKeyword": "qa-test-cp-foraccessible"
         },
         "extract_vars": {
@@ -1651,7 +1697,11 @@
         },
         "expected_response": {
           "code": 200,
-          "data": {"reports": {"$is_array": true}}
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
         }
       },
       {
