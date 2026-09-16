@@ -1,0 +1,105 @@
+[
+  {
+    "name": "POST /api/DisplayCampaigns - 创建后改名+暂停+关联ItemSet",
+    "description": "单接口测试：POST创建+PUT改名+deliveryStatus暂停+itemSet关联，链式覆盖4个endpoint。写操作真实执行：在测试账号display sandbox profile 16354252下创建一个测试Display Campaign(dailyBudget=5低预算)，探测确认响应为{isSuccess,message,profileID,campaignID,status}，campaignID真实可提取。全模块8接口未发现Delete接口(能创建不能删除，同AdGroups/ItemSet等模块先例)，接受残留固定命名(test+HHMMSS)测试实体，且创建后立即暂停(deliverySpeed/action=0)降低残留campaign的实际投放风险。itemSet关联复用ItemSet模块已自建的itemsetId 123639462(haloAssociationType=BRAND)。2轮验证通过(每轮换时间戳后缀避免同名冲突，同ItemSet/Audiences/NegativeKeyword模块已知模式)。POST DisplayCampaigns(15次)/PUT(332次)/deliveryStatus(75次)/itemSet(77次)均为365天真实调用。",
+    "module": "DisplayCampaigns",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST DisplayCampaigns 创建",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "DisplayCampaigns",
+        "request_body": {
+          "advertiserId": 16354252,
+          "name": "test114939_DisplayCampaign",
+          "description": "",
+          "objective": 1,
+          "campaignTagIds": [],
+          "mediaType": "BANNER",
+          "endDate": "2026-12-31T23:59:59-04:00",
+          "dailyBudget": 5,
+          "budgetType": 0,
+          "deliverySpeed": 0,
+          "startDate": "2026-10-01T00:01:00-04:00"
+        },
+        "extract_vars": {
+          "new_dc_id": "data.campaignID"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.isSuccess": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "PUT DisplayCampaigns 改名",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "DisplayCampaigns",
+        "request_body": [
+          {
+            "advertiserId": 16354252,
+            "campaignId": "{{new_dc_id}}",
+            "name": "test114939_DisplayCampaign_edited"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "POST deliveryStatus 暂停",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "DisplayCampaigns/deliveryStatus",
+        "request_body": [
+          {
+            "advertiserId": "16354252",
+            "campaignId": "{{new_dc_id}}",
+            "action": 0
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "POST itemSet 关联",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "DisplayCampaigns/itemSet",
+        "request_body": [
+          {
+            "advertiserId": 16354252,
+            "campaignId": "{{new_dc_id}}",
+            "itemsetId": 123639462,
+            "haloAssociationType": "BRAND",
+            "haloItemsetId": 123639462
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
