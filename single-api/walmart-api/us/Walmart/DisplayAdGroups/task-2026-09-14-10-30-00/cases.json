@@ -1250,7 +1250,7 @@
     ]
   },
   {
-    "name": "【待执行-已改造为测试账号版本】POST /api/DisplayAdGroups - 创建广告组(创建后暂停)",
+    "name": "【已执行-测试账号版本】POST /api/DisplayAdGroups - 创建广告组(创建后暂停)",
     "description": "单接口测试：POST /api/DisplayAdGroups。创建类写操作，经用户确认(2026-09-15)按“同AdGroups方案”处理：创建后改状态为pause/archive，不强求删除。用测试账号真实profile 16354252(Sandbox - Display LLC - 1P API)下的真实Display Campaign 3564(“display campaign gbb1.42.288 test”，LIVE，dailyBudget 120)。advertiserId取值等于profileId=16354252(已通过只读接口DisplayAdGroups/landingPage/list验证该advertiserId对该测试账号有效)。警告：Swagger未声明创建响应体schema，extract_vars的data.adGroupId路径为参照AdGroups模块POST响应结构的推测，实际执行时需先人工确认真实返回结构，若字段名不同需相应调整。暂停步骤复用同模块已验证的POST deliveryStatus(action=1=暂停)接口作为归档/清理手段(本模块Swagger未见DELETE /api/DisplayAdGroups)。[2026-09-15修复] 首次实测创建被拒绝(HTTP 405: \"Budget is not supported at ad group level, if budget is defined at campaign level\")，campaign 3564已在campaign级别配置了预算，故已从请求体移除totalBudget/budgetType两个字段。[2026-09-15二次修复] 用\"000test...\"前缀命名重试仍报\"Ad group already exists with the given name\"(该账号是共享沙盒，可能与其他历史测试残留重名)，改用更独特的\"zz_test_displayadgroups_create_0915_a\"重试后成功创建，返回data:{isSuccess,message,profileID,adGroupID,status}，确认字段名是\"adGroupID\"(大写ID，不是原先写的adGroupId)，已修正extract_vars路径。⚠️已知限制：本接口Swagger未见对应DELETE，清理只能pause不能真删，name字段一旦用过就永久占用，同一名称重跑第二次必然报\"Ad group already exists\"(非bug，是预期行为，同AdGroups模块先例)；如需重新验证需先把name换成新值。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "DisplayAdGroups",
     "granularity": "API",
@@ -1308,7 +1308,7 @@
     ]
   },
   {
-    "name": "【待执行-已改造为测试账号版本】PUT /api/DisplayAdGroups - 更新广告组设置(自建后改+核实原值还原)",
+    "name": "【已执行-测试账号版本】PUT /api/DisplayAdGroups - 更新广告组设置(自建后改+核实原值还原)",
     "description": "单接口测试：PUT /api/DisplayAdGroups。原地更新类写操作。使用测试账号真实profile 16354252/campaign 3564下的adGroupId 70517(“Copy of sfagagag edit46”)——注意：同campaign下另一adGroupId 26680(“sfagagag edit46”)被本模块及其他多个只读case作为默认adgroup_id广泛引用，为避免相互干扰，本写操作改用70517。流程：先用只读接口Report/adgroup/list按campaignId=3564查询，读取70517当前name/maxBid/frequencyCap*/creativeRotationMode作为还原基线→更新(改maxBid+改名验证)→还原为读取到的原值。警告：Report/adgroup/list返回的budgetType/rateType/deliverySpeed/dailyBudget/endDate等字段读取时为null(可能继承campaign级别配置)，为避免误设置这些未知字段的真实值，更新与还原请求体中对budgetType/deliverySpeed使用了样本默认值(DAILY/EVENLY)而非精确还原，若实际执行时因此产生非预期变化，需人工在UI二次核实这几个字段的准确原始配置。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "DisplayAdGroups",
     "granularity": "API",
@@ -1405,7 +1405,7 @@
     ]
   },
   {
-    "name": "【待执行-已改造为测试账号版本】PUT /api/DisplayAdGroups/Bulk/BaseBid - 批量设置BaseBid(自建adGroup+还原)",
+    "name": "【已执行-测试账号版本】PUT /api/DisplayAdGroups/Bulk/BaseBid - 批量设置BaseBid(自建adGroup+还原)",
     "description": "单接口测试：PUT /api/DisplayAdGroups/Bulk/BaseBid。使用测试账号真实adGroupId 70517(profile/advertiserId 16354252,campaign 3564)，避免影响被广泛复用的默认adGroupId 26680。警告：ProfileAndAdGroupIds字段格式为单个拼接字符串(ES真实样本形如“56035365366”，长度11位)，推测是advertiserId与adGroupId直接拼接无分隔符；本case按此规则拼出“1635425270517”(16354252+70517)，但该格式未经真实调用验证，执行前需人工核实真实拼接规则(建议从UI前端发起一次真实Bulk设置操作抓包确认)。流程：读取70517当前baseBid作为还原基线→设置新值→还原。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "DisplayAdGroups",
     "granularity": "API",
@@ -1479,7 +1479,7 @@
     ]
   },
   {
-    "name": "【待执行-已改造为测试账号版本】PUT /api/DisplayAdGroups/Bulk/MaxBid - 批量设置MaxBid(自建adGroup+还原)",
+    "name": "【已执行-测试账号版本】PUT /api/DisplayAdGroups/Bulk/MaxBid - 批量设置MaxBid(自建adGroup+还原)",
     "description": "单接口测试：PUT /api/DisplayAdGroups/Bulk/MaxBid。同Bulk/BaseBid，使用测试adGroupId 70517，ProfileAndAdGroupIds拼接格式同样为推测(“1635425270517”)，未经真实调用验证，执行前需人工核实。流程：读取70517当前maxBid作为还原基线→设置新值→还原。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "DisplayAdGroups",
     "granularity": "API",
@@ -1553,8 +1553,8 @@
     ]
   },
   {
-    "name": "【待执行-已改造为测试账号版本】Creatives - 关联创意到广告组→更新跟踪URL→解除关联(完整链路)",
-    "description": "单接口测试：POST /api/DisplayAdGroups/Creatives + PUT /api/DisplayAdGroups/Creatives + DELETE /api/DisplayAdGroups/Creatives。经用户确认(2026-09-15)合并成一条完整链路案例(参照CampaignTags“创建→抓ID→操作→清理”四步式写法)。使用测试账号真实adGroupId 70517(profile/advertiserId 16354252,campaign 3564)。警告：creativeId本身需要人工先在命令行运行本地脚本.claude/skills/swagger-api-case/scripts/media_upload_helper.py 上传一个一次性测试素材获得(该脚本是独立于run-cases.py框架的本地流程，无法在cases.json内自动生成)，然后把拿到的mediaId/creativeId临时填入下面steps中的test_creative_id变量再执行；config.json里不添加这个变量，避免产生错误的默认占位值。警告：如果Creatives模块实际使用的creativeId体系与Media模块的mediaId不是同一概念，需要人工在执行前额外确认两者是否可以直接互通，若不行则需改用其他方式获取真实creativeId。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
+    "name": "【技术受限-仅生成不执行】POST /api/DisplayAdGroups/Creatives - 关联创意到广告组→更新跟踪URL→解除关联(完整链路，需真实creativeId)",
+    "description": "单接口测试：POST /api/DisplayAdGroups/Creatives + PUT /api/DisplayAdGroups/Creatives + DELETE /api/DisplayAdGroups/Creatives。经用户确认(2026-09-15)合并成一条完整链路案例(参照CampaignTags“创建→抓ID→操作→清理”四步式写法)。使用测试账号真实adGroupId 70517(profile/advertiserId 16354252,campaign 3564)。警告：creativeId本身需要人工先在命令行运行本地脚本.claude/skills/swagger-api-case/scripts/media_upload_helper.py 上传一个一次性测试素材获得(该脚本是独立于run-cases.py框架的本地流程，无法在cases.json内自动生成)，然后把拿到的mediaId/creativeId临时填入下面steps中的test_creative_id变量再执行；config.json里不添加这个变量，避免产生错误的默认占位值。警告：如果Creatives模块实际使用的creativeId体系与Media模块的mediaId不是同一概念，需要人工在执行前额外确认两者是否可以直接互通，若不行则需改用其他方式获取真实creativeId。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行] 🔴[2026-09-16 二次自检更正] 2026-09-15 的执行记录是无效的：test_creative_id 变量从未在 config 或 extract_vars 中定义，三步请求实际都以字面量 \"{{test_creative_id}}\" 作为 creativeId 发出，服务端仍返回 HTTP 200，被误记为 PASS。该结果不能证明接口可用(反而说明这三个端点对无效 creativeId 缺少校验，已列入观察项)。已把该 case 改为“技术受限-仅生成不执行”并从 report.json 移除；测试账号 Display 素材库为空、无自有 creativeId，如需真正验证需先人工上传素材取得 creativeId 后填入再执行。",
     "module": "DisplayAdGroups",
     "granularity": "API",
     "since": "init",
@@ -1631,7 +1631,7 @@
     ]
   },
   {
-    "name": "【待执行-已改造为测试账号版本】POST /api/DisplayAdGroups/ForecastPlan/Add - 新建预测方案(接受少量残留)",
+    "name": "【已执行-测试账号版本】POST /api/DisplayAdGroups/ForecastPlan/Add - 新建预测方案(接受少量残留)",
     "description": "单接口测试：POST /api/DisplayAdGroups/ForecastPlan/Add。经用户确认(2026-09-15)“执行，接受少量残留”。使用测试账号真实profile/advertiserId 16354252、campaign 3564、adGroupId 70517直接生成case，不配清理步骤——本模块Swagger未见对应的删除/移除预测方案接口，测试账号允许少量残留，不视为脏数据。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "DisplayAdGroups",
     "granularity": "API",
@@ -1664,7 +1664,7 @@
     ]
   },
   {
-    "name": "【待执行-已改造为测试账号版本】POST /api/DisplayAdGroups/TargetingGuidance/Apply - 应用建议定向(自建并暂停的测试广告组)",
+    "name": "【已执行-测试账号版本】POST /api/DisplayAdGroups/TargetingGuidance/Apply - 应用建议定向(自建并暂停的测试广告组)",
     "description": "单接口测试：POST /api/DisplayAdGroups/TargetingGuidance/Apply。经用户确认(2026-09-15)“在自建的暂停测试广告组上执行”。流程：①在测试账号真实campaign 3564(profile/advertiserId 16354252)下自建一个新的测试Display广告组②通过POST DisplayAdGroups/deliveryStatus(action=1)将其暂停③用本模块已有的只读接口TargetingGuidance/Suggested查询该广告组的建议定向记录，抓取建议定向id④应用到该(已暂停的)自建广告组。警告：id字段(建议定向记录ID)按要求从只读的Suggested接口抓取，但该新建广告组暂无历史投放数据，Suggested接口是否会为全新广告组返回可用建议存在不确定性——如果实际执行时抓取到的建议列表为空，需人工从UI的真实建议定向列表接口人工核实获取一个可用id，不能凭空构造。[2026-09-15修复] 首次实测创建被拒绝(HTTP 405: \"Budget is not supported at ad group level, if budget is defined at campaign level\")，已同步移除请求体的totalBudget/budgetType字段(同本模块POST DisplayAdGroups case的修复)，并同步改用更独特的名称避开共享沙盒账号的历史重名、修正extract_vars路径为data.adGroupID(大写ID)，创建+暂停两步已实测成功。[2026-09-15阻塞说明] 第③步查询TargetingGuidance/Suggested对新建广告组稳定复现HTTP 500(\"Object reference not set to an instance of an object\")——这不是新问题，是本模块已记录的TargetingGuidance系列已知bug(与只读TargetingGuidance/MyTargeting/Suggested对老广告组的500是同一缺陷)，导致本case无法拿到真实建议定向id，第③④步暂时无法自动跑通，需等后端修复该bug后再补测，或人工从UI核实。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "DisplayAdGroups",
     "granularity": "API",
