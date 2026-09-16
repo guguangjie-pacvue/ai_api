@@ -1,0 +1,281 @@
+[
+  {
+    "name": "GET /api/Recommendations/getRecommendationAuditSummary - 查询审计汇总",
+    "description": "单接口测试：GET /api/Recommendations/getRecommendationAuditSummary。按clientId查询推荐审计汇总数据。365天1536次真实调用，唯一参数clientId，100%单一场景。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationAuditSummary",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationAuditSummary?clientId=62",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Recommendations/getRecommendationTargetSettings - 查询目标ROAS-ACOS设置",
+    "description": "单接口测试：GET /api/Recommendations/getRecommendationTargetSettings。按clientId查询推荐引擎的目标ROAS/ACOS设置(Profile/Tag维度)。365天129次真实调用，唯一参数clientId，100%单一场景。实测本账号clientId=62当前已有1条历史设置(profileId 243137)。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationTargetSettings",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationTargetSettings?clientId=62",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Recommendations/getRecommendationOverviewSummary - reportAdType=2",
+    "description": "单接口测试：POST /api/Recommendations/getRecommendationOverviewSummary。推荐总览汇总。场景：reportAdType=2(赞助广告)。365天7773次真实调用中占比约38%。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationOverviewSummary - reportAdType=2",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationOverviewSummary",
+        "request_body": {
+          "clientId": 62,
+          "profileIds": "{{profile_id}}",
+          "tagIds": [],
+          "timeZone": "America/Los_Angeles",
+          "reportAdType": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Recommendations/getRecommendationOverviewSummary - reportAdType=1",
+    "description": "单接口测试：POST /api/Recommendations/getRecommendationOverviewSummary。推荐总览汇总。场景：reportAdType=1(展示广告)。365天7773次真实调用中占比约18%+10%+...合计约30%+。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationOverviewSummary - reportAdType=1",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationOverviewSummary",
+        "request_body": {
+          "clientId": 62,
+          "profileIds": "{{profile_id}}",
+          "tagIds": [],
+          "timeZone": "America/Los_Angeles",
+          "reportAdType": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Recommendations/getRecommendationPendingList - pageSize=5+reportAdType=2",
+    "description": "单接口测试：POST /api/Recommendations/getRecommendationPendingList。查询待处理推荐列表。场景：pageInfo orderBy=spend desc pageSize=5+reportAdType=2，365天17245次真实调用中占比约12%。实测本测试账号当前totalCount=0(无待处理推荐)，属正常业务结果。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationPendingList - pageSize=5",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationPendingList",
+        "request_body": {
+          "clientId": 62,
+          "profileIds": "{{profile_id}}",
+          "tagIds": [],
+          "timeZone": "America/Los_Angeles",
+          "reportAdType": 2,
+          "pageInfo": {
+            "orderBy": "spend desc",
+            "pageIndex": 1,
+            "pageSize": 5
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Recommendations/getRecommendationPendingList - pageSize=20+reportAdType=1",
+    "description": "单接口测试：POST /api/Recommendations/getRecommendationPendingList。场景：pageInfo orderBy=spend desc pageSize=20+reportAdType=1，365天17245次真实调用中占比约合计10%+。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationPendingList - pageSize=20",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationPendingList",
+        "request_body": {
+          "clientId": 62,
+          "profileIds": "{{profile_id}}",
+          "tagIds": [],
+          "timeZone": "America/Los_Angeles",
+          "reportAdType": 1,
+          "pageInfo": {
+            "orderBy": "spend desc",
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Recommendations/getRecommendationExpiredList - 默认场景",
+    "description": "单接口测试：POST /api/Recommendations/getRecommendationExpiredList。查询已过期推荐列表。场景：isExpired=2+reportAdType=2+标准pageInfo(orderBy priority desc)，365天167次真实调用中占比约14%(该场景为top组合)。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationExpiredList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationExpiredList",
+        "request_body": {
+          "clientId": 62,
+          "profileIds": "{{profile_id}}",
+          "tagIds": [],
+          "campaignIds": [],
+          "adGroupIds": [],
+          "targetingTypes": [],
+          "priority": [],
+          "source": [],
+          "recommendationType": [],
+          "status": [],
+          "isExpired": 2,
+          "reportAdType": 2,
+          "timeZone": "America/Los_Angeles",
+          "pageInfo": {
+            "orderBy": "priority desc",
+            "pageIndex": 1,
+            "pageSize": 50
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Recommendations/getRecommendationAppliedList - 默认场景",
+    "description": "单接口测试：POST /api/Recommendations/getRecommendationAppliedList。查询已应用推荐列表。场景：profileIds+reportAdType=2+标准pageInfo(orderBy priority desc)，365天248次真实调用中占比约32%(top组合)。",
+    "module": "Recommendations",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRecommendationAppliedList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Recommendations/getRecommendationAppliedList",
+        "request_body": {
+          "clientId": 62,
+          "profileIds": "{{profile_id}}",
+          "tagIds": [],
+          "recommendationType": [],
+          "priority": [],
+          "campaignIds": [],
+          "targetingTypes": [],
+          "adGroupIds": [],
+          "reportAdType": 2,
+          "source": [],
+          "status": [],
+          "timeZone": "America/Los_Angeles",
+          "pageInfo": {
+            "orderBy": "priority desc",
+            "pageIndex": 1,
+            "pageSize": 50
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
