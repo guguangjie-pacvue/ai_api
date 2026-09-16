@@ -1,0 +1,63 @@
+[
+  {
+    "name": "GET /api/display/Moderation/comments - 查询审核意见",
+    "description": "单接口测试：GET /api/display/Moderation/comments。按advertiserId+creativeId查询素材审核意见(只读)。测试账号Display素材库为空(未自建过Creative，同Creative模块已确认的先例)，直接复用ES真实完整样本的advertiserId+creativeId配对(未做半替换，只读安全)。365天443次真实调用。",
+    "module": "Moderation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GET comments",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "display/Moderation/comments?advertiserId=239432&creativeId=dfaef613-942b-453e-a54b-307f88685d71",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/display/Moderation/assist/batch - AI审核辅助分析",
+    "description": "单接口测试：POST /api/display/Moderation/assist/batch。批量触发AI审核辅助分析(判定为幂等刷新/生成建议类接口，不修改creative核心内容，与Creative模块AsyncCreative/preview系列判定标准一致)。测试账号无自建Creative，复用ES真实完整样本的advertiserId+creativeIds配对。365天13次真实调用。",
+    "module": "Moderation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 assist/batch",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "display/Moderation/assist/batch",
+        "request_body": {
+          "items": [
+            {
+              "advertiserId": 239432,
+              "creativeIds": [
+                "6e3f4f5d-e6d3-4a12-a5c9-4f7872e15cb0"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
