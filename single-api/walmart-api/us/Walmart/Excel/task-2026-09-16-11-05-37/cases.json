@@ -1,0 +1,87 @@
+[
+  {
+    "name": "POST /api/Report/Excel/dashboard/Performance - timeType=weekly主流场景",
+    "description": "单接口测试：POST /api/Report/Excel/dashboard/Performance。导出Dashboard Performance数据(供Excel下载)。场景：timeType=weekly+dim=2+referenceIndicator=ROAS，32条真实样本中占比约90.6%。全模块13接口仅本接口有真实流量(其余12个365天零流量)。",
+    "module": "Excel",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dashboard/Performance - weekly",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/Excel/dashboard/Performance",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "groupBy": 0,
+          "timeType": "weekly",
+          "dim": 2,
+          "startDateCompared": "{{date_cmp_start}}",
+          "endDateCompared": "{{date_cmp_end}}",
+          "realTimeType": "weekly",
+          "campaignTagIds": [],
+          "referenceIndicator": "ROAS",
+          "tagIds": [],
+          "pageInfo": {
+            "pageSize": 10000,
+            "pageIndex": 1,
+            "orderBy": "weekOfYear"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/Excel/dashboard/Performance - timeType=custom场景",
+    "description": "单接口测试：POST /api/Report/Excel/dashboard/Performance。场景：timeType=custom+dim=1+referenceIndicator=ACoS，32条真实样本中占比约3.1%(1次)。🔴新发现疑似后端bug：用测试账号sandbox profile(数据量稀疏/近乎零流量)调用稳定复现HTTP 500\"Arithmetic overflow error converting expression to data type int\"；已交叉验证排除\"半替换ID\"误判——改用ES真实样本里的真实客户profileId(309297，同一份样本原始值配套)+完全相同的timeType=custom/dim=1参数组合，请求成功返回200。说明该接口在\"账号历史数据稀疏/主表与对比周期表连接后近似为空\"的边界场景下会触发SQL算术溢出，是真实数据稀疏度触发的服务端健壮性缺陷，不是测试数据构造问题，如实保留FAIL。",
+    "module": "Excel",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dashboard/Performance - custom",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/Excel/dashboard/Performance",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "groupBy": 0,
+          "timeType": "custom",
+          "dim": 1,
+          "startDateCompared": "{{date_cmp_start}}",
+          "endDateCompared": "{{date_cmp_end}}",
+          "realTimeType": "custom",
+          "campaignTagIds": [],
+          "referenceIndicator": "ACoS",
+          "tagIds": [],
+          "pageInfo": {
+            "pageSize": 10000,
+            "pageIndex": 1,
+            "orderBy": "day"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
