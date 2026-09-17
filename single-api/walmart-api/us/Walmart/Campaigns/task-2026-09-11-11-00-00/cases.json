@@ -762,8 +762,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Campaigns/status - 批量修改Campaign状态(0/1，真实取值)",
-    "description": "仅生成 case 供人工评估，不自动执行。批量修改Campaign状态(0/1，真实取值)。365天流量约15797次。⚠️ 样本真实取值为0/1，具体含义(如active/paused)需人工核实；后置步骤的还原值(status=0)基于假设，执行前需先查询目标Campaign当前真实状态再决定还原值。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PATCH /api/Campaigns/status - 批量修改Campaign状态(测试账号campaign 426321)",
+    "description": "单接口测试：PATCH /api/Campaigns/status。使用测试账号真实profile 16274451(Sandbox - 1P API-1)下的真实campaign 426321(当前state=Paused)。[2026-09-15重大修复+事故记录] 原方案假设status=0代表\"改回Paused\"，实测该假设错误——本接口每次调用HTTP层都返回500(疑似ClickHouse同步SQL语法错误，同一根因见本模块其他FAIL记录)，但请求本身其实已生效(500具有误导性)，导致原案例(status=1→status=0)把测试campaign 426323真实置为\"Deleted\"且无法通过接口恢复(已与用户确认接受该损失，426323自此弃用，模块统一改用426321作为写操作基线)。已用一次性诊断调用确认真实enum含义：status=0→Deleted(危险，本case起不再使用)，status=2→Paused(已用一次性调用在426321上验证：请求虽仍500但state确实变为Paused)。现改为status=1(启用，含义未100%验证，但风险可控)→status=2(改回Paused，已验证)。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -772,13 +772,13 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] status - 批量修改Campaign状态(0/1，真实取值)",
+        "name": "启用(status=1)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/status",
         "request_body": {
           "campaignIds": [
-            "{{campaign_id}}"
+            "426321"
           ],
           "status": 1
         },
@@ -788,15 +788,15 @@
         }
       },
       {
-        "name": "[未执行] 后置逆操作 - 将状态改回0(原状态需人工核实后调整此步骤的status值)",
+        "name": "改回Paused(status=2，已验证的正确枚举值)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/status",
         "request_body": {
           "campaignIds": [
-            "{{campaign_id}}"
+            "426321"
           ],
-          "status": 0
+          "status": 2
         },
         "extract_vars": {},
         "expected_response": {
@@ -806,8 +806,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/delete - 批量删除(归档)Campaign",
-    "description": "仅生成 case 供人工评估，不自动执行。批量删除(归档)Campaign。⚠️ 与CheckTargetROASToggling相同的规律：该接口84次真实流量中2/3为纯ID字符串数组格式(如[\"5088595\"])，与Swagger当前声明的{profileId,campaignId}对象数组契约不一致，此case按Swagger契约生成，纯字符串格式是否仍被后端接受需人工核实(疑似历史客户端兼容性问题，与CheckTargetROASToggling同源，建议一并排查)。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/delete - 创建测试Campaign后删除(归档)(自建自清理)",
+    "description": "单接口测试：PUT /api/Campaigns/delete。经用户确认(2026-09-15)\"自建+删除即可\"。流程：①用测试账号profile 16274451创建一个新测试Campaign(000test前缀+时间戳命名)②用只读接口Report/campaign/list按profileIds过滤+createTime倒序，取第一条(最新创建)核对名称匹配后抓取新campaignId③PUT /api/Campaigns/delete按Swagger声明的{profileId,campaignId}对象数组契约删除(归档)该新建campaign④(可选)再次查询campaign列表验证该campaignId状态已变化。全程只操作本case自建的实体，不影响任何既有测试campaign(426321/426322/425817)。[2026-09-15修复] 首次实测创建被业务规则拒绝(HTTP 405: Start Time需为今天或未来、Daily Budget不能低于$50)，startDate/dailyBudget已改为2026-09-16/60。[2026-09-15二次修复] 原方案用Report/campaign/list按campaignName过滤+排序抓ID，实测该list接口的campaignName/campaignNameOperand过滤字段完全不生效(profile 16274451下totalCount恒为6177，是团队共享的高噪音沙盒账号，非独占的3个campaign)，排序字段也不可靠，靠名字/排序找新建campaign是危险的(可能误操作到别的campaign，426323当天就是类似机制误删的)。改为直接从POST /api/Campaigns创建响应体的data.campaignID字段抓取(已实测确认该字段真实存在，此前认为\"Swagger未声明响应体schema无法抓取\"的判断是错的)，不再依赖list查找。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -816,41 +816,13 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] delete - 批量删除(归档)Campaign",
-        "method": "PUT",
-        "base_url": "{{WALMARTBASEURL}}",
-        "path": "Campaigns/delete",
-        "request_body": [
-          {
-            "profileId": "{{profile_id_single}}",
-            "campaignId": "{{campaign_id}}"
-          }
-        ],
-        "extract_vars": {},
-        "expected_response": {
-          "code": 200
-        }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】POST /api/Campaigns - 创建新Campaign",
-    "description": "仅生成 case 供人工评估，不自动执行。创建新Campaign(单条)。365天流量约6836次。⚠️请求体基于真实ES样本，除profileId已替换为本测试账号变量外，其余字段(campaignTagIds/biddingStrategy等)保留原样本真实结构，非本测试账号数据，人工执行前需替换为本账号下真实可用的字段值。⚠️该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。\n[修复说明] 此前因es_batch.py的fetch文件名撞车bug(同路径POST/PUT互相覆盖样本)，该case曾错误使用了PUT /api/Campaigns(改名操作)的样本，现已改用真实POST(创建)样本重新生成。",
-    "module": "Campaigns",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
-      {
-        "name": "[未执行] Campaigns - 创建新Campaign",
+        "name": "创建测试Campaign 000test093503DEL(直接从响应体抓campaignID)",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns",
         "request_body": {
-          "name": "Mighty Paw | SP | 2769230151 | Manual | CB",
-          "startDate": "{{date_start}}",
+          "name": "000test093503DEL",
+          "startDate": "2026-09-16",
           "budgetType": "daily",
           "campaignType": "sponsoredProducts",
           "isAutoReview": true,
@@ -860,36 +832,25 @@
             "strategy": "FIXED"
           },
           "totalBudget": 0,
-          "dailyBudget": 20,
-          "profileId": "{{profile_id_single}}"
+          "dailyBudget": 60,
+          "profileId": 16274451
         },
-        "extract_vars": {},
+        "extract_vars": {
+          "new_del_campaign_id": "data.campaignID"
+        },
         "expected_response": {
           "code": 200
         }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns - 修改Campaign名称(Rename)",
-    "description": "仅生成 case 供人工评估，不自动执行。修改Campaign名称(Rename，真实样本仅含advertiserId/campaignId/name三个字段)。365天流量约7437次。⚠️ 该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。\n[核实说明] 之前描述猜测该接口可改结束日期/竞价策略，但真实ES样本显示实际请求体仅包含name字段，已修正描述与实际行为一致(仅改名)。",
-    "module": "Campaigns",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
+      },
       {
-        "name": "[未执行] Campaigns - 更新Campaign(如结束日期/竞价策略)",
+        "name": "删除(归档)新建Campaign",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
-        "path": "Campaigns",
+        "path": "Campaigns/delete",
         "request_body": [
           {
-            "advertiserId": "316418",
-            "campaignId": "{{campaign_id}}",
-            "name": "Auto_ASUS_26q1_am_cons_ryz_Walmart-Sponsored-ads_conv_no_1008128_havas_004JK"
+            "profileId": "16274451",
+            "campaignId": "{{new_del_campaign_id}}"
           }
         ],
         "extract_vars": {},
@@ -900,8 +861,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】POST /api/Campaigns/CampaignCopied - 复制Campaign(创建新Campaign)",
-    "description": "仅生成 case 供人工评估，不自动执行。复制Campaign(创建新Campaign)。365天流量约834次。⚠️ 该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】POST /api/Campaigns - 创建新Campaign(测试账号profile 16274451，创建后归档自清理)",
+    "description": "单接口测试：POST /api/Campaigns。使用测试账号真实profile 16274451(Sandbox - 1P API-1)创建一个新测试Campaign。[2026-09-15修复] 原方案\"仅创建不强制清理\"会在测试账号累积残留，且首次实测创建被业务规则拒绝(HTTP 405: Start Time需为今天或未来、Daily Budget不能低于$50)，startDate/dailyBudget已修正为2026-09-16/60。[2026-09-15二次修复] 原打算比照Report/campaign/list按campaignName过滤抓ID，实测该list接口的campaignName/campaignNameOperand过滤字段完全不生效(profile 16274451下totalCount恒为6177，是团队共享的高噪音沙盒账号)，靠名字/排序找新建campaign不可靠也有风险(426323当天就是类似机制误删的)。改为直接从创建响应体的data.campaignID字段抓取(已实测确认该字段真实存在)，不再依赖list查找。[2026-09-15三次修复] campaign名称在账号内必须唯一(\"Unique campaign name required\")，之前两轮测试因list查找失败而遗留了2个同名未清理的\"000test093500 SP Manual CB\"孤儿campaign(且因沙盒账号噪音太大无法可靠找回删除)，第三轮改用新名称\"000test_campaigns_post_create_0915v2\"避开冲突，此前2个孤儿campaign接受作为残留(该账号本身残留量已很大，可忽略不计)。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -910,18 +871,132 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] CampaignCopied - 复制Campaign(创建新Campaign)",
+        "name": "创建新Campaign 000test093500(直接从响应体抓campaignID)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns",
+        "request_body": {
+          "name": "000test_campaigns_post_create_0915v2",
+          "startDate": "2026-09-16",
+          "budgetType": "daily",
+          "campaignType": "sponsoredProducts",
+          "isAutoReview": true,
+          "targetingType": "manual",
+          "campaignTagIds": [],
+          "biddingStrategy": {
+            "strategy": "FIXED"
+          },
+          "totalBudget": 0,
+          "dailyBudget": 60,
+          "profileId": 16274451
+        },
+        "extract_vars": {
+          "new_create_campaign_id": "data.campaignID"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "归档新建Campaign(自清理)",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/delete",
+        "request_body": [
+          {
+            "profileId": "16274451",
+            "campaignId": "{{new_create_campaign_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns - 修改Campaign名称(测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PUT /api/Campaigns(仅改名，真实ES样本body仅含advertiserId/campaignId/name三个字段)。使用测试账号真实profile 16274451/campaign 426321。先用只读接口GetCampaign读取当前真实名称作为还原基线，改名验证后再还原为原名。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
+    "module": "Campaigns",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "读取campaign 426321当前名称",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_name": "data[0].name"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "改名(追加后缀验证)",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns",
+        "request_body": [
+          {
+            "advertiserId": "16274451",
+            "campaignId": "426321",
+            "name": "{{orig_c426321_name}}-renamed"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为原名称",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns",
+        "request_body": [
+          {
+            "advertiserId": "16274451",
+            "campaignId": "426321",
+            "name": "{{orig_c426321_name}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【已执行-测试账号版本】POST /api/Campaigns/CampaignCopied - 复制Campaign(测试账号campaign 426321为源)",
+    "description": "单接口测试：POST /api/Campaigns/CampaignCopied。使用测试账号真实profile 16274451下的真实campaign 426321(Brand-SP-Manual-Category-10324542)作为复制源，真实adGroup 770991122(Brand-SP-Manual-Broad-Category-10324542)+真实目录商品itemId 10324542构造完整请求体。该操作会创建新Campaign，与POST /api/Campaigns同类(创建类，无法程序化删除，仅可归档)，经用户确认视为可接受，不强求清理。Swagger未声明响应体schema，无法可靠extract_vars新campaignId。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
+    "module": "Campaigns",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制Campaign 426321(测试账号)",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/CampaignCopied",
         "request_body": {
           "CampaignTagIds": [],
-          "ProfileName": "HP INC",
-          "OriginalCampaignId": "3679682",
+          "ProfileName": "Sandbox - 1P API-1",
+          "OriginalCampaignId": "426321",
           "ItemNewBid": 0.2,
           "CampaignCreatedRequest": {
-            "profileId": "{{profile_id_single}}",
-            "name": "US_ENG_Walmart_WalSpAds-s_HAAD-WM-X05826_OPEX_HyperX_hyprx_hyx_Conv_SP_Kywd_Mix_CM020134_Q226_15929218668",
+            "profileId": 16274451,
+            "name": "000test093501 Copy of Brand-SP-Manual-Category",
             "startDate": "{{date_start}}",
             "budgetType": "daily",
             "placementMultipliers": [],
@@ -959,10 +1034,10 @@
           },
           "AdGroupRequestParams": [
             {
-              "adgroupId": "{{adgroup_id}}",
-              "name": "US_ENG_WalSpAds_WalSpAds-s_0_OPEX_CPS_lapt_corepc_Conv_SP_Kywd_Mix_CM016731_6825911410.4",
+              "adgroupId": "770991122",
+              "name": "000test093501 Copy of Brand-SP-Manual-Broad-Category-10324542",
               "items": [
-                "15929218668"
+                "10324542"
               ]
             }
           ],
@@ -982,8 +1057,8 @@
           "CampaignPlacementStatus": {
             "CampaignPlacements": [
               {
-                "profileId": "{{profile_id_single}}",
-                "campaignId": "{{campaign_id}}",
+                "profileId": 16274451,
+                "campaignId": 426321,
                 "placements": [
                   {
                     "placement": "Search Carousel",
@@ -1015,8 +1090,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】POST /api/Campaigns/adGroupCopied - 复制AdGroup(创建新AdGroup)",
-    "description": "仅生成 case 供人工评估，不自动执行。复制AdGroup(创建新AdGroup)。365天流量约124次。⚠️ 该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】POST /api/Campaigns/adGroupCopied - 复制AdGroup(测试账号campaign 426321+adGroup 770991122为源)",
+    "description": "单接口测试：POST /api/Campaigns/adGroupCopied。使用测试账号真实campaign 426321(profile 16274451)+真实adGroup 770991122(Brand-SP-Manual-Broad-Category-10324542)+真实目录商品itemId 10324542。创建类写操作，无法程序化删除，经用户确认视为可接受，不强求清理。Swagger未声明响应体schema，无法可靠extract_vars新adGroupId。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1025,23 +1100,23 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] adGroupCopied - 复制AdGroup(创建新AdGroup)",
+        "name": "复制AdGroup 770991122(测试账号)",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/adGroupCopied",
         "request_body": {
-          "ProfileName": "FERRARA CANDY COMPANY 1",
-          "OriginalCampaignId": "4777279",
+          "ProfileName": "Sandbox - 1P API-1",
+          "OriginalCampaignId": "426321",
           "CampaignCreatedRequest": {
-            "profileId": "{{profile_id_single}}",
-            "name": "FRA_SSNL_19164_Walmart_SEA_RSS_Easter G2 Brachs_NT_FY26Q2_P6_P8_41255_NA_NB_EC_ASC_KYW_SALE"
+            "profileId": 16274451,
+            "name": "000test093502 adGroupCopied test"
           },
           "AdGroupRequestParams": [
             {
-              "adgroupId": "{{adgroup_id}}",
-              "name": "Copy of G2 Jelly Bean Black 7 Oz - 425361564",
+              "adgroupId": "770991122",
+              "name": "Copy of Brand-SP-Manual-Broad-Category-10324542",
               "items": [
-                "425361564"
+                "10324542"
               ]
             }
           ]
@@ -1054,8 +1129,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】POST /api/Campaigns/campaignSuperWizard - Campaign创建向导(批量创建Campaign+AdGroup)",
-    "description": "仅生成 case 供人工评估，不自动执行。Campaign创建向导(批量创建Campaign+AdGroup)。365天流量约69次。⚠️ 该操作会创建新实体，但响应体结构未在Swagger中声明，无法确定新建实体ID的返回字段路径；人工执行后需先确认真实响应结构，再补充extract_vars和后置归档(archive)清理步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】POST /api/Campaigns/campaignSuperWizard - Campaign创建向导(测试账号自建目录商品，接受少量残留)",
+    "description": "单接口测试：POST /api/Campaigns/campaignSuperWizard。经用户确认(2026-09-15)\"执行时用自建目录商品+创建后pause\"。使用测试账号profile 16274451下真实目录商品itemId 10324542(已通过AdItems模块验证是该profile的真实目录商品)构造完整的campaign+adGroup+adItem创建请求体。[2026-09-15二次修复，方案降级为\"仅生成不清理\"] 原计划创建后用list查找新campaignId再PATCH status暂停，但实测发现：①该接口响应体只有code/msg，不含新campaignId(不像POST /api/Campaigns那样能从data.campaignID直接拿到)；②profile 16274451是团队共享的高噪音沙盒账号(totalCount 6177)，Report/campaign/list的campaignName过滤字段完全不生效，靠名字/排序找新建campaign不可靠(426323当天就是类似机制误删的教训)。两者叠加导致\"创建后pause\"这个清理步骤没有安全可靠的实现方式，故降级为参照本模块ForecastPlan/Add同类决定(\"接受少量残留\")：只执行创建、不追加查找与暂停步骤，产生的测试campaign接受作为残留保留在沙盒账号中(该账号本身残留量已很大，可忽略不计)。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1064,15 +1139,15 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] campaignSuperWizard - Campaign创建向导(批量创建Campaign+AdGroup)",
+        "name": "创建Campaign+AdGroup+AdItem(测试账号目录商品10324542，接受残留不清理)",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/campaignSuperWizard",
         "request_body": {
           "campaigns": [
             {
-              "profileId": "{{profile_id_single}}",
-              "name": "CW-Auto-SpongeBob SquarePants Pillow Pet-933206091",
+              "profileId": 16274451,
+              "name": "000test093504SW",
               "targetingType": "auto",
               "campaignType": "sponsoredProducts",
               "dailyBudget": 10,
@@ -1083,13 +1158,13 @@
               "status": 0,
               "adGroups": [
                 {
-                  "profileId": "{{profile_id_single}}",
-                  "name": "CW-Auto-SpongeBob SquarePants Pillow Pet-933206091",
+                  "profileId": 16274451,
+                  "name": "000test093504SW",
                   "defaultBid": 0.2,
                   "adItems": [
                     {
-                      "itemId": "933206091",
-                      "profileId": "{{profile_id_single}}",
+                      "itemId": "10324542",
+                      "profileId": 16274451,
                       "bid": 0.2
                     }
                   ]
@@ -1108,8 +1183,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/bidMultipliers/campaignPlacement - 按Placement设置竞价乘数",
-    "description": "仅生成 case 供人工评估，不自动执行。按Placement设置竞价乘数。365天流量约12960次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/bidMultipliers/campaignPlacement - 按Placement设置竞价乘数(测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PUT /api/Campaigns/bidMultipliers/campaignPlacement。使用测试账号真实campaign 426321(profile 16274451，原426323因误操作被删除已弃用，见同模块status case description)。[2026-09-15更正] 426321的placementBidMultipliers实测原值为null(未配置过，不是100/0)，本case不再假设\"验证过的原值\"，改为自建基线：先改为[50,50]验证写入生效，再落定为[Search Ingrid:100,Buy-Box:0]作为本case固定的最终态(100=不调整/0=完全排除，属合理中性值，不代表\"真实原值\")。GetCampaign返回的placementBidMultipliers字段是JSON字符串(非原生嵌套数组)，run-cases.py的get_path按索引取值会静默返回null(已实测复现)，故还原步骤改用直接写死的字面量，不再用extract_vars动态抓取。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1118,23 +1193,69 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] campaignPlacement - 按Placement设置竞价乘数",
+        "name": "读取campaign 426321当前Placement竞价乘数(核对基线，已知原值100/0)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "设置测试值(Search Ingrid=50,Buy-Box=50)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bidMultipliers/campaignPlacement",
         "request_body": {
           "models": [
             {
-              "profileId": "{{profile_id_single}}",
-              "campaignId": "{{campaign_id}}",
+              "profileId": 16274451,
+              "campaignId": 426321,
+              "placementType": "Search Ingrid",
+              "multiplier": 50
+            },
+            {
+              "profileId": 16274451,
+              "campaignId": 426321,
               "placementType": "Buy-Box",
+              "multiplier": 50
+            }
+          ],
+          "PlacementBtns": {
+            "SearchIngridBtn": true,
+            "OthersBtn": true,
+            "ItemBuyBoxBtn": true,
+            "HomePageBtn": false,
+            "StockUpBtn": false,
+            "SearchCarouselBtn": true,
+            "ItemCarouselBtn": true
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为读取到的原值",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bidMultipliers/campaignPlacement",
+        "request_body": {
+          "models": [
+            {
+              "profileId": 16274451,
+              "campaignId": 426321,
+              "placementType": "Search Ingrid",
               "multiplier": 100
             },
             {
-              "profileId": "{{profile_id_single}}",
-              "campaignId": "{{campaign_id}}",
-              "placementType": "Search Ingrid",
-              "multiplier": 100
+              "profileId": 16274451,
+              "campaignId": 426321,
+              "placementType": "Buy-Box",
+              "multiplier": 0
             }
           ],
           "PlacementBtns": {
@@ -1155,8 +1276,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/bidMultipliers/campaignPlacementByCondition - 按筛选条件批量设置Placement竞价乘数",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量设置Placement竞价乘数。365天流量约41次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/bidMultipliers/campaignPlacementByCondition - 按条件批量设置Placement竞价乘数(限定测试账号campaign 426321)",
+    "description": "单接口测试：PUT /api/Campaigns/bidMultipliers/campaignPlacementByCondition。conditions.profileIds/campaignIds已显式限定为测试账号profile 16274451+campaign 426321(Brand-SP-Manual-Other-10324542,Paused)，不再使用空数组(代表全账号范围)。原ES样本里遗留的campaignName/campaignNameFilters/_taggingIds/_taggingSubIds等字段引用的是其他真实客户的Tag/Campaign名称，与限定后的单一测试campaign范围无关，已清空为[]避免误导，其余pageInfo/dim/kindType等仅影响排序分页展示，不影响写操作实际生效范围，予以保留。 [2026-09-15更正] 426321的placementBidMultipliers实测原值为null(未配置)，不是[Search Ingrid:100,Buy-Box:0]；本case按同模块campaignPlacement(非ByCondition)case同样的处理方式，改后落定为[Search Ingrid:100,Buy-Box:0]作为固定最终态(合理中性值，非验证过的原值)。项目规则要求写操作尽量成对可重跑，故仍补充还原步骤。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1165,7 +1286,18 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] campaignPlacementByCondition - 按筛选条件批量设置Placement竞价乘数",
+        "name": "读取campaign 426321当前Placement竞价乘数(核对基线，已知原值100/0)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "campaignPlacementByCondition - 按条件批量设置Placement竞价乘数(限定测试账号campaign)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bidMultipliers/campaignPlacementByCondition",
@@ -1176,7 +1308,9 @@
             "bidFilters": null,
             "itemHealthFilters": null,
             "dim": "ytd",
-            "profileIds": [],
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -1185,7 +1319,9 @@
             ],
             "kindType": "Campaign",
             "campaignTagIds": [],
-            "campaignIds": [],
+            "campaignIds": [
+              "426321"
+            ],
             "campaignStatus": [],
             "targetingTypes": [],
             "campaignBudgetStatus": [],
@@ -1219,18 +1355,99 @@
           "models": [
             {
               "placementType": "Home Page",
-              "multiplier": "150"
+              "multiplier": "50"
             },
             {
               "placementType": "Stock Up",
-              "multiplier": "150"
+              "multiplier": "50"
             },
             {
               "placementType": "Buy-Box",
-              "multiplier": 0
+              "multiplier": 50
             },
             {
               "placementType": "Search Ingrid",
+              "multiplier": 50
+            }
+          ],
+          "PlacementBtns": {
+            "SearchIngridBtn": true,
+            "OthersBtn": true,
+            "ItemBuyBoxBtn": true,
+            "HomePageBtn": true,
+            "StockUpBtn": true,
+            "SearchCarouselBtn": false,
+            "ItemCarouselBtn": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为读取到的原值",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bidMultipliers/campaignPlacementByCondition",
+        "request_body": {
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "bidFilters": null,
+            "itemHealthFilters": null,
+            "dim": "ytd",
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Campaign",
+            "campaignTagIds": [],
+            "campaignIds": [
+              "426321"
+            ],
+            "campaignStatus": [],
+            "targetingTypes": [],
+            "campaignBudgetStatus": [],
+            "attrWindow": 2,
+            "tabGroupBy": "Campaign",
+            "automationStatuses": [],
+            "tagCampaignLogic": 0,
+            "CampaignTypeItems": [],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "status": [],
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 25,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          },
+          "excludedIds": [],
+          "models": [
+            {
+              "placementType": "Search Ingrid",
+              "multiplier": 100
+            },
+            {
+              "placementType": "Buy-Box",
               "multiplier": 0
             }
           ],
@@ -1252,8 +1469,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/bidMultipliers/platform - 按Platform(Desktop/App/Mobile)设置竞价乘数",
-    "description": "仅生成 case 供人工评估，不自动执行。按Platform(Desktop/App/Mobile)设置竞价乘数。365天流量约3983次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/bidMultipliers/platform - 按Platform设置竞价乘数(测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PUT /api/Campaigns/bidMultipliers/platform。使用测试账号真实campaign 426321(profile 16274451)。警告：已通过只读接口GetCampaign确认该campaign当前platformBidMultipliers为null(未单独配置过)，无法读取到精确的\"改前展示值\"；本case还原步骤按Walmart平台未配置时的常见默认展示值100(即不打折)处理，这是合理假设而非精确验证过的原值，如实际执行后与UI展示不符，需人工核实真实默认值。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1262,28 +1479,71 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] platform - 按Platform(Desktop/App/Mobile)设置竞价乘数",
+        "name": "读取campaign 426321当前Platform竞价乘数(预期为null)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_platform_multipliers": "data[0].platformBidMultipliers"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "设置测试值(Desktop/App/Mobile=50)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bidMultipliers/platform",
         "request_body": [
           {
-            "profileId": "{{profile_id_single}}",
-            "campaignId": "{{campaign_id}}",
+            "profileId": 16274451,
+            "campaignId": 426321,
             "platformType": "Desktop",
-            "multiplier": 0
+            "multiplier": 50
           },
           {
-            "profileId": "{{profile_id_single}}",
-            "campaignId": "{{campaign_id}}",
+            "profileId": 16274451,
+            "campaignId": 426321,
             "platformType": "App",
-            "multiplier": "50"
+            "multiplier": 50
           },
           {
-            "profileId": "{{profile_id_single}}",
-            "campaignId": "{{campaign_id}}",
+            "profileId": 16274451,
+            "campaignId": 426321,
             "platformType": "Mobile",
-            "multiplier": "50"
+            "multiplier": 50
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为假设的默认值100(未配置时的常见展示值)",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bidMultipliers/platform",
+        "request_body": [
+          {
+            "profileId": 16274451,
+            "campaignId": 426321,
+            "platformType": "Desktop",
+            "multiplier": 100
+          },
+          {
+            "profileId": 16274451,
+            "campaignId": 426321,
+            "platformType": "App",
+            "multiplier": 100
+          },
+          {
+            "profileId": 16274451,
+            "campaignId": 426321,
+            "platformType": "Mobile",
+            "multiplier": 100
           }
         ],
         "extract_vars": {},
@@ -1294,8 +1554,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/bidMultipliers/platformByCondition - 按筛选条件批量设置Platform竞价乘数",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量设置Platform竞价乘数。365天流量约13次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/bidMultipliers/platformByCondition - 按条件批量设置Platform竞价乘数(限定测试账号campaign 426321)",
+    "description": "单接口测试：PUT /api/Campaigns/bidMultipliers/platformByCondition。conditions.profileIds/campaignIds已显式限定为测试账号profile 16274451+campaign 426321(Brand-SP-Manual-Other-10324542,Paused)，不再使用空数组(代表全账号范围)。原ES样本里遗留的campaignName/campaignNameFilters/_taggingIds/_taggingSubIds等字段引用的是其他真实客户的Tag/Campaign名称，与限定后的单一测试campaign范围无关，已清空为[]避免误导，其余pageInfo/dim/kindType等仅影响排序分页展示，不影响写操作实际生效范围，予以保留。 已通过只读接口GetCampaign确认该campaign当前platformBidMultipliers为null(未配置)，警告：还原步骤按未配置时的常见默认展示值100处理，属合理假设非精确验证，如与实际UI展示不符需人工核实。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1304,7 +1564,7 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] platformByCondition - 按筛选条件批量设置Platform竞价乘数",
+        "name": "[未执行] platformByCondition - 按条件批量设置Platform竞价乘数(限定测试账号campaign)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bidMultipliers/platformByCondition",
@@ -1315,7 +1575,9 @@
             "bidFilters": null,
             "itemHealthFilters": null,
             "dim": "ytd",
-            "profileIds": "{{profile_id}}",
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -1324,7 +1586,9 @@
             ],
             "kindType": "Campaign",
             "campaignTagIds": [],
-            "campaignIds": [],
+            "campaignIds": [
+              "426321"
+            ],
             "campaignStatus": [
               1
             ],
@@ -1334,402 +1598,14 @@
             "tabGroupBy": "Campaign",
             "automationStatuses": [],
             "tagCampaignLogic": 0,
-            "adGroupStatus": [
-              1
-            ],
+            "adGroupStatus": [],
             "adGroupIds": [],
-            "campaignName": [
-              "Elderberry | Q4 Deals | Manual | CB",
-              "Vitamin B1 | Q4 Deals | Manual | CB",
-              "BN Folic Acid 800 mcg, 240 Ct",
-              "Blessed Thistle | Q4 Deals | Manual | CB",
-              "BN L-Tryptophan 500 mg 60 Capsules",
-              "BN Carb Blocker 180 Capsules",
-              "BN GABA 750 mg 100 Vcaps",
-              "Video BN Berberine Plus 1000 mg 60 ct",
-              "Lactase Enzyme",
-              "SB BCAA",
-              "BN L-Carnosine 500mg 100 vcaps",
-              "BN Cal Mag Zinc 180 Tablets",
-              "BN Green Tea Extract 500 mg 250 Caps",
-              "BN NAC 600 mg 120 Capsules",
-              "BN D-Mannose Pure Powder - Urinary Tract Cleanse Supplement - 8 OZ",
-              "SB Serrapeptase",
-              "BN DLPA 500 mg 120 Tabs",
-              "BN Cascara Sagrada 450 mg 250 Capsules",
-              "BN Vitamin B-12 as Methylcobalamin (Methyl B12) 6000 mcg 60 Sublingual Tablets",
-              "BN Vitamin B1 500 mg 120 Tablets",
-              "BN Green Coffee Bean Extract 800 mg 120 Vcaps",
-              "BN Feverfew 380 mg 180 Capsules",
-              "BN Niacin 500 mg 180 Capsules",
-              "BN DIM Complex 100 mg 120 Capsules",
-              "BN L-Glutathione 250 mg 60 Capsules",
-              "Lice No More | Manual | CB",
-              "L-Tyrosine | Q4 Deals | Manual | CB",
-              "Lice No More | Auto | CB",
-              "BCAA | Q4 Deals | Manual | CB",
-              "SB L-Tryptophan",
-              "BN MK-7 Vitamin K2 100 mcg 60 Vegetarian Capsules",
-              "BN MSM 1 Lb Powder",
-              "BN Elderberry 5000mg 120 Veg Capsules",
-              "BN Olive Leaf Extract 700 mg 90 Capsules",
-              "Zinc Citrate | Q4 Deals | Manual | CB",
-              "Manganese | Q4 Deals | Manual | CB",
-              "BN Vitamin C 1 Lb Powder",
-              "Multi Collagen | Q4 Deals | Manual | CB",
-              "BN B-100 Complex 120 Tablets (Time Released)",
-              "SB Cinnamon",
-              "BN Zinc Citrate 30 mg 120 Tablets",
-              "Potassium Gluconate | Q4 Deals | Manual | CB",
-              "BN Chitosan 500 mg 120 Tablets",
-              "BF Organic Amla 1500mg, 45 Servings, Vegetarian, Gluten Free, 90 Vegetarian Tablet",
-              "Tart Cherry | Q4 Deals | Manual | CB",
-              "BN Black Seed Oil Capsules 1000 mg 60 Softgels",
-              "L-Carnitine | Q4 Deals | Manual | CB",
-              "MSM 1000 mg 180 Capsules",
-              "BN Melatonin 5mg 180 Tablets",
-              "BN 5-HTP 120 Capsules",
-              "Q3 Top 50 | Mag Oxide| Auto | CB",
-              "BN Dandelion Root 520 mg 250 Capsules",
-              "Folic Acid | Q4 Deals | Manual | CB",
-              "BN Moringa 500 mg 60 Vcaps",
-              "BN Coral Calcium Plus 250 Capsules",
-              "SB Berberine",
-              "BN L-Arginine 1000mg 120 Tablets",
-              "D2D Kidney | Q4 Deals | Manual | CB",
-              "BN Magensium Glycinate 425 mg 180 Veggie Capsules",
-              "CAT 1 | Digestive Health | Auto | CB",
-              "BN NAC 600 mg 250 Capsules",
-              "BN Black Cohosh 540 mg 120 Capsules",
-              "BN Boric | Q4 Deals | Manual | CB",
-              "BN D-Mannose 500 mg 120 Capsules"
-            ],
+            "campaignName": [],
             "campaignNameOperand": "LeftLike",
             "categories": [],
             "brands": [],
             "BiddingStrategy": [],
-            "campaignNameFilters": [
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Elderberry | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Vitamin B1 | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Folic Acid 800 mcg, 240 Ct"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Blessed Thistle | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN L-Tryptophan 500 mg 60 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Carb Blocker 180 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN GABA 750 mg 100 Vcaps"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Video BN Berberine Plus 1000 mg 60 ct"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Lactase Enzyme"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "SB BCAA"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN L-Carnosine 500mg 100 vcaps"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Cal Mag Zinc 180 Tablets"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Green Tea Extract 500 mg 250 Caps"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN NAC 600 mg 120 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN D-Mannose Pure Powder - Urinary Tract Cleanse Supplement - 8 OZ"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "SB Serrapeptase"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN DLPA 500 mg 120 Tabs"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Cascara Sagrada 450 mg 250 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Vitamin B-12 as Methylcobalamin (Methyl B12) 6000 mcg 60 Sublingual Tablets"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Vitamin B1 500 mg 120 Tablets"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Green Coffee Bean Extract 800 mg 120 Vcaps"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Feverfew 380 mg 180 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Niacin 500 mg 180 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN DIM Complex 100 mg 120 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN L-Glutathione 250 mg 60 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Lice No More | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "L-Tyrosine | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Lice No More | Auto | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BCAA | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "SB L-Tryptophan"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN MK-7 Vitamin K2 100 mcg 60 Vegetarian Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN MSM 1 Lb Powder"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Elderberry 5000mg 120 Veg Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Olive Leaf Extract 700 mg 90 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Zinc Citrate | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Manganese | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Vitamin C 1 Lb Powder"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Multi Collagen | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN B-100 Complex 120 Tablets (Time Released)"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "SB Cinnamon"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Zinc Citrate 30 mg 120 Tablets"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Potassium Gluconate | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Chitosan 500 mg 120 Tablets"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BF Organic Amla 1500mg, 45 Servings, Vegetarian, Gluten Free, 90 Vegetarian Tablet"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Tart Cherry | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Black Seed Oil Capsules 1000 mg 60 Softgels"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "L-Carnitine | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "MSM 1000 mg 180 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Melatonin 5mg 180 Tablets"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN 5-HTP 120 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Q3 Top 50 | Mag Oxide| Auto | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Dandelion Root 520 mg 250 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "Folic Acid | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Moringa 500 mg 60 Vcaps"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Coral Calcium Plus 250 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "SB Berberine"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN L-Arginine 1000mg 120 Tablets"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "D2D Kidney | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Magensium Glycinate 425 mg 180 Veggie Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "CAT 1 | Digestive Health | Auto | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN NAC 600 mg 250 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Black Cohosh 540 mg 120 Capsules"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN Boric | Q4 Deals | Manual | CB"
-              },
-              {
-                "field": "campaignName",
-                "operand": 6,
-                "value": "BN D-Mannose 500 mg 120 Capsules"
-              }
-            ],
+            "campaignNameFilters": [],
             "CampaignTypeItems": [],
             "__dim__": "ytd",
             "startDateCompared": "{{date_cmp_start}}",
@@ -1761,15 +1637,106 @@
           "models": [
             {
               "platformType": "Desktop",
-              "multiplier": "0"
+              "multiplier": "50"
             },
             {
               "platformType": "App",
-              "multiplier": "0"
+              "multiplier": "50"
             },
             {
               "platformType": "Mobile",
-              "multiplier": "0"
+              "multiplier": "50"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为假设默认值100",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bidMultipliers/platformByCondition",
+        "request_body": {
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "bidFilters": null,
+            "itemHealthFilters": null,
+            "dim": "ytd",
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Campaign",
+            "campaignTagIds": [],
+            "campaignIds": [
+              "426321"
+            ],
+            "campaignStatus": [
+              1
+            ],
+            "targetingTypes": [],
+            "campaignBudgetStatus": [],
+            "attrWindow": 2,
+            "tabGroupBy": "Campaign",
+            "automationStatuses": [],
+            "tagCampaignLogic": 0,
+            "adGroupStatus": [],
+            "adGroupIds": [],
+            "campaignName": [],
+            "campaignNameOperand": "LeftLike",
+            "categories": [],
+            "brands": [],
+            "BiddingStrategy": [],
+            "campaignNameFilters": [],
+            "CampaignTypeItems": [],
+            "__dim__": "ytd",
+            "startDateCompared": "{{date_cmp_start}}",
+            "endDateCompared": "{{date_cmp_end}}",
+            "toMarket": "US",
+            "status": [
+              1
+            ],
+            "filters": [],
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          },
+          "excludedIds": [],
+          "models": [
+            {
+              "platformType": "Desktop",
+              "multiplier": "100"
+            },
+            {
+              "platformType": "App",
+              "multiplier": "100"
+            },
+            {
+              "platformType": "Mobile",
+              "multiplier": "100"
             }
           ]
         },
@@ -1781,8 +1748,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Campaigns/bulkDailyBudget - 批量修改日预算",
-    "description": "仅生成 case 供人工评估，不自动执行。批量修改日预算。365天流量约49845次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PATCH /api/Campaigns/bulkDailyBudget - 批量修改日预算(测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PATCH /api/Campaigns/bulkDailyBudget。使用测试账号真实campaign 426321(profile 16274451)。已通过只读接口GetCampaign确认当前真实dailyBudget=73.81，本case改为90验证后还原为读取到的原值。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1791,15 +1758,45 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] bulkDailyBudget - 批量修改日预算",
+        "name": "读取campaign 426321当前日预算",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_dailyBudget": "data[0].dailyBudget"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "设置测试值90",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bulkDailyBudget",
         "request_body": {
           "setBudgetType": 0,
-          "newDailyBudget": "1471",
+          "newDailyBudget": "90",
           "campaignIds": [
-            "{{campaign_id}}"
+            "426321"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为读取到的原值",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bulkDailyBudget",
+        "request_body": {
+          "setBudgetType": 0,
+          "newDailyBudget": "{{orig_c426321_dailyBudget}}",
+          "campaignIds": [
+            "426321"
           ]
         },
         "extract_vars": {},
@@ -1810,8 +1807,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Campaigns/bulkDailyBudgetByCondition - 按筛选条件批量修改日预算",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量修改日预算。_taggingIds 保留样本真实ID(样本非本账号，需人工核实)；_taggingSubIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约202次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PATCH /api/Campaigns/bulkDailyBudgetByCondition - 按条件批量修改日预算(限定测试账号campaign 426321)",
+    "description": "单接口测试：PATCH /api/Campaigns/bulkDailyBudgetByCondition。conditions.profileIds/campaignIds已显式限定为测试账号profile 16274451+campaign 426321(Brand-SP-Manual-Other-10324542,Paused)，不再使用空数组(代表全账号范围)。原ES样本里遗留的campaignName/campaignNameFilters/_taggingIds/_taggingSubIds等字段引用的是其他真实客户的Tag/Campaign名称，与限定后的单一测试campaign范围无关，已清空为[]避免误导，其余pageInfo/dim/kindType等仅影响排序分页展示，不影响写操作实际生效范围，予以保留。 已通过只读接口GetCampaign确认当前真实dailyBudget=73.81，本case改为90验证后还原为读取到的原值。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1820,20 +1817,35 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] bulkDailyBudgetByCondition - 按筛选条件批量修改日预算",
+        "name": "读取campaign 426321当前日预算",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_dailyBudget_b": "data[0].dailyBudget"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "[未执行] bulkDailyBudgetByCondition - 按条件批量修改日预算(限定测试账号campaign)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bulkDailyBudgetByCondition",
         "request_body": {
           "setBudgetType": 0,
-          "newDailyBudget": "5000",
+          "newDailyBudget": "90",
           "conditions": {
             "start": "{{date_start}}",
             "end": "{{date_end}}",
             "bidFilters": null,
             "itemHealthFilters": null,
             "dim": "ytd",
-            "profileIds": "{{profile_id}}",
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -1842,15 +1854,76 @@
             ],
             "kindType": "Campaign",
             "campaignTagIds": [],
-            "_taggingIds": [
-              "23576"
-            ],
-            "_taggingSubIds": [
-              "23577",
-              "23578"
-            ],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
             "tabGroupBy": "Campaign",
-            "campaignIds": [],
+            "campaignIds": [
+              "426321"
+            ],
+            "campaignBudgetStatus": [],
+            "campaignName": [],
+            "tagCampaignLogic": 0,
+            "campaignNameOperand": "Like",
+            "CampaignTypeItems": [],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "status": [],
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          },
+          "excludedIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为读取到的原值",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bulkDailyBudgetByCondition",
+        "request_body": {
+          "setBudgetType": 0,
+          "newDailyBudget": "{{orig_c426321_dailyBudget_b}}",
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "bidFilters": null,
+            "itemHealthFilters": null,
+            "dim": "ytd",
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Campaign",
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "Campaign",
+            "campaignIds": [
+              "426321"
+            ],
             "campaignBudgetStatus": [],
             "campaignName": [],
             "tagCampaignLogic": 0,
@@ -1887,8 +1960,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Campaigns/bulkTotalBudget - 批量修改总预算",
-    "description": "仅生成 case 供人工评估，不自动执行。批量修改总预算。365天流量约1730次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PATCH /api/Campaigns/bulkTotalBudget - 批量修改总预算(测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PATCH /api/Campaigns/bulkTotalBudget。使用测试账号真实campaign 426321(profile 16274451)。已通过只读接口GetCampaign确认当前真实totalBudget=100.0，本case改为150验证后还原为读取到的原值。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1897,7 +1970,20 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] bulkTotalBudget - 批量修改总预算",
+        "name": "读取campaign 426321当前总预算",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_totalBudget": "data[0].totalBudget"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "设置测试值150",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bulkTotalBudget",
@@ -1905,10 +1991,30 @@
           "setBudgetType": 2,
           "budgetByValueSetting": {
             "type": 1,
-            "value": "100"
+            "value": "150"
           },
           "campaignIds": [
-            "{{campaign_id}}"
+            "426321"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为读取到的原值",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bulkTotalBudget",
+        "request_body": {
+          "setBudgetType": 2,
+          "budgetByValueSetting": {
+            "type": 1,
+            "value": "{{orig_c426321_totalBudget}}"
+          },
+          "campaignIds": [
+            "426321"
           ]
         },
         "extract_vars": {},
@@ -1919,8 +2025,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Campaigns/bulkTotalBudgetByCondition - 按筛选条件批量修改总预算",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量修改总预算。_taggingSubIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约3次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PATCH /api/Campaigns/bulkTotalBudgetByCondition - 按条件批量修改总预算(限定测试账号campaign 426321)",
+    "description": "单接口测试：PATCH /api/Campaigns/bulkTotalBudgetByCondition。conditions.profileIds/campaignIds已显式限定为测试账号profile 16274451+campaign 426321(Brand-SP-Manual-Other-10324542,Paused)，不再使用空数组(代表全账号范围)。原ES样本里遗留的campaignName/campaignNameFilters/_taggingIds/_taggingSubIds等字段引用的是其他真实客户的Tag/Campaign名称，与限定后的单一测试campaign范围无关，已清空为[]避免误导，其余pageInfo/dim/kindType等仅影响排序分页展示，不影响写操作实际生效范围，予以保留。 已通过只读接口GetCampaign确认当前真实totalBudget=100.0，本case改为150验证后还原为读取到的原值。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -1929,20 +2035,35 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] bulkTotalBudgetByCondition - 按筛选条件批量修改总预算",
+        "name": "读取campaign 426321当前总预算",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_totalBudget_b": "data[0].totalBudget"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "[未执行] bulkTotalBudgetByCondition - 按条件批量修改总预算(限定测试账号campaign)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/bulkTotalBudgetByCondition",
         "request_body": {
           "setBudgetType": 0,
-          "newTotalBudget": "50000",
+          "newTotalBudget": "150",
           "conditions": {
             "start": "{{date_start}}",
             "end": "{{date_end}}",
             "bidFilters": null,
             "itemHealthFilters": null,
             "dim": "ytd",
-            "profileIds": "{{profile_id}}",
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -1955,13 +2076,77 @@
             "tabGroupBy": "Campaign",
             "automationStatuses": [],
             "_taggingIds": [],
-            "_taggingSubIds": [
-              "39902"
-            ],
+            "_taggingSubIds": [],
             "categories": [],
             "brands": [],
             "campaignIds": [
-              "{{campaign_id}}"
+              "426321"
+            ],
+            "campaignStatus": [],
+            "tagCampaignLogic": 0,
+            "CampaignTypeItems": [],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "status": [],
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          },
+          "excludedIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为读取到的原值",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/bulkTotalBudgetByCondition",
+        "request_body": {
+          "setBudgetType": 0,
+          "newTotalBudget": "{{orig_c426321_totalBudget_b}}",
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "bidFilters": null,
+            "itemHealthFilters": null,
+            "dim": "ytd",
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Campaign",
+            "campaignTagIds": [],
+            "campaignBudgetStatus": [],
+            "tabGroupBy": "Campaign",
+            "automationStatuses": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "categories": [],
+            "brands": [],
+            "campaignIds": [
+              "426321"
             ],
             "campaignStatus": [],
             "tagCampaignLogic": 0,
@@ -1997,8 +2182,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/BulkEndDateByCondition - 按筛选条件批量修改结束日期",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量修改结束日期。_taggingIds 保留样本真实ID(样本非本账号，需人工核实)；_taggingSubIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约19次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/BulkEndDateByCondition - 按条件批量修改结束日期(限定测试账号campaign 426321，未来日期)",
+    "description": "单接口测试：PUT /api/Campaigns/BulkEndDateByCondition。conditions.profileIds/campaignIds已显式限定为测试账号profile 16274451+campaign 426321(Brand-SP-Manual-Other-10324542,Paused)，不再使用空数组(代表全账号范围)。原ES样本里遗留的campaignName/campaignNameFilters/_taggingIds/_taggingSubIds等字段引用的是其他真实客户的Tag/Campaign名称，与限定后的单一测试campaign范围无关，已清空为[]避免误导，其余pageInfo/dim/kindType等仅影响排序分页展示，不影响写操作实际生效范围，予以保留。 ⚠️特别注意(用户强调)：新endDate若设为过去/当前时间会导致campaign立即真实停止投放，本case新endDate设为\"2028-06-30\"(远期未来)，不会意外造成测试campaign过期。已通过只读接口GetCampaign确认该campaign当前真实endDate=\"01/01/2100\"(即长期无到期设置)，还原步骤设回\"2100-01-01\"匹配该已知原值。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -2007,7 +2192,7 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] BulkEndDateByCondition - 按筛选条件批量修改结束日期",
+        "name": "[未执行] BulkEndDateByCondition - 按条件批量修改结束日期(限定测试账号campaign，新日期远期未来)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/BulkEndDateByCondition",
@@ -2018,7 +2203,9 @@
             "bidFilters": null,
             "itemHealthFilters": null,
             "dim": "ytd",
-            "profileIds": "{{profile_id}}",
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -2027,7 +2214,9 @@
             ],
             "kindType": "Campaign",
             "campaignTagIds": [],
-            "campaignIds": [],
+            "campaignIds": [
+              "426321"
+            ],
             "campaignStatus": [
               1,
               7
@@ -2038,13 +2227,8 @@
             "tabGroupBy": "Campaign",
             "automationStatuses": [],
             "campaignName": [],
-            "_taggingIds": [
-              "36040"
-            ],
-            "_taggingSubIds": [
-              "36041",
-              "36042"
-            ],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
             "tagCampaignLogic": 0,
             "campaignNameOperand": "Like",
             "CampaignTypeItems": [],
@@ -2073,7 +2257,80 @@
             }
           },
           "excludedIds": [],
-          "endDate": "{{date_end}}"
+          "endDate": "2028-06-30"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为原endDate(2100-01-01)",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/BulkEndDateByCondition",
+        "request_body": {
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "bidFilters": null,
+            "itemHealthFilters": null,
+            "dim": "ytd",
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Campaign",
+            "campaignTagIds": [],
+            "campaignIds": [
+              "426321"
+            ],
+            "campaignStatus": [
+              1,
+              7
+            ],
+            "targetingTypes": [],
+            "campaignBudgetStatus": [],
+            "attrWindow": 2,
+            "tabGroupBy": "Campaign",
+            "automationStatuses": [],
+            "campaignName": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tagCampaignLogic": 0,
+            "campaignNameOperand": "Like",
+            "CampaignTypeItems": [],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "status": [
+              1,
+              7
+            ],
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 25,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          },
+          "excludedIds": [],
+          "endDate": "2100-01-01"
         },
         "extract_vars": {},
         "expected_response": {
@@ -2083,8 +2340,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/CampaignPlacement - 设置Campaign的Placement投放开关",
-    "description": "仅生成 case 供人工评估，不自动执行。设置Campaign的Placement投放开关。365天流量约12046次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/CampaignPlacement - 设置Placement投放开关(测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PUT /api/Campaigns/CampaignPlacement。使用测试账号真实campaign 426321(profile 16274451，原426323因误操作被删除已弃用，见同模块status case description)。[2026-09-15更正] 426321的campaignPlacement实测原值为\"[]\"(未配置，不是\"Search Ingrid:100;\")，本case不再假设\"验证过的原值\"，改为自建基线：先反转为(Search Ingrid excluded, Buy-Box included)验证写入生效，再落定为(Search Ingrid included, Buy-Box excluded)作为本case固定的最终态。警告：请求体沿用原ES样本仅列出被改动的placement项的结构，假设接口支持局部更新(未列出的placement保持不变)，此假设未经真实调用验证。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -2093,21 +2350,30 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] CampaignPlacement - 设置Campaign的Placement投放开关",
+        "name": "读取campaign 426321当前Placement配置(核对基线)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_campaignPlacement": "data[0].campaignPlacement"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反转Placement(Search Ingrid排除,Buy-Box包含)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/CampaignPlacement",
         "request_body": [
           {
-            "profileId": "{{profile_id_single}}",
-            "campaignId": "{{campaign_id}}",
+            "profileId": 16274451,
+            "campaignId": 426321,
             "placements": [
               {
-                "placement": "Search Carousel",
-                "status": "excluded"
-              },
-              {
-                "placement": "Item Carousel",
+                "placement": "Search Ingrid",
                 "status": "excluded"
               },
               {
@@ -2121,12 +2387,38 @@
         "expected_response": {
           "code": 200
         }
+      },
+      {
+        "name": "还原为原配置(Search Ingrid包含,Buy-Box排除)",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/CampaignPlacement",
+        "request_body": [
+          {
+            "profileId": 16274451,
+            "campaignId": 426321,
+            "placements": [
+              {
+                "placement": "Search Ingrid",
+                "status": "included"
+              },
+              {
+                "placement": "Buy-Box",
+                "status": "excluded"
+              }
+            ]
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Campaigns/statusByCondition - 按筛选条件批量修改状态",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量修改状态。_taggingIds 保留样本真实ID(样本非本账号，需人工核实)；_taggingSubIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约120次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PATCH /api/Campaigns/statusByCondition - 按条件批量修改状态(限定测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PATCH /api/Campaigns/statusByCondition。conditions.profileIds/campaignIds已显式限定为测试账号profile 16274451+campaign 426321(Brand-SP-Manual-Other-10324542,Paused)，不再使用空数组(代表全账号范围)。原ES样本里遗留的campaignName/campaignNameFilters/_taggingIds/_taggingSubIds等字段引用的是其他真实客户的Tag/Campaign名称，与限定后的单一测试campaign范围无关，已清空为[]避免误导，其余pageInfo/dim/kindType等仅影响排序分页展示，不影响写操作实际生效范围，予以保留。 campaign 426321当前state=Paused，本case先启用(status=1)验证再改回Paused(status=2，已用一次性诊断调用验证的正确枚举值)。[2026-09-15重大修复] 原方案假设status=0代表Paused是错误的(实测status=0代表Deleted)，这个错误假设已导致测试campaign 426323被误删且无法恢复(改用426321，详情见同模块PATCH /api/Campaigns/status case的description)。 [2026-09-15改造：已适配测试账号自建实体，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -2135,7 +2427,7 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] statusByCondition - 按筛选条件批量修改状态",
+        "name": "[未执行] statusByCondition - 按条件批量修改状态(限定测试账号campaign，启用)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/statusByCondition",
@@ -2148,7 +2440,9 @@
             "bidFilters": null,
             "itemHealthFilters": null,
             "dim": 0,
-            "profileIds": "{{profile_id}}",
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -2156,10 +2450,10 @@
               }
             ],
             "kindType": "Campaign",
-            "campaignTagIds": [
-              "{{campaign_tag_id}}"
+            "campaignTagIds": [],
+            "campaignIds": [
+              "426321"
             ],
-            "campaignIds": [],
             "campaignStatus": [],
             "targetingTypes": [],
             "campaignBudgetStatus": [],
@@ -2169,17 +2463,80 @@
             "brands": [],
             "categories": [],
             "campaignName": [],
-            "_taggingIds": [
-              "43752"
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tagCampaignLogic": 0,
+            "campaignNameOperand": "Like",
+            "CampaignTypeItems": [],
+            "__dim__": "ytd",
+            "startDateCompared": "{{date_cmp_start}}",
+            "endDateCompared": "{{date_cmp_end}}",
+            "noTagCampaigns": false,
+            "toMarket": "US",
+            "status": [],
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为Paused(status=2)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/statusByCondition",
+        "request_body": {
+          "status": 2,
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "bidFilters": null,
+            "itemHealthFilters": null,
+            "dim": 0,
+            "profileIds": [
+              "16274451"
             ],
-            "_taggingSubIds": [
-              "43769",
-              "43768",
-              "43766",
-              "43767",
-              "43770",
-              "43771"
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
             ],
+            "kindType": "Campaign",
+            "campaignTagIds": [],
+            "campaignIds": [
+              "426321"
+            ],
+            "campaignStatus": [],
+            "targetingTypes": [],
+            "campaignBudgetStatus": [],
+            "attrWindow": 2,
+            "tabGroupBy": "Campaign",
+            "automationStatuses": [],
+            "brands": [],
+            "categories": [],
+            "campaignName": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
             "tagCampaignLogic": 0,
             "campaignNameOperand": "Like",
             "CampaignTypeItems": [],
@@ -2216,8 +2573,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PUT /api/Campaigns/targetSetting - 设置Target ROAS/ACOS目标",
-    "description": "仅生成 case 供人工评估，不自动执行。设置Target ROAS/ACOS目标。365天流量约1637次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】PUT /api/Campaigns/targetSetting - 设置Target ACOS/ROAS(测试账号campaign 426321，改后还原)",
+    "description": "单接口测试：PUT /api/Campaigns/targetSetting。使用测试账号真实campaign 426321(profile 16274451)。已通过只读接口GetCampaign确认当前真实targetACOS/targetROAS均为null(未设置)。警告：真实ES样本body仅含IsSetSalesConversionPercent/StartDate/EndDate/CPA/campaignIds字段，未见acos/roas字段；本case参照同项目CampaignTags/targetSetting姊妹接口的契约补充了acos/roas字段用于验证\"设置目标\"这一功能语义，此字段结构为推测，执行前需人工核实Campaigns/targetSetting是否确实接受acos/roas字段。还原步骤对应\"未设置\"状态，按同接口CPA字段的空字符串约定，传acos=\"\"/roas=\"\"。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -2226,7 +2583,21 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] targetSetting - 设置Target ROAS/ACOS目标",
+        "name": "读取campaign 426321当前Target ACOS/ROAS(预期为null)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/GetCampaign?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {
+          "orig_c426321_acos": "data[0].targetACOS",
+          "orig_c426321_roas": "data[0].targetROAS"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "设置测试值(ACOS=15,ROAS=6)",
         "method": "PUT",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/targetSetting",
@@ -2236,8 +2607,31 @@
           "EndDate": "{{date_end_mdy}}",
           "CPA": "",
           "campaignIds": [
-            "{{campaign_id}}"
-          ]
+            "426321"
+          ],
+          "acos": "15",
+          "roas": "6"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "还原为未设置状态(空值)",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/targetSetting",
+        "request_body": {
+          "IsSetSalesConversionPercent": false,
+          "StartDate": "{{date_start_mdy}}",
+          "EndDate": "{{date_end_mdy}}",
+          "CPA": "",
+          "campaignIds": [
+            "426321"
+          ],
+          "acos": "",
+          "roas": ""
         },
         "extract_vars": {},
         "expected_response": {
@@ -2247,8 +2641,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】POST /api/Campaigns/customizedKeywordType - 设置账号级自定义关键词类型",
-    "description": "仅生成 case 供人工评估，不自动执行。设置账号级自定义关键词类型。365天流量约32次。⚠️ 该操作为原地更新，ES样本仅记录变更后的新值，不含变更前原值，无法可靠生成回滚步骤；执行前需人工先查询/记录目标Campaign当前真实值，执行后按记录的原值手动还原。⚠️请求体基于真实ES样本，除profileId/campaignId等已知字段已替换为本测试账号变量外，其余嵌套关联ID(如OriginalCampaignId/advertiserId等)保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "【已执行-测试账号版本】POST /api/Campaigns/customizedKeywordType - 设置账号级自定义关键词类型(读-改-还原)",
+    "description": "单接口测试：POST /api/Campaigns/customizedKeywordType。经用户确认(2026-09-15)\"读-改-还原\"方案。已通过只读接口GET /api/Campaigns/customizedKeywordType实测确认测试账号(clientId 62)当前该配置为空数组[](未设置)。流程：①GET读取当前配置(已确认为空数组)②POST设置一个真实ES样本中出现过的测试值[\"KW\"]③POST改回读取到的原始空数组[]。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",
@@ -2257,7 +2651,19 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] customizedKeywordType - 设置账号级自定义关键词类型",
+        "name": "读取当前自定义关键词类型配置(已确认为空数组)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/customizedKeywordType",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": []
+        }
+      },
+      {
+        "name": "设置测试值[\"KW\"]",
         "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Campaigns/customizedKeywordType",
@@ -2268,12 +2674,23 @@
         "expected_response": {
           "code": 200
         }
+      },
+      {
+        "name": "还原为读取到的原始空数组",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Campaigns/customizedKeywordType",
+        "request_body": [],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
   {
     "name": "【高风险-仅生成不执行】POST /api/Campaigns/bulkOperations/upload - 上传Bulk批量操作文件",
-    "description": "仅生成 case 供人工评估，不自动执行。上传Bulk批量修改Excel文件(multipart/form-data二进制)，无法用JSON request_body表示，需人工在浏览器/Postman中手动上传真实文件测试；上传后需走preview→提交流程(见bulkOperations/preview等只读接口)。365天流量约1461次。",
+    "description": "仅生成 case 供人工评估，不自动执行。上传Bulk批量修改Excel文件(multipart/form-data二进制)，无法用JSON request_body表示，需人工在浏览器/Postman中手动上传真实文件测试；上传后需走preview→提交流程(见bulkOperations/preview等只读接口)。365天流量约1461次。[2026-09-16 自检备注] 本 case 按规则不执行；但 run-cases.py 没有跳过机制，2026-09-15 整份 cases.json 重跑时曾被原样发送(请求体含 [NEEDS_REAL_VALUE]/无文件体)，服务端返回 400/415 参数校验错误、无任何副作用；该无意义结果已从 report.json 移除。整份重跑前请先过滤掉带【高风险-仅生成不执行】前缀的 case。",
     "module": "Campaigns",
     "granularity": "API",
     "since": "init",

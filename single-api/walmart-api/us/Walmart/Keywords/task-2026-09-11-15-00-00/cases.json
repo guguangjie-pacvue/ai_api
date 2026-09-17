@@ -3590,8 +3590,8 @@
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Keywords/state - 批量修改关键词状态(0/1)",
-    "description": "仅生成 case 供人工评估，不自动执行。批量修改关键词状态(0/1)。profileAndKeywordIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约7620次。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。【修正】后置逆操作的profileAndKeywordIds此前误用profile_id+campaign_id拼接(campaign_id并非keyword id，属编造值)，现改为与主步骤相同的真实样本ID；该字段形态看似profileId与keywordId拼接，需人工核实后替换为本账号真实关键词ID。",
+    "name": "POST /api/Keywords - 批量创建关键词(自建测试campaign，时间戳命名，创建后置为暂停)",
+    "description": "单接口测试：POST /api/Keywords 批量创建关键词(请求体为数组，含 profileId/campaignId/adGroupId/keywordText/matchType/bid/state/status，与 ES 真实样本结构一致，365天流量约12905次)。真实执行：在测试campaign 426321/adGroup 770991122 下创建 2 个关键词(test133356kwa exact、test133356kwb phrase，bid 0.3)，响应体 data.successCount=2；再用 Report/keyword/list 按唯一文本定位 keywordId，最后 PATCH /api/Keywords/state state=1 置为 paused 归位。⚠️Keywords 无删除接口且该campaign已上线过不允许 archive，新建关键词会以 paused 状态永久保留在测试campaign内(与 AdGroups 模块'能创建不能删除→暂停归档'的既定策略一致)；同一 keywordText 可重复创建不会报重名，但为了让定位步骤唯一，⚠️重跑前需把名称中的时间戳(133356)换成新的。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
     "module": "Keywords",
     "granularity": "API",
     "since": "init",
@@ -3600,178 +3600,303 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] state - 批量修改关键词状态(0/1)",
-        "method": "PATCH",
+        "name": "批量创建2个关键词",
+        "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
-        "path": "Keywords/state",
-        "request_body": {
-          "profileAndKeywordIds": [
-            "249193213069230"
-          ],
-          "state": 1
-        },
+        "path": "Keywords",
+        "request_body": [
+          {
+            "profileId": "16274451",
+            "campaignId": "426321",
+            "adGroupId": 770991122,
+            "keywordText": "test133356kwa",
+            "matchType": "exact",
+            "bid": "0.3",
+            "state": "enabled",
+            "status": "enabled"
+          },
+          {
+            "profileId": "16274451",
+            "campaignId": "426321",
+            "adGroupId": 770991122,
+            "keywordText": "test133356kwb",
+            "matchType": "phrase",
+            "bid": "0.3",
+            "state": "enabled",
+            "status": "enabled"
+          }
+        ],
         "extract_vars": {},
         "expected_response": {
-          "code": 200
+          "code": 200,
+          "data.successCount": 2,
+          "data.totalCount": 2
         }
       },
       {
-        "name": "[未执行] 后置逆操作 - 改回状态0(具体状态含义及原状态需人工核实后再决定还原值)",
-        "method": "PATCH",
+        "name": "定位新建关键词A的keywordId",
+        "method": "POST",
         "base_url": "{{WALMARTBASEURL}}",
-        "path": "Keywords/state",
+        "path": "Report/keyword/list",
         "request_body": {
-          "profileAndKeywordIds": [
-            "249193213069230"
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
           ],
-          "state": 0
-        },
-        "extract_vars": {},
-        "expected_response": {
-          "code": 200
-        }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】PATCH /api/Keywords/bid - 批量修改关键词出价(按keywordId)",
-    "description": "仅生成 case 供人工评估，不自动执行。批量修改关键词出价(按keywordId)。profileAndKeywordIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约116355次。⚠️该操作为原地更新，样本仅含目标新出价，不含变更前原值，执行前需人工先查询记录原出价以便回滚。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
-    "module": "Keywords",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
-      {
-        "name": "[未执行] bid - 批量修改关键词出价(按keywordId)",
-        "method": "PATCH",
-        "base_url": "{{WALMARTBASEURL}}",
-        "path": "Keywords/bid",
-        "request_body": {
-          "profileAndKeywordIds": [
-            "24829258521579"
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
           ],
-          "setBidType": 0,
-          "targetBid": 0.72
-        },
-        "extract_vars": {},
-        "expected_response": {
-          "code": 200
-        }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】PATCH /api/Keywords/bid/byConditions - 按筛选条件批量修改关键词出价",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量修改关键词出价。365天流量约4441次。⚠️该操作为原地更新且按条件批量命中未知数量的关键词，样本不含变更前原值，执行风险高于单条修改，执行前需人工先导出受影响关键词列表及原出价。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
-    "module": "Keywords",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
-      {
-        "name": "[未执行] byConditions - 按筛选条件批量修改关键词出价",
-        "method": "PATCH",
-        "base_url": "{{WALMARTBASEURL}}",
-        "path": "Keywords/bid/byConditions",
-        "request_body": {
-          "setBidType": 1,
-          "excludedIds": [],
-          "rate": 100,
-          "dValue": -0.15,
-          "max": 0.6,
-          "min": 0.3,
-          "conditions": {
-            "start": "{{date_start}}",
-            "end": "{{date_end}}",
-            "filters": [
-              {
-                "field": "roas",
-                "operand": 4,
-                "value": "1.99"
-              }
-            ],
-            "bidFilters": null,
-            "itemHealthFilters": null,
-            "dim": 0,
-            "profileIds": "{{profile_id}}",
-            "multiSortList": [
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test133356kwa"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
               {
                 "sortData": "spend",
                 "sortType": "desc"
               }
             ],
-            "kindType": "Default",
-            "campaignTagIds": [],
-            "campaignIds": [],
-            "campaignStatus": [
-              1
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {
+          "kw_new_a_id": "data.list[0].keywordId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordText": "test133356kwa",
+          "data.list[0].state": "enabled",
+          "data.list[0].matchType": "exact"
+        }
+      },
+      {
+        "name": "定位新建关键词B的keywordId",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test133356kwb"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
             ],
-            "targetingTypes": [],
-            "adGroupIds": [],
-            "adGroupStatus": [
-              1
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {
+          "kw_new_b_id": "data.list[0].keywordId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordText": "test133356kwb",
+          "data.list[0].state": "enabled",
+          "data.list[0].matchType": "phrase"
+        }
+      },
+      {
+        "name": "归位：新建关键词置为paused(state=1)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/state",
+        "request_body": {
+          "profileAndKeywordIds": [
+            "16274451{{kw_new_a_id}}",
+            "16274451{{kw_new_b_id}}"
+          ],
+          "state": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 2
+        }
+      },
+      {
+        "name": "验证A已暂停",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test133356kwa"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
             ],
-            "keywordTagIds": [],
-            "attrWindow": 2,
-            "keywordMatchType": [
-              "broad",
-              "exact",
-              "phrase"
-            ],
-            "tabGroupBy": "AdGroup",
-            "searchType": "0",
-            "_taggingIds": [],
-            "_taggingSubIds": [],
-            "keywordStatus": [
-              1
-            ],
-            "reviewStatus": [],
-            "tagCampaignLogic": 0,
-            "keywordOperand": "Like",
-            "tagKeywordLogic": 0,
-            "__dim__": "ytd",
-            "startDateCompared": "{{date_cmp_start}}",
-            "endDateCompared": "{{date_cmp_end}}",
-            "status": [
-              1
-            ],
-            "toMarket": "US",
-            "adGroupKeywordText": 0,
-            "isExchangeRate": false,
-            "customMetricIds": [],
-            "customMetricLevels": [],
-            "includeZeroPerformance": false,
-            "pageInfo": {
-              "orderAsc": false,
-              "orderByField": "bid",
-              "pageIndex": 1,
-              "pageSize": 100,
-              "multiSort": [
-                {
-                  "sortType": "desc",
-                  "sortData": "bid"
-                }
-              ],
-              "orderBy": "bid desc",
-              "ConvertMethodType": 0
-            },
-            "excludeZeroPerformance": true
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
           }
         },
         "extract_vars": {},
         "expected_response": {
-          "code": 200
+          "code": 200,
+          "data.list[0].state": "paused"
         }
       }
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】PATCH /api/Keywords/state/byConditions - 按筛选条件批量修改关键词状态",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量修改关键词状态。365天流量约484次。⚠️按条件批量命中未知数量的关键词，执行前需人工先导出受影响关键词列表及原状态。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "POST /api/Keywords/QueryToKeywords - 搜索词转正式关键词(创建，自建campaign，创建后置为暂停)",
+    "description": "单接口测试：POST /api/Keywords/QueryToKeywords 把搜索词(Query)转化为正式关键词(请求体数组元素含 adGroupIds/campaignIds/profileId/bid/matchType/keywordText/keywordId=0/state/status，与 ES 样本结构一致，365天流量约117次)。真实执行：在测试campaign 426321/adGroup 770991122 下把自造搜索词 test133356q2k 以 exact/bid 0.3 转为关键词，响应 data.successCount=1；定位 keywordId 后 PATCH state=1 置为 paused 归位。⚠️无删除接口、campaign 已上线过不可 archive，新建关键词以 paused 状态永久保留；⚠️重跑前需更换名称中的时间戳(133356)。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
     "module": "Keywords",
     "granularity": "API",
     "since": "init",
@@ -3780,7 +3905,629 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] byConditions - 按筛选条件批量修改关键词状态",
+        "name": "搜索词转关键词",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/QueryToKeywords",
+        "request_body": [
+          {
+            "adGroupIds": [
+              770991122
+            ],
+            "campaignIds": [
+              426321
+            ],
+            "profileId": 16274451,
+            "bid": 0.3,
+            "matchType": "exact",
+            "keywordText": "test133356q2k",
+            "keywordId": 0,
+            "state": "enabled",
+            "status": "enabled"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "定位新建关键词的keywordId",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test133356q2k"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {
+          "kw_new_q2k_id": "data.list[0].keywordId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordText": "test133356q2k",
+          "data.list[0].state": "enabled"
+        }
+      },
+      {
+        "name": "归位：置为paused(state=1)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/state",
+        "request_body": {
+          "profileAndKeywordIds": [
+            "16274451{{kw_new_q2k_id}}"
+          ],
+          "state": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "验证已暂停",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test133356q2k"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].state": "paused"
+        }
+      }
+    ]
+  },
+  {
+    "name": "PATCH /api/Keywords/state - 批量修改关键词状态(自有关键词：暂停后恢复启用)",
+    "description": "单接口测试：PATCH /api/Keywords/state 按 profileAndKeywordIds(profileId 与 keywordId 直接拼接的字符串，与 ES 样本格式一致)批量改状态，365天流量约7620次(样本中 state=1 占 87%)。真实执行：对本项目自建的测试关键词 36520006283(test115952batchinskw) 先 state=1(paused)，用 Report/keyword/list 核实 state=paused，再 state=0(enabled)还原并核实。响应体 data.successCount 为真实业务成功信号(已实测：对已处于目标状态的关键词重复设置会返回 successCount=0 而非报错)。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
+    "module": "Keywords",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "暂停(state=1)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/state",
+        "request_body": {
+          "profileAndKeywordIds": [
+            "1627445136520006283"
+          ],
+          "state": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1,
+          "data.totalCount": 1
+        }
+      },
+      {
+        "name": "核实已暂停",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test115952batchinskw"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordId": "36520006283",
+          "data.list[0].state": "paused"
+        }
+      },
+      {
+        "name": "还原(state=0 enabled)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/state",
+        "request_body": {
+          "profileAndKeywordIds": [
+            "1627445136520006283"
+          ],
+          "state": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "核实已恢复启用",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test115952batchinskw"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].state": "enabled"
+        }
+      }
+    ]
+  },
+  {
+    "name": "PATCH /api/Keywords/bid - 批量修改关键词出价(自有关键词：改为0.7后还原0.5)",
+    "description": "单接口测试：PATCH /api/Keywords/bid 按 profileAndKeywordIds 批量设置出价，setBidType=0(直接设为 targetBid，ES 样本 92% 为该模式)，365天流量约116355次(本模块流量最高的写接口)。真实执行：自建测试关键词 36520006283(test115952batchinskw，原 bid 0.5)改为 0.7，用 Report/keyword/list 核实 bid=0.7，再改回 0.5 并核实。响应体 data.successCount/keywordSuccess 为真实业务成功信号。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
+    "module": "Keywords",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "改价为0.7",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/bid",
+        "request_body": {
+          "profileAndKeywordIds": [
+            "1627445136520006283"
+          ],
+          "setBidType": 0,
+          "targetBid": 0.7
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1,
+          "data.keywordSuccess": 1
+        }
+      },
+      {
+        "name": "核实bid=0.7",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test115952batchinskw"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].keywordId": "36520006283",
+          "data.list[0].bid": "0.7"
+        }
+      },
+      {
+        "name": "还原为0.5",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/bid",
+        "request_body": {
+          "profileAndKeywordIds": [
+            "1627445136520006283"
+          ],
+          "setBidType": 0,
+          "targetBid": 0.5
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "核实bid=0.5",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "test115952batchinskw"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].bid": "0.5"
+        }
+      }
+    ]
+  },
+  {
+    "name": "PATCH /api/Keywords/state/byConditions - 按筛选条件批量修改关键词状态(限定自有campaign/adGroup/关键词，暂停后恢复)",
+    "description": "单接口测试：PATCH /api/Keywords/state/byConditions 按筛选条件批量改状态，365天流量约484次。ByCondition 类按项目规则改造为只命中自建实体：conditions.profileIds/campaignIds/adGroupIds 显式限定为 16274451/426321/770991122，并加 KeywordFilters(keywordText Like 'kwprobe')只命中自建关键词 36520006284，不再使用 ES 样本中代表全账号范围的空数组/其他客户的 profileIds。真实执行：state=1(paused)→核实→state=0(enabled)还原→核实。接口为异步(响应 data.isAsync=true，无 successCount)，中间插入一次只读 GET 作为等待，再用 Report/keyword/list 核实真实状态。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
+    "module": "Keywords",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按条件暂停(state=1)",
         "method": "PATCH",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Keywords/state/byConditions",
@@ -3790,10 +4537,10 @@
           "conditions": {
             "start": "{{date_start}}",
             "end": "{{date_end}}",
-            "bidFilters": null,
-            "itemHealthFilters": null,
             "dim": 0,
-            "profileIds": "{{profile_id}}",
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -3801,1334 +4548,43 @@
               }
             ],
             "kindType": "Default",
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "campaignTagIds": [],
-            "_taggingIds": [],
-            "_taggingSubIds": [],
-            "tabGroupBy": "AdGroup",
-            "searchType": "0",
-            "includeZeroPerformance": true,
-            "keywordStatus": [
-              1
-            ],
-            "reviewStatus": [
-              0
-            ],
-            "__dim__": "ytd",
-            "status": [
-              1
-            ],
-            "toMarket": "US",
-            "adGroupKeywordText": 0,
-            "isExchangeRate": false,
-            "customMetricIds": [],
-            "customMetricLevels": [],
-            "excludeZeroPerformance": false
-          }
-        },
-        "extract_vars": {},
-        "expected_response": {
-          "code": 200
-        }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】POST /api/Keywords - 批量创建关键词",
-    "description": "仅生成 case 供人工评估，不自动执行。批量创建关键词。365天流量约12905次。⚠️该操作会创建新关键词，响应体结构需人工执行后确认，再补充清理(归档)步骤，避免测试账号残留脏数据。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
-    "module": "Keywords",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
-      {
-        "name": "[未执行] Keywords - 批量创建关键词",
-        "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
-        "path": "Keywords",
-        "request_body": [
-          {
-            "profileId": "{{profile_id_single}}",
-            "campaignId": "{{campaign_id}}",
-            "adGroupId": "{{adgroup_id}}",
-            "adGroupName": "FY26_V8 Energy_Walmart_SBA_Manual_Conquesting",
-            "keywordText": "Alani",
-            "matchType": "exact",
-            "bid": "0.5",
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "profileId": "{{profile_id_single}}",
-            "campaignId": "{{campaign_id}}",
-            "adGroupId": "{{adgroup_id}}",
-            "adGroupName": "FY26_V8 Energy_Walmart_SBA_Manual_Conquesting",
-            "keywordText": "Monster",
-            "matchType": "exact",
-            "bid": "0.5",
-            "state": "enabled",
-            "status": "enabled"
-          }
-        ],
-        "extract_vars": {},
-        "expected_response": {
-          "code": 200
-        }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】POST /api/Keywords/QueryToKeywords - 将搜索词转化为正式关键词(创建)",
-    "description": "仅生成 case 供人工评估，不自动执行。将搜索词转化为正式关键词(创建)。365天流量约117次。⚠️该操作会创建新关键词，响应体结构需人工执行后确认，再补充清理(归档)步骤。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
-    "module": "Keywords",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
-      {
-        "name": "[未执行] QueryToKeywords - 将搜索词转化为正式关键词(创建)",
-        "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
-        "path": "Keywords/QueryToKeywords",
-        "request_body": [
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "collagen peptides powder",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "collagen peptides powder",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "collagen peptides powder",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "gruns daily gummies greens",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "gruns daily gummies greens",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "gruns daily gummies greens",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "beef liver supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "beef liver supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "beef liver supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "antibiotics pills",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "antibiotics pills",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "antibiotics pills",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "beef liver capsules",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "beef liver capsules",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "beef liver capsules",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "grass fed beef liver",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "grass fed beef liver",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "grass fed beef liver",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "ritual multivitamins for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "ritual multivitamins for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "ritual multivitamins for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "gruns daily gummies for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "gruns daily gummies for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "gruns daily gummies for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "beef organ supplement for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "beef organ supplement for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "beef organ supplement for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "ancestral supplements",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "ancestral supplements",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "ancestral supplements",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "nektar superfood",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "nektar superfood",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "nektar superfood",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "nad nicotinamide riboside",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "nad nicotinamide riboside",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "nad nicotinamide riboside",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "nad injections for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "nad injections for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "nad injections for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "nad+ nicotinamide riboside",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "nad+ nicotinamide riboside",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "nad+ nicotinamide riboside",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "collagen alaska",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "collagen alaska",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "collagen alaska",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "postbiotics for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "postbiotics for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "postbiotics for women",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "stress relief supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "stress relief supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "stress relief supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "grassfed beef liver supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "grassfed beef liver supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "grassfed beef liver supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "beef organ supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "beef organ supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "beef organ supplement",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "multi collagen protein",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "multi collagen protein",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "multi collagen protein",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "naked collagen",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "naked collagen",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "naked collagen",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "nad supplements for men",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "nad supplements for men",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "nad supplements for men",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "onnit total gut health",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "onnit total gut health",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "onnit total gut health",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "grass fed beef liver capsules",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "grass fed beef liver capsules",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "grass fed beef liver capsules",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.7,
-            "matchType": "exact",
-            "keywordText": "beef liver supplements",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.1,
-            "matchType": "broad",
-            "keywordText": "beef liver supplements",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          },
-          {
-            "adGroupIds": [
-              "{{adgroup_id}}"
-            ],
-            "campaignIds": [
-              "{{campaign_id}}"
-            ],
-            "profileId": "{{profile_id_single}}",
-            "bid": 1.3,
-            "matchType": "phrase",
-            "keywordText": "beef liver supplements",
-            "keywordId": 0,
-            "state": "enabled",
-            "status": "enabled"
-          }
-        ],
-        "extract_vars": {},
-        "expected_response": {
-          "code": 200
-        }
-      }
-    ]
-  },
-  {
-    "name": "【高风险-仅生成不执行】POST /api/Keywords/KeywordTag/byConditions - 按筛选条件批量打关键词标签",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量打关键词标签。keywordTagIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约45次。⚠️按条件批量操作，命中数量不确定；可用DELETE同路径接口作为逆操作(见下一条case)手动执行还原，两者需人工配合执行验证。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
-    "module": "Keywords",
-    "granularity": "API",
-    "since": "init",
-    "last_modified": "init",
-    "change_type": "NEW",
-    "generated_by": "swagger-api-case",
-    "steps": [
-      {
-        "name": "[未执行] byConditions - 按筛选条件批量打关键词标签",
-        "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
-        "path": "Keywords/KeywordTag/byConditions",
-        "request_body": {
-          "keywordTagIds": [
-            12153
-          ],
-          "conditions": {
-            "start": "{{date_start}}",
-            "end": "{{date_end}}",
-            "bidFilters": null,
-            "itemHealthFilters": null,
-            "dim": "ytd",
-            "profileIds": "{{profile_id}}",
-            "multiSortList": [
-              {
-                "sortData": "spend",
-                "sortType": "desc"
-              }
-            ],
-            "kindType": "Default",
-            "campaignTagIds": [],
-            "_taggingIds": [],
-            "_taggingSubIds": [],
-            "tabGroupBy": "AdGroup",
-            "searchType": "0",
-            "Bid": [],
-            "keywordStatus": [],
             "__isStandard__": true,
-            "campaignIds": [],
-            "campaignName": [
-              "tyfr"
+            "campaignIds": [
+              "426321"
             ],
-            "campaignStatus": [
-              1,
-              2,
-              5,
-              7,
-              6
+            "adGroupIds": [
+              "770991122"
             ],
-            "attrWindow": 2,
-            "keywordTagIds": [],
-            "targetingTypes": [],
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
+            "campaignStatus": [],
+            "campaignName": [],
             "adGroupStatus": [],
-            "adGroupIds": [],
-            "adgroupName": [
-              "tier2",
-              "tier 2",
-              "tier_2"
-            ],
-            "tagCampaignLogic": 0,
-            "campaignNameOperand": "Like",
-            "adgroupOperand": "Like",
-            "tagKeywordLogic": 0,
-            "keywordOperand": "Like",
-            "campaignNameFilters": [
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
               {
-                "field": "campaignName",
+                "field": "keywordText",
                 "operand": 7,
-                "value": "tyfr"
-              }
-            ],
-            "adgroupNameFilters": [
-              {
-                "field": "adGroupName",
-                "operand": 7,
-                "value": "tier2"
-              },
-              {
-                "field": "adGroupName",
-                "operand": 7,
-                "value": "tier 2"
-              },
-              {
-                "field": "adGroupName",
-                "operand": 7,
-                "value": "tier_2"
+                "value": "kwprobe"
               }
             ],
             "__dim__": "ytd",
-            "status": [],
             "toMarket": "US",
-            "adGroupKeywordText": 0,
             "isExchangeRate": false,
             "customMetricIds": [],
             "customMetricLevels": [],
-            "includeZeroPerformance": false,
             "pageInfo": {
               "orderAsc": false,
               "orderByField": "spend",
@@ -5142,21 +4598,285 @@
               ],
               "orderBy": "spend desc",
               "ConvertMethodType": 0
-            },
-            "excludeZeroPerformance": true
-          },
-          "excludedIds": []
+            }
+          }
         },
         "extract_vars": {},
         "expected_response": {
-          "code": 200
+          "code": 200,
+          "data.isAsync": true
+        }
+      },
+      {
+        "name": "等待异步生效(顺带只读主库关键词列表)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "核实已暂停",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordId": "36520006284",
+          "data.list[0].state": "paused"
+        }
+      },
+      {
+        "name": "按条件还原(state=0 enabled)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/state/byConditions",
+        "request_body": {
+          "state": 0,
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "dim": 0,
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "__isStandard__": true,
+            "campaignIds": [
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
+            ],
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
+            "campaignStatus": [],
+            "campaignName": [],
+            "adGroupStatus": [],
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
+              {
+                "field": "keywordText",
+                "operand": 7,
+                "value": "kwprobe"
+              }
+            ],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.isAsync": true
+        }
+      },
+      {
+        "name": "等待异步生效(顺带只读主库关键词列表)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "核实已恢复启用",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].state": "enabled"
         }
       }
     ]
   },
   {
-    "name": "【高风险-仅生成不执行】DELETE /api/Keywords/KeywordTag/byConditions - 按筛选条件批量移除关键词标签",
-    "description": "仅生成 case 供人工评估，不自动执行。按筛选条件批量移除关键词标签。keywordTagIds 保留样本真实ID(样本非本账号，需人工核实)。365天流量约3次。⚠️365天仅3次调用，极低频操作；按条件批量操作，命中数量不确定，执行前需人工确认目标范围。⚠️请求体基于真实ES样本，除profileId/campaignId/adGroupId等已知字段已替换为本测试账号变量外，其余嵌套关联ID保留原样本真实值，非本测试账号数据，人工执行前需替换为本账号下真实可操作的实体ID。",
+    "name": "PATCH /api/Keywords/bid/byConditions - 按筛选条件批量修改关键词出价(限定自有campaign/adGroup/关键词，改为0.4后还原0.3)",
+    "description": "单接口测试：PATCH /api/Keywords/bid/byConditions 按筛选条件批量改出价，365天流量约4441次。ByCondition 类按项目规则改造为只命中自建实体(conditions 限定 16274451/426321/770991122 + KeywordFilters Like 'kwprobe'，仅命中自建关键词 36520006284，原 bid 0.3)。setBidType=0 直接设 targetBid(ES 样本主流为 setBidType=1 按比例调整，本 case 为保证可精确核实与还原改用绝对值模式)。真实执行：0.4→核实→0.3 还原→核实。接口异步(data.isAsync=true，cpcError=[])，插入只读 GET 等待后用 Report/keyword/list 核实。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
     "module": "Keywords",
     "granularity": "API",
     "since": "init",
@@ -5165,41 +4885,557 @@
     "generated_by": "swagger-api-case",
     "steps": [
       {
-        "name": "[未执行] byConditions - 按筛选条件批量移除关键词标签",
+        "name": "按条件改价0.4",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/bid/byConditions",
+        "request_body": {
+          "setBidType": 0,
+          "targetBid": 0.4,
+          "rate": 0,
+          "dValue": 0,
+          "max": 0,
+          "min": 0,
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "dim": 0,
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "__isStandard__": true,
+            "campaignIds": [
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
+            ],
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
+            "campaignStatus": [],
+            "campaignName": [],
+            "adGroupStatus": [],
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
+              {
+                "field": "keywordText",
+                "operand": 7,
+                "value": "kwprobe"
+              }
+            ],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.isAsync": true
+        }
+      },
+      {
+        "name": "等待异步生效(顺带只读主库关键词列表)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "核实bid=0.4",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordId": "36520006284",
+          "data.list[0].bid": "0.4"
+        }
+      },
+      {
+        "name": "按条件还原0.3",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/bid/byConditions",
+        "request_body": {
+          "setBidType": 0,
+          "targetBid": 0.3,
+          "rate": 0,
+          "dValue": 0,
+          "max": 0,
+          "min": 0,
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "dim": 0,
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "__isStandard__": true,
+            "campaignIds": [
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
+            ],
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
+            "campaignStatus": [],
+            "campaignName": [],
+            "adGroupStatus": [],
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
+              {
+                "field": "keywordText",
+                "operand": 7,
+                "value": "kwprobe"
+              }
+            ],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.isAsync": true
+        }
+      },
+      {
+        "name": "等待异步生效(顺带只读主库关键词列表)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords?profileId=16274451&campaignId=426321",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "核实bid=0.3",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].bid": "0.3"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Keywords/KeywordTag/byConditions - 按筛选条件批量打关键词标签(限定自有关键词，打标后移除)",
+    "description": "单接口测试：POST /api/Keywords/KeywordTag/byConditions 按筛选条件给命中的关键词批量打标签，365天流量约45次。标签使用本项目自建的固定测试标签 tagId 14904(test_fixture_kwtag_byConditions，2026-09-16 创建并保留作 fixture，不在 case 内创建/删除标签——因为 GET /api/KeywordTags 的返回顺序不稳定(实测新建标签有时排在末尾有时排在开头)，按下标提取新标签 id 存在误删他人标签的风险)。conditions 限定 16274451/426321/770991122 + KeywordFilters Like 'kwprobe'，仅命中自建关键词 36520006284。响应体仅 code:200/msg:success，业务效果用 Report/keyword/list 的 keywordTagCount/keywordTags 核实(该列表字段实测即时生效；KeywordTags/tagsByKeywordIds 有明显延迟不适合即时核实)。 真实执行：打标→核实 keywordTagCount=1→DELETE 同路径移除→核实 keywordTagCount=0。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
+    "module": "Keywords",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按条件打标签",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/KeywordTag/byConditions",
+        "request_body": {
+          "keywordTagIds": [
+            14904
+          ],
+          "excludedKeywordIds": [],
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "dim": 0,
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "__isStandard__": true,
+            "campaignIds": [
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
+            ],
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
+            "campaignStatus": [],
+            "campaignName": [],
+            "adGroupStatus": [],
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
+              {
+                "field": "keywordText",
+                "operand": 7,
+                "value": "kwprobe"
+              }
+            ],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "msg": "success"
+        }
+      },
+      {
+        "name": "核实已打标",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordId": "36520006284",
+          "data.list[0].keywordTagCount": 1,
+          "data.list[0].keywordTags": [
+            "test_fixture_kwtag_byConditions"
+          ]
+        }
+      },
+      {
+        "name": "清理：按条件移除标签",
         "method": "DELETE",
         "base_url": "{{WALMARTBASEURL}}",
         "path": "Keywords/KeywordTag/byConditions",
         "request_body": {
           "keywordTagIds": [
-            13223,
-            13221,
-            13222,
-            1763,
-            1476,
-            1475,
-            1215,
-            8692,
-            13220,
-            13218,
-            13219,
-            1932,
-            1936,
-            1934,
-            1478,
-            4079,
-            4078,
-            1937,
-            1933,
-            1935,
-            1479
+            14904
           ],
+          "excludedKeywordIds": [],
+          "excludedIds": [],
           "conditions": {
             "start": "{{date_start}}",
             "end": "{{date_end}}",
-            "bidFilters": null,
-            "itemHealthFilters": null,
-            "dim": "ytd",
-            "profileIds": "{{profile_id}}",
+            "dim": 0,
+            "profileIds": [
+              "16274451"
+            ],
             "multiSortList": [
               {
                 "sortData": "spend",
@@ -5207,40 +5443,41 @@
               }
             ],
             "kindType": "Default",
-            "keywordTagIds": [],
-            "tabGroupBy": "Keyword",
-            "attrWindow": 2,
-            "keywordMatchType": [],
-            "searchType": "0",
-            "campaignName": [],
-            "adgroupName": [],
-            "keywordStatus": [],
-            "reviewStatus": [],
-            "Bid": [],
-            "wordCounts": [],
+            "__isStandard__": true,
+            "campaignIds": [
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
+            ],
+            "campaignTagIds": [],
             "_taggingIds": [],
             "_taggingSubIds": [],
-            "__isStandard__": true,
-            "campaignTagIds": [
-              "{{campaign_tag_id}}"
-            ],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
             "campaignStatus": [],
-            "campaignIds": [],
-            "targetingTypes": [],
-            "includeZeroPerformance": true,
-            "adGroupIds": [],
+            "campaignName": [],
             "adGroupStatus": [],
-            "tagCampaignLogic": 0,
-            "campaignNameOperand": "Like",
-            "adgroupOperand": "Like",
-            "tagKeywordLogic": 0,
-            "keywordOperand": "Like",
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
+              {
+                "field": "keywordText",
+                "operand": 7,
+                "value": "kwprobe"
+              }
+            ],
             "__dim__": "ytd",
-            "noTagCampaigns": false,
-            "status": [],
             "toMarket": "US",
-            "adGroupKeywordText": 1,
-            "isExchangeRate": true,
+            "isExchangeRate": false,
             "customMetricIds": [],
             "customMetricLevels": [],
             "pageInfo": {
@@ -5256,14 +5493,427 @@
               ],
               "orderBy": "spend desc",
               "ConvertMethodType": 0
-            },
-            "excludeZeroPerformance": false
-          },
-          "excludedIds": []
+            }
+          }
         },
         "extract_vars": {},
         "expected_response": {
-          "code": 200
+          "code": 200,
+          "msg": "success"
+        }
+      },
+      {
+        "name": "核实已移除",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].keywordTagCount": 0
+        }
+      }
+    ]
+  },
+  {
+    "name": "DELETE /api/Keywords/KeywordTag/byConditions - 按筛选条件批量移除关键词标签(先打标再移除，限定自有关键词)",
+    "description": "单接口测试：DELETE /api/Keywords/KeywordTag/byConditions 按筛选条件批量移除命中关键词上的标签，365天仅3次真实调用(极低频)。标签使用本项目自建的固定测试标签 tagId 14904(test_fixture_kwtag_byConditions，2026-09-16 创建并保留作 fixture，不在 case 内创建/删除标签——因为 GET /api/KeywordTags 的返回顺序不稳定(实测新建标签有时排在末尾有时排在开头)，按下标提取新标签 id 存在误删他人标签的风险)。conditions 限定 16274451/426321/770991122 + KeywordFilters Like 'kwprobe'，仅命中自建关键词 36520006284。响应体仅 code:200/msg:success，业务效果用 Report/keyword/list 的 keywordTagCount/keywordTags 核实(该列表字段实测即时生效；KeywordTags/tagsByKeywordIds 有明显延迟不适合即时核实)。 真实执行：先 POST 同路径打标(前置)→核实→DELETE 移除→核实 keywordTagCount=0。安全范围：全部写操作只作用于测试账号 clientId=62(autoui_acount) 的 profile 16274451 / 测试campaign 426321(Paused，Brand-SP-Manual-Category) / adGroup 770991122 下由本项目自建的测试关键词；ES 样本中其他客户的真实 profileAndKeywordIds 未使用。关键词 state 枚举已实测：0=enabled、1=paused、2=archived(该campaign曾上线过，archive 被业务规则拒绝 \"Keyword cannot be archived as the campaign has been live before.\"，因此本campaign下的关键词不可能被误归档)。新建关键词的 ID 通过 POST /api/Report/keyword/list 按唯一 keywordText(KeywordFilters Like)精确定位后 extract(data.list[0].keywordId)，不依赖 GET /api/Keywords 的返回顺序(实测顺序不稳定)。",
+    "module": "Keywords",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：按条件打标签",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/KeywordTag/byConditions",
+        "request_body": {
+          "keywordTagIds": [
+            14904
+          ],
+          "excludedKeywordIds": [],
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "dim": 0,
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "__isStandard__": true,
+            "campaignIds": [
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
+            ],
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
+            "campaignStatus": [],
+            "campaignName": [],
+            "adGroupStatus": [],
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
+              {
+                "field": "keywordText",
+                "operand": 7,
+                "value": "kwprobe"
+              }
+            ],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "msg": "success"
+        }
+      },
+      {
+        "name": "核实已打标",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.list[0].keywordTagCount": 1
+        }
+      },
+      {
+        "name": "按条件移除标签",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Keywords/KeywordTag/byConditions",
+        "request_body": {
+          "keywordTagIds": [
+            14904
+          ],
+          "excludedKeywordIds": [],
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{date_start}}",
+            "end": "{{date_end}}",
+            "dim": 0,
+            "profileIds": [
+              "16274451"
+            ],
+            "multiSortList": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "kindType": "Default",
+            "__isStandard__": true,
+            "campaignIds": [
+              "426321"
+            ],
+            "adGroupIds": [
+              "770991122"
+            ],
+            "campaignTagIds": [],
+            "_taggingIds": [],
+            "_taggingSubIds": [],
+            "tabGroupBy": "AdGroup",
+            "searchType": "0",
+            "campaignStatus": [],
+            "campaignName": [],
+            "adGroupStatus": [],
+            "adgroupName": [],
+            "targetingTypes": [],
+            "keywordTagIds": [],
+            "keywordStatus": [],
+            "reviewStatus": [],
+            "attrWindow": 2,
+            "keywordMatchType": [],
+            "wordCounts": [],
+            "Bid": [],
+            "includeZeroPerformance": true,
+            "KeywordFilters": [
+              {
+                "field": "keywordText",
+                "operand": 7,
+                "value": "kwprobe"
+              }
+            ],
+            "__dim__": "ytd",
+            "toMarket": "US",
+            "isExchangeRate": false,
+            "customMetricIds": [],
+            "customMetricLevels": [],
+            "pageInfo": {
+              "orderAsc": false,
+              "orderByField": "spend",
+              "pageIndex": 1,
+              "pageSize": 100,
+              "multiSort": [
+                {
+                  "sortData": "spend",
+                  "sortType": "desc"
+                }
+              ],
+              "orderBy": "spend desc",
+              "ConvertMethodType": 0
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "msg": "success"
+        }
+      },
+      {
+        "name": "核实已移除",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/keyword/list",
+        "request_body": {
+          "start": "{{date_start}}",
+          "end": "{{date_end}}",
+          "dim": 0,
+          "profileIds": [
+            "16274451"
+          ],
+          "multiSortList": [
+            {
+              "sortData": "spend",
+              "sortType": "desc"
+            }
+          ],
+          "kindType": "Default",
+          "__isStandard__": true,
+          "campaignIds": [
+            "426321"
+          ],
+          "adGroupIds": [
+            "770991122"
+          ],
+          "campaignTagIds": [],
+          "_taggingIds": [],
+          "_taggingSubIds": [],
+          "tabGroupBy": "AdGroup",
+          "searchType": "0",
+          "campaignStatus": [],
+          "campaignName": [],
+          "adGroupStatus": [],
+          "adgroupName": [],
+          "targetingTypes": [],
+          "keywordTagIds": [],
+          "keywordStatus": [],
+          "reviewStatus": [],
+          "attrWindow": 2,
+          "keywordMatchType": [],
+          "wordCounts": [],
+          "Bid": [],
+          "includeZeroPerformance": true,
+          "KeywordFilters": [
+            {
+              "field": "keywordText",
+              "operand": 7,
+              "value": "kwprobe"
+            }
+          ],
+          "__dim__": "ytd",
+          "toMarket": "US",
+          "isExchangeRate": false,
+          "customMetricIds": [],
+          "customMetricLevels": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "spend",
+            "pageIndex": 1,
+            "pageSize": 100,
+            "multiSort": [
+              {
+                "sortData": "spend",
+                "sortType": "desc"
+              }
+            ],
+            "orderBy": "spend desc",
+            "ConvertMethodType": 0
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.totalCount": 1,
+          "data.list[0].keywordId": "36520006284",
+          "data.list[0].keywordTagCount": 0,
+          "data.list[0].keywordTags": []
         }
       }
     ]

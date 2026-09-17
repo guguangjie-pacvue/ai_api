@@ -1,0 +1,429 @@
+[
+  {
+    "name": "GET /api/ItemTags - 获取全部ItemTag树",
+    "description": "单接口测试：GET /api/ItemTags。无查询参数，返回当前账号全部根Tag及子Tag。500条随机样本中占比约100%（500次）。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GET ItemTags",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemTags/tagsByItemIds - 按ItemId批量查Tag",
+    "description": "单接口测试：POST /api/ItemTags/tagsByItemIds。请求体为itemId字符串数组，查询这些item已打的Tag。168条全量样本中占比约100%（168次，365天内该接口共168次真实调用，已用全部命中记录，样本量<500）。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags/tagsByItemIds",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags/tagsByItemIds",
+        "request_body": [
+          "121562964",
+          "193231533",
+          "756963564",
+          "368143596",
+          "2576850531",
+          "1324107029",
+          "553826443",
+          "5337847296",
+          "785924555",
+          "9401951525",
+          "760342137",
+          "487887937",
+          "9239259475",
+          "257810627",
+          "2287662468"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemTags/TagItems - 按Tag/关键词搜索Item列表",
+    "description": "单接口测试：POST /api/ItemTags/TagItems。名字含Tag但实为item列表搜索接口(参数logicGate/tagIds/searchKeyword/profileIds均为查询过滤条件，无itemId/tagId写入字段，Swagger schema TagItemParams确认无写语义)，按实际body内容判定为只读查询。该接口共挖出4个≥1%场景(见同模块其余3条TagItems case)，本场景为默认列表。500条随机样本中占比约92.6%（463次）。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags/TagItems 默认列表",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags/TagItems",
+        "request_body": {
+          "profileIds": [
+            255756
+          ],
+          "tagIds": [],
+          "logicGate": 0,
+          "searchKeyword": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemTags/TagItems - 全字段为空(旧版调用)",
+    "description": "单接口测试：POST /api/ItemTags/TagItems，场景2：logicGate/searchKeyword缺省为null，仅传profileIds+空tagIds。500条随机样本中占比约2.2%（11次）。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags/TagItems 空字段",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags/TagItems",
+        "request_body": {
+          "profileIds": [
+            "226851"
+          ],
+          "tagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemTags/TagItems - 按数字关键词搜索",
+    "description": "单接口测试：POST /api/ItemTags/TagItems，场景3：searchKeyword传数字(疑似按itemId/UPC搜索)。500条随机样本中占比约1.8%（9次）。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags/TagItems 数字搜索",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags/TagItems",
+        "request_body": {
+          "profileIds": [
+            368690
+          ],
+          "tagIds": [],
+          "logicGate": 0,
+          "searchKeyword": "380511034"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemTags/TagItems - 按tagIds过滤",
+    "description": "单接口测试：POST /api/ItemTags/TagItems，场景4：传入tagIds做过滤。500条随机样本中占比约1.0%（5次）。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags/TagItems tagIds过滤",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags/TagItems",
+        "request_body": {
+          "profileIds": [
+            370169
+          ],
+          "tagIds": [
+            "20966",
+            "20967"
+          ],
+          "logicGate": 0,
+          "searchKeyword": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemTags - 创建根Tag(自清理)",
+    "description": "单接口测试：POST /api/ItemTags 创建根ItemTag + GET提取新Tag真实id + DELETE /api/ItemTags清理。675条随机样本中占比约100%（写操作类，单一创建模式）。写操作真实执行：账号当前固定有14个历史遗留Tag，新建Tag经实测稳定追加在GET列表末尾(data[14])，故用该固定下标提取id，与KeywordTags模块同款技巧(见记忆project_walmart_progress)。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test150153_w1"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET ItemTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w1": "data[14].tagId"
+        },
+        "expected_response": {
+          "data[14].tagName": "000test150153_w1"
+        }
+      },
+      {
+        "name": "DELETE ItemTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags?id={{new_tag_id_w1}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/ItemTags - 修改Tag名称(改名后还原+自清理)",
+    "description": "单接口测试：PUT /api/ItemTags 修改Tag名称。请求体为{tagName,tagId}(与KeywordTags不同，KeywordTags的id在query string，ItemTags的tagId在body里，两接口设计不一致)。自建临时Tag→改名→改回原名→删除。506条随机样本中占比约100%（改名操作，还原后再删除）。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test150153_w2_orig"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET ItemTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w2": "data[14].tagId"
+        },
+        "expected_response": {
+          "data[14].tagName": "000test150153_w2_orig"
+        }
+      },
+      {
+        "name": "PUT ItemTags rename",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {
+          "tagName": "000test150153_w2_renamed",
+          "tagId": "{{new_tag_id_w2}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "PUT ItemTags rename back",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {
+          "tagName": "000test150153_w2_orig",
+          "tagId": "{{new_tag_id_w2}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE ItemTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags?id={{new_tag_id_w2}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ItemTags/BulkTagsWithItems - 按ItemId批量打Tag(自清理)",
+    "description": "单接口测试：POST /api/ItemTags/BulkTagsWithItems 批量给Tag添加ItemId + DELETE /api/ItemTags/Items移除关联 + 删除临时Tag。1093条随机样本中占比约99.6%(ItemIds为多元素数组场景)。目标item为测试账号profile 16274451下的真实目录商品(itemId 10324542，AdItems模块已验证过的已知商品)，仅做打标签/移除标签验证，不改动item本身。POST /api/ItemTags/Items(单独打标签接口)365天0流量未生成case，故用BulkTagsWithItems承担attach职责，与DELETE /api/ItemTags/Items(107次/365天，真实detach接口)配对自清理，同KeywordTags模块BulkTagsWithKeywords+DELETE Keywords的处理方式。",
+    "module": "ItemTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ItemTags create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test150153_w3"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "successCount": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "GET ItemTags extract new id",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id_w3": "data[14].tagId"
+        },
+        "expected_response": {
+          "data[14].tagName": "000test150153_w3"
+        }
+      },
+      {
+        "name": "POST ItemTags/BulkTagsWithItems attach",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags/BulkTagsWithItems",
+        "request_body": {
+          "ItemTagIds": [
+            "{{new_tag_id_w3}}"
+          ],
+          "ItemIds": [
+            "10324542"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE ItemTags/Items detach",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags/Items",
+        "request_body": {
+          "ItemTagIds": [
+            "{{new_tag_id_w3}}"
+          ],
+          "ItemIds": [
+            "10324542"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE ItemTags cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ItemTags?id={{new_tag_id_w3}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
