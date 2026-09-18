@@ -1,0 +1,69 @@
+{
+  "name": "micro-api (dsp, us)",
+  "variables": {
+    "platform": "dsp",
+    "client_id": "2938",
+    "profile_id": "578107614358724215",
+    "profile_id_2": "5614853100001",
+    "profile_ids_all": [
+      "578107614358724215",
+      "5614853100001"
+    ],
+    "user_id": "20153",
+    "real_campaign_id": "584662207406365645",
+    "period_date": "2026-09-01",
+    "fixture_template_id": "28426",
+    "root_user_id": "14495",
+    "profile_id_3": "4006028960601",
+    "advertiser_ids": [
+      "amzn1.account.AF3UPZSPVKNKBDWDZZCL6WGUS67Q",
+      "amzn1.account.AFGIGLUMCUH4YEF75YBKV4QHM2SQ",
+      "amzn1.account.AHIJBW6UFBDHBQ6IIPJOJU52EW6A",
+      "amzn1.account.AFHYKWXITSVNWUO6RKPSORTMZKCQ"
+    ],
+    "advertiser_ids_client": [
+      "amzn1.account.AGVAUHWOAIZQST4Y2GRASGA6Z54A",
+      "amzn1.account.AG6HI4AYZ3ECYD43C4TMZAOK2G4Q",
+      "amzn1.account.AGXDLAZLH26FRVYP4RKQGAXLWEEQ",
+      "amzn1.account.AFMTB2JHZVYELAZWRKXT3SQMSDGA",
+      "amzn1.account.AG3E2ICE2FMKOBNG2APDP7XN5C2A",
+      "amzn1.account.AG4KZZ72NAXSJ34RJQYJJPCURPFQ",
+      "amzn1.account.AF3UPZSPVKNKBDWDZZCL6WGUS67Q",
+      "amzn1.account.AFHYKWXITSVNWUO6RKPSORTMZKCQ",
+      "amzn1.account.AEAJUWPRDP3DVDF2P62KWQWM6ZVA",
+      "amzn1.account.AF5PSEVQTMOD37CN7UZUOLQYQIKA",
+      "amzn1.account.AEZURKS3AA54QMZRJQBKAXQZNAEQ",
+      "amzn1.account.AGL4WJNWR6XFGZTI6P3SEW3K5NPQ"
+    ],
+    "_note_account": "本平台用户明确要求使用专属账号 dspautous/pacvue123!（非其他平台通用的 autoui_acount/walmart123!!）登录验证：POST https://apiuser.pacvue.com/api/Login/v2，header productline=dsp，body {userName:dspautous,password:pacvue123!}。登录成功，JWT userInfo 解出 availablePlatforms=[aggregator,amazon,dsp]（含dsp），ClientId=2938，RootUserId=14495，userId(sub)=20153，Mail=dspautous@pacvue.com。经核实该账号的真实ClientId是2938，不是62/3186(那是autoui_acount/superAdmin0913的测试账号)。因此本服务ES场景挖掘阶段仍按惯例排除62/3186两个内部测试账号噪音，但'该测试账号自己名下流量'的判断口径改为按clientId=2938过滤（而非62）。",
+    "_note_profile_ids": "从ES(dayparting-schedule-api-*)按clientId=2938(dspautous本账号真实历史调用,近365天)提取。profile_id=578107614358724215 与 real_campaign_id=584662207406365645 配对出自本账号POST /findDayParting/campaign历史请求体(2004次同款调用中的样本，profileId+campaignId固定配对)。profile_id_2=5614853100001 出自本账号POST /dayparting/updateTemplate(id=28426,tempName='5710')历史请求体lineItemIds的profileId字段，及POST /calendar/getApplyTagIdByProfileIds历史请求体profileIds数组。profile_ids_all=[578107614358724215,5614853100001] 为本账号POST /dayparting/templateNames历史请求体中出现的一组profileIds组合(唯一同时含两者的样本)。注：DSP平台的profileId是纯数字字符串(Amazon DSP advertiser profile id体系)，与citrus/instacart的UUID格式不同，也不同于samsclub的纯数字但更短的格式，属于DSP自身的ID空间。",
+    "_note_fixture_template_id": "fixture_template_id=28426，tempName='5710'，是dspautous(clientId=2938)在dsp产品线下名下的真实模板。ES显示该账号历史上对此id调用POST /dayparting/updateTemplate 5次(2026-08-24前后)，及POST /dayparting/template/operation-log、POST /dayparting/template/operators各1次，均为本账号自己的真实历史操作，非编造。用于只读校验类接口(getTemplate/downloadTemplate/template/operators/template/operation-log/apply/detailApply等)的tempId入参。",
+    "_note_real_campaign_id": "real_campaign_id=584662207406365645 与 profile_id=578107614358724215 配对，来自本账号(clientId=2938)POST /findDayParting/campaign 365天内2004次同款调用中的高频样本(campaignId+profileId固定不变，说明是该账号前端页面反复轮询同一条campaign的日志)。",
+    "_note_root_user_id": "root_user_id=14495，来自本账号登录JWT userInfo.RootUserId字段。",
+    "_note_user_id": "user_id=20153，来自本账号登录JWT sub/userId字段(dspautous自身的登录user id)。注：ES历史请求体里另见userId=20152/userName=dspustest2024字样(如updateTemplate id=27090样本)，是同一clientId=2938下的另一个子账号，二者均为本客户(2938)自己的用户，非跨client数据。",
+    "_note_advertiser_ids_client": "advertiser_ids_client=12个amzn1.account.*，来自本账号(clientId=2938)在ES(dayparting-schedule-api-*)近90天POST /dayparting/campaign/tree历史请求体中，profileIds精确等于profile_ids_all([578107614358724215,5614853100001])且clientId=2938的真实记录(userIds=[20152]，本账号子账号dspustest2024)，非编造、非其他客户数据。用于本任务(dayparting-controller只读接口批次)需要'advertiserIds非空'场景但该接口本身无法从自身ES样本直接确认安全advertiserId时的替代真实值。",
+    "_note_profile_id_3_and_advertiser_ids": "本次(dayparting-controller/calendar-center-controller/platform-dict-controller 21接口任务)在ES场景挖掘阶段新发现并补充的2个安全自有变量，均来自clientId=2938(dspautous)自己的真实历史请求体，非编造：profile_id_3=4006028960601 出自本账号POST /calendar/getApplyTagIdByProfileIds历史请求体profileIds数组(与profile_id_2固定配对，6次真实调用100%一致)，及POST /dayparting/profile/campaignTag/tree、POST /dayparting/templateNames历史请求体profileIds数组成员之一。advertiser_ids(4个amzn1.account.*格式的Amazon DSP广告主账号ID)出自本账号POST /dayparting/getCampaignsName历史请求体(244次调用中的高频取值)，用于getCampaignsName等接口需要真实advertiserIds结构的场景。",
+    "_note_updateTemplate_verification": "已按任务要求做过唯一一次干净验证性调用：回放本账号(dspustest2024,clientId=2938)最近一次真实历史POST /dayparting/updateTemplate请求体(id=27090,tempName='test0515-03',与ES记录逐字节一致，未做任何字段修改)。结果：HTTP 200, data.sucessNums=2, data.failNums=-2, message='Total:0,Success:2,Failed:-2'。属于'200且sucessNums>=1(真实生效)'模式，与samsclub/citrus一致(区别于amazon的500缺陷模式和instacart的sucessNums:0空操作模式)。由于回放的是该模板已有的原始lineItemIds/lineItemTags/advertiserIds等字段，是对已有状态的等幂重放，未引入新数据。因deleteTemplate仍在红线名单内、无法安全自建自清理，本次未生成updateTemplate的自动化case，仅记录该验证结果于RISK_NOTES.md。"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "dsp"
+    },
+    "body": {
+      "userName": "dspautous",
+      "password": "pacvue123!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "dsp"
+  }
+}

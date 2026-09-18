@@ -1,0 +1,38 @@
+{
+  "name": "micro-api (mercado, us)",
+  "variables": {
+    "platform": "mercado",
+    "user_id": "18589",
+    "client_id": "62",
+    "period_date": "2026-08-01",
+    "profile_id": "3679",
+    "profile_id_2": "609975",
+    "real_campaign_id": "347721808",
+    "real_campaign_id_2": "352835350",
+    "user_id_2": "93",
+    "_note_user_id_2": "dayparting/campaign/tree 与 dayparting/campaignTag/tree 两个接口90天内真实流量(全部clientId=62)的userIds字段固定为93，与本账号登录后在其他接口(templateNames等)使用的18589是同一clientId=62下的另一个真实历史userId(18589也同时出现在campaignTag/tree的完整团队userIds名单里)，非其他真实客户数据，按识别到的真实值变量化处理，避免硬编码。",
+    "_note_no_template": "GET /dayparting/getTemplates?productLine=mercado 返回0条模板，本账号在mercado平台下没有任何自建模板，无法验证updateTemplate（跟kroger平台情况一样），涉及模板的接口(updateTemplate/checkDeletePermission/template/operation-log/template/operators/deleteTemplate等)应跳过并说明原因，不要借用ES里的模板id。",
+    "_note_identity": "已用 query_es.py 对 dayparting-schedule-api-* 索引显式按 clientId=62（不排除62）核实：mercado平台在该索引里几乎全部真实流量的顶层clientId都是62（本账号自己），即mercado目前近乎只有本测试账号在使用，未发现其他真实客户的流量污染风险，但生成case时仍要遵守标准做法，identity字段统一用变量引用本账号真实值，不要硬编码。profile_id=3679/609975、real_campaign_id=347721808/352835350 均来自本账号(clientId=62)的历史真实调用（findDayParting/campaign、bulk/verify/apply等接口）。"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "mercado"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "mercado"
+  }
+}

@@ -1,0 +1,1055 @@
+[
+  {
+    "name": "POST /bulk/verify/apply - 批量校验单个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否可应用dayparting模板(纯校验,不提交生效)，真实流量中最常见的单campaign校验场景。500条随机样本中占比约78.8%（241次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 bulk/verify/apply（单campaign）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "criteo",
+            "campaignId": "864951273695158272",
+            "profileId": "198175118653435904",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 批量校验多个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否可应用dayparting模板(纯校验,不提交生效)。500条随机样本中占比约21.2%（65次，覆盖多种批次大小如2/25/50/100条，代表批量校验场景）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 bulk/verify/apply（多campaign批量）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "criteo",
+            "campaignId": "730104668858277888",
+            "profileId": "198150196392669184",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "criteo",
+            "campaignId": "730105024428040192",
+            "profileId": "198150196392669184",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/amazonCampaignTag/tree - 按profile+userIds查询campaign标签树(不筛选tagIds)",
+    "description": "单接口测试：POST /dayparting/amazonCampaignTag/tree。按profile+操作人userIds查询campaign标签树(isFilter=false,不筛选tagIds/states)，criteo平台90天内该接口样本量很少，已全覆盖真实模式。500条随机样本中占比约100%（2次，样本较少，场景覆盖可能不全）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 amazonCampaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/amazonCampaignTag/tree",
+        "request_body": {
+          "productLine": "criteo",
+          "advertiserIds": null,
+          "clientId": 3621,
+          "applyLevel": 2,
+          "isFilter": false,
+          "tagIds": [],
+          "userIds": [
+            22733,
+            24970,
+            24971,
+            33662,
+            34173
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "535498347073306624"
+          ],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按多profile+模板查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按多个profileId+模板tempId查询apply列表(applyLevel=2,line item级)，真实流量中最主流的场景。500条随机样本中占比约74.8%（80次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dayparting/apply（applyLevel=2,多profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "146692535658790912",
+            "276435008811294720"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "criteo",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 51691,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按多profile+模板查询apply列表(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/apply。按多个profileId+模板tempId查询apply列表(applyLevel=1,campaign级)。500条随机样本中占比约12.1%（13次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dayparting/apply（applyLevel=1,多profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "372815369217523712",
+            "464884895400796160"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "criteo",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 1,
+          "datePattern": null,
+          "name": null,
+          "tempId": 52203,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按单profile+模板查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按单个profileId+模板tempId查询apply列表(applyLevel=2)。500条随机样本中占比约11.2%（12次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dayparting/apply（applyLevel=2,单profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "342330371383554048"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "criteo",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 58200,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按单profile+模板查询apply列表(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/apply。按单个profileId+模板tempId查询apply列表(applyLevel=1)。500条随机样本中占比约1.9%（2次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dayparting/apply（applyLevel=1,单profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "282589132196569088"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "criteo",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 1,
+          "datePattern": null,
+          "name": null,
+          "tempId": 56890,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemIds查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按lineItemIds查询targeting汇总，真实流量中最主流的场景。500条随机样本中占比约93.1%（67次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum（按lineItemIds）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "criteo",
+          "lineItemIds": [
+            {
+              "relId": "661596313677549568",
+              "relName": "balm_mult_mult_x",
+              "profileId": "180765777331847168",
+              "profileIdName": null
+            },
+            {
+              "relId": "661598089860214784",
+              "relName": "concealer_mult_mult_x",
+              "profileId": "180765777331847168",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemTags查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按lineItemTags查询targeting汇总。500条随机样本中占比约4.2%（3次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum（按lineItemTags）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "criteo",
+          "lineItemIds": [],
+          "lineItemTags": [
+            {
+              "relId": "2031425075782934529",
+              "relName": "Meijer Single Cans",
+              "profileId": "256835676002775040",
+              "profileIdName": "Olipop US"
+            },
+            {
+              "relId": "2031425075799711746",
+              "relName": "Meijer 4-Packs",
+              "profileId": "256835676002775040",
+              "profileIdName": "Olipop US"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 不带任何过滤条件查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。lineItemIds和lineItemTags均为空数组的查询(不带任何过滤条件)。500条随机样本中占比约2.8%（2次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum（不带过滤条件）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "criteo",
+          "lineItemIds": [],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+states过滤查询campaign树(isFilter=true)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按profile+states过滤查询campaign标签树(isFilter=true,不筛选tagIds)，真实流量中绝对主流的场景。500条随机样本中占比约99.1%（229次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaign/tree（isFilter=true）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "criteo",
+          "advertiserIds": null,
+          "clientId": 3562,
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            30136
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "195562862394548224",
+            "395642274311741440",
+            "111947122004451328",
+            "180765777331847168"
+          ],
+          "tempId": 0,
+          "states": [
+            "Paused"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile查询campaign树(isFilter=false,不筛选states)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单profile查询campaign标签树(isFilter=false,不筛选states/tagIds)，虽占比略低于1%但代表与isFilter=true完全不同的查询模式(不过滤状态直接取全量树)，独立业务意图予以覆盖。500条随机样本中占比约0.9%（2次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaign/tree（isFilter=false）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "criteo",
+          "advertiserIds": null,
+          "clientId": 3621,
+          "applyLevel": 1,
+          "isFilter": false,
+          "tagIds": [],
+          "userIds": [
+            22733
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "535498347073306624"
+          ],
+          "tempId": 0,
+          "states": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。按campaignId+profileId查询campaign的dayparting冲突应用情况，criteo平台该接口真实调用均为此单一模式。500条随机样本中占比约100%（53次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "criteo",
+          "campaignId": "768227509339463680",
+          "profileId": "141930592755240960",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验(2profile+1模板id)",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。删除模板前置权限校验(2个profile+1个模板id)，真实流量中最常见的场景。500条随机样本中占比约80.0%（12次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 checkDeletePermission（2profile+1id）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "372815369217523712",
+            "464884895400796160"
+          ],
+          "productLine": "criteo",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            52205
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验(4profile+1模板id)",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。删除模板前置权限校验(4个profile+1个模板id)。500条随机样本中占比约13.3%（2次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 checkDeletePermission（4profile+1id）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "195562862394548224",
+            "395642274311741440",
+            "111947122004451328",
+            "180765777331847168"
+          ],
+          "productLine": "criteo",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            54834
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验(1profile+2模板id)",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。删除模板前置权限校验(1个profile+批量2个模板id)。500条随机样本中占比约6.7%（1次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 checkDeletePermission（1profile+2ids）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "282589132196569088"
+          ],
+          "productLine": "criteo",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            56891,
+            56890
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(applyLevels=1+2,不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。分页查询apply明细(applyLevels=[1,2],不筛选states/applyIds)，真实流量中最主流的场景。500条随机样本中占比约91.1%（226次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply（applyLevels=1+2）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "352925750723510272",
+            "387657602693828608"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "criteo",
+          "preferenceZone": "Europe/London",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "DD/MM/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 56036,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(仅applyLevels=1,不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。分页查询apply明细(仅applyLevels=[1],不筛选states/applyIds)。500条随机样本中占比约8.9%（22次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply（applyLevels=1）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "468809095115390976"
+          ],
+          "applyItems": null,
+          "states": [],
+          "productLine": "criteo",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 39077,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile维度campaign标签树(按tempId过滤)",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。按tempId过滤查询profile维度campaign标签树(isFilter=true)，真实流量中最主流的场景。500条随机样本中占比约66.3%（57次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 profile/campaignTag/tree（按tempId过滤）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "criteo",
+          "advertiserIds": null,
+          "clientId": 3562,
+          "applyLevel": 2,
+          "tagIds": [],
+          "daypartingType": 1,
+          "isFilter": true,
+          "userIds": [
+            30136
+          ],
+          "name": "",
+          "profileIds": [],
+          "tempId": 45351,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile维度campaign标签树(不筛选tempId)",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。不筛选tempId查询profile维度campaign标签树(isFilter=true)。500条随机样本中占比约33.7%（29次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 profile/campaignTag/tree（不筛选tempId）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "criteo",
+          "advertiserIds": null,
+          "clientId": 3562,
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            30136
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(不筛选操作类型)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。按templateId查询模板操作日志(不筛选actionTypes/userNames)，criteo平台该接口真实调用均为此单一模式。500条随机样本中占比约100%（13次，样本较少，场景覆盖可能不全）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "criteo",
+          "preferenceZone": "PST8PDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": 48572,
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators?productLine=criteo&tempId={{fixture_template_id}} - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。该接口真实调用通过query string传参(productLine+tempId)，请求体为空。500条随机样本中占比约100%（13次，样本较少，场景覆盖可能不全）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators?productLine=criteo&tempId={{fixture_template_id}}",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=criteo&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按多profile过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按多个profileId过滤查询模板名称列表，真实流量中最主流的场景（500条随机样本中占比约70.9%/258次）。ES样本原始clientId(3562)/profileIds/userIds属于其他真实客户，直接回放触发后端500（identity归属不匹配，与amazon/walmart平台已验证的结论一致：只读接口的clientId/profileIds/userIds必须与当前登录会话client吻合，否则后端空指针500）；已改用本测试账号自身真实identity(clientId={{client_id}}, profileIds含{{profile_id}}, userIds含{{user_id}})，profileIds数组保留多元素结构以体现多profile查询意图，但criteo测试账号当前仅验证到{{profile_id}}一个真实可访问profile，数组内重复使用占位第二个位置。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 templateNames（多profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id}}"
+          ],
+          "productLine": "criteo",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按单profile过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按单个profileId过滤查询模板名称列表（500条随机样本中占比约29.1%/106次）。ES样本原始clientId(4689)/profileId/userIds属于其他真实客户，直接回放触发后端500（identity归属不匹配，与amazon/walmart平台已验证的结论一致）；已改用本测试账号自身真实identity(clientId={{client_id}}, profileIds=[{{profile_id}}], userIds含{{user_id}})。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 templateNames（单profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "criteo",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaignId+profileId查询该campaign的dayparting应用详情，criteo平台该接口真实调用均为此单一模式。500条随机样本中占比约100%（209次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "criteo",
+          "campaignId": "656927962805743616",
+          "profileId": "141930592755240960",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

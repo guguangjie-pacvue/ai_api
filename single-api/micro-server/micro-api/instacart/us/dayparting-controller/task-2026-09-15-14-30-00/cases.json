@@ -1,0 +1,839 @@
+[
+  {
+    "name": "POST /bulk/verify/apply - 批量校验campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验campaign列表是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)。90天内instacart平台该接口共86次真实调用(已排除clientId 62/3186噪音)，全部为单campaign的校验请求，占比约100.0%（86次）。注：identity类字段(campaignId/profileId)已替换为测试账号自身(client 62/autoui_acount)可访问的真实值，避免因ES样本为其他真实客户数据、与当前测试会话client不匹配导致后端500(该风险与amazon平台一致，见RISK_NOTES.md)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "instacart",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按单profile+模板查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply（operationId=getApplyList，实际是查询接口非创建接口）。按单个profileId+tempId、applyLevel=2分页查询apply列表。90天内instacart平台该接口共29次真实调用，此场景占比约96.6%（28次）。注：identity类字段(profileIds/tempId)已替换为测试账号自身(client 62/autoui_acount)可访问的真实值，避免因ES样本为其他真实客户数据导致后端500。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "instacart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按多profile批量查询apply列表(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/apply。按多个profileId(不指定单一tempId过滤范围)、applyLevel=1分页查询apply列表。90天内instacart平台该接口共29次真实调用，此场景占比约3.4%（1次）。真实调用仅2种模式，已全覆盖。注：identity类字段(profileIds/tempId)已替换为测试账号自身(client 62/autoui_acount)可访问的真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "instacart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 1,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemIds查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：按lineItemIds查询targeting汇总。90天内instacart平台该接口共24次真实调用，此场景占比约70.8%（17次）。注：lineItemIds内的profileId已替换为测试账号自身(client 62/autoui_acount)可访问的真实值，relId保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "instacart",
+          "lineItemIds": [
+            {
+              "relId": "0bd36abf-48f2-4ff8-baa5-5d8722a66990",
+              "relName": "2026_NAT_DRYC_SEA_INSTA_DRUM_CONE_CVR_SP_OPTI_ALL_12CT MINIS INCREMENTAL MANUAL_IC26031_260063_V2",
+              "profileId": "{{profile_id}}",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemTags查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：按lineItemTags查询targeting汇总。90天内instacart平台该接口共24次真实调用，此场景占比约20.8%（5次）。注：lineItemTags内的profileId已替换为测试账号自身可访问的真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "instacart",
+          "lineItemIds": [],
+          "lineItemTags": [
+            {
+              "relId": "11668",
+              "relName": "Coors Light",
+              "profileId": "{{profile_id}}",
+              "profileIdName": "Molson Coors"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 不带任何过滤条件查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：不带任何过滤条件查询(lineItemIds/lineItemTags均为空)。90天内instacart平台该接口共24次真实调用，此场景占比约8.3%（2次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "instacart",
+          "lineItemIds": [],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+states过滤查询campaign树(isFilter=true)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按profileIds+states过滤(isFilter=true,不筛选tagIds)查询campaign层级树。90天内instacart平台该接口共130次真实调用，此场景占比约99.2%（129次，含states取值ENABLED/DISABLED、active/paused等多种真实枚举，业务查询模式一致，代表值取ENABLED+DISABLED）。占比0.8%(1次,额外按tagIds过滤)的极低频组合未单独覆盖。注：identity类字段(clientId/userIds/profileIds/tempId)已替换为测试账号自身(client 62/autoui_acount)可访问的真实值，避免因ES样本为其他真实客户数据导致后端500。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "instacart",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "tempId": "{{fixture_template_id}}",
+          "states": [
+            "ENABLED",
+            "DISABLED"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。按campaignId+profileId查询该campaign当前是否已应用dayparting模板(冲突检测)。90天内instacart平台该接口共11次真实调用，均为该单一模式，占比约100.0%（11次）。真实调用仅1种模式，已全覆盖。注：identity类字段(campaignId/profileId)已替换为测试账号自身可访问的真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "instacart",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。删除模版时检查是否具有删除权限(只读校验，不执行删除)。90天内instacart平台该接口共2次真实调用，样本较少，场景覆盖可能不全，占比约100.0%（2次）。注：identity类字段(profileIds/ids)已替换为测试账号自身(client 62)可访问的真实值(fixture_template_id)，避免误查他人模板。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": null,
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "productLine": "instacart",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "ids": [
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(applyLevels=1+2,不筛选状态,大页)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：applyLevels=[1,2]、不筛选states/applyItems/applyIds、大页(pageSize=99999)。90天内instacart平台该接口共98次真实调用，此场景占比约50.0%（49次）。注：identity类字段(profileIds/tempId)已替换为测试账号自身可访问的真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "instacart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(仅applyLevels=1,不筛选状态,小页)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：applyLevels=[1]、不筛选states/applyItems/applyIds、常规分页(pageSize=10)。90天内instacart平台该接口共98次真实调用，此场景占比约42.9%（42次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "applyItems": null,
+          "states": [],
+          "productLine": "instacart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 按applyIds过滤查询(applyLevels=2)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：applyLevels=[2]+指定applyIds过滤。90天内instacart平台该接口共98次真实调用，此场景占比约4.1%（4次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "instacart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            2
+          ],
+          "applyIds": [
+            1
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 按states=[1]筛选查询(applyLevels=1)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：applyLevels=[1]+states=[1]状态筛选。90天内instacart平台该接口共98次真实调用，此场景占比约2.0%（2次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "applyItems": null,
+          "states": [
+            1
+          ],
+          "productLine": "instacart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 按states全量枚举筛选查询(applyLevels=1)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：applyLevels=[1]+states=[0,1,2,3,4]全量状态枚举筛选。90天内instacart平台该接口共98次真实调用，此场景占比约1.0%（1次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "applyItems": null,
+          "states": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "productLine": "instacart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile维度campaign标签树",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。按advertiserIds+userIds查询profile维度campaign标签树(isFilter=true,不筛选tagIds,applyLevel=2)。90天内instacart平台该接口共54次真实调用，均为该单一模式，占比约100.0%（54次）。真实调用仅1种模式，已全覆盖。注：identity类字段(clientId/userIds/tempId)已替换为测试账号自身可访问的真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "instacart",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": "{{fixture_template_id}}",
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(不筛选操作类型)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。按templateId查询该模板全部操作日志，不筛选actionTypes。90天内instacart平台该接口共6次真实调用，样本较少，场景覆盖可能不全，占比约100.0%（6次）。注：templateId已替换为测试账号自身的fixture_template_id。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "instacart",
+          "preferenceZone": "America/Los_Angeles",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。该接口真实调用通过query string传参(productLine+tempId)，请求体为空。90天内instacart平台该接口共6次真实调用，占比约100.0%（6次）。注：tempId已替换为测试账号自身的fixture_template_id。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=instacart&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按profile过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按profileIds+userIds过滤(不筛选tempName/advertiserIds/ids/status)查询模板名称列表。90天内instacart平台该接口共173次真实调用，均为该单一模式，占比约100.0%（173次）。真实调用仅1种模式，已全覆盖。注：identity类字段(clientId/profileIds/userIds)已替换为测试账号自身可访问的真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "productLine": "instacart",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaignId+profileId查询该campaign当前应用的dayparting配置。90天内instacart平台该接口共75次真实调用，均为该单一模式，占比约100.0%（75次）。真实调用仅1种模式，已全覆盖。注：identity类字段(campaignId/profileId)已替换为测试账号自身可访问的真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "instacart",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

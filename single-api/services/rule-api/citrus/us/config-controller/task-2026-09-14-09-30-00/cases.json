@@ -1,0 +1,236 @@
+[
+  {
+    "name": "GET /config/actionMetrics - ruleType=Campaign(citrus真实场景)",
+    "description": "单接口测试：GET /config/actionMetrics。Swagger仅声明ruleType为必填查询参数，但真实调用中前端还会附带productLine查询参数按平台筛选。按productLine=citrus过滤（已排除测试账号62/3186）后近180天共78条真实调用，ruleType=Campaign为最高频场景。500条随机样本中占比约51.3%（40次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 actionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/actionMetrics?ruleType=Campaign&productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/actionMetrics - ruleType=Keyword(citrus真实场景)",
+    "description": "单接口测试：GET /config/actionMetrics。按productLine=citrus过滤（已排除测试账号62/3186）后近180天共78条真实调用，ruleType=Keyword场景。500条随机样本中占比约25.6%（20次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 actionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/actionMetrics?ruleType=Keyword&productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/actionMetrics - ruleType=SOV Bid(citrus真实场景)",
+    "description": "单接口测试：GET /config/actionMetrics。按productLine=citrus过滤（已排除测试账号62/3186）后近180天共78条真实调用，ruleType=SOV Bid场景。500条随机样本中占比约23.1%（18次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 actionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/actionMetrics?ruleType=SOV+Bid&productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/emails - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/emails。Swagger无声明参数，GET请求query string不携带productLine，无法按平台过滤，采用全平台流量挖掘场景（citrus平台覆盖仍按要求生成本case）。ES 90天全平台样本(27241次调用)均为无参默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 emails",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/emails",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/getCommercePermission - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/getCommercePermission。Swagger无声明参数，GET请求query string不携带productLine，无法按平台过滤，采用全平台流量挖掘场景（citrus平台覆盖仍按要求生成本case）。ES 90天全平台样本(33052次调用)均为无参默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getCommercePermission",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/getCommercePermission",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/requirementMetrics - 默认调用(不带ruleType参数)",
+    "description": "单接口测试：GET /config/requirementMetrics。Swagger声明ruleType为必填查询参数，但ES真实日志显示（已排除测试账号62/3186）近90天500条随机样本中499条完全不带任何查询参数、后端仍正常返回200及完整数据；仅极少数(约0.7%)携带ruleType的记录经核实clientId均为62/3186测试账号产生的污染流量，非真实用户行为，不构成≥1%的独立真实场景。因此采用真实占绝对多数的无参默认调用作为Happy Path，不编造ruleType取值。500条随机样本中占比约100%（500次，其中499次严格无参，1次为测试账号污染已剔除但样本仍以无参场景为代表）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 requirementMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/requirementMetrics",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/RuleActionMetrics - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/RuleActionMetrics。Swagger无声明参数。ES 90天全平台样本(78277次调用，已排除测试账号62/3186)中500条随机样本均为无查询参数的默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 RuleActionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/RuleActionMetrics",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/ruleTypes - productLine=citrus筛选",
+    "description": "单接口测试：GET /config/ruleTypes。Swagger未声明该参数，但真实调用中前端会附带productLine查询参数按平台筛选规则类型列表。按productLine=citrus过滤（已排除测试账号62/3186）后近180天共145条真实调用，均携带该参数，占比100%。500条随机样本中占比约100%（145次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ruleTypes",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/ruleTypes?productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/supportedTimeZones - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/supportedTimeZones。Swagger无声明参数，GET请求query string不携带productLine，无法按平台过滤，采用全平台流量挖掘场景（citrus平台覆盖仍按要求生成本case）。ES 90天全平台样本(27320次调用)均为无参默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 supportedTimeZones",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/supportedTimeZones",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

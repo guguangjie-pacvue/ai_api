@@ -1,0 +1,47 @@
+{
+  "name": "micro-api (tiktok, us)",
+  "variables": {
+    "platform": "tiktok",
+    "client_id": "62",
+    "profile_id": "7551300708960862209",
+    "user_id": "18589",
+    "real_campaign_id": "1856815001268353",
+    "period_date": "2026-09-01",
+    "root_user_id": "93",
+    "fixture_template_id": "[NEEDS_REAL_VALUE]",
+    "profile_ids_all": [
+      "7498240669018963985",
+      "7551300708960862209",
+      "7384788873567567873",
+      "7621800768387137553",
+      "7023954498661924866"
+    ],
+    "_note_login": "登录验证：POST https://apiuser.pacvue.com/api/Login/v2，header productline=tiktok（与amazon/citrus/samsclub等一样，用通用测试账号autoui_acount/walmart123!!，无需别名，'tiktok'直接可用）。登录成功(HTTP 200)，JWT userInfo解出availablePlatforms含'tiktok'字面量(同时也含'commerce-tiktok'，那是另一个不同的产品线值，本任务只用'tiktok')。ClientId=62、RootUserId=93、userId(sub)=18589、Mail=zhangshaobo@pacvue.com——与citrus/samsclub等平台使用的是同一个测试账号(autoui_acount, client 62)，与dsp专属账号(dspautous, client 2938)不同体系。",
+    "_note_profile_id_and_real_campaign_id": "profile_id=7551300708960862209 与 real_campaign_id=1856815001268353 配对，来自本账号(clientId=62)近90天POST /findDayParting/campaign真实历史请求体(74次调用中的最新高频样本)。已用当前登录token现场回放验证：POST /findDayParting/campaign {productLine:tiktok,campaignId:1856815001268353,profileId:7551300708960862209} 返回 HTTP 200 且返回真实dayparting配置数据(id=57759,userId=93,userName=yinzixin)，确认该profileId/campaignId组合对本账号当前仍然真实可用。",
+    "_note_user_id_and_root_user_id": "user_id=18589 来自本账号登录JWT sub/userId字段；root_user_id=93 来自登录JWT userInfo.RootUserId字段。两者与citrus/samsclub等平台的config一致(同一账号)。",
+    "_note_profile_ids_all": "profile_ids_all的5个纯数字tiktok advertiser id，来自本账号(clientId=62)近365天POST /dayparting/templateNames历史请求体(仅1次真实调用)中的profileIds数组，是该账号在tiktok产品线下唯一一条历史记录。已用当前登录token现场回放验证安全可用：POST /calendar/getApplyTagIdByProfileIds {profileIds:[...5个id...],productLine:tiktok} 返回 HTTP 200 (data:[]，无tagId但结构正常，非报错)。用于本任务需要profileIds数组的只读查询场景(calendar-center-controller等)。",
+    "_note_fixture_template_id_UNAVAILABLE": "🔴 本平台未能获得真实可用的tiktok模板id，原因：(1) 本账号(clientId=62)近365天在ES中对tiktok产品线的updateTemplate调用为0次，没有可参照的历史tempId；(2) 原计划通过POST /dayparting/templateNames(该账号自己的token)现场列出本账号名下的tiktok模板作为tempId来源，但现场验证发现该接口在productLine='tiktok'时无条件返回HTTP 500(见下方_note_templateNames_bug，与请求体其余字段完全无关，哪怕请求体只有{\"productLine\":\"tiktok\"}单个字段也500，而productLine=amazon/walmart/samsclub/instacart/bol/chewy/kroger/criteo/target/doordash/ebay/dsp/mercado等12个其他平台用完全相同的调用方式均正常200)，导致无法通过该接口枚举获得本账号在tiktok下的真实模板id。因此本次未生成/未编造fixture_template_id，凡是需要真实tiktok tempId的只读接口(getTemplate/downloadTemplate/template/operators/template/operation-log/apply/detailApply/checkDeletePermission等)，若ES也查不到本账号或真实客户在90/365天内的tiktok调用记录，一律按'ES无流量'处理，不代入编造的id。",
+    "_note_templateNames_bug": "🔴🔴 tiktok平台新发现的POST /dayparting/templateNames确认后端缺陷，与bol(userIds特定值93触发)/chewy(profileIds非null即触发)/dsp(userIds非空数组触发)三个平台已知的'字段级'500缺陷性质不同、更严重：只要请求体JSON中包含 \"productLine\":\"tiktok\" 这一个字段(无论其余字段是否存在、是否为空)，无条件返回HTTP 500，与userIds/profileIds取值完全无关。已用当前登录token现场验证：{}→200(空列表)；{\"pageInfo\":{...}}(不含productLine字段)→200；{\"productLine\":\"tiktok\"}单字段→500(可稳定复现，测试2次结果一致)；{\"productLine\":\"<其余12个平台名>\"}(amazon/walmart/samsclub/instacart/bol/chewy/kroger/criteo/target/doordash/ebay/dsp/mercado逐一测试)→全部200正常返回数据。且已通过ES确认：真实客户(clientId=4618，非测试账号)近90天内对该接口的2次真实tiktok调用，请求体均包含\"productLine\":\"tiktok\"字段(与本账号历史调用体结构一致)，说明该缺陷在生产环境对真实tiktok客户同样必现，属于当前正在影响生产的缺陷，非本次测试引入。本次仅生成1条Happy Path case(基于ES真实流量场景，占比100%，2条样本)，如实保留为FAIL以留存缺陷证据，不修改请求体规避。"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "tiktok"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "tiktok"
+  }
+}

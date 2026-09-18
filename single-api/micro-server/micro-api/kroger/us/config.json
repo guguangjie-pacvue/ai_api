@@ -1,0 +1,36 @@
+{
+  "name": "micro-api (kroger, us)",
+  "variables": {
+    "platform": "krogerv3",
+    "profile_id": "100000000001",
+    "user_id": "18589",
+    "client_id": "62",
+    "period_date": "2026-08-01",
+    "real_campaign_id": "100000000169",
+    "_note_real_campaign_id": "campaignId=100000000169 (name=\"AK Testing 111523\"), profileId=100000000001，通过 GET /dayparting/getCampaignsName?productLine=krogerv3 验证为测试账号可访问的真实campaign，仅用于只读查询类case",
+    "_note_platform": "登录productline header 和 productLine 请求字段真实值必须用 krogerv3（不是 kroger），已验证：productline=kroger 登录返回406；目录名/Excel Platform 列仍用业务名 kroger",
+    "_note_no_template": "GET /dayparting/getTemplates?productLine=krogerv3 返回空列表，本账号在kroger平台下没有任何已有模板（不同于其他平台），涉及模板的写操作(updateTemplate等)本轮无自有fixture可用于no-op验证，需要先通过安全方式确认是否有可用模板或跳过验证",
+    "_note_client_id": "本测试账号(autoui_acount)的 clientId=62，用于把ES样本里其他真实客户的clientId替换为本账号自己的值，避免读接口因identity归属不匹配返回500"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "krogerv3"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "krogerv3"
+  }
+}

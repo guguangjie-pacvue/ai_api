@@ -1,0 +1,240 @@
+[
+  {
+    "name": "GET /config/RuleActionMetrics - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/RuleActionMetrics。Swagger无声明参数，ES近180天样本(全平台164146条真实调用，已排除测试账号)显示queryString 100%为空(无查询参数)，占比100%，已全覆盖，与平台无关。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 RuleActionMetrics(GET)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/RuleActionMetrics",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/actionMetrics - ruleType=Campaign&productLine=mercado",
+    "description": "单接口测试：GET /config/actionMetrics。ES近90天按 body.productLine.keyword:mercado 口径(GET无body，实际过滤自queryString)命中0条，近180天全平台排除测试账号后仅2条真实调用，均为 ruleType=Campaign&productLine=mercado(真实mercado客户调用，非测试账号，非其他平台数据借用；样本量极小(n=2)，已如实标注，不构成≥1%高频场景但为mercado唯一可考真实取值)。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 actionMetrics(ruleType=Campaign, productLine=mercado)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/actionMetrics",
+        "request_body": {
+          "ruleType": "Campaign",
+          "productLine": "mercado"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/emails - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/emails。Swagger无声明参数，接口结构与平台无关，ES近180天样本(全平台58272条真实调用，已排除测试账号)均为相同调用形态(queryString 100%为空)，占比100%，已全覆盖。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 emails",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/emails",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/getCommercePermission - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/getCommercePermission。Swagger无声明参数，接口结构与平台无关，ES近180天样本(全平台69300条真实调用，已排除测试账号)均为相同调用形态(queryString 100%为空)，占比100%，已全覆盖。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getCommercePermission",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/getCommercePermission",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/requirementMetrics - ruleType=Campaign(推断)",
+    "description": "单接口测试：GET /config/requirementMetrics。该接口访问日志的queryString字段ES基本未采集(近180天全平台抽样99.79%为空，非mercado特有问题)，按 productLine=mercado 过滤更是0命中，无法直接确认mercado真实ruleType分布；ruleType与同模块 actionMetrics 共享同一取值域，采用 actionMetrics 在mercado平台仅有的真实取值 Campaign 作为代表场景（非编造，为同平台同模块字段复用推断，未写占比）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 requirementMetrics(ruleType=Campaign)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/requirementMetrics",
+        "request_body": {
+          "ruleType": "Campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/ruleTypes - productLine=mercado筛选",
+    "description": "单接口测试：GET /config/ruleTypes。Swagger未声明该参数，但真实调用中前端会附带 productLine 查询参数按平台筛选规则类型列表。ES近180天排除测试账号后，mercado真实调用共6条，均为 productLine=mercado 该筛选形态(占比100%，但mercado整体样本量极小，已如实标注)。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ruleTypes(productLine=mercado)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/ruleTypes",
+        "request_body": {
+          "productLine": "mercado"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/ruleTypes - 不带productLine(旧版调用)",
+    "description": "单接口测试：GET /config/ruleTypes。部分真实调用不带 productLine 查询参数(旧版前端行为，与平台无关)。ES近180天全平台排除测试账号后抽样中占比约38.2%（52291/136937次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ruleTypes(无过滤)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/ruleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /config/RuleActionMetrics - productLine=mercado",
+    "description": "单接口测试：POST /config/RuleActionMetrics。productLine 为必填查询参数(非body字段)，直接决定要查询的平台；该接口请求体恒为空。ES近90天真实样本(43条，跨全部平台，已排除测试账号)显示该接口请求体不含productLine字段(query-param型接口)，且按 body.productLine.keyword:mercado 过滤(GET/POST无body场景下无效)近90/180天均0命中，故无法按平台归因，按平台强制枚举规则、依据Swagger参数定义构造mercado场景。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 RuleActionMetrics(POST)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/RuleActionMetrics?productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/supportedTimeZones - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/supportedTimeZones。Swagger无声明参数，接口结构与平台无关，ES近180天样本(全平台58645条真实调用，已排除测试账号)均为相同调用形态(queryString 100%为空)，占比100%，已全覆盖。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 supportedTimeZones",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/supportedTimeZones",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

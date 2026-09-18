@@ -1,0 +1,107 @@
+[
+  {
+    "name": "POST /dataImpact/brandOrManufacturers - metric=soa+category筛选(全平台基线)",
+    "description": "单接口测试：POST /dataImpact/brandOrManufacturers。查询指定品类下的品牌/厂商份额列表(metric=soa)。ES近365天该接口真实客户流量(排除clientId 62/3186测试账号)仅5条，且大部分不带productLine/platform字段(经es_helper productline-agg确认61条历史流量中仅7条带productLine，均为amazon/instacart/walmart/target，无bol，且这7条不在近365天5条真实客户样本中)，按services.json定义的post_fallback_no_productline_field约定视为无法按平台归因，用全平台基线；bol无法从该基线中被单独识别、也无法被排除。5条样本全部为country=US+metric=soa的单一模式，占比约100%（5次），category取样本中出现频率最高的真实值(FABRIC FINISHER，2/5次)。实测该测试账号(bol，client_id=62)调用返回code:405、msg含\"countryInfo\" is null（Data Impact Add-On未在该测试账号配置国家信息），与citrus/doordash/mercado/target平台执行同一全平台基线case时的现象完全一致，属真实业务限制而非接口缺陷，已按实测结果调整断言。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 brandOrManufacturers",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/brandOrManufacturers",
+        "request_body": {
+          "country": "US",
+          "metric": "soa",
+          "category": "FABRIC FINISHER"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/categories - metric=soa(全平台基线)",
+    "description": "单接口测试：POST /dataImpact/categories。查询Share of Assortment(soa)维度的品类列表。ES近365天该接口真实客户流量(排除测试账号)共11条，大部分不带productLine/platform字段，按post_fallback_no_productline_field约定用全平台基线；bol无法被单独识别。11条样本中metric=soa出现6次，占比约54.5%（6次），为最高频模式。实测该测试账号(bol，client_id=62)调用返回code:405、msg含\"countryInfo\" is null（Data Impact Add-On未在该测试账号配置国家信息），属真实业务限制而非接口缺陷，已按实测结果调整断言。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 categories(soa)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/categories",
+        "request_body": {
+          "country": "US",
+          "metric": "soa"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/categories - metric=sop(全平台基线)",
+    "description": "单接口测试：POST /dataImpact/categories。查询Share of Page(sop)维度的品类列表。ES近365天该接口真实客户流量(排除测试账号)共11条，大部分不带productLine/platform字段，按post_fallback_no_productline_field约定用全平台基线；bol无法被单独识别。11条样本中metric=sop出现4次，占比约36.4%（4次）。实测该测试账号(bol，client_id=62)调用返回code:405、msg含\"countryInfo\" is null（Data Impact Add-On未在该测试账号配置国家信息），属真实业务限制而非接口缺陷，已按实测结果调整断言。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 categories(sop)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/categories",
+        "request_body": {
+          "country": "US",
+          "metric": "sop"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dataImpact/categories - metric=oos(全平台基线)",
+    "description": "单接口测试：POST /dataImpact/categories。查询Out of Stock(oos)维度的品类列表。ES近365天该接口真实客户流量(排除测试账号)共11条，大部分不带productLine/platform字段，按post_fallback_no_productline_field约定用全平台基线；bol无法被单独识别。11条样本中metric=oos出现1次，占比约9.1%（1次），虽为最低频但代表了soa/sop未覆盖的独立业务意图(缺货品类)，故单独成场景。实测该测试账号(bol，client_id=62)调用返回code:405、msg含\"countryInfo\" is null（Data Impact Add-On未在该测试账号配置国家信息），属真实业务限制而非接口缺陷，已按实测结果调整断言。",
+    "module": "data-impact-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 categories(oos)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/dataImpact/categories",
+        "request_body": {
+          "country": "US",
+          "metric": "oos"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  }
+]

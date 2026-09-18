@@ -1,0 +1,917 @@
+[
+  {
+    "name": "POST /bulk/verify/apply - 校验单campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)。90天内samsclub平台该接口共614次真实调用(已排除clientId 62/3186噪音)，其中单campaign的校验请求占比约96.2%（481条，500条随机样本中）。注：campaignId/profileId已替换为测试账号自身(client 62/autoui_acount)可访问的真实值(56775/20322，来自本账号历史调用配对样本)，避免ES样本为其他真实客户数据导致与当前会话client不匹配。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "samsclub",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 多profile批量查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、多个profile批量查询campaign的dayparting应用列表。90天内samsclub平台该接口共23次真实调用，此场景(applyLevel=2+多profile)占比约52.1%（12次）。注：profileIds替换为测试账号自身可访问的8个真实profileId(profile_ids_all，本账号POST /dayparting/templateNames历史调用同款列表)，tempId替换为本账号专用自动化fixture模板45058。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": null,
+          "states": null,
+          "productLine": "samsclub",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 单profile查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=2、单个profile查询campaign的dayparting应用列表。90天内samsclub平台该接口共23次真实调用，此场景占比约39.1%（9次）。注：profileIds替换为测试账号自身真实profileId，tempId替换为本账号专用fixture模板45058。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "samsclub",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 单profile查询apply列表(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/apply。按applyLevel=1(campaign级)、单个profile查询dayparting应用列表。90天内samsclub平台该接口共23次真实调用，此场景占比约8.7%（2次）。注：profileIds替换为测试账号自身真实profileId，tempId替换为本账号专用fixture模板45058。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "samsclub",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 1,
+          "datePattern": null,
+          "name": null,
+          "tempId": "{{fixture_template_id}}",
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按单个lineItem查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按单个lineItemId查询targeting汇总数量。90天内samsclub平台该接口共100次真实调用(已排除clientId 62/3186噪音)，单lineItem场景占比约84%（84次）。注：本case直接复用本账号(client 62)自身历史真实请求体(relId=113422/profileId=12362均为本账号自身数据)，未做任何替换。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "samsclub",
+          "lineItemIds": [
+            {
+              "relId": "113422",
+              "relName": null,
+              "profileId": "{{profile_id_2}}",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按多个lineItem批量查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按多个lineItemId批量查询targeting汇总数量。90天内samsclub平台该接口共100次真实调用，多lineItem(批量选择)场景合计占比约16%（lineItemIds长度2~43不等，共16次）。注：本case直接复用本账号(client 62)自身历史真实请求体(4个relId均为本账号自身campaign的lineItem，profileId=20322)，未做任何替换。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "samsclub",
+          "lineItemIds": [
+            {
+              "relId": "27444",
+              "relName": "CreateSBCampaign202307311545",
+              "profileId": "{{profile_id}}",
+              "profileIdName": null
+            },
+            {
+              "relId": "27445",
+              "relName": "CreateSBCampaign202307311546",
+              "profileId": "{{profile_id}}",
+              "profileIdName": null
+            },
+            {
+              "relId": "27446",
+              "relName": "CreateSBCampaign202307311549",
+              "profileId": "{{profile_id}}",
+              "profileIdName": null
+            },
+            {
+              "relId": "27447",
+              "relName": "CreateSBCampaign202307311550",
+              "profileId": "{{profile_id}}",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+全量states查询campaign树(不筛选模板)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单profile、全量5种states过滤查询campaign树，不筛选特定模板(tempId=0)。90天内samsclub平台该接口共46次真实调用，此场景占比约32.6%（15次）。注：profileIds替换为测试账号自身真实profileId，userIds替换为本账号历史调用同款真实值(root_user_id=93)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "samsclub",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "Paused",
+            "Live",
+            "Proposal",
+            "Completed",
+            "Scheduled"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+Live状态查询campaign树(不筛选模板)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单profile、仅Live状态过滤查询campaign树，不筛选特定模板(tempId=0)。90天内samsclub平台该接口共46次真实调用，此场景占比约28.3%（13次）。注：profileIds/userIds同上均替换为测试账号自身真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "samsclub",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "Live"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+Live状态+指定模板查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单profile、仅Live状态、并筛选指定模板查询campaign树。90天内samsclub平台该接口共46次真实调用，此场景占比约21.7%（10次）。注：profileIds/userIds替换为测试账号自身真实值，tempId替换为本账号专用fixture模板45058。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "samsclub",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": "{{fixture_template_id}}",
+          "states": [
+            "Live"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+全量states+指定模板查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单profile、全量5种states、并筛选指定模板查询campaign树。90天内samsclub平台该接口共46次真实调用，此场景占比约17.4%（8次）。注：profileIds/userIds替换为测试账号自身真实值，tempId替换为本账号专用fixture模板45058。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "samsclub",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": "{{fixture_template_id}}",
+          "states": [
+            "Paused",
+            "Live",
+            "Proposal",
+            "Completed",
+            "Scheduled"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。查询campaign存在冲突应用情况(只读)。90天内samsclub平台该接口共129次真实调用，请求体结构单一(仅campaignId+profileId)，占比100%（129次）。注：campaignId/profileId替换为测试账号自身可访问的真实值(56775/20322)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "samsclub",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。删除模板前检查是否具有删除权限(只读校验，不实际删除)。90天内samsclub平台该接口共3次真实调用(样本较少，已用全部命中条数)，请求体结构单一(单ids+单profileIds)，占比100%（3次）。注：ids替换为测试账号自身专用fixture模板45058，profileIds替换为测试账号自身真实profileId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "samsclub",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(applyLevels=1+2,不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。按applyLevels=[1,2]、不筛选states分页查询apply明细。90天内samsclub平台该接口共82次真实调用，此场景占比约79.3%（65次）。注：profileIds替换为测试账号自身可访问的8个真实profileId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": [],
+          "states": [],
+          "productLine": "samsclub",
+          "preferenceZone": "PST8PDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": null,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(仅applyLevels=1,不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。按applyLevels=[1]、不筛选states分页查询apply明细。90天内samsclub平台该接口共82次真实调用，此场景占比约13.4%（11次）。注：profileIds替换为测试账号自身真实profileId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "samsclub",
+          "preferenceZone": "CST6CDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": null,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 按applyItems/applyIds过滤查询(applyLevels=1+2)",
+    "description": "单接口测试：POST /dayparting/detailApply。按applyLevels=[1,2]并附带applyItems/applyIds过滤条件分页查询apply明细。90天内samsclub平台该接口共82次真实调用，此场景占比约7.3%（6次）。注：profileIds替换为测试账号自身可访问的8个真实profileId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "applyItems": [],
+          "states": [],
+          "productLine": "samsclub",
+          "preferenceZone": "Asia/Tokyo",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": null,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            },
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile维度campaign标签树",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。查询profile维度的campaign标签树(applyLevel=2)。90天内samsclub平台该接口共21次真实调用，请求体结构单一(isFilter=true,applyLevel=2,profileIds为空数组走全量)，占比100%（21次）。注：clientId/userIds替换为测试账号自身真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "samsclub",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询指定模板的操作日志(不筛选操作类型/操作人)。90天内samsclub平台该接口共3次真实调用(样本较少，已用全部命中条数)，请求体结构单一，占比100%（3次）。注：templateId替换为测试账号自身专用fixture模板45058。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "samsclub",
+          "preferenceZone": "PST8PDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。查询指定模板的可操作人列表(该接口参数通过queryString传递,body为空)。90天内samsclub平台该接口共3次真实调用(样本较少，已用全部命中条数)，占比100%（3次）。注：tempId替换为测试账号自身专用fixture模板45058。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=samsclub&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按单profile查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按单个profile查询模板名称列表。90天内samsclub平台该接口共125次真实调用(已排除clientId 62/3186噪音)，单profile场景占比约63.2%（79次）。注：profileIds替换为测试账号自身真实profileId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "samsclub",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按多profile批量查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按多个profile批量查询模板名称列表。90天内samsclub平台该接口共125次真实调用，多profile(批量)场景合计占比约36.8%（46次，profileIds数量2~18不等）。注：本case直接复用本账号(client 62)自身历史真实请求体，profileIds为本账号8个真实profile(已通过该接口真实调用验证,HTTP 200返回52条本账号模板)，未做任何替换。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "productLine": "samsclub",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaign查询其dayparting应用情况(只读)。90天内samsclub平台该接口共590次真实调用(已排除clientId 62/3186噪音)，请求体结构单一(仅campaignId+profileId)，占比100%（500条随机样本中）。注：campaignId/profileId替换为测试账号自身可访问的真实值(223567/12362，来自本账号历史调用配对样本)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "samsclub",
+          "campaignId": "{{real_campaign_id_2}}",
+          "profileId": "{{profile_id_2}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

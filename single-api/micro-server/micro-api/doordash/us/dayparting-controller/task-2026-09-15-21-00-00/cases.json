@@ -1,0 +1,1068 @@
+[
+  {
+    "name": "POST /bulk/verify/apply - 批量校验单个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验单个campaign是否可应用dayparting，真实流量中最常见的场景。500条随机样本中占比约89.0%（105次，90天内真实流量共118条）。campaignId/profileId为identity字段，已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}，不直接照抄ES样本中其他真实客户的原始值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 verify/apply（单campaign）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "doordash",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 批量校验多个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否可应用dayparting。500条随机样本中占比约11.0%（13次，90天内真实流量共118条）。campaignId/profileId为identity字段，已替换为本测试账号自有值；数组内重复占位第二个元素以保留\"批量多campaign\"的结构语义（本账号当前仅验证到1个真实可访问campaign）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 verify/apply（多campaign）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "doordash",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "doordash",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按单profile+模板查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按单个profile+模板查询apply列表(applyLevel=2)。500条随机样本中占比约35.7%（5次，90天内真实流量共14条，doordash平台本轮全部真实流量均为applyLevel=2，未出现applyLevel=1）。profileIds为identity字段已替换为本测试账号自有的{{profile_id}}；tempId为业务过滤字段（描述被查询的模板范围，非调用方identity），保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "doordash",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 10652,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按多profile+模板查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按多个profile+模板查询apply列表(applyLevel=2)，真实流量中最常见的场景。500条随机样本中占比约64.3%（9次，90天内真实流量共14条）。profileIds为identity字段已替换为本测试账号自有值，数组保留5元素结构重复占位以体现多profile查询意图；tempId为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "doordash",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 11730,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemIds查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按lineItemIds查询targeting汇总，真实流量中最常见的场景。500条随机样本中占比约86.7%（26次，90天内真实流量共30条）。lineItemIds内嵌的profileId为被查询line item的归属对象（业务引用字段，非调用方identity），保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum（lineItemIds）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "doordash",
+          "lineItemIds": [
+            {
+              "relId": "0f46a8a7-03bc-4a7d-bf0e-afee1488480d",
+              "relName": "US_HC_PLM_LDS_NA_EVG_SP_AT_ALL_PBC_CPT_NA_RFUS_EN_CAA DDA_Doordash_NA",
+              "profileId": "1251887368961523712",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 同时按lineItemIds和lineItemTags查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。同时按lineItemIds和lineItemTags查询targeting汇总。500条随机样本中占比约6.7%（2次，90天内真实流量共30条）。内嵌profileId为业务引用字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum（ids+tags）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "doordash",
+          "lineItemIds": [
+            {
+              "relId": "95c66e1d-5277-4628-9282-0a0165735e71",
+              "relName": "SP_SSMP_Juices_Manual",
+              "profileId": "1286684063817531392",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": [
+            {
+              "relId": "2089389090303307777",
+              "relName": "Auto",
+              "profileId": null,
+              "profileIdName": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 不带任何过滤条件查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。不带任何过滤条件查询(lineItemIds/lineItemTags均为空)。500条随机样本中占比约3.3%（1次，90天内真实流量共30条）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum（无过滤）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "doordash",
+          "lineItemIds": [],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemTags查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按lineItemTags查询targeting汇总。500条随机样本中占比约3.3%（1次，90天内真实流量共30条）。lineItemTags内嵌profileId为业务引用字段，doordash该场景ES样本中profileId为null（真实原样值），保留。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum（lineItemTags）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "doordash",
+          "lineItemIds": [],
+          "lineItemTags": [
+            {
+              "relId": "1946295308009119745",
+              "relName": "BTF_Automatic",
+              "profileId": null,
+              "profileIdName": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按多profile+ACTIVE状态过滤查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。多profile+ACTIVE状态过滤查询campaign树。500条随机样本中占比约28.9%（13次，90天内真实流量共45条）。identity字段(clientId/userIds/profileIds)已替换为本测试账号自有值({{client_id}}/{{user_id}}/{{profile_id}})，不直接照抄ES样本中其他真实客户的identity值；states/applyLevel/tempId/tagIds为业务过滤字段，保留ES真实值；profileIds数组保留2元素结构以体现多profile查询意图（本账号当前仅验证到1个真实可访问profile，重复占位）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree（多profile+ACTIVE）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "doordash",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "ACTIVE"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按多profile+全部状态过滤查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。多profile+全部状态过滤查询campaign树。500条随机样本中占比约28.9%（13次，90天内真实流量共45条）。identity字段(clientId/userIds/profileIds)已替换为本测试账号自有值，不直接照抄ES样本中其他真实客户的identity值；states为业务过滤字段，保留ES真实值；profileIds数组保留2元素结构占位体现多profile查询意图。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree（多profile+全部状态）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "doordash",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "tagIds": [],
+          "daypartingType": 1,
+          "isFilter": true,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "ACTIVE",
+            "PAUSED",
+            "INCOMPLETE",
+            "SCHEDULED",
+            "ENDED"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile+全部状态过滤查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。单profile+全部状态过滤查询campaign树。500条随机样本中占比约22.2%（10次，90天内真实流量共45条）。identity字段(clientId/userIds/profileIds)已替换为本测试账号自有值，不直接照抄ES样本中其他真实客户的identity值；states为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree（单profile+全部状态）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "doordash",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "tagIds": [],
+          "daypartingType": 1,
+          "isFilter": true,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "ACTIVE",
+            "PAUSED",
+            "INCOMPLETE",
+            "SCHEDULED",
+            "ENDED"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile+ACTIVE状态过滤查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。单profile+ACTIVE状态过滤查询campaign树。500条随机样本中占比约17.8%（8次，90天内真实流量共45条）。identity字段(clientId/userIds/profileIds)已替换为本测试账号自有值，不直接照抄ES样本中其他真实客户的identity值；states为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree（单profile+ACTIVE）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "doordash",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "ACTIVE"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile+ACTIVE&SCHEDULED状态过滤查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。单profile+按ACTIVE&SCHEDULED两种状态过滤查询campaign树。500条随机样本中占比约2.2%（1次，90天内真实流量共45条），占比恰好触及≥1%覆盖门槛，按规则纳入覆盖。identity字段(clientId/userIds/profileIds)已替换为本测试账号自有值，不直接照抄ES样本中其他真实客户的identity值；states为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree（单profile+ACTIVE&SCHEDULED）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "doordash",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "tagIds": [],
+          "daypartingType": 1,
+          "isFilter": true,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "ACTIVE",
+            "SCHEDULED"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。查询campaign冲突应用情况，真实流量中唯一的场景。500条随机样本中占比100%（11次，90天内真实流量共11条）。campaignId/profileId为identity字段，已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}，不直接照抄ES样本中其他真实客户的原始值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "doordash",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignTag/tree - 按clientId+userIds查询campaign标签树(不筛选profileIds/tagIds)",
+    "description": "单接口测试：POST /dayparting/campaignTag/tree。doordash平台真实调用全部按clientId+userIds维度查询(profileIds恒为空数组，非按profile过滤)，是唯一场景。500条随机样本中占比约100%（21次，90天内真实流量共21条）。identity字段(clientId/userIds)已替换为本测试账号自有值({{client_id}}/{{user_id}})，不直接照抄ES样本中其他真实客户的identity值；profileIds在ES样本中恒为空数组，保留ES真实值；tempId=0为该场景最高频取值(18/21)，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree（campaignTag）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignTag/tree",
+        "request_body": {
+          "productLine": "doordash",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。删除模板前置权限校验，真实流量中唯一的一次调用。500条随机样本中占比100%（1次，90天内真实流量共1条，样本较少）。identity字段(clientId/profileIds/userIds/advertiserIds)已按红线要求统一替换为本测试账号自有值；ids(待校验的模板id)本轮采用amazon/walmart平台已验证的更保守做法，替换为本账号自有的{{fixture_template_id}}(而非ES样本中其他真实客户的模板id)，避免对非本账号模板发起权限探测。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "doordash",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(多profile+仅applyLevels(1)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。分页查询apply明细，多profile+仅applyLevels(1)+不筛选状态，真实流量中最常见的场景。500条随机样本中占比约43.3%（29次，90天内真实流量共67条）。profileIds为identity字段已替换为本测试账号自有值，数组保留5元素结构占位；tempId为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply（多profile+levels1）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": [],
+          "productLine": "doordash",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 10482,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(多profile+applyLevels(1,2)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。分页查询apply明细，多profile+applyLevels(1,2)+不筛选状态。500条随机样本中占比约35.8%（24次，90天内真实流量共67条）。profileIds为identity字段已替换为本测试账号自有值，数组保留5元素结构占位；tempId为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply（多profile+levels1,2）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}",
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "doordash",
+          "preferenceZone": "PST8PDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 11731,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile+仅applyLevels(1)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。分页查询apply明细，单profile+仅applyLevels(1)+不筛选状态。500条随机样本中占比约14.9%（10次，90天内真实流量共67条）。profileIds为identity字段已替换为本测试账号自有值；tempId为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply（单profile+levels1）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": [],
+          "productLine": "doordash",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 11883,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile+applyLevels(1,2)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。分页查询apply明细，单profile+applyLevels(1,2)+不筛选状态。500条随机样本中占比约6.0%（4次，90天内真实流量共67条）。profileIds为identity字段已替换为本测试账号自有值；tempId为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply（单profile+levels1,2）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "doordash",
+          "preferenceZone": "CST6CDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 9441,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(不筛选操作类型)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询模板操作日志(不筛选操作类型/用户名)，真实流量中唯一的场景。500条随机样本中占比100%（3次，90天内真实流量共3条，样本较少）。templateId本轮采用amazon/walmart平台已验证的更保守做法，替换为本账号自有的{{fixture_template_id}}(而非ES样本中其他真实客户的templateId)，避免读取非本账号模板的操作历史。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "doordash",
+          "preferenceZone": "PST8PDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators?productLine=doordash&tempId={{fixture_template_id}} - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。查询模板可操作人列表，query参数productLine+tempId，请求体为空，真实流量中唯一的场景。500条随机样本中占比100%（3次，90天内真实流量共3条，样本较少）。tempId使用本账号自有模板{{fixture_template_id}}(而非ES样本中其他真实客户的tempId)，避免跨client查询。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 template/operators",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=doordash&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按多profile过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按多个profileId过滤查询模板名称列表，真实流量中最常见的场景。500条随机样本中占比约64.5%（91次，90天内真实流量共141条）。identity字段(clientId/profileIds/userIds/advertiserIds)已按红线要求统一替换为本测试账号自有值，不直接照抄ES样本中其他真实客户的identity值；其余业务字段保留ES真实结构与取值；profileIds数组保留2元素结构占位以体现多profile查询意图。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 templateNames（多profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id}}"
+          ],
+          "productLine": "doordash",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按单profile过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按单个profileId过滤查询模板名称列表。500条随机样本中占比约35.5%（50次，90天内真实流量共141条）。identity字段(clientId/profileIds/userIds/advertiserIds)已按红线要求统一替换为本测试账号自有值，不直接照抄ES样本中其他真实客户的identity值；其余业务字段保留ES真实结构与取值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 templateNames（单profile）",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "doordash",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaign查询dayparting应用，真实流量中唯一的场景。500条随机样本中占比100%（105次，90天内真实流量共105条）。campaignId/profileId为identity字段，已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}，不直接照抄ES样本中其他真实客户的原始值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "doordash",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

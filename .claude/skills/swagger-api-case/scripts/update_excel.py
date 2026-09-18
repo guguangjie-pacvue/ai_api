@@ -122,7 +122,7 @@ def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
     print(f'[模块汇总] WARNING: row not found for {swagger_title}/{module}[{env}]')
 
 # ── Phase 5.2 — 接口级场景覆盖（单列「场景覆盖」，多行文本）────────────────────
-def update_scenario_col(wb, swagger_sheet, env, cases, report):
+def update_scenario_col(wb, swagger_sheet, env, cases, report, platform=None):
     if swagger_sheet not in wb.sheetnames:
         print(f'[场景覆盖] sheet "{swagger_sheet}" not found, skip')
         return
@@ -174,6 +174,8 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
                         'path' in str(ws.cell(1, c).value or '').lower()), None)
     method_col = next((c for c in range(1, ws.max_column + 1)
                        if str(ws.cell(1, c).value or '').strip().lower() in ('method', '方法', 'http方法')), None)
+    platform_col = next((c for c in range(1, ws.max_column + 1)
+                        if 'Platform' in str(ws.cell(1, c).value or '')), None)
     if path_col is None:
         print(f'[场景覆盖] path column not found in {swagger_sheet}'); return
 
@@ -186,6 +188,12 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
     for r in range(2, ws.max_row + 1):
         if env_col and ws.cell(r, env_col).value not in (env, None, ''):
             continue
+        # 多平台服务（rule-api）：必须按平台列过滤，否则会把当前平台的场景文本
+        # 写到其它平台的同路径行上（历史 bug，曾导致 criteo 行显示 instacart 内容）。
+        if platform_col and platform:
+            row_platform = ws.cell(r, platform_col).value
+            if row_platform != platform:
+                continue
         path = ws.cell(r, path_col).value
         if not path:
             continue
@@ -240,7 +248,9 @@ def main():
 
     wb = openpyxl.load_workbook(args.excel)
     update_summary(wb, args.swagger_title, args.module, args.env, cases, report, endpoints)
-    update_scenario_col(wb, args.sheet_name, args.env, cases, report)
+    # swagger_title 对多平台服务（rule-api）传的就是平台名（如 criteo），用于按
+    # 平台列过滤场景覆盖写入行；标准服务的 sheet 没有 Platform 列，此参数会被忽略。
+    update_scenario_col(wb, args.sheet_name, args.env, cases, report, platform=args.swagger_title)
     # 原文件常被 Excel 打开占用：先存 tmp，再尝试替换；替换失败则保留 tmp 供手动合并
     import os, shutil
     tmp = args.excel.replace('.xlsx', '_tmp.xlsx')

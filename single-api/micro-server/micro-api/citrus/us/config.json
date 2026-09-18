@@ -1,0 +1,44 @@
+{
+  "name": "micro-api (citrus, us)",
+  "variables": {
+    "platform": "citrus",
+    "client_id": "62",
+    "profile_id": "0acae067-00b9-411f-a614-09ca7bc3a12b",
+    "profile_id_2": "fac3b50c-8a0c-4a11-b78c-0f3c35191825",
+    "user_id": "18589",
+    "real_campaign_id": "fd943b03-40a8-4b96-be2c-804908f0b7c2",
+    "period_date": "2026-08-01",
+    "fixture_template_id": "45061",
+    "root_user_id": "93",
+    "profile_ids_all": [
+      "fac3b50c-8a0c-4a11-b78c-0f3c35191825",
+      "0acae067-00b9-411f-a614-09ca7bc3a12b"
+    ],
+    "_note_profile_ids": "从ES查询clientId=62(autoui_acount本账号)近365天citrus真实历史调用中提取的本账号自身可访问的profileId(UUID格式，与samsclub的纯数字格式不同，与instacart同为UUID格式)。profile_id=0acae067-00b9-411f-a614-09ca7bc3a12b/profile_id_2=fac3b50c-8a0c-4a11-b78c-0f3c35191825均出自POST /dayparting/templateNames、/dayparting/campaign/tree等接口本账号历史请求体的profileIds数组(唯一一组组合)，已通过POST /dayparting/templateNames真实调用验证可访问(HTTP 200，返回40条本账号名下模板)。",
+    "_note_fixture_template_id": "id=45061, tempName='auto自动化专用勿删'，是autoui_acount(client 62)在citrus产品线下专用于自动化测试的模板(通过POST /dayparting/templateNames列表验证存在，且ES显示该账号历史上对此id反复调用updateTemplate/detailApply/deleteDetailApply等7次以上，命名与用法均与instacart/samsclub侧的同名fixture模板一致)，可安全用于只读校验类接口。",
+    "_note_real_campaign_id": "real_campaign_id=fd943b03-40a8-4b96-be2c-804908f0b7c2 与 profile_id=0acae067-00b9-411f-a614-09ca7bc3a12b 配对，campaign名为'AutoCitrusCampaign_20250518'(本账号专用测试campaign，命名自带Auto前缀)，来自本账号POST /findDayParting/campaign历史请求体(21次同款调用中的样本)，同一campaignId/profileId组合也出现在updateTemplate的历史请求体lineItemIds字段中。均为本账号(client 62)自身历史调用涉及的campaign，非其他真实客户数据。",
+    "_note_root_user_id": "root_user_id=93，来自本账号(client 62)登录JWT userInfo.RootUserId字段，及历史真实调用POST /dayparting/campaign/tree、/dayparting/profile/campaignTag/tree(isFilter=true)的请求体userIds字段首位，用于需要userIds过滤的查询类接口。",
+    "_note_profile_ids_all": "profile_ids_all为本账号(client 62)历史真实调用POST /dayparting/templateNames的完整profileIds数组(仅2个，citrus平台下本账号只绑定了2个profile)，已通过该接口真实调用验证可访问(HTTP 200，返回40条本账号名下模板)，用于多profile查询场景。"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "citrus"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "citrus"
+  }
+}

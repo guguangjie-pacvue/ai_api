@@ -1,0 +1,1229 @@
+[
+  {
+    "name": "POST /getHistoryList - 按具体规则下钻查看执行历史",
+    "description": "单接口测试：POST /getHistoryList。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(500条随机样本)。场景1：带mode=Auto+ruleDefinitionId，下钻查看某一具体规则的执行历史(不含includeZeroCount)。500条随机样本中占比约48.8%（244次）。ruleDefinitionId使用ES真实抽样规则{{real_rule_id}}(非测试账号自有，仅验证按规则过滤的结构正确性)，ownerIds替换为{{user_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getHistoryList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "endDate": "2026-07-15",
+          "prevEndDate": "2026-06-30",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "ruleDefinitionId": "{{real_rule_id}}",
+          "download": false,
+          "ruleType": [],
+          "ruleName": "Auto BidUp Profitable_14D",
+          "ignore": false,
+          "currency": "$",
+          "startDate": "2026-07-01",
+          "prevStartDate": "2026-06-24",
+          "includeZeroCount": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getHistoryList - 通用历史列表查询(带ruleName搜索)",
+    "description": "单接口测试：POST /getHistoryList。场景2：不带mode/ruleDefinitionId的通用历史列表查询，带ruleName关键字搜索(不下钻)。500条随机样本中占比约43.8%（219次）。ownerIds替换为{{user_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getHistoryList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "endDate": "2026-08-11",
+          "prevEndDate": "2026-07-27",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "download": false,
+          "ruleType": [],
+          "ruleName": "(Manual) Bid Decrease",
+          "ignore": false,
+          "currency": "$",
+          "startDate": "2026-07-28",
+          "prevStartDate": "2026-07-21",
+          "includeZeroCount": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getHistoryList - 下钻查询+includeZeroCount",
+    "description": "单接口测试：POST /getHistoryList。场景3：带mode=Auto+ruleDefinitionId下钻，同时includeZeroCount=true(含零计数结果)。500条随机样本中占比约4.2%（21次）。ruleDefinitionId使用{{real_rule_id}}，ownerIds替换为{{user_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getHistoryList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "endDate": "2026-07-23",
+          "prevEndDate": "2026-07-08",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "ruleDefinitionId": "{{real_rule_id}}",
+          "download": false,
+          "ruleType": [],
+          "ruleName": "Spruce SBA Ownership",
+          "ignore": false,
+          "currency": "$",
+          "startDate": "2026-07-09",
+          "prevStartDate": "2026-07-02",
+          "includeZeroCount": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getHistoryList - 空白查询(不带ruleName/下钻)",
+    "description": "单接口测试：POST /getHistoryList。场景4：不带ruleName、不下钻的空白查询(仅按日期范围，首次加载页面)。500条随机样本中占比约2.8%（14次）。ownerIds替换为{{user_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getHistoryList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "endDate": "2026-08-31",
+          "prevEndDate": "2026-06-30",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/New_York",
+          "fromSnapShot": false,
+          "download": false,
+          "ruleType": [],
+          "ruleName": "",
+          "ignore": false,
+          "currency": "$",
+          "startDate": "2026-07-01",
+          "prevStartDate": "2026-06-24",
+          "includeZeroCount": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingList - 按规则名搜索待处理列表",
+    "description": "单接口测试：POST /getPendingList。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(500条随机样本)。场景1：带ruleName关键词搜索过滤。500条随机样本中占比约88.8%（444次）。ownerIds替换为{{user_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getPendingList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleType": [],
+          "ruleName": "Polka Dog Audience Rule",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingList - 无过滤条件的空白搜索",
+    "description": "单接口测试：POST /getPendingList。场景2：不带ruleName关键词的空白搜索(打开页面首次加载)。500条随机样本中占比约11.2%（56次）。ownerIds替换为{{user_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getPendingList",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleType": [],
+          "ruleName": "",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingRuleNum - 待处理规则数量",
+    "description": "单接口测试：POST /getPendingRuleNum。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(2160次)。该接口无请求体(Swagger定义body为空，抽样500条全部为空body)。场景1(唯一场景)：空body调用。500条随机样本中占比约100%（500次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getPendingRuleNum",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingRuleNum",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - 不带profileIds过滤(仅按执行日志)",
+    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(500条随机样本)。场景1：不带profileIds过滤，仅按ruleExecutionLogId查询。500条随机样本中占比约98.6%（493次）。ruleExecutionLogId使用ES真实抽样值{{real_execution_log_id}}(非测试账号自有数据，实测对foreign执行日志返回code:200，仅断言code)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getProfiles",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - 带profileIds过滤",
+    "description": "单接口测试：POST /getProfiles。场景2：带profileIds过滤。500条随机样本中占比约1.4%（7次）。ruleExecutionLogId使用{{real_execution_log_id}}，profileIds为ES真实抽样值(非测试账号自有，仅验证按profile过滤的结构正确性，原样本含'-1'哨兵值，保留)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getProfiles",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [
+            "3805523144111305",
+            "-1"
+          ],
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertCount - 标准告警计数查询",
+    "description": "单接口测试：POST /history/getRuleAlertCount。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(726378次)。场景1：不带dismissedRuleIds的标准查询。500条随机样本中占比约98.8%（494次）。clientId替换为{{client_id}}，ownerIds替换为{{user_id}}(原样本ownerIds为数百个生产客户user的全选，已收敛为测试账号自身)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/history/getRuleAlertCount",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertCount",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "clientId": "{{client_id}}",
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "dismissedRuleIds": [],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertCount - 带dismissedRuleIds过滤",
+    "description": "单接口测试：POST /history/getRuleAlertCount。场景2：带dismissedRuleIds(已忽略规则)过滤。500条随机样本中占比约1.2%（6次）。clientId替换为{{client_id}}，ownerIds替换为{{user_id}}，dismissedRuleIds保留ES真实抽样值(非测试账号自有，仅验证按已忽略规则过滤的结构正确性)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/history/getRuleAlertCount",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertCount",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "clientId": "{{client_id}}",
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "dismissedRuleIds": [
+            1767329335786918000,
+            1762354456407519200
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleDeadDetail - 规则失效详情",
+    "description": "单接口测试：POST /history/getRuleDeadDetail。该接口ES无productLine字段，视同GET；近90天/180天全平台(排除测试账号)均为0调用，近730天发现40次真实调用，100%为同一结构(fromIndex分页,无ruleId/pageInfo字段)，已按实际观测结构全覆盖。样本时间跨度较大，场景覆盖可能不全。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/history/getRuleDeadDetail",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleDeadDetail",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ignore": false,
+          "timeZone": "America/Los_Angeles",
+          "currency": "$",
+          "fromIndex": 1,
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - 按规则+实体查询执行快照",
+    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(6700次)。场景1：entityIds非空(带具体实体过滤)。500条随机样本中占比约83.4%（417次），使用测试账号自身真实profile{{profile_id}}+entity{{target_id}}+ES真实抽样规则{{real_rule_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/queryRuleSnapshots",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/queryRuleSnapshots",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "batchIds": [
+            "00000000-0000-0000-0000-000000000000"
+          ],
+          "entityIds": [
+            "{{target_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - entityIds为空的批次级查询",
+    "description": "单接口测试：POST /queryRuleSnapshots。场景2：entityIds为空数组(仅按规则/批次查询，不限定具体实体)。500条随机样本中占比约16.6%（83次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/queryRuleSnapshots",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/queryRuleSnapshots",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "batchIds": [
+            "00000000-0000-0000-0000-000000000000"
+          ],
+          "entityIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAdGroups/{ruleExecutionLogId} - 按campaignIds过滤(不带profileIds)",
+    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线(180天内抽样，路径为解析后真实执行日志ID，已用wildcard-agg核实避免路径模板字面量误判)。场景1(唯一场景)：带campaignIds过滤，不带profileIds，抽样均为此模式。ruleExecutionLogId使用ES真实抽样值{{real_execution_log_id}}(非测试账号自有，仅验证结构正确性，实测对foreign执行日志返回code:200，仅断言code)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getAdGroups/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAdGroups/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": [
+            "275575170877404",
+            "11425804742429",
+            "193001405359615"
+          ],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaigns/{ruleExecutionLogId} - 无额外过滤(仅按执行日志)",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线(180天内多个真实执行日志抽样299条，已用wildcard-agg核实避免路径模板字面量误判)。场景1：不带profileIds过滤，仅按执行日志查询。299条真实样本中占比约93.3%（279次）。ruleExecutionLogId使用{{real_execution_log_id}}；实测对foreign执行日志返回code:200，仅断言code。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getCampaigns/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaigns/{ruleExecutionLogId} - 带profileIds过滤",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。场景2：带profileIds过滤。299条真实样本中占比约6.7%（20次）。profileIds为ES真实抽样值(非测试账号自有，仅验证按profile过滤的结构正确性)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getCampaigns/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [
+            "3209730641380639",
+            "4487963760100843"
+          ],
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaignTags/{ruleExecutionLogId} - 标准查询",
+    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线(180天内多个真实执行日志抽样263条，100%同一模式，已用wildcard-agg核实避免路径模板字面量误判)。场景1(唯一场景)：无额外过滤条件的标准查询。263条真实样本中占比约100%（263次）。ruleExecutionLogId使用{{real_execution_log_id}}；实测对foreign执行日志返回code:200，仅断言code。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getCampaignTags/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaignTags/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - Applied+Not_Applied双状态查询(默认全量视图)",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线(180天内多个真实执行日志抽样400条，已用wildcard-agg核实避免路径模板字面量误判)。场景1：applyStatusList=['Applied','Not_Applied']。400条真实样本中占比约65.2%（261次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getDetail/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "keywordsOperand": "Like",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 仅Not_Applied单状态查询(待处理明细)",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景2：applyStatusList=['Not_Applied']。400条真实样本中占比约18.5%（74次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getDetail/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Not_Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "keywordsOperand": "Like",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": [],
+          "applyStatus": "Not_Applied"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - Applied+Ignore+Not_Applied三状态查询",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景3：applyStatusList=['Applied','Ignore','Not_Applied']。400条真实样本中占比约7.5%（30次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getDetail/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Ignore",
+            "Not_Applied",
+            "Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 空applyStatusList查询(全量不筛状态)",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景4：applyStatusList=[]。400条真实样本中占比约4.2%（17次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getDetail/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "keywordsOperand": "Like",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 仅Ignore单状态查询(忽略明细)",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景5：applyStatusList=['Ignore']。400条真实样本中占比约3.0%（12次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getDetail/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Ignore"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": true,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 仅Applied单状态查询(已生效明细)",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景6：applyStatusList=['Applied']。400条真实样本中占比约1.2%（5次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}。注：另有0.2%(1次)的['Ignore','Not_Applied']组合占比<1%，按规则舍弃不生成。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getDetail/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 100
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "keywordsOperand": "Like",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": [],
+          "applyStatus": "Applied"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getLineItems/{ruleExecutionLogId} - 按campaignIds查询行项目",
+    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线(180天内wildcard-agg共58次调用，排除测试账号后33条真实客户样本，已用wildcard-agg核实避免路径模板字面量误判)。场景1(唯一场景)：带campaignIds过滤，不带profileIds，33条真实样本100%为此模式。33条真实样本中占比约100%（33次）。ruleExecutionLogId使用{{real_execution_log_id}}；实测对foreign执行日志返回code:200，仅断言code。样本量较小，场景覆盖可能不全。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/getLineItems/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getLineItems/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "profileIds": [],
+          "currency": "$",
+          "campaignIds": [
+            "835563932219695104"
+          ],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/export/{ruleExecutionLogId} - Budget Usage汇总报表导出",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线(180天内wildcard-agg共387次调用，排除测试账号后仅5条真实客户样本，样本很小)。场景1：exportHeaders为Campaign维度Budget Usage汇总报表。5条真实样本中占比约40%（2次）。实测返回二进制xlsx文件(而非JSON)，使用run_cases.py内建$binary断言校验文件大小。ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。样本量很小，场景覆盖可能不全。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/history/export/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "EN",
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "exportHeaders": [
+            "Campaign",
+            "Profile",
+            "Campaign Type",
+            "Spend",
+            "Budget Usage",
+            "ROAS",
+            "Campaign Target ROAS",
+            "Change Result"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/export/{ruleExecutionLogId} - Targeting维度审计报表导出",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。场景2：exportHeaders为Targeting/AdGroup维度审计报表，与场景1属不同的报表内容维度。5条真实样本中占比约60%（3次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}(原样本为数百个生产客户profile的全选，已收敛为测试账号自身)。实测返回二进制xlsx文件，使用$binary断言。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/history/export/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "ZH",
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "exportHeaders": [
+            "Targeting",
+            "Campaign",
+            "AdGroup",
+            "Match Type",
+            "ACOS",
+            "Change Result",
+            "State"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /pending/export/{ruleExecutionLogId} - Keyword竞价调整审计报表导出",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线(180天内wildcard-agg共336次调用，排除测试账号后仅6条真实客户样本，样本很小)。场景1：exportHeaders为Keyword维度竞价(Bid)调整审计报表。6条真实样本中占比约50%（3次）。ownerIds替换为{{user_id}}，实测返回二进制xlsx文件，使用$binary断言。样本量很小，场景覆盖可能不全。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/pending/export/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/pending/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "EN",
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "exportHeaders": [
+            "Keyword",
+            "Source Campaign",
+            "Source AdGroup",
+            "Destination Campaign",
+            "Destination AdGroup",
+            "Match Type",
+            "ROAS",
+            "Sales",
+            "Spend",
+            "Bid",
+            "State",
+            "Note"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /pending/export/{ruleExecutionLogId} - PAT来源/目标审计报表导出",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。场景2：exportHeaders为PAT来源/目标Campaign+AdGroup审计报表(含Clicks/Orders列变体)，与场景1属不同的报表内容维度。6条真实样本中占比约50%（3次，含近似列组合变体合并统计）。ownerIds替换为{{user_id}}，profileIds替换为{{profile_id}}，实测返回二进制xlsx文件，使用$binary断言。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "/pending/export/{ruleExecutionLogId}",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/pending/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Not_Applied",
+            "Applied",
+            "Ignore"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "language": "EN",
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "exportHeaders": [
+            "PAT",
+            "Source Campaign",
+            "Source AdGroup",
+            "Destination Campaign",
+            "Destination AdGroup",
+            "Clicks",
+            "Orders",
+            "Match Type",
+            "State",
+            "Note"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "keywordsOperand": "Like",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1000
+          }
+        }
+      }
+    ]
+  }
+]

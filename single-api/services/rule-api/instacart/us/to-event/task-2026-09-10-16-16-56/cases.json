@@ -1,0 +1,140 @@
+[
+  {
+    "name": "POST /event/getRuleTypes - 默认调用(无入参)",
+    "description": "单接口测试：POST /event/getRuleTypes。获取系统支持的规则类型枚举列表，供事件消费方或前端初始化使用，Swagger无声明参数，请求体为空。该接口90天ES真实样本(301次调用)结构与平台无关，跨平台通用，占比约100%。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则类型列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleCountByCampaignIds - 测试账号真实campaign(instacart)",
+    "description": "单接口测试：POST /event/getRuleCountByCampaignIds。按CampaignId列表查询各Campaign关联的规则数量，供事件消费方使用。该接口ES近90天共13次调用，body无productLine/平台标识字段，且样本profileId均为数字型(amazon风格)，未出现instacart(UUID风格profileId)真实调用，按walmart已验证结构(targetIds+profileIds+targetType)套用instacart真实campaign({{real_campaign_id}})+profile({{profile_id}})构造。实测响应code:200、data:\"0\"，为该campaign下真实规则计数结果(该campaign暂无关联规则)，非接口错误。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按CampaignId查询规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByCampaignIds",
+        "request_body": {
+          "targetIds": [
+            "{{real_campaign_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "targetType": "Campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleCountByUserIds - 按userId统计instacart规则数量",
+    "description": "单接口测试：POST /event/getRuleCountByUserIds。按用户ID列表统计各用户在指定时间范围内的规则数量。该接口ES近90天500条随机样本中body.productLine=instacart的调用占比约1%（5次），确认为真实存在场景(profileId为UUID格式，符合instacart真实profile样式)，使用测试账号真实user_id({{user_id}})+profile_id({{profile_id}})套用该结构。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按UserId查询规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByUserIds",
+        "request_body": {
+          "productLine": "instacart",
+          "clientId": "{{client_id}}",
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleDefinition - 测试账号真实instacart规则",
+    "description": "单接口测试：POST /event/getRuleDefinition。按ruleIds批量查询规则完整定义，供事件消费方使用。该接口90天ES调用量极高(约352万次)，但body只含ruleIds(雪花ID)无平台标识字段，无法按instacart过滤流量；使用测试账号真实存在的instacart规则({{real_rule_id}})构造，参照walmart已验证结论：响应体为裸数组(不含code/data/msg包装)。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则定义",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleDefinition",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$is_array": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/clearCacheTypes - 清除规则缓存类型(无ES流量)",
+    "description": "单接口测试：POST /event/clearCacheTypes。触发清除规则相关缓存，供内部事件消费方调用，Swagger无声明参数，请求体为空。该接口近90天ES无调用记录(0次)。属只读缓存清理操作，无持久数据变更，不影响其他测试用例，无需回滚，正常执行。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "清除规则缓存类型",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/clearCacheTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

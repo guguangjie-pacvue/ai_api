@@ -1,0 +1,55 @@
+[
+  {
+    "name": "POST /event/getRuleDefinition - 按ruleIds查询规则定义",
+    "description": "单接口测试：POST /event/getRuleDefinition。该接口请求体不含productLine字段(全平台通用，无法按平台归因，按规则使用全平台真实样本作为基线，适用于包括ebay在内的所有平台)，近180天全平台真实样本(500条抽样,已排除测试账号)中ruleIds数组长度分布：单ruleId 449条(89.8%)最高频，其余为21个(6.4%)/9个(1.8%)/17个(0.8%)/41个(0.8%)/181个(0.4%)等批量查询，均为同一批量查询操作的不同数量，无独立业务意图差异，故仅覆盖占比最高的单ruleId场景。真实ruleId均属于其他真实客户(如clientId 1583/4693/4235等)而非QA测试账号(ebay/client 62)所有，为避免跨客户数据依赖，测试传入不存在的占位ruleId('1')，与此前target/doordash/mercado platform一致的既定处理方式。500条随机样本中占比约89.8%（449次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则定义",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleDefinition",
+        "request_body": {
+          "ruleIds": [
+            "1"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$is_array": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleTypes - 默认调用(无入参)",
+    "description": "单接口测试：POST /event/getRuleTypes。Swagger无声明requestBody，该接口不含productLine字段(全平台通用，无法按平台归因，按规则使用全平台真实样本作为基线，适用于包括ebay在内的所有平台)，ES真实调用body均为空，近180天全平台(不区分平台)共592次调用，抽样均为空body，占比100%，已全覆盖唯一真实场景。500条随机样本中占比约100%（592次全平台）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则类型列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

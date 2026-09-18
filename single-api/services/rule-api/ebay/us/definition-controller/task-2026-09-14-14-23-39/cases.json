@@ -1,0 +1,1813 @@
+[
+  {
+    "name": "POST /definition - 创建Keyword类型规则(ebay平台唯一真实模式,含后置删除,可重复)",
+    "description": "单接口测试：POST /definition。ebay平台90天窗口内该接口仅2条真实客户调用(clientId=3655/4572,已排除内部账号62/3186)，2条均为ruleType=Keyword/mode=Auto/targetLevel=Campaign结构，占比100%(2/2)——ebay流量极稀薄，这2条即代表该平台当前全部真实使用模式，未借用其他平台真实请求体伪造。targetInfo使用config真实fixture(target_id/profile_id，源自clientId=62自身历史ebay editRule样本，与真实ebay数据结构一致)。创建后查询提取ruleId并归档删除，保证可重复执行。500条随机样本中占比约100%(2次，ebay平台维度)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ebay Keyword规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_CreateKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_CreateKeyword_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_CreateKeyword_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "create_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{create_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/{ruleId} - 查询自建规则详情(自包含,含后置删除,可重复)",
+    "description": "单接口测试：GET /definition/{ruleId}。该接口全平台GET流量巨大(730天窗口/definition/前缀数字ID路径命中数千次)但ruleId为数字自增ID,ES无法按平台归因；且路径为模板化ID，query_es对urlReferrer.keyword的精确term匹配无法命中真实样本，已用es_helper wildcard-agg确认。按doordash/target先例，自建一条ebay规则后用其真实ruleId验证GET详情返回，随后归档删除，保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于GET验证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_GetById_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_GetById_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_GetById_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "get_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "GET 定义详情",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{get_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{get_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeOwners - 变更自建规则负责人(自包含,可重复)",
+    "description": "单接口测试：POST /definition/changeOwners。该接口请求体不含productLine字段(仅ruleIds/userName/userId,session范围调用,无法按平台归因)，按GET同等对待使用全平台90天基线(69条样本)，单ruleId占比62.3%(43/69)为主，属≥1%场景。本case自建临时ebay规则后，将其owner显式设置为测试账号自身用户({{user_id}}/autoui_acount)，验证成功后归档删除。500条随机样本中占比约62.3%(43次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于变更负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_ChangeOwners_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_ChangeOwners_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_ChangeOwners_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "co_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "变更规则负责人",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeOwners",
+        "request_body": {
+          "ruleIds": [
+            "{{co_rule_id}}"
+          ],
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{co_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 暂停自建规则(isPaused:true,自包含,可重复)",
+    "description": "单接口测试：POST /definition/changeStatus。该接口请求体不含productLine字段(仅ruleIds/isPaused/isDelete，无法按平台归因)，按全平台30天基线(300条样本)统计，isPaused:true(单ruleId)占比49.3%(148/300)为最高频模式。本case自建临时ebay规则后暂停，GET验证isPaused=true，随后归档删除，保证可重复执行。500条随机样本中占比约49.3%(148次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于暂停测试",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_PauseStatus_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_PauseStatus_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_PauseStatus_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "pause_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "暂停规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{pause_rule_id}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{pause_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{pause_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 恢复自建规则(isPaused:false,自包含,可重复)",
+    "description": "单接口测试：POST /definition/changeStatus。同上全平台30天基线，isPaused:false(单ruleId)占比25.3%(76/300)，属≥1%独立场景。本case自建临时ebay规则后先暂停再恢复，GET验证isPaused=false，随后归档删除，保证可重复执行。500条随机样本中占比约25.3%(76次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于恢复测试",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_ResumeStatus_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_ResumeStatus_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_ResumeStatus_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "resume_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "前置-先暂停规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "恢复规则(isPaused:false)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已恢复(isPaused:false)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{resume_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": false
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{resume_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/checkRuleName - 检查未占用规则名(不带id,可重复)",
+    "description": "单接口测试：POST /definition/checkRuleName。该接口请求体绝大多数不含productLine字段(90396条全平台样本中仅2106条含该字段，且从未见ebay取值)，按平台非归因场景处理，使用全平台90天基线(200条样本)，不带id(新建校验)场景占比35.5%(71/200)，属≥1%场景。直接检查一个未使用过的规则名，无副作用可重复执行。500条随机样本中占比约35.5%(71次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "检查规则名(新建场景)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/checkRuleName",
+        "request_body": {
+          "emailOption": "NoEmails",
+          "ruleName": "TC_Ebay_CheckRuleName_NotExist_Probe",
+          "ruleNames": [
+            "TC_Ebay_CheckRuleName_NotExist_Probe"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/checkRuleName - 检查规则名(带id排除自身,自包含,可重复)",
+    "description": "单接口测试：POST /definition/checkRuleName。同上全平台90天基线，带id(编辑场景,排除自身)占比64.5%(129/200)为最高频模式。本case自建临时ebay规则后，用其真实ruleId+自身ruleName调用checkRuleName(验证排除自身逻辑不误判占用)，随后归档清理。500条随机样本中占比约64.5%(129次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于checkRuleName(带id)验证",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_CheckRuleName_WithId_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_CheckRuleName_WithId_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_CheckRuleName_WithId_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "crn_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "检查规则名(编辑场景,排除自身)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/checkRuleName",
+        "request_body": {
+          "emailOption": "NoEmails",
+          "ruleName": "TC_Ebay_CheckRuleName_WithId_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_CheckRuleName_WithId_Cleanup"
+          ],
+          "id": "{{crn_rule_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{crn_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/commerceRuleClient - 默认调用(无入参)",
+    "description": "单接口测试：GET /definition/commerceRuleClient。该接口无请求体，90天窗口内全平台基线13次调用，均为无参默认调用，占比100%。直接调用验证返回结构。500条随机样本中占比约100%(13次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleClient",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleClient",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - By Client维度报表(可重复)",
+    "description": "单接口测试：POST /definition/commerceRuleReport。该接口请求体不含productLine字段，730天全平台基线(37条样本)中commerceRuleReportGroupBy=By Client占比91.9%(34/37)为最高频模式。直接调用报表查询(只读，无副作用)，可重复执行。500条随机样本中占比约91.9%(34次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleReport(By Client)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "endDate": "2026-09-12",
+          "prevEndDate": "2026-09-05",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Client",
+          "startDate": "2026-09-06",
+          "prevStartDate": "2026-08-30",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - By Rule Name维度报表(真实缺陷,已复核确认)",
+    "description": "单接口测试：POST /definition/commerceRuleReport。同上730天全平台基线，commerceRuleReportGroupBy=By Rule Name占比8.1%(3/37)，属≥1%独立场景。实测发现：无论用ES真实样本日期窗口(2026-07-19~2026-07-25)还是当前最近窗口(2026-09-06~2026-09-12，与本账号By Client场景同窗口，By Client在该窗口返回200正常)，测试账号(clientId=62)在By Rule Name分组下均稳定返回405(msg为null，无异常堆栈文本)，而By Client用完全相同账号/相近窗口稳定返回200正常数据。已用两个不同日期窗口复核确认为服务端针对该账号的真实缺陷（与target/mercado平台agent在同类账号上独立发现的By Rule Name分组405问题同属一类，但本次响应msg为空，未捕获到具体异常文本），非本次用例构造问题，故按实际响应(code:405)固化为回归用例。500条随机样本中占比约8.1%(3次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleReport(By Rule Name)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "endDate": "2026-07-25",
+          "prevEndDate": "2026-07-18",
+          "timeZone": "America/Los_Angeles",
+          "clientIds": [],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Rule Name",
+          "prevStartDate": "2026-07-12",
+          "startDate": "2026-07-19",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑自建Keyword规则(自包含,可重复)",
+    "description": "单接口测试：POST /definition/editRule。ebay平台90天窗口内该接口共7条真实客户调用(clientId=3655为主)，730天窗口内clientId=62自身历史也存在2条真实ebay editRule记录(ruleType=Listing/Keyword，config.json的target_id/profile_id fixture即源自其中一条)，均为mode=Auto、targetLevel=Campaign结构。本case自建Keyword规则(frequency=Weekly)后，用相同请求体+真实id字段调用editRule将frequency改为Daily，GET验证frequency已变更，随后归档删除。500条随机样本中占比约100%(7次，ebay平台维度，mode=Auto为唯一真实模式)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建待编辑的Keyword规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_EditKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_EditKeyword_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_EditKeyword_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "er_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑规则(frequency: Weekly -> Daily)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Daily",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 6,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_EditKeyword_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_EditKeyword_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": [],
+          "id": "{{er_rule_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证frequency已变更为Daily",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{er_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "frequency": "Daily"
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{er_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Auto模式全量导出(不带ruleType/ruleIds过滤,可重复)",
+    "description": "单接口测试：POST /definition/export。该接口请求体不含productLine字段，全平台730天基线(100条样本)中mode=Auto且不带ruleType/ruleIds过滤占比66.0%(66/100)为最高频模式。ownerIds/managedProfileIds使用config真实fixture(user_id/profile_id)替代真实客户数组，避免借用其他客户身份数据。只读导出，可重复执行。500条随机样本中占比约66.0%(66次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(Auto,全量)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "download": true,
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": [],
+          "mode": "Auto",
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Manual模式全量导出(可重复)",
+    "description": "单接口测试：POST /definition/export。同上全平台730天基线，mode=Manual且不带过滤占比12.0%(12/100)，属≥1%独立场景。只读导出，可重复执行。500条随机样本中占比约12.0%(12次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(Manual,全量)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "download": true,
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": [],
+          "mode": "Manual",
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Auto模式+ruleType过滤导出(可重复)",
+    "description": "单接口测试：POST /definition/export。同上全平台730天基线，mode=Auto+ruleType过滤(真实值Negative Targeting)占比2.0%(2/100)，属≥1%独立场景。只读导出，可重复执行。500条随机样本中占比约2.0%(2次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(Auto,ruleType过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "download": true,
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": [],
+          "mode": "Auto",
+          "ruleType": [
+            "Negative Targeting"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Commerce类规则导出(ruleType过滤,可重复)",
+    "description": "单接口测试：POST /definition/export。同上全平台730天基线，mode=AutoCommerce+ruleType=[Commerce,Inventory,Competitor]占比2.0%(2/100)，属≥1%独立场景。只读导出，可重复执行。500条随机样本中占比约2.0%(2次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(Commerce类)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "download": true,
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": [],
+          "mode": "AutoCommerce",
+          "ruleType": [
+            "Commerce",
+            "Inventory",
+            "Competitor"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - Auto模式+ruleIds过滤导出(自包含,可重复)",
+    "description": "单接口测试：POST /definition/export。同上全平台730天基线，mode=Auto+带ruleIds过滤占比16.0%(16/100)，属≥1%独立场景。本case自建一条临时ebay规则获取真实ruleId后按ruleIds过滤导出，验证成功后归档删除。500条随机样本中占比约16.0%(16次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时规则用于ruleIds过滤导出",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Weekly",
+          "productLine": "ebay",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "dayOfWeek": 7,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ACOS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "0.15",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.2,
+                "percentage": 3,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "ruleType": "Keyword",
+          "ruleName": "TC_Ebay_ExportByIds_Cleanup",
+          "ruleNames": [
+            "TC_Ebay_ExportByIds_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Ebay_ExportByIds_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "ebay",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "exp_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "导出规则列表(Auto,ruleIds过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "language": "EN",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [],
+          "frequency": [],
+          "fromSnapShot": false,
+          "download": true,
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "ruleNameSearchOperand": "LikeOr",
+          "status": [],
+          "mode": "Auto",
+          "ruleType": [],
+          "ruleIds": [
+            "{{exp_rule_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除(isDelete+isPaused)临时规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{exp_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export/commerceRuleReport - By Client维度导出(唯一真实模式,可重复)",
+    "description": "单接口测试：POST /definition/export/commerceRuleReport。该接口全平台730天基线中仅1条非测试账号真实调用记录(其余为内部账号62/3186的历史探测)，为commerceRuleReportGroupBy=By Client结构，占比100%(1/1)——流量极稀薄，该1条即代表当前唯一真实使用模式，未编造凑数。只读导出，可重复执行。500条随机样本中占比约100%(1次，全平台基线)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 export/commerceRuleReport(By Client)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "endDate": "2026-01-31",
+          "prevEndDate": "2026-01-24",
+          "timeZone": "America/Los_Angeles",
+          "clientIds": [],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Client",
+          "startDate": "2026-01-25",
+          "prevStartDate": "2026-01-18",
+          "status": [
+            "Active"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  }
+]

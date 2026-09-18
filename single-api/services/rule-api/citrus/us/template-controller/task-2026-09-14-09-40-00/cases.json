@@ -1,0 +1,748 @@
+[
+  {
+    "name": "POST /template/getCategory - 默认查询(无过滤)",
+    "description": "单接口测试：POST /template/getCategory。该POST接口无法用ES按citrus平台过滤流量(body无productLine字段)，按约定使用全平台500条样本挖掘场景：ruleType=[](无过滤)组合占36/500=7.2%，属于真实高频场景(≥1%)，且与citrus账号直接实测一致(实测返回4条真实分类：QA_Citrus_Fixture_Category/Rule Kickstart/latata/campaign_rule1)。creator/onlyFavorite在500条样本中几乎恒为[]/false，非有效划分维度。500条随机样本中占比约7.2%（36次）。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultCategory - 默认查询(真实body结构defaultCategory=false)",
+    "description": "单接口测试：POST /template/getDefaultCategory。该POST接口无法按citrus平台过滤ES流量，全平台29条样本100%一致为{creator:[],onlyFavorite:false,defaultCategory:false,ruleType:[]}——注意真实流量body里的defaultCategory字段固定是false(不是true)，是否返回默认分类完全由URL路径决定，与body里的该字段无关；这与其他平台既有case文件里假设defaultCategory:true的写法不同，本次以ES真实值为准。citrus账号直接实测：code:200，返回1条全局默认分类(Rule Kickstart, id=1912046024318316545, canDelete:false, accessibleClientIds:null)。该接口真实调用仅1种模式，已全覆盖。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultTemplate - 默认查询(真实body结构+真实categoryId)",
+    "description": "单接口测试：POST /template/getDefaultTemplate。全平台35条ES样本中34条(97%)结构为{creator:[],onlyFavorite:false,defaultCategory:false,ruleType:[],categoryId:<某默认分类id>}——同样确认body.defaultCategory真实值固定为false，且真实调用会带categoryId过滤到具体默认分类。citrus账号直接实测：categoryId使用本账号真实默认分类id(1912046024318316545, Rule Kickstart)，code:200，返回该分类下的全局共享默认模板列表(记录clientId均为null)。该接口近90天全平台总命中数仅35条(样本量本身小于500)，占比约97.1%（34次/35条）。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [],
+          "categoryId": "1912046024318316545"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /template/getOwners - 默认调用(无入参)",
+    "description": "单接口测试：GET /template/getOwners。Swagger无声明参数，GET请求ES queryString恒为空、不区分平台，采用全平台真实调用模式(近90天1986次，均为无入参调用)。citrus账号直接实测：code:200，返回3条真实owner记录(Pacvue Default/yinzixin/autoui_acount)。该接口真实调用仅1种模式，已全覆盖。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询模板所有者列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getOwners",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getRecommendation - 默认查询(复现真实缺陷)",
+    "description": "【真实后端缺陷，非测试构造错误】单接口测试：POST /template/getRecommendation。全平台500条ES样本100%body为{\"defaultCategory\": false}(唯一模式，无creator/onlyFavorite/ruleType/templateId字段，比其他平台既有case文件构造的body更简单，以本次ES真实值为准)。citrus账号直接实测：返回code:405，服务端SQL异常\"...java.sql.SQLSyntaxErrorException...near '))' at line 3...RuleAutomationMapper.java\"，SQL为\"...FROM rule_automation WHERE (rule_template_id IN ())\"——服务端在推荐模板候选集为空时拼接出了非法的SQL IN()语句。该缺陷已在walmart/instacart/target/kroger/chewy平台的既有case文件中复现过，本次在citrus平台用真实ES body再次独立复现，确认是跨平台共性缺陷。断言按正确业务预期写(code:200)，实际会FAIL，如实记录缺陷，不修改断言掩盖问题。该接口真实调用仅1种模式，已全覆盖。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询推荐模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getRecommendation",
+        "request_body": {
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - ruleType=Keyword(citrus账号真实存量)",
+    "description": "单接口测试：POST /template/getTemplate。该POST接口无法用ES按citrus平台归因(body无productLine字段，全平台混合样本里的ruleType字符串本质是各平台各自的枚举术语，不能直接套用到citrus)，改为直接统计citrus账号(client_id=62)当前全部12条非默认模板的真实ruleType分布：Keyword 5条(41.7%，含QA_Citrus_Fixture_Template)、Campaign 7条(58.3%)，两种均需覆盖。本场景ruleType=Keyword。citrus测试账号直接实测：code:200，返回5条真实模板。citrus平台，真实账号验证+账号真实数据统计。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Keyword"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - ruleType=Campaign(citrus账号真实存量)",
+    "description": "单接口测试：POST /template/getTemplate。citrus账号真实存量ruleType分布场景之二：Campaign占7/12(58.3%)。citrus测试账号直接实测：code:200，返回7条真实模板。citrus平台，真实账号验证+账号真实数据统计。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Campaign"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板(真实body结构)",
+    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。该接口ES近90天全平台仅2条命中(均为同一条amazon->walmart的跨平台分享记录，clientId=4328属于其他真实客户，不可挪用到citrus测试账号下)，其真实字段结构为{sourceProductLine, retailers[], clientId, templateIds[]}(与本模块另一同schema的旧case文件里使用targetProductLine的写法不同，本次以ES真实字段名为准)。改用citrus测试账号自身真实模板({{fixture_template_id}})+真实client_id构造该场景，验证接口基础可用性：citrus测试账号直接实测code:200，返回1条retailer=citrus的模板详情(非空，说明本账号下该模板确实可被查询到)。该接口真实调用仅1种模式(全平台口径)，已全覆盖；citrus平台专属流量为0，已用真实账号数据验证结构可用性。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询DirectShare模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromDirectShare",
+        "request_body": {
+          "sourceProductLine": "{{platform}}",
+          "retailers": [
+            "{{platform}}"
+          ],
+          "clientId": "{{client_id}}",
+          "templateIds": [
+            "{{fixture_template_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplateListFromSharePass - 创建真实SharePass后查询(可重复)",
+    "description": "单接口测试：POST /template/getTemplateListFromSharePass。全平台38条ES样本100%一致为{sharePassId, targetProductLine}两字段(无clientId，与本模块另一同schema旧case文件额外带clientId的写法不同，本次以ES真实字段集为准)。为避免使用自造/虚构sharePassId，串联同服务share-pass-controller模块的真实创建结构 POST /sharePass/create(targetType=rule，使用citrus测试账号真实模板{{fixture_template_id}})产生一个真实sharePassId，再用该真实ID+真实字段结构调用本接口，最后调用POST /sharePass/delete清理，保证用例可重复执行、不留残留分享记录。citrus平台，真实sharePass生命周期验证(已直接调用API验证整套流程可行且已清理)。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建真实SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/create",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "timeZone": "America/Los_Angeles",
+          "targetType": "rule",
+          "list": [
+            {
+              "templateId": "{{fixture_template_id}}",
+              "type": 1
+            }
+          ],
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "tpl_share_pass_id": "data[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "通过分享密码获取模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromSharePass",
+        "request_body": {
+          "sharePassId": "{{tpl_share_pass_id}}",
+          "targetProductLine": "{{platform}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-删除SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/delete",
+        "request_body": [
+          "{{tpl_share_pass_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "模板生命周期(创建/编辑/收藏/移动/删除) - citrus",
+    "description": "单接口测试：串联 POST /template/category(创建2个专属临时分类A/B) → POST /template(创建模板,ruleType使用citrus账号已验证真实有效值Keyword) → POST /template/getTemplate(查询新建ID) → POST /template/editTemplate → POST /template/addFavorite(addFavorite=true,defaultTemplate=false——仅覆盖收藏自建模板场景，ES里addFavorite同时命中的defaultTemplate=true场景(收藏全局默认模板)因涉及全局共享模板池，出于安全考虑不覆盖，理由同editDefaultTemplate等5个跳过接口) → POST /template/moveTemplate(移动到分类B) → DELETE /template/{templateId} → DELETE /template/category/{categoryId}(A) → DELETE /template/category/{categoryId}(B)。全程只使用本次自建的QA_Citrus_Test_*临时模板/分类，不触碰fixture_template_id/fixture_category_id或Rule Kickstart/latata/campaign_rule1等既有真实数据。已直接调用API验证整套流程可行且已清理，citrus账号存量数据(4分类/12模板)执行前后一致。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建临时分类A(容纳新建模板)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "QA_Citrus_Test_Category_A",
+          "description": "citrus swagger-api-case throwaway category A (safe to delete)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "创建临时分类B(移动目的地)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "QA_Citrus_Test_Category_B",
+          "description": "citrus swagger-api-case throwaway category B (safe to delete)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询A/B分类的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_category_a_id": "data[name=QA_Citrus_Test_Category_A].id",
+          "created_category_b_id": "data[name=QA_Citrus_Test_Category_B].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "创建模板(ruleType=Keyword,放入分类A)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template",
+        "request_body": {
+          "templateName": "QA_Citrus_Test_Template",
+          "description": "citrus swagger-api-case throwaway template (safe to delete)",
+          "categoryId": "{{created_category_a_id}}",
+          "ruleType": "Keyword",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_qacitrus",
+                    "value": "4",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 10,
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建模板的ID(按ruleType=Keyword+分类A过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Keyword"
+          ],
+          "categoryId": "{{created_category_a_id}}"
+        },
+        "extract_vars": {
+          "created_template_id": "data[templateName=QA_Citrus_Test_Template].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "templateName": "QA_Citrus_Test_Template_Edited",
+          "description": "citrus swagger-api-case throwaway template (edited)",
+          "categoryId": "{{created_category_a_id}}",
+          "ruleType": "Keyword",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_qacitrus",
+                    "value": "5",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 12,
+                "percentage": 12,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "收藏模板(自建模板,非默认模板)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/addFavorite",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "addFavorite": true,
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "移动模板到分类B",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/moveTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "categoryId": "{{created_category_b_id}}",
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类A",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_a_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类B",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_b_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "分类生命周期(创建/编辑/删除) - citrus",
+    "description": "单接口测试：串联 POST /template/category(创建,真实ES body结构{name,description,defaultCategory}) → POST /template/getCategory(查询新建ID，创建接口本身不返回ID) → POST /template/editCategory(真实ES body结构{categoryId,name,description,defaultCategory}) → DELETE /template/category/{categoryId}。请求体字段集合已按ES真实90天样本核对(未使用Swagger CategoryRequest里其余ruleType/onlyFavorite/is1p/isChild/clientId/userId等真实流量中未出现的可选字段)。创建一个专属临时分类，验证编辑后，后置步骤删除，保证用例可重复执行。citrus平台，真实账号验证(已直接调用API验证整套流程可行且已清理)。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "QA_Citrus_Test_Category_Edit",
+          "description": "citrus swagger-api-case throwaway category for editCategory test (safe to delete)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建分类的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_category_id": "data[name=QA_Citrus_Test_Category_Edit].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editCategory",
+        "request_body": {
+          "categoryId": "{{created_category_id}}",
+          "name": "QA_Citrus_Test_Category_Edit_Renamed",
+          "description": "citrus swagger-api-case throwaway category (edited)",
+          "defaultCategory": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "批量创建模板(bulk)+清理 - citrus",
+    "description": "单接口测试：POST /template/bulk。请求体结构(templateRequestList数组，元素同TemplateRequest)已核对当前Swagger BulkCreateTemplateParam定义，使用citrus账号已验证真实有效的ruleType=Keyword批量创建1个临时测试模板，容器分类使用只读fixture分类{{fixture_category_id}}作临时挂载点(仅创建时挂靠该分类，随后立即DELETE的是新建的模板本身，不对fixture分类做任何编辑/删除，countNum会短暂+1后立即恢复)。通过 POST /template/getTemplate(按ruleType=Keyword过滤)查询新建ID(bulk接口本身只返回{success:[],failed:[]}模板名称列表，不返回ID)，验证成功后DELETE清理，保证用例可重复执行。citrus平台，真实账号验证(已直接调用API验证整套流程可行且已清理，fixture分类countNum验证前后一致)。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/bulk",
+        "request_body": {
+          "templateRequestList": [
+            {
+              "templateName": "QA_Citrus_Test_Bulk_Template",
+              "description": "citrus swagger-api-case throwaway bulk template (safe to delete)",
+              "categoryId": "{{fixture_category_id}}",
+              "ruleType": "Keyword",
+              "isFavorite": false,
+              "defaultTemplate": false,
+              "frequency": "Weekly",
+              "dayOfWeek": 7,
+              "hour": 0,
+              "automation": [
+                {
+                  "requirements": [
+                    [
+                      {
+                        "field": "ROAS",
+                        "valueType": "Custom",
+                        "id": "requirement_0_0_qacitrus_bulk",
+                        "value": "4",
+                        "operand": "Greater"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "length": 7,
+                    "index": 1,
+                    "days": 14
+                  },
+                  "action": {
+                    "cap": 10,
+                    "percentage": 10,
+                    "action": "Increase",
+                    "budgetRate": 100,
+                    "actionName": "Increase"
+                  },
+                  "secondDateIndex": {}
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "success": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "查询bulk新建模板的ID(按ruleType=Keyword+fixture分类过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Keyword"
+          ],
+          "categoryId": "{{fixture_category_id}}"
+        },
+        "extract_vars": {
+          "created_bulk_template_id": "data[templateName=QA_Citrus_Test_Bulk_Template].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-删除bulk创建的模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_bulk_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
