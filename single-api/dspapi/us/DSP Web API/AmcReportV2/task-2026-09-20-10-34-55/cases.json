@@ -1611,5 +1611,644 @@
         }
       }
     ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST AmcReportV2/AuthAmcInstance",
+    "description": "单接口测试：POST AmcReportV2/AuthAmcInstance。高风险未执行：该接口用于向Amazon提交AMC实例授权(entityInstances/oAuthEntities关联真实Amazon广告主账号)，属于AMC实例生命周期管理类操作，可能触发真实Amazon侧授权变更，成本/可逆性不确定，用户已拍板不执行，仅记录请求体示例供参考。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AuthAmcInstance(示例，未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/AuthAmcInstance",
+        "request_body": {
+          "amazonAccountId": "[NEEDS_REAL_VALUE]",
+          "amazonAccount": "[NEEDS_REAL_VALUE]",
+          "entityInstances": [
+            {
+              "region": "NA",
+              "entityId": "7582522080201",
+              "entityName": "[NEEDS_REAL_VALUE]",
+              "instances": []
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST AmcReportV2/BulkCreateAMCInstance",
+    "description": "单接口测试：POST AmcReportV2/BulkCreateAMCInstance。高风险未执行：批量创建AMC实例，requestBody为multipart/form-data(file字段)上传批量创建清单，既属于AMC实例生命周期管理类操作(可能向Amazon真实批量申请创建/绑定实例)，又因multipart类型run-cases.py执行框架不支持，双重原因不执行，用户已拍板跳过。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkCreateAMCInstance(示例，未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/BulkCreateAMCInstance",
+        "request_body": {
+          "__multipart_form_field__": "file",
+          "__note__": "multipart/form-data，无法通过run-cases.py的JSON请求框架执行，需人工测试"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST AmcReportV2/CreateAMCInstance",
+    "description": "单接口测试：POST AmcReportV2/CreateAMCInstance。高风险未执行：向Amazon真实申请创建/绑定AMC实例，请求体advertisers字段需关联真实广告主账号列表，成本/可逆性不确定，用户已拍板不执行，仅记录请求体示例供参考。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateAMCInstance(示例，未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/CreateAMCInstance",
+        "request_body": {
+          "instanceName": "[NEEDS_REAL_VALUE]",
+          "advertiserName": "[NEEDS_REAL_VALUE]",
+          "pacvueEntity": "PacvueUS",
+          "advertisers": [
+            {
+              "name": "[NEEDS_REAL_VALUE]",
+              "id": "[NEEDS_REAL_VALUE]",
+              "marketplaceId": "[NEEDS_REAL_VALUE]",
+              "type": "SPONSORED_ADS"
+            }
+          ],
+          "bindUserIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】DELETE AmcReportV2/DeleteAMCInstance",
+    "description": "单接口测试：DELETE AmcReportV2/DeleteAMCInstance。高风险未执行：删除AMC实例，属于AMC实例生命周期管理类操作，一旦对测试账号真实拥有的amcgd4jvzeh误执行将不可逆丢失唯一真实实例，用户已拍板不执行，仅记录请求示例供参考(id应为AMC2_InstanceCreation记录的GUID而非instanceId，未探测到有效值)。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DeleteAMCInstance(示例，未执行)",
+        "method": "DELETE",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/DeleteAMCInstance",
+        "request_body": {
+          "id": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】DELETE AmcReportV2/DeleteAMCInstanceCreation",
+    "description": "单接口测试：DELETE AmcReportV2/DeleteAMCInstanceCreation。高风险未执行：只删除本地AMC2_InstanceCreation记录(不删除远端AMC实例)，属于AMC实例生命周期管理类操作组，用户已拍板整组不执行，仅记录请求示例供参考(未探测到测试账号下有效的InstanceCreation记录id)。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DeleteAMCInstanceCreation(示例，未执行)",
+        "method": "DELETE",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/DeleteAMCInstanceCreation",
+        "request_body": {
+          "id": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST AmcReportV2/ImportAMCInstance",
+    "description": "单接口测试：POST AmcReportV2/ImportAMCInstance。高风险未执行：导入AMC实例，属于AMC实例生命周期管理类操作，可能触发真实Amazon侧实例关联变更，用户已拍板不执行，仅记录请求体示例供参考。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ImportAMCInstance(示例，未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/ImportAMCInstance",
+        "request_body": {
+          "instanceId": "[NEEDS_REAL_VALUE]",
+          "pacvueEntity": "PacvueUS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST AmcReportV2/SubscribePaidFeatures",
+    "description": "单接口测试：POST AmcReportV2/SubscribePaidFeatures。高风险未执行：批量订阅付费功能，依次查价、获取账单账户并提交billing enrollment，涉及真实计费流程，成本不确定，用户已拍板不执行，仅记录请求体示例供参考。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SubscribePaidFeatures(示例，未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/SubscribePaidFeatures",
+        "request_body": {
+          "instanceIds": [
+            "amcgd4jvzeh"
+          ],
+          "dataSourceId": "streaming_insights",
+          "isTrial": false,
+          "includeCleanRoom": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST AmcReportV2/UpdateAMCInstance",
+    "description": "单接口测试：POST AmcReportV2/UpdateAMCInstance。探测后判定比预期更高危，改为不执行：①请求体需要的id为GUID(ES真实样本如d69459c3-5a6a-4642-a545-a7151b212e85)，经GetAmcInstanceList/GetInstanceDetail/GetAmcInstanceCreationList多个只读接口探测，测试账号amcgd4jvzeh均未返回任何GUID id(全部为null)，无法确认该GUID对应的是AMC2_InstanceCreation创建记录还是别的实体；②真实ES样本的advertisers字段包含真实Amazon广告主账号绑定关系(entityId+marketplaceId+type如DISPLAY/SPONSORED_ADS)，怀疑该接口实际编辑的是'实例创建申请'而非已完成的实时实例，对已完成(creationStatus=COMPLETED)的amcgd4jvzeh盲目提交可能产生未知副作用(如重新提交广告主绑定请求)。综合判断为高风险，未执行，留待主会话/用户确认后再补测。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateAMCInstance(示例，未执行，id为ES真实样本非本账号值)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UpdateAMCInstance",
+        "request_body": {
+          "id": "[NEEDS_REAL_VALUE-未探测到amcgd4jvzeh对应的GUID]",
+          "instanceName": "1pacvuefangyuanyimeus",
+          "advertiserName": "Fang Yuan Yi Me US",
+          "pacvueEntity": "PacvueUS",
+          "advertisers": [
+            {
+              "name": "[NEEDS_REAL_VALUE]",
+              "id": "578107614358724215",
+              "marketplaceId": "[NEEDS_REAL_VALUE]",
+              "type": "DISPLAY"
+            }
+          ],
+          "bindUserIds": [
+            13293,
+            18589
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【技术受限-仅生成不执行】POST AmcReportV2/UploadCustomCampaigns",
+    "description": "单接口测试：POST AmcReportV2/UploadCustomCampaigns。技术受限未执行：requestBody为multipart/form-data(File二进制文件字段+InstanceId+EntityId)，run-cases.py执行框架仅支持JSON请求体，无法自动化提交文件，需人工测试。示例使用测试账号已知真实order_id/lineitem_id供人工构造campaign关联数据参考。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UploadCustomCampaigns(示例，未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UploadCustomCampaigns",
+        "request_body": {
+          "__multipart_form_fields__": {
+            "File": "[NEEDS_REAL_VALUE-二进制CSV文件]",
+            "InstanceId": "amcgd4jvzeh",
+            "EntityId": "7582522080201"
+          },
+          "__note__": "multipart/form-data，无法通过run-cases.py的JSON请求框架执行；参考order_id=576582423523984235/lineitem_id=577321116875613595构造CSV内容"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/CancelPaidFeatureSubscription - 取消不存在的订阅(streaming_insights未订阅,验证否定场景)",
+    "description": "单接口测试：POST AmcReportV2/CancelPaidFeatureSubscription。按约定仅测试'取消一个不存在的订阅'否定场景，不先调用SubscribePaidFeatures真实创建订阅。经GetInstancePaidFeatureList探测，amcgd4jvzeh实际已订阅conversions_asm_bundle/amazon_retail_purchases/brand_store_conversions三项付费功能(与任务预设的'该实例当前无真实订阅'不符，已避开这三项，未使用它们做取消测试)，选用确认未订阅的streaming_insights验证取消不存在订阅的处理。实测返回IsSuccessStatusCode=false、Error.message=No active subscription found，属于正确的业务级否定响应(而非报错)。2轮验证结果一致。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "取消未订阅的streaming_insights",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/CancelPaidFeatureSubscription",
+        "request_body": {
+          "instanceId": "amcgd4jvzeh",
+          "dataSourceId": "streaming_insights"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": false,
+          "Error.message": "No active subscription found"
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/RefreshAmcInstance - 对真实持有实例amcgd4jvzeh触发刷新(仅执行1次)",
+    "description": "单接口测试：POST AmcReportV2/RefreshAmcInstance。对测试账号真实拥有的AMC实例amcgd4jvzeh触发一次刷新。按约定仅执行1次，不做第二轮，避免重复触发Amazon侧数据拉取成本。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "刷新amcgd4jvzeh",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/RefreshAmcInstance",
+        "request_body": {
+          "instanceId": "amcgd4jvzeh"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/BindUserInstance+UnbindUserInstance - 绑定测试用户15031到amcgd4jvzeh后撤销(可重复)",
+    "description": "单接口测试：POST AmcReportV2/BindUserInstance 与 POST AmcReportV2/UnbindUserInstance。经GetBindUsers探测amcgd4jvzeh当前仅绑定userId 13293/18589，选用未绑定的测试用户15031(同ClientId=62测试客户端)先绑定再撤销，保证可重复执行。2轮验证均PASS，绑定用户表最终态确认恢复为仅13293/18589。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "绑定用户15031到amcgd4jvzeh",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/BindUserInstance",
+        "request_body": {
+          "userIds": [
+            15031
+          ],
+          "instanceIds": [
+            "amcgd4jvzeh"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "撤销绑定(还原)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UnbindUserInstance",
+        "request_body": {
+          "userId": 15031,
+          "instanceId": "amcgd4jvzeh"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/ChangeInstanceStatus - amcgd4jvzeh从ACTIVE改INACTIVE再改回ACTIVE(实测status为字符串枚举)",
+    "description": "单接口测试：POST AmcReportV2/ChangeInstanceStatus。经ES真实样本(347条真实调用值为INACTIVE)+GetAmcInstanceList探测(amcgd4jvzeh当前Status=ACTIVE)确认status字段为字符串枚举ACTIVE/INACTIVE(非数字，与任务预设的0/1/2数字枚举不符)。对amcgd4jvzeh从ACTIVE改为INACTIVE，随即改回ACTIVE，保证不留脏状态。2轮验证均PASS，最终态确认恢复为ACTIVE。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "改为INACTIVE",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/ChangeInstanceStatus",
+        "request_body": {
+          "instanceId": "amcgd4jvzeh",
+          "status": "INACTIVE"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "改回ACTIVE(还原)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/ChangeInstanceStatus",
+        "request_body": {
+          "instanceId": "amcgd4jvzeh",
+          "status": "ACTIVE"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/CreateDataSet+UpdateDataSet+DeleteDataSet - 创建测试数据集test141735后更新再删除(可重复)",
+    "description": "单接口测试：POST AmcReportV2/CreateDataSet、POST AmcReportV2/UpdateDataSet、POST AmcReportV2/DeleteDataSet(配对清理，DeleteDataSet不在原21接口清单内但为必需的归档/清理步骤)。对真实持有实例amcgd4jvzeh创建测试数据集test141735，s3Setting沿用ES真实样本中该实例历史调用使用的占位凭证(s3Accesskey=112/s3Secretkey=111，与真实历史调用模式一致，未使用真实AWS密钥)，更新描述后删除，保证账号内不留残留数据集。2轮验证均PASS，最终态经GetDataSet确认test141735已不存在(TotalDataCount=0)。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试数据集test141735",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/CreateDataSet",
+        "request_body": {
+          "dataSetId": "test141735",
+          "datasetType": "Off-Amazon conversion events",
+          "description": null,
+          "instanceId": "amcgd4jvzeh",
+          "instanceName": "1pacvuefangyuanyimeus",
+          "s3Setting": {
+            "s3Bucket": "amc-advertiser-uploaddata-us-east-1",
+            "s3RegionEndpoint": "USEast1",
+            "s3Accesskey": "112",
+            "s3Secretkey": "111",
+            "customerEncryptionKeyArn": ""
+          },
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "更新测试数据集描述",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UpdateDataSet",
+        "request_body": {
+          "dataSetId": "test141735",
+          "datasetType": "Off-Amazon conversion events",
+          "description": "swagger-api-case write test - safe to delete",
+          "instanceId": "amcgd4jvzeh",
+          "instanceName": "1pacvuefangyuanyimeus",
+          "s3Setting": {
+            "s3Bucket": "amc-advertiser-uploaddata-us-east-1",
+            "s3RegionEndpoint": "USEast1",
+            "s3Accesskey": "112",
+            "s3Secretkey": "111",
+            "customerEncryptionKeyArn": ""
+          },
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理-删除测试数据集(还原)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/DeleteDataSet",
+        "request_body": {
+          "dataSetId": "test141735",
+          "instanceId": "amcgd4jvzeh"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/CreateDataUpload - 对已存在数据集pacvue_1p_test登记测试上传记录(实测需真实S3文件预先存在,否定路径)",
+    "description": "单接口测试：POST AmcReportV2/CreateDataUpload。body为普通JSON(非multipart)。首次尝试复用真实存在的dataSetId=pacvue_1p_test(ES真实样本同款)登记上传记录，实测返回IsSuccessStatusCode=false，Error.message提示bucket amc-advertiser-uploaddata-us-east-1中键为amcgd4jvzeh/swagger_api_case_test_141735.csv的文件不存在——说明该接口会校验S3桶内对应文件必须已真实存在才能登记成功(需先调用GenerateS3UploadUrl获取预签名URL并真实PUT文件到S3，本次未做真实文件写入，超出安全测试范围)。故仅验证了'文件不存在'的否定路径，未验证真实成功路径。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "登记测试上传记录(预期因文件不存在而失败,验证否定路径)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/CreateDataUpload",
+        "request_body": {
+          "instanceId": "amcgd4jvzeh",
+          "dataSetId": "pacvue_1p_test",
+          "updateStrategy": "ADDITIVE",
+          "fileName": "swagger_api_case_test_141735.csv"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": false
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/SaveMyFavoriteQuery - 保存收藏查询test141735后软删除还原(可重复)",
+    "description": "单接口测试：POST AmcReportV2/SaveMyFavoriteQuery。该接口同时承担保存与软删除(isDeleted标记)两种语义，先保存一条测试收藏查询test141735(query=SELECT 1，仅做接口连通性验证非真实AMC分析)，再用返回的queryId(Data字段为新建记录的int64 id)软删除还原，保证可重复执行。2轮验证均PASS。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存收藏查询test141735",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/SaveMyFavoriteQuery",
+        "request_body": {
+          "queryName": "test141735",
+          "query": "SELECT 1",
+          "isDeleted": false,
+          "isAudience": false
+        },
+        "extract_vars": {
+          "new_query_id": "Data"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "软删除还原",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/SaveMyFavoriteQuery",
+        "request_body": {
+          "queryId": "{{new_query_id}}",
+          "isDeleted": true,
+          "isAudience": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/UpdateAMCInstanceName - amcgd4jvzeh临时改名test141735后还原为原名(可重复)",
+    "description": "单接口测试：POST AmcReportV2/UpdateAMCInstanceName。操作前经GetAmcInstanceList探测并记录amcgd4jvzeh原名为1pacvuefangyuanyimeus，改为测试值test141735后立即还原为原名，避免真实实例长期处于测试值状态。2轮验证均PASS，最终态经GetAmcInstanceList确认InstanceName已恢复为1pacvuefangyuanyimeus。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "改名为测试值test141735",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UpdateAMCInstanceName",
+        "request_body": {
+          "instanceName": "test141735",
+          "instanceId": "amcgd4jvzeh"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "还原为原名1pacvuefangyuanyimeus",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UpdateAMCInstanceName",
+        "request_body": {
+          "instanceName": "1pacvuefangyuanyimeus",
+          "instanceId": "amcgd4jvzeh"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcReportV2/UpdateInstanceDetail - amcgd4jvzeh原entityId/countryCode为空,设置为真实entity后尝试还原",
+    "description": "单接口测试：POST AmcReportV2/UpdateInstanceDetail。操作前经GetInstanceDetail探测确认amcgd4jvzeh当前entityId/countryCode均为空(advertisers数组为空)，设置为测试账号真实拥有的entity 7582522080201(ChiSip [US])+countryCode=US后，尝试提交空字符串还原为原始空状态。实测两步均返回IsSuccessStatusCode=true，且2轮验证后经GetInstanceDetail确认advertisers仍为空(与操作前一致)，说明该接口的写入未反映在GetInstanceDetail的advertisers读取路径上(或该只读接口未及时同步)，未观察到该实例被污染的迹象，但entityId/countryCode实际生效状态建议后续人工在前端UI二次核实。",
+    "module": "AmcReportV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置entityId+countryCode为真实值",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UpdateInstanceDetail",
+        "request_body": {
+          "instanceId": "amcgd4jvzeh",
+          "entityId": "7582522080201",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "尝试还原为空(原始状态)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcReportV2/UpdateInstanceDetail",
+        "request_body": {
+          "instanceId": "amcgd4jvzeh",
+          "entityId": "",
+          "countryCode": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
   }
 ]
