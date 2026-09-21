@@ -72,13 +72,18 @@ def mark_scenario_cells(wb, sheet_name, env, swagger_title, module, method_paths
         print(f'[mark_no_traffic] path column not found in {sheet_name}')
         return 0
 
+    # 标准服务传入的 swagger_title 不是平台名，不会出现在平台列取值里，此时不按平台过滤
+    # （见 update_excel.py update_scenario_col 里的同一处理，两边需保持一致）
+    platform_values = {ws.cell(r, platform_col).value for r in range(2, ws.max_row + 1)} if platform_col else set()
+    filter_by_platform = platform_col and swagger_title in platform_values
+
     scene_col = _find_or_create_col(ws, '场景覆盖', h_font, h_fill, width=72)
 
     updated = 0
     for r in range(2, ws.max_row + 1):
         if env_col and ws.cell(r, env_col).value not in (env, None, ''):
             continue
-        if platform_col and ws.cell(r, platform_col).value != swagger_title:
+        if filter_by_platform and ws.cell(r, platform_col).value != swagger_title:
             continue
         if module_col and ws.cell(r, module_col).value != module:
             continue
@@ -113,19 +118,19 @@ def mark_summary_row(wb, module, env, swagger_title, api_total):
     for name in ('Case数', '通过率', '接口覆盖率'):
         col_idx[name] = _find_or_create_col(ws, name, summary_font, summary_fill)
 
-    has_swagger = 'swagger' in col_idx
-    has_platform = 'platform' in col_idx
-
     for r in range(2, ws.max_row + 1):
         env_val = ws.cell(r, col_idx['env']).value if 'env' in col_idx else None
         env_ok = env_val in (env, None, '')
         mod_ok = 'module' in col_idx and ws.cell(r, col_idx['module']).value == module
-        if has_swagger:
-            key_ok = ws.cell(r, col_idx['swagger']).value == swagger_title
-        elif has_platform:
-            key_ok = ws.cell(r, col_idx['platform']).value == swagger_title
-        else:
+        # 两列可能同时存在，按值匹配到对应的列，不预设固定优先级（同 update_excel.py）
+        if 'swagger' in col_idx and ws.cell(r, col_idx['swagger']).value == swagger_title:
             key_ok = True
+        elif 'platform' in col_idx and ws.cell(r, col_idx['platform']).value == swagger_title:
+            key_ok = True
+        elif 'swagger' not in col_idx and 'platform' not in col_idx:
+            key_ok = True
+        else:
+            key_ok = False
         if env_ok and key_ok and mod_ok:
             ws.cell(r, col_idx['Case数'], 0).alignment = Alignment(horizontal='center')
             pass_cell = ws.cell(r, col_idx['通过率'])
