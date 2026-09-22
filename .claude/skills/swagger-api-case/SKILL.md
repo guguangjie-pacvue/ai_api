@@ -520,6 +520,28 @@ python ".claude/skills/swagger-api-case/scripts/update_excel.py" `
 ...
 ```
 
+🔴 **各服务 Excel 列结构必须保持一致**（4 份 `swagger_modules.xlsx` 已统一，新服务接入照此建表，不得另起结构）：
+
+- **模块汇总** sheet（9列）：`环境 / 服务(Swagger Title) / 平台(Platform) / 模块(Tag) / 接口数 / 负责人 / Case数 / 通过率 / 接口覆盖率`
+- **接口明细** sheet（8列，sheet 名=swagger title 或多平台服务名如 `RuleApi`）：`环境 / 平台(Platform) / 模块(Tag) / Method / 接口路径 / 负责人 / 场景覆盖 / 备注`
+- 标准服务（单 swagger，如 mainapi/walmart）：`平台` 列按实际归属填值（能明确对应单一广告平台的填平台名，如 `amazon`/`walmart`；跨平台通用模块留空，不强行归类）
+- 多平台服务（如 rule-api/micro-api）：`服务(Swagger Title)` 列填该服务唯一 swagger 的常量名（如 `RuleApi`），`平台` 列填真实平台名（如 `tiktok`），按平台细分统计
+- `update_excel.py` / `mark_no_traffic.py` 按值匹配对应列（不预设"哪一列必然存在"），两列同时存在时不会误判，新增服务无需改代码
+
+---
+
+## Phase 6 — 导出 coverage.json（按需，供看板/外部工具消费）
+
+Excel 是覆盖率的唯一数据源（Phase 5 维护），这一步**不重新计算**，只是把每份 `swagger_modules.xlsx` 原样转成同目录下的 `coverage.json`（一对一，不跨服务汇总成一份）：
+
+```powershell
+python ".claude/skills/swagger-api-case/scripts/export_coverage.py"
+```
+
+- 遍历 `single-api/**/swagger_modules.xlsx`，在**每份 Excel 同目录**下生成一份 `coverage.json`（如 `single-api/mainapi/coverage.json`、`single-api/services/rule-api/coverage.json`）
+- JSON 内容：`summary`（对应「模块汇总」sheet）+ `details`（对应各接口明细 sheet），字段名直接用 Excel 表头原文做 key，不改名不重排
+- **何时执行**：不是每次生成 case 都要跑；Phase 5 跑完 `update_excel.py` 后，若需要把覆盖率数据喂给外部工具/看板，再补跑一次即可
+
 ---
 
 ## 交付物
@@ -532,5 +554,6 @@ python ".claude/skills/swagger-api-case/scripts/update_excel.py" `
 | `single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/cases.json` | 目标接口的测试 case |
 | `single-api/<服务>/<环境>/<swagger>/<模块>/task-<timestamp>/report.json` | 执行结果报告 |
 | `single-api/<服务>/swagger_modules.xlsx`（`模块汇总` sheet） | 更新 Case数 / 通过率 / 接口覆盖率三列，每个服务独立一份 |
+| `single-api/<服务>/coverage.json`（可选） | Excel 覆盖率数据的 JSON 镜像，一份 Excel 对应一份，Phase 6 `export_coverage.py` 生成 |
 
 对话中额外输出**待补清单**（若有 `[NEEDS_REAL_VALUE]` 字段）。
