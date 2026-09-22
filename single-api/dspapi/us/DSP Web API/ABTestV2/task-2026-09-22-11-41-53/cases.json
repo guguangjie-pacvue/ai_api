@@ -1,0 +1,1084 @@
+[
+  {
+    "name": "POST /api/ABTestV2/CheckGroupName - 新建分组时校验名称是否可用(无testGroupId)",
+    "description": "单接口测试：POST /api/ABTestV2/CheckGroupName。新建AB测试分组前校验候选名称是否重复，不传testGroupId。500条随机样本中占比约88.2%（112次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CheckGroupName",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CheckGroupName",
+        "request_body": {
+          "name": "AB_Creative_2026-09-16",
+          "testGroupId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CheckGroupName - 编辑已有分组时校验名称(带testGroupId排除自身)",
+    "description": "单接口测试：POST /api/ABTestV2/CheckGroupName。编辑已有AB测试分组时校验名称是否重复，传testGroupId排除自身。500条随机样本中占比约11.8%（15次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CheckGroupName",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CheckGroupName",
+        "request_body": {
+          "name": "AB_Creative_2025-01-07",
+          "testGroupId": 356
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetABTestGroupBasic - 按testGroupId查询分组基础信息",
+    "description": "单接口测试：GET /api/ABTestV2/GetABTestGroupBasic。按testGroupId查询AB测试分组基础信息，只读查询。500条随机样本中占比约100%（4次，唯一真实调用模式）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetABTestGroupBasic",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetABTestGroupBasic",
+        "request_body": {
+          "testGroupId": 612
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetABTestGroupDetail - 按testGroupId查询分组详情",
+    "description": "单接口测试：GET /api/ABTestV2/GetABTestGroupDetail。按testGroupId查询AB测试分组详情，只读查询。500条随机样本中占比约100%（19次，唯一真实调用模式）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetABTestGroupDetail",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetABTestGroupDetail",
+        "request_body": {
+          "testGroupId": 356
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetABTestGroupList - 正式分组列表查询(非草稿,无过滤)",
+    "description": "单接口测试：POST /api/ABTestV2/GetABTestGroupList。查询AB测试分组列表，isDraft=false，不带任何过滤条件，默认按createdTime倒序分页。500条随机样本中占比约72.2%（361次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetABTestGroupList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetABTestGroupList",
+        "request_body": {
+          "advertiserIds": [],
+          "states": [],
+          "types": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20,
+            "orderAsc": false,
+            "orderByField": "createdTime"
+          },
+          "isDraft": false,
+          "name": "",
+          "profileIds": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetABTestGroupList - 草稿分组列表查询",
+    "description": "单接口测试：POST /api/ABTestV2/GetABTestGroupList。查询AB测试分组列表，isDraft=true，查看草稿分组，按flightStartTime倒序分页。500条随机样本中占比约20.2%（101次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetABTestGroupList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetABTestGroupList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "flightStartTime"
+          },
+          "isDraft": true,
+          "profileIds": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetABTestGroupList - 按名称搜索分组",
+    "description": "单接口测试：POST /api/ABTestV2/GetABTestGroupList。查询AB测试分组列表，isDraft=false且携带name做模糊搜索。500条随机样本中占比约7.0%（35次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetABTestGroupList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetABTestGroupList",
+        "request_body": {
+          "advertiserIds": [],
+          "states": [],
+          "types": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20,
+            "orderAsc": false,
+            "orderByField": "createdTime"
+          },
+          "isDraft": false,
+          "name": "AB_Creative",
+          "profileIds": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetABTestGroupPlans - 查看测试计划列表(非图表)",
+    "description": "单接口测试：GET /api/ABTestV2/GetABTestGroupPlans。按testGroupId查询AB测试计划列表，isChart=false，查看计划详情表格。500条随机样本中占比约66.6%（295次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetABTestGroupPlans",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetABTestGroupPlans",
+        "request_body": {
+          "testGroupId": 632,
+          "isChart": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetABTestGroupPlans - 查看测试计划图表数据",
+    "description": "单接口测试：GET /api/ABTestV2/GetABTestGroupPlans。按testGroupId查询AB测试计划列表，isChart=true，查看效果对比图表。500条随机样本中占比约33.4%（148次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetABTestGroupPlans",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetABTestGroupPlans",
+        "request_body": {
+          "testGroupId": 632,
+          "isChart": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetBaseGoalStandard - 获取基准目标标准值(goal=0)",
+    "description": "单接口测试：POST /api/ABTestV2/GetBaseGoalStandard。按advertiserId查询AB测试基准目标(testGoal枚举=0)的行业标准值，用于新建分组时的默认目标参考。500条随机样本中占比约71.5%（148次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBaseGoalStandard",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetBaseGoalStandard",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "goal": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetBaseGoalStandard - 获取基准目标标准值(goal=2)",
+    "description": "单接口测试：POST /api/ABTestV2/GetBaseGoalStandard。按advertiserId查询AB测试基准目标(testGoal枚举=2)的行业标准值。500条随机样本中占比约16.9%（35次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBaseGoalStandard",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetBaseGoalStandard",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "goal": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetBaseGoalStandard - 获取基准目标标准值(goal=1)",
+    "description": "单接口测试：POST /api/ABTestV2/GetBaseGoalStandard。按advertiserId查询AB测试基准目标(testGoal枚举=1)的行业标准值。500条随机样本中占比约11.6%（24次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBaseGoalStandard",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetBaseGoalStandard",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "goal": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetGroupAlertSetting - 查询分组告警设置",
+    "description": "单接口测试：GET /api/ABTestV2/GetGroupAlertSetting。按testGroupId查询AB测试分组的告警通知设置(到期/水平/速率告警及邮箱)。500条随机样本中占比约100%（8次，唯一真实调用模式）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGroupAlertSetting",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetGroupAlertSetting",
+        "request_body": {
+          "testGroupId": 355
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetGroupBudgetSchedule - 查询分组预算排期",
+    "description": "单接口测试：GET /api/ABTestV2/GetGroupBudgetSchedule。按testGroupId查询AB测试分组的预算排期设置。500条随机样本中占比约100%（1次，唯一真实调用模式）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGroupBudgetSchedule",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetGroupBudgetSchedule",
+        "request_body": {
+          "testGroupId": 642
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetGroupCreatives - 新建Creative类型分组前预览可选素材",
+    "description": "单接口测试：POST /api/ABTestV2/GetGroupCreatives。testType=Creative，未创建分组前(noGroupBody)按profile/advertiser/lineItemType预览可用于AB测试的素材列表。500条随机样本中占比约76.9%（83次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGroupCreatives",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetGroupCreatives",
+        "request_body": {
+          "testType": "Creative",
+          "noGroupBody": {
+            "profileId": "{{profile_id_single}}",
+            "advertiserId": "{{advertiser_id_single}}",
+            "lineItemType": "DISPLAY",
+            "planNum": 2
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetGroupCreatives - 查看已有Creative分组的素材(按testGroupId)",
+    "description": "单接口测试：POST /api/ABTestV2/GetGroupCreatives。testType=Creative，分组已创建或已保存为草稿，传testGroupId查看该分组已选素材。500条随机样本中占比约16.7%（18次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGroupCreatives",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetGroupCreatives",
+        "request_body": {
+          "testType": "Creative",
+          "testGroupId": 356
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetGroupCreatives - 新建Audience类型分组前预览可选素材",
+    "description": "单接口测试：POST /api/ABTestV2/GetGroupCreatives。testType=Audience，未创建分组前(noGroupBody)按profile/advertiser/lineItemType预览可用于AB测试的素材列表。500条随机样本中占比约5.6%（6次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGroupCreatives",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetGroupCreatives",
+        "request_body": {
+          "testType": "Audience",
+          "noGroupBody": {
+            "profileId": "{{profile_id_single}}",
+            "advertiserId": "{{advertiser_id_single}}",
+            "lineItemType": "DISPLAY",
+            "planNum": 2
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetGroupDayparting - 查询分组分时段设置",
+    "description": "单接口测试：GET /api/ABTestV2/GetGroupDayparting。按testGroupId查询AB测试分组的Dayparting分时段投放设置。500条随机样本中占比约100%（1次，唯一真实调用模式）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGroupDayparting",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetGroupDayparting",
+        "request_body": {
+          "testGroupId": 642
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ABTestV2/GetGuideState - 查询新手引导展示状态",
+    "description": "单接口测试：GET /api/ABTestV2/GetGuideState。查询当前用户AB测试功能新手引导(Guide)是否已展示，无入参。500条随机样本中占比约100%（500次，唯一真实调用模式）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGuideState",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetGuideState",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetSufficientTestBudget - 计算充分测试所需预算(testGoal=0)",
+    "description": "单接口测试：POST /api/ABTestV2/GetSufficientTestBudget。按advertiserId+baseGoalValue+testGoal=0计算达到统计显著性所需的最低测试预算。500条随机样本中占比约71.3%（209次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSufficientTestBudget",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetSufficientTestBudget",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "testGoal": 0,
+          "baseGoalValue": 0.25
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetSufficientTestBudget - 计算充分测试所需预算(testGoal=2)",
+    "description": "单接口测试：POST /api/ABTestV2/GetSufficientTestBudget。按advertiserId+baseGoalValue+testGoal=2计算所需最低测试预算。500条随机样本中占比约17.4%（51次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSufficientTestBudget",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetSufficientTestBudget",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "testGoal": 2,
+          "baseGoalValue": 0.25
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/GetSufficientTestBudget - 计算充分测试所需预算(testGoal=1)",
+    "description": "单接口测试：POST /api/ABTestV2/GetSufficientTestBudget。按advertiserId+baseGoalValue+testGoal=1计算所需最低测试预算。500条随机样本中占比约11.3%（33次）。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSufficientTestBudget",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/GetSufficientTestBudget",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "testGoal": 1,
+          "baseGoalValue": 0.25
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CreateABTestGroup - 正式创建Creative类型分组(testGoal=0)",
+    "description": "单接口测试：POST /api/ABTestV2/CreateABTestGroup。isDraft=false，testType=Creative，testGoal=0，正式创建(非草稿)AB测试分组。500条随机样本中占比约43.8%（14次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CreateABTestGroup",
+        "request_body": {
+          "testGroupId": "",
+          "isDraft": false,
+          "name": "test000000",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Creative",
+          "baseGoalValue": "0.221",
+          "testGoal": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CreateABTestGroup - 保存草稿Creative类型分组(testGoal=0)",
+    "description": "单接口测试：POST /api/ABTestV2/CreateABTestGroup。isDraft=true，testType=Creative，testGoal=0，保存为草稿，不进入正式投放。500条随机样本中占比约18.8%（6次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CreateABTestGroup",
+        "request_body": {
+          "testGroupId": "",
+          "isDraft": true,
+          "name": "test000001",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Creative",
+          "baseGoalValue": "0.221",
+          "testGoal": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CreateABTestGroup - 正式创建Creative类型分组(testGoal=2)",
+    "description": "单接口测试：POST /api/ABTestV2/CreateABTestGroup。isDraft=false，testType=Creative，testGoal=2，正式创建(非草稿)AB测试分组。500条随机样本中占比约12.5%（4次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CreateABTestGroup",
+        "request_body": {
+          "testGroupId": "",
+          "isDraft": false,
+          "name": "test000002",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Creative",
+          "baseGoalValue": "0.221",
+          "testGoal": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CreateABTestGroup - 正式创建Creative类型分组(testGoal=1)",
+    "description": "单接口测试：POST /api/ABTestV2/CreateABTestGroup。isDraft=false，testType=Creative，testGoal=1，正式创建(非草稿)AB测试分组。500条随机样本中占比约9.4%（3次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CreateABTestGroup",
+        "request_body": {
+          "testGroupId": "",
+          "isDraft": false,
+          "name": "test000003",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Creative",
+          "baseGoalValue": "0.221",
+          "testGoal": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CreateABTestGroup - 保存草稿Creative类型分组(testGoal=2)",
+    "description": "单接口测试：POST /api/ABTestV2/CreateABTestGroup。isDraft=true，testType=Creative，testGoal=2，保存为草稿。500条随机样本中占比约6.2%（2次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CreateABTestGroup",
+        "request_body": {
+          "testGroupId": "",
+          "isDraft": true,
+          "name": "test000004",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Creative",
+          "baseGoalValue": "0.221",
+          "testGoal": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CreateABTestGroup - 保存草稿Audience类型分组(testGoal=0)",
+    "description": "单接口测试：POST /api/ABTestV2/CreateABTestGroup。isDraft=true，testType=Audience，testGoal=0，保存为草稿。500条随机样本中占比约6.2%（2次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CreateABTestGroup",
+        "request_body": {
+          "testGroupId": "",
+          "isDraft": true,
+          "name": "test000005",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Audience",
+          "baseGoalValue": "0.221",
+          "testGoal": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/CreateABTestGroup - 保存草稿Audience类型分组(testGoal=2)",
+    "description": "单接口测试：POST /api/ABTestV2/CreateABTestGroup。isDraft=true，testType=Audience，testGoal=2，保存为草稿。500条随机样本中占比约3.1%（1次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/CreateABTestGroup",
+        "request_body": {
+          "testGroupId": "",
+          "isDraft": true,
+          "name": "test000006",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Audience",
+          "baseGoalValue": "0.221",
+          "testGoal": 2
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/EndABTestGroup - 提前结束AB测试分组",
+    "description": "单接口测试：POST /api/ABTestV2/EndABTestGroup。按testGroupId提前结束正在运行的AB测试分组，恢复正常投放。500条随机样本中占比约100%（1次，唯一真实调用模式）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 EndABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/EndABTestGroup",
+        "request_body": {
+          "testGroupId": 621
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/SetGroupState - 启动(激活)AB测试分组",
+    "description": "单接口测试：POST /api/ABTestV2/SetGroupState。按testGroupId将分组状态置为active=true，正式启动AB测试、开始按分组分配真实广告流量。500条随机样本中占比约100%（14次，唯一真实调用模式，ES样本中从未出现active=false的调用）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SetGroupState",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/SetGroupState",
+        "request_body": {
+          "testGroupId": "619",
+          "active": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/UpdateABTestGroup - 更新AB测试分组完整配置(Audience类型)",
+    "description": "单接口测试：POST /api/ABTestV2/UpdateABTestGroup。按testGroupId更新已有分组的完整配置(含lineItem/targeting/budgetCaps等真实投放层级字段)，testType=Audience。500条随机样本中占比约100%（1次，唯一真实调用模式）。 【仅生成未执行-受限】该操作需指向调用方真实拥有的testGroupId/素材ID才有意义，ES样本捕获的testGroupId/邮箱等属于其他历史调用产生的真实数据，未创建可安全复用的自有分组前不应对其写入，未执行。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateABTestGroup",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/UpdateABTestGroup",
+        "request_body": {
+          "testGroupId": 617,
+          "name": "test000007",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id}}",
+          "planNum": 2,
+          "testType": "Audience",
+          "baseGoalValue": 0.131,
+          "testGoal": 0,
+          "isDraft": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/UpdateGroupAlertSetting - 更新分组告警设置",
+    "description": "单接口测试：POST /api/ABTestV2/UpdateGroupAlertSetting。按testGroupId更新到期/水平/速率三类告警的开关及通知邮箱。500条随机样本中占比约100%（1次，唯一真实调用模式）。 【仅生成未执行-受限】该操作需指向调用方真实拥有的testGroupId/素材ID才有意义，ES样本捕获的testGroupId/邮箱等属于其他历史调用产生的真实数据，未创建可安全复用的自有分组前不应对其写入，未执行。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateGroupAlertSetting",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/UpdateGroupAlertSetting",
+        "request_body": {
+          "testGroupId": 635,
+          "setting": {
+            "expirationStatus": true,
+            "levelStatus": true,
+            "rateStatus": true,
+            "expirationEmail": "test@example.com",
+            "levelEmail": "test@example.com",
+            "rateEmail": "test@example.com"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/UpdateGroupInfo - 修改分组名称",
+    "description": "单接口测试：POST /api/ABTestV2/UpdateGroupInfo。按testGroupId仅修改分组的groupName字段。500条随机样本中占比约50.0%（1次）。 【仅生成未执行-受限】该操作需指向调用方真实拥有的testGroupId/素材ID才有意义，ES样本捕获的testGroupId/邮箱等属于其他历史调用产生的真实数据，未创建可安全复用的自有分组前不应对其写入，未执行。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateGroupInfo",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/UpdateGroupInfo",
+        "request_body": {
+          "testGroupId": 632,
+          "groupName": "test000008"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ABTestV2/UpdateGroupInfo - 修改分组基础出价",
+    "description": "单接口测试：POST /api/ABTestV2/UpdateGroupInfo。按testGroupId仅修改分组的baseSupplyBid出价字段。500条随机样本中占比约50.0%（1次）。 【仅生成未执行-高危】该操作会实际影响DSP广告投放流量分配/预算，未通过run-cases.py执行，避免影响真实广告投放。",
+    "module": "ABTestV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateGroupInfo",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ABTestV2/UpdateGroupInfo",
+        "request_body": {
+          "testGroupId": 635,
+          "baseSupplyBid": "5"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
