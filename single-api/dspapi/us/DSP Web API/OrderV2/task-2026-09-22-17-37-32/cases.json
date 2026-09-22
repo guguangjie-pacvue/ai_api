@@ -1,0 +1,826 @@
+[
+  {
+    "name": "GET /api/OrderV2/GetGuidanceActions - 查询Order智能建议动作",
+    "description": "单接口测试：GET /api/OrderV2/GetGuidanceActions。按orderId+profileId+advertiserId查询该Order的智能投放建议动作列表(供CreatePerformanceOrBrandLineItem建议式创建LineItem使用)。orderId使用本账号真实活跃Order(有实际建议数据)，profileId/advertiserId为本账号真实实体。该接口query参数固定为3个ID，样本间无其他业务分化维度。1625条随机样本中占比约100%。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGuidanceActions",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetGuidanceActions",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id_active}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetFrequencyCap - 不指定lineItemId(按Order汇总)",
+    "description": "单接口测试：POST /api/OrderV2/GetFrequencyCap。查询Order的频次上限(Frequency Cap)数据，lineItemId不传(按整个Order汇总统计)。orderId/profileId/advertiserId替换为本账号真实实体。场景：lineItemId=[](按Order汇总)。191条随机样本中占比约56.5%(108次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetFrequencyCap - 按Order汇总",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetFrequencyCap",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": [
+            "{{advertiser_id_single}}"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "orderId": [
+            "{{order_id}}"
+          ],
+          "lineItemId": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetFrequencyCap - 指定lineItemId(按LineItem过滤)",
+    "description": "单接口测试：POST /api/OrderV2/GetFrequencyCap。查询Order的频次上限数据，指定lineItemId按具体LineItem过滤。orderId/lineItemId/profileId/advertiserId替换为本账号真实实体。场景：lineItemId非空(按LineItem过滤)。191条随机样本中占比约43.5%(83次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetFrequencyCap - 按LineItem过滤",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetFrequencyCap",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": [
+            "{{advertiser_id_single}}"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "orderId": [
+            "{{order_id}}"
+          ],
+          "lineItemId": [
+            "{{lineitem_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetOrderCopyDetails - 不指定lineItemIds(复制整单)",
+    "description": "单接口测试：POST /api/OrderV2/GetOrderCopyDetails。查询用于复制Order的详情数据(为RunCopyOrder准备预填数据)，lineItemIds不传表示复制整单(含全部LineItem)。orderId/profileId/advertiserId替换为本账号真实活跃Order。场景：lineItemIds=[](复制整单)。374条随机样本中占比约28.3%(106次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetOrderCopyDetails - 复制整单",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetOrderCopyDetails",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id_active}}",
+          "lineItemIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetOrderCopyDetails - 指定lineItemIds(仅复制选中LineItem)",
+    "description": "单接口测试：POST /api/OrderV2/GetOrderCopyDetails。查询用于复制Order的详情数据，lineItemIds指定则仅复制选中的LineItem。orderId/lineItemIds替换为本账号真实历史订单及其下真实LineItem(样本原值，本账号自有实体)。场景：lineItemIds非空(仅复制选中LineItem)。374条随机样本中占比约71.7%(268次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetOrderCopyDetails - 仅复制选中LineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetOrderCopyDetails",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "576518450413347926",
+          "lineItemIds": [
+            "578276075507038059"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetPerformanceOrBrandOrder - performance类型+不按名称过滤(默认列表)",
+    "description": "单接口测试：POST /api/OrderV2/GetPerformanceOrBrandOrder。分页查询Performance/Brand类型Order列表。profileId/advertiserId替换为本账号真实实体。场景：performance类型+不按名称过滤(默认列表)。500条随机样本中占比约55.0%(275次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceOrBrandOrder - performance类型+不按名称过滤(默认列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetPerformanceOrBrandOrder",
+        "request_body": {
+          "profileId": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserId": [
+            "{{advertiser_id_single}}"
+          ],
+          "orderName": "",
+          "type": "performance",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderByField": "orders.orderId",
+            "orderAsc": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetPerformanceOrBrandOrder - performance类型+按名称模糊搜索",
+    "description": "单接口测试：POST /api/OrderV2/GetPerformanceOrBrandOrder。分页查询Performance/Brand类型Order列表。profileId/advertiserId替换为本账号真实实体。场景：performance类型+按名称模糊搜索。500条随机样本中占比约22.8%(114次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceOrBrandOrder - performance类型+按名称模糊搜索",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetPerformanceOrBrandOrder",
+        "request_body": {
+          "profileId": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserId": [
+            "{{advertiser_id_single}}"
+          ],
+          "orderName": "test",
+          "type": "performance",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderByField": "orders.orderId",
+            "orderAsc": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetPerformanceOrBrandOrder - brand类型+不按名称过滤(默认列表)",
+    "description": "单接口测试：POST /api/OrderV2/GetPerformanceOrBrandOrder。分页查询Performance/Brand类型Order列表。profileId/advertiserId替换为本账号真实实体。场景：brand类型+不按名称过滤(默认列表)。500条随机样本中占比约16.6%(83次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceOrBrandOrder - brand类型+不按名称过滤(默认列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetPerformanceOrBrandOrder",
+        "request_body": {
+          "profileId": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserId": [
+            "{{advertiser_id_single}}"
+          ],
+          "orderName": "",
+          "type": "brand",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderByField": "orders.orderId",
+            "orderAsc": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetPerformanceOrBrandOrder - brand类型+按名称模糊搜索",
+    "description": "单接口测试：POST /api/OrderV2/GetPerformanceOrBrandOrder。分页查询Performance/Brand类型Order列表。profileId/advertiserId替换为本账号真实实体。场景：brand类型+按名称模糊搜索。500条随机样本中占比约5.6%(28次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPerformanceOrBrandOrder - brand类型+按名称模糊搜索",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetPerformanceOrBrandOrder",
+        "request_body": {
+          "profileId": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserId": [
+            "{{advertiser_id_single}}"
+          ],
+          "orderName": "test",
+          "type": "brand",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderByField": "orders.orderId",
+            "orderAsc": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetRecommendation - goalKpi=COST_PER_DETAIL_PAGE_VIEW",
+    "description": "单接口测试：POST /api/OrderV2/GetRecommendation。按目标KPI+预算查询投放建议(供创建Order/LineItem时的目标设置参考)。advertiserId/profileId替换为本账号真实实体，日期用近期真实区间。场景：goalKpi=COST_PER_DETAIL_PAGE_VIEW。500条随机样本中占比约34.0%(170次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetRecommendation - COST_PER_DETAIL_PAGE_VIEW",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetRecommendation",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "goalKpi": "COST_PER_DETAIL_PAGE_VIEW",
+          "budgetAmount": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetRecommendation - goalKpi=CLICK_THROUGH_RATE",
+    "description": "单接口测试：POST /api/OrderV2/GetRecommendation。按目标KPI+预算查询投放建议(供创建Order/LineItem时的目标设置参考)。advertiserId/profileId替换为本账号真实实体，日期用近期真实区间。场景：goalKpi=CLICK_THROUGH_RATE。500条随机样本中占比约30.8%(154次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetRecommendation - CLICK_THROUGH_RATE",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetRecommendation",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "goalKpi": "CLICK_THROUGH_RATE",
+          "budgetAmount": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetRecommendation - goalKpi=COST_PER_ACTION",
+    "description": "单接口测试：POST /api/OrderV2/GetRecommendation。按目标KPI+预算查询投放建议(供创建Order/LineItem时的目标设置参考)。advertiserId/profileId替换为本账号真实实体，日期用近期真实区间。场景：goalKpi=COST_PER_ACTION。500条随机样本中占比约22.8%(114次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetRecommendation - COST_PER_ACTION",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetRecommendation",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "goalKpi": "COST_PER_ACTION",
+          "budgetAmount": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/GetRecommendation - goalKpi=COST_PER_CLICK",
+    "description": "单接口测试：POST /api/OrderV2/GetRecommendation。按目标KPI+预算查询投放建议(供创建Order/LineItem时的目标设置参考)。advertiserId/profileId替换为本账号真实实体，日期用近期真实区间。场景：goalKpi=COST_PER_CLICK。500条随机样本中占比约11.8%(59次)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetRecommendation - COST_PER_CLICK",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/GetRecommendation",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "goalKpi": "COST_PER_CLICK",
+          "budgetAmount": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/BulkUpdateOrderBudgetCaps - 批量修改Order DailyCap(自建一次性测试Order,含后置归档)",
+    "description": "单接口测试：POST /api/OrderV2/BulkUpdateOrderBudgetCaps。先用Order/CreateOrder创建一次性测试Order(本账号真实advertiser，小额预算+1天flight窗口)，再对其调用BulkUpdateOrderBudgetCaps将dailyCap改为15，最后用Order/BulkUpdateOrders将该Order置INACTIVE归档(避免残留、保证可重复执行)。已知本账号旧Order(576582423523984235)已结束超180天，更新类操作会被业务规则拒绝，故改为自建实体验证，规避此限制。业务成功断言：Data=\"Operation succeeded\"。11条随机样本中占比约100%(单Order批量场景为主流模式)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建一次性测试Order",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Order/CreateOrder",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderTemplateId": "",
+          "order": {
+            "advertiserId": "{{advertiser_id_single}}",
+            "name": "test173732-budgetcaps",
+            "externalId": "",
+            "comments": "",
+            "optimization": {
+              "productLocation": "SOLD_ON_AMAZON",
+              "goal": "CONSIDERATION",
+              "goalKpi": "CLICK_THROUGH_RATE",
+              "biddingStrategy": "SPEND_BUDGET_IN_FULL",
+              "automateBudgetAllocation": true,
+              "primaryInventoryTypes": [],
+              "targetKpi": "10"
+            },
+            "budget": {
+              "budgetCaps": [
+                {
+                  "recurrenceTimePeriod": "DAILY",
+                  "amount": 10
+                }
+              ],
+              "flights": [
+                {
+                  "amount": 10,
+                  "startDateTime": "2026-09-23 12:00:00",
+                  "endDateTime": "2026-09-24 12:00:00"
+                }
+              ]
+            },
+            "agencyFee": {
+              "feePercentage": "12"
+            },
+            "frequencies": [
+              {
+                "frequencyType": "UNCAPPED"
+              }
+            ]
+          },
+          "customFees": null,
+          "associatedConversions": [],
+          "conversionTracking": {
+            "products": {
+              "productList": [],
+              "productFile": null
+            }
+          }
+        },
+        "extract_vars": {
+          "bc_order_id": "Data"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "修改DailyCap为15",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/BulkUpdateOrderBudgetCaps",
+        "request_body": [
+          {
+            "profileId": "{{profile_id_single}}",
+            "advertiserId": "{{advertiser_id_single}}",
+            "orderId": "{{bc_order_id}}",
+            "dailyCap": 15
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": "Operation succeeded"
+        }
+      },
+      {
+        "name": "后置归档-新建Order置INACTIVE",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Order/BulkUpdateOrders",
+        "request_body": {
+          "orderData": [
+            {
+              "profileID": "{{profile_id_single}}",
+              "orderId": "{{bc_order_id}}",
+              "deliveryActivationStatus": "INACTIVE",
+              "AdvertiserId": "{{advertiser_id_single}}",
+              "beforeVal": "ACTIVE"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/BulkUpdateOrderFlightsAsync - 批量修改Order Flight(自建一次性测试Order,含后置归档)",
+    "description": "单接口测试：POST /api/OrderV2/BulkUpdateOrderFlightsAsync。先创建一次性测试Order并读取其真实flightId，再调用本接口后台异步修改该flight的金额/结束时间，最后归档Order(避免残留、保证可重复执行)。同BulkUpdateOrderBudgetCaps一样规避旧Order 180天锁定限制。业务成功断言：IsSuccessStatusCode=true+Data非空(异步任务提交成功，Data为任务状态描述文本，非同步生效结果)。889条随机样本中占比约100%(结构固定，orderFlights回填现有flight并修改amount/endDateTime为主流模式)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建一次性测试Order",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Order/CreateOrder",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderTemplateId": "",
+          "order": {
+            "advertiserId": "{{advertiser_id_single}}",
+            "name": "test173732-flightsasync",
+            "externalId": "",
+            "comments": "",
+            "optimization": {
+              "productLocation": "SOLD_ON_AMAZON",
+              "goal": "CONSIDERATION",
+              "goalKpi": "CLICK_THROUGH_RATE",
+              "biddingStrategy": "SPEND_BUDGET_IN_FULL",
+              "automateBudgetAllocation": true,
+              "primaryInventoryTypes": [],
+              "targetKpi": "10"
+            },
+            "budget": {
+              "budgetCaps": [
+                {
+                  "recurrenceTimePeriod": "DAILY",
+                  "amount": 10
+                }
+              ],
+              "flights": [
+                {
+                  "amount": 10,
+                  "startDateTime": "2026-09-23 12:00:00",
+                  "endDateTime": "2026-09-24 12:00:00"
+                }
+              ]
+            },
+            "agencyFee": {
+              "feePercentage": "12"
+            },
+            "frequencies": [
+              {
+                "frequencyType": "UNCAPPED"
+              }
+            ]
+          },
+          "customFees": null,
+          "associatedConversions": [],
+          "conversionTracking": {
+            "products": {
+              "productList": [],
+              "productFile": null
+            }
+          }
+        },
+        "extract_vars": {
+          "fl_order_id": "Data"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "读取新建Order信息(获取flightId)",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Order/GetOrder",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "orderId": "{{fl_order_id}}"
+        },
+        "extract_vars": {
+          "fl_flight_id": "Data.budget.flights[0].flightId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "异步修改Flight金额与结束时间",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/BulkUpdateOrderFlightsAsync",
+        "request_body": [
+          {
+            "orderId": "{{fl_order_id}}",
+            "profileId": "{{profile_id_single}}",
+            "isChangeLine": false,
+            "orderFlights": [
+              {
+                "flightId": "{{fl_flight_id}}",
+                "amount": 12,
+                "startDateTime": "2026-09-23 12:00:00",
+                "endDateTime": "2026-09-25 12:00:00",
+                "name": ""
+              }
+            ]
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置归档-新建Order置INACTIVE",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Order/BulkUpdateOrders",
+        "request_body": {
+          "orderData": [
+            {
+              "profileID": "{{profile_id_single}}",
+              "orderId": "{{fl_order_id}}",
+              "deliveryActivationStatus": "INACTIVE",
+              "AdvertiserId": "{{advertiser_id_single}}",
+              "beforeVal": "ACTIVE"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/CreatePerformanceOrBrandLineItem - 按建议动作批量创建LineItem(技术受限-仅生成不执行)",
+    "description": "单接口测试：POST /api/OrderV2/CreatePerformanceOrBrandLineItem。按GetGuidanceActions返回的actionIds/actionTypes批量创建推荐LineItem。已探测：自建一次性全新Order调用GetGuidanceActions返回Data=[](无建议数据，建议需基于历史投放数据生成，新Order无法产生)；账号内有真实建议数据的Order均为共享沙盒下非本任务自建的既有Order(如AutoTestCreation_*)，按规则写操作只能动本任务自建实体，为避免在共享既有Order下产生非本任务创建的LineItem残留，判定技术受限，仅生成不执行。actionIds/actionTypes取自GetGuidanceActions对账号内真实活跃Order(594148454745670632)的探测结果，结构真实有效。1034条随机样本中占比约100%(actionIds/actionTypes均为3项的组合为主流模式，具体值随Order的建议内容变化)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreatePerformanceOrBrandLineItem(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/CreatePerformanceOrBrandLineItem",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id_active}}",
+          "actionIds": [
+            "5e71c352-4db9-4630-8e6c-1c0d87179740",
+            "d2ff6542-579f-4e3c-9f13-ce28cbe1746f",
+            "5733fd8b-048f-4a8b-b008-d67e568429a1"
+          ],
+          "actionTypes": [
+            "Search - Display",
+            "Customer Acquisition - Streaming TV",
+            "Remarketing - Streaming TV"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/OrderV2/RunCopyOrder - 复制整单(不复制LineItem,含后置归档)",
+    "description": "单接口测试：POST /api/OrderV2/RunCopyOrder。以本账号已知真实Order({{order_id}})为copiedOrderId复制生成新Order(newLineItems=[]，不复制LineItem，为账号内该接口最小/最常见调用形态)，复制成功后用Order/BulkUpdateOrders将新Order置INACTIVE归档(避免残留、保证可重复执行)。业务成功断言：IsSuccessStatusCode=true+Data为新OrderId(非空字符串)。183条随机样本中占比约32.8%(60次，newLineItems为空/仅复制Order壳的场景)。",
+    "module": "OrderV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "复制Order(不含LineItem)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "OrderV2/RunCopyOrder",
+        "request_body": {
+          "newOrder": {
+            "profileId": "{{profile_id_single}}",
+            "advertiserId": "{{advertiser_id_single}}",
+            "copiedOrderId": "{{order_id}}",
+            "name": "test173732-copyorder",
+            "optimization": {
+              "productLocation": "SOLD_ON_AMAZON",
+              "goal": "AWARENESS",
+              "goalKpi": "REACH",
+              "biddingStrategy": "SPEND_BUDGET_IN_FULL",
+              "automateBudgetAllocation": true,
+              "primaryInventoryTypes": [],
+              "flightBudgetRolloverSetting": {
+                "rolloverStrategy": "NO_ROLLOVER"
+              }
+            },
+            "budget": {
+              "budgetCaps": [
+                {
+                  "recurrenceTimePeriod": "DAILY",
+                  "amount": 6.96
+                }
+              ],
+              "flights": [
+                {
+                  "amount": "1",
+                  "startDateTime": "2026-09-23 00:00:00",
+                  "endDateTime": "2026-09-24 00:00:00",
+                  "name": ""
+                }
+              ]
+            },
+            "frequencies": [
+              {
+                "frequencyType": "UNCAPPED"
+              }
+            ],
+            "associatedConversions": [],
+            "conversionTracking": {
+              "products": {
+                "productList": [],
+                "productFile": null
+              }
+            }
+          },
+          "newLineItems": []
+        },
+        "extract_vars": {
+          "copy_order_id": "Data"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置归档-复制出的新Order置INACTIVE",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Order/BulkUpdateOrders",
+        "request_body": {
+          "orderData": [
+            {
+              "profileID": "{{profile_id_single}}",
+              "orderId": "{{copy_order_id}}",
+              "deliveryActivationStatus": "INACTIVE",
+              "AdvertiserId": "{{advertiser_id_single}}",
+              "beforeVal": "ACTIVE"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]
