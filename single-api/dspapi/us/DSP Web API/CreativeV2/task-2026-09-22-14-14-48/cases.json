@@ -1,0 +1,1126 @@
+[
+  {
+    "name": "POST /api/CreativeV2/GetAllCreative - 按profileId+advertiserId+lineItemIds查询可选Creative列表",
+    "description": "单接口测试：POST /api/CreativeV2/GetAllCreative。按profileId+advertiserId+lineItemIds(+lineItemTypes)查询该lineItem下可选/已关联的Creative列表(V2版)。500条随机样本中占比约99.7%(355次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAllCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/GetAllCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineItemIds": ["{{lineitem_id}}"],
+          "lineItemTypes": ["DISPLAY"]
+        },
+        "extract_vars": {},
+        "expected_response": { "$root": { "$is_array": true } }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CreativeV2/GetAssetDetailForStreamingTv - 按assetId判断是否支持StreamingTv",
+    "description": "单接口测试：GET /api/CreativeV2/GetAssetDetailForStreamingTv。按profileId+assetId+assetVersion判断该素材是否支持用于创建Streaming TV Creative。630条流量中唯一真实模式，已全覆盖。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAssetDetailForStreamingTv",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/GetAssetDetailForStreamingTv?profileId={{profile_id_single}}&assetId={{asset_id_standarddisplay}}&assetVersion=version_v1",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/GetAssets - 按assetId+assetVersion批量查询素材详情",
+    "description": "单接口测试：POST /api/CreativeV2/GetAssets。按profileId+assets[{assetId,assetVersion}]批量查询素材库详情(V2版)。339条流量中唯一真实模式，已全覆盖。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAssets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/GetAssets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "assets": [
+            { "assetId": "{{asset_id_standarddisplay}}", "assetVersion": "version_v1" }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true, "Data": { "$is_array": true } }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CreativeV2/GetCreativeLineItem - 按creativeId+advertiserId查询关联lineItem",
+    "description": "单接口测试：GET /api/CreativeV2/GetCreativeLineItem。按creativeId+advertiserId查询该creative关联的lineItem列表(V2版)。使用本账号下已存在关联的真实creative(test90101)。6条流量中唯一真实模式，已全覆盖。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreativeLineItem",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/GetCreativeLineItem?creativeId={{creativev2_creative_id_with_lineitem}}&advertiserId={{advertiser_id_single}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": { "$root": { "$is_array": true } }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CreativeV2/GetCreativeTagId - 按creativeId查询关联标签",
+    "description": "单接口测试：GET /api/CreativeV2/GetCreativeTagId。按creativeId查询该creative已关联的tagId列表。845条流量中唯一真实模式，已全覆盖。测试账号下该creative当前无标签，返回空数组亦为正常业务态。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreativeTagId",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/GetCreativeTagId?creativeId={{creative_id_standarddisplay}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": { "$root": { "$is_array": true } }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/GetTagsByCreativeIds - 按creativeIds批量查询lineitem标签(不选全部)",
+    "description": "单接口测试：POST /api/CreativeV2/GetTagsByCreativeIds。按creativeIds批量查询关联的lineitem tags，selectedAllQuery为null(非全选模式)。500条随机样本中占比约98.4%(492次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTagsByCreativeIds",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/GetTagsByCreativeIds",
+        "request_body": {
+          "creativeIds": ["{{creative_id_standarddisplay}}", "{{creative_id_rec}}"],
+          "selectedAllQuery": null
+        },
+        "extract_vars": {},
+        "expected_response": { "code": 200, "data": { "$is_array": true } }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/GetUnifyCreative - 按profileId+creativeId查询统一Creative详情",
+    "description": "单接口测试：POST /api/CreativeV2/GetUnifyCreative。按profileId+creativeId查询Unify格式的Creative详情(V2统一模型)。3547条流量中唯一真实模式，已全覆盖。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetUnifyCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/GetUnifyCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "creativeId": "{{creative_id_standarddisplay}}"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true, "Data": { "$not_empty": true } }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/PreviewCreative - RESPONSIVE_ECOMMERCE/COMPONENT组件式预览",
+    "description": "单接口测试：POST /api/CreativeV2/PreviewCreative。预览RESPONSIVE_ECOMMERCE(COMPONENT组件式)创意渲染效果(不持久化)。500条随机样本中占比约96.2%(480次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PreviewCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/PreviewCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "creative": {
+            "adExperience": "RESPONSIVE_ECOMMERCE",
+            "previewOverrides": {
+              "adCreativeFormatPreviewOverrides": {
+                "adCreativeFormatType": "COMPONENT",
+                "productFilter": "B000HHMG6W",
+                "sizeFilter": { "width": "300", "height": "50" },
+                "retailFormatFilter": "SHOP_NOW"
+              },
+              "languageFilter": "en",
+              "previewSite": "ON_AMAZON"
+            },
+            "creative": {
+              "country": "US",
+              "adCreativeFormatProperties": {
+                "adCreativeFormatType": "COMPONENT",
+                "assets": [],
+                "creativeSizes": [],
+                "trackingUrls": [],
+                "adCopy": [],
+                "additionalAttributes": {
+                  "targetPlacements": ["DISPLAY", "NATIVE"],
+                  "allowThirdPartySellers": false,
+                  "creativeContentType": "PRODUCT",
+                  "renderOptimizations": ["TITLE", "HEADLINE", "IMAGE"]
+                },
+                "products": [
+                  { "productTitle": "", "productId": "B000HHMG6W", "reviewUrl": "", "productType": "ASIN", "reviewText": "" }
+                ]
+              },
+              "name": "test250922-preview-REC",
+              "language": "en",
+              "hostedType": "AMAZON_HOSTED"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/PreviewCreative - ONLINE_VIDEO视频预览",
+    "description": "单接口测试：POST /api/CreativeV2/PreviewCreative。预览ONLINE_VIDEO(VIDEO)视频创意渲染效果(不持久化)。500条随机样本中占比约1.2%(6次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PreviewCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/PreviewCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "creative": {
+            "adExperience": "ONLINE_VIDEO",
+            "creative": {
+              "name": "test250922-preview-video",
+              "country": "CA",
+              "language": "en",
+              "hostedType": "AMAZON_HOSTED",
+              "adCreativeFormatProperties": {
+                "assets": [
+                  { "assetId": "amzn1.assetlibrary.asset1.1738e6aafbf30cc1ad80e570bb6c6f7a", "assetVersion": "version_v1" }
+                ],
+                "trackingUrls": null,
+                "clickActions": [ { "urlDestination": "", "clickActionType": "URL" } ],
+                "adCreativeFormatType": "VIDEO"
+              }
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/PreviewCreative - ASSET_BASED_CREATIVE预览",
+    "description": "单接口测试：POST /api/CreativeV2/PreviewCreative。预览ASSET_BASED_CREATIVE(自定义图片组件)创意渲染效果(不持久化)。500条随机样本中占比约1.0%(5次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PreviewCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/PreviewCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "creative": {
+            "adExperience": "ASSET_BASED_CREATIVE",
+            "previewOverrides": {
+              "adCreativeFormatPreviewOverrides": {
+                "adCreativeFormatType": "COMPONENT",
+                "sizeFilter": { "width": "980", "height": "55" },
+                "retailFormatFilter": null
+              },
+              "languageFilter": null,
+              "previewSite": "ON_AMAZON"
+            },
+            "creative": {
+              "country": "US",
+              "adCreativeFormatProperties": {
+                "adCreativeFormatType": "COMPONENT",
+                "assets": [
+                  {
+                    "label": "600x600-7.png",
+                    "value": "{{asset_id_standarddisplay}}",
+                    "applyBorder": false,
+                    "associatedAdExperience": "ASSET_BASED_CREATIVE",
+                    "assetVersion": "version_v1",
+                    "assetType": "CUSTOM_IMAGE",
+                    "assetCroppingCoordinates": [ { "x": 0, "width": 600, "y": 0, "height": 600, "aspectRatio": "1" } ],
+                    "assetId": "{{asset_id_standarddisplay}}"
+                  }
+                ],
+                "creativeSizes": [],
+                "trackingUrls": [],
+                "adCopy": [ { "type": "HEADLINE", "value": "test250922" }, { "type": "BRAND_NAME", "value": "test250922" } ],
+                "additionalAttributes": {
+                  "targetPlacements": ["DISPLAY", "NATIVE"],
+                  "creativeContentType": null,
+                  "renderOptimizations": ["TITLE", "HEADLINE", "IMAGE"]
+                },
+                "products": null,
+                "clickActions": [ { "clickActionType": "URL", "urlDestination": "https://111.com", "associatedAdExperience": "ASSET_BASED_CREATIVE" } ]
+              },
+              "name": "test250922-preview-assetbased",
+              "language": "en",
+              "hostedType": "AMAZON_HOSTED"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/PreviewCreative - BRAND_STORE预览",
+    "description": "单接口测试：POST /api/CreativeV2/PreviewCreative。预览BRAND_STORE(店铺引流)创意渲染效果(不持久化)。500条随机样本中占比约1.0%(5次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PreviewCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/PreviewCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "creative": {
+            "adExperience": "BRAND_STORE",
+            "previewOverrides": {
+              "adCreativeFormatPreviewOverrides": {
+                "adCreativeFormatType": "COMPONENT",
+                "sizeFilter": { "width": "336", "height": "280" },
+                "retailFormatFilter": null
+              },
+              "languageFilter": null,
+              "previewSite": "ON_AMAZON"
+            },
+            "creative": {
+              "country": "US",
+              "adCreativeFormatProperties": {
+                "adCreativeFormatType": "COMPONENT",
+                "assets": [
+                  { "assetId": "{{asset_id_standarddisplay}}", "applyBorder": false, "associatedAdExperience": "BRAND_STORE", "assetVersion": "version_v1", "assetType": "CUSTOM_IMAGE", "assetCroppingCoordinates": [ { "x": 0, "width": 600, "y": 0, "aspectRatio": "1", "height": 600 } ] }
+                ],
+                "creativeSizes": [],
+                "trackingUrls": [],
+                "adCopy": [ { "type": "HEADLINE", "value": "test250922" }, { "type": "BRAND_NAME", "value": "test250922" } ],
+                "additionalAttributes": {
+                  "renderOptimizations": ["BRAND_STORE_DEALS_HEADLINE"],
+                  "targetPlacements": ["DISPLAY", "NATIVE"],
+                  "creativeContentType": null
+                },
+                "products": [],
+                "clickActions": [ { "clickActionType": "URL", "urlDestination": "https://www.amazon.com/stores/test250922/page/1A2B3C4D-5678-90AB-CDEF-1234567890AB", "associatedAdExperience": "BRAND_STORE" } ]
+              },
+              "name": "test250922-preview-brandstore",
+              "language": "en",
+              "hostedType": "AMAZON_HOSTED"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/PreviewCreativeById - 按creativeId预览(type=STANDARD_DISPLAY)",
+    "description": "单接口测试：POST /api/CreativeV2/PreviewCreativeById。按adCreativeId+type=STANDARD_DISPLAY预览已存在creative的渲染效果。500条随机样本中占比约85.4%(427次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PreviewCreativeById",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/PreviewCreativeById",
+        "request_body": {
+          "adCreativeId": "{{creative_id_standarddisplay}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "type": "STANDARD_DISPLAY"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true, "Data": { "previewContent": { "$not_empty": true } } }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/PreviewCreativeById - 按creativeId预览(size代替type)",
+    "description": "单接口测试：POST /api/CreativeV2/PreviewCreativeById。按adCreativeId+size=Responsive(不传type)预览Responsive类creative渲染效果。500条随机样本中占比约11.4%(57次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PreviewCreativeById",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/PreviewCreativeById",
+        "request_body": {
+          "adCreativeId": "{{creative_id_rec}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "size": "Responsive"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/PreviewCreativeById - 按creativeId预览(不传type/size)",
+    "description": "单接口测试：POST /api/CreativeV2/PreviewCreativeById。仅按adCreativeId+advertiserId+profileId预览(不传type也不传size)。500条随机样本中占比约2.6%(13次)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 PreviewCreativeById",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/PreviewCreativeById",
+        "request_body": {
+          "adCreativeId": "{{creative_id_standarddisplay}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/UpdateCreativeName - 修改creative名称(含后置还原,可重复)",
+    "description": "单接口测试：POST /api/CreativeV2/UpdateCreativeName。修改creative显示名称。500条随机样本中占比100%(500次)。第2步后置操作将名称还原为原值，保证用例可重复执行。使用本账号真实creative(576467793485520873)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改creative名称为测试值",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/UpdateCreativeName",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "creativeId": "{{creative_id_standarddisplay}}",
+          "creativeName": "test250922-rename-standarddisplay"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      },
+      {
+        "name": "后置还原-恢复原名称",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/UpdateCreativeName",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "creativeId": "{{creative_id_standarddisplay}}",
+          "creativeName": "autoTestCreation_Creative_StandardDisplay_20251013093058"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/BatchModifyCreativeState - 切换association状态(含后置还原,可重复)",
+    "description": "单接口测试：POST /api/CreativeV2/BatchModifyCreativeState。批量修改creative-lineItem关联的启用/禁用状态(不带selectedAllQuery)。500条随机样本中占比约52.4%(262次)。第2步后置操作将状态还原为ACTIVE，保证用例可重复执行。使用本账号真实association(creativeId=588186041844810295/lineItemId=593961935036994002，测试遗留数据)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置association状态为INACTIVE",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BatchModifyCreativeState",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "associations": [
+            { "adCreativeId": "{{creativev2_creative_id_with_lineitem}}", "state": "INACTIVE", "adGroupId": "{{creativev2_lineitem_id_for_state}}" }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      },
+      {
+        "name": "后置还原-设置association状态为ACTIVE",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BatchModifyCreativeState",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "associations": [
+            { "adCreativeId": "{{creativev2_creative_id_with_lineitem}}", "state": "ACTIVE", "adGroupId": "{{creativev2_lineitem_id_for_state}}" }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CreativeV2/UpdateUnifyCreative - RESPONSIVE_ECOMMERCE整体更新(含后置还原,可重复)",
+    "description": "单接口测试：POST /api/CreativeV2/UpdateUnifyCreative。整体更新RESPONSIVE_ECOMMERCE(COMPONENT)类型creative。500条随机样本中占比约47.4%(237次)。第2步后置操作将name还原为原值，保证用例可重复执行。使用本账号真实creative(576468887949737402，type=Responsive eCommerce)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新creative(name加后缀-test)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/UpdateUnifyCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "RESPONSIVE_ECOMMERCE",
+          "adCreativeId": "{{creative_id_rec}}",
+          "creative": {
+            "hostedType": "AMAZON_HOSTED",
+            "country": "US",
+            "language": "en",
+            "name": "autoTestCration_Creative_REC_20260503094129-test250922",
+            "adCreativeFormatProperties": {
+              "adCreativeFormatType": "COMPONENT",
+              "assets": [
+                { "assetId": "amzn1.assetlibrary.asset1.956d1e4e55ddd1c1c4b4d9bda789ecbe", "applyBorder": false, "associatedAdExperience": "RESPONSIVE_ECOMMERCE", "assetVersion": "version_v1", "assetType": "CUSTOM_IMAGE", "assetCroppingCoordinates": [ { "x": 0.0, "width": 1080.0, "y": 3.0, "height": 1080.0 } ] },
+                { "assetId": "amzn1.assetlibrary.asset1.956d1e4e55ddd1c1c4b4d9bda789ecbe", "applyBorder": false, "associatedAdExperience": "RESPONSIVE_ECOMMERCE", "assetVersion": "version_v1", "assetType": "CUSTOM_IMAGE", "assetCroppingCoordinates": [ { "x": 235.0, "width": 610.0, "y": 0.0, "height": 1085.0 } ] },
+                { "assetId": "amzn1.assetlibrary.asset1.956d1e4e55ddd1c1c4b4d9bda789ecbe", "applyBorder": false, "associatedAdExperience": "RESPONSIVE_ECOMMERCE", "assetVersion": "version_v1", "assetType": "CUSTOM_IMAGE", "assetCroppingCoordinates": [ { "x": 0.0, "width": 1080.0, "y": 260.0, "height": 566.0 } ] }
+              ],
+              "creativeSizes": [
+                { "responsive": false, "width": 970.0, "height": 250.0 },
+                { "responsive": false, "width": 728.0, "height": 90.0 },
+                { "responsive": false, "width": 320.0, "height": 50.0 },
+                { "responsive": false, "width": 300.0, "height": 50.0 },
+                { "responsive": false, "width": 336.0, "height": 280.0 },
+                { "responsive": false, "width": 300.0, "height": 600.0 },
+                { "responsive": false, "width": 160.0, "height": 600.0 },
+                { "responsive": false, "width": 300.0, "height": 250.0 },
+                { "responsive": false, "width": 980.0, "height": 55.0 },
+                { "responsive": false, "width": 650.0, "height": 130.0 },
+                { "responsive": false, "width": 414.0, "height": 125.0 },
+                { "responsive": false, "width": 245.0, "height": 250.0 },
+                { "responsive": false, "width": 350.0, "height": 420.0 }
+              ],
+              "products": [ { "productId": "B086S4XM3W", "productTitle": "Kidde Smoke & Carbon Monoxide Detector, 10-Year Battery, Voice Alerts , 1 Count ( Pack of 1)", "productType": "ASIN" } ],
+              "additionalAttributes": {
+                "allowedRetailFormats": ["SHOP_NOW", "ADD_TO_CART", "CUSTOMER_REVIEW", "COUPON"],
+                "optimizationGoal": "PURCHASE_RATE",
+                "targetPlacements": ["DISPLAY", "NATIVE"],
+                "allowThirdPartySellers": false,
+                "allowCbcDriveTrafficToVideo": false
+              }
+            }
+          },
+          "tagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      },
+      {
+        "name": "后置还原-name恢复为原值",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/UpdateUnifyCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "RESPONSIVE_ECOMMERCE",
+          "adCreativeId": "{{creative_id_rec}}",
+          "creative": {
+            "hostedType": "AMAZON_HOSTED",
+            "country": "US",
+            "language": "en",
+            "name": "autoTestCration_Creative_REC_20260503094129",
+            "adCreativeFormatProperties": {
+              "adCreativeFormatType": "COMPONENT",
+              "assets": [
+                { "assetId": "amzn1.assetlibrary.asset1.956d1e4e55ddd1c1c4b4d9bda789ecbe", "applyBorder": false, "associatedAdExperience": "RESPONSIVE_ECOMMERCE", "assetVersion": "version_v1", "assetType": "CUSTOM_IMAGE", "assetCroppingCoordinates": [ { "x": 0.0, "width": 1080.0, "y": 3.0, "height": 1080.0 } ] },
+                { "assetId": "amzn1.assetlibrary.asset1.956d1e4e55ddd1c1c4b4d9bda789ecbe", "applyBorder": false, "associatedAdExperience": "RESPONSIVE_ECOMMERCE", "assetVersion": "version_v1", "assetType": "CUSTOM_IMAGE", "assetCroppingCoordinates": [ { "x": 235.0, "width": 610.0, "y": 0.0, "height": 1085.0 } ] },
+                { "assetId": "amzn1.assetlibrary.asset1.956d1e4e55ddd1c1c4b4d9bda789ecbe", "applyBorder": false, "associatedAdExperience": "RESPONSIVE_ECOMMERCE", "assetVersion": "version_v1", "assetType": "CUSTOM_IMAGE", "assetCroppingCoordinates": [ { "x": 0.0, "width": 1080.0, "y": 260.0, "height": 566.0 } ] }
+              ],
+              "creativeSizes": [
+                { "responsive": false, "width": 970.0, "height": 250.0 },
+                { "responsive": false, "width": 728.0, "height": 90.0 },
+                { "responsive": false, "width": 320.0, "height": 50.0 },
+                { "responsive": false, "width": 300.0, "height": 50.0 },
+                { "responsive": false, "width": 336.0, "height": 280.0 },
+                { "responsive": false, "width": 300.0, "height": 600.0 },
+                { "responsive": false, "width": 160.0, "height": 600.0 },
+                { "responsive": false, "width": 300.0, "height": 250.0 },
+                { "responsive": false, "width": 980.0, "height": 55.0 },
+                { "responsive": false, "width": 650.0, "height": 130.0 },
+                { "responsive": false, "width": 414.0, "height": 125.0 },
+                { "responsive": false, "width": 245.0, "height": 250.0 },
+                { "responsive": false, "width": 350.0, "height": 420.0 }
+              ],
+              "products": [ { "productId": "B086S4XM3W", "productTitle": "Kidde Smoke & Carbon Monoxide Detector, 10-Year Battery, Voice Alerts , 1 Count ( Pack of 1)", "productType": "ASIN" } ],
+              "additionalAttributes": {
+                "allowedRetailFormats": ["SHOP_NOW", "ADD_TO_CART", "CUSTOMER_REVIEW", "COUPON"],
+                "optimizationGoal": "PURCHASE_RATE",
+                "targetPlacements": ["DISPLAY", "NATIVE"],
+                "allowThirdPartySellers": false,
+                "allowCbcDriveTrafficToVideo": false
+              }
+            }
+          },
+          "tagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/UpdateUnifyCreative - ONLINE_VIDEO整体更新",
+    "description": "单接口测试：POST /api/CreativeV2/UpdateUnifyCreative。整体更新ONLINE_VIDEO(VIDEO)类型creative。500条随机样本中占比约52.2%(261次)。技术受限：本账号下未确认拥有可安全改后还原的真实ONLINE_VIDEO类型creative，仅生成不执行，避免误改他方数据或本账号无法还原。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新creative(ONLINE_VIDEO)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/UpdateUnifyCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "ONLINE_VIDEO",
+          "adCreativeId": "[NEEDS_REAL_VALUE]",
+          "creative": {
+            "hostedType": "AMAZON_HOSTED",
+            "name": "test250922-video",
+            "advertiserId": "{{advertiser_id_single}}",
+            "country": "CA",
+            "marketplace": "CA",
+            "language": "en",
+            "adCreativeFormatProperties": {
+              "adCreativeFormatType": "VIDEO",
+              "trackingUrls": [ { "url": "https://123.com", "type": "IMPRESSION", "associatedAdExperience": "ONLINE_VIDEO" } ],
+              "clickActions": [ { "clickActionType": "URL", "urlDestination": "https://123.com" } ],
+              "products": [],
+              "assets": [ { "assetId": "amzn1.assetlibrary.asset1.2b81394499f763fc989b44af7d9e26a5", "assetVersion": "version_v1" } ]
+            }
+          },
+          "tagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/AddAssociatedCreativesToLineItem - 关联creativeIds到lineItem",
+    "description": "单接口测试：POST /api/CreativeV2/AddAssociatedCreativesToLineItem。将creativeIds关联到指定lineItem。500条随机样本中占比约71.0%(355次)。技术受限：CreativeV2的23个接口中未发现对应的\"取消关联/移除creative\"接口，且无法确认该接口是追加语义还是整体替换语义(替换语义下用空数组回填可能误删共享沙箱账号下其他关联)，为避免在共享测试账号上留下不可清理的残留，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "关联creativeIds到lineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/AddAssociatedCreativesToLineItem",
+        "request_body": {
+          "lineItemId": "{{lineitem_id}}",
+          "creativeIds": ["{{creative_id_standarddisplay}}"]
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/AddAssociatedCreativesToLineItem - creativeIds为空(清空关联)",
+    "description": "单接口测试：POST /api/CreativeV2/AddAssociatedCreativesToLineItem。creativeIds传空数组(疑似清空该lineItem的creative关联)。500条随机样本中占比约29.0%(145次)。技术受限：语义未明确(追加/替换)，且清空操作可能影响共享沙箱账号下其他既有关联，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "creativeIds为空",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/AddAssociatedCreativesToLineItem",
+        "request_body": {
+          "lineItemId": "{{lineitem_id}}",
+          "creativeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkCreateNewCreatives - 批量创建RESPONSIVE_ECOMMERCE creative(不带tag)",
+    "description": "单接口测试：POST /api/CreativeV2/BulkCreateNewCreatives。批量创建RESPONSIVE_ECOMMERCE(COMPONENT)类型creative，tagIds为空。500条随机样本中占比约81.9%(59/72次)。技术受限：CreativeV2的23个接口中未发现creative级别的归档/删除接口(仅BatchModifyCreativeState可改association层级状态，需creative已关联lineItem)，创建后无法清理，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建creative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkCreateNewCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "RESPONSIVE_ECOMMERCE",
+          "tagIds": [],
+          "creatives": [
+            {
+              "Type": "RESPONSIVE_ECOMMERCE",
+              "profileId": "{{profile_id_single}}",
+              "advertiserId": "{{advertiser_id_single}}",
+              "hostedType": "AMAZON_HOSTED",
+              "country": "US",
+              "adCreativeFormatProperties": {
+                "adCreativeFormatType": "COMPONENT",
+                "trackingUrls": [],
+                "adCopy": [],
+                "products": [ { "productId": "B0DJ4DHT25", "productType": "ASIN" } ]
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkCreateNewCreatives - 批量创建RESPONSIVE_ECOMMERCE creative(带tagIds)",
+    "description": "单接口测试：POST /api/CreativeV2/BulkCreateNewCreatives。批量创建RESPONSIVE_ECOMMERCE类型creative并同时打tag(tagIds非空)。500条随机样本中占比约15.3%(11/72次)。技术受限：同上，无creative级归档接口，仅生成不执行；tagIds需真实tagId，本账号亦未探测到。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建creative并打tag",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkCreateNewCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "RESPONSIVE_ECOMMERCE",
+          "tagIds": ["[NEEDS_REAL_VALUE]"],
+          "creatives": [
+            {
+              "Type": "RESPONSIVE_ECOMMERCE",
+              "profileId": "{{profile_id_single}}",
+              "advertiserId": "{{advertiser_id_single}}",
+              "hostedType": "AMAZON_HOSTED",
+              "country": "US",
+              "adCreativeFormatProperties": {
+                "adCreativeFormatType": "COMPONENT",
+                "trackingUrls": [],
+                "adCopy": [],
+                "products": [ { "productId": "B0BZT85TLG", "productType": "ASIN" } ]
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkCreateNewCreatives - creatives为空数组",
+    "description": "单接口测试：POST /api/CreativeV2/BulkCreateNewCreatives。creatives传空数组(不创建任何creative,校验类调用)。500条随机样本中占比约2.8%(2/72次)。技术受限：同上，仅生成不执行(该场景本身不产生残留,但为保持同接口场景统一处理策略仍标注仅生成不执行)。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "creatives为空",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkCreateNewCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "VIDEO",
+          "creatives": [],
+          "tagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkSetCreativeFlight - 设置creative在lineItem下的投放起止时间",
+    "description": "单接口测试：POST /api/CreativeV2/BulkSetCreativeFlight。设置creative-lineItem关联的flight(startDate/endDate)。104条流量中唯一真实模式，已全覆盖。技术受限：对应查询接口GetLitemItemFlight在365天全平台流量为0(疑似废弃/不可用)，无法安全获取原始flight值以便还原，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置flight",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkSetCreativeFlight",
+        "request_body": [
+          {
+            "profileId": "{{profile_id_single}}",
+            "advertiserId": "{{advertiser_id_single}}",
+            "lineItemId": "{{creativev2_lineitem_id_for_state}}",
+            "creativeId": "{{creativev2_creative_id_with_lineitem}}",
+            "startDate": "2026-09-22 00:00:00",
+            "endDate": "2026-10-22 23:58:00"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkSetTagCreative - 批量为creative添加标签",
+    "description": "单接口测试：POST /api/CreativeV2/BulkSetTagCreative。批量为creative添加tag(bulkType=add,isAdd=true)。500条随机样本中占比约90.2%(451次)。技术受限：本账号下探测GetCreativeTagId/GetTagsByCreativeIds均无现存tagId，CreativeV2范围内无创建tag的接口(标签由ag-service/LineItemTags维护，超出本次tag范围)，无法配对真实tagId做add+delete回滚，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量添加tag",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkSetTagCreative",
+        "request_body": {
+          "bulkType": "add",
+          "creativeIds": ["{{creative_id_standarddisplay}}"],
+          "isSaveValid": false,
+          "isAdd": true,
+          "profileIds": ["{{profile_id_single}}"],
+          "advertiserIds": ["{{advertiser_id_single}}"],
+          "tagIds": ["[NEEDS_REAL_VALUE]"],
+          "selectedAllQuery": null
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkSetTagCreative - 批量为creative删除标签",
+    "description": "单接口测试：POST /api/CreativeV2/BulkSetTagCreative。批量为creative删除tag(bulkType=delete)。500条随机样本中占比约1.0%(5次)。技术受限：同上，无真实tagId可用，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量删除tag",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkSetTagCreative",
+        "request_body": {
+          "bulkType": "delete",
+          "creativeIds": ["{{creative_id_standarddisplay}}"],
+          "isSaveValid": true,
+          "profileIds": ["{{profile_id_single}}"],
+          "advertiserIds": ["{{advertiser_id_single}}"],
+          "tagIds": ["[NEEDS_REAL_VALUE]"],
+          "selectedAllQuery": null
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkUploadComponentBasedCreatives - 批量上传Component模板创建creative",
+    "description": "单接口测试：POST /api/CreativeV2/BulkUploadComponentBasedCreatives。通过multipart/form-data上传Excel模板批量创建Component类creative(Products on Amazon/Other website/Brand Store)。34条流量中唯一真实模式，已全覆盖。技术受限：请求体为multipart文件上传(非JSON)，需要构造与真实模板列结构一致的Excel文件，且创建后无creative级归档接口可清理，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "上传Component模板文件",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkUploadComponentBasedCreatives",
+        "request_body": {
+          "__multipart__": true,
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "file": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/BulkUploadComponentCreatives - 批量上传Component creative(旧版接口)",
+    "description": "单接口测试：POST /api/CreativeV2/BulkUploadComponentCreatives。通过multipart/form-data上传数据批量创建Component类creative(旧版/并行接口)。102条流量中唯一真实模式，已全覆盖。技术受限：同上，multipart文件上传+无creative级归档接口，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "上传Component数据",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/BulkUploadComponentCreatives",
+        "request_body": {
+          "__multipart__": true,
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "file": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/CreateUnifyCreative - 创建RESPONSIVE_ECOMMERCE creative",
+    "description": "单接口测试：POST /api/CreativeV2/CreateUnifyCreative。创建RESPONSIVE_ECOMMERCE(COMPONENT)类型的Unify creative。500条随机样本中占比约56.0%(280次)。技术受限：无creative级归档/删除接口，创建后无法清理，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Unify creative(REC)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/CreateUnifyCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "RESPONSIVE_ECOMMERCE",
+          "creative": {
+            "adCreativeFormatProperties": {
+              "adCreativeFormatType": "COMPONENT",
+              "creativeSizes": [],
+              "assets": [],
+              "adCopy": [],
+              "products": [ { "productId": "B0007P9554", "productTitle": "test250922 product", "productType": "ASIN" } ]
+            },
+            "name": "test250922-create-rec",
+            "country": "US",
+            "language": "en",
+            "hostedType": "AMAZON_HOSTED"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/CreateUnifyCreative - 创建ONLINE_VIDEO creative(带tagIds)",
+    "description": "单接口测试：POST /api/CreativeV2/CreateUnifyCreative。创建ONLINE_VIDEO(VIDEO)类型的Unify creative，tagIds为空数组。500条随机样本中占比约43.0%(215次)。技术受限：同上，无creative级归档接口，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Unify creative(VIDEO)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/CreateUnifyCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "ONLINE_VIDEO",
+          "creative": {
+            "hostedType": "AMAZON_HOSTED",
+            "name": "test250922-create-video",
+            "advertiserId": "{{advertiser_id_single}}",
+            "country": "US",
+            "marketplace": "US",
+            "language": "en",
+            "adCreativeFormatProperties": {
+              "adCreativeFormatType": "VIDEO",
+              "trackingUrls": [],
+              "clickActions": [ { "clickActionType": "URL", "urlDestination": "https://amazon.com/dp/B08FCFTDT5" } ],
+              "products": [ { "productId": "B08FCFTDT5", "productType": "ASIN" } ],
+              "assets": [ { "assetId": "amzn1.assetlibrary.asset1.9c909d54421ecd4e792df009fabd4d4f", "assetVersion": "version_v1" } ]
+            }
+          },
+          "tagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  },
+  {
+    "name": "[仅生成不执行] POST /api/CreativeV2/CreateUnifyCreative - 创建STREAMING_TV_VIDEO creative",
+    "description": "单接口测试：POST /api/CreativeV2/CreateUnifyCreative。创建STREAMING_TV_VIDEO类型的Unify creative(带tagIds)。500条随机样本中占比约1.0%(5次)。技术受限：同上，无creative级归档接口，仅生成不执行。",
+    "module": "CreativeV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Unify creative(STREAMING_TV_VIDEO)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "CreativeV2/CreateUnifyCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "adExperience": "STREAMING_TV_VIDEO",
+          "creative": {
+            "hostedType": "AMAZON_HOSTED",
+            "name": "test250922-create-stv",
+            "advertiserId": "{{advertiser_id_single}}",
+            "country": "US",
+            "marketplace": "US",
+            "language": "en",
+            "adCreativeFormatProperties": {
+              "adCreativeFormatType": "VIDEO",
+              "trackingUrls": [],
+              "clickActions": [ { "associatedAdExperience": "STREAMING_TV_VIDEO", "clickActionType": "LEARN_MORE", "position": "LEFT", "urlDestination": "https://amazon.com/dp/B0GN8YR51C" } ],
+              "products": [ { "productId": "B0GN8YR51C", "productType": "ASIN" } ],
+              "assets": [ { "assetId": "amzn1.assetlibrary.asset1.7727774c747f3e5236ccf631cb6acd9e", "assetVersion": "version_v1" } ]
+            },
+            "externalId": null
+          },
+          "tagIds": ["[NEEDS_REAL_VALUE]"]
+        },
+        "extract_vars": {},
+        "expected_response": { "IsSuccessStatusCode": true }
+      }
+    ]
+  }
+]
