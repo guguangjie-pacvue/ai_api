@@ -1,0 +1,313 @@
+[
+  {
+    "name": "POST /getHistoryList - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /getHistoryList。该模块共享RuleParam请求体虽在Swagger中声明productLine字段，但实测(ES 90天全平台1594条真实样本聚合)该字段从未被真实填充(聚合桶为空)，无法用ES按平台归因，视同GET采用全平台流量结构+samsclub测试账号直接验证。samsclub测试账号(client_id=62)当前无任何规则执行历史，返回totalCount:0(空结果，非接口缺陷，是账号真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行历史列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "startDate": "2025-01-01",
+          "endDate": "2026-09-14",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingList - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /getPendingList。请求体结构同getHistoryList(RuleParam)，无法按平台归因，采用全平台流量。samsclub测试账号验证：code:200，返回空列表(totalCount:0，账号无待处理规则建议，真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingRuleNum - 默认调用(无请求体)",
+    "description": "单接口测试：POST /getPendingRuleNum。Swagger无声明请求体。samsclub测试账号验证：code:200，返回空数组(账号无待处理规则，真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理规则数",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingRuleNum",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /getProfiles。请求体结构同getHistoryList(RuleParam)，无法按平台归因，采用全平台流量。samsclub测试账号验证：code:200，返回空数组(该账号当前在profile维度无执行历史记录，真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Profile列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertCount - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /history/getRuleAlertCount。请求体结构同getHistoryList(RuleParam)，无法按平台归因，采用全平台流量。samsclub测试账号验证：code:200，返回ruleAlertCount=0(账号无告警，真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警数",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertCount",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertDetail - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /history/getRuleAlertDetail。请求体结构同getHistoryList(RuleParam)，无法按平台归因，采用全平台流量。samsclub测试账号验证：code:200，返回空列表(账号无告警详情，真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertDetail",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleDeadDetail - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /history/getRuleDeadDetail。请求体结构同getHistoryList(RuleParam)，无法按平台归因，采用全平台流量。实测该接口返回的是跨client/跨productLine的规则失效状态数据(非单一平台/客户隔离的报表，业务设计如此，非本次测试引入的问题，与kroger/chewy平台观察一致)。samsclub测试账号验证：code:200，返回真实数组。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则失效详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleDeadDetail",
+        "request_body": {
+          "startDate": "2025-01-01",
+          "endDate": "2026-09-14",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - entityIds为空的批次级查询",
+    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线。empty batchIds会触发后端SQL \"IN()\"空列表拼接缺陷(已在template/getRecommendation同类复现)，故按target/kroger/chewy平台已验证过的规避方式传入占位batchId(\"00000000-0000-0000-0000-000000000000\")+跨平台真实存在的ruleId({{cross_platform_rule_id}})+profile_id，规避该缺陷验证接口基础可用性。entityIds非空的场景因samsclub账号当前无自有campaign/target数据(definition-controller模块尚未创建)暂无法用真实ID覆盖。samsclub测试账号验证：code:200，返回空数组(无匹配快照)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则执行快照(entityIds为空)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/queryRuleSnapshots",
+        "request_body": {
+          "ruleIds": [
+            "{{cross_platform_rule_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "batchIds": [
+            "00000000-0000-0000-0000-000000000000"
+          ],
+          "entityIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLog - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /getAutoRuleDetailLog。该POST请求体不含productLine字段。此前kroger平台曾判断该接口必须携带真实ruleId才能返回(非405即报错)，本次对samsclub账号重新实测：仅携带pageInfo+newLog即可正常返回code:200(不要求真实ruleId)，与chewy平台的复核结论一致，属于按账号重新验证后的更新结论。samsclub测试账号验证：返回空列表(totalCount:0，账号无自动规则明细日志，真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则明细日志",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleDetailLog",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "newLog": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLogFilter - 默认查询(无过滤条件)",
+    "description": "单接口测试：POST /getAutoRuleDetailLogFilter。与getAutoRuleDetailLog同结构。samsclub测试账号验证：仅携带pageInfo+newLog即可正常返回code:200，返回可选过滤项的空集合(actionType/adGroupIds/asin/campaignIds均为空数组，账号无数据，真实状态)。samsclub平台，真实账号验证。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则明细日志过滤项",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleDetailLogFilter",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "newLog": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

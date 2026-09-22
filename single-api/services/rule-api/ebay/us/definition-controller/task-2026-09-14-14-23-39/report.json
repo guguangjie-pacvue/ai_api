@@ -1,0 +1,898 @@
+{
+  "config": "rule-api (ebay, us)",
+  "started_at": "2026-09-14T06:31:25.194208+00:00",
+  "finished_at": "2026-09-14T06:32:43.778096+00:00",
+  "total": 17,
+  "passed": 17,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /definition - 创建Keyword类型规则(ebay平台唯一真实模式,含后置删除,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建ebay Keyword规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 1510,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 5628,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 1012,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /definition/{ruleId} - 查询自建规则详情(自包含,含后置删除,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建临时规则用于GET验证",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 2397,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 1760,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "GET 定义详情",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/2099385556053176322",
+          "status_code": 200,
+          "ms": 1082,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 54,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 2084,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/changeOwners - 变更自建规则负责人(自包含,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建临时规则用于变更负责人",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 2625,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 2355,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "变更规则负责人",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeOwners",
+          "status_code": 200,
+          "ms": 879,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 1456,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/changeStatus - 暂停自建规则(isPaused:true,自包含,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建临时规则用于暂停测试",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 2888,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 1308,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "暂停规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 3288,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证已Paused",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/2099385611078250498",
+          "status_code": 200,
+          "ms": 2183,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 54,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 1179,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/changeStatus - 恢复自建规则(isPaused:false,自包含,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建临时规则用于恢复测试",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 1136,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 1122,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "前置-先暂停规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 966,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "恢复规则(isPaused:false)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 2178,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证已恢复(isPaused:false)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/2099385657618247682",
+          "status_code": 200,
+          "ms": 2104,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 54,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 960,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/checkRuleName - 检查未占用规则名(不带id,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "检查规则名(新建场景)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/checkRuleName",
+          "status_code": 200,
+          "ms": 2408,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": ""
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/checkRuleName - 检查规则名(带id排除自身,自包含,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建临时规则用于checkRuleName(带id)验证",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 2409,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 1361,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "检查规则名(编辑场景,排除自身)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/checkRuleName",
+          "status_code": 200,
+          "ms": 1161,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": ""
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 1223,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /definition/commerceRuleClient - 默认调用(无入参)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 commerceRuleClient",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/commerceRuleClient",
+          "status_code": 200,
+          "ms": 2192,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 151,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/commerceRuleReport - By Client维度报表(可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 commerceRuleReport(By Client)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/commerceRuleReport",
+          "status_code": 200,
+          "ms": 4108,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 137,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/commerceRuleReport - By Rule Name维度报表(真实缺陷,已复核确认)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 commerceRuleReport(By Rule Name)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/commerceRuleReport",
+          "status_code": 200,
+          "ms": 1620,
+          "pass": true,
+          "failures": [],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "Cannot invoke \"String.contains(java.lang.CharSequence)\" because the return value of \"com.pacvue.rulemeta.entity.ruleService.dto.RuleView.getRequirements()\" is null"
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/editRule - 编辑自建Keyword规则(自包含,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建待编辑的Keyword规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 1417,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 2502,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "编辑规则(frequency: Weekly -> Daily)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/editRule",
+          "status_code": 200,
+          "ms": 956,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证frequency已变更为Daily",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/2099385761314025474",
+          "status_code": 200,
+          "ms": 1162,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 54,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 961,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/export - Auto模式全量导出(不带ruleType/ruleIds过滤,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "导出规则列表(Auto,全量)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/export",
+          "status_code": 200,
+          "ms": 1094,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/export - Manual模式全量导出(可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "导出规则列表(Manual,全量)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/export",
+          "status_code": 200,
+          "ms": 1497,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/export - Auto模式+ruleType过滤导出(可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "导出规则列表(Auto,ruleType过滤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/export",
+          "status_code": 200,
+          "ms": 929,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/export - Commerce类规则导出(ruleType过滤,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "导出规则列表(Commerce类)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/export",
+          "status_code": 200,
+          "ms": 925,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/export - Auto模式+ruleIds过滤导出(自包含,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建临时规则用于ruleIds过滤导出",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition",
+          "status_code": 200,
+          "ms": 969,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-按名称查询提取ruleId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/getRule",
+          "status_code": 200,
+          "ms": 1155,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "导出规则列表(Auto,ruleIds过滤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/export",
+          "status_code": 200,
+          "ms": 1241,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除(isDelete+isPaused)临时规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/changeStatus",
+          "status_code": 200,
+          "ms": 2403,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/export/commerceRuleReport - By Client维度导出(唯一真实模式,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 export/commerceRuleReport(By Client)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/export/commerceRuleReport",
+          "status_code": 200,
+          "ms": 2763,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

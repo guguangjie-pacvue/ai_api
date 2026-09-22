@@ -1,0 +1,52 @@
+[
+  {
+    "name": "POST /event/getRuleDefinition - 按单个ruleId查询规则定义",
+    "description": "单接口测试：POST /event/getRuleDefinition。该接口请求体不含productLine字段，无法按平台归因，按规则跟GET一样采用全平台流量作为场景挖掘基线。ES 90天全平台样本(500条)中499条(99.8%)为单元素ruleIds数组查询，取样本中最高频真实ruleId(121/500次)作为代表值。500条随机样本中占比约99.8%（499次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRuleDefinition",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleDefinition",
+        "request_body": {
+          "ruleIds": [
+            "{{cross_platform_rule_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$is_array": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleTypes - 默认调用(无入参)",
+    "description": "单接口测试：POST /event/getRuleTypes。Swagger无请求体，无productLine字段，无法按平台归因，采用全平台流量。ES 90天全平台样本(306条)均为无参默认调用，占比100%。500条随机样本中占比约100%（306次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRuleTypes",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

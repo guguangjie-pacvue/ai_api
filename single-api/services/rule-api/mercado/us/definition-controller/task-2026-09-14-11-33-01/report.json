@@ -1,0 +1,111 @@
+{
+  "config": "rule-api (mercado, us)",
+  "started_at": "2026-09-14T03:34:23.085631+00:00",
+  "finished_at": "2026-09-14T03:34:33.183292+00:00",
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /definition/checkRuleName - 检查未占用规则名(不带id,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "检查规则名(新建场景)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/checkRuleName",
+          "status_code": 200,
+          "ms": 1008,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": ""
+        }
+      ]
+    },
+    {
+      "name": "GET /definition/commerceRuleClient - 默认调用(无入参)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 commerceRuleClient",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/definition/commerceRuleClient",
+          "status_code": 200,
+          "ms": 2277,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 151,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/commerceRuleReport - 按Client维度报表(可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 commerceRuleReport(By Client)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/commerceRuleReport",
+          "status_code": 200,
+          "ms": 3758,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 137,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /definition/commerceRuleReport - 按Rule Name维度报表(真实缺陷,已复核确认)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 commerceRuleReport(By Rule Name)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/definition/commerceRuleReport",
+          "status_code": 200,
+          "ms": 3051,
+          "pass": true,
+          "failures": [],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "Cannot invoke \"String.contains(java.lang.CharSequence)\" because the return value of \"com.pacvue.rulemeta.entity.ruleService.dto.RuleView.getRequirements()\" is null"
+        }
+      ]
+    }
+  ]
+}

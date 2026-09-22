@@ -1,0 +1,657 @@
+{
+  "config": "rule-api (instacart, us)",
+  "started_at": "2026-09-10T09:58:13.739339+00:00",
+  "finished_at": "2026-09-10T09:58:45.695569+00:00",
+  "total": 17,
+  "passed": 12,
+  "failed": 2,
+  "skipped": 3,
+  "cases": [
+    {
+      "name": "DELETE /template/default/{templateId} - 跳过(无安全回滚路径)",
+      "status": "skipped",
+      "pass": null,
+      "steps": [],
+      "skip_reason": "DELETE /template/default/{templateId}物理删除全平台/全客户共享的系统默认模板，无对应\"创建默认模板\"接口可先造出一次性数据再删除回滚，删除不可逆，风险不可接受，故跳过。"
+    },
+    {
+      "name": "DELETE /template/defaultCategory/{categoryId} - 跳过(无安全回滚路径)",
+      "status": "skipped",
+      "pass": null,
+      "steps": [],
+      "skip_reason": "DELETE /template/defaultCategory/{categoryId}物理删除全平台/全客户共享的系统默认分类(仅5个)，无对应创建接口可先造一次性数据再删除回滚，删除不可逆，风险不可接受，故跳过。"
+    },
+    {
+      "name": "POST /template/editDefaultTemplate - 跳过(全量覆盖式写入,回滚不可靠)",
+      "status": "skipped",
+      "pass": null,
+      "steps": [],
+      "skip_reason": "POST /template/editDefaultTemplate对全平台/全客户共享的系统默认模板做整体覆盖式写入，TemplateRequest嵌套automation结构复杂，无法可靠保证等值回写不遗漏字段，误写会静默影响全产品所有客户且难以事后验证，风险不可接受，故跳过（同组editDefaultCategory/moveDefaultTemplate因改动字段简单、可精确回滚而予以执行，未一并跳过）。"
+    },
+    {
+      "name": "POST /template/getCategory - 默认查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询分类列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getCategory",
+          "status_code": 200,
+          "ms": 848,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 10,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getDefaultCategory - 默认查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询默认分类列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getDefaultCategory",
+          "status_code": 200,
+          "ms": 993,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 5,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getDefaultTemplate - 默认查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询默认模板列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getDefaultTemplate",
+          "status_code": 200,
+          "ms": 1277,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 22,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /template/getOwners - 默认调用(无入参)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询模板所有者列表",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/template/getOwners",
+          "status_code": 200,
+          "ms": 1054,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 7,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getRecommendation - 默认查询(复现真实缺陷)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "查询推荐模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getRecommendation",
+          "status_code": 200,
+          "ms": 1163,
+          "pass": false,
+          "failures": [
+            "resp.code: expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3\n### The error may exist in com/pacvue/ruleservice/mapper/RuleAutomationMapper.java (best guess)\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: SELECT  id,rule_definition_id,requirements,prerequisites,data_range_length,data_range_exclude_index,days,attribution_model,action,rule_template_id,second_data_range_length,second_data_range_exclude_index,margin_data_range_length,margin_data_range_exclude_index,asp_data_range_length,asp_data_range_exclude_index,buy_box_data_range_length,buy_box_data_range_exclude_index,related_automation_id,ad_group_placement,is_single_keyword,bid_multiplier_requirement_type,practice_type  FROM rule_automation     WHERE (rule_template_id IN ())\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3\n; bad SQL grammar []"
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getTemplate - 按ruleType=Keyword筛选",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "按ruleType查询模板列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplate",
+          "status_code": 200,
+          "ms": 1841,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 54,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getTemplate - 按ruleType=Campaign筛选(复现真实缺陷)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "按ruleType=Campaign查询模板列表(预期缺陷复现)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplate",
+          "status_code": 200,
+          "ms": 870,
+          "pass": false,
+          "failures": [
+            "resp.code: expected 200, got 405",
+            "resp.data: expected $is_array=True, got None"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "Cannot invoke \"java.util.List.forEach(java.util.function.Consumer)\" because \"ruleRuleAutomationList\" is null"
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询DirectShare模板列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplateListFromDirectShare",
+          "status_code": 200,
+          "ms": 1241,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getTemplateListFromSharePass - 创建真实SharePass后查询(可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建真实SharePass",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/create",
+          "status_code": 200,
+          "ms": 1011,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "通过分享密码获取模板列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplateListFromSharePass",
+          "status_code": 200,
+          "ms": 1015,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        },
+        {
+          "name": "清理-删除SharePass",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/sharePass/delete",
+          "status_code": 200,
+          "ms": 833,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "模板生命周期(创建/编辑/收藏/移动/删除) - instacart",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template",
+          "status_code": 200,
+          "ms": 835,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询新建模板的ID(按ruleType=Keyword过滤避开已知缺陷)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplate",
+          "status_code": 200,
+          "ms": 1168,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 16,
+          "msg": null
+        },
+        {
+          "name": "编辑模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/editTemplate",
+          "status_code": 200,
+          "ms": 908,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "收藏模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/addFavorite",
+          "status_code": 200,
+          "ms": 1056,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "移动模板到另一分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/moveTemplate",
+          "status_code": 200,
+          "ms": 1056,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "清理-删除模板",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/rule-api/template/2097988059925245954",
+          "status_code": 200,
+          "ms": 1023,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "分类生命周期(创建/编辑/删除) - instacart",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/category",
+          "status_code": 200,
+          "ms": 1051,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询新建分类的ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getCategory",
+          "status_code": 200,
+          "ms": 1801,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 11,
+          "msg": null
+        },
+        {
+          "name": "编辑分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/editCategory",
+          "status_code": 200,
+          "ms": 829,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "清理-删除分类",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/rule-api/template/category/2097988086241624065",
+          "status_code": 200,
+          "ms": 1061,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "批量创建模板(bulk)+清理 - instacart",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "批量创建模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/bulk",
+          "status_code": 200,
+          "ms": 863,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "查询bulk新建模板的ID(按ruleType=Keyword过滤避开已知缺陷)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplate",
+          "status_code": 200,
+          "ms": 1234,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 16,
+          "msg": null
+        },
+        {
+          "name": "清理-删除bulk创建的模板",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/rule-api/template/2097988105334095874",
+          "status_code": 200,
+          "ms": 1133,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/editDefaultCategory - 默认分类等值回写(捕获原值+复原,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "捕获默认分类原始值",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getDefaultCategory",
+          "status_code": 200,
+          "ms": 840,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 5,
+          "msg": null
+        },
+        {
+          "name": "等值回写默认分类(不改变实际内容,仅验证接口)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/editDefaultCategory",
+          "status_code": 200,
+          "ms": 835,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/moveDefaultTemplate - 默认模板临时移动+复原(可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "捕获默认模板原始分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getDefaultTemplate",
+          "status_code": 200,
+          "ms": 1363,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 22,
+          "msg": null
+        },
+        {
+          "name": "临时移动默认模板到Efficiency分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/moveDefaultTemplate",
+          "status_code": 200,
+          "ms": 1692,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置-移回原分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/moveDefaultTemplate",
+          "status_code": 200,
+          "ms": 1037,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

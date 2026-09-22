@@ -1,0 +1,375 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/Campaign/Create - 创建SD广告系列+广告组+广告(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredDisplay/Campaign/Create。一次性创建SD广告系列、默认广告组、商品广告及相似商品views定向。365天内约382次真实调用，字段结构参照ES真实样本，按Swagger类型改用测试账号自身profile_id/asin构造。涉及真实创建广告系列(带DailyBudget)，仅生成case供人工评估，不自动执行；如需执行须人工确认预算后手动运行，并对新建campaign执行归档清理。",
+    "module": "SponsoredDisplayMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】创建SD Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredDisplay/Campaign/Create",
+        "request_body": {
+          "IsCreatedAsinLandPage": false,
+          "ProfileId": "{{profile_id}}",
+          "StartDate": "{{today}}",
+          "PortfolioId": "{{test_portfolio_id}}",
+          "State": "enabled",
+          "Name": "autoTest_SD_Campaign_{{today}}",
+          "DailyBudget": 10,
+          "CostType": "VCPM",
+          "CampaignTagIds": [],
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "Name": "autoTest_SD_adg_{{today}}",
+            "DefaultBid": 1,
+            "State": "enabled",
+            "BidOptimization": "reach",
+            "CreativeType": "IMAGE",
+            "CostControlEnabled": false
+          },
+          "Ads": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "State": "enabled",
+              "ResponsiveEcommerceSettings": {
+                "Products": [
+                  {
+                    "ProductId": "{{target_asin}}",
+                    "ProductIdType": "ASIN"
+                  }
+                ]
+              }
+            }
+          ],
+          "TargetingClause": [
+            {
+              "expressionType": "manual",
+              "expression": [
+                {
+                  "type": "similarProduct"
+                }
+              ],
+              "type": "views",
+              "bid": 1,
+              "state": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sdm_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{created_sdm_campaign_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/AdGroup/Create - 在已有SD Campaign下新建广告组+广告(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredDisplay/AdGroup/Create。在测试账号已有SD Campaign({{sd_campaign_id}})下新建广告组及商品广告。365天内约9次真实调用，字段结构参照ES真实样本，换成测试账号自身campaign_id/asin。涉及真实创建广告组，仅生成case供人工评估，不自动执行；如需执行须人工确认后手动运行，并对新建AdGroup执行归档清理。",
+    "module": "SponsoredDisplayMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】创建SD AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredDisplay/AdGroup/Create",
+        "request_body": {
+          "AdGroup": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sd_campaign_id}}",
+            "Name": "autoTest_SD_AdGroup_{{today}}",
+            "DefaultBid": 1,
+            "State": "enabled",
+            "BidOptimization": "clicks",
+            "CreativeType": "IMAGE",
+            "CostControlEnabled": false
+          },
+          "Ads": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "State": "enabled",
+              "ResponsiveEcommerceSettings": {
+                "Products": [
+                  {
+                    "ProductId": "{{target_asin}}",
+                    "ProductIdType": "ASIN"
+                  }
+                ]
+              }
+            }
+          ],
+          "TargetingClause": [
+            {
+              "expressionType": "manual",
+              "expression": [
+                {
+                  "type": "similarProduct"
+                }
+              ],
+              "type": "views",
+              "bid": 1,
+              "state": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sdm_adgroup_id": "data.AdGroupId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档新建AdGroup",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "AdGroupUpdate/V3/UpdateAdGroupsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "adGroupId": "{{created_sdm_adgroup_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/Ad/Create - 在已有SD广告组下新建广告(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredDisplay/Ad/Create。在测试账号已有SD AdGroup({{sd_adgroup_id}})下新建商品广告。365天内仅1次真实调用，且该唯一样本使用的是{profileId,creativeRequests:[...]}结构、引用了他人账号已上传的图片素材assetId，与Swagger声明的入参结构(SourceName/Ads/UserId)不一致，疑似Swagger标注与实际部署有偏差。本case按Swagger结构+测试账号商品定向(ResponsiveEcommerceSettings.Products)构造，未使用assetId素材，执行前必须人工核实实际接口入参结构，不能直接当作已验证结构运行。仅生成case供人工评估，不自动执行。",
+    "module": "SponsoredDisplayMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】创建SD Ad",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredDisplay/Ad/Create",
+        "request_body": {
+          "SourceName": "swagger-api-case-test",
+          "Ads": [
+            {
+              "ProfileId": "{{profile_id}}",
+              "AdgroupId": "{{sd_adgroup_id}}",
+              "Name": "autoTest_SD_Ad_{{today}}",
+              "State": "enabled",
+              "ResponsiveEcommerceSettings": {
+                "Products": [
+                  {
+                    "ProductId": "{{target_asin}}",
+                    "ProductIdType": "ASIN"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sdm_ad_id": "data.AdManagerResponse.APIResult[0].entityId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建Ad",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Ad/v3/BulkUpdateAds",
+        "request_body": {
+          "Inputs": [
+            {
+              "profileId": "{{profile_id}}",
+              "AdId": "{{created_sdm_ad_id}}",
+              "State": "archived"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/Campaign/Copy - 同Profile内复制SD广告系列(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredDisplay/Campaign/Copy。将测试账号已有SD Campaign({{sd_campaign_id}})复制一份到同一profile下(CopySdCreative=1)。365天内约14次真实调用，字段结构参照ES真实样本，ToProfileId换成测试账号自身profile_id(无第二个可用测试profile，故做同profile复制)。涉及真实创建广告系列，仅生成case供人工评估，不自动执行；如需执行须人工确认后手动运行，并对新建campaign执行归档清理。",
+    "module": "SponsoredDisplayMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】复制SD Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredDisplay/Campaign/Copy",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "Campaign": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sd_campaign_id}}",
+            "CampaignName": "autoTest_SD_Copy_{{today}}",
+            "DailyBudget": 10,
+            "StartDate": "{{today}}",
+            "portfolioId": "{{test_portfolio_id}}",
+            "State": "enabled",
+            "Tags": []
+          },
+          "CopySdCreative": 1
+        },
+        "extract_vars": {
+          "created_sdm_copy_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{created_sdm_copy_campaign_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/Campaign/CopyV2 - 同Profile内复制SD广告系列并指定AdGroup+ASIN(含后置归档,可重复)",
+    "description": "单接口测试：POST /api/SponsoredDisplay/Campaign/CopyV2。在Copy基础上按AdGroupAsins指定复制后广告组下的ASIN定向商品。365天内约12次真实调用，字段结构参照ES真实样本，ToProfileId/AdGroupId/Asins换成测试账号自身profile_id/sd_adgroup_id/target_asin。涉及真实创建广告系列，仅生成case供人工评估，不自动执行；如需执行须人工确认后手动运行，并对新建campaign执行归档清理。",
+    "module": "SponsoredDisplayMaterial",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】复制SD Campaign(V2,含ASIN指定)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "SponsoredDisplay/Campaign/CopyV2",
+        "request_body": {
+          "ToProfileId": "{{profile_id}}",
+          "Campaign": {
+            "ProfileId": "{{profile_id}}",
+            "CampaignId": "{{sd_campaign_id}}",
+            "CampaignName": "autoTest_SD_CopyV2_{{today}}",
+            "DailyBudget": 10,
+            "StartDate": "{{today}}",
+            "portfolioId": "{{test_portfolio_id}}",
+            "State": "enabled",
+            "Tags": []
+          },
+          "CopySdCreative": 1,
+          "AdGroupAsins": [
+            {
+              "AdGroupId": "{{sd_adgroup_id}}",
+              "Name": "autoTest_SD_adg_copy",
+              "Asins": [
+                "{{target_asin}}"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {
+          "created_sdm_copyv2_campaign_id": "data.CampaignId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-归档新建Campaign",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
+        "request_body": {
+          "param": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignId": "{{created_sdm_copyv2_campaign_id}}"
+            }
+          ],
+          "state": "archived"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

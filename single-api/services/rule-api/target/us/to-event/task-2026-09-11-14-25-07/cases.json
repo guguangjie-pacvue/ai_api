@@ -1,0 +1,89 @@
+[
+  {
+    "name": "POST /event/getRuleCountByUserIds - 按clientId+userIds+月度时间窗查询规则数",
+    "description": "单接口测试：POST /event/getRuleCountByUserIds。ES真实样本(180天,已排除测试账号,body.productLine.keyword=target精确匹配)共41条，均为同一结构：按clientId+userIds列表+profileIds+start/end月度时间窗查询规则计数，占比100%（41次），已全覆盖。clientId/userIds/profileIds替换为测试账号(target)真实值。500条随机样本中占比约100%（41次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getRuleCountByUserIds",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByUserIds",
+        "request_body": {
+          "productLine": "{{platform}}",
+          "clientId": "{{client_id}}",
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "start": "{{count_period_start}}",
+          "end": "{{count_period_end}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleDefinition - 按ruleIds查询规则定义",
+    "description": "单接口测试：POST /event/getRuleDefinition。该接口请求体不含productLine字段(全平台通用,无法按平台归因)，近90天全平台真实样本(500条,已排除测试账号)中单ruleId查询占比99.4%(497次)，为唯一占比≥1%的场景，已全覆盖。真实ruleId均属于其他真实客户而非QA测试账号(client 62)所有，为避免跨客户数据依赖，测试传入不存在的占位ruleId('1')，实测返回裸数组[](不含code/data包装)。注：实测发现传入空数组ruleIds会导致服务端BaseResponse强转List异常(疑似服务端已知缺陷)，真实用户从不会传空数组，故不作为本case用例，此现象已记录于对话，未生成对应缺陷单。500条随机样本中占比约99.4%（497次）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则定义",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleDefinition",
+        "request_body": {
+          "ruleIds": [
+            "1"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$is_array": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleTypes - 默认调用(无入参)",
+    "description": "单接口测试：POST /event/getRuleTypes。Swagger无声明requestBody，ES真实调用body均为空对象，近180天全平台(不区分productLine)589次调用，占比100%，已全覆盖唯一真实场景。500条随机样本中占比约100%（589次全平台）。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则类型列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

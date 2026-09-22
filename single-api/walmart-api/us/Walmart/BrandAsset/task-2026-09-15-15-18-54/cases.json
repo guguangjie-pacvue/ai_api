@@ -1,0 +1,122 @@
+[
+  {
+    "name": "POST /api/sponsor/BrandAsset/pageData - 分页列表(默认无过滤)",
+    "description": "单接口测试：POST /api/sponsor/BrandAsset/pageData。场景1：不传profileIds/filterStatus过滤，默认分页(pageSize25,按createdAt排序)。237条全量样本中占比约62.4%（148次，样本量<500，已用全部命中记录，最高频场景）。",
+    "module": "BrandAsset",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST sponsor/BrandAsset/pageData 默认",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "sponsor/BrandAsset/pageData",
+        "request_body": {
+          "profileIds": [],
+          "filterStatus": [],
+          "creatorIds": [],
+          "associatedBrands": [],
+          "searchName": "",
+          "pageInfo": {
+            "pageSize": 25,
+            "pageIndex": 1,
+            "orderBy": "createdAt desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sponsor/BrandAsset/pageData - 按profileIds+已审核状态过滤",
+    "description": "单接口测试：POST /api/sponsor/BrandAsset/pageData。场景2：传profileIds+filterStatus=[approved]，按BrandAssetId排序，pageSize200。237条全量样本中占比约30.8%（73次）。",
+    "module": "BrandAsset",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST sponsor/BrandAsset/pageData 已审核",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "sponsor/BrandAsset/pageData",
+        "request_body": {
+          "profileIds": [
+            219079
+          ],
+          "searchName": "",
+          "filterStatus": [
+            "approved"
+          ],
+          "associatedBrands": [],
+          "pageInfo": {
+            "pageSize": 200,
+            "pageIndex": 1,
+            "orderBy": "BrandAssetId"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sponsor/BrandAsset/pageData - 按status/brandName字段查询(旧版参数)",
+    "description": "单接口测试：POST /api/sponsor/BrandAsset/pageData。场景3：使用status/brandName字段(与场景1/2的filterStatus/associatedBrands不同参数名，疑似接口迭代后新旧字段并存)，pageSize10。237条全量样本中占比约4.2%（10次）。",
+    "module": "BrandAsset",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST sponsor/BrandAsset/pageData 旧版参数",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "sponsor/BrandAsset/pageData",
+        "request_body": {
+          "profileIds": [],
+          "status": [],
+          "creatorIds": [],
+          "brandName": [],
+          "searchName": "",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1,
+            "orderBy": "createdAt desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  }
+]

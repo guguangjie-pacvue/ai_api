@@ -1,0 +1,351 @@
+[
+  {
+    "name": "GET /profitero/getProfiteroCountryList - 默认调用(无入参)",
+    "description": "单接口测试：GET /profitero/getProfiteroCountryList。Swagger无声明参数。amazon平台。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Profitero国家列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/profitero/getProfiteroCountryList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAllBrands - 默认查询",
+    "description": "单接口测试：POST /report/getAllBrands。请求体结构取自ES真实样本(90天5条)，未传schema字段(该字段为客户已开通的Profitero数据源标识，测试账号未开通)。amazon平台，实测返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询全部品牌",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAllBrands",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAllProfiteroRules - 默认查询",
+    "description": "单接口测试：POST /report/getAllProfiteroRules。请求体结构取自ES真实样本(90天24条)，未传schema。amazon平台，实测返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询全部Profitero规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAllProfiteroRules",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAllProfiteroRulesApplies - 默认查询",
+    "description": "单接口测试：POST /report/getAllProfiteroRulesApplies。请求体结构取自ES真实样本(90天35条)。amazon平台，实测返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Profitero规则应用情况",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAllProfiteroRulesApplies",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "ruleIds": [],
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getAsins - 默认查询",
+    "description": "单接口测试：POST /report/getAsins。请求体结构取自ES真实样本(90天61条)。实测发现：ES历史样本的start/end使用完整日期时间格式(如'2026-07-19 07:00:00')，但当前生产环境用该格式调用返回405日期解析失败(\"unparsed text found at index 10\")，改用纯日期格式(YYYY-MM-DD)后可正常返回——请求体格式可能已随后端变更与历史样本不再一致，建议核实当前前端实际发送格式是否也遇到此问题(疑似真实缺陷)。amazon平台，未传schema，返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ASIN列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getAsins",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "myBrandList": [],
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getSignals - 默认查询",
+    "description": "单接口测试：POST /report/getSignals。请求体结构取自ES真实样本(90天61条，start/end为纯日期格式)。amazon平台，未传schema，返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询信号列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getSignals",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/getDailyRuleData - 默认查询",
+    "description": "单接口测试：POST /report/getDailyRuleData。请求体结构取自ES真实样本(90天49条)。与getAsins同理，start/end改用纯日期格式规避405。amazon平台，ruleIds/profileIds/campaignIds传空数组，返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则每日数据",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/getDailyRuleData",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "ruleIds": [],
+          "profileIds": [],
+          "campaignIds": [],
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/MyBrandCountSummary - 默认查询",
+    "description": "单接口测试：POST /report/MyBrandCountSummary。请求体结构取自ES真实样本(90天47条)。amazon平台，未传schema，实测返回结构完整的统计对象(各字段计数为0)。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询我的品牌数量汇总",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/MyBrandCountSummary",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "myBrandList": [],
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/BrandEventList - 默认查询",
+    "description": "单接口测试：POST /report/BrandEventList。请求体结构取自ES真实样本(90天63条)。amazon平台，未传schema，实测返回分页包装对象(total=0)。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询品牌事件列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/BrandEventList",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "searchAsin": [],
+          "myBrandList": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          },
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true,
+          "brand": [],
+          "signal": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/CompetitorBrandSummary - 默认查询",
+    "description": "单接口测试：POST /report/CompetitorBrandSummary。请求体结构取自ES真实样本(90天14条)。amazon平台，未传schema，返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询竞品品牌汇总",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/CompetitorBrandSummary",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report/ExecutionRecordSummary - 默认查询",
+    "description": "单接口测试：POST /report/ExecutionRecordSummary。请求体结构取自ES真实样本(90天61条)。与getAsins同理，start/end改用纯日期格式规避405。amazon平台，未传schema，返回空列表属真实预期结果。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行记录汇总",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/ExecutionRecordSummary",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "isMyBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

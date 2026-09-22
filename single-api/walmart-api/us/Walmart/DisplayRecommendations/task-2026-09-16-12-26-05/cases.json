@@ -1,0 +1,30 @@
+[
+ {
+  "name": "POST /api/display/DisplayRecommendations/list - 查询预算重分配建议",
+  "description": "单接口测试：POST /api/display/DisplayRecommendations/list。查询Display推荐(预算重分配类)。用测试账号display sandbox profile 16354252+DisplayCampaigns模块自建的测试campaign 22560构造。365天167次真实调用，100%单一场景(recommendationType=budget_reallocation+按campaign实体过滤+status=active)。实测本测试campaign返回业务码405\"NO_RECOMMENDATIONS_AVAILABLE\"(无可用推荐)；进一步用ES真实样本原始advertiserId(239432)+campaignId(194495)重新验证，同样返回NO_RECOMMENDATIONS_AVAILABLE——说明推荐是动态生成、有时效性的，历史样本对应的推荐大概率早已处理/过期，不是测试账号数据问题也不是bug，如实保留FAIL(断言code:200)记录该业务状态。",
+  "module": "DisplayRecommendations",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 DisplayRecommendations/list",
+    "method": "POST",
+    "base_url": "{{WALMARTBASEURL}}",
+    "path": "display/DisplayRecommendations/list",
+    "request_body": {
+     "advertiserId": 16354252,
+     "filter[recommendationType]": ["budget_reallocation"],
+     "filter[entities]": [{"id": 22560, "type": "campaign"}],
+     "filter[recommendationStatus]": {"status": ["active"]}
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200
+    }
+   }
+  ]
+ }
+]

@@ -1,0 +1,461 @@
+{
+  "config": "rule-api (walmart, us)",
+  "started_at": "2026-09-01T06:24:03.321879+00:00",
+  "total": 10,
+  "passed": 7,
+  "failed": 3,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /template/getCategory - 默认查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询分类列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getCategory",
+          "status_code": 200,
+          "ms": 2480,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 8,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getDefaultCategory - 默认查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询默认分类列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getDefaultCategory",
+          "status_code": 200,
+          "ms": 1536,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 10,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getDefaultTemplate - 默认查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询默认模板列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getDefaultTemplate",
+          "status_code": 200,
+          "ms": 3228,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 32,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /template/getOwners - 默认调用(无入参)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询模板所有者列表",
+          "method": "GET",
+          "url": "https://api.pacvue.com/rule-api/template/getOwners",
+          "status_code": 200,
+          "ms": 1910,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getRecommendation - 默认查询",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "查询推荐模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getRecommendation",
+          "status_code": 200,
+          "ms": 3077,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3\n### The error may exist in com/pacvue/ruleservice/mapper/RuleAutomationMapper.java (best guess)\n### The error may involve defaultParameterMap\n### The error occurred while setting parameters\n### SQL: SELECT  id,rule_definition_id,requirements,prerequisites,data_range_length,data_range_exclude_index,days,attribution_model,action,rule_template_id,second_data_range_length,second_data_range_exclude_index,margin_data_range_length,margin_data_range_exclude_index,asp_data_range_length,asp_data_range_exclude_index,buy_box_data_range_length,buy_box_data_range_exclude_index,related_automation_id,ad_group_placement,is_single_keyword,bid_multiplier_requirement_type,practice_type  FROM rule_automation     WHERE (rule_template_id IN ())\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3\n; bad SQL grammar []"
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getTemplate - 按ruleType筛选",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "按ruleType查询模板列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplate",
+          "status_code": 200,
+          "ms": 2328,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询DirectShare模板列表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplateListFromDirectShare",
+          "status_code": 200,
+          "ms": 2388,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "模板生命周期(创建/编辑/收藏/移动/删除) - walmart",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template",
+          "status_code": 200,
+          "ms": 1798,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 10002"
+          ],
+          "resp_code": 10002,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "Rule Template Name Repeat"
+        },
+        {
+          "name": "查询新建模板的ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplate",
+          "status_code": 200,
+          "ms": 17711,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405",
+            "data expected not_empty, got null"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "productLine: walmart, rule type: Targeting not exists"
+        },
+        {
+          "name": "编辑模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/editTemplate",
+          "status_code": 200,
+          "ms": 1825,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "JSON parse error: parseLong error, field : templateId"
+        },
+        {
+          "name": "收藏模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/addFavorite",
+          "status_code": 200,
+          "ms": 2000,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "JSON parse error: parseLong error, field : templateId"
+        },
+        {
+          "name": "移动模板到另一分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/moveTemplate",
+          "status_code": 200,
+          "ms": 1973,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "JSON parse error: parseLong error, field : templateId"
+        },
+        {
+          "name": "清理-删除模板",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/rule-api/template/{{created_template_id}}",
+          "status_code": 200,
+          "ms": 1792,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"{{created_template_id}}\""
+        }
+      ]
+    },
+    {
+      "name": "分类生命周期(创建/编辑/删除) - walmart",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/category",
+          "status_code": 200,
+          "ms": 2141,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询新建分类的ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getCategory",
+          "status_code": 200,
+          "ms": 1702,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "list",
+          "data_len": 9,
+          "msg": null
+        },
+        {
+          "name": "编辑分类",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/editCategory",
+          "status_code": 200,
+          "ms": 1574,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "清理-删除分类",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/rule-api/template/category/2094672809140813825",
+          "status_code": 200,
+          "ms": 2441,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "批量创建模板(bulk)+清理 - walmart",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "批量创建模板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/bulk",
+          "status_code": 200,
+          "ms": 1647,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "dict:success,failed",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "查询bulk新建模板的ID",
+          "method": "POST",
+          "url": "https://api.pacvue.com/rule-api/template/getTemplate",
+          "status_code": 200,
+          "ms": 16171,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405",
+            "data expected not_empty, got null"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "productLine: walmart, rule type: Targeting not exists"
+        },
+        {
+          "name": "清理-删除bulk创建的模板",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/rule-api/template/{{created_bulk_template_id}}",
+          "status_code": 200,
+          "ms": 1674,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "data",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"{{created_bulk_template_id}}\""
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-01T06:25:14.730965+00:00"
+}

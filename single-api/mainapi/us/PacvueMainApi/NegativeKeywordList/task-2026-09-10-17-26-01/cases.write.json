@@ -1,0 +1,330 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/NegativeKeywordList/v3/CreateNegativeKeywordListCampaign - 按CampaignTag批量应用否定关键词列表(含建议后置解除)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/NegativeKeywordList/v3/CreateNegativeKeywordListCampaign。将否定关键词列表按CampaignTagIds批量应用到该Tag下全部Campaign，会真实修改测试账号广告结构(为Campaign挂载否定关键词)，365天内约1375次真实调用，ES样本中Type=campaigntag+CampaignTagIds为最高频模式(54.7%，251/459)。字段结构取自ES真实样本，NegativeKeywordListId换成测试账号自身列表(Id=9317)，CampaignTagIds换成测试账号自身test_campaign_tag_id。无独立的'解除应用'接口，观察到ES样本中2.6%的调用为Type=campaign+Campaigns=[]，推测是同一接口传空数组用于解除应用，建议执行前人工确认该推测，执行后用后置步骤(同接口CampaignTagIds=[])尝试解除，保证可重复执行。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】按CampaignTag应用否定关键词列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListCampaign",
+        "request_body": {
+          "NegativeKeywordListId": 9317,
+          "CampaignTagIds": ["{{test_campaign_tag_id}}"],
+          "Campaigns": [],
+          "Type": "campaigntag"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理(建议)-尝试解除CampaignTag应用",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListCampaign",
+        "request_body": {
+          "NegativeKeywordListId": 9317,
+          "CampaignTagIds": [],
+          "Campaigns": [],
+          "Type": "campaigntag"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/NegativeKeywordList/v3/CreateNegativeKeywordListCampaign - 按Campaign直接应用否定关键词列表(含建议后置解除)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/NegativeKeywordList/v3/CreateNegativeKeywordListCampaign。将否定关键词列表按Type=campaign直接应用到指定Campaign(ProfileId+CampaignId)，会真实修改测试账号广告结构，ES样本中该模式占33.1%(152/459，另9.2%为Type=adgroup精确到AdGroup级)。字段结构取自ES真实样本，profileId/campaignId换成测试账号自身profile_id/exist_sp_campaign_id。同上无确认的解除接口，后置步骤按同接口传空Campaigns数组尝试解除，执行前需人工确认解除效果。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】按Campaign应用否定关键词列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListCampaign",
+        "request_body": {
+          "NegativeKeywordListId": 9317,
+          "CampaignTagIds": [],
+          "Campaigns": [
+            { "ProfileId": "{{profile_id}}", "CampaignId": "{{exist_sp_campaign_id}}" }
+          ],
+          "Type": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理(建议)-尝试解除Campaign应用",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListCampaign",
+        "request_body": {
+          "NegativeKeywordListId": 9317,
+          "CampaignTagIds": [],
+          "Campaigns": [],
+          "Type": "campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/NegativeKeywordList/v3/CreateNegativeKeywordListKeyword - 为列表批量新增否定关键词(含后置删除清理)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/NegativeKeywordList/v3/CreateNegativeKeywordListKeyword。为指定NegativeKeywordListId批量新增关键词文本，会真实向测试账号列表写入数据，365天内约1504次真实调用，ES真实样本为该接口唯一模式(仅KeywordText数量不同)。NegativeKeywordListId换成测试账号自身列表(Id=9317)，KeywordText换成带时间戳的自建测试词避免语义污染。后置步骤先通过NegativeKeywordListKeywordTable按KeywordText定位新增关键词的真实Id(extract_vars)，再调用DeleteNegativeKeywordListKeyword删除，保证可重复执行、不留残留。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】新增否定关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListId": 9317,
+          "KeywordText": ["swagger-case-test-kw-{{today}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置-按关键词文本定位新增关键词Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListKeywordTable",
+        "request_body": {
+          "Id": 9317
+        },
+        "extract_vars": {
+          "new_keyword_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除本case新增的关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListKeywordId": ["{{new_keyword_id}}"],
+          "DeleteType": "delete"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/NegativeKeywordList/v3/DeleteNegativeKeywordList - 删除否定关键词列表(自建自删)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/NegativeKeywordList/v3/DeleteNegativeKeywordList。真实删除指定Id的否定关键词列表(不可逆)，365天内约303次真实调用，ES真实样本主要模式为{Id,ListName}(另3.03%样本Id为空串，疑似前端异常场景，未纳入覆盖)。为避免误删测试账号真实数据(如Id=9317等长期使用的列表)，本case前置先调用CreateNegativeKeywordList自建一个一次性列表，再对其执行删除，实现自建自删、可重复执行、零残留。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建一次性否定关键词列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordList",
+        "request_body": {
+          "ListName": "swagger-case-delete-test-{{today}}",
+          "MatchType": "exact",
+          "Level": "adgroup"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-按ListName定位新建列表真实Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
+        "request_body": {
+          "ListName": "swagger-case-delete-test-{{today}}",
+          "profileIds": ["{{profile_id}}"]
+        },
+        "extract_vars": {
+          "disposable_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "【高风险-仅生成不执行】删除该一次性列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordList",
+        "request_body": {
+          "Id": "{{disposable_list_id}}",
+          "ListName": "swagger-case-delete-test-{{today}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword - 场景1:DeleteType=delete直接删除(自建自删)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword。真实删除指定NegativeKeywordListKeywordId(不可逆)，365天内约209次真实调用，ES真实样本中DeleteType=delete占比约36.2%+15.9%(单个/批量Id合计约52.1%)。为避免误删测试账号列表(Id=9317)中真实关键词，本case前置先向该列表新增一个自建关键词并定位其Id，再对其执行DeleteType=delete，实现自建自删、零残留。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新增待删除关键词(delete场景)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListId": 9317,
+          "KeywordText": ["swagger-case-delete-kw-{{today}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-定位待删除关键词Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListKeywordTable",
+        "request_body": {
+          "Id": 9317
+        },
+        "extract_vars": {
+          "delete_target_keyword_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "【高风险-仅生成不执行】DeleteType=delete直接删除",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListKeywordId": ["{{delete_target_keyword_id}}"],
+          "DeleteType": "delete"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword - 场景2:DeleteType=archieveDelete先归档再删(自建自删)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword。真实删除指定NegativeKeywordListKeywordId(不可逆)，ES真实样本中DeleteType=archieveDelete占比约26.1%+21.7%(单个/批量Id合计约47.9%)，语义为已应用到Campaign/AdGroup的关键词删除前先归档记录再删除。为避免误删测试账号列表(Id=9317)中真实关键词，本case前置先向该列表新增一个自建关键词并定位其Id，再对其执行DeleteType=archieveDelete，实现自建自删、零残留。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-新增待删除关键词(archieveDelete场景)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/CreateNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListId": 9317,
+          "KeywordText": ["swagger-case-archdelete-kw-{{today}}"]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-定位待删除关键词Id",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListKeywordTable",
+        "request_body": {
+          "Id": 9317
+        },
+        "extract_vars": {
+          "delete_target_keyword_id_2": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "【高风险-仅生成不执行】DeleteType=archieveDelete归档删除",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword",
+        "request_body": {
+          "NegativeKeywordListKeywordId": ["{{delete_target_keyword_id_2}}"],
+          "DeleteType": "archieveDelete"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

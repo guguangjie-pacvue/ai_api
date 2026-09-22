@@ -1,0 +1,410 @@
+[
+  {
+    "name": "POST /dayparting/getCampaignsName - 按advertiserIds查询候选campaign列表",
+    "description": "单接口测试：POST /dayparting/getCampaignsName。按advertiserIds查询模板可应用的campaign候选列表(只读，用于前端下拉框数据源)。90天内dsp平台该接口共867次真实调用(已排除clientId 62/3186噪音)，请求体结构单一(仅productLine+advertiserIds)，占比100%(500/500)，advertiserIds的数量差异仅反映各客户名下Amazon DSP广告主账号数量，非业务分支。500条随机样本中占比约100%（500次）。注：advertiserIds已替换为测试账号自身(clientId=2938/dspautous)真实历史请求体中出现的advertiser_ids(4个amzn1.account.*)，避免使用ES样本中其他真实客户的广告主账号ID。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/getCampaignsName",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/getCampaignsName",
+        "request_body": {
+          "productLine": "dsp",
+          "advertiserIds": "{{advertiser_ids}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile的campaign标签树(不限定模板,tempId=0)",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。按applyLevel=2查询profile维度的campaign标签树，tempId=0表示不限定具体模板(只读)。90天内dsp平台该接口共171次真实调用，tempId=0场景占比约46.8%（80条，500条随机样本中）。注：advertiserIds替换为null，clientId替换为{{client_id}}，userIds替换为{{root_user_id}}，均为测试账号(2938/dspautous)自身安全值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "dsp",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询指定模板的campaign标签树(tempId=fixture模板)",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。按applyLevel=2查询profile维度的campaign标签树，tempId指定具体模板(只读)。90天内dsp平台该接口共171次真实调用，tempId为具体模板值的场景合计占比约53.2%（91条，500条随机样本中，含多个不同tempId取值，其中fixture_template_id=28426本身占比约4.7%/8条）。注：tempId替换为测试账号自身专用fixture模板28426，advertiserIds替换为null，clientId替换为{{client_id}}，userIds替换为{{root_user_id}}。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "dsp",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": "{{fixture_template_id}}",
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(倒序+指定模板)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询指定模板的操作变更日志，按操作时间倒序(只读审计)。90天内dsp平台该接口共33次真实调用，orderBy=desc且templateId指定的场景占比约84.8%（28条，500条随机样本中）。注：templateId替换为测试账号自身专用fixture模板28426(ES确认clientId=2938历史曾对此调用过本接口)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "dsp",
+          "preferenceZone": "America/Los_Angeles",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(倒序+不限模板)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询操作日志且不限定templateId，按操作时间倒序(只读审计)。90天内dsp平台该接口共33次真实调用，orderBy=desc且templateId为空的场景占比约9.1%（3条，500条随机样本中）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "dsp",
+          "preferenceZone": "America/Los_Angeles",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": null,
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(正序+指定模板)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询指定模板的操作日志，按操作时间正序(只读审计)。90天内dsp平台该接口共33次真实调用，orderBy=asc且templateId指定的场景占比约6.1%（2条，500条随机样本中）。注：templateId替换为测试账号自身专用fixture模板28426。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "dsp",
+          "preferenceZone": "America/Los_Angeles",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time asc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators - 查询模板可选操作人",
+    "description": "单接口测试：POST /dayparting/template/operators。查询指定模板可选的操作人列表(只读，参数走query string而非body)。90天内dsp平台该接口共28次真实调用，请求体均为空(body为空，参数在queryString中)，占比100%(28次)。注：tempId替换为测试账号自身专用fixture模板28426，ES确认clientId=2938本账号历史上曾对此tempId调用过本接口(2026-08-25)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=dsp&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 单profile查询模板列表",
+    "description": "单接口测试：POST /dayparting/templateNames。单个profile查询模板名称列表(只读)。90天内dsp平台该接口共800次真实调用，单profile场景(profileIds长度=1)占比约32.2%（161条，500条随机样本中）。注：clientId替换为{{client_id}}，profileIds替换为{{profile_id}}，advertiserIds替换为null，userIds替换为{{root_user_id}}。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "dsp",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 多profile批量查询模板列表",
+    "description": "单接口测试：POST /dayparting/templateNames。多个profile批量查询模板名称列表(只读)。90天内dsp平台该接口共800次真实调用，多profile场景(profileIds长度>1)占比约67.8%（339条，500条随机样本中）。注：clientId替换为{{client_id}}，profileIds替换为本账号全部2个真实profile({{profile_ids_all}})，advertiserIds替换为null，userIds替换为{{root_user_id}}。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "productLine": "dsp",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 查询campaign的dayparting应用详情",
+    "description": "单接口测试：POST /findDayParting/campaign。查询单个campaign的dayparting应用详情(只读)。90天内dsp平台该接口共4696次真实调用，请求体结构单一(仅campaignId+profileId)，占比100%（500/500）。注：本接口测试账号自身(clientId=2938/dspautous)有365天内2004次历史真实调用，campaignId/profileId直接来自本账号真实历史请求体固定配对({{real_campaign_id}}/{{profile_id}})。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "dsp",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 校验单campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)。90天内dsp平台该接口共3196次真实调用，单campaign(数组长度=1)的校验请求占比约99.8%（499/500，500条随机样本中）；批量(数组长度=4)场景仅0.2%（1条），低于1%覆盖门槛未纳入。注：campaignId/profileId已替换为测试账号自身(clientId=2938)可访问的真实值({{real_campaign_id}}/{{profile_id}})。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "dsp",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

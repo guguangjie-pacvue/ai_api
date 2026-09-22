@@ -1,0 +1,191 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Targeting/V3/AddTargetsNew - 新增ASIN商品定向Target",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Targeting/V3/AddTargetsNew。会在指定广告组下真实创建一个新的商品定向(Product Target)，属写操作类不执行。365天ES真实样本162次命中，字段结构取自真实请求（asinSameAs表达式+竞价）。若需执行，须补充后置归档(state=archived)步骤并使用未被占用的ASIN。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddTargetsNew",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/AddTargetsNew",
+        "request_body": {
+          "Targets": [
+            {
+              "asin": "{{target_asin}}",
+              "MatchType": "Product",
+              "bid": "0.9",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "ProfileID": "{{profile_id}}",
+              "CampaignType": "sponsoredProducts",
+              "expression": [
+                { "type": "asinSameAs", "value": "{{target_asin}}" }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Targeting/V3/BatchCopyToNegativeTargetMult - 批量将目标复制为否定投放",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Targeting/V3/BatchCopyToNegativeTargetMult。会在选中的广告组下批量真实创建否定商品定向，属写操作类不执行。365天ES真实样本10次命中，字段结构取自真实请求（按ASIN批量复制到多个广告组的否定列表）。若需执行，须补充后置删除否定投放的步骤。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BatchCopyToNegativeTargetMult",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/BatchCopyToNegativeTargetMult",
+        "request_body": {
+          "target": [
+            {
+              "CampaignType": "sponsoredProducts",
+              "KeywordText": "Asin=\"{{target_asin}}\"",
+              "MatchType": "Product",
+              "ProfileID": "{{profile_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "bid": "0.05",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "expressionType": "manual",
+              "matchValue": "{{target_asin}}",
+              "targetId": "{{target_id}}",
+              "isCheck": false
+            }
+          ],
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Targeting/V3/BulkApplyPATSuggestBid - 批量应用PAT建议出价",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Targeting/V3/BulkApplyPATSuggestBid。会对选中的多个PAT Target批量真实修改出价为系统建议值，属写操作类不执行。365天ES真实样本940次命中(该接口调用量最大)，字段结构取自真实请求（时间范围+targetId/profileId列表）。若需执行，须先记录原始bid，执行后还原。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkApplyPATSuggestBid",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/BulkApplyPATSuggestBid",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "param": [
+            { "targetId": "{{target_id}}", "profileId": "{{profile_id}}" }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Targeting/V3/BulkCopyTarget - 批量复制Target到其他广告组",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Targeting/V3/BulkCopyTarget。会在目标广告组下批量真实创建复制出的商品定向，属写操作类不执行。365天ES真实样本6次命中(低频但非零)，字段结构取自真实请求（含negativeTargets/targets、toMarket）。若需执行，须补充后置归档新建Target的步骤。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkCopyTarget",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/BulkCopyTarget",
+        "request_body": {
+          "negativeTargets": [],
+          "targets": [
+            {
+              "currencySymbol": "US",
+              "ProfileID": "{{profile_id}}",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "query": "{{target_asin}}",
+              "BidModel": "custom",
+              "bid": "2"
+            }
+          ],
+          "toMarket": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Targeting/V3/MutlExcelTargetOperation - Excel批量更新Target(状态/出价/表达式)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/Targeting/V3/MutlExcelTargetOperation。用于Excel批量导入方式真实修改已有Target的state/bid/expression，也可批量新建(createTargets)，属写操作类不执行。365天ES真实样本23次命中，字段结构取自真实请求（updateTargets数组，含state/expression/bid）。若需执行，须先记录原state/bid，执行后还原。",
+    "module": "Targeting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 MutlExcelTargetOperation",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "Targeting/V3/MutlExcelTargetOperation",
+        "request_body": {
+          "updateTargets": [
+            {
+              "profileId": "{{profile_id}}",
+              "campaignType": "sponsoredProducts",
+              "campaignId": "{{sp_manual_pat_campaign_id}}",
+              "adgroupId": "{{sp_manual_pat_adgroup_id}}",
+              "targetId": "{{target_id}}",
+              "state": "enabled",
+              "expression": [
+                { "type": "asinSameAs", "value": "{{target_asin}}" }
+              ],
+              "expressionType": "manual",
+              "bid": 0.9
+            }
+          ],
+          "createTargets": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

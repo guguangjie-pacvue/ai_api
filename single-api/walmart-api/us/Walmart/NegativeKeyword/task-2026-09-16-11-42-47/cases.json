@@ -1,0 +1,187 @@
+[
+  {
+    "name": "POST /api/NegativeKeyword/bulk - 创建后禁用",
+    "description": "单接口测试：POST bulk创建+POST search定位新ID+PUT改状态，链式覆盖3个endpoint。写操作真实执行：在测试账号adGroup 770991122(campaign 426321, profile 16274451)下批量创建1个否定关键词，探测确认响应为{totalCount,successCount,isAsync,errorMessages}(不含新ID)。全模块9接口未发现Delete，采用search定位法(按adGroupIds过滤+createdAt desc排序，新建项固定出现在data.list[0]，字段名为keywordId而非id或negativeKeywordId，已探测确认)获取新ID，再用PUT改status=0(禁用)代替删除，同AdGroups等模块\"能创建不能删除按改状态处理\"先例。⚠️同一adGroup下相同keywordText不能重复创建(实测第二次直接静默successCount=0，非报错)，同ItemSet/Audiences模块先例，重跑前需更换keywordText时间戳后缀。2轮验证通过(第二轮换新keywordText)。POST bulk(2490次)/PUT NegativeKeyword(483次)均为365天真实调用。",
+    "module": "NegativeKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST bulk 创建",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "NegativeKeyword/bulk",
+        "request_body": {
+          "models": [
+            {
+              "keywordText": "test114358negkw",
+              "profileId": "{{profile_id_single}}",
+              "adGroupId": "770991122",
+              "campaignId": "426321",
+              "negativeMatchType": "negativeExact",
+              "state": "enabled"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "POST search 定位新建ID",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "NegativeKeyword/search",
+        "request_body": {
+          "adGroupIds": [
+            770991122
+          ],
+          "adGroupStatus": [],
+          "campaignIds": [],
+          "campaignStatus": [],
+          "tagIds": [],
+          "campaignTagIds": [],
+          "keywordMatchType": [],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "filters": [],
+          "negativeKeywordStatus": [],
+          "tagCampaignLogic": 0,
+          "pageInfo": {
+            "PageSize": 20,
+            "PageIndex": 1,
+            "OrderBy": "createdAt desc"
+          }
+        },
+        "extract_vars": {
+          "new_nk_id": "data.list[0].keywordId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.list[0].keywordText": "test114358negkw",
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "PUT NegativeKeyword 禁用",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "NegativeKeyword",
+        "request_body": {
+          "negativeKeywordIds": [
+            "{{new_nk_id}}"
+          ],
+          "status": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeyword/search - 默认场景查询",
+    "description": "单接口测试：POST /api/NegativeKeyword/search。查询否定关键词列表。场景：无过滤+按createdAt降序，365天5842次真实调用中的常见形态。",
+    "module": "NegativeKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 search 默认场景",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "NegativeKeyword/search",
+        "request_body": {
+          "adGroupIds": [],
+          "adGroupStatus": [],
+          "campaignIds": [],
+          "campaignStatus": [],
+          "tagIds": [],
+          "campaignTagIds": [],
+          "keywordMatchType": [],
+          "profileIds": "{{profile_id}}",
+          "filters": [],
+          "negativeKeywordStatus": [],
+          "tagCampaignLogic": 0,
+          "pageInfo": {
+            "PageSize": 20,
+            "PageIndex": 1,
+            "OrderBy": "createdAt desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeyword/queryAsNegativeKeyword - 校验可否作为否定词添加",
+    "description": "单接口测试：POST /api/NegativeKeyword/queryAsNegativeKeyword。查询/校验一批关键词文本添加为否定词时会影响的目标(addTo数组，含profileId/campaignId/adGroup信息)。用测试账号自己的campaign 426321+adGroup 770991122构造，只读安全(不实际写入)。365天238次真实调用。",
+    "module": "NegativeKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 queryAsNegativeKeyword",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "NegativeKeyword/queryAsNegativeKeyword",
+        "request_body": [
+          {
+            "addTo": [
+              {
+                "profileId": "{{profile_id_single}}",
+                "profileName": "Sandbox - 1P API-1",
+                "campaignId": "426321",
+                "campaignName": "Brand-SP-Manual-Category-10324542",
+                "adGroups": [
+                  {
+                    "adGroupId": "770991122",
+                    "adGroupName": "AdGroup1",
+                    "adGroupStatus": "Paused"
+                  }
+                ],
+                "market": "US"
+              }
+            ],
+            "negativeMatchType": "negativeExact",
+            "keywordText": "test114358querykw"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,1054 @@
+{
+  "config": "walmart-api (us)",
+  "started_at": "2026-09-15T06:33:35.242670+00:00",
+  "total": 24,
+  "passed": 14,
+  "failed": 10,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "GET /api/Report/custom/columns - type=30(疑似契约不一致,预期FAIL)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 columns(type=30)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/columns?type=30",
+          "status_code": 400,
+          "ms": 1780,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"type\": [\"The value '30' is invalid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 400, \"traceId\": \"00-1015"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Report/custom/GetAccessibleReports - 按userId查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 GetAccessibleReports",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/GetAccessibleReports?userId=25004",
+          "status_code": 200,
+          "ms": 1629,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Report/custom/history - 按reportId查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 history",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/history?reportId=31110",
+          "status_code": 200,
+          "ms": 1975,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 62,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Report/custom/history/export - isExport=true+historyId",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 history/export",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/history/export?isExport=true&historyId=1108493",
+          "status_code": 200,
+          "ms": 2470,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "__binary__",
+            "content_type",
+            "size"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Report/custom/history/preview - 仅historyId(不含SOV维度)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 history/preview(无sovDataLevel)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/history/preview?historyId=1108493",
+          "status_code": 200,
+          "ms": 3634,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:list,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Report/custom/history/preview - historyId+sovDataLevel(疑似后端bug,预期FAIL)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 history/preview(带sovDataLevel)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/history/preview?historyId=1108493&sovDataLevel=0",
+          "status_code": 500,
+          "ms": 1817,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Value cannot be null. (Parameter 'value')\", \"exceptionType\": \"System.Argument"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/list - 无campaignIds+无customDays",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 list(基础场景)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/list",
+          "status_code": 200,
+          "ms": 1711,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/list - 含campaignIds+customDays",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 list(campaignIds+customDays)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/list",
+          "status_code": 200,
+          "ms": 1759,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/list - 含campaignIds+无customDays",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 list(campaignIds,无customDays)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/list",
+          "status_code": 200,
+          "ms": 1724,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/list - 无campaignIds+含customDays",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 list(无campaignIds,customDays)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/list",
+          "status_code": 200,
+          "ms": 1718,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/preview - SOV报表(reportType=10)+sendToMode=1",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 preview(SOV报表)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/preview",
+          "status_code": 200,
+          "ms": 1922,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/preview - 非SOV报表(reportType=0)+不传sendToMode",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 preview(非SOV报表)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/preview",
+          "status_code": 200,
+          "ms": 2721,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Report/custom/preview - 仅id(不含SOV维度)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 preview(GET,无sovDataLevel)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/preview?id=31110",
+          "status_code": 200,
+          "ms": 3001,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/Report/custom/preview - id+sovDataLevel",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 preview(GET,带sovDataLevel)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/preview?id=31110&sovDataLevel=0",
+          "status_code": 200,
+          "ms": 3588,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:data,columns",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/reports - 按userId过滤报表列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 reports",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/reports",
+          "status_code": 200,
+          "ms": 2913,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:reports,totalCount,pageInfo",
+          "data_len": 3,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "【已确认后端bug-阻塞】POST /api/Report/custom - 创建基础自定义报表",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建自定义报表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom",
+          "status_code": 500,
+          "ms": 16028,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/{{created_report_id}}",
+          "status_code": 400,
+          "ms": 2209,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_report_id}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 400, "
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "【已确认后端bug-阻塞】PUT /api/Report/custom/{id} - 更新自定义报表",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建自定义报表(供更新用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom",
+          "status_code": 500,
+          "ms": 15830,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "更新自定义报表",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/{{created_report_id}}",
+          "status_code": 400,
+          "ms": 1671,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_report_id}}' is not valid.\"], \"reportId\": [\"Could not convert string to integer: {{created_report_id}}. Path 'reportId', line 1, position 726.\"]}, \"type\": \"htt"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/{{created_report_id}}",
+          "status_code": 400,
+          "ms": 1617,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_report_id}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 400, "
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "【已确认后端bug-阻塞】DELETE /api/Report/custom/{id} - 删除自定义报表",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建自定义报表(供删除用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom",
+          "status_code": 500,
+          "ms": 16071,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "删除自定义报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/{{created_report_id}}",
+          "status_code": 400,
+          "ms": 1991,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_report_id}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 400, "
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "【已确认后端bug-阻塞】PATCH /api/Report/custom/{Id} - 切换报表启用状态",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建自定义报表(供状态切换用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom",
+          "status_code": 500,
+          "ms": 16125,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "切换报表状态为禁用",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/{{created_report_id}}?status=false",
+          "status_code": 400,
+          "ms": 1682,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"Id\": [\"The value '{{created_report_id}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 400, "
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/{{created_report_id}}",
+          "status_code": 400,
+          "ms": 1645,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_report_id}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 400, "
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/campaignPerformance - 创建Campaign Performance报表(含后置清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建Campaign Performance报表",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance",
+          "status_code": 200,
+          "ms": 2096,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "按报表名查找刚创建的id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/reports",
+          "status_code": 200,
+          "ms": 4368,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:reports,totalCount,pageInfo",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除Campaign Performance报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance/33212",
+          "status_code": 200,
+          "ms": 2058,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "success"
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/Report/custom/campaignPerformance/{id} - 更新Campaign Performance报表(含后置清理)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建Campaign Performance报表(供更新用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance",
+          "status_code": 500,
+          "ms": 1894,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "按报表名查找刚创建的id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/reports",
+          "status_code": 200,
+          "ms": 16524,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:reports,totalCount,pageInfo",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "更新Campaign Performance报表",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance/{{created_cp_report_id2}}",
+          "status_code": 400,
+          "ms": 1702,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_cp_report_id2}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 4"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除Campaign Performance报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance/{{created_cp_report_id2}}",
+          "status_code": 400,
+          "ms": 1632,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_cp_report_id2}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 4"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "DELETE /api/Report/custom/campaignPerformance/{id} - 删除Campaign Performance报表",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建Campaign Performance报表(供删除用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance",
+          "status_code": 500,
+          "ms": 1833,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "按报表名查找刚创建的id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/reports",
+          "status_code": 200,
+          "ms": 17487,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:reports,totalCount,pageInfo",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "删除Campaign Performance报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance/{{created_cp_report_id3}}",
+          "status_code": 400,
+          "ms": 1746,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_cp_report_id3}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 4"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PATCH /api/Report/custom/ChangeOwner - 变更报表负责人(自转自·无实质转移·自清理)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建测试报表(供ChangeOwner用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance",
+          "status_code": 500,
+          "ms": 1717,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "按报表名查找刚创建的id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/reports",
+          "status_code": 200,
+          "ms": 20144,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:reports,totalCount,pageInfo",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "变更报表负责人为测试账号自己(自转自)",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/ChangeOwner?id={{created_report_id_co}}&userId=18589",
+          "status_code": 400,
+          "ms": 606,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"__raw__\": \"\"}"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "__raw__"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance/{{created_report_id_co}}",
+          "status_code": 400,
+          "ms": 1632,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_report_id_co}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 40"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/Report/custom/SetAccessibleReports - 设置用户可访问报表(含后置清理)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建测试报表(供SetAccessibleReports用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance",
+          "status_code": 500,
+          "ms": 1666,
+          "pass": false,
+          "failures": [
+            "http 500",
+            "http 500 {\"type\": \"https://tools.ietf.org/html/rfc9110#section-15.6.1\", \"title\": \"Internal Server Error\", \"status\": 500, \"detail\": \"Object reference not set to an instance of an object.\", \"exceptionType\": \"Sys"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "type",
+            "title",
+            "status",
+            "detail",
+            "exceptionType",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "按报表名查找刚创建的id",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/reports",
+          "status_code": 200,
+          "ms": 21059,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:reports,totalCount,pageInfo",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "设置可访问报表(仅本测试报表,userId为本账号真实值)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/SetAccessibleReports",
+          "status_code": 400,
+          "ms": 1719,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"reportIds[0]\": [\"Error converting value \\\"{{created_report_id_sar}}\\\" to type 'System.Int64'. Path 'reportIds[0]', line 1, position 42.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#se"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试报表",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/walmart-newui/api/Report/custom/campaignPerformance/{{created_report_id_sar}}",
+          "status_code": 400,
+          "ms": 1648,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "http 400 {\"errors\": {\"id\": [\"The value '{{created_report_id_sar}}' is not valid.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation errors occurred.\", \"status\": 4"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-15T06:37:18.632269+00:00"
+}

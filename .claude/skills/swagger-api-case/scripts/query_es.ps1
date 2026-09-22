@@ -1,4 +1,4 @@
-<#
+﻿<#
 query_es.ps1 — Phase 2.2 ES 日志查询（参数化，内建 GET/POST 平台过滤）
 
 用法：

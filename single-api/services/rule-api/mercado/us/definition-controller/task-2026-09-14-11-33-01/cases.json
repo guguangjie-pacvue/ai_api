@@ -1,0 +1,132 @@
+[
+  {
+    "name": "POST /definition/checkRuleName - 检查未占用规则名(不带id,可重复)",
+    "description": "单接口测试:POST /definition/checkRuleName。该接口纯校验、不写库,请求体不含productLine字段(与平台无关,mercado同其他平台共用同一后端行为)。全平台90天基线500条样本中不带id(新建场景)占比40.0%(200/500)为≥1%真实场景。使用未被占用的随机规则名验证接口可用性,无需清理。500条随机样本中占比约40.0%(200次,全平台基线,mercado该接口自身90/180/730天窗口均无独立调用,不可按平台归因)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "检查规则名(新建场景)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/checkRuleName",
+        "request_body": {
+          "emailOption": "NoEmails",
+          "ruleName": "TC_Mercado_CheckRuleName_NotExist_Probe",
+          "ruleNames": [
+            "TC_Mercado_CheckRuleName_NotExist_Probe"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/commerceRuleClient - 默认调用(无入参)",
+    "description": "单接口测试:GET /definition/commerceRuleClient。Swagger无声明参数,接口不带productLine字段(GET且无查询参数,无法按平台归因)。ES全平台90天样本(13条,已排除测试账号clientId 62/3186)均为相同调用形态,占比100%,已全覆盖。500条随机样本中占比约100%(13次,全平台基线;mercado该路径本身无独立可归因流量)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleClient",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleClient",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - 按Client维度报表(可重复)",
+    "description": "单接口测试:POST /definition/commerceRuleReport。该接口不含productLine字段(与平台无关)。全平台180天基线29条样本中commerceRuleReportGroupBy=By Client占比89.7%(26/29)为最高频模式,纯读操作无需清理。500条随机样本中占比约89.7%(26次,全平台基线;mercado该路径本身无独立可归因流量,样本量小于500已如实说明)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleReport(By Client)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "endDate": "2026-04-18",
+          "prevEndDate": "2026-04-11",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Client",
+          "startDate": "2026-04-12",
+          "prevStartDate": "2026-04-05",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - 按Rule Name维度报表(真实缺陷,已复核确认)",
+    "description": "单接口测试:POST /definition/commerceRuleReport。全平台180天基线29条样本中commerceRuleReportGroupBy=By Rule Name占比10.3%(3/29),属≥1%独立真实场景。ES真实样本的clientIds字段指向具体真实客户(如896/4126/4127),为避免引用其他真实客户数据,本case比照真实结构但clientIds改为空数组,其余字段(groupBy/日期窗口结构)保持真实样本形态。实测发现真实缺陷:调用方账号(clientId=62)名下存在requirements为null的规则,By Rule Name分组代码路径未做空值检查,稳定复现服务端405: 'Cannot invoke \"String.contains(java.lang.CharSequence)\" because the return value of \"RuleView.getRequirements()\" is null'。该缺陷与target平台agent在同一账号上独立发现的缺陷根因完全一致(非本次用例构造错误),故按实际响应(code:405)固化为回归用例。500条随机样本中占比约10.3%(3次,全平台基线,样本量小已如实说明)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 commerceRuleReport(By Rule Name)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "endDate": "2026-05-09",
+          "prevEndDate": "2026-05-02",
+          "timeZone": "America/Los_Angeles",
+          "clientIds": [],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Rule Name",
+          "startDate": "2026-05-03",
+          "prevStartDate": "2026-04-26",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  }
+]

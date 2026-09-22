@@ -1,0 +1,236 @@
+[
+  {
+    "name": "GET /config/actionMetrics - ruleType=Targeting(bol真实场景)",
+    "description": "单接口测试：GET /config/actionMetrics。Swagger仅声明ruleType为必填查询参数，但真实调用中前端还会附带productLine查询参数按平台筛选。按queryString含productLine=bolv2过滤（已排除测试账号62/3186）后近180天共142条真实调用，ruleType=Targeting为最高频场景。500条随机样本中占比约69.0%（98次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 actionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/actionMetrics?ruleType=Targeting&productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/actionMetrics - ruleType=Campaign(bol真实场景)",
+    "description": "单接口测试：GET /config/actionMetrics。按queryString含productLine=bolv2过滤（已排除测试账号62/3186）后近180天共142条真实调用，ruleType=Campaign场景。500条随机样本中占比约19.0%（27次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 actionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/actionMetrics?ruleType=Campaign&productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/actionMetrics - ruleType=SOV Bid(bol真实场景)",
+    "description": "单接口测试：GET /config/actionMetrics。按queryString含productLine=bolv2过滤（已排除测试账号62/3186）后近180天共142条真实调用，ruleType=SOV Bid场景。500条随机样本中占比约12.0%（17次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 actionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/actionMetrics?ruleType=SOV+Bid&productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/emails - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/emails。Swagger无声明参数，GET请求query string不携带productLine，无法按平台过滤，采用全平台流量挖掘场景（bol平台覆盖仍按要求生成本case）。ES 90天全平台样本(27221次调用，已排除测试账号)均为无参默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 emails",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/emails",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/getCommercePermission - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/getCommercePermission。Swagger无声明参数，GET请求query string不携带productLine，无法按平台过滤，采用全平台流量挖掘场景（bol平台覆盖仍按要求生成本case）。ES 90天全平台样本(33058次调用，已排除测试账号)均为无参默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 getCommercePermission",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/getCommercePermission",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/requirementMetrics - 默认调用(不带ruleType参数)",
+    "description": "单接口测试：GET /config/requirementMetrics。Swagger声明ruleType为必填查询参数，但ES真实日志显示（已排除测试账号62/3186）近90天共56726条真实调用中56578条(约99.7%)完全不带任何查询参数、后端仍正常返回200及完整数据；带ruleType的记录(合计148条，约0.3%)经核实是测试账号污染流量的残留统计(未排除测试账号时ruleType调用量从148条暴增至35000+条，与真实客户行为特征明显不同)，不构成≥1%的独立真实场景。因此采用真实占绝对多数的无参默认调用作为Happy Path，不编造ruleType取值。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 requirementMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/requirementMetrics",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/RuleActionMetrics - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/RuleActionMetrics。Swagger无声明参数。ES 90天全平台样本(78295次调用，已排除测试账号62/3186)均为无查询参数的默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 RuleActionMetrics",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/RuleActionMetrics",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/ruleTypes - productLine=bol筛选",
+    "description": "单接口测试：GET /config/ruleTypes。Swagger未声明该参数，但真实调用中前端会附带productLine查询参数按平台筛选规则类型列表。按queryString含productLine=bolv2过滤（已排除测试账号62/3186）后近180天共174条真实调用，均携带该参数，占比100%。500条随机样本中占比约100%（174次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ruleTypes",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/ruleTypes?productLine={{platform}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /config/supportedTimeZones - 默认调用(无入参)",
+    "description": "单接口测试：GET /config/supportedTimeZones。Swagger无声明参数，GET请求query string不携带productLine，无法按平台过滤，采用全平台流量挖掘场景（bol平台覆盖仍按要求生成本case）。ES 90天全平台样本(27300次调用，已排除测试账号)均为无参默认调用。500条随机样本中占比约100%（500次）。",
+    "module": "config-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 supportedTimeZones",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/config/supportedTimeZones",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

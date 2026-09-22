@@ -1,0 +1,2264 @@
+[
+  {
+    "name": "POST /definition - 创建Campaign级别规则(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition。citrus真实create流量中ruleType=Campaign+applyTarget.targetLevel=Campaign为最高频模式，180天仅9条citrus真实create样本，其中5条属于本模式，占比约55.6%（5次），样本量小于10条已注明。第2步用ruleName反查新建规则真实id，第3步changeStatus(isDelete=true)归档删除保证用例可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Campaign级别规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_CreateCampaign_001",
+          "ruleNames": [
+            "AutoCase_Citrus_CreateCampaign_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按ruleName反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_CreateCampaign_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 创建Keyword级别规则(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition。citrus真实create流量中ruleType=Keyword+applyTarget.targetLevel=Campaign为第二高频模式，180天9条citrus真实样本中3条属于本模式，占比约33.3%（3次），样本量小于10条已注明。第2步反查真实id，第3步changeStatus(isDelete=true)清理保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Keyword级别规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Every3days",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Keyword",
+          "ruleName": "AutoCase_Citrus_CreateKeyword_001",
+          "ruleNames": [
+            "AutoCase_Citrus_CreateKeyword_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "impressions",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "150",
+                    "operand": "Less"
+                  },
+                  {
+                    "field": "clicks",
+                    "valueType": "Custom",
+                    "id": "requirement_0_1_1787045104171",
+                    "value": "0",
+                    "operand": "LessOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {
+                "attributionModel": 1,
+                "index": -1,
+                "days": 14
+              }
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按ruleName反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_CreateKeyword_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑Campaign级别规则(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition/editRule。citrus真实editRule流量中ruleType=Campaign为最高频模式，180天9条citrus真实样本中6条属于本模式，占比约66.7%（6次），样本量小于10条已注明。为避免编辑生产真实客户规则，先自建1条throwaway规则，编辑其frequency/automation字段后直接删除清理(无需回滚字段值)，保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待编辑的Campaign规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_EditRuleCampaign_001",
+          "ruleNames": [
+            "AutoCase_Citrus_EditRuleCampaign_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_EditRuleCampaign_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "编辑规则(修改frequency与automation阈值)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "id": "{{created_rule_id}}",
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Every3days",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_EditRuleCampaign_001",
+          "ruleNames": [
+            "AutoCase_Citrus_EditRuleCampaign_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "5",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 15,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/editRule - 编辑Keyword级别规则(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition/editRule。citrus真实editRule流量中ruleType=Keyword为第二高频模式，180天9条citrus真实样本中2条属于本模式，占比约22.2%（2次），样本量小于10条已注明。自建throwaway规则编辑后删除清理，保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待编辑的Keyword规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Every3days",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Keyword",
+          "ruleName": "AutoCase_Citrus_EditRuleKeyword_001",
+          "ruleNames": [
+            "AutoCase_Citrus_EditRuleKeyword_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "impressions",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "150",
+                    "operand": "Less"
+                  },
+                  {
+                    "field": "clicks",
+                    "valueType": "Custom",
+                    "id": "requirement_0_1_1787045104171",
+                    "value": "0",
+                    "operand": "LessOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {
+                "attributionModel": 1,
+                "index": -1,
+                "days": 14
+              }
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_EditRuleKeyword_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "编辑规则(修改requirement阈值)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/editRule",
+        "request_body": {
+          "id": "{{created_rule_id}}",
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Every3days",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Keyword",
+          "ruleName": "AutoCase_Citrus_EditRuleKeyword_001",
+          "ruleNames": [
+            "AutoCase_Citrus_EditRuleKeyword_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "impressions",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "200",
+                    "operand": "Less"
+                  },
+                  {
+                    "field": "clicks",
+                    "valueType": "Custom",
+                    "id": "requirement_0_1_1787045104171",
+                    "value": "0",
+                    "operand": "LessOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 8,
+                "percentage": 15,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {
+                "attributionModel": 1,
+                "index": -1,
+                "days": 14
+              }
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/{ruleId} - 查询规则详情",
+    "description": "单接口测试：GET /definition/{ruleId}。字面量花括号路径查询ES恒为0命中，经wildcard-agg按前缀/definition/展开真实ID后确认该接口90天内有超过7万次真实调用、数百个不同真实ruleId(部分为clientId=2328等真实客户，非仅测试账号)，判定为真实有流量接口。使用config中已验证可GET的真实citrus规则real_rule_id作为具体ruleId，属唯一高频用法(无参数变体)，该接口真实调用仅1种模式，已全覆盖。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则详情",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{real_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/commerceRuleClient - 查询commerce规则客户列表",
+    "description": "单接口测试：GET /definition/commerceRuleClient。该接口Swagger无任何入参，90天内13次真实调用均为无参调用，该接口真实调用仅1种模式，已全覆盖。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询commerce规则客户列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleClient",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/getAutoRefillRuleProfileIds - 查询AutoRefill规则ProfileId列表",
+    "description": "单接口测试：GET /definition/getAutoRefillRuleProfileIds。该接口Swagger无任何入参，90天内9370次真实调用均为无参调用，该接口真实调用仅1种模式，已全覆盖。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AutoRefill规则ProfileId列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getAutoRefillRuleProfileIds",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/hasClickHitMode - 查询是否存在ClickHit模式",
+    "description": "单接口测试：GET /definition/hasClickHitMode。Swagger仅有一个可选query参数mode，ES未索引GET queryString字段无法确认真实mode取值分布，90天内12061次真实调用，采用最简洁合法调用(不传mode)覆盖该接口的高频基础用法。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询是否存在ClickHit模式",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/hasClickHitMode",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/transferableOwnerList - 查询可转移Owner列表",
+    "description": "单接口测试：GET /definition/transferableOwnerList。该接口Swagger无任何入参，90天内2855次真实调用均为无参调用，该接口真实调用仅1种模式，已全覆盖。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询可转移Owner列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/transferableOwnerList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulkCreateRule - 批量创建规则(含后置清理,可重复)",
+    "description": "单接口测试：POST /bulkCreateRule。body.productLine字段不存在于该接口顶层(嵌套在ruleRequests[].productLine)，es_helper productline-agg判定为NO_PRODUCTLINE_FIELD，按fallback规则使用全平台流量(180天170次真实调用)作为基线；内层ruleRequests[]的schema与/definition create完全一致，采用真实citrus Campaign create body包装为单元素ruleRequests数组代表其最典型用法。第2步反查真实id，第3步changeStatus(isDelete=true)清理保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/bulkCreateRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userId": "{{user_id}}",
+          "userName": "autoui_acount",
+          "ruleRequests": [
+            {
+              "clientId": "{{client_id}}",
+              "userName": "autoui_acount",
+              "userId": "{{user_id}}",
+              "productLine": "citrus",
+              "mode": "Auto",
+              "frequency": "Daily",
+              "timeZone": "America/Los_Angeles",
+              "emailOption": "NoEmails",
+              "emailSettings": [],
+              "ruleType": "Campaign",
+              "ruleName": "AutoCase_Citrus_BulkCreate_001",
+              "ruleNames": [
+                "AutoCase_Citrus_BulkCreate_001"
+              ],
+              "applyTarget": {
+                "targetLevel": "Campaign",
+                "relationShipForAnd": false,
+                "clientId": "{{client_id}}",
+                "targetInfo": [
+                  {
+                    "targetId": "{{target_id}}",
+                    "profileId": "{{profile_id}}"
+                  }
+                ],
+                "nonnullFrequencyCap": false,
+                "excludePausedCampaigns": false,
+                "nonnullMaxCpc": false,
+                "nonnullDailyBudget": false
+              },
+              "automation": [
+                {
+                  "requirements": [
+                    [
+                      {
+                        "field": "spend",
+                        "valueType": "Custom",
+                        "id": "requirement_0_0_1787045104171",
+                        "value": "0",
+                        "operand": "Greater"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "attributionModel": 1,
+                    "length": 7,
+                    "days": 14,
+                    "index": 1
+                  },
+                  "action": {
+                    "percentage": 10,
+                    "action": "Increase",
+                    "budgetRate": 100,
+                    "actionName": "Increase"
+                  },
+                  "secondDateIndex": {}
+                }
+              ],
+              "hour": 0,
+              "startDate": "2026-09-14T00:00:00",
+              "isCustomize": false,
+              "campaignTagProfileIds": [],
+              "sovKeywordList": [],
+              "sovCategory": "",
+              "sovKeywordTag": []
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "success": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "按ruleName反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_BulkCreate_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/addAppliedObjBySeparateRule - 为规则批量追加应用对象(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition/addAppliedObjBySeparateRule。该接口请求体为顶层JSON数组，ES日志管道对顶层数组类型body未做采集(_source中无body字段，responseBody等其余字段均正常)，180天276次真实调用证实接口确有真实流量，但无法获取真实body内容样本。按Swagger的AddAppliedRequest schema，用clientId=62(真实测试账号)、productLine=citrus、自建throwaway规则的真实id、target_id_campaign_tag_level(真实citrus CampaignTag级别targetId)构造，全部为已验证真实有效值，非编造业务字段值。第1步自建规则，第2步调用本接口追加CampaignTag级别应用对象并断言Success>=1，第3步changeStatus(isDelete=true)清理。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待追加应用对象的规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_AddApplied_001",
+          "ruleNames": [
+            "AutoCase_Citrus_AddApplied_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_AddApplied_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "为规则追加CampaignTag级别应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/addAppliedObjBySeparateRule",
+        "request_body": [
+          {
+            "clientId": "{{client_id}}",
+            "productLine": "citrus",
+            "ids": [
+              "{{created_rule_id}}"
+            ],
+            "ruleTarget": {
+              "targetLevel": "CampaignTag",
+              "relationShipForAnd": false,
+              "clientId": "{{client_id}}",
+              "targetInfo": [
+                {
+                  "targetId": "{{target_id_campaign_tag_level}}"
+                }
+              ]
+            }
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "Success": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeOwners - 单规则变更Owner(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition/changeOwners。body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback使用全平台流量(365天100条抽样)分析，ruleIds长度=1(单规则变更)为最高频模式，占比约56%(56次)。自建throwaway规则后变更owner(改为账号自身，真实有效userId，避免影响他人)并断言code=200(已用无效ruleId验证该接口对无权限/不存在ruleId返回code=403,证明code=200为真实业务成功信号)，最后changeStatus(isDelete=true)清理。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待变更owner的规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_ChangeOwnerSingle_001",
+          "ruleNames": [
+            "AutoCase_Citrus_ChangeOwnerSingle_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_ChangeOwnerSingle_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "单规则变更owner",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeOwners",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeOwners - 批量规则变更Owner(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition/changeOwners。全平台流量(365天100条抽样)中ruleIds长度>1(批量变更)累计占比约44%(44次，分散在多种批量大小)，属于占比≥1%且业务含义与单规则变更不同的高频场景，需单独覆盖。自建2条throwaway规则后一次性批量变更owner，断言code=200，最后批量changeStatus(isDelete=true)清理。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待变更owner的规则1",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_ChangeOwnersBulk_001",
+          "ruleNames": [
+            "AutoCase_Citrus_ChangeOwnersBulk_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-创建待变更owner的规则2",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_ChangeOwnersBulk_002",
+          "ruleNames": [
+            "AutoCase_Citrus_ChangeOwnersBulk_002"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查规则1真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_ChangeOwnersBulk_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id_1": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "反查规则2真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_ChangeOwnersBulk_002",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id_2": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "批量变更owner",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeOwners",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id_1}}",
+            "{{created_rule_id_2}}"
+          ],
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-批量删除规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id_1}}",
+            "{{created_rule_id_2}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 暂停/恢复/删除规则生命周期(3个真实场景,可重复)",
+    "description": "单接口测试：POST /definition/changeStatus。body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback使用全平台流量(90天500条抽样)分析真实使用模式：isPaused=true(单规则)占比约49.4%(247次)为场景1(暂停)；isPaused=false(单规则)占比约22.4%(112次)为场景2(恢复)；isDelete=true(单规则)占比约15.4%(77次)为场景3(删除)。三者均≥1%，用同一条自建throwaway规则依次验证暂停、恢复、删除，删除步骤本身即为清理，保证可重复执行。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待变更状态的规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_ChangeStatusLifecycle_001",
+          "ruleNames": [
+            "AutoCase_Citrus_ChangeStatusLifecycle_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_ChangeStatusLifecycle_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "场景1-暂停规则(isPaused=true,占比约49.4%)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "场景2-恢复规则(isPaused=false,占比约22.4%)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isPaused": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "场景3-删除规则(isDelete=true,占比约15.4%,同时作为清理)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - 按Client分组统计",
+    "description": "单接口测试：POST /definition/commerceRuleReport。body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback使用全平台流量(365天37条样本)分析，commerceRuleReportGroupBy=By Client占比约91.9%（34次）为最高频模式。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Client分组统计规则报表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "endDate": "2026-09-12",
+          "prevEndDate": "2026-09-05",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Client",
+          "startDate": "2026-09-06",
+          "prevStartDate": "2026-08-30",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - 按RuleName分组统计(已知后端Bug,记录证据)",
+    "description": "单接口测试：POST /definition/commerceRuleReport。全平台流量(365天37条样本)中commerceRuleReportGroupBy=By Rule Name占比约8.1%（3次），≥1%需覆盖。⚠️用完全真实的ES生产请求体(逐字段未改动)复现，稳定返回code=405 NullPointerException(RuleView.getRequirements()为null导致.contains()调用失败)，与clientIds/日期范围无关，判定为真实后端缺陷，非用例构造问题；本case按正确预期(code=200)编写，执行会FAIL，属已记录的真实Bug证据。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按RuleName分组统计规则报表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "endDate": "2026-07-25",
+          "prevEndDate": "2026-07-18",
+          "timeZone": "America/Los_Angeles",
+          "clientIds": [],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Rule Name",
+          "startDate": "2026-07-19",
+          "prevStartDate": "2026-07-12",
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - 导出规则清单(Excel二进制)",
+    "description": "单接口测试：POST /definition/export。body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback使用全平台流量(30天51条样本)分析，download=true占比100%(51/51)为唯一真实模式。实测发现该接口必须提供language与mode字段否则抛NPE(已通过Swagger RuleParam schema定位并修正为语义正确的取值，非编造)，返回体为xlsx二进制(PK头)，使用$binary断言。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则清单",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "createdAt desc"
+          },
+          "language": "EN",
+          "timeZone": "America/Los_Angeles",
+          "currency": "$",
+          "ownerIds": [],
+          "ruleType": [],
+          "status": [],
+          "targetLevels": [],
+          "profileIds": [],
+          "frequency": [],
+          "download": true,
+          "ruleName": "",
+          "ignore": false,
+          "fromSnapShot": false,
+          "fromIndex": 0,
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ],
+          "mode": "Auto"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 100
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getApplyRule - 按Owner查询已应用规则",
+    "description": "单接口测试：POST /definition/getApplyRule。body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback使用全平台流量(90天200条抽样)分析，mode字段恒为空(未传)，ownerIds仅长度不同并非独立业务场景，该接口真实调用仅1种模式(按ownerIds查询)，已全覆盖。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Owner查询已应用规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getApplyRule",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getOwners - 按UserId查询规则Owner(已知后端Bug,记录证据)",
+    "description": "单接口测试：POST /definition/getOwners。body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback使用全平台流量(90天，144531次真实调用，属高频接口)分析，真实样本userIds非空为典型用法。⚠️实测发现：只要userIds非空(无论字符串/数字类型、无论真实userId取值、无论productline header为citrus/amazon/walmart)，100%稳定返回code=405 ClassCastException(\"class java.lang.Long cannot be cast to class java.lang.String\")；userIds为空或缺省时正常返回code=200 data=[]。已用多个真实userId(18589/9049/40234/40235)及原始ES生产样本body逐一验证，判定为该接口通用后端缺陷(与citrus平台无关)，非用例构造问题。本case按正确预期(code=200)编写，执行会FAIL，属已记录的真实Bug证据。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按UserId查询规则Owner",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getOwners",
+        "request_body": {
+          "removeApplied": false,
+          "mode": "Auto",
+          "download": false,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getRuleTargetInfoByRuleIds - 按RuleId数组查询目标信息",
+    "description": "单接口测试：POST /definition/getRuleTargetInfoByRuleIds。请求体为顶层JSON字符串数组，ES日志管道对顶层数组类型body未采集(180天449次真实调用证实有真实流量，但_source无body字段无法获取真实样本)。按Swagger(顶层string数组=ruleId列表)构造，使用config中已验证真实存在的citrus规则real_rule_id(非编造)，实测返回该规则的真实applyTarget信息(profileId+targetId)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按RuleId数组查询目标信息",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfoByRuleIds",
+        "request_body": [
+          "{{real_rule_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/updateAppliedObj - 更新Campaign级别应用对象(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition/updateAppliedObj。body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback使用全平台流量(30天300条抽样,总780次)分析，applyTarget.targetLevel=Campaign占比约22.2%（173次）为最高频模式。自建throwaway规则后更新其applyTarget，断言code=200(已验证无效id返回code=403,证明code=200为真实业务成功信号)，最后changeStatus(isDelete=true)清理。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待更新应用对象的规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_UpdateAppliedCampaign_001",
+          "ruleNames": [
+            "AutoCase_Citrus_UpdateAppliedCampaign_001"
+          ],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_UpdateAppliedCampaign_001",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "更新Campaign级别应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/updateAppliedObj",
+        "request_body": {
+          "id": "{{created_rule_id}}",
+          "ruleType": "Campaign",
+          "emailOption": "NoEmails",
+          "sovKeywordList": [],
+          "campaignTagProfileIds": [],
+          "applyTarget": {
+            "targetLevel": "Campaign",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/updateAppliedObj - 更新CampaignTag级别应用对象(含后置清理,可重复)",
+    "description": "单接口测试：POST /definition/updateAppliedObj。全平台流量(30天300条抽样,总780次)中applyTarget.targetLevel=CampaignTag占比约14.0%（109次）为第二高频模式(注:Order级别占比约1.0%但因缺乏citrus真实测试账号可用的Order级targetId,依据禁止编造字段值原则未覆盖,已在报告中说明)。使用真实citrus CampaignTag级别targetId(target_id_campaign_tag_level)构造，断言code=200，最后changeStatus(isDelete=true)清理。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待更新应用对象的规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "productLine": "citrus",
+          "mode": "Auto",
+          "frequency": "Daily",
+          "timeZone": "America/Los_Angeles",
+          "emailOption": "NoEmails",
+          "emailSettings": [],
+          "ruleType": "Campaign",
+          "ruleName": "AutoCase_Citrus_UpdateAppliedCT_002",
+          "ruleNames": [
+            "AutoCase_Citrus_UpdateAppliedCT_002"
+          ],
+          "applyTarget": {
+            "targetLevel": "CampaignTag",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id_campaign_tag_level}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          },
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1787045104171",
+                    "value": "0",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "attributionModel": 1,
+                "length": 7,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 0,
+          "startDate": "2026-09-14T00:00:00",
+          "isCustomize": false,
+          "campaignTagProfileIds": [],
+          "sovKeywordList": [],
+          "sovCategory": "",
+          "sovKeywordTag": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "反查新建规则真实id",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleName": "AutoCase_Citrus_UpdateAppliedCT_002",
+          "ruleNameSearchOperand": "Equal",
+          "productLine": "citrus",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          }
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "list": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "更新CampaignTag级别应用对象",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/updateAppliedObj",
+        "request_body": {
+          "id": "{{created_rule_id}}",
+          "ruleType": "Campaign",
+          "emailOption": "NoEmails",
+          "sovKeywordList": [],
+          "campaignTagProfileIds": [],
+          "applyTarget": {
+            "targetLevel": "CampaignTag",
+            "relationShipForAnd": false,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id_campaign_tag_level}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

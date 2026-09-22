@@ -1,0 +1,119 @@
+[
+  {
+    "name": "POST /event/getRuleTypes - 默认调用(无入参)",
+    "description": "单接口测试：POST /event/getRuleTypes。Swagger无声明参数。amazon平台。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则类型列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleTypes",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleCountByCampaignIds - 测试账号真实campaign",
+    "description": "单接口测试：POST /event/getRuleCountByCampaignIds。请求体结构取自ES真实样本(90天14条)。使用测试账号真实campaign({{real_campaign_id}})+profile({{profile_id}})。amazon平台。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按CampaignId查询规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByCampaignIds",
+        "request_body": {
+          "targetIds": [
+            "{{real_campaign_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "targetType": "Campaign"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleCountByUserIds - 测试账号真实user",
+    "description": "单接口测试：POST /event/getRuleCountByUserIds。请求体结构取自ES真实样本(90天3695条)。使用测试账号真实userId({{user_id}})。日期字段改用纯日期格式(参照report-controller的发现)。amazon平台。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按UserId查询规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleCountByUserIds",
+        "request_body": {
+          "productLine": "amazon",
+          "clientId": "{{client_id}}",
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "start": "2026-08-01",
+          "end": "2026-08-31",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /event/getRuleDefinition - 测试账号真实规则",
+    "description": "单接口测试：POST /event/getRuleDefinition。该接口90天内3095904次调用，访问量极高。使用测试账号真实存在的规则({{real_rule_id}})。amazon平台。 实测该接口响应体是裸数组(不含code/data/msg包装)，断言改为$root+$is_array。",
+    "module": "to-event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则定义",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/event/getRuleDefinition",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

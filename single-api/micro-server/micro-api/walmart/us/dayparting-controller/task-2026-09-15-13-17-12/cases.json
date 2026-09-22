@@ -1,0 +1,1093 @@
+[
+  {
+    "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaignId+profileId查询该campaign当前应用的dayparting配置。500条随机样本中占比约99.8%（499次）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "walmart",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。campaign存在dayparting冲突应用时的查询接口，按campaignId+profileId查询。500条随机样本中占比约100.0%（500次）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "walmart",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。按profileIds+ids校验当前用户是否具有删除模板权限(只读校验,无副作用)。500条随机样本中占比约100.0%（74次）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "walmart",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按profile/操作人过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按profileIds+clientId+userIds过滤查询可用模板名称列表(分页拉取全量)。500条随机样本中占比约100.0%（1947次样本命中，500条抽样内100%同结构）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": 62,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}"
+          ],
+          "productLine": "walmart",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            18589
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators?productLine=walmart&tempId={{fixture_template_id}} - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。该接口真实调用通过query string传参(productLine+tempId)，请求体为空。500条随机样本中占比约100%（37次，实际总命中37条）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operators?productLine=walmart&tempId={{fixture_template_id}}",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=walmart&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(不筛选操作类型)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。按templateId查询该模板全部操作日志，不筛选actionTypes。500条随机样本中占比约100.0%（37次，实际总命中37条，walmart近90天内无actionTypes筛选场景）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "walmart",
+          "preferenceZone": "PST8PDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile维度campaign标签树",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。按clientId+userIds+applyLevel查询profile维度的campaign分类标签树(不筛选profileIds)。500条随机样本中占比约100.0%（401次样本命中）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "walmart",
+          "advertiserIds": null,
+          "clientId": 62,
+          "applyLevel": 2,
+          "tagIds": [],
+          "daypartingType": 1,
+          "isFilter": true,
+          "userIds": [
+            18589
+          ],
+          "name": "",
+          "profileIds": [],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/amazonCampaignTag/tree - 按profile查询campaign标签树(不筛选tagIds)",
+    "description": "单接口测试：POST /dayparting/amazonCampaignTag/tree（虽然接口名含amazon字样，但为通用tree查询代码路径，walmart真实流量中同样被调用)。按profileIds+clientId+userIds查询campaign标签树。500条随机样本中占比约100.0%（65次样本命中）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/amazonCampaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/amazonCampaignTag/tree",
+        "request_body": {
+          "productLine": "walmart",
+          "advertiserIds": null,
+          "clientId": 62,
+          "applyLevel": 2,
+          "isFilter": false,
+          "tagIds": [],
+          "userIds": [
+            18589
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+states过滤(isFilter=true,不筛选tagIds)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按profile+states过滤(isFilter=true,不筛选tagIds)。500条随机样本中占比约92.4%（462次）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "walmart",
+          "advertiserIds": null,
+          "clientId": 62,
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            18589
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}"
+          ],
+          "tempId": 55057,
+          "states": [
+            "Live"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile查询(isFilter=false,不筛选states/tagIds)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按单profile查询(isFilter=false,不筛选states/tagIds)。500条随机样本中占比约5.4%（27次）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "walmart",
+          "advertiserIds": null,
+          "clientId": 62,
+          "applyLevel": 1,
+          "isFilter": false,
+          "tagIds": [],
+          "userIds": [
+            18589
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+tagIds+states过滤(isFilter=true)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按profile+tagIds+states过滤(isFilter=true)。500条随机样本中占比约1.2%（6次）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "walmart",
+          "advertiserIds": null,
+          "clientId": 62,
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [
+            38865
+          ],
+          "userIds": [
+            18589
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}"
+          ],
+          "tempId": 48186,
+          "states": [
+            "Paused",
+            "Live"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按profile+tagIds过滤(isFilter=false,不筛选states)",
+    "description": "单接口测试：POST /dayparting/campaign/tree。查询campaign分类树，场景：按profile+tagIds过滤(isFilter=false,不筛选states)。500条随机样本中占比约1.0%（5次）。 注：identity类字段(profileIds/userIds/clientId/campaignId/profileId)已替换为测试账号自身可访问的真实值，避免因ES样本中该字段为其他真实客户数据、与当前测试会话client不匹配导致后端500(该行为已在amazon平台验证：同一请求体仅替换该字段即可从500变为200，是账号数据归属问题非case参数错误)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/campaign/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "walmart",
+          "advertiserIds": null,
+          "clientId": 62,
+          "applyLevel": 1,
+          "isFilter": false,
+          "tagIds": [
+            38337
+          ],
+          "userIds": [
+            18589
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 查询apply列表(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/apply（operationId=getApplyList，实际是查询接口非创建接口）。按profileIds+tempId+applyLevel=1分页查询apply列表。500条随机样本中占比约16.0%（80次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "300745"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "walmart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 1,
+          "datePattern": null,
+          "name": null,
+          "tempId": 40950,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply（operationId=getApplyList，实际是查询接口非创建接口）。按profileIds+tempId+applyLevel=2分页查询apply列表。500条随机样本中占比约84.0%（420次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "241699",
+            "540029",
+            "429108",
+            "247217"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "walmart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 54518,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemIds查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：按lineItemIds查询targeting汇总。500条随机样本中占比约82.6%（413次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "walmart",
+          "lineItemIds": [
+            {
+              "relId": "4795427",
+              "relName": null,
+              "profileId": "240351",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemTags查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：按lineItemTags查询targeting汇总。500条随机样本中占比约11.4%（57次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "walmart",
+          "lineItemIds": [],
+          "lineItemTags": [
+            {
+              "relId": "36627",
+              "relName": "Packs - Manual - Non Branded",
+              "profileId": "245057",
+              "profileIdName": "Olipop Inc"
+            },
+            {
+              "relId": "37014",
+              "relName": "4PK - Crisp Apple - Non Branded EXA",
+              "profileId": "245057",
+              "profileIdName": "Olipop Inc"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 不带任何过滤条件查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：不带任何过滤条件查询。500条随机样本中占比约3.2%（16次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "walmart",
+          "lineItemIds": [],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 同时按lineItemIds+lineItemTags查询",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。查询targeting汇总数量，场景：同时按lineItemIds+lineItemTags查询。500条随机样本中占比约2.8%（14次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "walmart",
+          "lineItemIds": [
+            {
+              "relId": "4167810",
+              "relName": "2025 98\" Test",
+              "profileId": "217433",
+              "profileIdName": null
+            },
+            {
+              "relId": "4853886",
+              "relName": "AI-QM7K QM8K TEST-SP-Manual-KW",
+              "profileId": "217433",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": [
+            {
+              "relId": "36627",
+              "relName": "Packs - Manual - Non Branded",
+              "profileId": "245057",
+              "profileIdName": "Olipop Inc"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(按profile+日期偏好,不筛选applyIds)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：全字段(含datePattern+preferenceZone)分页查询,不筛选applyIds/applyItems/states。500条随机样本中占比约61.8%（309次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "330082",
+            "278509",
+            "352588"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "walmart",
+          "preferenceZone": "EST5EDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 51155,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(精简字段,不带datePattern/preferenceZone)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：精简字段分页查询,不带datePattern/preferenceZone/applyIds。500条随机样本中占比约32.2%（161次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "573727",
+            "570579",
+            "356009"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "walmart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 56109,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(指定applyIds+applyItems明细过滤)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：指定applyIds+applyItems明细过滤。500条随机样本中占比约1.8%（9次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "330082",
+            "278509",
+            "352588"
+          ],
+          "applyItems": [
+            {
+              "profileName": null,
+              "relId": "3988839",
+              "applyLevel": null,
+              "profileId": "278509",
+              "name": null,
+              "tempId": null,
+              "id": null
+            },
+            {
+              "profileName": null,
+              "relId": "3988868",
+              "applyLevel": null,
+              "profileId": "278509",
+              "name": null,
+              "tempId": null,
+              "id": null
+            }
+          ],
+          "states": [],
+          "productLine": "walmart",
+          "preferenceZone": "EST5EDT",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 51155,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": [
+            6001234,
+            6001235
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(指定applyIds过滤,精简字段)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：指定applyIds过滤(不带datePattern/preferenceZone)。500条随机样本中占比约1.6%（8次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "459747",
+            "466298",
+            "469096",
+            "459743"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "walmart",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 53912,
+          "applyLevels": [
+            2
+          ],
+          "applyIds": [
+            200747
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(指定applyIds过滤,全字段)",
+    "description": "单接口测试：POST /dayparting/detailApply。查询dayparting apply明细列表，场景：指定applyIds过滤(含datePattern/preferenceZone)。500条随机样本中占比约1.6%（8次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "12391",
+            "235377",
+            "327718",
+            "260697"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "walmart",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": "MM/DD/YYYY HH:mm:ss",
+          "name": null,
+          "tempId": 51155,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": [
+            6009999
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 批量校验单个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验campaign列表是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)，场景：单campaign校验。500条随机样本中占比约96.6%（483次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "walmart",
+            "campaignId": "3075569",
+            "profileId": "230716",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 批量校验多个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验campaign列表是否存在dayparting冲突标签(只读dry-run校验,不产生实际写操作)，场景：批量多campaign(代表条数3个)校验。500条随机样本中占比约1.6%（8次）。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /bulk/verify/apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "walmart",
+            "campaignId": "4723842",
+            "profileId": "230716",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "walmart",
+            "campaignId": "4723851",
+            "profileId": "230716",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "walmart",
+            "campaignId": "4723875",
+            "profileId": "230716",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

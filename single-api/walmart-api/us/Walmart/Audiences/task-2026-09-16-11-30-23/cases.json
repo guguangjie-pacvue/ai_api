@@ -1,0 +1,221 @@
+[
+  {
+    "name": "POST /api/display/Audiences - 创建ITEM_PROPENSITY类型受众后修改",
+    "description": "单接口测试：POST创建+PATCH修改，链式覆盖2个endpoint。写操作真实执行：在测试账号profile 16274451下创建attribute=ITEM_PROPENSITY(引用ItemSet模块自建的itemsetId 123639462)的自定义受众，探测已确认响应为{code:success,id,audienceId,details:[AUDIENCE_CREATE_REQUEST_SUCCESS]}的嵌套结构(data.data.*)。已排除attribute=ADVANCED+空include/exclude的写法(该结构虽在ES真实样本中出现过，但探测证实会被业务校验拒绝，稳定返回405 INCLUDE_SHOULD_NOT_BE_EMPTY_IN_ADVANCED_CRITERIA，说明那条真实样本本身就是别的用户的一次失败尝试)。全模块9接口未发现对应Delete接口(能创建不能删除，同ItemSet/AdGroups等模块先例)，接受残留固定命名(test+HHMMSS)测试实体，且Audiences名称是否要求账号内唯一未逐一验证，暂按ItemSet同类经验预留时间戳后缀避免冲突。PATCH更新时用create返回的data.data.audienceId(而非id字段，已探测确认两者不可互换，用id会报\"Audience with id xxx not found\")。2轮验证通过(每轮换用不同时间戳后缀创建，验证行为一致)。POST Audiences(32次)/PATCH Audiences(10次)均为365天真实调用。",
+    "module": "Audiences",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST Audiences 创建",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "display/Audiences",
+        "request_body": {
+          "audienceType": "CUSTOM",
+          "advertiserId": 16274451,
+          "name": "test113134_Audience",
+          "description": "swagger-api-case probe",
+          "audienceObjective": [
+            "PERFORMANCE"
+          ],
+          "attribute": "ITEM_PROPENSITY",
+          "audienceDefinition": {
+            "audienceCriteria": {
+              "propensityCriteria": {
+                "strategy": "PROMOTE_SEASONAL_PRODUCTS",
+                "itemsetIds": [
+                  123639462
+                ]
+              }
+            }
+          }
+        },
+        "extract_vars": {
+          "new_audience_id": "data.data.audienceId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data.data.code": "success",
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "PATCH Audiences 修改",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "display/Audiences",
+        "request_body": {
+          "audienceType": "CUSTOM",
+          "advertiserId": 16274451,
+          "name": "test113134_Audience_edited",
+          "description": "swagger-api-case probe (edited)",
+          "audienceObjective": [
+            "PERFORMANCE"
+          ],
+          "attribute": "ITEM_PROPENSITY",
+          "audienceDefinition": {
+            "audienceCriteria": {
+              "propensityCriteria": {
+                "strategy": "PROMOTE_SEASONAL_PRODUCTS",
+                "itemsetIds": [
+                  123639462
+                ]
+              }
+            }
+          },
+          "audienceId": "{{new_audience_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.data.code": "success",
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/display/Audiences/estimate - RULE_BASED购买行为估算",
+    "description": "单接口测试：POST /api/display/Audiences/estimate。估算受众规模(只读，不创建实体)。场景：attribute=RULE_BASED+purchaseCriteria，直接复用ES真实完整样本(未做任何字段替换，只读安全)。365天478次真实调用。",
+    "module": "Audiences",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 estimate - RULE_BASED",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "display/Audiences/estimate",
+        "request_body": {
+          "audienceType": "CUSTOM",
+          "advertiserId": 239432,
+          "name": "Top Deo Spenders",
+          "description": "",
+          "audienceObjective": [
+            "PERFORMANCE"
+          ],
+          "attribute": "RULE_BASED",
+          "audienceDefinition": {
+            "audienceCriteria": {
+              "include": {
+                "purchaseCriteria": {
+                  "purchaseChannel": "OMNI",
+                  "itemsetIds": [
+                    10267386
+                  ],
+                  "purchaseStartOffsetDays": 182,
+                  "purchaseEndOffsetDays": 0,
+                  "purchasePercentile": 10
+                },
+                "browseCriteria": null
+              },
+              "exclude": {
+                "purchaseCriteria": null,
+                "browseCriteria": null
+              },
+              "demographics": {
+                "gender": null,
+                "ageRange": [
+                  "F"
+                ],
+                "income": null
+              },
+              "geoTargets": null
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/display/Audiences/estimate - ADVANCED空条件(边界场景)",
+    "description": "单接口测试：POST /api/display/Audiences/estimate。场景：attribute=ADVANCED+include/exclude均为空数组，该结构在ES真实样本中确有出现(365天478次调用里的真实一条)。探测证实这是无效请求，稳定返回业务码405\"INCLUDE_SHOULD_NOT_BE_EMPTY_IN_ADVANCED_CRITERIA\"——说明这条真实样本本身就是某个用户的一次失败尝试(前端未做客户端校验就提交了空条件)，如实保留FAIL，断言code:200。",
+    "module": "Audiences",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 estimate - ADVANCED空条件",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "display/Audiences/estimate",
+        "request_body": {
+          "advertiserId": 16274451,
+          "audienceType": "CUSTOM",
+          "attribute": "ADVANCED",
+          "audienceDefinition": {
+            "audienceCriteria": {
+              "advancedCriteria": {
+                "include": [],
+                "exclude": []
+              }
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/display/Audiences/list - 默认场景查询受众列表",
+    "description": "单接口测试：POST /api/display/Audiences/list。查询受众列表。场景：默认过滤条件(所有filter均为空数组)+profileIds过滤，365天539次真实调用中最常见形态。",
+    "module": "Audiences",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 Audiences/list",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "display/Audiences/list",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "audienceStatus": [],
+          "audienceType": [],
+          "audienceAttributes": [],
+          "createdBy": [],
+          "keyword": "",
+          "pageInfo": {
+            "pageSize": 25,
+            "pageIndex": 1,
+            "orderBy": "audienceLastUpdatedDate desc"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

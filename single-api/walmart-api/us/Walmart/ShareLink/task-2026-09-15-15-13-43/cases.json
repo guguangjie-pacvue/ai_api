@@ -1,0 +1,470 @@
+[
+  {
+    "name": "GET /api/ShareLink/shareLink - 按secretKey查ShareLink信息",
+    "description": "单接口测试：GET /api/ShareLink/shareLink?secretKey=。用于外部访客用分享链接密钥查看Dashboard内容，公开查询接口无副作用。500条随机样本中占比约100%（500次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GET ShareLink/shareLink",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/shareLink?secretKey=cf40ddfe71f441be8c62bf722066b7e0",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ShareLink/shareLinkById - 按id查ShareLink",
+    "description": "单接口测试：GET /api/ShareLink/shareLinkById?id=。137条全量样本中占比约100%（137次，365天内该接口共137次真实调用，已用全部命中记录，样本量<500）。注：原始ES样本id 10751执行时返回HTTP 500(NullReferenceException)，排查发现该id对应的ShareLink已被其真实用户删除，接口对'查询不存在的id'没有做判空处理、抛出未处理异常而非返回404/业务错误——这是真实后端bug，已记录待报Jira；本case改用当前仍存在的id 10780验证正常路径。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GET ShareLink/shareLinkById",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/shareLinkById?id=10780",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ShareLink/shareToken - 按secretKey查shareToken",
+    "description": "单接口测试：GET /api/ShareLink/shareToken?secretKey=。497条全量样本中占比约100%（497次，样本量<500，已用全部命中记录）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GET ShareLink/shareToken",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/shareToken?secretKey=26ece9c2d2c74ecfb17284a072143b13",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ShareLink/sovShareLink - 按secretKey查SovShareLink信息",
+    "description": "单接口测试：GET /api/ShareLink/sovShareLink?secretKey=。85条全量样本中占比约100%（85次，样本量<500，已用全部命中记录）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "GET ShareLink/sovShareLink",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/sovShareLink?secretKey=8ca4ef5d33264d67a1e6d72deb25ae82",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/GetShareLinkList - 列表(dashboardTypes含值)",
+    "description": "单接口测试：POST /api/ShareLink/GetShareLinkList。场景1：dashboardTypes含具体值+userIds过滤。500条随机样本中占比约48.0%（240次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ShareLink/GetShareLinkList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": "createTime desc"
+          },
+          "profileIds": [
+            218132,
+            316905
+          ],
+          "userIds": [
+            "33971"
+          ],
+          "dashboardTypes": [
+            0
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/GetShareLinkList - 列表(dashboardTypes为空)",
+    "description": "单接口测试：POST /api/ShareLink/GetShareLinkList。场景2：dashboardTypes为空数组(不按dashboard类型过滤)+userIds过滤。500条随机样本中占比约49.8%（249次，最高频场景）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ShareLink/GetShareLinkList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": "createTime desc"
+          },
+          "profileIds": [
+            241699,
+            247217,
+            247288,
+            247452,
+            247491
+          ],
+          "userIds": [
+            "12345"
+          ],
+          "dashboardTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/GetShareLinkList - 列表(不传userIds)",
+    "description": "单接口测试：POST /api/ShareLink/GetShareLinkList。场景3：不传userIds字段(查全部用户)。500条随机样本中占比约1.8%（9次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ShareLink/GetShareLinkList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": "createTime desc"
+          },
+          "profileIds": [
+            229971
+          ],
+          "dashboardTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/GetSovShareLinkList - SOV ShareLink列表",
+    "description": "单接口测试：POST /api/ShareLink/GetSovShareLinkList。请求体为{pageInfo,userIds}，71条全量样本中占比约100%（71次，样本量<500，已用全部命中记录）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ShareLink/GetSovShareLinkList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/GetSovShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": "createTime desc"
+          },
+          "userIds": [
+            "24734"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/shareLink - 创建ShareLink+改DateRange+改Description+改Setting(自清理)",
+    "description": "单接口测试：POST /api/ShareLink/shareLink 创建ShareDashboard链接 → PATCH UpdateShareLinkDateRange改日期范围 → PATCH UpdateShareLinkDescription改描述 → PUT UpdateShareLinkSetting改整体设置 → DELETE BulkDelete清理。83条随机样本中占比约100%(创建场景)。写操作真实执行：全流程只作用于自建的ShareLink实体(profile 16274451)，不触碰任何真实客户的分享链接。创建响应体直接返回新id(data.result[0].id)，非常规'无ID返回'情况，无需额外探测。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ShareLink/shareLink create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/shareLink",
+        "request_body": {
+          "isCrateEveryProfile": false,
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "keywordTagIds": [],
+          "itemTagIds": [],
+          "dateRange": 1,
+          "widgets": [
+            {
+              "id": 804,
+              "isCheck": true,
+              "name": "Performance",
+              "showOrder": 0,
+              "thumbnail": "",
+              "title": "Performance",
+              "type": "Performance"
+            },
+            {
+              "id": 806,
+              "isCheck": true,
+              "name": "RealTime",
+              "showOrder": 1,
+              "thumbnail": "",
+              "title": "Real Time",
+              "type": "Performance"
+            }
+          ],
+          "ids": [
+            0
+          ],
+          "categoryIds": [],
+          "isNew": true,
+          "dashboardTypes": [
+            1
+          ],
+          "campaignTagIds": [],
+          "displayCampaignTagIds": [],
+          "countryCode": "US"
+        },
+        "extract_vars": {
+          "new_share_id": "data.result[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "PATCH ShareLink/UpdateShareLinkDateRange",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/UpdateShareLinkDateRange",
+        "request_body": {
+          "dateRange": 14,
+          "ids": [
+            "{{new_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "PATCH ShareLink/UpdateShareLinkDescription",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/UpdateShareLinkDescription",
+        "request_body": {
+          "description": "000test151343_desc",
+          "ids": [
+            "{{new_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "PUT ShareLink/UpdateShareLinkSetting",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/UpdateShareLinkSetting?id={{new_share_id}}",
+        "request_body": {
+          "isCrateEveryProfile": false,
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "keywordTagIds": [],
+          "itemTagIds": [],
+          "dateRange": 8,
+          "widgets": [
+            {
+              "id": 804,
+              "isCheck": true,
+              "name": "Performance",
+              "showOrder": 0,
+              "thumbnail": "",
+              "title": "Performance",
+              "type": "Performance"
+            }
+          ],
+          "ids": [
+            0
+          ],
+          "categoryIds": [],
+          "isNew": true,
+          "dashboardTypes": [
+            1
+          ],
+          "campaignTagIds": [],
+          "displayCampaignTagIds": [],
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE ShareLink/BulkDelete cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": [
+          "{{new_share_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/sovShare/shareLink - 创建SOV ShareLink+改Setting(自清理)",
+    "description": "单接口测试：POST /api/ShareLink/sovShare/shareLink 创建SOV分享链接 → PUT UpdateSovShareLinkSetting改设置 → DELETE BulkDelete清理。9条全量样本中占比约100%(创建场景，样本量<500，已用全部命中记录)。写操作真实执行：只作用于自建的SOV ShareLink实体(profile 16274451)。创建响应体直接返回新id(data.result.id，注意与POST shareLink不同这里result是单个对象不是数组)。已验证DELETE /api/ShareLink/BulkDelete对SOV类型ShareLink同样生效。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "POST ShareLink/sovShare/shareLink create",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/sovShare/shareLink",
+        "request_body": {
+          "categoryIds": [],
+          "dateRange": 4,
+          "description": "000test151343_sov",
+          "keywordTagIds": [],
+          "menuses": [
+            0
+          ],
+          "myBrands": [],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "widgetIds": [],
+          "market": [
+            "US"
+          ],
+          "isNew": true
+        },
+        "extract_vars": {
+          "new_sov_id": "data.result.id"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "PUT ShareLink/UpdateSovShareLinkSetting",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/UpdateSovShareLinkSetting?id={{new_sov_id}}",
+        "request_body": {
+          "categoryIds": [],
+          "dateRange": 11,
+          "description": "000test151343_sov_updated",
+          "keywordTagIds": [],
+          "menuses": [
+            0
+          ],
+          "myBrands": [],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "widgetIds": [],
+          "market": [
+            "US"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "DELETE ShareLink/BulkDelete cleanup",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": [
+          "{{new_sov_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

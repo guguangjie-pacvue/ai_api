@@ -1,0 +1,1736 @@
+[
+  {
+    "name": "GET /api/Report/custom/columns - type=30(疑似契约不一致,预期FAIL)",
+    "description": "单接口测试：GET /api/Report/custom/columns。查询报表列定义。500条随机样本中仅1条真实调用(ES样本量极少，真实调用极罕见)，唯一真实样本query为type=30。500条随机样本中占比约100%(1次)。【已知问题】type=30超出Swagger DefinitionReportType枚举范围(0-29)，实测后端对此值返回HTTP 400\"The value '30' is invalid\"——即该真实生产调用当时大概率也是失败的，属于前后端枚举契约不一致，非本次测试引入的问题，故意保留此真实值以记录该发现，预期结果为FAIL。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 columns(type=30)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/columns?type=30",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Report/custom/GetAccessibleReports - 按userId查询",
+    "description": "单接口测试：GET /api/Report/custom/GetAccessibleReports。查询指定用户可访问的报表列表。99.0%真实调用只传userId(0.8%额外带productLine，占比<1%不单独覆盖)。500条随机样本中占比约99.0%(495次)。userId取自ES真实样本(非本测试账号)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAccessibleReports",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/GetAccessibleReports?userId=25004",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Report/custom/history - 按reportId查询",
+    "description": "单接口测试：GET /api/Report/custom/history。查询报表历史发送/生成记录。100%真实调用只传reportId，单一场景。500条随机样本中占比约100%(500次)。注：ES真实样本的reportId多属其他clientId，实测该接口按clientId严格隔离(跨租户reportId返回404，符合预期的权限隔离，非bug)，故reportId改用本测试账号(autoui_acount, userId=18589)通过POST /api/Report/custom/reports 真实查到的自有报表id=31110，以验证真正的成功路径。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 history",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/history?reportId=31110",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Report/custom/history/export - isExport=true+historyId",
+    "description": "单接口测试：GET /api/Report/custom/history/export。导出某次历史报表(返回二进制文件流,非JSON)。100%真实调用固定带isExport=true+historyId，单一场景。500条随机样本中占比约100%(500次)。断言改用$binary(该框架内置的二进制响应断言)，因为实测该接口成功时返回文件二进制流而非{code,data}结构，若仍断言code:200会被误判FAIL。historyId改用本测试账号自有报表31110下的真实lastRunId=1108493(ES样本里的historyId多属其他clientId，但实测该接口不做租户隔离——用其他client的historyId也能拿到200+真实二进制文件，见最终报告的疑似数据越权问题)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 history/export",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/history/export?isExport=true&historyId=1108493",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Report/custom/history/preview - 仅historyId(不含SOV维度)",
+    "description": "单接口测试：GET /api/Report/custom/history/preview。预览历史报表内容。场景：只传historyId，不含sovDataLevel。300条随机样本中占比约52.7%(158次)。historyId改用本测试账号自有报表(id=31110)的真实lastRunId=1108493(同上，实测该接口不做租户隔离，用ES真实样本里其他client的historyId也能拿到200+真实数据，但为避免案例本身依赖他人数据，采用自有值)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 history/preview(无sovDataLevel)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/history/preview?historyId=1108493",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Report/custom/history/preview - historyId+sovDataLevel(疑似后端bug,预期FAIL)",
+    "description": "单接口测试：GET /api/Report/custom/history/preview。预览历史报表内容(SOV报表按数据层级预览)。场景：historyId+sovDataLevel。300条随机样本中占比约47.3%(142次)。【已知问题-已复现】用本测试账号自有报表(id=31110,非SOV类型reportType=0)的真实historyId=1108493附加sovDataLevel=0参数，返回HTTP 500\"System.ArgumentNullException: Value cannot be null. (Parameter 'value')\"——即对非SOV类型报表的history传sovDataLevel会导致服务端空引用异常而非优雅处理(忽略该参数或返回400校验错误)。已排除是账号权限问题(用自己的报表复现)、也排除是历史数据过期问题(用最新产生的historyId复现)，且已用同一id对GET /api/Report/custom/preview(非history/preview)传sovDataLevel验证可以正常返回200，证明问题只出在history/preview这条路径的sovDataLevel处理逻辑，故意保留此发现，预期结果为FAIL。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 history/preview(带sovDataLevel)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/history/preview?historyId=1108493&sovDataLevel=0",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/list - 无campaignIds+无customDays",
+    "description": "单接口测试：POST /api/Report/custom/list。查询已保存自定义报表的报表数据（给中台/前端渲染用）。场景：请求体不含campaignIds键,也不含customDays键(最基础的按profile+日期范围查询)。500条随机样本中占比约54.4%(272次)。clientId/userId为ES真实样本值(与本测试账号profile可能不属同一client，但历史验证该字段不影响以profileIds为准的数据权限判定)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 list(基础场景)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/list",
+        "request_body": {
+          "pageInfo": {
+            "pageSize": 700,
+            "pageIndex": 1,
+            "orderBy": "DateTime desc"
+          },
+          "reportType": 3,
+          "profileIds": "{{profile_id}}",
+          "clientId": 1145,
+          "userId": 33666,
+          "columns": [
+            {
+              "defaultName": "Campaign Tag",
+              "aliasName": "Campaign Tag"
+            },
+            {
+              "defaultName": "Item Id",
+              "aliasName": "Item Id"
+            },
+            {
+              "defaultName": "Title",
+              "aliasName": "Title"
+            },
+            {
+              "defaultName": "Campaign Type",
+              "aliasName": "Campaign Type"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "filters": [
+            {
+              "field": "Impressions",
+              "value": 0,
+              "operand": 1
+            }
+          ],
+          "dateRange": 6,
+          "dateRangeType": 0,
+          "specificDateRange": {},
+          "timeSegmentation": 5,
+          "cycleWeeklyDay": 6,
+          "metricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/list - 含campaignIds+customDays",
+    "description": "单接口测试：POST /api/Report/custom/list。场景：请求体含campaignIds键(空数组)+含customDays(自定义天数)。500条随机样本中占比约22.2%(111次)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 list(campaignIds+customDays)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/list",
+        "request_body": {
+          "pageInfo": {
+            "pageSize": 700,
+            "pageIndex": 1,
+            "orderBy": "DateTime desc"
+          },
+          "reportType": 2,
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [],
+          "clientId": 3925,
+          "userId": 32726,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Keyword Text",
+              "aliasName": "Keyword Text"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Campaign Id",
+              "aliasName": "Campaign Id"
+            },
+            {
+              "defaultName": "Campaign Type",
+              "aliasName": "Campaign Type"
+            },
+            {
+              "defaultName": "Match Type",
+              "aliasName": "Match Type"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "customDays": 45,
+          "filters": [],
+          "dateRange": 9,
+          "dateRangeType": 0,
+          "specificDateRange": {},
+          "timeSegmentation": 0,
+          "cycleWeeklyDay": 6,
+          "metricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/list - 含campaignIds+无customDays",
+    "description": "单接口测试：POST /api/Report/custom/list。场景：请求体含campaignIds键(空数组)，不含customDays。500条随机样本中占比约12.2%(61次)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 list(campaignIds,无customDays)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/list",
+        "request_body": {
+          "pageInfo": {
+            "pageSize": 700,
+            "pageIndex": 1,
+            "orderBy": "DateTime desc"
+          },
+          "reportType": 2,
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [],
+          "clientId": 4012,
+          "userId": 25864,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Keyword Text",
+              "aliasName": "Keyword Text"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Campaign Id",
+              "aliasName": "Campaign Id"
+            },
+            {
+              "defaultName": "Campaign Type",
+              "aliasName": "Campaign Type"
+            },
+            {
+              "defaultName": "Match Type",
+              "aliasName": "Match Type"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "filters": [],
+          "dateRange": 2,
+          "dateRangeType": 0,
+          "specificDateRange": {},
+          "timeSegmentation": 1,
+          "cycleWeeklyDay": 6,
+          "metricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/list - 无campaignIds+含customDays",
+    "description": "单接口测试：POST /api/Report/custom/list。场景：请求体不含campaignIds键，含customDays(自定义天数)。500条随机样本中占比约11.2%(56次)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 list(无campaignIds,customDays)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/list",
+        "request_body": {
+          "pageInfo": {
+            "pageSize": 700,
+            "pageIndex": 1,
+            "orderBy": "DateTime desc"
+          },
+          "reportType": 0,
+          "profileIds": "{{profile_id}}",
+          "clientId": 3925,
+          "userId": 32726,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Keyword Text",
+              "aliasName": "Keyword Text"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Campaign Id",
+              "aliasName": "Campaign Id"
+            },
+            {
+              "defaultName": "Campaign Type",
+              "aliasName": "Campaign Type"
+            },
+            {
+              "defaultName": "Match Type",
+              "aliasName": "Match Type"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            },
+            {
+              "defaultName": "CPM",
+              "aliasName": "CPM"
+            }
+          ],
+          "customDays": 100,
+          "filters": [],
+          "dateRange": 9,
+          "dateRangeType": 0,
+          "specificDateRange": {},
+          "timeSegmentation": 0,
+          "cycleWeeklyDay": 6,
+          "metricIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/preview - SOV报表(reportType=10)+sendToMode=1",
+    "description": "单接口测试：POST /api/Report/custom/preview。预览自定义报表(不落库,仅试算)。场景：reportType=10(SOV类报表)+sendToMode=1(定时发送邮件配置)。500条随机样本中占比约18.8%(94次，该combo为最高频单一组合)。该接口body为完整CustomReportParams,可选字段极多(SOV/云存储/FTP/多种column变体等50+种真实组合)，本case仅覆盖SOV与非SOV两条代表性结构主干，未逐一穷举全部可选字段组合。columns/CampaignTagColumns数组已从ES真实样本裁剪为代表性子集(保留真实字段名，未新增虚构字段)。emails字段真实值为其他客户真实邮箱,出于隐私已替换为测试占位邮箱。googleSheetKey同理已置空。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 preview(SOV报表)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/preview",
+        "request_body": {
+          "name": "qa-test-sov-preview",
+          "profileIds": [],
+          "tagIds": [],
+          "ItemTagIds": [],
+          "keywordTagIds": [],
+          "targetingTypes": [],
+          "campaignIds": [],
+          "Categories": [],
+          "filters": [],
+          "timeSegmentation": 1,
+          "dateRange": 6,
+          "dateRangeType": "0",
+          "customDays": "",
+          "specificDateRange": null,
+          "cycleWeeklyDay": "Sunday",
+          "scheduleType": 1,
+          "cyclePeriod": "0",
+          "timeZone": "America/Eastern",
+          "cycleSendTime": 8,
+          "cron": "0 0 8 * * ? *",
+          "csvDelimiter": 1,
+          "reportDateFormat": 2,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "TimeColumn",
+              "isTag": false,
+              "sovDataLevel": 0
+            },
+            {
+              "aliasName": "Brand",
+              "defaultName": "Brand",
+              "isTag": false,
+              "sovDataLevel": 0
+            },
+            {
+              "aliasName": "SOV Brand",
+              "defaultName": "SOV Brand",
+              "isTag": false,
+              "sovDataLevel": 0
+            },
+            {
+              "aliasName": "Total SOV",
+              "defaultName": "Total SOV",
+              "isTag": false,
+              "sovDataLevel": 0
+            },
+            {
+              "aliasName": "Time",
+              "defaultName": "TimeColumn",
+              "isTag": false,
+              "sovDataLevel": 1
+            },
+            {
+              "aliasName": "Keyword",
+              "defaultName": "Keyword",
+              "isTag": false,
+              "sovDataLevel": 1
+            },
+            {
+              "aliasName": "SOV Brand",
+              "defaultName": "SOV Brand",
+              "isTag": false,
+              "sovDataLevel": 1
+            }
+          ],
+          "CampaignTagColumns": [
+            "TimeColumn",
+            "Brand",
+            "SOV Brand",
+            "Total SOV"
+          ],
+          "customMetricIds": [],
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "customFileNameButton": false,
+          "fileName": "",
+          "reportNameDateFormat": 0,
+          "IsAppendDataTimeToFileName": false,
+          "emails": [
+            "qa-single-api-test@pacvue.com"
+          ],
+          "sendToMode": 1,
+          "fTPAccountParams": {
+            "isSendToFTP": false,
+            "hostName": "ftp://",
+            "userName": "",
+            "authenticationType": 0,
+            "passWord": "",
+            "keyFilePath": ""
+          },
+          "IsSendToAWSAmazonS3": false,
+          "AmazonS3RegionEndpoint": "USEast1",
+          "AmazonS3Accesskey": "",
+          "AmazonS3Bucket": "",
+          "AmazonS3Secretkey": "",
+          "isSendToGoogleCloud": false,
+          "googleCloudStorage": "",
+          "googleCloudStorageBucket": "",
+          "userGoogleSheet": false,
+          "googleSheetKey": "",
+          "isSendToMicrosoftAzure": false,
+          "microsoftAzureConnectionString": "",
+          "microsoftAzureContainerName": "",
+          "reportType": "10",
+          "categoryIds": [
+            90119
+          ],
+          "sovBrands": [
+            "Schwarzkopf"
+          ],
+          "sovDataSplit": 2,
+          "sovDataLevel": [
+            0
+          ],
+          "deviceMode": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/preview - 非SOV报表(reportType=0)+不传sendToMode",
+    "description": "单接口测试：POST /api/Report/custom/preview。场景：reportType=0(常规Campaign类报表)+不传sendToMode(非定时/一次性预览)。500条随机样本中占比约6.2%(31次)。同上，columns/tagIds/CampaignTagColumns已从真实样本裁剪为代表性子集，emails已替换为测试占位邮箱。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 preview(非SOV报表)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/preview",
+        "request_body": {
+          "name": "qa-test-monthly-preview",
+          "profileIds": [],
+          "tagIds": [
+            40439,
+            40440,
+            40441
+          ],
+          "ItemTagIds": [],
+          "keywordTagIds": [],
+          "campaignIds": [],
+          "Categories": [],
+          "filters": [],
+          "timeSegmentation": "2",
+          "dateRange": "9",
+          "dateRangeType": "1",
+          "customDays": "",
+          "specificDateRange": {
+            "start": "2026-01-01",
+            "end": "2026-04-08"
+          },
+          "cycleWeeklyDay": "Sunday",
+          "scheduleType": 0,
+          "cyclePeriod": "0",
+          "timeZone": "America/Eastern",
+          "cycleSendTime": 8,
+          "cron": "0 0 8 8 4 ? 2026",
+          "csvDelimiter": 1,
+          "reportDateFormat": 0,
+          "reportAdType": 0,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "Time"
+            },
+            {
+              "aliasName": "Campaign Name",
+              "defaultName": "Campaign Name"
+            },
+            {
+              "aliasName": "Impressions",
+              "defaultName": "Impressions"
+            },
+            {
+              "aliasName": "Clicks",
+              "defaultName": "Clicks"
+            },
+            {
+              "aliasName": "CTR",
+              "defaultName": "CTR"
+            },
+            {
+              "aliasName": "Spend",
+              "defaultName": "Spend"
+            }
+          ],
+          "CampaignTagColumns": [],
+          "customMetricIds": [],
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "customFileNameButton": false,
+          "fileName": "",
+          "reportNameDateFormat": 0,
+          "IsAppendDataTimeToFileName": true,
+          "emails": [
+            "qa-single-api-test@pacvue.com"
+          ],
+          "fTPAccountParams": {
+            "isSendToFTP": false,
+            "hostName": "ftp://",
+            "userName": "",
+            "passWord": "",
+            "authenticationType": 0,
+            "keyFilePath": ""
+          },
+          "IsSendToAWSAmazonS3": false,
+          "AmazonS3RegionEndpoint": "USEast1",
+          "AmazonS3Accesskey": "",
+          "AmazonS3Bucket": "",
+          "AmazonS3Secretkey": "",
+          "isSendToGoogleCloud": false,
+          "googleCloudStorage": "",
+          "googleCloudStorageBucket": "",
+          "userGoogleSheet": false,
+          "googleSheetKey": "",
+          "isSendToMicrosoftAzure": false,
+          "microsoftAzureConnectionString": "",
+          "microsoftAzureContainerName": "",
+          "reportType": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Report/custom/preview - 仅id(不含SOV维度)",
+    "description": "单接口测试：GET /api/Report/custom/preview。按已保存报表id预览。场景：只传id，不含sovDataLevel。500条随机样本中占比约71.8%(359次)。id改用本测试账号自有报表id=31110(ES真实样本id多属其他clientId，实测该接口按clientId严格隔离，跨租户id返回404，属正常权限隔离非bug，故改用自有id验证真正成功路径)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 preview(GET,无sovDataLevel)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/preview?id=31110",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Report/custom/preview - id+sovDataLevel",
+    "description": "单接口测试：GET /api/Report/custom/preview。场景：id+sovDataLevel(SOV报表按数据层级预览)。500条随机样本中占比约28.2%(141次)。id同上改用自有id=31110(非SOV类型报表)+sovDataLevel=0，实测该组合能正常返回200(与GET /api/Report/custom/history/preview同参数组合500形成对比，证明sovDataLevel处理bug只存在于history/preview这一条路径，见最终报告)。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 preview(GET,带sovDataLevel)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/preview?id=31110&sovDataLevel=0",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/reports - 按userId过滤报表列表",
+    "description": "单接口测试：POST /api/Report/custom/reports。分页查询自定义报表列表(按reportType/scheduleType/userId/searchKeyword过滤，均可为空数组=不过滤)。100%真实调用字段结构一致(reportType=[]、scheduleType=[]均不过滤，仅userId+分页生效)，单一场景。500条随机样本中占比约100%(500次)。经核实该接口body结构为纯过滤/分页DTO(CustomReportRequest：reportType[]/scheduleType[]/userId[]/pageInfo/searchKeyword/status)，语义上是查询而非创建，故归入E类只读。userId取自ES真实样本。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 reports",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/reports",
+        "request_body": {
+          "reportType": [],
+          "scheduleType": [],
+          "userId": [
+            36873
+          ],
+          "pageInfo": {
+            "pageSize": 25,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
+          "searchKeyword": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【已确认后端bug-阻塞】POST /api/Report/custom - 创建基础自定义报表",
+    "description": "单接口测试：POST /api/Report/custom。创建类写操作。[2026-09-15实测确认后端bug] 数据库故障已恢复后实测，本接口稳定复现HTTP 500\"Object reference not set to an instance of an object\"(NullReferenceException)，无法创建成功，导致本case及依赖它的后续步骤全部阻塞——不是case设计问题，是接口本身坏了。ES 365天窗口该端点0次真实调用(疑似前端未使用此通用创建入口，实际创建走/api/Report/custom/campaignPerformance，见最终报告疑似问题)，body结构参照同DTO(CustomReportParams)在/list、/preview、/campaignPerformance的真实字段取值构造，非凭空捏造。第二步后置操作将新建报表删除，保证用例可重复执行。extract_vars路径`data`为常见返回模式的推测，未经真实响应验证，执行前需先核实实际响应结构后再修正。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建自定义报表",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom",
+        "request_body": {
+          "name": "qa-test-custom-report-create",
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [],
+          "reportType": 0,
+          "dateRange": 9,
+          "dateRangeType": 0,
+          "customDays": 30,
+          "specificDateRange": {},
+          "timeSegmentation": 0,
+          "cycleWeeklyDay": 6,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "filters": [],
+          "customMetricIds": [],
+          "scheduleType": 0,
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "fileName": "",
+          "emails": [],
+          "sendToMode": 0
+        },
+        "extract_vars": {
+          "created_report_id": "data"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除新建报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/{{created_report_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【已确认后端bug-阻塞】PUT /api/Report/custom/{id} - 更新自定义报表",
+    "description": "单接口测试：PUT /api/Report/custom/{id}。更新类写操作。ES该端点365天0次真实调用。[2026-09-15实测确认后端bug] 依赖的POST /Report/custom创建接口稳定复现500(NullReferenceException，见同模块POST /Report/custom - 创建基础自定义报表 case)，本case无法拿到有效id，全程阻塞，非case设计问题。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建自定义报表(供更新用)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom",
+        "request_body": {
+          "name": "qa-test-custom-report-forupdate",
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [],
+          "reportType": 0,
+          "dateRange": 9,
+          "dateRangeType": 0,
+          "customDays": 30,
+          "specificDateRange": {},
+          "timeSegmentation": 0,
+          "cycleWeeklyDay": 6,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "filters": [],
+          "customMetricIds": [],
+          "scheduleType": 0,
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "fileName": "",
+          "emails": [],
+          "sendToMode": 0
+        },
+        "extract_vars": {
+          "created_report_id": "data"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "更新自定义报表",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/{{created_report_id}}",
+        "request_body": {
+          "name": "qa-test-custom-report-updated",
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [],
+          "reportType": 0,
+          "dateRange": 9,
+          "dateRangeType": 0,
+          "customDays": 30,
+          "specificDateRange": {},
+          "timeSegmentation": 0,
+          "cycleWeeklyDay": 6,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "filters": [],
+          "customMetricIds": [],
+          "scheduleType": 0,
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "fileName": "",
+          "emails": [],
+          "sendToMode": 0,
+          "reportId": "{{created_report_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除测试报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/{{created_report_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【已确认后端bug-阻塞】DELETE /api/Report/custom/{id} - 删除自定义报表",
+    "description": "单接口测试：DELETE /api/Report/custom/{id}。删除类写操作。ES该端点365天0次真实调用。[2026-09-15实测确认后端bug] 依赖的POST /Report/custom创建接口稳定复现500(NullReferenceException)，本case无法拿到有效id，全程阻塞，非case设计问题。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建自定义报表(供删除用)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom",
+        "request_body": {
+          "name": "qa-test-custom-report-fordelete",
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [],
+          "reportType": 0,
+          "dateRange": 9,
+          "dateRangeType": 0,
+          "customDays": 30,
+          "specificDateRange": {},
+          "timeSegmentation": 0,
+          "cycleWeeklyDay": 6,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "filters": [],
+          "customMetricIds": [],
+          "scheduleType": 0,
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "fileName": "",
+          "emails": [],
+          "sendToMode": 0
+        },
+        "extract_vars": {
+          "created_report_id": "data"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "删除自定义报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/{{created_report_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【已确认后端bug-阻塞】PATCH /api/Report/custom/{Id} - 切换报表启用状态",
+    "description": "单接口测试：PATCH /api/Report/custom/{Id}?status=bool。切换自定义报表启用/禁用状态，属写操作。ES该端点365天0次真实调用。[2026-09-15实测确认后端bug] 依赖的POST /Report/custom创建接口稳定复现500(NullReferenceException)，本case无法拿到有效id，全程阻塞，非case设计问题。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建自定义报表(供状态切换用)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom",
+        "request_body": {
+          "name": "qa-test-custom-report-forstatus",
+          "profileIds": "{{profile_id}}",
+          "campaignIds": [],
+          "reportType": 0,
+          "dateRange": 9,
+          "dateRangeType": 0,
+          "customDays": 30,
+          "specificDateRange": {},
+          "timeSegmentation": 0,
+          "cycleWeeklyDay": 6,
+          "columns": [
+            {
+              "defaultName": "Time",
+              "aliasName": "Time"
+            },
+            {
+              "defaultName": "Campaign Name",
+              "aliasName": "Campaign Name"
+            },
+            {
+              "defaultName": "Impressions",
+              "aliasName": "Impressions"
+            },
+            {
+              "defaultName": "Clicks",
+              "aliasName": "Clicks"
+            },
+            {
+              "defaultName": "Spend",
+              "aliasName": "Spend"
+            }
+          ],
+          "filters": [],
+          "customMetricIds": [],
+          "scheduleType": 0,
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "fileName": "",
+          "emails": [],
+          "sendToMode": 0
+        },
+        "extract_vars": {
+          "created_report_id": "data"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "切换报表状态为禁用",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/{{created_report_id}}?status=false",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除测试报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/{{created_report_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/campaignPerformance - 创建Campaign Performance报表(含后置清理)",
+    "description": "单接口测试：POST /api/Report/custom/campaignPerformance。创建类写操作。ES 365天该端点4190次真实调用(是实际生产中使用的创建入口)，body取自真实样本结构(name/dateRange/columns等)，已将scheduleType改为0(关闭定时发送)以降低意外触发邮件风险，emails字段真实值为第三方客户真实邮箱已替换为测试占位邮箱。[2026-09-15修复] 创建响应体只有{code,msg}不含新id，改用POST /Report/custom/reports的searchKeyword字段按报表名查找获取id，用DELETE campaignPerformance/{id}清理。⚠️观察到疑似限流/并发缺陷：同一批次里连续多次调用本创建接口，只有第1次成功，后续几次稳定复现500(NullReferenceException)，间隔调用或许能规避，已记录为疑似后端bug。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Campaign Performance报表",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance",
+        "request_body": {
+          "name": "qa-test-campaignperformance-create",
+          "profileIds": [],
+          "tagIds": [],
+          "ItemTagIds": [],
+          "keywordTagIds": [],
+          "campaignIds": [],
+          "Categories": [],
+          "filters": [],
+          "timeSegmentation": "0",
+          "dateRange": "9",
+          "dateRangeType": "0",
+          "customDays": "30",
+          "specificDateRange": {},
+          "cycleWeeklyDay": "Sunday",
+          "scheduleType": 0,
+          "cyclePeriod": "0",
+          "timeZone": "America/Eastern",
+          "cycleSendTime": 8,
+          "csvDelimiter": 1,
+          "reportDateFormat": 0,
+          "reportAdType": 0,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "Time"
+            },
+            {
+              "aliasName": "Campaign Name",
+              "defaultName": "Campaign Name"
+            },
+            {
+              "aliasName": "Impressions",
+              "defaultName": "Impressions"
+            },
+            {
+              "aliasName": "Clicks",
+              "defaultName": "Clicks"
+            },
+            {
+              "aliasName": "Spend",
+              "defaultName": "Spend"
+            }
+          ],
+          "CampaignTagColumns": [],
+          "adGroupTagColumns": [],
+          "KeywordTagColumns": [],
+          "ItemTagColumns": [],
+          "customMetricIds": [],
+          "fileFormat": "xlsx",
+          "compressType": 0,
+          "customFileNameButton": false,
+          "fileName": "",
+          "reportNameDateFormat": 0,
+          "IsAppendDataTimeToFileName": false,
+          "emails": [
+            "qa-single-api-test@pacvue.com"
+          ],
+          "sendToMode": 0,
+          "fTPAccountParams": {
+            "isSendToFTP": false,
+            "hostName": "ftp://",
+            "userName": "",
+            "authenticationType": 0,
+            "passWord": "",
+            "keyFilePath": ""
+          },
+          "IsSendToAWSAmazonS3": false,
+          "AmazonS3RegionEndpoint": "USEast1",
+          "AmazonS3Accesskey": "",
+          "AmazonS3Bucket": "",
+          "AmazonS3Secretkey": "",
+          "isSendToGoogleCloud": false,
+          "googleCloudStorage": "",
+          "googleCloudStorageBucket": "",
+          "userGoogleSheet": false,
+          "googleSheetKey": "",
+          "isSendToMicrosoftAzure": false,
+          "microsoftAzureConnectionString": "",
+          "microsoftAzureContainerName": "",
+          "reportType": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按报表名查找刚创建的id",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/reports",
+        "request_body": {
+          "reportType": [],
+          "scheduleType": [],
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
+          "searchKeyword": "qa-test-campaignperformance-create"
+        },
+        "extract_vars": {
+          "created_cp_report_id": "data.reports[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Campaign Performance报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance/{{created_cp_report_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/Report/custom/campaignPerformance/{id} - 更新Campaign Performance报表(含后置清理)",
+    "description": "单接口测试：PUT /api/Report/custom/campaignPerformance/{id}。更新类写操作。ES该端点365天0次真实调用(PUT本身无流量，但同名POST创建端点流量很高，故沿用其真实body结构)。先创建再更新再删除，保证可重复执行。[2026-09-15修复] 创建响应体只有{code,msg}，不含新报表id，改用POST /Report/custom/reports的searchKeyword字段按报表名精确查找(已实测确认该字段真实生效，能精确定位)获取id，不再假设响应体含data字段。⚠️疑似限流/并发缺陷：同批次里POST /Report/custom/campaignPerformance若不是当次批次第一次调用，稳定复现500(NullReferenceException)，本case因排在同模块另一条campaignPerformance创建case之后而受影响，非本case设计问题，需要间隔调用或单独执行验证。[2026-09-16 补执行] 数据库恢复后单独重跑(非同批次首次调用问题)：前置 POST /Report/custom/campaignPerformance 创建步骤连续 4 次(间隔 25~60 秒)稳定 HTTP 500 NullReferenceException(\"Object reference not set to an instance of an object.\")，与 2026-09-15 同批次首次调用曾成功(报表 33212)的表现不同，疑似该创建接口已退化为稳定 500；创建失败导致本 case 的 PUT/DELETE 步骤无有效 id，如实记录 FAIL，未改断言。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Campaign Performance报表(供更新用)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance",
+        "request_body": {
+          "name": "qa-test-cp-forupdate",
+          "profileIds": [],
+          "campaignIds": [],
+          "filters": [],
+          "dateRange": "9",
+          "dateRangeType": "0",
+          "customDays": "30",
+          "specificDateRange": {},
+          "scheduleType": 0,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "Time"
+            },
+            {
+              "aliasName": "Campaign Name",
+              "defaultName": "Campaign Name"
+            },
+            {
+              "aliasName": "Impressions",
+              "defaultName": "Impressions"
+            }
+          ],
+          "fileFormat": "xlsx",
+          "emails": [],
+          "sendToMode": 0,
+          "reportType": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按报表名查找刚创建的id",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/reports",
+        "request_body": {
+          "reportType": [],
+          "scheduleType": [],
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
+          "searchKeyword": "qa-test-cp-forupdate"
+        },
+        "extract_vars": {
+          "created_cp_report_id2": "data.reports[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "更新Campaign Performance报表",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance/{{created_cp_report_id2}}",
+        "request_body": {
+          "name": "qa-test-cp-updated",
+          "profileIds": [],
+          "campaignIds": [],
+          "filters": [],
+          "dateRange": "9",
+          "dateRangeType": "0",
+          "customDays": "60",
+          "specificDateRange": {},
+          "scheduleType": 0,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "Time"
+            },
+            {
+              "aliasName": "Campaign Name",
+              "defaultName": "Campaign Name"
+            },
+            {
+              "aliasName": "Clicks",
+              "defaultName": "Clicks"
+            }
+          ],
+          "fileFormat": "xlsx",
+          "emails": [],
+          "sendToMode": 0,
+          "reportType": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除Campaign Performance报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance/{{created_cp_report_id2}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "DELETE /api/Report/custom/campaignPerformance/{id} - 删除Campaign Performance报表",
+    "description": "单接口测试：DELETE /api/Report/custom/campaignPerformance/{id}。删除类写操作。ES该端点365天0次真实调用。先创建测试报表再删除，天然自清理。[2026-09-15修复] 创建响应体只有{code,msg}，不含新报表id，改用POST /Report/custom/reports的searchKeyword字段按报表名精确查找获取id。⚠️疑似限流/并发缺陷：同上一条PUT campaignPerformance case，同批次非第一次调用POST /Report/custom/campaignPerformance稳定复现500，非本case设计问题。[2026-09-16 补执行] 数据库恢复后单独重跑(非同批次首次调用问题)：前置 POST /Report/custom/campaignPerformance 创建步骤连续 4 次(间隔 25~60 秒)稳定 HTTP 500 NullReferenceException(\"Object reference not set to an instance of an object.\")，与 2026-09-15 同批次首次调用曾成功(报表 33212)的表现不同，疑似该创建接口已退化为稳定 500；创建失败导致本 case 的 PUT/DELETE 步骤无有效 id，如实记录 FAIL，未改断言。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Campaign Performance报表(供删除用)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance",
+        "request_body": {
+          "name": "qa-test-cp-fordelete",
+          "profileIds": [],
+          "campaignIds": [],
+          "filters": [],
+          "dateRange": "9",
+          "dateRangeType": "0",
+          "customDays": "30",
+          "specificDateRange": {},
+          "scheduleType": 0,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "Time"
+            },
+            {
+              "aliasName": "Campaign Name",
+              "defaultName": "Campaign Name"
+            }
+          ],
+          "fileFormat": "xlsx",
+          "emails": [],
+          "sendToMode": 0,
+          "reportType": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按报表名查找刚创建的id",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/reports",
+        "request_body": {
+          "reportType": [],
+          "scheduleType": [],
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
+          "searchKeyword": "qa-test-cp-fordelete"
+        },
+        "extract_vars": {
+          "created_cp_report_id3": "data.reports[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "删除Campaign Performance报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance/{{created_cp_report_id3}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PATCH /api/Report/custom/ChangeOwner - 变更报表负责人(自转自·无实质转移·自清理)",
+    "description": "单接口测试：PATCH /api/Report/custom/ChangeOwner?id=&userId=。经用户确认(2026-09-15)方案：自建一个测试报表(默认owner即测试账号自己userId 18589)→把owner改成同一个18589(自转自，验证接口可调但不产生真实权限转移风险)→删除测试报表清理。原ES真实样本(365天50次调用)的id/userId是其他真实客户数据，不使用。[2026-09-15修复] 普通POST /Report/custom创建接口有真实后端bug(稳定复现NullReferenceException 500，详见同模块POST /Report/custom - 创建基础自定义报表 case)，改用有真实生产流量、已验证可正常创建的POST /Report/custom/campaignPerformance；该创建接口响应体只有{code,msg}不含新id，改用POST /Report/custom/reports的searchKeyword字段按报表名查找获取id；清理步骤相应改用DELETE /Report/custom/campaignPerformance/{id}(已验证可用)。⚠️疑似限流/并发缺陷：同批次里POST /Report/custom/campaignPerformance非第一次调用稳定复现500(NullReferenceException)，本case因排在同模块其他campaignPerformance创建case之后而受影响，非本case设计问题。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试报表(供ChangeOwner用)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance",
+        "request_body": {
+          "name": "qa-test-cp-forchangeowner",
+          "profileIds": [],
+          "campaignIds": [],
+          "filters": [],
+          "dateRange": "9",
+          "dateRangeType": "0",
+          "customDays": "30",
+          "specificDateRange": {},
+          "scheduleType": 0,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "Time"
+            }
+          ],
+          "fileFormat": "xlsx",
+          "emails": [],
+          "sendToMode": 0,
+          "reportType": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按报表名查找刚创建的id",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/reports",
+        "request_body": {
+          "reportType": [],
+          "scheduleType": [],
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
+          "searchKeyword": "qa-test-cp-forchangeowner"
+        },
+        "extract_vars": {
+          "created_report_id_co": "data.reports[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "变更报表负责人为测试账号自己(自转自)",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/ChangeOwner?id={{created_report_id_co}}&userId=18589",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除测试报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance/{{created_report_id_co}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/custom/SetAccessibleReports - 设置用户可访问报表(含后置清理)",
+    "description": "单接口测试：POST /api/Report/custom/SetAccessibleReports。设置指定userId可访问的报表列表，属权限类写操作。ES该端点365天0次真实调用，且无Swagger以外的接口文档说明该调用是'覆盖'还是'追加'用户可访问报表列表。经用户确认(2026-09-15)：只使用本次自建的测试报表id+本测试账号自身真实userId(18589)作为参数，接受该操作可能覆盖测试账号自身可访问报表配置的风险(不影响真实客户)。[2026-09-15修复] 同ChangeOwner case：普通POST /Report/custom创建接口有真实后端bug(500)，改用campaignPerformance创建+reports的searchKeyword查找id+campaignPerformance删除清理。⚠️疑似限流/并发缺陷：同批次里POST /Report/custom/campaignPerformance非第一次调用稳定复现500，本case因排在同模块其他campaignPerformance创建case之后而受影响，非本case设计问题。",
+    "module": "CustomReport",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试报表(供SetAccessibleReports用)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance",
+        "request_body": {
+          "name": "qa-test-cp-foraccessible",
+          "profileIds": [],
+          "campaignIds": [],
+          "filters": [],
+          "dateRange": "9",
+          "dateRangeType": "0",
+          "customDays": "30",
+          "specificDateRange": {},
+          "scheduleType": 0,
+          "columns": [
+            {
+              "aliasName": "Time",
+              "defaultName": "Time"
+            }
+          ],
+          "fileFormat": "xlsx",
+          "emails": [],
+          "sendToMode": 0,
+          "reportType": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按报表名查找刚创建的id",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/reports",
+        "request_body": {
+          "reportType": [],
+          "scheduleType": [],
+          "userId": [
+            18589
+          ],
+          "pageInfo": {
+            "pageSize": 5,
+            "pageIndex": 1,
+            "orderBy": "createdTime desc"
+          },
+          "searchKeyword": "qa-test-cp-foraccessible"
+        },
+        "extract_vars": {
+          "created_report_id_sar": "data.reports[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "reports": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "设置可访问报表(仅本测试报表,userId为本账号真实值)",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/SetAccessibleReports",
+        "request_body": {
+          "reportIds": [
+            "{{created_report_id_sar}}"
+          ],
+          "userId": 18589
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除测试报表",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Report/custom/campaignPerformance/{{created_report_id_sar}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

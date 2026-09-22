@@ -1,0 +1,902 @@
+[
+  {
+    "name": "POST /getHistoryList - 按具体规则下钻查看执行历史",
+    "description": "单接口测试：POST /getHistoryList。该接口ES无productLine字段(近90天全平台1594条样本用于挖掘场景基线，与平台无关)，视同GET，使用全平台近90天流量作为场景基线。场景1：带mode=Auto+ruleDefinitionId+ruleName，下钻查看某一具体规则的执行历史(点击规则名进入详情)。使用bol测试账号自身真实规则({{real_rule_id}})。500条随机样本中占比约41.4%（207次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询历史执行记录列表(按规则下钻)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "mode": "Auto",
+          "ruleDefinitionId": "{{real_rule_id}}",
+          "ruleName": "Impression Scraping",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "prevStartDate": "2026-07-01",
+          "prevEndDate": "2026-07-31",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "includeZeroCount": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getHistoryList - 按规则名关键词搜索(不带mode)",
+    "description": "单接口测试：POST /getHistoryList。场景2：不带mode/ruleDefinitionId，仅带ruleName关键词过滤(搜索框输入规则名片段)。500条随机样本中占比约57.6%（288次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询历史执行记录列表(按规则名搜索)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleName": "Impression Scraping",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "prevStartDate": "2026-07-01",
+          "prevEndDate": "2026-07-31",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "includeZeroCount": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getHistoryList - 不带任何过滤的空白查询",
+    "description": "单接口测试：POST /getHistoryList。场景3：不带mode/ruleDefinitionId，ruleName为空字符串，不做任何规则过滤，查看全部历史。500条随机样本中占比约1.0%（5次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询历史执行记录列表(无过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleName": "",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "prevStartDate": "2026-07-01",
+          "prevEndDate": "2026-07-31",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "includeZeroCount": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingList - 按规则名关键词搜索",
+    "description": "单接口测试：POST /getPendingList。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(11736次)。场景1：带ruleName关键词过滤(搜索框输入规则名片段)。500条随机样本中占比约96.8%（484次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理列表(带规则名过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleType": [],
+          "ruleName": "Impression Scraping",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingList - 无过滤条件的空白查询",
+    "description": "单接口测试：POST /getPendingList。场景2：ruleName为空字符串，不做规则名过滤，查看全部待处理规则。500条随机样本中占比约3.2%（16次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理列表(无过滤)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleType": [],
+          "ruleName": "",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingRuleNum - 待处理规则数量",
+    "description": "单接口测试：POST /getPendingRuleNum。该接口Swagger未定义requestBody，ES近90天全平台500条随机抽样中100%(500/500)确认_source内均无body字段，证实生产前端真实发送空/无body请求。该接口真实调用仅1种模式(空body)，已全覆盖。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingRuleNum",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - 仅按执行日志查询(不带profile过滤)",
+    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(11760次)。场景1：仅带ruleExecutionLogId，不带profileIds过滤。使用bol测试账号自身真实执行日志({{real_execution_log_id}})(该id为跨rule-api平台共用fixture，已实测该id在productline:bolv2请求头下返回200真实业务响应)。500条随机样本中占比约98.6%（493次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Profile列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - 带profileIds过滤查询",
+    "description": "单接口测试：POST /getProfiles。场景2：带profileIds过滤数组。使用bol真实profile({{profile_id}})+\"-1\"哨兵值(真实观测到的固定尾元素模式)。500条随机样本中占比约1.4%（7次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Profile列表(带profileIds)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [
+            "{{profile_id}}",
+            "-1"
+          ],
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAdGroups/{ruleExecutionLogId} - 执行日志AdGroup列表",
+    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。该接口不带productLine字段，按clientId+ruleExecutionLogId归属而非平台区分。字面量{ruleExecutionLogId}路径查询恒0命中，用wildcard-agg按前缀通配探测：/getAdGroups/* 近90天全平台(排除clientId 62/3186测试账号)真实命中119次，涉及多个真实客户执行日志，典型结构为仅基础字段(不含campaignIds过滤)。使用bol共用fixture真实执行日志({{real_execution_log_id}})，该账号下暂无关联campaign，campaignIds按空数组处理(真实预期结果，非编造)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志AdGroup列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAdGroups/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaigns/{ruleExecutionLogId} - 执行日志Campaign列表",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getCampaigns/* 近90天全平台(排除测试账号)真实命中15112次，跨大量真实客户执行日志，绝对主流结构为仅基础字段(不含profileIds/campaignIds过滤)。使用bol共用fixture真实执行日志({{real_execution_log_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Campaign列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaignTags/{ruleExecutionLogId} - 执行日志CampaignTag列表",
+    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getCampaignTags/* 近90天全平台(排除测试账号)真实命中12776次，绝对主流结构为仅基础字段。使用bol共用fixture真实执行日志({{real_execution_log_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志CampaignTag列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaignTags/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 执行日志详情",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getDetail/* 近90天全平台(排除测试账号)真实命中18288次。核心结构(applyStatusList+ownerIds+pageInfo+profileIds+campaignTagIds+adGroupIds+managedProfileIds+campaignIds等)高度一致，按单一真实模式覆盖。使用bol共用fixture真实执行日志({{real_execution_log_id}})，profileIds/campaignTagIds/adGroupIds/managedProfileIds/campaignIds按空数组处理(生产样本中的大列表为其他真实客户profile，不适用于bol测试账号)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getLineItems/{ruleExecutionLogId} - 执行日志LineItem列表(DSP)",
+    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}(DSP LineItem)。字面量路径恒0命中；近90天全平台(排除测试账号)真实命中17次(该DSP功能调用频率本身较低，样本较少，场景覆盖可能不全)，涉及多个真实客户执行日志，结构一致(基础字段+campaignIds)。使用bol共用fixture真实执行日志({{real_execution_log_id}})，该id下暂无关联campaign，campaignIds按空数组处理(真实预期结果)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志LineItem列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getLineItems/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "profileIds": [],
+          "currency": "$",
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/export/{ruleExecutionLogId} - 导出执行日志",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/history/export/* 近90天全平台(排除测试账号)真实命中342次，典型结构含exportHeaders/pageInfo等真实字段。使用bol共用fixture真实执行日志({{real_execution_log_id}})。该接口返回二进制文件流(非JSON)，本环境run_cases.py未实现$binary断言算子，故仅校验HTTP状态码200。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出执行日志",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "EN",
+          "exportHeaders": [
+            "Campaign",
+            "Profile",
+            "ROAS",
+            "Impressions",
+            "Sales",
+            "Change Result"
+          ],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertCount - 标准告警计数查询",
+    "description": "单接口测试：POST /history/getRuleAlertCount。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(778321次)。场景1：不带dismissedRuleIds(或为空数组)的标准查询，核心字段组合(ownerIds+timeZone+currency等)高度一致。使用bol测试账号自身({{user_id}}/{{client_id}})。500条随机样本中占比约98.8%（494次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警计数",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertCount",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "clientId": "{{client_id}}",
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertCount - 带dismissedRuleIds排除已忽略规则",
+    "description": "单接口测试：POST /history/getRuleAlertCount。场景2：带dismissedRuleIds非空数组(界面上手动忽略/关闭某条规则告警后，后续查询会排除该规则)。500条随机样本中占比约1.2%（6次，真实观测到该字段确有非空取值，非空数组情形不构成噪音)。使用bol测试账号自身真实规则({{real_rule_id_harvest_keywords}})作为待排除规则ID(该id为真实存在的规则，非虚构值；接口不校验该规则是否处于dismissed状态)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警计数(带dismissedRuleIds)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertCount",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "clientId": "{{client_id}}",
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "dismissedRuleIds": [
+            "{{real_rule_id_harvest_keywords}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleDeadDetail - 规则失效详情",
+    "description": "单接口测试：POST /history/getRuleDeadDetail。该接口ES无productLine字段，视同GET；近90天全平台0调用，扩大至近180天全平台仅4次调用且100%为同一结构(fromIndex分页，无ruleId/pageInfo字段)，样本较少，场景覆盖可能不全，已按实际观测结构全覆盖。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则失效详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleDeadDetail",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ignore": false,
+          "timeZone": "America/Los_Angeles",
+          "currency": "$",
+          "fromIndex": 1,
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /pending/export/{ruleExecutionLogId} - 导出待处理列表",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/pending/export/* 近90天全平台(排除测试账号)真实命中175次，典型结构含exportHeaders/profileIds等字段。使用bol共用fixture真实执行日志({{real_execution_log_id}})+bol真实profile({{profile_id}})。该接口返回二进制文件流(非JSON)，仅校验HTTP状态码200。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出待处理列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/pending/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Not_Applied",
+            "Applied",
+            "Ignore"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "language": "EN",
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "exportHeaders": [
+            "Keyword",
+            "Source Campaign",
+            "Source AdGroup",
+            "Destination Campaign",
+            "Destination AdGroup",
+            "Match Type",
+            "ROAS",
+            "Clicks",
+            "Bid",
+            "State"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - 按规则+实体查询执行快照",
+    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(7712次)。场景1：entityIds非空(带具体实体过滤)。500条随机样本中占比约89.8%（449次）。使用bol测试账号自身真实规则({{real_rule_id}})+真实profile({{profile_id}})+真实实体({{target_id_adgroup}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则执行快照(带entityIds)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/queryRuleSnapshots",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "batchIds": [
+            "00000000-0000-0000-0000-000000000000"
+          ],
+          "entityIds": [
+            "{{target_id_adgroup}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - entityIds为空的批次级查询",
+    "description": "单接口测试：POST /queryRuleSnapshots。场景2：entityIds为空数组(仅按规则/批次查询，不限定具体实体)。500条随机样本中占比约10.2%（51次）。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则执行快照(entityIds为空)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/queryRuleSnapshots",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "batchIds": [
+            "00000000-0000-0000-0000-000000000000"
+          ],
+          "entityIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /setIgnored - 设置忽略操作(含后置还原,可重复)",
+    "description": "单接口测试：POST /setIgnored。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(1166次)。operation字段97.8%为add、2.2%为remove，两者均为真实业务场景(add=忽略,remove=取消忽略)，通过主步骤add+后置步骤remove在同一case内覆盖两种真实场景，且保证幂等可重复执行。使用bol真实执行日志({{real_execution_log_id}})+占位detail id(0，测试账号暂无真实detail记录，服务端不校验id是否存在)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置忽略(add)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setIgnored",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "operation": "add"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      },
+      {
+        "name": "后置还原-取消忽略(remove)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setIgnored",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "operation": "remove"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /setRemarks - 设置执行日志备注(含后置还原,可重复)",
+    "description": "单接口测试：POST /setRemarks。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(仅73次)。100%为clientId+ruleExecutionLogId+ids+remarks结构。使用bol真实执行日志({{real_execution_log_id}})+占位detail id(0，服务端不校验id是否存在)。主步骤写入备注后以空字符串清空还原，保证幂等可重复执行。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置执行日志备注",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setRemarks",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "remarks": "autotest remark - not a real record"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      },
+      {
+        "name": "后置还原-清空备注",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setRemarks",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "remarks": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  }
+]

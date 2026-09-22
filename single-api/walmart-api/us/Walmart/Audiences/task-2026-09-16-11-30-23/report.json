@@ -1,0 +1,126 @@
+{
+  "config": "walmart-api (us)",
+  "started_at": "2026-09-16T03:31:47.783068+00:00",
+  "total": 4,
+  "passed": 3,
+  "failed": 1,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/display/Audiences - 创建ITEM_PROPENSITY类型受众后修改",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "POST Audiences 创建",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/display/Audiences",
+          "status_code": 200,
+          "ms": 4002,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:httpErrorMsg,data,isHttpSuccesssCode,statusCode,requestId",
+          "data_len": 5,
+          "msg": null
+        },
+        {
+          "name": "PATCH Audiences 修改",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/display/Audiences",
+          "status_code": 200,
+          "ms": 4361,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:httpErrorMsg,data,isHttpSuccesssCode,statusCode,requestId",
+          "data_len": 5,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/display/Audiences/estimate - RULE_BASED购买行为估算",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 estimate - RULE_BASED",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/display/Audiences/estimate",
+          "status_code": 200,
+          "ms": 4718,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:httpErrorMsg,data,isHttpSuccesssCode,statusCode,requestId",
+          "data_len": 5,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/display/Audiences/estimate - ADVANCED空条件(边界场景)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 estimate - ADVANCED空条件",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/display/Audiences/estimate",
+          "status_code": 200,
+          "ms": 1681,
+          "pass": false,
+          "failures": [
+            "code expected 200, got 405"
+          ],
+          "resp_code": 405,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": "[{\"code\":\"failure\",\"details\":[\"INCLUDE_SHOULD_NOT_BE_EMPTY_IN_ADVANCED_CRITERIA\"]}]"
+        }
+      ]
+    },
+    {
+      "name": "POST /api/display/Audiences/list - 默认场景查询受众列表",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 Audiences/list",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/display/Audiences/list",
+          "status_code": 200,
+          "ms": 927,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:totalCount,items,pageNumber,pageSize,totalPages,hasPreviousPage,hasNextPage,startIndex",
+          "data_len": 9,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-16T03:32:03.474948+00:00"
+}

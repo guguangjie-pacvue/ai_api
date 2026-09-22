@@ -1,0 +1,666 @@
+[
+  {
+    "name": "POST /api/CampaignCreate/V3/BrandHome/ListPages - 按ENTITY_ID查询品牌StorePage列表",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/BrandHome/ListPages。查询Brand Store指定Entity下的Page列表，365天内约10647次真实调用，样本中identifierType恒为ENTITY_ID。500条随机样本中占比约100%（60次）。profileId已替换为本账号{{profile_id}}，identifier保留ES真实样本值（非本账号原始数据），若因权限不匹配返回空列表属预期，断言仅校验L1业务成功。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ENTITY_ID查询品牌StorePage列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/BrandHome/ListPages",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "identifier": "ENTITYWJ2QYSM1W73H",
+          "identifierType": "ENTITY_ID"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/BrandHome/ListStores - 按profileId查询品牌Store列表",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/BrandHome/ListStores。按profileId查询该广告主下的Brand Store列表，仅profileId一个字段，365天内约12979次真实调用。500条随机样本中占比约100%（60次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按profileId查询品牌Store列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/BrandHome/ListStores",
+        "request_body": {
+          "profileId": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinKeywordList - 按ASIN查询推荐关键词",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinKeywordList。按ASIN列表查询系统推荐的SB关键词，365天内约9633次真实调用。场景1：asins非空。500条随机样本中占比约55.0%（33次）。asins保留ES真实样本值，profileId已替换为本账号{{profile_id}}。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ASIN查询推荐关键词",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetAsinKeywordList",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "B0G62L3HL6"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetAsinKeywordList - 空ASIN列表查询关键词(isVerifyDuplicate=false)",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetAsinKeywordList。场景2：asins为空数组+isVerifyDuplicate=false（用户未选定ASIN时的默认查询/校验模式）。500条随机样本中占比约43.3%（26次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "空ASIN列表查询关键词(isVerifyDuplicate=false)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetAsinKeywordList",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [],
+          "isVerifyDuplicate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetPageAsins - 按Store Page URL查询页面内ASIN",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetPageAsins。按Amazon Store Page URL抓取该页面下的ASIN列表，365天内约18665次真实调用。场景1：url为/stores/page/形式(品牌店铺子页面)。500条随机样本中占比约88.3%（53次）。profileId已替换为本账号{{profile_id}}，url保留ES真实样本值（非本账号Store，仅验证接口结构与返回格式，可能返回空列表）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按Store Page URL查询页面内ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetPageAsins",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "url": "https://www.amazon.com/stores/page/2E6C613B-6B23-4793-8F00-16F79B5EB110"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetPageAsins - 按商品详情页(dp)URL查询ASIN",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetPageAsins。场景2：url为/dp/商品详情页形式，直接查询单ASIN对应商品。500条随机样本中占比约11.7%（7次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按商品详情页(dp)URL查询ASIN",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetPageAsins",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "url": "https://www.amazon.com/dp/B0GDVF4FXB"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetProductAdFromProfile - 第三方(is1P=0)SP广告按SKU查询商品",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetProductAdFromProfile。按profileId+SKU查询已投放的Product Ad，365天内约4756次真实调用。场景1：is1P=0(第三方卖家)+adType=SP+按skus查询。500条随机样本中占比约48.3%（29次）。profileId已替换为本账号{{profile_id}}，skus保留真实样本值。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "第三方(is1P=0)SP广告按SKU查询商品",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetProductAdFromProfile",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "is1P": 0,
+          "countryCode": "US",
+          "adType": "SP",
+          "skus": [
+            "B0FQCGKYC2"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetProductAdFromProfile - 一方厂商(is1P=1)SP广告按ASIN查询商品",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetProductAdFromProfile。场景2：is1P=1(1P厂商)+adType=SP+按asins查询。500条随机样本中占比约35.0%（21次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "一方厂商(is1P=1)SP广告按ASIN查询商品",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetProductAdFromProfile",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "is1P": 1,
+          "countryCode": "US",
+          "adType": "SP",
+          "asins": [
+            "B07MFWBH62"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetProductAdFromProfile - 第三方(is1P=0)SB广告按ASIN查询商品",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetProductAdFromProfile。场景3：is1P=0+adType=SB(SponsoredBrands)+按asins查询。500条随机样本中占比约13.3%（8次）。SD相关组合各占比约1.7%，样本量过小未单独覆盖。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "第三方(is1P=0)SB广告按ASIN查询商品",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetProductAdFromProfile",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "is1P": 0,
+          "countryCode": "US",
+          "adType": "SB",
+          "asins": [
+            "B0F7J63F34",
+            "B0DPY4MDTD"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetRecommendedCategories - 按ASIN列表查询推荐类目",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetRecommendedCategories。按ASIN查询商品推荐所属类目，365天内约1180次真实调用。场景1：asins非空。500条随机样本中占比约95.0%（57次）。profileId已替换为本账号{{profile_id}}，asins保留真实样本值。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ASIN列表查询推荐类目",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetRecommendedCategories",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": [
+            "B0GYZV6XRL",
+            "B0GYZVS13L",
+            "B0GYZW1V1Y",
+            "B0GYZPMDNB"
+          ],
+          "skus": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetRecommendedCategories - 空ASIN列表查询推荐类目",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetRecommendedCategories。场景2：asins为空数组(未选定商品时的默认/兜底查询)。500条随机样本中占比约5.0%（3次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "空ASIN列表查询推荐类目",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetRecommendedCategories",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSBBidRecommend - ProductCollection广告位+按关键词查询建议出价",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSBBidRecommend。按投放目标(关键词/广告位/goal)查询SB建议出价，365天内约8958次真实调用。场景1：costType=CPC+goal=PAGE_VISIT+adFormat=productCollection+按keywords查询。500条随机样本中占比约38.3%（23次）。keywordText保留真实样本值(已从原始样本截取部分关键词，原样本单次调用可达数十个关键词)。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "ProductCollection广告位+按关键词查询建议出价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSBBidRecommend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "costType": "CPC",
+          "goal": "PAGE_VISIT",
+          "adFormat": "productCollection",
+          "request": {
+            "keywords": [
+              {
+                "matchType": "exact",
+                "keywordText": "pillow protector"
+              },
+              {
+                "matchType": "exact",
+                "keywordText": "pillow covers"
+              },
+              {
+                "matchType": "exact",
+                "keywordText": "pillow case protector"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSBBidRecommend - Video广告位+按关键词查询建议出价",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSBBidRecommend。场景2：costType=CPC+goal=PAGE_VISIT+adFormat=video+按keywords查询。500条随机样本中占比约35.0%（21次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "Video广告位+按关键词查询建议出价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSBBidRecommend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "costType": "CPC",
+          "goal": "PAGE_VISIT",
+          "adFormat": "video",
+          "request": {
+            "keywords": [
+              {
+                "matchType": "exact",
+                "keywordText": "pillow protector"
+              },
+              {
+                "matchType": "exact",
+                "keywordText": "pillow covers"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSBBidRecommend - ProductCollection广告位+不指定关键词查询建议出价",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSBBidRecommend。场景3：costType=CPC+goal=PAGE_VISIT+adFormat=productCollection+request无keywords(不细分关键词，取整体广告位建议出价)。500条随机样本中占比约10.0%（6次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "ProductCollection广告位+不指定关键词查询建议出价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSBBidRecommend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "costType": "CPC",
+          "goal": "PAGE_VISIT",
+          "adFormat": "productCollection",
+          "request": {}
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSBBidRecommend - 不指定adFormat+按关键词查询建议出价",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSBBidRecommend。场景4：costType=CPC+goal=PAGE_VISIT+adFormat未指定+按keywords查询(通用出价建议，不区分广告位)。500条随机样本中占比约8.3%（5次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "不指定adFormat+按关键词查询建议出价",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSBBidRecommend",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "costType": "CPC",
+          "goal": "PAGE_VISIT",
+          "request": {
+            "keywords": [
+              {
+                "matchType": "exact",
+                "keywordText": "pillow protector"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetSponsoredBrandsCampaignAsins - 分页查询SB Campaign下ASIN列表",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetSponsoredBrandsCampaignAsins。按profileId分页查询SB Campaign素材可用的ASIN列表，365天内约7747次真实调用。500条随机样本中占比约100%（18次，样本全部来自本测试账号profileId={{profile_id}}）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "分页查询SB Campaign下ASIN列表",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetSponsoredBrandsCampaignAsins",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "pageInfo": {
+            "OrderByField": "title",
+            "OrderAsc": false,
+            "PageSize": 5,
+            "PageIndex": 1
+          },
+          "asin": "",
+          "type": "sb"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/SuggestedProduct - 单ASIN查询推荐商品",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/SuggestedProduct。按asinstr(逗号分隔ASIN/SKU字符串)查询相关推荐商品，365天内约18068次真实调用。场景1：单个ASIN。500条随机样本中占比约56.7%（34次）。profileId已替换为本账号{{profile_id}}，asinstr保留真实样本值。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "单ASIN查询推荐商品",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/SuggestedProduct",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asinstr": "B0CZM2FB6R"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/SuggestedProduct - 少量多ASIN(2-10个)查询推荐商品",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/SuggestedProduct。场景2：asinstr含2-10个ASIN/SKU。500条随机样本中占比约23.3%（14次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "少量多ASIN(2-10个)查询推荐商品",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/SuggestedProduct",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asinstr": "B073MKQFGW,B0D1Z2951T,B0D47PWFML,B079QHPJPC,B079QHPWQX"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/SuggestedProduct - 大批量多ASIN(>10个)查询推荐商品",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/SuggestedProduct。场景3：asinstr含10个以上ASIN/SKU(批量导入场景)。500条随机样本中占比约20.0%（12次）。已从原始样本截取部分ASIN作为代表(原样本单次调用可达数十个)。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "大批量多ASIN(>10个)查询推荐商品",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/SuggestedProduct",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "asinstr": "B073MKQFGW,LH-R6UW-C0AB,B0D1Z2951T,CB-Cheese-Egg-16oz-2pk,B0D47PWFML,CB-Crunch-Trk-Lvr-Cran-2pk,B0D4ZXSDC8,CB-Crunch-Egg-Cheese-4pk,B079QHPJPC,FBA_B079QHPJPC,B079QHPWQX,FBA_B079QHPWQX"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignCreate/V3/GetBrands/{profileId} - 按profileId查询品牌列表",
+    "description": "单接口测试：GET /api/CampaignCreate/V3/GetBrands/{profileId}。路径参数profileId查询该广告主下品牌(Brand)列表，365天内约33次真实调用，且真实样本profileId均为本测试账号({{profile_id}})。500条随机样本中占比约100%（33次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按profileId查询品牌列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetBrands/{{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignCreate/V3/GetStores/{profileId} - 按profileId查询品牌Store列表",
+    "description": "单接口测试：GET /api/CampaignCreate/V3/GetStores/{profileId}。路径参数profileId查询该广告主下Brand Store列表，365天内约74次真实调用，且真实样本profileId均为本测试账号({{profile_id}})。500条随机样本中占比约100%（74次）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按profileId查询品牌Store列表",
+        "method": "GET",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetStores/{{profile_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignCreate/V3/GetCategoryAll - 按国家查询全部类目",
+    "description": "单接口测试：POST /api/CampaignCreate/V3/GetCategoryAll。按国家码查询Amazon全部商品类目树，365天内仅2次真实调用(低频接口，非零流量)。500条随机样本中占比约100%（2次，样本量较少，场景覆盖可能不全）。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按国家查询全部类目",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/GetCategoryAll",
+        "request_body": {
+          "countryCode": "US",
+          "name": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

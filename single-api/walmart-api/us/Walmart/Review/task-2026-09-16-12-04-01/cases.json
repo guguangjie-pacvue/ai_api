@@ -1,0 +1,58 @@
+[
+  {
+    "name": "POST /api/Review - 提交campaign审核(业务限制，非bug)",
+    "description": "单接口测试：POST /api/Review。提交campaign的AdGroup给Pacvue内部审核流程。用测试账号自己的campaign 426321(profile 16274451)真实执行，稳定收到业务层优雅拒绝(HTTP 200+业务码405)\"AdGroup Review can not be submitted for this campaign\"——判定为业务前置条件不满足(该campaign类型/状态不符合可提交审核的要求，同SbaProfile模块\"Cannot define SBA Profile for KeywordBidded campaigns\"同类先例，不算bug)，如实保留FAIL(断言code:200)记录这一真实限制，未强行换用其他账号数据凑成功。365天3295次真实调用。",
+    "module": "Review",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 POST Review",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Review",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "campaignIds": [
+            "426321"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Review/FilterReview - 按campaignId查询审核状态",
+    "description": "单接口测试：POST /api/Review/FilterReview。按campaignId数组查询审核状态(只读)。用测试账号自己的campaign 426321构造，365天17268次真实调用(全模块流量最高)，请求体为单campaignId数组，100%单一场景。",
+    "module": "Review",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 FilterReview",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "Review/FilterReview",
+        "request_body": [
+          "426321"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

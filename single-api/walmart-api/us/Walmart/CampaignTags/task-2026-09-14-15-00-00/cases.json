@@ -1,0 +1,640 @@
+[
+  {
+    "name": "GET /api/CampaignTags - 默认调用",
+    "description": "单接口测试：GET /api/CampaignTags。获取全量CampaignTag标签列表。场景：默认调用(不传display参数，display=1仅占比0.6%<1%不单独覆盖)。500条随机样本中占比约99.4%(497次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CampaignTags - 默认调用",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignTags/campaigns - 默认调用",
+    "description": "单接口测试：GET /api/CampaignTags/campaigns。按TagId获取绑定的Campaign列表。场景：默认调用(id参数为唯一维度，100%样本仅此一种模式)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaigns - 默认调用",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/campaigns?id={{campaign_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/CampaignTags/ShareLink - 默认调用",
+    "description": "单接口测试：GET /api/CampaignTags/ShareLink。获取分享链接。场景：默认调用(无查询参数)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ShareLink - 默认调用",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/ShareLink",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/tagsByCampaignIds - 纯ID数组",
+    "description": "单接口测试：POST /api/CampaignTags/tagsByCampaignIds。按CampaignId批量查询关联的Tag。场景：纯campaignId字符串数组(不含profileId)。500条随机样本中占比约97.4%(487次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tagsByCampaignIds - 纯ID数组",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/tagsByCampaignIds",
+        "request_body": [
+          "{{campaign_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/tagsByCampaignIds - 含profileId的对象数组",
+    "description": "单接口测试：POST /api/CampaignTags/tagsByCampaignIds。按CampaignId批量查询关联的Tag。场景：{campaignId,profileId}对象数组(与纯ID数组是两种真实并存的调用形态)。500条随机样本中占比约2.4%(12次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tagsByCampaignIds - 含profileId的对象数组",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/tagsByCampaignIds",
+        "request_body": [
+          {
+            "profileId": "{{profile_id_single}}",
+            "campaignId": "{{campaign_id}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/dailyBudgetCampaignWithPacingTagCheck - 默认调用",
+    "description": "单接口测试：POST /api/CampaignTags/dailyBudgetCampaignWithPacingTagCheck。校验Campaign打Tag后与预算节奏(Pacing)是否冲突(只读校验类接口)。场景：默认调用(单一场景，500条样本结构一致)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 dailyBudgetCampaignWithPacingTagCheck - 默认调用",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/dailyBudgetCampaignWithPacingTagCheck",
+        "request_body": {
+          "tagIds": [
+            "{{campaign_tag_id}}"
+          ],
+          "campaignIds": [
+            "{{campaign_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags/SyncTagCampaignToCk - 默认调用",
+    "description": "单接口测试：POST /api/CampaignTags/SyncTagCampaignToCk。将Tag-Campaign关联数据同步至ClickHouse供报表查询(仅刷新已有数据的分析副本，不创建/删除/修改业务实体，判定为安全可执行)。场景：默认调用(单一tagId)。500条随机样本中占比约100.0%(500次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SyncTagCampaignToCk - 默认调用",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/SyncTagCampaignToCk",
+        "request_body": [
+          "{{campaign_tag_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/CampaignTags - 创建标签→抓ID→删除(写操作·自清理)",
+    "description": "单接口测试：POST /api/CampaignTags(创建) + DELETE /api/CampaignTags?id(删除)。写操作·自建实体·自清理·可重复执行。只动测试账号(clientId 62)自建的标签，不碰已有数据。测试标签名用000前缀使其在按名称排序的列表中排第一，以便用data[0].tagId抓ID。真实样本(3822次)body形态：istransfer+parentId+tagNames数组。创建响应不返回新ID，只有successCount，故第2步查列表抓ID。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试标签 000test140501",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test140501"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "查列表抓新标签ID(000前缀保证排第一)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id": "data[0].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "000test140501"
+        }
+      },
+      {
+        "name": "后置清理-删除自建标签",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PATCH /api/CampaignTags/name - 重命名标签(写操作·自清理)",
+    "description": "单接口测试：PATCH /api/CampaignTags/name?id=xxx。写操作·自建实体·自清理·可重复执行。只动测试账号(clientId 62)自建的标签，不碰已有数据。测试标签名用000前缀使其在按名称排序的列表中排第一，以便用data[0].tagId抓ID。流程：自建→改名→查列表验证新名→删除。真实样本(1313次)body仅tagName，id在query。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试标签 000test140502",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test140502"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "查列表抓新标签ID(000前缀保证排第一)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id": "data[0].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "000test140502"
+        }
+      },
+      {
+        "name": "重命名",
+        "method": "PATCH",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/name?id={{new_tag_id}}",
+        "request_body": {
+          "tagName": "000test140502r"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查列表验证改名生效",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "000test140502r"
+        }
+      },
+      {
+        "name": "后置清理-删除自建标签",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/CampaignTags - 更新标签并绑定Campaign(写操作·自清理)",
+    "description": "单接口测试：PUT /api/CampaignTags。写操作·自建实体·自清理·可重复执行。只动测试账号(clientId 62)自建的标签，不碰已有数据。测试标签名用000前缀使其在按名称排序的列表中排第一，以便用data[0].tagId抓ID。流程：自建标签→PUT绑定测试账号campaign {{campaign_id}}→GET campaigns?id 验证绑定→删除标签(解除绑定)。真实样本(1072次)body：tagName+campaignIds+id+parentId。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试标签 000test140503",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test140503"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "查列表抓新标签ID(000前缀保证排第一)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id": "data[0].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "000test140503"
+        }
+      },
+      {
+        "name": "更新标签绑定Campaign",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "tagName": "000test140503",
+          "campaignIds": [
+            "{{campaign_id}}"
+          ],
+          "id": "{{new_tag_id}}",
+          "parentId": 0
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证绑定的Campaign列表",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/campaigns?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除自建标签",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/CampaignTags/targetSetting - 设置Tag目标ACOS/ROAS(写操作·自清理)",
+    "description": "单接口测试：PUT /api/CampaignTags/targetSetting。写操作·自建实体·自清理·可重复执行。只动测试账号(clientId 62)自建的标签，不碰已有数据。测试标签名用000前缀使其在按名称排序的列表中排第一，以便用data[0].tagId抓ID。流程：自建标签→设置目标ACOS 12.50/ROAS 8(真实样本值)→删除标签。真实样本(136次)。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试标签 000test140504",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test140504"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "查列表抓新标签ID(000前缀保证排第一)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id": "data[0].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "000test140504"
+        }
+      },
+      {
+        "name": "设置目标ACOS/ROAS",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/targetSetting",
+        "request_body": {
+          "IsSetSalesConversionPercent": false,
+          "StartDate": "{{date_start_mdy}}",
+          "EndDate": "{{date_end_mdy}}",
+          "CPA": "",
+          "targetIds": [
+            "{{new_tag_id}}"
+          ],
+          "acos": "12.50",
+          "roas": "8"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除自建标签",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "DELETE /api/CampaignTags/BulkCampaignTag - 批量删除标签(写操作·自建2个)",
+    "description": "单接口测试：DELETE /api/CampaignTags/BulkCampaignTag。写操作·自建实体·自清理·可重复执行。只动测试账号(clientId 62)自建的标签，不碰已有数据。测试标签名用000前缀使其在按名称排序的列表中排第一，以便用data[0].tagId抓ID。流程：一次创建2个测试标签→查列表抓2个ID→批量删除→查列表验证已不在首位(假设账号内无其他000前缀标签)。真实样本(52次)body为tagId数组。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试标签 ['000test140505a', '000test140505b']",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test140505a",
+            "000test140505b"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 2
+        }
+      },
+      {
+        "name": "查列表抓2个新标签ID",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {
+          "bulk_tag_a": "data[0].tagId",
+          "bulk_tag_b": "data[1].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "000test140505a",
+          "data[1].tagName": "000test140505b"
+        }
+      },
+      {
+        "name": "批量删除",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/BulkCampaignTag",
+        "request_body": [
+          "{{bulk_tag_a}}",
+          "{{bulk_tag_b}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已删除(首位不再是000test)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "0302SHARE"
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/CampaignTags/UpdateTagOwner - 变更标签负责人(写操作·自清理)",
+    "description": "单接口测试：PUT /api/CampaignTags/UpdateTagOwner。原样本userId/userName为其他客户真实用户，改为经用户2026-09-15确认的安全方案：自建测试标签→把负责人改成测试账号自己(userId 18589, autoui_acount)→删除清理，不影响任何真实客户数据。真实样本(365天4次调用)body结构：parentTagIds+userName+userId。",
+    "module": "CampaignTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建测试标签 000test085544",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {
+          "istransfer": true,
+          "parentId": 0,
+          "tagNames": [
+            "000test085544"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1
+        }
+      },
+      {
+        "name": "查列表抓新标签ID(000前缀保证排第一)",
+        "method": "GET",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id": "data[0].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data[0].tagName": "000test085544"
+        }
+      },
+      {
+        "name": "变更标签负责人为测试账号自己",
+        "method": "PUT",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags/UpdateTagOwner",
+        "request_body": {
+          "parentTagIds": [
+            "{{new_tag_id}}"
+          ],
+          "userName": "autoui_acount",
+          "userId": "18589"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置清理-删除自建标签",
+        "method": "DELETE",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "CampaignTags?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

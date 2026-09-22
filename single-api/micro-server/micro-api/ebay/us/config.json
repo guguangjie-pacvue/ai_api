@@ -1,0 +1,41 @@
+{
+  "name": "micro-api (ebay, us)",
+  "variables": {
+    "platform": "ebay",
+    "user_id": "18589",
+    "client_id": "62",
+    "period_date": "2026-08-01",
+    "fixture_template_id": "45054",
+    "profile_id": "vfstro9jqxk",
+    "profile_id_2": "007IND2xyeBay",
+    "profile_id_3": "c9ac344a-a156-4406-8f3c-ad8c36f3daea",
+    "real_campaign_id": "5018005010",
+    "real_campaign_id_2": "5020578010",
+    "_note_fixture_template_id": "id=45054 tempName=\"自动化专用-勿删\"，userId=18589=本账号自己创建、明确标注给自动化测试用的模板，可用于安全的读/等价no-op写验证",
+    "_note_no_campaign": "GET /dayparting/getCampaignsName?productLine=ebay 返回 data:null，本账号在 ebay 平台下当前没有任何可通过该接口列出的real-time campaign。但通过 query_es.py 对 dayparting-schedule-api-* 索引显式按 clientId=62（不排除62）独立探测，发现本账号在 ebay 平台下确有历史真实调用流量（findDayParting/campaign、dayparting/apply、dayparting/detailApply、dayparting/templateNames、dayparting/campaign/tree、dayparting/profile/campaignTag/tree、bulk/verify/apply、bulk/set/dayparting 等接口 90 天内均有 clientId=62 的记录），据此确认 profile_id/profile_id_2/profile_id_3/real_campaign_id/real_campaign_id_2 均为本账号自己产生的真实历史数据（非借用其他真实客户），可安全用于只读查询类case的identity字段替换。",
+    "_note_profile_id": "profileId=vfstro9jqxk / 007IND2xyeBay / c9ac344a-a156-4406-8f3c-ad8c36f3daea 均取自 clientId=62 在 ebay 平台下的历史真实调用（如 dayparting/detailApply 请求体 profileIds 数组），三者常一起出现，用于'多profile'场景；vfstro9jqxk 额外通过 findDayParting/campaign 验证与 real_campaign_id 存在真实关联，作为'单profile'场景首选",
+    "_note_real_campaign_id": "campaignId=5018005010（次要 5020578010）+ profileId=vfstro9jqxk，来自 clientId=62 对 POST /findDayParting/campaign、POST /bulk/set/dayparting 的历史真实调用（90天ES日志），非当前 getCampaignsName 实时可查询到的campaign，仅用于只读查询类case",
+    "_note_client_id": "本测试账号(autoui_acount)的 clientId=62，用于把ES样本里其他真实客户的clientId替换为本账号自己的值，避免读接口因identity归属不匹配返回500"
+  },
+  "base_urls": {
+    "DAYPARTING": "https://api.pacvue.com/micro-api-v2/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "ebay"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "{{token}}",
+    "Content-Type": "application/json",
+    "productline": "ebay"
+  }
+}

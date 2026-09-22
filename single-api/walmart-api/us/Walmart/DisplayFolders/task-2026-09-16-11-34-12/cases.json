@@ -1,0 +1,58 @@
+[
+  {
+    "name": "POST /api/DisplayFolders/Create - ProfileId为空字符串(高频真实场景，发现bug)",
+    "description": "单接口测试：POST /api/DisplayFolders/Create。365天15次真实调用中有3次(20%)body为{\"ProfileId\":\"\",\"FolderName\":\"...\"}(前端未选择具体profile时的账号级文件夹场景)。🔴新发现疑似后端bug：探测证实这个真实高频场景稳定返回HTTP 400\"Error converting value \\\"\\\" to type 'System.Int64'\"——后端Swagger声明profileId是非nullable的int64，前端却会在未选择profile时传空字符串，说明这个\"创建账号级文件夹(不绑定具体profile)\"的产品功能在当前后端实现下完全不可用，不是个例而是约20%真实流量的系统性问题。另外尝试用测试账号真实profileId(16274451，int/string两种格式、PascalCase/camelCase两种字段名都试过)反而复现另一个不同的\"Failed to read HTTP message\"错误(疑似需要该profile先经过Walmart侧同步，涉及路径含禁用关键词\"Sync\"的接口，未继续深挖)，也未能构造出成功案例，故本模块POST Create保留为FAIL(如实按真实高频样本断言code:200)。全模块9接口中Delete/Update/Move/list/Clone这5个365天零流量，按规则不生成/执行case。",
+    "module": "DisplayFolders",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DisplayFolders/Create - ProfileId空字符串",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "DisplayFolders/Create",
+        "request_body": {
+          "ProfileId": "",
+          "FolderName": "test113412_Folder"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/DisplayFolders/Tree - 查询文件夹树",
+    "description": "单接口测试：POST /api/DisplayFolders/Tree。查询Display文件夹树结构。场景：默认无过滤(profileIds/folderNameSearch/excludeParentFolderIdList均为空)，365天994次真实调用中的主流场景。",
+    "module": "DisplayFolders",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DisplayFolders/Tree",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "DisplayFolders/Tree",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "folderNameSearch": "",
+          "excludeParentFolderIdList": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

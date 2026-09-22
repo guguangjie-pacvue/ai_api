@@ -1,0 +1,74 @@
+[
+  {
+    "name": "GET /profitero/getProfiteroCountryList - 默认调用(无入参)",
+    "description": "单接口测试：GET /profitero/getProfiteroCountryList。Swagger 未声明任何 parameters，GET 请求的 queryString ES 不索引平台信息，按 SKILL.md 规则采用全平台流量作为场景挖掘基线。ES 近90天全平台共186次调用，body/query 均为空，均为无参数默认调用，唯一模式占比100%（186/186次）。该接口真实调用仅1种模式，已全覆盖。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Profitero国家列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/profitero/getProfiteroCountryList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report/syncBrands - 同步品牌数据",
+    "description": "单接口测试：GET /report/syncBrands。Swagger 未声明任何 parameters，GET 请求 ES 不索引平台信息，按规则采用全平台流量挖掘场景。ES 近90天全平台共90次调用，均无 body/query 参数，唯一模式占比100%（90/90次）。ES 原始样本显示该接口实际调用方绝大多数为 queryString=env=k8s-Production-pacvue-custom-job-*（生产环境 Kubernetes 定时任务/custom-job Pod，每天固定时间各调用1次），语义上是触发 Profitero 品牌数据的全局同步，不区分 productLine/client，无创建实体、无需回滚清理，天然幂等（每天被定时重复调用即为证明）。该接口真实调用仅1种模式，已全覆盖，按只读式 Happy Path 处理（非 Phase 3.5 创建类写操作）。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "触发品牌数据同步",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/syncBrands",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report/syncTables - 同步表格数据",
+    "description": "单接口测试：GET /report/syncTables。Swagger 未声明任何 parameters，GET 请求 ES 不索引平台信息，按规则采用全平台流量挖掘场景。ES 近90天全平台共90次调用，均无 body/query 参数，唯一模式占比100%（90/90次）。ES 原始样本显示该接口实际调用方绝大多数为 queryString=env=k8s-Production-pacvue-custom-job-*（生产环境 Kubernetes 定时任务/custom-job Pod，每天固定时间各调用1次），语义上是触发 Profitero 表结构数据的全局同步，不区分 productLine/client，无创建实体、无需回滚清理，天然幂等（每天被定时重复调用即为证明）。该接口真实调用仅1种模式，已全覆盖，按只读式 Happy Path 处理（非 Phase 3.5 创建类写操作）。",
+    "module": "report-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "触发表格数据同步",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/report/syncTables",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

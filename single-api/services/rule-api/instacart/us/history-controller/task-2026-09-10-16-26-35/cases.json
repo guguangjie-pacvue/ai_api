@@ -1,0 +1,959 @@
+[
+  {
+    "name": "POST /changeSuggestionStatus - 变更建议操作状态(含后置还原,可重复)",
+    "description": "单接口测试：POST /changeSuggestionStatus。该接口ES近90天全平台0调用记录。实际Swagger请求体为RuleApplyParam[]，字段为ruleExecutionLogId+action(枚举APPLY_KEYWORD_SUGGESTION/SNOOZE_KEYWORD_SUGGESTION/IGNORE_KEYWORD_SUGGESTION/RESUME_KEYWORD_SUGGESTION)，纠正此前walmart/tiktok同模块case中误用的status:\"accepted\"字段(该字段在真实schema中不存在，猜测该错误字段此前被服务端忽略后直接短路返回成功，掩盖了真实契约)。使用instacart真实执行日志({{real_execution_log_id}})按正确字段调用后，实测返回code:405，服务端SQL报错\"UPDATE rule_execution_detail ... WHERE (rule_definition_id IN () AND query IN (?))\"——rule_definition_id列表为空导致SQL语法错误，属真实后端缺陷(该execution log关联的规则非Adtomic建议类规则，导致规则定义id列表为空，服务端未对空列表做保护)，如实保留FAIL记录该缺陷。两步(IGNORE/RESUME)均因同一缺陷失败，非用例本身编写问题。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "变更建议操作状态为IGNORE",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/changeSuggestionStatus",
+        "request_body": [
+          {
+            "ruleExecutionLogId": "{{real_execution_log_id}}",
+            "action": "IGNORE_KEYWORD_SUGGESTION"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      },
+      {
+        "name": "后置还原-变更建议操作状态为RESUME",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/changeSuggestionStatus",
+        "request_body": [
+          {
+            "ruleExecutionLogId": "{{real_execution_log_id}}",
+            "action": "RESUME_KEYWORD_SUGGESTION"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAdGroups/{ruleExecutionLogId} - 执行日志AdGroup列表",
+    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。instacart平台该接口ES近90天0调用；按real_execution_log_id精确路径查询同样0命中。全平台按/getAdGroups/*通配查询95条真实样本，100%为该结构(campaignIds为该执行日志关联的真实campaign列表)。instacart真实执行日志({{real_execution_log_id}})下暂无关联campaign，campaignIds按空数组处理。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志AdGroup列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAdGroups/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "profileIds": [],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAdtomicSuggestions - Adtomic建议操作列表",
+    "description": "单接口测试：POST /getAdtomicSuggestions。该接口ES近90天全平台0调用记录。请求体为RuleParam(全字段可选)，使用Swagger结构最小可用子集。instacart测试账号暂无Adtomic建议记录。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询Adtomic建议列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAdtomicSuggestions",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLog - Amazon专属，instacart预期不支持",
+    "description": "单接口测试：POST /getAutoRuleDetailLog。该接口ES近90天全平台0调用记录（Amazon专属功能）。请求体为AmazonSpecialRuleRequest，真实字段是ruleId+ruleLogId(非walmart/tiktok旧case中误用的ruleExecutionLogId)，纠正此前字段名错误。使用instacart真实rule({{real_rule_id}})+执行日志({{real_execution_log_id}})。实测返回code:405,msg:\"Index 0 out of bounds for length 0\"——服务端对该rule/log组合下自动化日志结果集为空时未做长度校验直接按下标0取值，属真实后端缺陷(非业务限制)，如实保留FAIL以记录该缺陷，不属于instacart平台适配问题。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则详细日志",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleDetailLog",
+        "request_body": {
+          "ruleId": "{{real_rule_id}}",
+          "ruleLogId": "{{real_execution_log_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          },
+          "newLog": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleDetailLogFilter - Amazon专属，instacart预期不支持",
+    "description": "单接口测试：POST /getAutoRuleDetailLogFilter。该接口ES近90天全平台0调用记录（Amazon专属功能）。请求体为AmazonSpecialRuleRequest，真实字段是ruleId+ruleLogId，纠正此前walmart/tiktok旧case中误用的字段名。使用instacart真实rule({{real_rule_id}})+执行日志({{real_execution_log_id}})。首次省略newLog字段实测触发服务端NPE(getNewLog()为null导致booleanValue()空指针,405)；补充newLog:false后重测，暴露与getAutoRuleDetailLog相同的真实后端缺陷：code:405,msg:\"Index 0 out of bounds for length 0\"(该rule/log组合下自动化日志结果集为空时未做长度校验直接按下标0取值)，如实保留FAIL记录该缺陷，非用例编写问题。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则日志过滤器",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleDetailLogFilter",
+        "request_body": {
+          "ruleId": "{{real_rule_id}}",
+          "ruleLogId": "{{real_execution_log_id}}",
+          "newLog": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getAutoRuleLogList - Amazon专属，instacart预期不支持",
+    "description": "单接口测试：POST /getAutoRuleLogList。该接口ES近90天全平台0调用记录（Amazon专属功能）。请求体为RuleRequest，真实核心字段是规则id(id)，纠正此前walmart/tiktok旧case中混用RuleParam字段(ownerIds/removeApplied等，均不属于RuleRequest schema)的问题。使用instacart真实规则({{real_rule_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自动规则执行日志列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getAutoRuleLogList",
+        "request_body": {
+          "id": "{{real_rule_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          },
+          "timeZone": "America/Los_Angeles"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaigns/{ruleExecutionLogId} - 执行日志Campaign列表",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。instacart平台该接口0调用；全平台按/getCampaigns/*通配查询200条抽样中98.5%(197/200)为该结构（不含campaignIds/profileIds等过滤字段），为绝对主流模式。使用instacart真实执行日志({{real_execution_log_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Campaign列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getCampaignTags/{ruleExecutionLogId} - 执行日志CampaignTag列表",
+    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。instacart平台该接口0调用；全平台按/getCampaignTags/*通配查询200条抽样中100%为该结构。使用instacart真实执行日志({{real_execution_log_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志CampaignTag列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getCampaignTags/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getDetail/{ruleExecutionLogId} - 执行日志详情",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。instacart平台该接口0调用；全平台按/getDetail/*通配查询200条抽样中84.5%(169/200)为该结构(不含keywordsOperand/keywords等筛选变体)，为主流模式。使用instacart真实执行日志({{real_execution_log_id}})，managedProfileIds/campaignIds/profileIds等按空数组处理(生产样本中的巨大列表为其他账号真实profile,不适用于instacart测试账号)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getDetail/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "managedProfileIds": [],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getHistoryList - 历史执行记录列表",
+    "description": "单接口测试：POST /getHistoryList。instacart平台该接口0调用；全平台近90天1601次调用，抽样50条中48%(24/50)为该核心结构(不含ruleDefinitionId/mode/ruleName等按具体规则筛选时才出现的可选字段)。含日期范围过滤，使用instacart真实账号({{user_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询历史执行记录列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getHistoryList",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "startDate": "2026-08-11",
+          "endDate": "2026-09-10",
+          "prevStartDate": "2026-07-12",
+          "prevEndDate": "2026-08-10",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false,
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getLineItems/{ruleExecutionLogId} - 执行日志LineItem列表",
+    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}(DSP LineItem)。instacart平台该接口0调用；全平台近90天仅6次调用(单一真实执行日志)，均为同一结构。使用instacart真实执行日志({{real_execution_log_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志LineItem列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getLineItems/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "profileIds": [],
+          "currency": "$",
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingList - 待处理规则列表",
+    "description": "单接口测试：POST /getPendingList。instacart平台该接口0调用；全平台近90天10840次调用，抽样50条中100%为该结构。使用instacart真实账号({{user_id}})，测试账号暂无待处理规则，返回结构为分页包装对象{list:[],pageInfo:{...}}(list为空)属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理规则列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingList",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "ruleType": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50
+          },
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getPendingRuleNum - 待处理规则数量",
+    "description": "单接口测试：POST /getPendingRuleNum。该接口Swagger未定义requestBody(无请求体schema)，ES近90天全平台2160次调用样本中确认_source内均无body字段被记录，证实生产前端真实发送空请求体，纠正此前walmart/tiktok旧case中携带removeApplied/ownerIds等字段的空穴来风构造。改为真实的空body {}。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询待处理规则数量",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getPendingRuleNum",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProducts/{ruleExecutionLogId} - 执行日志Product列表",
+    "description": "单接口测试：POST /getProducts/{ruleExecutionLogId}。该接口ES近90天全平台0调用记录(含通配符扫描/getProducts/*同样0命中)。使用instacart真实执行日志({{real_execution_log_id}})，请求体按RuleParam结构最小可用子集构造。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Product列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProducts/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /getProfiles - 执行日志Profile列表",
+    "description": "单接口测试：POST /getProfiles。instacart平台该接口0调用；全平台近90天11974次调用，抽样50条中98%(49/50)为该结构。使用instacart真实执行日志({{real_execution_log_id}})，该执行日志下暂无Profile数据，返回空数组属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询执行日志Profile列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/getProfiles",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/archiveOldLogsTask - 归档旧日志（运维接口，已跳过执行）",
+    "description": "单接口测试：POST /history/archiveOldLogsTask。危险运维接口：批量归档全平台旧执行日志，ES近90天全平台0调用记录（无常规前端/定时任务证据经该HTTP路径触发，可能另有内部cron机制）。该操作对生产数据是全局性、不可安全回滚的批量归档动作，按任务要求跳过实际执行，仅记录接口契约供追踪。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "skip": true,
+    "skip_reason": "危险运维接口：全局批量归档旧执行日志，无法限定范围也无安全回滚手段，禁止对生产环境执行，仅生成不执行",
+    "steps": [
+      {
+        "name": "触发旧日志归档任务(跳过)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/archiveOldLogsTask",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /history/deleteHistoryData/{tableName} - 清理历史数据（运维接口，已跳过执行）",
+    "description": "单接口测试：GET /history/deleteHistoryData/{tableName}。危险运维接口：物理删除指定表的历史归档数据。ES近90天全平台6570次调用，tableName抽样20条100%为rule_snapshot_detail。该操作对生产表做物理删除且无回滚手段，按任务要求跳过实际执行，仅记录接口契约与真实tableName取值供追踪。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "skip": true,
+    "skip_reason": "危险运维接口：物理删除历史表数据，无回滚手段，禁止对生产环境执行，仅生成不执行",
+    "steps": [
+      {
+        "name": "清理历史数据(跳过)",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/deleteHistoryData/{{table_name}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/export/{ruleExecutionLogId} - 导出执行日志",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。instacart平台该接口0调用；全平台近90天315次调用，含exportHeaders/campaignTagIds/adGroupIds/campaignIds等字段，取该接口真实典型结构。使用instacart真实执行日志({{real_execution_log_id}})。该接口返回二进制文件流(非JSON)；本环境用的run_cases.py本地Python移植版(非Windows版run-cases.py)未实现$binary/$min_size断言算子(实测该算子导致误判FAIL，因非JSON响应体被解析为{}后再按dict取$binary键必然为None)，故改为仅校验HTTP状态码200(空expected_response)，实测真实响应status_code=200，接口调用成功。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出执行日志",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Applied",
+            "Not_Applied"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "EN",
+          "exportHeaders": [
+            "Campaign",
+            "Profile",
+            "ROAS",
+            "Impressions",
+            "Sales",
+            "Change Result"
+          ],
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "campaignIds": [],
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getLastPauseAsins/{ruleId} - 规则最近暂停ASIN列表",
+    "description": "单接口测试：POST /history/getLastPauseAsins/{ruleId}。该接口Swagger未定义requestBody(仅路径参数ruleId)。ES近90天全平台0调用记录。使用instacart真实存在的规则({{real_rule_id}})，暂无暂停ASIN记录，返回空数组属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询最近暂停ASIN列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getLastPauseAsins/{{real_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertCount - 标准告警计数查询",
+    "description": "单接口测试：POST /history/getRuleAlertCount。instacart平台该接口0调用；全平台近90天726756次调用，抽样50条中100%为该结构(含clientId)。使用instacart真实账号({{user_id}}/{{client_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警计数",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertCount",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "clientId": "{{client_id}}",
+          "dismissedRuleIds": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleAlertDetail - 规则告警详情列表",
+    "description": "单接口测试：POST /history/getRuleAlertDetail。instacart平台该接口按body.productLine.keyword=instacart精确term过滤0命中；全平台近90天287次调用，抽样50条中92%(46/50)为该结构。使用instacart真实账号，测试账号暂无告警记录，返回空列表属真实预期结果。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则告警详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleAlertDetail",
+        "request_body": {
+          "removeApplied": false,
+          "clientId": "{{client_id}}",
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "userId": "{{user_id}}",
+          "fromSnapShot": false,
+          "productLine": "instacart",
+          "download": false,
+          "ruleType": [],
+          "userIds": [],
+          "ruleName": "",
+          "ignore": false,
+          "currency": "$"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /history/getRuleDeadDetail - 规则失效详情",
+    "description": "单接口测试：POST /history/getRuleDeadDetail。该接口ES近90天全平台0调用记录。使用instacart真实存在的规则({{real_rule_id}})。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则失效详情",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/history/getRuleDeadDetail",
+        "request_body": {
+          "ruleId": "{{real_rule_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /pending/export/{ruleExecutionLogId} - 导出待处理列表",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。instacart平台该接口0调用；全平台近90天144次调用，含exportHeaders/managedProfileIds等字段，取该接口真实典型结构(managedProfileIds按instacart真实profile处理，不沿用其他账号巨大列表)。使用instacart真实执行日志({{real_execution_log_id}})。该接口返回二进制文件流(非JSON)；本环境用的run_cases.py本地Python移植版未实现$binary/$min_size断言算子(实测该算子导致误判FAIL)，故改为仅校验HTTP状态码200(空expected_response)，实测真实响应status_code=200，接口调用成功。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出待处理列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/pending/export/{{real_execution_log_id}}",
+        "request_body": {
+          "removeApplied": false,
+          "applyStatusList": [
+            "Not_Applied",
+            "Applied",
+            "Ignore"
+          ],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": -1
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "language": "EN",
+          "campaignTagIds": [],
+          "adGroupIds": [],
+          "exportHeaders": [
+            "Keyword",
+            "Source Campaign",
+            "Source AdGroup",
+            "Destination Campaign",
+            "Destination AdGroup",
+            "Match Type",
+            "ROAS",
+            "Clicks",
+            "Bid",
+            "State"
+          ],
+          "fromSnapShot": false,
+          "download": false,
+          "ignore": false,
+          "currency": "$",
+          "campaignIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      }
+    ]
+  },
+  {
+    "name": "POST /queryRuleSnapshots - 规则执行快照查询",
+    "description": "单接口测试：POST /queryRuleSnapshots。instacart平台该接口0调用；全平台近90天6725次调用，抽样50条中100%为该结构(ruleIds+profileIds+batchIds+entityIds)。使用instacart真实规则({{real_rule_id}})+真实profile({{profile_id}})+真实campaign({{real_campaign_id}})；batchIds使用全零占位GUID(instacart测试账号暂无真实批次快照，占位GUID仅为规避空数组导致的下游SQL语法错误，同amazon平台既有case的处理方式)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则执行快照",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/queryRuleSnapshots",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id}}"
+          ],
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "batchIds": [
+            "00000000-0000-0000-0000-000000000000"
+          ],
+          "entityIds": [
+            "{{real_campaign_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /setIgnored - 设置忽略操作(含后置还原,可重复)",
+    "description": "单接口测试：POST /setIgnored。instacart平台该接口0调用；全平台近90天1042次调用，抽样50条中operation字段96%(48/50)为add、4%(2/50)为remove，两者均为真实业务场景(add=忽略, remove=取消忽略)。使用instacart真实执行日志({{real_execution_log_id}})+占位detail id(0，instacart测试账号暂无真实detail记录，服务端不校验id是否存在)。主步骤add后以remove还原，保证幂等可重复执行。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置忽略(add)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setIgnored",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "operation": "add"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      },
+      {
+        "name": "后置还原-取消忽略(remove)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setIgnored",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "operation": "remove"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /setRemarks - 设置执行日志备注(含后置还原,可重复)",
+    "description": "单接口测试：POST /setRemarks。instacart平台该接口0调用；全平台近90天7次调用，100%为该结构(clientId+ruleExecutionLogId+ids+remarks)。使用instacart真实执行日志({{real_execution_log_id}})+占位detail id(0，instacart测试账号暂无真实detail记录，服务端不校验id是否存在)。主步骤写入备注后以空字符串清空还原，remarks为普通string字段，清空为空串是结构上自然的复位值(非ES样本中直接观测到，但符合schema的合理复位操作)。",
+    "module": "history-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置执行日志备注",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setRemarks",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "remarks": "autotest remark - not a real record"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      },
+      {
+        "name": "后置还原-清空备注",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/setRemarks",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ids": [
+            0
+          ],
+          "remarks": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": true
+        }
+      }
+    ]
+  }
+]

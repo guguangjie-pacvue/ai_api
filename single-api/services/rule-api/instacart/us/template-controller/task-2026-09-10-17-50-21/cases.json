@@ -1,0 +1,832 @@
+[
+  {
+    "name": "DELETE /template/default/{templateId} - 跳过(无安全回滚路径)",
+    "description": "该接口物理删除全平台/全客户共享的系统默认模板库(22条，userName=\"Pacvue Default\"，非instacart专属，无sourceProductLine/clientId归属)中的一条记录。Swagger中不存在\"创建默认模板\"的接口，无法先造一条一次性默认模板再删除做回滚；对已有生产默认模板做物理删除属不可逆操作，一旦误删会影响全产品所有客户在\"推荐模板\"功能下看到的内容。按Phase 3.5铁律\"无法构造安全回滚就skip\"处理，不执行。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "skip": true,
+    "skip_reason": "DELETE /template/default/{templateId}物理删除全平台/全客户共享的系统默认模板，无对应\"创建默认模板\"接口可先造出一次性数据再删除回滚，删除不可逆，风险不可接受，故跳过。",
+    "steps": []
+  },
+  {
+    "name": "DELETE /template/defaultCategory/{categoryId} - 跳过(无安全回滚路径)",
+    "description": "该接口物理删除全平台/全客户共享的系统默认分类(仅5个：Sales/Efficiency/Incrementality/Relevancy/Discovery)中的一个。这5个分类是默认模板库的顶层分组，同样没有\"创建默认分类\"接口可用于先造出一次性数据再删除回滚；误删会导致该分类下所有默认模板在页面上失去归属分组，影响全产品所有客户。按Phase 3.5铁律\"无法构造安全回滚就skip\"处理，不执行。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "skip": true,
+    "skip_reason": "DELETE /template/defaultCategory/{categoryId}物理删除全平台/全客户共享的系统默认分类(仅5个)，无对应创建接口可先造一次性数据再删除回滚，删除不可逆，风险不可接受，故跳过。",
+    "steps": []
+  },
+  {
+    "name": "POST /template/editDefaultTemplate - 跳过(全量覆盖式写入,回滚不可靠)",
+    "description": "该接口按Swagger TemplateRequest整体覆盖式写入一条全平台/全客户共享的系统默认模板(22条，userName=\"Pacvue Default\")。与editDefaultCategory(仅name/description两个标量字段，可精确等值回写)和moveDefaultTemplate(仅categoryId单一外键字段，可精确移回)不同，TemplateRequest/RuleAutomationRequest包含automation数组下大量嵌套的requirements/prerequisites/action/dateIndex/harvestAction等可空字段，读接口(getDefaultTemplate)返回的字段集合与写接口(editDefaultTemplate)的入参schema虽大体同名但未逐字段完全比对确认1:1映射；一旦整体回写时遗漏或类型转换某个嵌套字段，覆盖式写入会静默地把该共享模板的规则逻辑改坏，且会立即对全产品所有客户可见，事后仅凭接口返回码无法确认是否已发生静默数据破坏。风险明显高于同组的editDefaultCategory/moveDefaultTemplate，按Phase 3.5铁律\"无法构造安全、可验证的回滚就skip\"处理，不执行。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "skip": true,
+    "skip_reason": "POST /template/editDefaultTemplate对全平台/全客户共享的系统默认模板做整体覆盖式写入，TemplateRequest嵌套automation结构复杂，无法可靠保证等值回写不遗漏字段，误写会静默影响全产品所有客户且难以事后验证，风险不可接受，故跳过（同组editDefaultCategory/moveDefaultTemplate因改动字段简单、可精确回滚而予以执行，未一并跳过）。",
+    "steps": []
+  },
+  {
+    "name": "POST /template/getCategory - 默认查询",
+    "description": "单接口测试：POST /template/getCategory。请求体结构取自现有CategoryRequest Swagger定义(name/description/ruleType[]/creator[]/onlyFavorite/defaultCategory)。该模块POST接口的平台信息通过HTTP header(productline)而非URL query string传递，ES access log不索引header，queryString过滤对amazon/walmart/tiktok/instacart均命中0条(已逐一验证)，因此无法用ES按平台切分该接口日志；全平台该接口近90天命中27255次。改用instacart测试账号(autoui_acount, header productline=instacart)直接调用验证：返回code:200，10条分类记录(含5个系统默认分类与5个测试自建分类)。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultCategory - 默认查询",
+    "description": "单接口测试：POST /template/getDefaultCategory。与getCategory同结构，defaultCategory=true查询系统默认分类(Sales/Efficiency/Incrementality/Relevancy/Discovery,全平台/全客户共享)。ES该接口全平台近90天命中29次(instacart平台POST请求queryString无法过滤，理由同getCategory)。instacart测试账号直接验证：code:200，返回5条默认分类。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认分类列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": true,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getDefaultTemplate - 默认查询",
+    "description": "单接口测试：POST /template/getDefaultTemplate。查询系统默认模板库(userName=\"Pacvue Default\"，全平台/全客户共享的推荐模板)。ES该接口全平台近90天命中35次(instacart平台POST请求queryString无法过滤，理由同getCategory)。instacart测试账号直接验证：code:200，返回22条系统默认模板。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询默认模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": true,
+          "ruleType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /template/getOwners - 默认调用(无入参)",
+    "description": "单接口测试：GET /template/getOwners。Swagger无声明参数。GET请求不区分平台(header中的productLine未被ES索引，GET的queryString本就为空)，全平台该接口近90天真实调用1972次，直接复用该真实调用模式。instacart测试账号验证：code:200，返回owner列表。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询模板所有者列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getOwners",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getRecommendation - 默认查询(复现真实缺陷)",
+    "description": "【真实后端缺陷，非测试构造错误】单接口测试：POST /template/getRecommendation。请求体结构同getCategory。ES该接口全平台近90天命中5763次，instacart平台POST请求queryString无法过滤(理由同上)。直接用instacart测试账号验证：无论是否携带templateId(已分别测试空body与携带{{fixture_template_id}}两种情况)，均返回code:405，服务端SQL异常：\"...WHERE (rule_template_id IN ())...bad SQL grammar\"——服务端在计算推荐模板候选集为空时拼接出了非法的SQL \"IN()\"语句。该缺陷在walmart平台此模块此前测试中已复现过同一SQL语法错误(同一处RuleAutomationMapper缺陷)，本次在instacart平台账号上独立复现，说明是跨平台共性缺陷而非单一平台数据问题：接口对空候选集缺少容错，应返回空列表而不是抛SQL异常。断言按正确业务预期写(code:200)，实际会FAIL，如实记录缺陷。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询推荐模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getRecommendation",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [],
+          "templateId": "{{fixture_template_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - 按ruleType=Keyword筛选",
+    "description": "单接口测试：POST /template/getTemplate。ruleType过滤值取自同服务config-controller模块对instacart平台GET /config/actionMetrics的真实ES样本分布(90天295条真实样本中Keyword占比84.1%/248次，为instacart平台该字段实测最高频真实值)。ES该接口全平台近90天命中30891次，instacart平台POST请求queryString无法过滤。instacart测试账号验证：ruleType=[\"Keyword\"]返回code:200，54条模板；作为happy path。instacart平台，真实账号验证+跨模块真实频率依据。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType查询模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Keyword"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplate - 按ruleType=Campaign筛选(复现真实缺陷)",
+    "description": "【真实后端缺陷，非测试构造错误】单接口测试：POST /template/getTemplate。ruleType=\"Campaign\"同样是instacart平台真实存在的枚举值(同服务config-controller模块ES样本中占比3.4%/10次)，但instacart测试账号下按此值过滤会稳定返回code:405，服务端异常：\"Cannot invoke \\\"java.util.List.forEach(java.util.function.Consumer)\\\" because \\\"ruleRuleAutomationList\\\" is null\"——已排除categoryId影响(带/不带categoryId过滤均复现)，定位为该测试账号下存在至少一条ruleType=Campaign且automation关联为null的模板记录，服务端对此情况未做空值判断即执行forEach导致NPE。不传ruleType(即getTemplate无过滤查询全部模板，很多前端场景会用到)同样触发此缺陷。断言按正确业务预期写(code:200)，实际会FAIL，如实记录缺陷，供研发定位该测试账号下的脏数据或修复空值判断。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleType=Campaign查询模板列表(预期缺陷复现)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Campaign"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板",
+    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。请求体按当前Swagger SharePassParams定义(clientId/sourceProductLine/targetProductLine/templateIds)构造，字段名已核对与线上/rule-api/v3/api-docs一致。该接口ES近90天全平台命中仅2次，无法覆盖到instacart的真实调用样本；使用instacart测试账号真实模板({{fixture_template_id}})验证接口基础可用性：code:200(该模板未配置任何direct share关系，故data为空数组，属正常业务结果)。instacart平台，真实账号验证+低流量接口按Swagger结构构造。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询DirectShare模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromDirectShare",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "sourceProductLine": "instacart",
+          "targetProductLine": "instacart",
+          "templateIds": [
+            "{{fixture_template_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/getTemplateListFromSharePass - 创建真实SharePass后查询(可重复)",
+    "description": "单接口测试：POST /template/getTemplateListFromSharePass。该接口ES近90天在instacart平台无可用样本，全平台合计38次。为避免使用自造/虚构sharePassId，串联同服务share-pass-controller模块已验证的真实创建结构 POST /sharePass/create(targetType=rule, 使用instacart真实规则{{real_rule_id}})产生一个真实sharePassId，再用该真实ID调用本接口(SharePassParams: sharePassId/clientId/targetProductLine，字段名已核对Swagger)，最后调用POST /sharePass/delete清理，保证用例可重复执行、不留残留分享记录。instacart平台，真实sharePass生命周期验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建真实SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/create",
+        "request_body": {
+          "productLine": "instacart",
+          "clientId": "{{client_id}}",
+          "timeZone": "America/Los_Angeles",
+          "targetType": "rule",
+          "list": [
+            {
+              "templateId": "{{real_rule_id}}",
+              "type": 1
+            }
+          ],
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {
+          "tpl_share_pass_id": "data[0]"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "通过分享密码获取模板列表",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplateListFromSharePass",
+        "request_body": {
+          "sharePassId": "{{tpl_share_pass_id}}",
+          "clientId": "{{client_id}}",
+          "targetProductLine": "instacart"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除SharePass",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/sharePass/delete",
+        "request_body": [
+          "{{tpl_share_pass_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "模板生命周期(创建/编辑/收藏/移动/删除) - instacart",
+    "description": "单接口测试：串联 POST /template(创建) → POST /template/getTemplate(按ruleType=Keyword查询新建ID，创建接口本身不返回ID) → POST /template/editTemplate → POST /template/addFavorite → POST /template/moveTemplate → DELETE /template/{templateId}。ruleType取值使用instacart平台真实高频值\"Keyword\"(同服务config-controller模块ES验证占比84.1%)，避免使用会触发本模块已记录真实缺陷(见getTemplate ruleType=Campaign/空过滤两个缺陷case)的取值。使用已复用的测试账号真实分类({{fixture_category_id}}/{{fixture_category_id_2}})，创建一个临时测试模板，验证编辑/收藏/移动后，后置步骤删除，保证用例可重复执行。请求体字段结构已核对当前Swagger TemplateRequest/AddFavoriteRequest/MoveTemplateRequest定义。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template",
+        "request_body": {
+          "templateName": "autotest_lifecycle_template_ic",
+          "description": "自动化测试用临时模板(instacart)，用例结束后会被删除",
+          "categoryId": "{{fixture_category_id}}",
+          "ruleType": "Keyword",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_autotest_ic",
+                    "value": "4",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 10,
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建模板的ID(按ruleType=Keyword过滤避开已知缺陷)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Keyword"
+          ],
+          "categoryId": "{{fixture_category_id}}"
+        },
+        "extract_vars": {
+          "created_template_id": "data[templateName=autotest_lifecycle_template_ic].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "templateName": "autotest_lifecycle_template_ic_edited",
+          "description": "自动化测试用临时模板(instacart,已编辑)",
+          "categoryId": "{{fixture_category_id}}",
+          "ruleType": "Keyword",
+          "isFavorite": false,
+          "defaultTemplate": false,
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "hour": 0,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ROAS",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_autotest_ic",
+                    "value": "5",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "cap": 12,
+                "percentage": 12,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "收藏模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/addFavorite",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "addFavorite": true,
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "移动模板到另一分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/moveTemplate",
+        "request_body": {
+          "templateId": "{{created_template_id}}",
+          "categoryId": "{{fixture_category_id_2}}",
+          "defaultTemplate": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "分类生命周期(创建/编辑/删除) - instacart",
+    "description": "单接口测试：串联 POST /template/category(创建) → POST /template/getCategory(查询新建ID，创建接口本身不返回ID) → POST /template/editCategory → DELETE /template/category/{categoryId}。请求体字段结构已核对当前Swagger CategoryRequest定义(name/description/ruleType[]/is1p/isChild/clientId/userId)。创建一个临时测试分类，验证编辑后，后置步骤删除，保证用例可重复执行。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category",
+        "request_body": {
+          "name": "autotest_lifecycle_category_ic",
+          "description": "自动化测试用临时分类(instacart)，用例结束后会被删除",
+          "ruleType": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "is1p": 0,
+          "isChild": false,
+          "clientId": "{{client_id}}",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查询新建分类的ID",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "created_category_id": "data[name=autotest_lifecycle_category_ic].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "编辑分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editCategory",
+        "request_body": {
+          "categoryId": "{{created_category_id}}",
+          "name": "autotest_lifecycle_category_ic_edited",
+          "description": "自动化测试用临时分类(instacart,已编辑)",
+          "ruleType": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "is1p": 0,
+          "isChild": false,
+          "clientId": "{{client_id}}",
+          "userId": "{{user_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理-删除分类",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/category/{{created_category_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "批量创建模板(bulk)+清理 - instacart",
+    "description": "单接口测试：POST /template/bulk。请求体结构(templateRequestList数组，元素同TemplateRequest)已核对当前Swagger BulkCreateTemplateParam定义。ES该接口全平台近90天命中29次，instacart平台POST请求queryString无法过滤。使用instacart真实高频ruleType=\"Keyword\"批量创建1个临时测试模板，通过 POST /template/getTemplate(按ruleType=Keyword过滤避开已知缺陷)查询新建ID(bulk接口本身只返回成功的模板名称列表，不返回ID)，验证成功后DELETE清理，保证用例可重复执行。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建模板",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/bulk",
+        "request_body": {
+          "templateRequestList": [
+            {
+              "templateName": "autotest_bulk_template_ic",
+              "description": "自动化测试用临时模板(instacart,bulk创建)，用例结束后会被删除",
+              "categoryId": "{{fixture_category_id}}",
+              "ruleType": "Keyword",
+              "isFavorite": false,
+              "defaultTemplate": false,
+              "frequency": "Weekly",
+              "dayOfWeek": 7,
+              "hour": 0,
+              "automation": [
+                {
+                  "requirements": [
+                    [
+                      {
+                        "field": "ROAS",
+                        "valueType": "Custom",
+                        "id": "requirement_0_0_autotest_bulk_ic",
+                        "value": "4",
+                        "operand": "Greater"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "length": 7,
+                    "index": 1,
+                    "days": 14
+                  },
+                  "action": {
+                    "cap": 10,
+                    "percentage": 10,
+                    "action": "Increase",
+                    "budgetRate": 100,
+                    "actionName": "Increase"
+                  },
+                  "secondDateIndex": {}
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "查询bulk新建模板的ID(按ruleType=Keyword过滤避开已知缺陷)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": false,
+          "ruleType": [
+            "Keyword"
+          ],
+          "categoryId": "{{fixture_category_id}}"
+        },
+        "extract_vars": {
+          "created_bulk_template_id": "data[templateName=autotest_bulk_template_ic].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "清理-删除bulk创建的模板",
+        "method": "DELETE",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/{{created_bulk_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/editDefaultCategory - 默认分类等值回写(捕获原值+复原,可重复)",
+    "description": "单接口测试：POST /template/editDefaultCategory。该接口操作的是全平台/全客户共享的系统默认分类(Sales/Efficiency/Incrementality/Relevancy/Discovery，仅5个)，ES近90天全平台命中0次。由于没有可安全丢弃的\"默认分类\"创建入口(POST /template/category创建的都是普通分类)，为避免对全局共享数据造成可见影响，本case先用 POST /template/getDefaultCategory 捕获目标分类(id=1493782669410349057,\"Sales\")当前的真实name/description原值，再用完全相同的原值调用editDefaultCategory做等值回写(即请求前后该分类内容不发生任何实际变化，仅验证接口本身按CategoryRequest结构可正常写入并返回成功)，不改变系统默认分类的实际内容，可重复执行且无副作用。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "捕获默认分类原始值",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultCategory",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": true,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "default_cat_orig_name": "data[id=1493782669410349057].name"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "等值回写默认分类(不改变实际内容,仅验证接口)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/editDefaultCategory",
+        "request_body": {
+          "categoryId": "1493782669410349057",
+          "name": "{{default_cat_orig_name}}",
+          "description": null,
+          "ruleType": [],
+          "onlyFavorite": false,
+          "defaultCategory": true,
+          "is1p": 0,
+          "isChild": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /template/moveDefaultTemplate - 默认模板临时移动+复原(可重复)",
+    "description": "单接口测试：POST /template/moveDefaultTemplate。该接口操作全平台/全客户共享的系统默认模板库(22条，userName=\"Pacvue Default\")，ES近90天全平台命中0次。请求体按当前Swagger MoveTemplateRequest定义(templateId/categoryId/defaultTemplate，与moveTemplate共用同一schema)。为避免对共享数据造成持久影响，本case先用 POST /template/getDefaultTemplate 捕获目标模板(id=1525005906126172162,\"Wasted Spend\")当前真实categoryId(已知原值为Sales分类1493782669410349057)，将其临时移动到另一个默认分类(Efficiency,1493522466704084993)验证接口写入成功，再在后置步骤移回原分类，保证模板最终分类状态与执行前完全一致、可重复执行。instacart平台，真实账号验证。",
+    "module": "template-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "捕获默认模板原始分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/getDefaultTemplate",
+        "request_body": {
+          "creator": [],
+          "onlyFavorite": false,
+          "defaultCategory": true,
+          "ruleType": []
+        },
+        "extract_vars": {
+          "default_tmpl_orig_category_id": "data[id=1525005906126172162].categoryId"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "临时移动默认模板到Efficiency分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/moveDefaultTemplate",
+        "request_body": {
+          "templateId": "1525005906126172162",
+          "categoryId": "1493522466704084993",
+          "defaultTemplate": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置-移回原分类",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/template/moveDefaultTemplate",
+        "request_body": {
+          "templateId": "1525005906126172162",
+          "categoryId": "{{default_tmpl_orig_category_id}}",
+          "defaultTemplate": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

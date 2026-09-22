@@ -1,0 +1,121 @@
+[
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetNegativeKeywordListTable - 按Profile查询否定关键词列表",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetNegativeKeywordListTable。按profileIds分页查询否定关键词列表(ListName筛选留空)，为该接口唯一真实模式：ListName恒为空串，仅profileIds数量随选中Profile数变化，属同一业务场景。500条随机样本中占比约100%（493/493次）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询否定关键词列表表格",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
+        "request_body": {
+          "ListName": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/GetNegativeKeywordListDetail - 按Id查询列表已应用AdGroup详情",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/GetNegativeKeywordListDetail。按NegativeKeywordListId查询该列表已应用到的AdGroup明细，为该接口唯一真实模式(仅Id字段变化)。500条随机样本中占比约99.6%（498/500次，另0.4%为Id缺失的异常样本未覆盖）。返回data为该列表已应用的AdGroup数组，测试账号列表(Id=9317)当前0个应用AdGroup故data为空数组，属正常业务结果(非报错)。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询列表已应用AdGroup详情",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/GetNegativeKeywordListDetail",
+        "request_body": {
+          "Id": 9317
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/NegativeKeywordListKeywordTable - 按Id查询关键词表格(含AppliedCampaigns统计)",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/NegativeKeywordListKeywordTable。按NegativeKeywordListId查询该列表下全部关键词及各自应用统计(AppliedCampaigns/AppliedAdgroups)，为该接口主流程真实模式。500条随机样本中占比约98.8%（494/500次，另1.2%为Id传空串导致后端400校验失败的疑似前端异常样本，未纳入本次覆盖，详见交付说明）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询列表关键词表格",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListKeywordTable",
+        "request_body": {
+          "Id": 9317
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/NegativeKeywordList/v3/NegativeKeywordListKeywords - 按Id查询关键词纯文本列表",
+    "description": "单接口测试：POST /api/NegativeKeywordList/v3/NegativeKeywordListKeywords。按NegativeKeywordListId查询该列表下关键词文本数组(轻量版，不含应用统计)，为该接口唯一真实模式(仅Id字段变化)。500条随机样本中占比约99.4%（497/500次，另0.6%为Id缺失样本占比<1%未覆盖）。",
+    "module": "NegativeKeywordList",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询列表关键词纯文本",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "NegativeKeywordList/v3/NegativeKeywordListKeywords",
+        "request_body": {
+          "Id": 9317
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

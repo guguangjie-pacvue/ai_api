@@ -1,0 +1,234 @@
+{
+  "config": "walmart-api (us)",
+  "started_at": "2026-09-15T06:18:24.054887+00:00",
+  "total": 9,
+  "passed": 8,
+  "failed": 1,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/AdItems/ByAdgroups - profileIds+adgroupIds对象形式",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 ByAdgroups(对象形式)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/ByAdgroups",
+          "status_code": 200,
+          "ms": 740,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AdItems/ByAdgroups - 纯数组形式(旧调用约定)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "调用 ByAdgroups(纯数组形式)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/ByAdgroups",
+          "status_code": 400,
+          "ms": 670,
+          "pass": false,
+          "failures": [
+            "code expected 200, got null",
+            "data expected array, got NoneType",
+            "http 400 {\"errors\": {\"\": [\"Cannot deserialize the current JSON array (e.g. [1,2,3]) into type 'pacvue.walmart.dal.DTO.GetAdItemByAdgroupsRequest' because the type requires a JSON object (e.g. {\\\"name\\\":\\\"value"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AdItems/search - 默认调用(空搜索)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 search(空搜索)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/search",
+          "status_code": 200,
+          "ms": 734,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AdItems/search - 按searchItemIds过滤",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 search(按ID过滤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/search",
+          "status_code": 200,
+          "ms": 667,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/AdItems/searchItemCategroy - 默认调用",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 searchItemCategroy",
+          "method": "GET",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/searchItemCategroy",
+          "status_code": 200,
+          "ms": 760,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:brand,category",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AdItems - 创建AdItem(写操作·验证业务校验)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "尝试创建AdItem(itemId不在目标campaign商品池内)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems",
+          "status_code": 200,
+          "ms": 1185,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:totalCount,successCount,isAsync,errorMessages,successList",
+          "data_len": 5,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/AdItems/UpdateItemInfo - 刷新商品信息(写操作·幂等安全)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "刷新商品信息",
+          "method": "POST",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/UpdateItemInfo",
+          "status_code": 200,
+          "ms": 660,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "【已执行-测试账号版本】PATCH /api/AdItems/bid/byConditions - 按条件批量改出价(限定测试账号campaign+adGroup)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "按条件批量改出价(限定测试账号campaign 426321+adGroup 770991122)",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/bid/byConditions",
+          "status_code": 200,
+          "ms": 3477,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:isAsync,cpcError",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "【已执行-测试账号版本】PATCH /api/AdItems/status/byConditions - 按条件批量改状态(限定测试账号campaign+adGroup)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "按条件批量改状态(限定测试账号campaign 426321+adGroup 770991122)",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/walmart-newui/api/AdItems/status/byConditions",
+          "status_code": 200,
+          "ms": 3721,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict:isAsync",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-15T06:18:38.389747+00:00"
+}

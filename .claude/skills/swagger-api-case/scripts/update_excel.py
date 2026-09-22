@@ -20,6 +20,8 @@ import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
+from coverage_lib import norm_path, canon as _canon, compute_module_coverage
+
 EXCEL_PATH = None  # 从 cases 路径自动推断：single-api/<服务>/swagger_modules.xlsx
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -41,41 +43,15 @@ def _find_or_create_col(ws, col_name, header_font=None, header_fill=None, width=
         ws.column_dimensions[get_column_letter(col_idx)].width = width
     return col_idx
 
-def norm_path(p, base_url=''):
-    """把 cases.json 里的相对 path（不含/api前缀，走ROOTURL的接口也不含）补全成
-    与 endpoints-*.json 的 path 同格式的绝对路径，便于跨数据源匹配。"""
-    if not p:
-        return p
-    p = p.split('?', 1)[0]
-    if p.startswith('/api/') or p.startswith('/'):
-        return p if p.startswith('/api/') or 'ROOTURL' in base_url else '/api' + p
-    if 'ROOTURL' in base_url:
-        return '/' + p
-    return '/api/' + p
-
-def _canon(p):
-    # 归一化：去 query、去 /api/ 前缀、数字ID/{占位} 段统一为 * ，以便按端点模板匹配
-    if not p:
-        return ''
-    p = p.split('?', 1)[0]
-    p = p.split('/api/', 1)[-1] if '/api/' in p else p.lstrip('/')
-    segs = ['*' if (s.isdigit() or (s.startswith('{') and s.endswith('}'))) else s.lower()
-            for s in p.split('/')]
-    return '/'.join(segs)
-
 # ── Phase 5.1 — 模块汇总 ─────────────────────────────────────────────────────
 def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
     ws = wb['模块汇总']
 
-    module_eps  = [e for e in endpoints if e.get('tag') == module]
-    api_total   = len(module_eps)
     # cases.json 的 step 只有相对 path（不含/api前缀），先用 norm_path 按 base_url 补全成
     # 绝对路径，再归一化按 (方法, 端点模板) 去重匹配；report.json 里的 step 只有完整 url
     # （含域名/服务前缀），不能直接拿来做路径匹配，因此改用 cases.json 作为匹配数据源。
-    case_keys   = {((s.get('method') or '').upper(), _canon(norm_path(s.get('path', ''), s.get('base_url', ''))))
-                   for c in cases for s in c.get('steps', [])}
-    api_covered = len({((e.get('method') or '').upper(), _canon(e.get('path', ''))) for e in module_eps
-                       if ((e.get('method') or '').upper(), _canon(e.get('path', ''))) in case_keys})
+    cov = compute_module_coverage(cases, report, endpoints, module)
+    api_total, api_covered = cov['api_total'], cov['api_covered']
 
     summary_font = Font(bold=True)
     summary_fill = PatternFill('solid', fgColor='D9E1F2')
@@ -91,28 +67,27 @@ def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
     for name in ('Case数', '通过率', '接口覆盖率'):
         col_idx[name] = _find_or_create_col(ws, name, summary_font, summary_fill)
 
-    # 兼容两种结构：标准服务用 swagger 列，多平台服务（rule-api）用 platform 列
-    has_swagger  = 'swagger'  in col_idx
-    has_platform = 'platform' in col_idx
-
-    total  = report['total']
-    passed = report['passed']
-    pass_rate = (str(round(passed / total * 100)) + '%') if total else 'N/A'
-    coverage  = (str(round(api_covered / api_total * 100)) + '%'
-                 + ' (' + str(api_covered) + '/' + str(api_total) + ')') if api_total else 'N/A'
+    total  = cov['case_total']
+    pass_rate = (str(cov['pass_rate_pct']) + '%') if cov['pass_rate_pct'] is not None else 'N/A'
+    coverage  = (str(cov['coverage_pct']) + '%' + ' (' + str(api_covered) + '/' + str(api_total) + ')') \
+                if cov['coverage_pct'] is not None else 'N/A'
 
     for r in range(2, ws.max_row + 1):
         # 环境列常为合并单元格（仅块首行有值，其余为 None）；None 视为继承块环境，不作否决
         env_val = ws.cell(r, col_idx['env']).value if 'env' in col_idx else None
         env_ok = env_val in (env, None, '')
         mod_ok  = 'module' in col_idx and ws.cell(r, col_idx['module']).value == module
-        if has_swagger:
-            key_ok = ws.cell(r, col_idx['swagger']).value == swagger_title
-        elif has_platform:
-            # 多平台服务：swagger_title 传平台名（如 tiktok）
-            key_ok = ws.cell(r, col_idx['platform']).value == swagger_title
-        else:
+        # 两列可能同时存在（如 rule-api 既有服务名又有平台名）：swagger_title 传的是
+        # 实际调用方传入的那个值，按值匹配到对应的列，不预设固定优先级。
+        # 多平台服务传的是平台名（如 tiktok），标准服务传的是 swagger 文档标题。
+        if 'swagger' in col_idx and ws.cell(r, col_idx['swagger']).value == swagger_title:
+            key_ok = True
+        elif 'platform' in col_idx and ws.cell(r, col_idx['platform']).value == swagger_title:
+            key_ok = True
+        elif 'swagger' not in col_idx and 'platform' not in col_idx:
             key_ok = True  # 无 swagger/platform 列时仅按 module 匹配
+        else:
+            key_ok = False
         if env_ok and key_ok and mod_ok:
             ws.cell(r, col_idx['Case数'],    total).alignment    = Alignment(horizontal='center')
             ws.cell(r, col_idx['通过率'],    pass_rate).alignment = Alignment(horizontal='center')
@@ -122,7 +97,7 @@ def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
     print(f'[模块汇总] WARNING: row not found for {swagger_title}/{module}[{env}]')
 
 # ── Phase 5.2 — 接口级场景覆盖（单列「场景覆盖」，多行文本）────────────────────
-def update_scenario_col(wb, swagger_sheet, env, cases, report):
+def update_scenario_col(wb, swagger_sheet, env, cases, report, platform=None):
     if swagger_sheet not in wb.sheetnames:
         print(f'[场景覆盖] sheet "{swagger_sheet}" not found, skip')
         return
@@ -174,8 +149,17 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
                         'path' in str(ws.cell(1, c).value or '').lower()), None)
     method_col = next((c for c in range(1, ws.max_column + 1)
                        if str(ws.cell(1, c).value or '').strip().lower() in ('method', '方法', 'http方法')), None)
+    platform_col = next((c for c in range(1, ws.max_column + 1)
+                        if 'Platform' in str(ws.cell(1, c).value or '')), None)
     if path_col is None:
         print(f'[场景覆盖] path column not found in {swagger_sheet}'); return
+
+    # 标准服务（mainapi/walmart）现在也有「平台(Platform)」列，但传入的 platform 参数其实
+    # 是 swagger_title（不是真正的平台名），不会出现在该列的取值里；只有当 platform 参数
+    # 确实是这个 sheet 用到的平台名之一（多平台服务，如 rule-api 传 tiktok）时才按列过滤，
+    # 否则视为无平台概念，不过滤，行为等同于没有这一列。
+    platform_values = {ws.cell(r, platform_col).value for r in range(2, ws.max_row + 1)} if platform_col else set()
+    filter_by_platform = platform_col and platform in platform_values
 
     scene_col = _find_or_create_col(ws, '场景覆盖', h_font, h_fill, width=72)
 
@@ -186,6 +170,12 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report):
     for r in range(2, ws.max_row + 1):
         if env_col and ws.cell(r, env_col).value not in (env, None, ''):
             continue
+        # 多平台服务（rule-api）：必须按平台列过滤，否则会把当前平台的场景文本
+        # 写到其它平台的同路径行上（历史 bug，曾导致 criteo 行显示 instacart 内容）。
+        if filter_by_platform:
+            row_platform = ws.cell(r, platform_col).value
+            if row_platform != platform:
+                continue
         path = ws.cell(r, path_col).value
         if not path:
             continue
@@ -240,7 +230,9 @@ def main():
 
     wb = openpyxl.load_workbook(args.excel)
     update_summary(wb, args.swagger_title, args.module, args.env, cases, report, endpoints)
-    update_scenario_col(wb, args.sheet_name, args.env, cases, report)
+    # swagger_title 对多平台服务（rule-api）传的就是平台名（如 criteo），用于按
+    # 平台列过滤场景覆盖写入行；标准服务的 sheet 没有 Platform 列，此参数会被忽略。
+    update_scenario_col(wb, args.sheet_name, args.env, cases, report, platform=args.swagger_title)
     # 原文件常被 Excel 打开占用：先存 tmp，再尝试替换；替换失败则保留 tmp 供手动合并
     import os, shutil
     tmp = args.excel.replace('.xlsx', '_tmp.xlsx')

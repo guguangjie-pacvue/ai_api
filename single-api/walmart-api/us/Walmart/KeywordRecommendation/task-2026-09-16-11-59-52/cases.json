@@ -1,0 +1,130 @@
+[
+  {
+    "name": "POST /api/KeywordRecommendation/BatchInsert - 批量应用关键词推荐",
+    "description": "单接口测试：POST /api/KeywordRecommendation/BatchInsert。批量把关键词推荐应用为真实关键词(直接写入campaign/adGroup，含matchType/bid/state)。与Recommendations模块的BatchApply不同——本接口不依赖预先存在的recommendationId，请求体直接是完整关键词对象，因此可以安全地用测试账号自己的campaign 426321/adGroup 770991122/profile 16274451构造，不需要依赖\"测试账号有无待处理推荐\"这个前置条件。写操作真实执行：低出价(0.5)+enabled状态插入1个测试关键词，探测确认响应{totalCount,isAsync,successCount,errorMessages}，successCount=1代表真实成功。全模块7接口未发现对应的删除/回滚endpoint(需要用Keywords模块的接口才能改状态，超出本模块范围)，接受残留(campaign 426321处于Paused状态，不会产生真实花费)，keywordText用test+HHMMSS避免同名冲突(同ItemSet/Audiences/NegativeKeyword模块已知模式)。2轮验证通过。365天209次真实调用。",
+    "module": "KeywordRecommendation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BatchInsert",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordRecommendation/BatchInsert",
+        "request_body": [
+          {
+            "keywordText": "test115952batchinskw",
+            "matchType": "exact",
+            "bid": 0.5,
+            "campaignId": 426321,
+            "adGroupId": 770991122,
+            "profileId": 16274451,
+            "campaignType": "sponsoredProducts",
+            "clientId": 62,
+            "state": "enabled",
+            "status": "enabled"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data.successCount": 1,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordRecommendation/List - 默认场景查询关键词推荐",
+    "description": "单接口测试：POST /api/KeywordRecommendation/List。查询关键词推荐列表。场景：默认无过滤+按profileName降序，365天1363次真实调用中的常见形态。",
+    "module": "KeywordRecommendation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 List",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordRecommendation/List",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "campaignNameFilters": [],
+          "targetingTypes": [],
+          "adGroupIds": [],
+          "adgroupNameFilters": [],
+          "KeywordFilters": [],
+          "bidFilters": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "profileName",
+            "pageIndex": 1,
+            "pageSize": 20,
+            "orderBy": "profileName desc",
+            "ConvertMethodType": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/KeywordRecommendation/AppliedSuggestionList - 查询已应用推荐",
+    "description": "单接口测试：POST /api/KeywordRecommendation/AppliedSuggestionList。查询已应用的关键词推荐列表。场景：默认无过滤+按campaignName降序，365天85次真实调用中的常见形态。",
+    "module": "KeywordRecommendation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AppliedSuggestionList",
+        "method": "POST",
+        "base_url": "{{WALMARTBASEURL}}",
+        "path": "KeywordRecommendation/AppliedSuggestionList",
+        "request_body": {
+          "profileIds": "{{profile_id}}",
+          "campaignTagIds": [],
+          "campaignIds": [],
+          "campaignNameFilters": [],
+          "targetingTypes": [],
+          "adGroupIds": [],
+          "adgroupNameFilters": [],
+          "KeywordFilters": [],
+          "bidFilters": [],
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "campaignName",
+            "pageIndex": 1,
+            "pageSize": 20,
+            "orderBy": "campaignName desc",
+            "ConvertMethodType": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

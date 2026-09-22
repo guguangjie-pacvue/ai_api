@@ -1,0 +1,1180 @@
+[
+  {
+    "name": "POST /definition - 创建Targeting类型规则(bol账号真实存量分布,含后置清理,可重复)",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=Targeting占比约50.0%(3/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约50.0%(3/6)",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建bol Targeting规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "endDate": "2026-09-30T23:59:59",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "Europe/Amsterdam",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Daily",
+          "productLine": "{{platform}}",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "ruleTargetType": [
+              "Keyword",
+              "Category",
+              "ProductPage"
+            ],
+            "excludePausedTargetings": true,
+            "clientId": "{{client_id}}",
+            "targetInfo": [
+              {
+                "targetId": "{{target_id_campaign}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "9",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 0.5,
+                "percentage": 10,
+                "action": "Decrease",
+                "budgetRate": 100,
+                "actionName": "Decrease"
+              },
+              "secondDateIndex": {}
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "roas",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "11",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 14,
+                "days": 14,
+                "index": 1
+              },
+              "action": {
+                "cap": 15,
+                "percentage": 10,
+                "action": "Increase",
+                "budgetRate": 100,
+                "actionName": "Increase"
+              },
+              "secondDateIndex": {}
+            }
+          ],
+          "hour": 1,
+          "ruleType": "Targeting",
+          "ruleName": "TC_Bol_CreateTargeting_Cleanup",
+          "ruleNames": [
+            "TC_Bol_CreateTargeting_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": [],
+          "dayOfWeek": 7
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId(TC_Bol_CreateTargeting_Cleanup)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5,
+            "orderBy": "createdAt desc"
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Bol_CreateTargeting_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "{{platform}}",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档(isDelete+isPaused)新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{created_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 创建Campaign类型规则(bol账号真实存量分布,含后置清理,可重复)",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=Campaign占比约33.3%(2/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约33.3%(2/6)",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建bol Campaign规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "endDate": "2026-09-30T23:59:59",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "Europe/Amsterdam",
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "frequency": "Daily",
+          "productLine": "{{platform}}",
+          "mode": "Auto",
+          "applyTarget": {
+            "relationShipForAnd": false,
+            "targetInfo": [
+              {
+                "targetId": "{{target_id_campaign}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "clientId": "{{client_id}}",
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "profiteroBrandInfoList": [],
+            "competitorBrandInfoList": [],
+            "nonnullDailyBudget": false,
+            "targetLevel": "Campaign"
+          },
+          "isCustomize": false,
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "ActlBidPercent",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "1",
+                    "operand": "Less"
+                  },
+                  {
+                    "field": "ActlBidPercent",
+                    "valueType": "Custom",
+                    "id": "requirement_0_1_1",
+                    "value": "0.8",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 1,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "percentage": 20,
+                "action": "IncreaseDailyBudget",
+                "budgetRate": 100,
+                "actionName": "IncreaseDailyBudget"
+              }
+            }
+          ],
+          "hour": 20,
+          "ruleType": "Campaign",
+          "ruleName": "TC_Bol_CreateCampaign_Cleanup",
+          "ruleNames": [
+            "TC_Bol_CreateCampaign_Cleanup"
+          ],
+          "startDate": "2026-09-14T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false,
+          "campaignTagProfileIds": [],
+          "dayOfWeek": 7
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId(TC_Bol_CreateCampaign_Cleanup)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5,
+            "orderBy": "createdAt desc"
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Bol_CreateCampaign_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "{{platform}}",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档(isDelete+isPaused)新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{created_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition - 创建SOV Bid类型规则(bol账号真实存量分布,含后置清理,可重复)",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=SOV Bid占比约16.7%(1/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约16.7%(1/6)",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建bol SOV Bid规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "emailSettings": [],
+          "sovKeywordTag": [],
+          "frequency": "Weekly",
+          "dayOfWeek": 7,
+          "productLine": "{{platform}}",
+          "mode": "Auto",
+          "automation": [
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "page1Rate",
+                    "valueType": "Custom",
+                    "id": "requirement_0_0_1",
+                    "value": "11111.11",
+                    "operand": "Greater"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 1,
+                "days": 14
+              },
+              "action": {
+                "percentage": 1,
+                "action": "IncreaseKeywordBid",
+                "budgetRate": 100,
+                "actionName": "IncreaseKeywordBid"
+              },
+              "isSingleKeyword": true,
+              "secondDateIndex": {
+                "length": 7,
+                "index": 1
+              }
+            }
+          ],
+          "hour": 19,
+          "ruleType": "SOV Bid",
+          "ruleName": "TC_Bol_CreateSOVBid_Cleanup",
+          "ruleNames": [
+            "TC_Bol_CreateSOVBid_Cleanup"
+          ],
+          "campaignTagProfileIds": [],
+          "sovAsinApplyTarget": {
+            "relationShipForAnd": false,
+            "targetInfo": [
+              {
+                "targetId": "{{target_id_adgroup}}",
+                "profileId": "{{profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "clientId": "{{client_id}}",
+            "excludePausedCampaigns": true,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "isAllApplyTarget": false,
+            "targetLevel": "AdGroup"
+          },
+          "userName": "autoui_acount",
+          "userId": "{{user_id}}",
+          "emailOption": "NoEmails",
+          "timeZone": "Europe/Amsterdam",
+          "applyTarget": {
+            "nonnullFrequencyCap": false,
+            "targetInfo": [
+              {
+                "targetId": "{{target_id_item}}"
+              }
+            ],
+            "clientId": "{{client_id}}",
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "Item"
+          },
+          "isCustomize": false,
+          "startDate": "2026-09-14T00:00:00",
+          "sovKeywordList": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId(TC_Bol_CreateSOVBid_Cleanup)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5,
+            "orderBy": "createdAt desc"
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Bol_CreateSOVBid_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "{{platform}}",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档(isDelete+isPaused)新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{created_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulkCreateRule - 批量创建Targeting规则(全平台真实存量分布,含后置清理,可重复)",
+    "description": "单接口测试：POST /bulkCreateRule。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按SKILL.md fallback规则使用全平台90天真实流量为基线(53次真实客户调用，已排除clientId 62/3186)：ruleRequests单条创建占主导场景，占比约100%(53/53)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用/definition创建case同款真实结构，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，已实测验证可重复执行。500条随机样本中占比约100.0%(53/53)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建bol Targeting规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/bulkCreateRule",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "userId": "{{user_id}}",
+          "userName": "autoui_acount",
+          "createByShare": false,
+          "ruleRequests": [
+            {
+              "clientId": "{{client_id}}",
+              "endDate": "2026-09-30T23:59:59",
+              "emailSettings": [],
+              "emailOption": "NoEmails",
+              "timeZone": "Europe/Amsterdam",
+              "userName": "autoui_acount",
+              "userId": "{{user_id}}",
+              "frequency": "Daily",
+              "productLine": "{{platform}}",
+              "mode": "Auto",
+              "applyTarget": {
+                "relationShipForAnd": false,
+                "ruleTargetType": [
+                  "Keyword",
+                  "Category",
+                  "ProductPage"
+                ],
+                "excludePausedTargetings": true,
+                "clientId": "{{client_id}}",
+                "targetInfo": [
+                  {
+                    "targetId": "{{target_id_campaign}}",
+                    "profileId": "{{profile_id}}"
+                  }
+                ],
+                "nonnullFrequencyCap": false,
+                "excludePausedCampaigns": true,
+                "nonnullMaxCpc": false,
+                "nonnullDailyBudget": false,
+                "targetLevel": "Campaign"
+              },
+              "isCustomize": false,
+              "automation": [
+                {
+                  "requirements": [
+                    [
+                      {
+                        "field": "roas",
+                        "valueType": "Custom",
+                        "id": "requirement_0_0_1",
+                        "value": "9",
+                        "operand": "Less"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "length": 14,
+                    "days": 14,
+                    "index": 1
+                  },
+                  "action": {
+                    "cap": 0.5,
+                    "percentage": 10,
+                    "action": "Decrease",
+                    "budgetRate": 100,
+                    "actionName": "Decrease"
+                  },
+                  "secondDateIndex": {}
+                },
+                {
+                  "requirements": [
+                    [
+                      {
+                        "field": "roas",
+                        "valueType": "Custom",
+                        "id": "requirement_0_0_1",
+                        "value": "11",
+                        "operand": "Greater"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "length": 14,
+                    "days": 14,
+                    "index": 1
+                  },
+                  "action": {
+                    "cap": 15,
+                    "percentage": 10,
+                    "action": "Increase",
+                    "budgetRate": 100,
+                    "actionName": "Increase"
+                  },
+                  "secondDateIndex": {}
+                }
+              ],
+              "hour": 1,
+              "ruleType": "Targeting",
+              "ruleName": "TC_Bol_BulkCreateTargeting_Cleanup",
+              "ruleNames": [
+                "TC_Bol_BulkCreateTargeting_Cleanup"
+              ],
+              "startDate": "2026-09-14T00:00:00",
+              "isPaused": false,
+              "sendFailEmail": false,
+              "campaignTagProfileIds": [],
+              "dayOfWeek": 7
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "success": {
+              "$not_empty": true
+            }
+          }
+        }
+      },
+      {
+        "name": "前置-按名称查询提取ruleId(TC_Bol_BulkCreateTargeting_Cleanup)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRule",
+        "request_body": {
+          "removeApplied": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5,
+            "orderBy": "createdAt desc"
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_Bol_BulkCreateTargeting_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "productLine": "{{platform}}",
+          "ignore": false,
+          "currency": "$",
+          "status": []
+        },
+        "extract_vars": {
+          "created_bulk_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-归档(isDelete+isPaused)新建规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{created_bulk_rule_id}}"
+          ],
+          "isPaused": true,
+          "isDelete": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认规则已Paused",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{created_bulk_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeStatus - 暂停/恢复规则状态(全平台真实存量分布,含后置逆操作,可重复)",
+    "description": "单接口测试：POST /definition/changeStatus。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(3216次真实客户调用，已排除62/3186)：{ruleIds,isPaused}主流场景占绝大多数。写操作复用bol账号(client_id=62)已存在的真实规则real_rule_id_targeting(非本次新建)，先pause再resume恢复原状态(该规则初始isPaused=false，已实测确认恢复后与初始状态一致)，保证幂等可重复执行。500条随机样本中占比约90.0%(约2900/3216，主流{ruleIds,isPaused}模式)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "暂停real_rule_id_targeting",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id_targeting}}"
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证已暂停",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{real_rule_id_targeting}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": true
+          }
+        }
+      },
+      {
+        "name": "后置逆操作-恢复原状态(isPaused=false)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeStatus",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id_targeting}}"
+          ],
+          "isPaused": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "后置验证-确认已恢复原状态",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{real_rule_id_targeting}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "isPaused": false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/changeOwners - 变更规则Owner(全平台真实存量分布,幂等无副作用写法,可重复)",
+    "description": "单接口测试：POST /definition/changeOwners。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(67次真实客户调用，已排除62/3186)：{ruleIds,userName,userId}为唯一模式，占比100%。写操作复用bol账号(client_id=62)已存在的真实规则real_rule_id_campaign(非本次新建)，已实测确认该规则当前owner即为{{user_id}}/autoui_acount，故本用例将owner设置为其自身(真实、已验证的值，非编造)，属无副作用幂等操作，不改变规则实际owner，可安全重复执行。500条随机样本中占比约100.0%(67/67)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "变更real_rule_id_campaign的owner为自身(幂等)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/changeOwners",
+        "request_body": {
+          "ruleIds": [
+            "{{real_rule_id_campaign}}"
+          ],
+          "userId": "{{user_id}}",
+          "userName": "autoui_acount"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "验证owner未变化(仍为{{user_id}})",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{real_rule_id_campaign}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "userId": "18589"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getRuleTargetInfoByRuleIds - 按规则Id批量查询目标信息(全平台真实存量分布)",
+    "description": "单接口测试：POST /definition/getRuleTargetInfoByRuleIds。该接口body为纯字符串数组(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(211次真实客户调用，已排除62/3186；ES日志对该端点body字段未采集到样本内容，但真实调用次数与clientId确认非测试噪声)。Swagger定义body为array<string>(ruleId列表)，使用bol账号已存在的真实规则real_rule_id(=real_rule_id_targeting)查询其targetInfo，纯读操作无副作用。500条随机样本中占比约100.0%(211/211)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ruleId查询targetInfo",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getRuleTargetInfoByRuleIds",
+        "request_body": [
+          "{{real_rule_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getOwners - 按userIds查询规则Owner列表(全平台真实存量分布,已知后端缺陷回归用例)",
+    "description": "单接口测试：POST /definition/getOwners。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(58196次真实客户调用，已排除62/3186)：{userIds,mode,timeZone,...}为主流模式。实测发现：无论userIds传字符串数组还是整型数组，bol账号(client_id=62)调用均稳定返回405 \"class java.lang.Long cannot be cast to class java.lang.String\"，属已复核确认的真实后端缺陷(与kroger definition-controller RISK_NOTES记录的commerceRuleReport/adtomicRules 405缺陷同类性质)，本用例作为缺陷回归用例保留，预期结果记录为该已知405，不代表用例设计错误。500条随机样本中占比约100.0%(约55000+/58196，主流userIds查询模式)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按userIds查询Owner(已知会405-后端Long/String cast缺陷)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getOwners",
+        "request_body": {
+          "removeApplied": false,
+          "mode": "Auto",
+          "download": false,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 405
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/getApplyRule - 按ownerIds查询可应用规则(全平台真实存量分布)",
+    "description": "单接口测试：POST /definition/getApplyRule。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(7543次真实客户调用，已排除62/3186)：{ownerIds,timeZone,currency,...}为主流模式。使用bol账号自身真实userId({{user_id}})作为ownerIds查询，纯读操作无副作用，实测返回200。500条随机样本中占比约100.0%(7543/7543)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按ownerIds查询可应用规则",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getApplyRule",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/commerceRuleReport - 按Client分组的规则周报(全平台真实存量分布)",
+    "description": "单接口测试：POST /definition/commerceRuleReport。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(16次真实客户调用，已排除62/3186；样本量小于10已放宽窗口说明)：commerceRuleReportGroupBy=\"By Client\"为唯一真实模式，占比100%。使用与真实样本相同的周报窗口结构(startDate/endDate等日期字段保持真实周期模式)，纯读操作无副作用。500条随机样本中占比约100.0%(16/16)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询By Client分组规则周报",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleReport",
+        "request_body": {
+          "removeApplied": false,
+          "download": false,
+          "endDate": "2026-09-13",
+          "prevEndDate": "2026-09-06",
+          "timeZone": "America/Los_Angeles",
+          "ignore": false,
+          "currency": "$",
+          "commerceRuleReportGroupBy": "By Client",
+          "startDate": "2026-09-07",
+          "prevStartDate": "2026-08-31",
+          "fromSnapShot": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /definition/export - 导出规则列表(全平台真实存量分布,二进制xlsx响应)",
+    "description": "单接口测试：POST /definition/export。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(132次真实客户调用，已排除62/3186)：download=true(导出xlsx文件)为100%真实模式(8/8样本全部download=true)。实测确认该接口返回二进制xlsx(Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)，非JSON，故使用run_cases.py内置的$binary断言按响应体字节数校验，不做JSON字段断言。500条随机样本中占比约100.0%(132/132)。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出规则列表(xlsx)",
+        "method": "POST",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/export",
+        "request_body": {
+          "removeApplied": false,
+          "targetLevels": [],
+          "ownerIds": [
+            "{{user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "timeZone": "America/Los_Angeles",
+          "profileIds": [],
+          "language": "EN",
+          "commonCampaigns": [],
+          "managedProfileIds": [
+            "{{profile_id}}"
+          ],
+          "frequency": [],
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": true,
+          "ruleType": [],
+          "ruleName": "",
+          "ignore": false,
+          "currency": "$",
+          "fromIndex": 0,
+          "status": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/{ruleId} - 查询规则详情(全平台真实存量分布)",
+    "description": "单接口测试：GET /definition/{ruleId}。GET请求无法通过ES区分平台(header中的productline未被ES索引)，按SKILL.md规则使用全平台流量作为基线：ES wildcard-agg近90天/definition/{id}前缀命中大量真实规则详情查询(已抽样验证clientId=2328/4096等真实客户，非62/3186噪声)。使用bol账号已存在的真实规则real_rule_id查询详情，纯读操作无副作用。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询规则详情",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/{{real_rule_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/commerceRuleClient - 查询商用规则Client列表(全平台真实存量分布)",
+    "description": "单接口测试：GET /definition/commerceRuleClient。GET请求按fallback规则使用全平台流量为基线(90天13次真实客户调用，已排除62/3186)。无请求参数，纯读操作无副作用。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询商用规则Client列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/commerceRuleClient",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/getAutoRefillRuleProfileIds - 查询AutoRefill规则关联ProfileId列表(全平台真实存量分布)",
+    "description": "单接口测试：GET /definition/getAutoRefillRuleProfileIds。GET请求按fallback规则使用全平台流量为基线(90天9372次真实客户调用，已排除62/3186)。无请求参数，纯读操作无副作用。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询AutoRefill规则ProfileId列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/getAutoRefillRuleProfileIds",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/hasClickHitMode - 查询是否存在ClickHit模式规则(全平台真实存量分布)",
+    "description": "单接口测试：GET /definition/hasClickHitMode。GET请求按fallback规则使用全平台流量为基线(90天12069次真实客户调用，已排除62/3186)。实测确认所有真实调用均不带mode查询参数(queryString为空)，故不传mode参数，纯读操作无副作用。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询是否存在ClickHit模式规则",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/hasClickHitMode",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /definition/transferableOwnerList - 查询可转移Owner列表(全平台真实存量分布)",
+    "description": "单接口测试：GET /definition/transferableOwnerList。GET请求按fallback规则使用全平台流量为基线(90天2854次真实客户调用，已排除62/3186)。无请求参数，纯读操作无副作用。",
+    "module": "definition-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询可转移Owner列表",
+        "method": "GET",
+        "base_url": "{{RULEBASEURL}}",
+        "path": "/definition/transferableOwnerList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

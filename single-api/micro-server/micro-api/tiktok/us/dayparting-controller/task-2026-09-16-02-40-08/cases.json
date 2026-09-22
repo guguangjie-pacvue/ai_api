@@ -1,0 +1,80 @@
+[
+  {
+    "name": "POST /findDayParting/campaign - 按campaignId+profileId查询dayparting配置详情",
+    "description": "单接口测试：POST /findDayParting/campaign。根据campaignId+profileId查询该campaign当前应用的dayparting配置详情(只读)。90天内tiktok平台该接口共1次真实客户调用(非测试账号)，样本量极少，已全覆盖(占比100%，1次，500条随机样本中)。注：campaignId/profileId替换为测试账号自己(clientId=62)的真实历史值{{real_campaign_id}}/{{profile_id}}(与ES真实客户样本同构，仅id值不同)，已用当前登录token现场验证HTTP 200返回真实配置数据(id=57759,userId=93)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /findDayParting/campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "tiktok",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按profileIds批量查询模板列表（确认后端缺陷复现）",
+    "description": "单接口测试：POST /dayparting/templateNames。批量按profileIds查询模板名称列表(只读)。90天内tiktok平台该接口仅2次真实调用(样本较少)，2条样本结构完全一致，占比100%（2次，500条随机样本中）。🔴已确认tiktok平台专属后端缺陷：请求体只要包含\"productLine\":\"tiktok\"字段即无条件返回HTTP 500，与其余字段(profileIds/userIds等)取值完全无关；已用当前登录token现场验证，并对照其余12个平台(amazon/walmart/samsclub/instacart/bol/chewy/kroger/criteo/target/doordash/ebay/dsp/mercado)逐一测试同结构请求体均返回200，排除通用请求体问题；进一步用ES确认真实客户(clientId=4618，非测试账号)近90天内2次真实tiktok调用请求体同样携带该字段，说明此缺陷正在生产环境对真实tiktok客户必现。本case如实按正常预期编写expected_response，执行时预期FAIL，用于留存该缺陷证据，不修改请求体规避。注：clientId替换为{{client_id}}，profileIds替换为{{profile_ids_all}}，userIds替换为[{{root_user_id}}]。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 /dayparting/templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": "{{profile_ids_all}}",
+          "productLine": "tiktok",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{root_user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]

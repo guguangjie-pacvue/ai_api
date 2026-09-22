@@ -1,0 +1,1004 @@
+[
+  {
+    "name": "POST /bulk/verify/apply - 批量校验单个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否可应用dayparting(不提交)。占比约75.0%（3次，90天内真实流量[排除clientId 62/3186]共4条）。identity字段(campaignId/profileId)已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}（通过对本账号clientId=62在ebay平台的ES历史流量独立探测确认为真实值），未使用ES样本中其他真实客户的campaignId/profileId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "ebay",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /bulk/verify/apply - 批量校验多个campaign是否可应用dayparting(不提交)",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否可应用dayparting(不提交)，真实流量中该场景单次请求可达24个campaign元素。占比约25.0%（1次，90天内真实流量[排除clientId 62/3186]共4条）。identity字段已替换为本测试账号自有的{{profile_id}}+两个真实历史campaignId（{{real_campaign_id}}/{{real_campaign_id_2}}，均通过对clientId=62独立探测确认），本账号当前仅验证到2个真实可访问campaignId，数组内交替使用这2个真实值以保留“批量校验”的结构语义（不足24个原始条目，已如实注明，不构成编造场景），未使用ES样本中其他真实客户的campaignId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 apply(批量)",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/bulk/verify/apply",
+        "request_body": [
+          {
+            "productLine": "ebay",
+            "campaignId": "{{real_campaign_id}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          },
+          {
+            "productLine": "ebay",
+            "campaignId": "{{real_campaign_id_2}}",
+            "profileId": "{{profile_id}}",
+            "name": null,
+            "tempId": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按单profile+模板查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按单个profileId+模板tempId查询apply列表(applyLevel=2)。占比约82.4%（28次，90天内真实流量[排除clientId 62/3186]共34条）。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}，不直接照抄ES样本中其他真实客户的profileId；tempId为业务过滤字段(非identity)，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 59600,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按单profile+模板查询apply列表(applyLevel=1)",
+    "description": "单接口测试：POST /dayparting/apply。按单个profileId+模板tempId查询apply列表(applyLevel=1)。占比约14.7%（5次，90天内真实流量[排除clientId 62/3186]共34条）。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}，不直接照抄ES样本中其他真实客户的profileId；tempId为业务过滤字段(非identity)，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 apply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 9999,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 1,
+          "datePattern": null,
+          "name": null,
+          "tempId": 56200,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/apply - 按多profile+模板查询apply列表(applyLevel=2)",
+    "description": "单接口测试：POST /dayparting/apply。按多个profileId+模板tempId查询apply列表(applyLevel=2)。占比约2.9%（1次，90天内真实流量[排除clientId 62/3186]共34条），占比虽低但≥1%阈值，按规则全覆盖。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}+{{profile_id_2}}（均为clientId=62在ebay平台历史真实使用的profileId），不直接照抄ES样本中其他真实客户的profileId；tempId为业务过滤字段(非identity)，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 apply(多profile)",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/apply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}"
+          ],
+          "applyItems": null,
+          "states": null,
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": 2,
+          "datePattern": null,
+          "name": null,
+          "tempId": 40049,
+          "applyLevels": null,
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemTags查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按lineItemTags查询targeting汇总。占比约70.0%（7次，90天内真实流量[排除clientId 62/3186]共10条）。lineItemTags内嵌的relId/relName/profileId/profileIdName为被查询对象归属的业务标签数据(非调用方identity)，与amazon/walmart/criteo/target/kroger/doordash五平台已审定的处理口径一致，保留ES真实值不做替换；顶层仅productLine为identity字段，已是ebay真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "ebay",
+          "lineItemIds": [],
+          "lineItemTags": [
+            {
+              "relId": "2074857255759192065",
+              "relName": "PLG/PLS Campaign (General)",
+              "profileId": "zPGrchIsTSC",
+              "profileIdName": "radwell_international"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/applyTargetSum - 按lineItemIds查询targeting汇总",
+    "description": "单接口测试：POST /dayparting/applyTargetSum。按lineItemIds查询targeting汇总。占比约30.0%（3次，90天内真实流量[排除clientId 62/3186]共10条）。lineItemIds内嵌的relId/relName/profileId为被查询对象归属的业务数据(非调用方identity)，与五平台已审定口径一致，保留ES真实值不做替换。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 applyTargetSum",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/applyTargetSum",
+        "request_body": {
+          "productLine": "ebay",
+          "lineItemIds": [
+            {
+              "relId": "166483509016",
+              "relName": "Beldray - Steam Iron - Manual - June 26",
+              "profileId": "rPvP7RHGQX-",
+              "profileIdName": null
+            }
+          ],
+          "lineItemTags": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile+全部状态过滤查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单个profileId查询campaign树，states过滤为全部5种状态(RUNNING/PAUSED/SYSTEM_PAUSED/SCHEDULED/ENDING_SOON)。占比约59.2%（29次，90天内真实流量[排除clientId 62/3186]共49条）。identity字段(clientId/profileIds/userIds)已替换为本测试账号自有的{{client_id}}/{{profile_id}}/{{user_id}}，不直接照抄ES样本中其他真实客户的值；tempId/states/tagIds为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "ebay",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 0,
+          "states": [
+            "RUNNING",
+            "PAUSED",
+            "SYSTEM_PAUSED",
+            "SCHEDULED",
+            "ENDING_SOON"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaign/tree - 按单profile+RUNNING状态过滤查询campaign树",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单个profileId查询campaign树，仅筛选RUNNING状态。占比约40.8%（20次，90天内真实流量[排除clientId 62/3186]共49条）。identity字段(clientId/profileIds/userIds)已替换为本测试账号自有的{{client_id}}/{{profile_id}}/{{user_id}}；tempId/states为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaign/tree",
+        "request_body": {
+          "productLine": "ebay",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 1,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "tempId": 56201,
+          "states": [
+            "RUNNING"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
+    "description": "单接口测试：POST /dayparting/campaignApply。查询campaign冲突应用情况，90天内真实流量[排除clientId 62/3186]共3条，全部为同一业务模式(单campaign+单profile查询)，占比约100%，已全量覆盖，未按500条采样。identity字段(campaignId/profileId)已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}，未使用ES样本中其他真实客户的campaignId/profileId。 实际响应data为null(该真实campaign当前无冲突应用记录，属业务正常结果，非接口异常)，故断言收敛为仅校验code=200，不强制data结构。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaignApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/campaignApply",
+        "request_body": {
+          "productLine": "ebay",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/checkDeletePermission - 删除模板前置权限校验",
+    "description": "单接口测试：POST /dayparting/checkDeletePermission。删除模板前置权限校验。90天内真实流量[排除clientId 62/3186]共4条，全部为单profile+单模板id查询模式，占比约100%，已全量覆盖。该接口的查询对象就是“某个模板本身”的删除权限，本轮采用比一般identity替换更保守的口径（与amazon/walmart/criteo/doordash一致）：profileIds替换为本账号自有的{{profile_id}}，ids替换为本账号自有的{{fixture_template_id}}（tempName=\"自动化专用-勿删\"），不直接照抄ES样本中其他真实客户的profileId/模板id。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 checkDeletePermission",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/checkDeletePermission",
+        "request_body": {
+          "clientId": null,
+          "pageInfo": null,
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "ebay",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": null,
+          "ids": [
+            "{{fixture_template_id}}"
+          ],
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile+applyLevels(1,2)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。按单profile+applyLevels(1,2)分页查询，不筛选状态。占比约56.4%（31次，90天内真实流量[排除clientId 62/3186]共55条）。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}；tempId/applyIds/states为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 59600,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile+仅applyLevels(1)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。按单profile+仅applyLevels(1)分页查询，不筛选状态。占比约25.5%（14次，90天内真实流量[排除clientId 62/3186]共55条）。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}；tempId为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": [],
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 32099,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile+仅applyLevels(2)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。按单profile+仅applyLevels(2)分页查询，不筛选状态。占比约7.3%（4次，90天内真实流量[排除clientId 62/3186]共55条）。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}；tempId/applyIds为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 56201,
+          "applyLevels": [
+            2
+          ],
+          "applyIds": [
+            210391
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(多profile+applyLevels(1,2)+不筛选状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。按多profile+applyLevels(1,2)分页查询，不筛选状态。占比约5.5%（3次，90天内真实流量[排除clientId 62/3186]共55条），占比虽低但≥1%阈值，按规则全覆盖。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}+{{profile_id_2}}；tempId为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply(多profile)",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 99999,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}"
+          ],
+          "applyItems": [],
+          "states": [],
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 40049,
+          "applyLevels": [
+            1,
+            2
+          ],
+          "applyIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile+仅applyLevels(1)+按状态筛选单一状态)",
+    "description": "单接口测试：POST /dayparting/detailApply。按单profile+仅applyLevels(1)分页查询，states按单一状态码[1]筛选。占比约3.6%（2次，90天内真实流量[排除clientId 62/3186]共55条），占比虽低但≥1%阈值，按规则全覆盖。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}；tempId/states为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply(按状态筛选)",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": [
+            1
+          ],
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 56201,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/detailApply - 分页查询(单profile+仅applyLevels(1)+按全部状态码筛选)",
+    "description": "单接口测试：POST /dayparting/detailApply。按单profile+仅applyLevels(1)分页查询，states按全部5种状态码[0,1,2,3,4]筛选(等价于全选而非不筛选，两者在请求结构上有区别，故独立成场景)。占比约1.8%（1次，90天内真实流量[排除clientId 62/3186]共55条），占比恰为1%以上阈值，按规则覆盖，不编造。identity字段(profileIds)已替换为本测试账号自有的{{profile_id}}；tempId/states为业务过滤字段，保留ES真实值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 detailApply(全部状态码筛选)",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/detailApply",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": null
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "applyItems": null,
+          "states": [
+            3,
+            1,
+            4,
+            0,
+            2
+          ],
+          "productLine": "ebay",
+          "preferenceZone": null,
+          "advertiserIds": null,
+          "applyLevel": null,
+          "datePattern": null,
+          "name": null,
+          "tempId": 56201,
+          "applyLevels": [
+            1
+          ],
+          "applyIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/profile/campaignTag/tree - 查询profile维度campaign标签树",
+    "description": "单接口测试：POST /dayparting/profile/campaignTag/tree。查询profile维度campaign标签树。90天内真实流量[排除clientId 62/3186]共17条，全部为同一业务模式(不筛选profileIds/tagIds，按tempId过滤)，占比约100%，已全量覆盖。identity字段(clientId/userIds)已替换为本测试账号自有的{{client_id}}/{{user_id}}；tempId为业务过滤字段，保留ES真实值(56201)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 profile/campaignTag/tree",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/profile/campaignTag/tree",
+        "request_body": {
+          "productLine": "ebay",
+          "advertiserIds": null,
+          "clientId": "{{client_id}}",
+          "applyLevel": 2,
+          "isFilter": true,
+          "tagIds": [],
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "daypartingType": 1,
+          "name": "",
+          "profileIds": [],
+          "tempId": 56201,
+          "states": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operation-log - 查询模板操作日志(不筛选操作类型)",
+    "description": "单接口测试：POST /dayparting/template/operation-log。查询模板操作日志，不筛选操作类型(actionTypes为空)。90天内真实流量[排除clientId 62/3186]共4条，全部为同一业务模式，占比约100%，已全量覆盖。该接口查询对象为“某个模板自身的操作历史”，采用与checkDeletePermission一致的保守口径：templateId替换为本账号自有的{{fixture_template_id}}，不直接照抄ES样本中其他真实客户的模板id；preferenceZone为业务展示字段，保留ES真实值(EST5EDT)。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 template/operation-log",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operation-log",
+        "request_body": {
+          "productLine": "ebay",
+          "preferenceZone": "EST5EDT",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderBy": "operate_time desc"
+          },
+          "userNames": [],
+          "templateId": "{{fixture_template_id}}",
+          "actionTypes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/template/operators?productLine=ebay&tempId={{fixture_template_id}} - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。查询指定模板的可操作人列表，该接口按Swagger定义仅接受query参数(productLine+tempId)，不接受请求体，ES样本body恒为null(90天内真实流量[排除clientId 62/3186]共4条，验证了该接口无body这一事实)。tempId采用与checkDeletePermission一致的保守口径，替换为本账号自有的{{fixture_template_id}}，不使用ES样本中其他真实客户的模板id。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 template/operators",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/template/operators?productLine=ebay&tempId={{fixture_template_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按单profile过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按单个profileId过滤查询模板名称列表。占比约90.5%（57次，90天内真实流量[排除clientId 62/3186]共63条）。identity字段(clientId/profileIds/userIds)已替换为本测试账号自有的{{client_id}}/{{profile_id}}/{{user_id}}，不直接照抄ES样本中其他真实客户的值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 templateNames",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}"
+          ],
+          "productLine": "ebay",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /dayparting/templateNames - 按多profile过滤查询模板名称列表",
+    "description": "单接口测试：POST /dayparting/templateNames。按多个profileId过滤查询模板名称列表(真实流量中该场景单次请求可携带上百个profileId的大型代理商账号)。占比约9.5%（6次，90天内真实流量[排除clientId 62/3186]共63条）。identity字段(clientId/profileIds/userIds)已替换为本测试账号自有的{{client_id}}/{{profile_id}}/{{profile_id_2}}/{{profile_id_3}}/{{user_id}}，本账号当前仅验证到3个真实可访问profileId，已如实注明用3个真实值代表“多profile”结构语义(不足原始上百个)，不构成编造场景，不直接照抄ES样本中其他真实客户的值。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 templateNames(多profile)",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/dayparting/templateNames",
+        "request_body": {
+          "clientId": "{{client_id}}",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 2147483647,
+            "orderBy": "createdAt desc"
+          },
+          "profileIds": [
+            "{{profile_id}}",
+            "{{profile_id_2}}",
+            "{{profile_id_3}}"
+          ],
+          "productLine": "ebay",
+          "preferenceZone": "America/Los_Angeles",
+          "advertiserIds": null,
+          "tempName": null,
+          "fliterQuery": false,
+          "datePattern": null,
+          "userIds": [
+            "{{user_id}}"
+          ],
+          "ids": null,
+          "applyCampaign": null,
+          "status": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "pageInfo": {
+              "$not_empty": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaign查询dayparting应用情况。90天内真实流量[排除clientId 62/3186]共3条，全部为同一业务模式(单campaign+单profile查询)，占比约100%，已全量覆盖。identity字段(campaignId/profileId)已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}（该组合通过对clientId=62独立探测确认为本账号自己产生的真实历史流量，非借用其他真实客户数据），未使用ES样本中其他真实客户的campaignId/profileId。",
+    "module": "dayparting-controller",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 campaign",
+        "method": "POST",
+        "base_url": "{{DAYPARTING}}",
+        "path": "/findDayParting/campaign",
+        "request_body": {
+          "productLine": "ebay",
+          "campaignId": "{{real_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "name": null,
+          "tempId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

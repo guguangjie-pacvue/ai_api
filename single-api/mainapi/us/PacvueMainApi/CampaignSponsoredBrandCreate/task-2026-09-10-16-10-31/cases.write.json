@@ -1,0 +1,296 @@
+[
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateAsset - 注册品牌Logo/素材资产到Amazon素材库",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/CampaignCreate/V3/CreateAsset。真实向Amazon Assets Library注册一个新素材(图片/Logo)，365天内约4次真实调用，且ES真实样本body均为空对象{}（可能因日志脱敏或字段实际为空未记录），无法还原真实fileRelatePath/fileName取值。Swagger结构：profileId(int64)/brandEntityId(string)/imageType(string)/fileRelatePath(string)/fileName(string)。brandEntityId/fileRelatePath/fileName本账号无已知真实值，标记[NEEDS_REAL_VALUE]。该接口会真实创建Amazon素材资源且素材库暂无已知删除/归档接口，故仅生成case供人工评估，执行前需确认brandEntityId归属及素材清理方式。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】注册品牌Logo/素材资产到Amazon素材库",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateAsset",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "brandEntityId": "[NEEDS_REAL_VALUE]",
+          "imageType": "[NEEDS_REAL_VALUE]",
+          "fileRelatePath": "[NEEDS_REAL_VALUE]",
+          "fileName": "[NEEDS_REAL_VALUE]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateCollection - 创建SB Manual Collection广告(含建议后置归档)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/CampaignCreate/V3/CreateCollection。在指定AdGroup下真实创建SB手动Collection广告(多ASIN组合广告)，365天内约14次真实调用。ES真实样本profileId/campaignId/adGroupId均非本测试账号，样本非本账号，需人工核实。字段结构取自真实样本(campaignId/profileId/isAutoCollection/collectionAds[adGroupId/creative/name/state])，已替换为本账号profileId+exist_sb_campaign_id占位，adGroupId需人工核实是否与该campaign匹配后填入真实值[NEEDS_REAL_VALUE]。建议执行后通过Ad模块的状态更新接口将新建Ad的state改为archived完成清理，保证可重复执行。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】创建SB Manual Collection广告(含建议后置归档)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateCollection",
+        "request_body": {
+          "ProfileId": "{{profile_id}}",
+          "campaignId": "{{exist_sb_campaign_id}}",
+          "profileId": "{{profile_id}}",
+          "isAutoCollection": false,
+          "collectionAds": [
+            {
+              "adGroupId": "[NEEDS_REAL_VALUE]",
+              "creative": {
+                "brandLogoAssetID": "amzn1.assetlibrary.asset1.6748f4a8d65f758a847d76320caecd72",
+                "brandLogoCrop": {
+                  "top": 2,
+                  "left": 2,
+                  "width": 2499,
+                  "height": 2500
+                },
+                "brandName": "Big Joe",
+                "asins": [
+                  "B0GSGRFPXH",
+                  "B0GSGV1SKD",
+                  "B0GSH2DB46",
+                  "B0GV13K7MR"
+                ],
+                "landingPage": {
+                  "asins": [
+                    "B0GSGRFPXH",
+                    "B0GSGV1SKD",
+                    "B0GSH2DB46",
+                    "B0GV13K7MR"
+                  ],
+                  "pageType": "PRODUCT_LIST"
+                }
+              },
+              "name": "swagger-api-case-test-collection",
+              "state": "ENABLED"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateProductCollection - 创建SB Product Collection广告(含建议后置归档)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/CampaignCreate/V3/CreateProductCollection。在指定AdGroup下真实创建SB Product Collection广告(商品集合广告，落地页可为Store或商品列表)，365天内约21次真实调用。ES真实样本profileId/campaignId/adGroupId均非本测试账号，样本非本账号，需人工核实。字段结构取自真实样本，已替换为本账号profileId+exist_sb_campaign_id占位，adGroupId/brandLogoAssetID/customImages需人工核实本账号真实素材ID后填入[NEEDS_REAL_VALUE]。建议执行后归档新建Ad完成清理。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】创建SB Product Collection广告(含建议后置归档)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateProductCollection",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sb_campaign_id}}",
+          "productCollectionAds": [
+            {
+              "name": "swagger-api-case-test-productcollection",
+              "state": "ENABLED",
+              "adGroupId": "[NEEDS_REAL_VALUE]",
+              "creative": {
+                "asins": [
+                  "B0GDVF4FXB",
+                  "B0GMJP2RCB",
+                  "B0GDV4KBYQ"
+                ],
+                "brandLogoCrop": {
+                  "left": 0,
+                  "top": 0,
+                  "width": 500,
+                  "height": 498
+                },
+                "brandLogoAssetID": "[NEEDS_REAL_VALUE]",
+                "brandName": "swagger-test-brand",
+                "headline": "Today is a gift"
+              },
+              "landingPage": {
+                "type": "PRODUCT_LIST",
+                "asins": [
+                  "B0GDVF4FXB",
+                  "B0GMJP2RCB",
+                  "B0GDV4KBYQ"
+                ],
+                "pageType": "PRODUCT_LIST"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateSBAdVideo - 创建SB Video广告(含建议后置归档)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/CampaignCreate/V3/CreateSBAdVideo。在指定AdGroup下真实创建SB视频广告，365天内约38次真实调用。ES真实样本profileId/campaignId/adGroupId/videoAssetIds均非本测试账号，样本非本账号，需人工核实。字段结构取自真实样本(campaignId/profileId/videoAds[name/state/adGroupId/creative[asins/videoAssetIds]])，已替换为本账号profileId+exist_sb_campaign_id占位，adGroupId/videoAssetIds需人工核实本账号真实视频素材ID后填入[NEEDS_REAL_VALUE]。建议执行后归档新建Ad完成清理。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】创建SB Video广告(含建议后置归档)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateSBAdVideo",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sb_campaign_id}}",
+          "videoAds": [
+            {
+              "name": "swagger-api-case-test-video",
+              "state": "ENABLED",
+              "adGroupId": "[NEEDS_REAL_VALUE]",
+              "creative": {
+                "asins": [
+                  "{{target_asin}}"
+                ],
+                "videoAssetIds": [
+                  "[NEEDS_REAL_VALUE]"
+                ]
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/CreateStoreSpotlight - 创建SB Store Spotlight广告(含建议后置归档)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/CampaignCreate/V3/CreateStoreSpotlight。在指定AdGroup下真实创建SB Store Spotlight广告(店铺聚光灯，含多个子页面导流)，365天内仅2次真实调用(低频高风险)。ES真实样本profileId/campaignId/adGroupId/subpages均非本测试账号，样本非本账号，需人工核实。字段结构取自真实样本，已替换为本账号profileId+exist_sb_campaign_id占位，adGroupId/subpages(asin+url)/brandLogoAssetID需人工核实本账号真实Store子页面数据后填入[NEEDS_REAL_VALUE]。建议执行后归档新建Ad完成清理。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】创建SB Store Spotlight广告(含建议后置归档)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/CreateStoreSpotlight",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "campaignId": "{{exist_sb_campaign_id}}",
+          "storeSpotlightAds": [
+            {
+              "name": "swagger-api-case-test-storespotlight",
+              "state": "ENABLED",
+              "creative": {
+                "subpages": [
+                  {
+                    "asin": "[NEEDS_REAL_VALUE]",
+                    "url": "[NEEDS_REAL_VALUE]",
+                    "pageTitle": "swagger-test-subpage"
+                  }
+                ],
+                "headline": "swagger-api-case test headline",
+                "brandLogoCrop": {
+                  "left": 0,
+                  "top": 0,
+                  "width": 400,
+                  "height": 400
+                },
+                "brandName": "swagger-test-brand",
+                "brandLogoAssetID": "[NEEDS_REAL_VALUE]"
+              },
+              "landingPage": {
+                "type": "STORE",
+                "url": "[NEEDS_REAL_VALUE]",
+                "pageType": "STORE"
+              },
+              "adGroupId": "[NEEDS_REAL_VALUE]"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/CampaignCreate/V3/UpdateManualAutoCreative - 更新SB Ad创意(品牌名/Logo/ASIN组合)",
+    "description": "仅生成case供人工评估，不自动执行。单接口测试：POST /api/CampaignCreate/V3/UpdateManualAutoCreative。按adId真实修改已存在SB广告的创意内容(品牌名/Logo/ASIN列表)，365天内约112次真实调用。ES真实样本profileId/adId/brandLogoAssetID均非本测试账号，样本非本账号，需人工核实。字段结构取自真实样本(profileId/isAutoCollection/ads[adId/creative[brandLogoAssetID/brandLogoCrop/brandName/asins]])，adId需替换为本账号已存在的SB Ad ID(当前config无现成变量)，标记[NEEDS_REAL_VALUE]。此为编辑类接口，会真实覆盖原有创意内容，建议执行前先GetAssetsById查询该Ad当前creative内容并保存，执行后用后置步骤还原为原creative，保证可重复执行。",
+    "module": "CampaignSponsoredBrandCreate",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "【高风险-仅生成不执行】更新SB Ad创意(品牌名/Logo/ASIN组合)",
+        "method": "POST",
+        "base_url": "{{BASEURL}}",
+        "path": "CampaignCreate/V3/UpdateManualAutoCreative",
+        "request_body": {
+          "profileId": "{{profile_id}}",
+          "isAutoCollection": false,
+          "ads": [
+            {
+              "adId": "[NEEDS_REAL_VALUE]",
+              "creative": {
+                "brandLogoAssetID": "[NEEDS_REAL_VALUE]",
+                "brandLogoCrop": {
+                  "left": 0,
+                  "top": 0,
+                  "width": 1477,
+                  "height": 1476
+                },
+                "brandName": "swagger-test-brand",
+                "asins": [
+                  "{{target_asin}}"
+                ]
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
