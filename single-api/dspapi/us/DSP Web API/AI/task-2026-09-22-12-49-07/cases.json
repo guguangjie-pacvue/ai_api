@@ -1,0 +1,978 @@
+[
+  {
+    "name": "POST /api/AI/GetAiAdvertiserNameAndIds - 按profileIds查询广告主下拉框",
+    "description": "单接口测试：POST /api/AI/GetAiAdvertiserNameAndIds。AI创建页广告主下拉框数据源，真实调用仅profileIds一种入参形态（含前端固定追加的\"0\"哨兵值）。500条随机样本中占比约100%（500次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiAdvertiserNameAndIds",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiAdvertiserNameAndIds",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiOrderNameAndIds - 按profileIds查询Order下拉框",
+    "description": "单接口测试：POST /api/AI/GetAiOrderNameAndIds。AI创建页Order下拉框数据源，真实调用仅profileIds一种入参形态（含\"0\"哨兵值）。500条随机样本中占比约100%（500次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiOrderNameAndIds",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiOrderNameAndIds",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiTableList - 无额外筛选(仅profile+日期+分页)",
+    "description": "单接口测试：POST /api/AI/GetAiTableList。AI主列表默认查询，不传advertiserIds/orderIds/userIds/states筛选。500条随机样本中占比约75.4%（377次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiTableList(无筛选)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiTableList",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ],
+          "advertiserIds": [],
+          "orderIds": [],
+          "userIds": [],
+          "states": [],
+          "start": "2026/08/03",
+          "end": "2026/08/09",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTimeUTC",
+            "pageIndex": 1,
+            "pageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiTableList - 广告主+Order+User全筛选",
+    "description": "单接口测试：POST /api/AI/GetAiTableList。同时传advertiserIds+orderIds+userIds三个筛选维度（真实样本另含userId=20152，此处保留真实结构）。500条随机样本中占比约17.2%（86次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiTableList(全筛选)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiTableList",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "orderIds": [
+            "{{order_id}}"
+          ],
+          "userIds": [
+            20152
+          ],
+          "states": [],
+          "start": "2025/07/27",
+          "end": "2025/08/02",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTimeUTC",
+            "pageIndex": 1,
+            "pageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiTableList - 仅Order筛选",
+    "description": "单接口测试：POST /api/AI/GetAiTableList。仅传orderIds筛选，不传advertiserIds/userIds。500条随机样本中占比约5.4%（27次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiTableList(Order筛选)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiTableList",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ],
+          "advertiserIds": [],
+          "orderIds": [
+            "{{order_id}}"
+          ],
+          "userIds": [],
+          "states": [],
+          "start": "2026/02/05",
+          "end": "2026/02/11",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTimeUTC",
+            "pageIndex": 1,
+            "pageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiTableList - 仅广告主筛选",
+    "description": "单接口测试：POST /api/AI/GetAiTableList。仅传advertiserIds筛选。500条随机样本中占比约1.0%（5次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiTableList(广告主筛选)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiTableList",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "orderIds": [],
+          "userIds": [],
+          "states": [],
+          "start": "2026/03/11",
+          "end": "2026/03/17",
+          "pageInfo": {
+            "orderAsc": false,
+            "orderByField": "CreateTimeUTC",
+            "pageIndex": 1,
+            "pageSize": 25
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiPreviewTableList - 单Order预览",
+    "description": "单接口测试：POST /api/AI/GetAiPreviewTableList。orderIds数量=1的场景，真实历史Order。500条随机样本中占比约44.6%（223次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiPreviewTableList(1个Order)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiPreviewTableList",
+        "request_body": {
+          "orderIds": [
+            "2054706270701"
+          ],
+          "start": "2026/04/29",
+          "end": "2026/05/05"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiPreviewTableList - 2-5个Order预览",
+    "description": "单接口测试：POST /api/AI/GetAiPreviewTableList。orderIds数量=2-5的场景。500条随机样本中占比约31.6%（158次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiPreviewTableList(2-5个Order)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiPreviewTableList",
+        "request_body": {
+          "orderIds": [
+            "589962904475856611",
+            "589266946702469898",
+            "583251668280079694"
+          ],
+          "start": "2026/09/07",
+          "end": "2026/09/13"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiPreviewTableList - 6-20个Order预览",
+    "description": "单接口测试：POST /api/AI/GetAiPreviewTableList。orderIds数量=6-20的场景。500条随机样本中占比约12.8%（64次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiPreviewTableList(6-20个Order)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiPreviewTableList",
+        "request_body": {
+          "orderIds": [
+            "577362076068777357",
+            "578349808863363690",
+            "578641491837133599",
+            "582400163377324368",
+            "582452474840372422",
+            "585538816143111828",
+            "592805308827268057"
+          ],
+          "start": "2026/07/15",
+          "end": "2026/07/21"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiPreviewTableList - >20个Order预览",
+    "description": "单接口测试：POST /api/AI/GetAiPreviewTableList。orderIds数量>20的场景（真实样本约250条，此处截取25条代表，保留>20特征）。500条随机样本中占比约11.0%（55次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiPreviewTableList(>20个Order)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiPreviewTableList",
+        "request_body": {
+          "orderIds": [
+            "1505458100801",
+            "1694654780601",
+            "2252986020201",
+            "2363171450001",
+            "2374698840201",
+            "2458339030401",
+            "2509700270801",
+            "2717899760701",
+            "2943123530601",
+            "2975942570701",
+            "3012246860301",
+            "3161898330701",
+            "3223104950201",
+            "3379984990501",
+            "3465828860101",
+            "4072365300801",
+            "4116319990101",
+            "4448228420601",
+            "4541953130701",
+            "4561263830501",
+            "4589940900801",
+            "4607268770201",
+            "4941153710401",
+            "4997527780901",
+            "5079209760301"
+          ],
+          "start": "2026/02/09",
+          "end": "2026/02/15"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiForecastDetail - targetMetric=eCPM",
+    "description": "单接口测试：POST /api/AI/GetAiForecastDetail。targetMetric=eCPM，真实advertiserId+orderId组合。30条随机样本中占比约36.7%（11次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiForecastDetail(eCPM)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiForecastDetail",
+        "request_body": {
+          "advertiserId": "578485119808660612",
+          "orderId": "592873244106229592",
+          "start": "2026/07/01",
+          "end": "2026/07/07",
+          "targetMetric": "eCPM"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiForecastDetail - targetMetric=CTR",
+    "description": "单接口测试：POST /api/AI/GetAiForecastDetail。targetMetric=CTR，真实advertiserId+orderId组合。30条随机样本中占比约30.0%（9次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiForecastDetail(CTR)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiForecastDetail",
+        "request_body": {
+          "advertiserId": "576569079213259551",
+          "orderId": "577881760636516426",
+          "start": "2026/08/19",
+          "end": "2026/08/25",
+          "targetMetric": "CTR"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiForecastDetail - targetMetric=ROAS",
+    "description": "单接口测试：POST /api/AI/GetAiForecastDetail。targetMetric=ROAS，真实advertiserId+orderId组合。30条随机样本中占比约20.0%（6次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiForecastDetail(ROAS)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiForecastDetail",
+        "request_body": {
+          "advertiserId": "5797658410201",
+          "orderId": "582578983938622830",
+          "start": "2026/05/05",
+          "end": "2026/05/11",
+          "targetMetric": "ROAS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiForecastDetail - targetMetric=TotalROAS",
+    "description": "单接口测试：POST /api/AI/GetAiForecastDetail。targetMetric=TotalROAS，真实advertiserId+orderId组合。30条随机样本中占比约6.7%（2次）。【已知问题】本组合真实执行会复现后端bug：该Order当前无有效AI来源(source)配置，接口未做判空防护，直接抛出内部异常\"Value cannot be null. (Parameter 'source')\"并透传给前端(HTTP 200但IsSuccessStatusCode=false)，而非返回友好业务提示；不是测试数据问题，另两个真实Order+ROAS/TotalROAS组合复现一致，判定为真实bug。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiForecastDetail(TotalROAS)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiForecastDetail",
+        "request_body": {
+          "advertiserId": "583773897071777207",
+          "orderId": "581838999675939884",
+          "start": "2026/08/12",
+          "end": "2026/08/18",
+          "targetMetric": "TotalROAS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiForecastDetail - targetMetric=CPA",
+    "description": "单接口测试：POST /api/AI/GetAiForecastDetail。targetMetric=CPA，真实advertiserId+orderId组合。30条随机样本中占比约3.3%（1次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiForecastDetail(CPA)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiForecastDetail",
+        "request_body": {
+          "advertiserId": "583577193430461505",
+          "orderId": "576785857305450113",
+          "start": "2026/01/06",
+          "end": "2026/01/12",
+          "targetMetric": "CPA"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiForecastDetail - targetMetric=CPDPV",
+    "description": "单接口测试：POST /api/AI/GetAiForecastDetail。targetMetric=CPDPV，真实advertiserId+orderId组合。30条随机样本中占比约3.3%（1次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiForecastDetail(CPDPV)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiForecastDetail",
+        "request_body": {
+          "advertiserId": "576569079213259551",
+          "orderId": "591060914439112908",
+          "start": "2026/08/19",
+          "end": "2026/08/25",
+          "targetMetric": "CPDPV"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiLogTableList - 按aiId+日期查询执行日志",
+    "description": "单接口测试：POST /api/AI/GetAiLogTableList。真实历史aiId=9796，查询该AI的执行日志列表。89条随机样本中占比约100%（均为aiId+start+end三字段结构）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiLogTableList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiLogTableList",
+        "request_body": {
+          "aiId": 9796,
+          "start": "2026-03-01",
+          "end": "2026-04-30"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiLogDetailTableList - 无额外筛选(仅logId+分页)",
+    "description": "单接口测试：POST /api/AI/GetAiLogDetailTableList。真实历史logId=49742，不传objectLevel/lineItemId筛选。81条随机样本中占比约97.5%（79次）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiLogDetailTableList(无筛选)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiLogDetailTableList",
+        "request_body": {
+          "logId": 49742,
+          "objectLevel": [],
+          "lineItemId": [],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "id"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiLogDetailTableList - objectLevel=Order+lineItemId筛选",
+    "description": "单接口测试：POST /api/AI/GetAiLogDetailTableList。真实历史logId=38333，传objectLevel=[Order]+lineItemId数组筛选。81条随机样本中占比约2.5%（2次，含lineItemId为空/非空各1次，取更完整一条）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiLogDetailTableList(Order+lineItem筛选)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiLogDetailTableList",
+        "request_body": {
+          "logId": 38333,
+          "objectLevel": [
+            "Order"
+          ],
+          "lineItemId": [
+            "584426529739898617",
+            "584712279609684318",
+            "585253377739215803",
+            "589808015792240072",
+            "591399539774682143"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10,
+            "orderAsc": false,
+            "orderByField": "id"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/GetAiLogDetailLineItemNameAndIds - 按logId查询LineItem下拉框",
+    "description": "单接口测试：POST /api/AI/GetAiLogDetailLineItemNameAndIds。真实历史logId=46162，LogDetail页面lineitem下拉框数据源。60条随机样本中占比约100%（均为logId单字段结构）。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAiLogDetailLineItemNameAndIds",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAiLogDetailLineItemNameAndIds",
+        "request_body": {
+          "logId": 46162
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AI/GetAIUsers - 查询AI创建人下拉框",
+    "description": "单接口测试：GET /api/AI/GetAIUsers。无请求参数，返回裸数组(非标准wrapper)。3条随机样本中占比约100%(均为无参调用)。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAIUsers",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/GetAIUsers",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AI/Detail - 查询AI详情",
+    "description": "单接口测试：GET /api/AI/Detail?id=9796。真实历史AI记录详情查询。80条随机样本中占比约100%(均为id单参数查询)。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 Detail",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/Detail",
+        "request_body": {
+          "id": 9796
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.Id": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/Create - 创建AI(单Order,goal=Conversion/ROAS)",
+    "description": "单接口测试：POST /api/AI/Create。goal=Conversion+targetMetric=ROAS+单Order，102条随机样本中占比约23.5%（24次，最高频组合）。使用本项目共享测试Order({{order_id}})。【已知问题】真实执行发现该Order在本账号被判定为\"已设置AI\"而跳过创建(Error.message=\"Orders were partially added. We removed the orders have set AI.\")，但GetAiTableList在该profile/advertiser/order范围内(2020-2026全量日期)查询结果为0条记录——列表侧查不到\"已存在\"的AI，Create侧却判定已存在，两处数据源不一致，怀疑Create去重校验读取了软删除/历史脏数据或校验维度有误(可能按advertiser而非order匹配，因为对该advertiser下随机15个不同Order调用GetAiPreviewTableList也全部返回同样的\"already set up\"错误，而这些Order各自在GetAiTableList里也查不到独立记录)。断言仅校验请求层面IsSuccessStatusCode=true(此环境下这属实际会通过的部分，说明该异常被包装为业务提示而非HTTP错误)，创建结果本身因上述bug无法验证。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建AI",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/Create",
+        "request_body": {
+          "goal": "Conversion",
+          "orders": [
+            {
+              "orderId": "{{order_id}}",
+              "advertiserId": "{{advertiser_id_single}}",
+              "state": "Enabled",
+              "targetMetric": "ROAS",
+              "targetValue": 4,
+              "timeZone": "America/New_York"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/Update - 修改AI状态/目标【技术受限-未执行】",
+    "description": "单接口测试：POST /api/AI/Update。101条随机样本中最高频结构为单id+state+targetMetric+targetValue+goal整体覆盖式更新，占比约100%(id=6162示例结构)。【技术受限,未执行】：AI/Create在本账号被判定重复而无法产出可安全操作的自建实体id(见AI/Create case说明的真实bug)，若直接对已存在的真实AI记录(如从ES样本中看到的id=6162/9809等)执行Update，属于修改他人真实客户的实际广告优化配置，存在业务风险，故仅生成结构、不执行。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "修改AI(仅结构,未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/Update",
+        "request_body": {
+          "id": "{{ai_id_placeholder}}",
+          "state": "Paused",
+          "targetMetric": "eCPM",
+          "targetValue": 0.1,
+          "goal": "Awareness"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/BulkUpdateState - 批量置Paused【技术受限-未执行】",
+    "description": "单接口测试：POST /api/AI/BulkUpdateState。state=Paused场景，38条随机样本中占比约81.6%（31次，最高频）。【技术受限,未执行】：原因同AI/Update，无可安全操作的自建实体id，不对真实AI记录执行状态变更。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量置Paused(仅结构,未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/BulkUpdateState",
+        "request_body": {
+          "ids": [
+            "{{ai_id_placeholder}}"
+          ],
+          "state": "Paused"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/BulkUpdateState - 批量置Enabled【技术受限-未执行】",
+    "description": "单接口测试：POST /api/AI/BulkUpdateState。state=Enabled场景，38条随机样本中占比约18.4%（7次）。【技术受限,未执行】：原因同上。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量置Enabled(仅结构,未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/BulkUpdateState",
+        "request_body": {
+          "ids": [
+            "{{ai_id_placeholder}}"
+          ],
+          "state": "Enabled"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/BulkUpdateTarget - 批量修改目标(Consideration/DPVR)【技术受限-未执行】",
+    "description": "单接口测试：POST /api/AI/BulkUpdateTarget。goal=Consideration+targetMetric=DPVR场景，5条真实样本中2次(占比约40%)。【技术受限,未执行】：原因同AI/Update。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量修改目标(仅结构,未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/BulkUpdateTarget",
+        "request_body": {
+          "ids": [
+            "{{ai_id_placeholder}}"
+          ],
+          "goal": "Consideration",
+          "targetMetric": "DPVR",
+          "targetValue": 0.0075
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/BulkUpdateTarget - 批量修改目标(Conversion/ROAS)【技术受限-未执行】",
+    "description": "单接口测试：POST /api/AI/BulkUpdateTarget。goal=Conversion+targetMetric=ROAS场景，5条真实样本中3次(占比约60%)。【技术受限,未执行】：原因同AI/Update。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量修改目标(仅结构,未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/BulkUpdateTarget",
+        "request_body": {
+          "ids": [
+            "{{ai_id_placeholder}}"
+          ],
+          "goal": "Conversion",
+          "targetMetric": "ROAS",
+          "targetValue": 4
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AI/BulkDelete - 批量删除AI【技术受限-未执行】",
+    "description": "单接口测试：POST /api/AI/BulkDelete。38条随机样本中占比约100%(均为ids数组结构,数量1-25不等)。【技术受限,未执行】：原因同AI/Update，无可安全操作的自建实体id，不对真实AI记录执行删除。",
+    "module": "AI",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量删除(仅结构,未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AI/BulkDelete",
+        "request_body": {
+          "ids": [
+            "{{ai_id_placeholder}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]
