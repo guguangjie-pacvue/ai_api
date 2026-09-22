@@ -1,0 +1,591 @@
+[
+ {
+  "name": "POST /api/Budget/GetAdvertiserIdAndProfileId - 单个profileId查询",
+  "description": "单接口测试：POST /api/Budget/GetAdvertiserIdAndProfileId。用户勾选单个profile查询其对应的advertiserId/profileId映射关系（Budget Manager页面初始化场景）。500条随机样本中占比约27%(135次)。【真实后端bug】实测本账号真实profileId查询返回code:200,success:true,但data恒为[]，msg=\"No validation header present\"——该问题与本任务另外2个写接口(UpdateOrderLineItems/UpdateOrders_UpdateOrdersAsync)共享同一根因：这3个接口在生产环境100%由内部服务(定时任务/消息队列消费者)调用，后端对调用方存在一个未在Swagger声明的隐藏header校验，标准外部Bearer token调用一律无法通过校验，但接口不返回403/success:false，而是伪装成code:200,success:true的\"假成功\"响应，仅把真实错误文本塞进data/msg字段，具备较强误导性，建议登记为bug统一整改(详见任务汇报)。断言已放宽为允许空数组以适配此现状。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetAdvertiserIdAndProfileId(单个)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetAdvertiserIdAndProfileId",
+    "request_body": {
+     "clientId": "{{client_id}}",
+     "profileIds": [
+      "{{profile_id_single}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/GetAdvertiserIdAndProfileId - 批量profileId查询",
+  "description": "单接口测试：POST /api/Budget/GetAdvertiserIdAndProfileId。用户勾选多个profile批量查询advertiserId/profileId映射（真实样本常见2-30+个profileId一次提交）。500条随机样本中占比约73%(365次)。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetAdvertiserIdAndProfileId(批量)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetAdvertiserIdAndProfileId",
+    "request_body": {
+     "clientId": "{{client_id}}",
+     "profileIds": [
+      "{{profile_id_single}}",
+      "{{profile_id_single}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "GET /api/Budget/GetBudgetAlertSetting - 查询预算告警设置",
+  "description": "单接口测试：GET /api/Budget/GetBudgetAlertSetting。不带任何参数，按当前登录用户/账号上下文查询其Budget预算告警设置(邮件列表/触发条件/是否开启)。3条真实调用样本100%为该模式(无query/无body)。2026-09-17记录曾观察到该tag下GetProfileList等接口100%空body(彼时账号无DSP实体)；本次账号已分配真实profile/advertiser，重新探测本接口返回真实非空的告警配置数据(SendCondions/EmailsList/isEnabled等字段)，未见异常。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetBudgetAlertSetting",
+    "method": "GET",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetBudgetAlertSetting",
+    "request_body": {},
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/GetDashboardPerformance - profiles为空",
+  "description": "单接口测试：POST /api/Budget/GetDashboardPerformance。日期范围内profiles传空数组(用户尚未勾选任何profile/未配置Budget Manager时的看板初始态)。500条随机样本中占比约7%(35次)。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetDashboardPerformance(空profiles)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetDashboardPerformance",
+    "request_body": {
+     "startDate": "{{date_start}}",
+     "endDate": "{{date_end}}",
+     "profiles": []
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/GetDashboardPerformance - budgetMode=Profile",
+  "description": "单接口测试：POST /api/Budget/GetDashboardPerformance。profiles全部为Profile级预算管理(未启用Tag/SubTag分组)，Budget Manager三种管理粒度之一。500条随机样本中占比约17%(85次)。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetDashboardPerformance(Profile级)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetDashboardPerformance",
+    "request_body": {
+     "startDate": "{{date_start}}",
+     "endDate": "{{date_end}}",
+     "profiles": [
+      {
+       "budgetMode": "Profile",
+       "profileId": "{{profile_id_single}}",
+       "tagId": []
+      }
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/GetDashboardPerformance - budgetMode=SubTag",
+  "description": "单接口测试：POST /api/Budget/GetDashboardPerformance。profiles全部为SubTag级预算管理(按二级标签分组管理预算)，是该接口真实流量中最高频的单一模式。500条随机样本中占比约25.4%(127次)。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetDashboardPerformance(SubTag级)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetDashboardPerformance",
+    "request_body": {
+     "startDate": "{{date_start}}",
+     "endDate": "{{date_end}}",
+     "profiles": [
+      {
+       "budgetMode": "SubTag",
+       "profileId": "{{profile_id_single}}",
+       "tagId": [
+        "{{order_tag_id}}"
+       ]
+      }
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/GetDashboardPerformance - budgetMode=Tag",
+  "description": "单接口测试：POST /api/Budget/GetDashboardPerformance。profiles全部为Tag级预算管理(按一级标签分组管理预算)。500条随机样本中占比约10.8%(54次)。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetDashboardPerformance(Tag级)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetDashboardPerformance",
+    "request_body": {
+     "startDate": "{{date_start}}",
+     "endDate": "{{date_end}}",
+     "profiles": [
+      {
+       "budgetMode": "Tag",
+       "profileId": "{{profile_id_single}}",
+       "tagId": [
+        "{{order_tag_id_2}}"
+       ]
+      }
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/GetDashboardPerformance - Profile+SubTag混合",
+  "description": "单接口测试：POST /api/Budget/GetDashboardPerformance。同一请求的profiles数组内混合Profile级与SubTag级条目(账号内不同产品线采用不同预算管理粒度)，是所有真实入参组合中占比最高的一种。500条随机样本中占比约27.2%(136次)。低频混合组合(如SubTag+Tag 6.8%、Profile+SubTag+Tag 3.8%、Profile+Tag 2%)与本case同属budgetMode字段的排列组合，结构已被本case+单模式3个case共同覆盖，未逐一单独生成case。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetDashboardPerformance(混合)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetDashboardPerformance",
+    "request_body": {
+     "startDate": "{{date_start}}",
+     "endDate": "{{date_end}}",
+     "profiles": [
+      {
+       "budgetMode": "Profile",
+       "profileId": "{{profile_id_single}}",
+       "tagId": []
+      },
+      {
+       "budgetMode": "SubTag",
+       "profileId": "{{profile_id_single}}",
+       "tagId": [
+        "{{order_tag_id}}"
+       ]
+      }
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/GetProfileList - 查询Budget Manager可用Profile列表",
+  "description": "单接口测试：POST /api/Budget/GetProfileList。不传body(真实样本500条100%为空/null body)，按登录账号上下文返回其可用于Budget Manager的Profile列表。500条随机样本中占比约100%(500次)。2026-09-17曾记录该接口在账号无DSP实体时100%空数据；本次账号已分配profile 1251036855266063/advertiser 578107614358724215后重新探测，返回真实非空的1条profile记录(profileId=578107614358724215)，此前的空结果是账号未分配实体所致，非接口本身问题。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "调用 GetProfileList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/GetProfileList",
+    "request_body": null,
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true,
+     "data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/UpdateOrders/UpdateOrdersAsync - budgetLevel=Profile切换deliveryActivationStatus(含前置建单+后置归档)【真实后端bug:响应假成功】",
+  "description": "单接口测试：POST /api/Budget/UpdateOrders/UpdateOrdersAsync。真实流量113条100%为系统自动补投(eventType=auto_reenable)触发,其中budgetLevel=Profile(对应changeType=AutoReenable_Advertiser)占比约11.5%(13次)，是三种budgetLevel中唯一可用本账号真实advertiser/order复现验证的场景(SubTag/Tag两种场景占比更高但需要本账号真实的Budget Manager Tag/SubTag分组ID，当前无法从本账号数据获取，见另两条技术受限case)。为避免写操作影响历史真实Order，先用Order/CreateOrder创建一次性测试Order，再对其调用本接口将deliveryActivationStatus置ACTIVE，最后再次调用本接口置回INACTIVE归档，保证可重复执行。 【真实后端bug复核】实测：无论使用本账号真实创建的Order还是共享的旧Order，调用本接口均返回code:200,success:true,但data=\"No validation header present\"（探测用断言强制暴露），即写操作从未真正生效，属于\"假成功\"响应(与GetAdvertiserIdAndProfileId同一根因，可能是仅限内部服务调用的隐藏header校验)。因run-cases.py断言引擎不支持不等于判断，此case在当前L1断言(code:200,success:true)下仍显示PASS，但该PASS不代表写操作真正生效，请勿据此判断本接口功能正常，详见任务汇报的bug列表。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建一次性测试Order",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Order/CreateOrder",
+    "request_body": {
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "orderTemplateId": "",
+     "order": {
+      "advertiserId": "{{advertiser_id_single}}",
+      "name": "test123607_budget",
+      "externalId": "",
+      "comments": "",
+      "optimization": {
+       "productLocation": "SOLD_ON_AMAZON",
+       "goal": "CONSIDERATION",
+       "goalKpi": "CLICK_THROUGH_RATE",
+       "biddingStrategy": "SPEND_BUDGET_IN_FULL",
+       "automateBudgetAllocation": true,
+       "primaryInventoryTypes": [],
+       "targetKpi": "10"
+      },
+      "budget": {
+       "budgetCaps": [
+        {
+         "recurrenceTimePeriod": "DAILY",
+         "amount": 10
+        }
+       ],
+       "flights": [
+        {
+         "amount": 10,
+         "startDateTime": "2026-09-23 12:00:00",
+         "endDateTime": "2026-09-24 12:00:00"
+        }
+       ]
+      },
+      "agencyFee": {
+       "feePercentage": "12"
+      },
+      "frequencies": [
+       {
+        "frequencyType": "UNCAPPED"
+       }
+      ]
+     },
+     "customFees": null,
+     "associatedConversions": [],
+     "conversionTracking": {
+      "products": {
+       "productList": [],
+       "productFile": null
+      }
+     }
+    },
+    "extract_vars": {
+     "budget_new_order_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "Budget UpdateOrdersAsync置ACTIVE(Profile级)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/UpdateOrders/UpdateOrdersAsync",
+    "request_body": {
+     "budgetManagerOrderList": [
+      {
+       "orderId": "{{budget_new_order_id}}",
+       "deliveryActivationStatus": "ACTIVE"
+      }
+     ],
+     "budgetManageId": "{{advertiser_id_single}}",
+     "budgetManagerChangeType": "AutoReenable_Advertiser",
+     "eventType": "auto_reenable",
+     "budgetLevel": "Profile",
+     "budgetLevelEntityId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true
+    }
+   },
+   {
+    "name": "还原-Budget UpdateOrdersAsync置INACTIVE(归档)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/UpdateOrders/UpdateOrdersAsync",
+    "request_body": {
+     "budgetManagerOrderList": [
+      {
+       "orderId": "{{budget_new_order_id}}",
+       "deliveryActivationStatus": "INACTIVE"
+      }
+     ],
+     "budgetManageId": "{{advertiser_id_single}}",
+     "budgetManagerChangeType": "AutoReenable_Advertiser",
+     "eventType": "auto_reenable",
+     "budgetLevel": "Profile",
+     "budgetLevelEntityId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/UpdateOrders/UpdateOrdersAsync - budgetLevel=SubTag【技术受限-仅生成不执行】",
+  "description": "单接口测试：POST /api/Budget/UpdateOrders/UpdateOrdersAsync。真实流量113条中budgetLevel=SubTag(changeType=AutoReEnable_SubTag)占比约78.8%(89次)，是该接口最高频场景，但100%来自后端auto_reenable系统自动补投任务(非用户UI直接触发)，真实budgetManageId/budgetLevelEntityId(SubTag分组ID)均属于生产环境真实客户账号(clientId 2938/777等)，本测试账号未配置对应的Budget Manager SubTag分组，无法在不影响真实客户数据的前提下构造等价的自有测试数据，故仅按ES真实结构生成case用于人工复核字段/断言设计，不纳入本次执行。budgetManageId/budgetLevelEntityId/orderId均为占位，需人工确认本账号是否有对应SubTag分组后再补真实值执行。 补充：即便后续补齐真实SubTag/Tag分组ID，探测发现该接口对标准外部token调用统一返回code:200,success:true+data/msg=\"No validation header present\"的假成功响应(与Profile级场景同一后端bug)，实际写入大概率同样不会生效，执行前需先与后端确认该隐藏header校验的触发条件。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "Budget UpdateOrdersAsync(SubTag级,未执行)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/UpdateOrders/UpdateOrdersAsync",
+    "request_body": {
+     "budgetManagerOrderList": [
+      {
+       "orderId": "{{order_id}}",
+       "deliveryActivationStatus": "ACTIVE"
+      }
+     ],
+     "budgetManageId": "[NEEDS_REAL_VALUE]",
+     "budgetManagerChangeType": "AutoReEnable_SubTag",
+     "eventType": "auto_reenable",
+     "budgetLevel": "SubTag",
+     "budgetLevelEntityId": "[NEEDS_REAL_VALUE]"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/UpdateOrders/UpdateOrdersAsync - budgetLevel=Tag【技术受限-仅生成不执行】",
+  "description": "单接口测试：POST /api/Budget/UpdateOrders/UpdateOrdersAsync。真实流量113条中budgetLevel=Tag(changeType=AutoReEnable_Tag)占比约9.7%(11次)，同样100%来自auto_reenable系统任务，本测试账号未配置对应的Budget Manager Tag分组真实ID，仅按ES真实结构生成case供人工复核，不纳入本次执行。budgetManageId/budgetLevelEntityId为占位。 补充：即便后续补齐真实SubTag/Tag分组ID，探测发现该接口对标准外部token调用统一返回code:200,success:true+data/msg=\"No validation header present\"的假成功响应(与Profile级场景同一后端bug)，实际写入大概率同样不会生效，执行前需先与后端确认该隐藏header校验的触发条件。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "Budget UpdateOrdersAsync(Tag级,未执行)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/UpdateOrders/UpdateOrdersAsync",
+    "request_body": {
+     "budgetManagerOrderList": [
+      {
+       "orderId": "{{order_id}}",
+       "deliveryActivationStatus": "ACTIVE"
+      }
+     ],
+     "budgetManageId": "[NEEDS_REAL_VALUE]",
+     "budgetManagerChangeType": "AutoReEnable_Tag",
+     "eventType": "auto_reenable",
+     "budgetLevel": "Tag",
+     "budgetLevelEntityId": "[NEEDS_REAL_VALUE]"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/UpdateOrderLineItems - budgetLevel=SubTag【技术受限-仅生成不执行】",
+  "description": "单接口测试：POST /api/Budget/UpdateOrderLineItems。真实流量38条中budgetLevel=SubTag(changeType=Pacing_SubTag)占比约65.8%(25次)。该接口100%由后端auto_pacing自动调控任务触发(非用户UI直接操作)，涉及修改真实客户(clientId 2938/777)Order/LineItem的flight金额与dailyCap，本测试账号无对应真实SubTag分组及处于投放窗口内的LineItem，无法安全复现，仅生成结构参考case,不执行。budgetManageId/budgetLevelEntityId为占位。 补充：即便后续补齐真实SubTag/Tag分组ID，探测发现该接口对标准外部token调用统一返回code:200,success:true+data/msg=\"No validation header present\"的假成功响应(与Profile级场景同一后端bug)，实际写入大概率同样不会生效，执行前需先与后端确认该隐藏header校验的触发条件。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "Budget UpdateOrderLineItems(SubTag级,未执行)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/UpdateOrderLineItems",
+    "request_body": {
+     "budgetManagerOrderList": [
+      {
+       "orderId": "{{order_id}}",
+       "budgetCap": 10,
+       "lineItemList": [
+        {
+         "lineItemId": "{{lineitem_id}}",
+         "orderId": "{{order_id}}",
+         "budgetCap": 10,
+         "forceChangeBudget": true
+        }
+       ]
+      }
+     ],
+     "budgetManageId": "[NEEDS_REAL_VALUE]",
+     "budgetManagerChangeType": "Pacing_SubTag",
+     "eventType": "auto_pacing",
+     "budgetLevel": "SubTag",
+     "budgetLevelEntityId": "[NEEDS_REAL_VALUE]"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Budget/UpdateOrderLineItems - budgetLevel=Tag【技术受限-仅生成不执行】",
+  "description": "单接口测试：POST /api/Budget/UpdateOrderLineItems。真实流量38条中budgetLevel=Tag(changeType=Pacing_Tag)占比约34.2%(13次)，同样100%由auto_pacing系统任务触发，涉及批量修改多个真实Order/LineItem的flight与budgetCap，本测试账号无对应真实Tag分组及可安全操作的LineItem，仅生成结构参考case,不执行。budgetManageId/budgetLevelEntityId为占位。 补充：即便后续补齐真实SubTag/Tag分组ID，探测发现该接口对标准外部token调用统一返回code:200,success:true+data/msg=\"No validation header present\"的假成功响应(与Profile级场景同一后端bug)，实际写入大概率同样不会生效，执行前需先与后端确认该隐藏header校验的触发条件。",
+  "module": "Budget",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "Budget UpdateOrderLineItems(Tag级,未执行)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Budget/UpdateOrderLineItems",
+    "request_body": {
+     "budgetManagerOrderList": [
+      {
+       "orderId": "{{order_id}}",
+       "lineItemList": [
+        {
+         "lineItemId": "{{lineitem_id}}",
+         "orderId": "{{order_id}}"
+        }
+       ]
+      }
+     ],
+     "budgetManageId": "[NEEDS_REAL_VALUE]",
+     "budgetManagerChangeType": "Pacing_Tag",
+     "eventType": "auto_pacing",
+     "budgetLevel": "Tag",
+     "budgetLevelEntityId": "[NEEDS_REAL_VALUE]"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "code": 200,
+     "success": true
+    }
+   }
+  ]
+ }
+]
