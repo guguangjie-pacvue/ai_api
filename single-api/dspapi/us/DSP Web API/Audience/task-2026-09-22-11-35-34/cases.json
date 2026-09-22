@@ -1,0 +1,1065 @@
+[
+  {
+    "name": "GET /api/Audience/GetAudienceBlackList - 获取当前账号黑名单列表",
+    "description": "单接口测试：GET Audience/GetAudienceBlackList。无参数，返回当前client/user下全部audience黑名单(本账号真实已有blackListId=1410\"Default\")。500条随机样本中占比约100%(542次，全部无参数)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取黑名单列表",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceBlackList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Audience/GetAudienceBlackListDetail - 按blackListId查询黑名单明细",
+    "description": "单接口测试：GET Audience/GetAudienceBlackListDetail。按blackListId查询该黑名单下的audience明细列表，用本账号真实blackListId=1410(Default)。500条随机样本中占比约87.4%(437次，按blackListId精确查询为唯一真实模式，其余为长尾其他blackListId)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询黑名单明细",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceBlackListDetail",
+        "request_body": {
+          "blackListId": "1410"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetAudienceGroupIdAndName - 场景1:仅按advertiserIds查询",
+    "description": "单接口测试：POST Audience/GetAudienceGroupIdAndName。仅传advertiserIds，不传includeUnnamed/clientId。500条随机样本中占比约48.8%(244次)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询group id和名称",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceGroupIdAndName",
+        "request_body": {
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetAudienceGroupIdAndName - 场景2:advertiserIds为空+clientId+includeUnnamed",
+    "description": "单接口测试：POST Audience/GetAudienceGroupIdAndName。advertiserIds传空数组，附加clientId和includeUnnamed=true(管理端按clientId全量查询模式)。500条随机样本中占比约45.4%(227次)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询group id和名称(按clientId)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceGroupIdAndName",
+        "request_body": {
+          "advertiserIds": [],
+          "clientId": 62,
+          "includeUnnamed": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetAudienceGroupIdAndName - 场景3:advertiserIds+includeUnnamed",
+    "description": "单接口测试：POST Audience/GetAudienceGroupIdAndName。传advertiserIds且includeUnnamed=true(含未命名/已归档分组)。500条随机样本中占比约5.8%(29次)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询group id和名称(含未命名)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceGroupIdAndName",
+        "request_body": {
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "includeUnnamed": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetAudienceId - 按advertiserId+audienceName查询audienceId",
+    "description": "单接口测试：POST Audience/GetAudienceId。按advertiserId+精确audienceName查询对应的audienceId，用本账号真实存在的目录audience \"IM - Automotive Battery Testers\"。500条随机样本中占比约100%(该字段组合为唯一真实模式)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询audienceId",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceId",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "audienceName": "IM - Automotive Battery Testers"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetAudienceOverlaps - 查询audience重叠度报告",
+    "description": "单接口测试：POST Audience/GetAudienceOverlaps。500条随机样本中占比约100%(全部字段组合一致)。注意：本账号真实advertiser(578107614358724215)被后端判定为\"Global advertiser\"，该类型广告主统一被拒绝(非本接口专属限制，GetAudienceOverlaps/ExportAudienceOverlap两个接口在本账号下均复现同一限制)，属账号类型限制非缺陷，断言为该真实业务拒绝响应。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询audience重叠度",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceOverlaps",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "audienceId": "384466733249666714",
+          "profileId": "{{profile_id_single}}",
+          "audienceCategory": [],
+          "audienceSizeSymbolType": 1,
+          "overlapAffinitySymbolType": 1,
+          "audienceSizeValue": 1,
+          "overlapAffinityValue": "0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": false,
+          "HttpStatusCode": 400
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Audience/GetAudiencesName - 按名称关键字模糊搜索audience(输入联想)",
+    "description": "单接口测试：GET Audience/GetAudiencesName。按audiencesName关键字+aid做输入联想式模糊搜索，真实调用均为该字段组合，仅关键字文本各不相同(典型输入框联想场景)。500条随机样本(实际57条为全量)中占比约100%。响应为裸数组(无Error/Data包装)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按名称模糊搜索",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudiencesName",
+        "request_body": {
+          "audiencesName": "IM",
+          "aid": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Audience/GetCategory - 获取audience分类目录",
+    "description": "单接口测试：GET Audience/GetCategory。无参数，返回平台级固定分类目录(Advertiser audiences/Custom-built/Demographic/In-market/Lifestyle)，与广告主无关的全局枚举。500条随机样本中占比约100%(全部无参数)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "获取分类目录",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetCategory",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetDSPAudienceGroupChart - 场景1:按日期+filters查询图表数据",
+    "description": "单接口测试：POST Audience/GetDSPAudienceGroupChart。标准日期范围+TotalCost filter查询。500条随机样本中占比约97.8%(489次)。响应结构为{Data,PageInfo,CustomData}，无Error/IsSuccessStatusCode包装。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询group图表数据",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetDSPAudienceGroupChart",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "advertiserIds": [],
+          "audienceGroupIds": [],
+          "showUnnamed": true,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 0,
+            "orderAsc": false,
+            "orderByField": "TotalCost"
+          },
+          "filters": [
+            {
+              "field": "TotalCost",
+              "operand": "Greater",
+              "value": 0
+            }
+          ],
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetDSPAudienceGroupChart - 场景2:空body调用",
+    "description": "单接口测试：POST Audience/GetDSPAudienceGroupChart。ES真实样本中存在约2.2%(11/500)请求体为空的调用（异常/边界输入，仍在1%阈值之上如实覆盖）。本框架用{}近似空body(无法复现0字节body)。🔴发现真实bug：空body调用HTTP 200但响应体直接泄露后端NullReferenceException：{\"Data\":null,\"PageInfo\":null,\"CustomData\":null,\"ErrorMessage\":\"Object reference not set to an instance of an object.\"}，未做空body的判空/校验分支处理。ES真实生产流量里约2.2%的调用正在稳定命中这个异常。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "空body调用(复现NullReferenceException)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetDSPAudienceGroupChart",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "ErrorMessage": "Object reference not set to an instance of an object."
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetDSPAudienceGroupList - 场景1:标准日期查询(无filters)",
+    "description": "单接口测试：POST Audience/GetDSPAudienceGroupList。标准日期范围查询，不带filters。500条随机样本中占比约90.4%(452次)。响应结构为{Data,PageInfo,CustomData}，无Error/IsSuccessStatusCode包装。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询group列表",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetDSPAudienceGroupList",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "advertiserIds": [],
+          "audienceGroupIds": [],
+          "showUnnamed": true,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 20,
+            "orderAsc": false,
+            "orderByField": "TotalCost"
+          },
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetDSPAudienceGroupList - 场景2:带TotalCost filter查询",
+    "description": "单接口测试：POST Audience/GetDSPAudienceGroupList。带TotalCost filter。500条随机样本中占比约7.6%(38次)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询group列表(带filter)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetDSPAudienceGroupList",
+        "request_body": {
+          "start": "{{date_start_mdy}}",
+          "end": "{{date_end_mdy}}",
+          "advertiserIds": [],
+          "audienceGroupIds": [],
+          "showUnnamed": true,
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 0,
+            "orderAsc": false,
+            "orderByField": "TotalCost"
+          },
+          "filters": [
+            {
+              "field": "TotalCost",
+              "operand": "Greater",
+              "value": 0
+            }
+          ],
+          "profileIds": [
+            "{{profile_id_single}}",
+            "0"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetDSPAudienceGroupList - 场景3:空body调用",
+    "description": "单接口测试：POST Audience/GetDSPAudienceGroupList。ES真实样本中存在约2.0%(10/500)请求体为空的调用。本框架用{}近似空body。🔴与GetDSPAudienceGroupChart同源真实bug：空body调用HTTP 200但响应体泄露NullReferenceException：{\"Data\":null,\"PageInfo\":null,\"CustomData\":null,\"ErrorMessage\":\"Object reference not set to an instance of an object.\"}。ES真实生产流量里约2.0%的调用正在稳定命中。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "空body调用(复现NullReferenceException)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetDSPAudienceGroupList",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "ErrorMessage": "Object reference not set to an instance of an object."
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/GetLineItemsByOrderIds - 按orderIds批量查询lineItem",
+    "description": "单接口测试：POST Audience/GetLineItemsByOrderIds。请求体为orderId数组，用本账号真实order_id。500条随机样本(实际30条为全量)中占比约100%(全部为纯数组body)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按order查询lineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetLineItemsByOrderIds",
+        "request_body": [
+          "{{order_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Audience/GetRelatedLineItems - 按audienceGroupId查询关联lineItem",
+    "description": "单接口测试：GET Audience/GetRelatedLineItems。按audienceGroupId查询该分组已关联的lineItem，用本账号真实存在的audienceGroupId=1550021849516081152(此前任务遗留的真实分组)。500条随机样本(实际159条为全量)中占比约100%。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询关联lineItem",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetRelatedLineItems",
+        "request_body": {
+          "audienceGroupId": "1550021849516081152"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Audience/GetSegmentTargetingViewByGroupId - 按groupId查询segment定向详情",
+    "description": "单接口测试：GET Audience/GetSegmentTargetingViewByGroupId。按audienceGroupId查询该分组的segment定向配置详情，用本账号真实存在的audienceGroupId=1550021849516081152。500条随机样本中占比约100%。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询segment定向详情",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetSegmentTargetingViewByGroupId",
+        "request_body": {
+          "audienceGroupId": "1550021849516081152"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/AddAudienceBlackListDetail - 向黑名单添加audience名称(含清理)",
+    "description": "单接口测试：POST Audience/AddAudienceBlackListDetail。向本任务专用测试黑名单(blackListId=1411,\"test113535-throwaway\"，本任务用AddAudienceBlackList新建的隔离测试资源，不影响共享的Default黑名单1410)添加一条audience名称，随后用extract_vars抓取新增detail的真实Id，调用DeleteAudienceBlackListDetail精确清理，验证清理后为空。500条随机样本(实际3条为全量)中占比约100%(blackListId+audienceNames数组为唯一真实模式)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "添加黑名单明细",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/AddAudienceBlackListDetail",
+        "request_body": {
+          "blackListId": 1411,
+          "audienceNames": [
+            "test-blacklist-entry-{{date_start}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "查询明细获取新增Id",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceBlackListDetail",
+        "request_body": {
+          "blackListId": "1411"
+        },
+        "extract_vars": {
+          "new_detail_id": "Data[0].Id"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "清理:删除刚添加的明细",
+        "method": "DELETE",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/DeleteAudienceBlackListDetail",
+        "request_body": {
+          "blackListDetailId": "{{new_detail_id}}",
+          "blackListId": 1411
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "验证清理后为空",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/GetAudienceBlackListDetail",
+        "request_body": {
+          "blackListId": "1411"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": []
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/Audience/UpdateAudienceBlackList - 重命名黑名单(改名后还原)",
+    "description": "单接口测试：PUT Audience/UpdateAudienceBlackList。对本任务专用测试黑名单(blackListId=1411)重命名为临时值，随后立即还原为原名\"test113535-throwaway\"，保证可重复执行、不留残留。500条随机样本(实际4条为全量)中占比约100%(blackListId+blackListName为唯一真实模式)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "改名为临时值",
+        "method": "PUT",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/UpdateAudienceBlackList",
+        "request_body": {
+          "blackListId": 1411,
+          "blackListName": "test-renamed-{{date_start}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "还原为原名",
+        "method": "PUT",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/UpdateAudienceBlackList",
+        "request_body": {
+          "blackListId": 1411,
+          "blackListName": "test113535-throwaway"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/CreateAudienceGroup - 创建audience group(仅执行1轮)",
+    "description": "单接口测试：POST Audience/CreateAudienceGroup。用profileId/advertiserId(本账号)+segmentTargeting(引用Amazon公共目录In-market分类的segmentId，与私有Custom-built类不同，公共目录跨广告主通用可安全复用)创建audience group，extract_vars抓取真实groupId供后续Update/Apply/Bulk步骤链式复用。500条随机样本(实际165条为全量)中占比约100%。🔴仅执行1轮：探测发现AudienceGroupBulk的deleteGroup:true不会真正删除group(详见AudienceGroupBulk case描述)，若清理不彻底重跑会因\"相同segment组合重复创建\"被业务层判定失败，因此本chain只安全执行一次，不做第二轮回归。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建audience group",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/CreateAudienceGroup",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "groupName": "test113535-audience-group-final",
+          "target": "DPVR",
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "In-market",
+                    "dspFee": 0,
+                    "segmentId": "382297963225343375",
+                    "segmentName": "IM - Herbs, Spices & Seasonings",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ANY",
+                "intraOperator": "AND"
+              }
+            ]
+          }
+        },
+        "extract_vars": {
+          "final_group_id": "Data"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/UpdateAudienceGroup - 更新刚创建的audience group(仅执行1轮)",
+    "description": "单接口测试：POST Audience/UpdateAudienceGroup。更新上一个case创建的group(groupId通过run-cases.py全局变量跨case复用)的名称/target。500条随机样本(实际140条为全量)中占比约100%。🔴仅执行1轮，原因同CreateAudienceGroup case。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "更新audience group",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/UpdateAudienceGroup",
+        "request_body": {
+          "groupId": "{{final_group_id}}",
+          "groupName": "test113535-audience-group-final-renamed",
+          "target": "eCPM",
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "In-market",
+                    "dspFee": 0,
+                    "segmentId": "382297963225343375",
+                    "segmentName": "IM - Herbs, Spices & Seasonings",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ANY",
+                "intraOperator": "AND"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/AudienceGroupApply - 应用audience group到lineItem(仅执行1轮)",
+    "description": "单接口测试：POST Audience/AudienceGroupApply。将上一步的group应用到本账号真实lineitem_id。500条随机样本(实际48条为全量)中占比约100%。🔴仅执行1轮，原因同上。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "应用group到lineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/AudienceGroupApply",
+        "request_body": {
+          "groupId": "{{final_group_id}}",
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/AudienceGroupBulk - 批量更新target(真实场景)+批量删除清理(仅执行1轮)",
+    "description": "单接口测试：POST Audience/AudienceGroupBulk。500条随机样本(实际仅1条为全量流量)中占比100%的真实场景是批量更新target(不含deleteGroup)，先按此场景对group批量改target。随后调用deleteGroup:true尝试清理。🔴发现真实问题：deleteGroup:true返回IsSuccessStatusCode:true但并未真正删除该group——事后用GetSegmentTargetingViewByGroupId仍能查到完整segmentGroups配置，且GetAudienceGroupIdAndName(includeUnnamed:true)里该groupId仍然存在(仅groupName被清空，显示为形如\"{广告主名}_{日期}_{id后10位}\"的占位名)，因此本chain全程只安全执行1轮，不做第二轮回归，避免残留group越积越多；已产生的3个测试group(1550021849516081152【本任务开始前既有】/1551799692390563840/1551800197565120512/本case新建的{{final_group_id}})需要工程侧确认是否有真正的物理删除方式。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量更新target(真实场景)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/AudienceGroupBulk",
+        "request_body": {
+          "groupIds": [
+            "{{final_group_id}}"
+          ],
+          "target": "ROAS"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "尝试批量删除清理(实测未真正生效，见case描述)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/AudienceGroupBulk",
+        "request_body": {
+          "groupIds": [
+            "{{final_group_id}}"
+          ],
+          "deleteGroup": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/RefreshAdvertiserAudiences - 刷新广告主audience数据(仅执行1次)",
+    "description": "单接口测试：POST Audience/RefreshAdvertiserAudiences。会触发从Amazon真实拉取该广告主的audience数据(类似RefreshAmcInstance/RunNow等真实外呼接口)，按既往用户决定仅执行1次、不跑第二轮以避免重复触发真实成本。500条随机样本(实际231条为全量)中占比约100%(profileId+advertiserId为唯一真实模式)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "刷新广告主audience",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/RefreshAdvertiserAudiences",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audience/ExportAudienceOverlap - 导出audience重叠度报告",
+    "description": "单接口测试：POST Audience/ExportAudienceOverlap。500条随机样本(实际41条为全量)中占比约100%(字段组合一致)。与GetAudienceOverlaps相同，本账号广告主类型(Global advertiser)被后端拒绝——实测响应不是JSON而是纯文本(text/plain, 54字节)，内容即\"Invalid request: Global advertisers are not supported.\"错误文本，run-cases.py按$binary识别。属账号类型限制非缺陷，非真正的重叠度导出文件。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "导出audience重叠度",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/ExportAudienceOverlap",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "audienceId": "384466733249666714",
+          "profileId": "{{profile_id_single}}",
+          "audienceCategory": [
+            "Lifestyle",
+            "In-market",
+            "Demographic"
+          ],
+          "audienceSizeSymbolType": 1,
+          "overlapAffinitySymbolType": 1,
+          "audienceSizeValue": 1,
+          "overlapAffinityValue": "0",
+          "columnFilter": [
+            "name",
+            "marketplace",
+            "size",
+            "reachForecastDataRange",
+            "category",
+            "affinity"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Audience/CreateAudiences - PRODUCT_PURCHASES",
+    "description": "【高风险-仅生成不执行】单接口测试：POST Audience/CreateAudiences。经实际探测确认：①该接口直接向Amazon真实创建custom audience广告定向实体(非Pacvue内部记录，idempotencyKey字段是Amazon Ads API幂等创建的标志性字段)；②本tag内唯一可能的清理接口DeleteAutoTestDspAudiences请求体为空、无任何作用域参数(无法限定只删除本次创建的实体)、ES 365天零流量(从未被任何真实调用使用过)，本会话尝试准备该接口的调用素材时被Claude Code auto模式安全分类器以\"Interfere With Workloads\"拦截，判定为高风险信号；③该tag内其余接口均无法真正删除/归档已创建的Audience(仅AddAudienceBlackListDetail可将其加入黑名单抑制显示，但不能移除真实实体)。三条证据叠加，判定为不可逆操作，遵照规则改为仅生成不执行，留待用户/工程侧确认安全的清理方式后再补测执行。 该audienceType(PRODUCT_PURCHASES)在500条随机样本的audience条目中占比约76.7%(1318/1718次涉及的audience条目)(1718次请求共3846条audience条目里的分布)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建PRODUCT_PURCHASES类型audience(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/CreateAudiences",
+        "request_body": {
+          "aid": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "audiences": [
+            {
+              "name": "test-CreateAudience-ProductPurchases",
+              "audienceType": "PRODUCT_PURCHASES",
+              "lookback": 180,
+              "description": "test automation ProductPurchases audience",
+              "idempotencyKey": "11111111-1111-4111-8111-111111111111",
+              "rules": [
+                {
+                  "clause": "INCLUDE",
+                  "attributeType": "ASIN",
+                  "operator": "ONE_OF",
+                  "attributeValues": [
+                    "B0DRPRJVWN",
+                    "B0DRPRXZNG"
+                  ]
+                }
+              ],
+              "country": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Audience/CreateAudiences - PRODUCT_SEARCH",
+    "description": "【高风险-仅生成不执行】单接口测试：POST Audience/CreateAudiences。经实际探测确认：①该接口直接向Amazon真实创建custom audience广告定向实体(非Pacvue内部记录，idempotencyKey字段是Amazon Ads API幂等创建的标志性字段)；②本tag内唯一可能的清理接口DeleteAutoTestDspAudiences请求体为空、无任何作用域参数(无法限定只删除本次创建的实体)、ES 365天零流量(从未被任何真实调用使用过)，本会话尝试准备该接口的调用素材时被Claude Code auto模式安全分类器以\"Interfere With Workloads\"拦截，判定为高风险信号；③该tag内其余接口均无法真正删除/归档已创建的Audience(仅AddAudienceBlackListDetail可将其加入黑名单抑制显示，但不能移除真实实体)。三条证据叠加，判定为不可逆操作，遵照规则改为仅生成不执行，留待用户/工程侧确认安全的清理方式后再补测执行。 该audienceType(PRODUCT_SEARCH)在500条随机样本的audience条目中占比约58.9%(1012/1718次)(1718次请求共3846条audience条目里的分布)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建PRODUCT_SEARCH类型audience(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/CreateAudiences",
+        "request_body": {
+          "aid": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "audiences": [
+            {
+              "name": "test-CreateAudience-ProductSearch",
+              "audienceType": "PRODUCT_SEARCH",
+              "lookback": 90,
+              "description": "test automation ProductSearch audience",
+              "idempotencyKey": "22222222-2222-4222-8222-222222222222",
+              "rules": [
+                {
+                  "clause": "INCLUDE",
+                  "attributeType": "ASIN",
+                  "operator": "ONE_OF",
+                  "attributeValues": [
+                    "B0DRPRJVWN"
+                  ]
+                }
+              ],
+              "country": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Audience/CreateAudiences - PRODUCT_VIEWS",
+    "description": "【高风险-仅生成不执行】单接口测试：POST Audience/CreateAudiences。经实际探测确认：①该接口直接向Amazon真实创建custom audience广告定向实体(非Pacvue内部记录，idempotencyKey字段是Amazon Ads API幂等创建的标志性字段)；②本tag内唯一可能的清理接口DeleteAutoTestDspAudiences请求体为空、无任何作用域参数(无法限定只删除本次创建的实体)、ES 365天零流量(从未被任何真实调用使用过)，本会话尝试准备该接口的调用素材时被Claude Code auto模式安全分类器以\"Interfere With Workloads\"拦截，判定为高风险信号；③该tag内其余接口均无法真正删除/归档已创建的Audience(仅AddAudienceBlackListDetail可将其加入黑名单抑制显示，但不能移除真实实体)。三条证据叠加，判定为不可逆操作，遵照规则改为仅生成不执行，留待用户/工程侧确认安全的清理方式后再补测执行。 该audienceType(PRODUCT_VIEWS)在500条随机样本的audience条目中占比约50.5%(867/1718次)(1718次请求共3846条audience条目里的分布)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建PRODUCT_VIEWS类型audience(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/CreateAudiences",
+        "request_body": {
+          "aid": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "audiences": [
+            {
+              "name": "test-CreateAudience-ProductViews",
+              "audienceType": "PRODUCT_VIEWS",
+              "lookback": 14,
+              "description": "test automation ProductViews audience",
+              "idempotencyKey": "33333333-3333-4333-8333-333333333333",
+              "rules": [
+                {
+                  "clause": "INCLUDE",
+                  "attributeType": "ASIN",
+                  "operator": "ONE_OF",
+                  "attributeValues": [
+                    "B0CKLZVF41",
+                    "B0CKLZZWXW"
+                  ]
+                }
+              ],
+              "country": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【高风险-仅生成不执行】POST /api/Audience/CreateAudiences - PRODUCT_SIMS",
+    "description": "【高风险-仅生成不执行】单接口测试：POST Audience/CreateAudiences。经实际探测确认：①该接口直接向Amazon真实创建custom audience广告定向实体(非Pacvue内部记录，idempotencyKey字段是Amazon Ads API幂等创建的标志性字段)；②本tag内唯一可能的清理接口DeleteAutoTestDspAudiences请求体为空、无任何作用域参数(无法限定只删除本次创建的实体)、ES 365天零流量(从未被任何真实调用使用过)，本会话尝试准备该接口的调用素材时被Claude Code auto模式安全分类器以\"Interfere With Workloads\"拦截，判定为高风险信号；③该tag内其余接口均无法真正删除/归档已创建的Audience(仅AddAudienceBlackListDetail可将其加入黑名单抑制显示，但不能移除真实实体)。三条证据叠加，判定为不可逆操作，遵照规则改为仅生成不执行，留待用户/工程侧确认安全的清理方式后再补测执行。 该audienceType(PRODUCT_SIMS)在500条随机样本的audience条目中占比约37.8%(649/1718次)(1718次请求共3846条audience条目里的分布)。",
+    "module": "Audience",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建PRODUCT_SIMS类型audience(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audience/CreateAudiences",
+        "request_body": {
+          "aid": "{{advertiser_id_single}}",
+          "profileId": "{{profile_id_single}}",
+          "audiences": [
+            {
+              "name": "test-CreateAudience-ProductSims",
+              "audienceType": "PRODUCT_SIMS",
+              "lookback": 14,
+              "description": "test automation ProductSims audience",
+              "idempotencyKey": "44444444-4444-4444-8444-444444444444",
+              "rules": [
+                {
+                  "clause": "INCLUDE",
+                  "attributeType": "ASIN",
+                  "operator": "ONE_OF",
+                  "attributeValues": [
+                    "B0000YB96K"
+                  ]
+                }
+              ],
+              "country": null
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]
