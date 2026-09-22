@@ -1,0 +1,306 @@
+[
+  {
+    "name": "POST /api/Dashboard/GetMyCategoryWidgets - 查询当前用户Dashboard组件配置",
+    "description": "单接口测试：POST /api/Dashboard/GetMyCategoryWidgets。查询当前登录用户的Dashboard分类组件配置(默认isAll=false)。500条随机样本中占比约99.4%（497次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetMyCategoryWidgets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/GetMyCategoryWidgets",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "userCategoryWidgetList": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/SaveWidgetsNoCategory - 自定义模板+勾选具体widget(含还原)",
+    "description": "单接口测试：POST /api/Dashboard/SaveWidgetsNoCategory。保存当前登录用户自己的Dashboard组件显示偏好(每用户级配置，非共享/全局数据，可安全反复写入)，本场景为自定义模板(widgetTemplate=0)+勾选具体widget列表。第2步恢复为默认模板1，避免残留自定义状态影响下次验证。500条随机样本中占比约51.8%（259次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "保存自定义组件配置(模板0+勾选列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/SaveWidgetsNoCategory",
+        "request_body": {
+          "widgetTemplate": "0",
+          "widgetIsCheck": [
+            {
+              "isCheck": true,
+              "widgetID": 2
+            },
+            {
+              "isCheck": true,
+              "widgetID": 16
+            },
+            {
+              "isCheck": true,
+              "widgetID": 17
+            },
+            {
+              "isCheck": true,
+              "widgetID": 3
+            },
+            {
+              "isCheck": true,
+              "widgetID": 4
+            },
+            {
+              "isCheck": true,
+              "widgetID": 6
+            },
+            {
+              "isCheck": false,
+              "widgetID": 29
+            },
+            {
+              "isCheck": false,
+              "widgetID": 28
+            },
+            {
+              "isCheck": false,
+              "widgetID": 26
+            },
+            {
+              "isCheck": false,
+              "widgetID": 25
+            },
+            {
+              "isCheck": false,
+              "widgetID": 24
+            },
+            {
+              "isCheck": false,
+              "widgetID": 23
+            },
+            {
+              "isCheck": false,
+              "widgetID": 20
+            },
+            {
+              "isCheck": false,
+              "widgetID": 15
+            },
+            {
+              "isCheck": false,
+              "widgetID": 14
+            },
+            {
+              "isCheck": false,
+              "widgetID": 19
+            },
+            {
+              "isCheck": false,
+              "widgetID": 18
+            },
+            {
+              "isCheck": false,
+              "widgetID": 13
+            },
+            {
+              "isCheck": false,
+              "widgetID": 33
+            },
+            {
+              "isCheck": false,
+              "widgetID": 12
+            },
+            {
+              "isCheck": false,
+              "widgetID": 11
+            },
+            {
+              "isCheck": false,
+              "widgetID": 10
+            },
+            {
+              "isCheck": false,
+              "widgetID": 9
+            },
+            {
+              "isCheck": false,
+              "widgetID": 8
+            },
+            {
+              "isCheck": false,
+              "widgetID": 7
+            },
+            {
+              "isCheck": false,
+              "widgetID": 5
+            },
+            {
+              "isCheck": false,
+              "widgetID": 22
+            },
+            {
+              "isCheck": false,
+              "widgetID": 32
+            },
+            {
+              "isCheck": false,
+              "widgetID": 21
+            },
+            {
+              "isCheck": false,
+              "widgetID": 1
+            },
+            {
+              "isCheck": false,
+              "widgetID": 34
+            },
+            {
+              "isCheck": false,
+              "widgetID": 31
+            },
+            {
+              "isCheck": false,
+              "widgetID": 30
+            },
+            {
+              "isCheck": false,
+              "widgetID": 27
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "还原为默认模板1(不留自定义残留)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/SaveWidgetsNoCategory",
+        "request_body": {
+          "widgetTemplate": "1"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/SaveWidgetsNoCategory - 切换预设模板1",
+    "description": "单接口测试：POST /api/Dashboard/SaveWidgetsNoCategory。选择预设模板1(不自定义具体widget)。500条随机样本中占比约13.0%（65次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SaveWidgetsNoCategory(模板1)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/SaveWidgetsNoCategory",
+        "request_body": {
+          "widgetTemplate": "1"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/SaveWidgetsNoCategory - 切换预设模板2",
+    "description": "单接口测试：POST /api/Dashboard/SaveWidgetsNoCategory。选择预设模板2(不自定义具体widget)。500条随机样本中占比约16.6%（83次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SaveWidgetsNoCategory(模板2)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/SaveWidgetsNoCategory",
+        "request_body": {
+          "widgetTemplate": "2"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": 1
+        }
+      },
+      {
+        "name": "还原为默认模板1",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/SaveWidgetsNoCategory",
+        "request_body": {
+          "widgetTemplate": "1"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": 1
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Dashboard/SaveWidgetsNoCategory - 切换预设模板3",
+    "description": "单接口测试：POST /api/Dashboard/SaveWidgetsNoCategory。选择预设模板3(不自定义具体widget)。500条随机样本中占比约18.6%（93次）。",
+    "module": "Dashboard",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SaveWidgetsNoCategory(模板3)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/SaveWidgetsNoCategory",
+        "request_body": {
+          "widgetTemplate": "3"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": 1
+        }
+      },
+      {
+        "name": "还原为默认模板1",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Dashboard/SaveWidgetsNoCategory",
+        "request_body": {
+          "widgetTemplate": "1"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": 1
+        }
+      }
+    ]
+  }
+]
