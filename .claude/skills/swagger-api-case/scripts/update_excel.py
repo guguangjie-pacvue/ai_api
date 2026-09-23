@@ -44,7 +44,7 @@ def _find_or_create_col(ws, col_name, header_font=None, header_fill=None, width=
     return col_idx
 
 # ── Phase 5.1 — 模块汇总 ─────────────────────────────────────────────────────
-def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
+def update_summary(wb, swagger_title, module, env, cases, report, endpoints, module_path=None):
     ws = wb['模块汇总']
 
     # cases.json 的 step 只有相对 path（不含/api前缀），先用 norm_path 按 base_url 补全成
@@ -66,6 +66,8 @@ def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
         if 'Tag' in v:        col_idx['module']    = c
     for name in ('Case数', '通过率', '接口覆盖率'):
         col_idx[name] = _find_or_create_col(ws, name, summary_font, summary_fill)
+    if module_path:
+        col_idx['模块路径'] = _find_or_create_col(ws, '模块路径', summary_font, summary_fill, width=60)
 
     total  = cov['case_total']
     pass_rate = (str(cov['pass_rate_pct']) + '%') if cov['pass_rate_pct'] is not None else 'N/A'
@@ -92,6 +94,8 @@ def update_summary(wb, swagger_title, module, env, cases, report, endpoints):
             ws.cell(r, col_idx['Case数'],    total).alignment    = Alignment(horizontal='center')
             ws.cell(r, col_idx['通过率'],    pass_rate).alignment = Alignment(horizontal='center')
             ws.cell(r, col_idx['接口覆盖率'], coverage).alignment  = Alignment(horizontal='center')
+            if module_path and '模块路径' in col_idx:
+                ws.cell(r, col_idx['模块路径'], module_path).alignment = Alignment(horizontal='left')
             print(f'[模块汇总] {swagger_title}/{module}[{env}]: case={total}, pass={pass_rate}, coverage={coverage}')
             return
     print(f'[模块汇总] WARNING: row not found for {swagger_title}/{module}[{env}]')
@@ -228,8 +232,15 @@ def main():
     with open(args.report,    encoding='utf-8-sig') as f: report    = json.load(f)
     with open(args.endpoints, encoding='utf-8-sig') as f: endpoints = json.load(f)
 
+    # 模块路径 = cases 路径去掉 /task-*/cases.json 的那一级模块目录，前缀 ai_api\，反斜杠
+    # 用 rfind 定位仓库内的 single-api（仓库父目录本身也叫 single-api，绝对路径会出现两次）
+    _norm = args.cases.replace('\\', '/')
+    _i = _norm.rfind('single-api/')
+    _rel = _norm[_i:] if _i >= 0 else _norm
+    module_path = ('ai_api/' + '/'.join(_rel.split('/')[:-2])).replace('/', '\\')
+
     wb = openpyxl.load_workbook(args.excel)
-    update_summary(wb, args.swagger_title, args.module, args.env, cases, report, endpoints)
+    update_summary(wb, args.swagger_title, args.module, args.env, cases, report, endpoints, module_path)
     # swagger_title 对多平台服务（rule-api）传的就是平台名（如 criteo），用于按
     # 平台列过滤场景覆盖写入行；标准服务的 sheet 没有 Platform 列，此参数会被忽略。
     update_scenario_col(wb, args.sheet_name, args.env, cases, report, platform=args.swagger_title)
