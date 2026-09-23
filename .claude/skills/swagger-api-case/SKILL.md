@@ -63,7 +63,7 @@ single-api/
 
 1. **Swagger 是结构权威**：字段类型、必填性、枚举值以 Swagger 为准，ES 只提供真实值样本
 2. **禁止猜参数值**：无 Swagger example 且 ES 无样本的字段，值填 `"[NEEDS_REAL_VALUE]"` 并在末尾列出待补清单
-3. **动态 ID 必须变量化**：数字 ID / timestamp 替换为 `{{var}}`，不得硬编码
+3. **动态 ID 必须变量化**：数字 ID / timestamp 替换为 `{{variables.<名字>}}`（config 变量）或 `{{<名字>}}`（extract_vars 提取值），不得硬编码
 4. **每次新建目录**：`single-api/<服务>/<swagger>/<模块>/task-<YYYY-MM-DD-HH-MM-SS>/`，禁止复用
 5. **config.json 跟服务走**：位于 `single-api/<服务>/config.json`，一个服务一份（含该服务所有 base_url）
 6. **服务身份先查 `single-api/services.json`**：swagger→服务 的映射维护在此表，命中就不问用户；未命中才问并回写
@@ -328,9 +328,15 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 
 **只生成 Happy Path case，每个真实用户场景对应一个 case。不生成异常、边界、缺失字段等额外 case。**
 
+**🔴 变量写法（点号命名空间，强制）**：
+- config.json `variables` 里的变量 → 一律写成 `{{variables.<名字>}}`（如 `{{variables.profile_id}}`、`{{variables.platform}}`）
+- config.json `base_urls` 里的地址 → 一律写成 `{{base_urls.<名字>}}`（如 `{{base_urls.BASEURL}}`、`{{base_urls.RULEBASEURL}}`）
+- 登录 token → 保持扁平 `{{token}}`（由 runner 登录后注入，**不要**写成 `{{variables.token}}`）
+- `extract_vars` 提取的运行时变量 → 保持扁平 `{{<名字>}}`（同一 case 内跨步骤有效，不加 `variables.` 前缀）
+
 **🔴 ES 入参处理规则**：
-- 数字型 ID（profileId、campaignId 等）→ 替换为 `{{profile_id}}`、`{{campaign_id}}` 等 config 变量
-- 日期字段 → 替换为 `{{date_start_mdy}}`、`{{date_end_mdy}}` 等运行时变量
+- 数字型 ID（profileId、campaignId 等）→ 替换为 `{{variables.profile_id}}`、`{{variables.campaign_id}}` 等 config 变量
+- 日期字段 → 替换为 `{{variables.date_start_mdy}}`、`{{variables.date_end_mdy}}` 等运行时变量
 - `ToMarket` / `toMarket` → **保留 ES 真实值，不做变量化**（体现真实市场分布）
 - 其余字段保持 ES 原始值不变，不推断、不替换
 
@@ -372,7 +378,8 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
       {
         "name": "调用 <接口末段名>",
         "method": "<METHOD>",
-        "base_url": "<按来源 swagger 选，见下方 base_url 规则，如 {{INDBASEURL}} / {{BASEURL}}>",
+        "base_url": "<按来源 swagger 选，见下方 base_url 规则，如 {{base_urls.INDBASEURL}} / {{base_urls.BASEURL}}>",
+        "headers": "{{headers}}",
         "path": "<path>",
         "request_body": {},
         "extract_vars": {},
@@ -386,16 +393,18 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 ]
 ```
 
+🔴 **每个 step 必须带 `"headers": "{{headers}}"`**：值固定引用 config.json 顶层的 `headers` 对象（含 `Authorization: {{token}}` + `productline`）。这样每个 case 自带 header、可直接上平台执行，而 token 仍只在 config 一处维护（平台/定时任务只需刷 config.headers 里的 token）。**不要在 step 里写死 token**。
+
 **base_url 选择规则**（🔴 按 **endpoint 来源的 swagger** 选，不是按路径前缀）：
 
 同一服务下多个 swagger 的路径可能都以 `/api/` 开头，**不能用路径前缀判断**。要看该 endpoint 是从哪个 swagger 扫出来的，映射到对应 base_url 变量：
 
 | endpoint 来源 swagger（info.title） | base_url 变量 | 实际地址 |
 |---|---|---|
-| `Amazon.Advertising.Api` | `{{INDBASEURL}}` | `amazon-advertising-api/api/` |
-| `PacvueMainApi` | `{{BASEURL}}` | `pacvuemainapiv2/api/` |
+| `Amazon.Advertising.Api` | `{{base_urls.INDBASEURL}}` | `amazon-advertising-api/api/` |
+| `PacvueMainApi` | `{{base_urls.BASEURL}}` | `pacvuemainapiv2/api/` |
 
-其他服务的 base_url 变量（按需在 config.json 的 `base_urls` 里补充）：`{{META}}`(meta-api)、`{{DAYPARTING}}`(micro-api-v2)、`{{FILTER_COLUMN}}`(filter-column)、`{{AIURL}}`(ai-api)、`{{RULEBASEURL}}`(rule-api，实际地址 `rule-api/`，路径不带 `/api/` 前缀，直接拼 `RULEBASEURL` + path)。
+其他服务的 base_url 变量（按需在 config.json 的 `base_urls` 里补充）：`{{base_urls.META}}`(meta-api)、`{{base_urls.DAYPARTING}}`(micro-api-v2)、`{{base_urls.FILTER_COLUMN}}`(filter-column)、`{{base_urls.AIURL}}`(ai-api)、`{{base_urls.RULEBASEURL}}`(rule-api，实际地址 `rule-api/`，路径不带 `/api/` 前缀，直接拼 base_url + path)。
 
 🔴 **生成前先确认**：该 endpoint 在哪个 `endpoints-<title>.json` 里 → 对应 base_url 变量 → config.json 的 `base_urls` 里必须有这个变量。
 
@@ -417,7 +426,7 @@ python ".claude/skills/swagger-api-case/scripts/backfill_pct.py" `
 
 3. **用 `extract_vars` 抓取新建实体 ID**，后置步骤引用，**禁止硬编码 ID**。
    - 提取路径支持数组下标，如 `data.result[0].APIResult[0].entityId`
-   - 框架自动把提取值注入后续步骤的 `{{var}}`（同一 case 内跨步骤有效）
+   - 框架自动把提取值注入后续步骤,引用时用**扁平**写法 `{{<提取名>}}`（不加 `variables.` 前缀，同一 case 内跨步骤有效）
 
 4. **断言用业务成功信号**：写操作断言 `"data": {"successCount": {"$gte": 1}}`（嵌套写法，见 Phase 3 断言路径规则；或对应的真实成功计数字段），**不能只断言 `code:200`**——很多写接口 HTTP/业务 code 都是 200 但实际 `success 0`（如 bid 超预算一半、谓词类型错误、重复创建）。
 
@@ -473,8 +482,8 @@ python ".claude/skills/swagger-api-case/scripts/summarize_report.py" \
 |------|------|------|
 | HTTP 400 | 请求体结构异常（Filters 反序列化失败） | 删除该场景的 case |
 | HTTP 200 但 FAIL | `data` 返回空列表，`$not_empty` 断言不过 | 断言改为 `$is_array` 允许空 |
-| HTTP 401 | token 过期 | 重新登录刷新 token |
-| HTTP 403 `toMarket contains illegal characters` | `{{to_market}}` 变量未替换（不经 run-cases.py 直接发请求时出现） | 必须通过 run-cases.py 执行 |
+| HTTP 401 | token 过期 | run-cases.py 已内置：遇 401 自动重新登录刷新 token 并重试一次，无需手动处理 |
+| HTTP 403 `toMarket contains illegal characters` | `{{variables.to_market}}` 变量未替换（不经 run-cases.py 直接发请求时出现） | 必须通过 run-cases.py 执行 |
 | HTTP 200 + `success:true` 但写操作 `successCount=0` / `success 0` | 写接口业务层未生效：bid 超预算一半 / 谓词类型(如 SD `type`)错误 / 同参重复创建 / 规则托管广告组拒绝 | 查看 `data.result[].APIResult[].message` 或 `ErrorMessages` 定位；修正 bid/枚举值/目标层级；确保后置清理已归档避免重复 |
 | 写操作 case 第二次跑失败（首次 PASS） | 未加后置清理，实体已存在导致重复创建失败 | 按 Phase 3.5 补后置逆操作步骤，连跑 2 次验证 |
 

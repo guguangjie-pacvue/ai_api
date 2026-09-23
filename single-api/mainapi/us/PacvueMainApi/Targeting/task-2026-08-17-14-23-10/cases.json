@@ -12,11 +12,12 @@
       {
         "name": "调用 UpdateTargetBid",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Targeting/V3/UpdateTargetBid",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "targetId": "{{target_id}}",
+          "profileId": "{{variables.profile_id}}",
+          "targetId": "{{variables.target_id}}",
           "bid": "0.5"
         },
         "extract_vars": {},
@@ -40,15 +41,16 @@
       {
         "name": "调用 UpdateTargetPATStatus",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Targeting/V3/UpdateTargetPATStatus",
         "request_body": {
           "Item": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sp_campaign_id}}",
-              "AdgroupId": "{{adgroup_id}}",
-              "TargetId": "{{target_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sp_campaign_id}}",
+              "AdgroupId": "{{variables.adgroup_id}}",
+              "TargetId": "{{variables.target_id}}",
               "CampaignType": "sponsoredProducts",
               "MatchType": "Product-Expanded"
             }
@@ -76,15 +78,16 @@
       {
         "name": "调用 UpdateTargetPATStatus",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Targeting/V3/UpdateTargetPATStatus",
         "request_body": {
           "Item": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sp_campaign_id}}",
-              "AdgroupId": "{{adgroup_id}}",
-              "TargetId": "{{target_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sp_campaign_id}}",
+              "AdgroupId": "{{variables.adgroup_id}}",
+              "TargetId": "{{variables.target_id}}",
               "CampaignType": "sponsoredProducts",
               "MatchType": "Product-Expanded"
             }
@@ -112,12 +115,13 @@
       {
         "name": "创建 SD 商品定向 PAT",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Targeting/V3/CreateSDPAT",
         "request_body": {
           "targetingClause": [
             {
-              "adGroupId": "{{sd_adgroup_id}}",
+              "adGroupId": "{{variables.sd_adgroup_id}}",
               "expression": [
                 {
                   "type": "asinSameAs",
@@ -132,9 +136,9 @@
           ],
           "adGroupsAndCampaigns": [
             {
-              "profileId": "{{profile_id}}",
-              "campaignId": "{{sd_campaign_id}}",
-              "adGroupId": "{{sd_adgroup_id}}"
+              "profileId": "{{variables.profile_id}}",
+              "campaignId": "{{variables.sd_campaign_id}}",
+              "adGroupId": "{{variables.sd_adgroup_id}}"
             }
           ]
         },
@@ -154,14 +158,15 @@
       {
         "name": "后置清理-归档新建target",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Targeting/V3/UpdateTargetPATStatus",
         "request_body": {
           "Item": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{sd_campaign_id}}",
-              "AdgroupId": "{{sd_adgroup_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.sd_campaign_id}}",
+              "AdgroupId": "{{variables.sd_adgroup_id}}",
               "TargetId": "{{created_target_id}}",
               "CampaignType": "SponsoredDisplay",
               "MatchType": ""

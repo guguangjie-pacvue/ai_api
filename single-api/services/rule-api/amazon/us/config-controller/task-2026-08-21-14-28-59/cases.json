@@ -12,7 +12,8 @@
       {
         "name": "调用 RuleActionMetrics(GET)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/RuleActionMetrics",
         "request_body": {},
         "extract_vars": {},
@@ -38,7 +39,8 @@
       {
         "name": "调用 actionMetrics(ruleType=Targeting)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/actionMetrics",
         "request_body": {
           "ruleType": "Targeting"
@@ -66,7 +68,8 @@
       {
         "name": "调用 actionMetrics(ruleType=Placement)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/actionMetrics",
         "request_body": {
           "ruleType": "Placement"
@@ -94,7 +97,8 @@
       {
         "name": "调用 actionMetrics(ruleType=Auto Refill)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/actionMetrics",
         "request_body": {
           "ruleType": "Auto Refill"
@@ -122,7 +126,8 @@
       {
         "name": "调用 actionMetrics(ruleType=Campaign)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/actionMetrics",
         "request_body": {
           "ruleType": "Campaign"
@@ -150,7 +155,8 @@
       {
         "name": "调用 actionMetrics(ruleType=Audience)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/actionMetrics",
         "request_body": {
           "ruleType": "Audience"
@@ -178,7 +184,8 @@
       {
         "name": "调用 actionMetrics(ruleType=SOV Bid)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/actionMetrics",
         "request_body": {
           "ruleType": "SOV Bid"
@@ -206,7 +213,8 @@
       {
         "name": "调用 emails",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/emails",
         "request_body": {},
         "extract_vars": {},
@@ -232,7 +240,8 @@
       {
         "name": "调用 getAddOn",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/getAddOn",
         "request_body": {},
         "extract_vars": {},
@@ -255,7 +264,8 @@
       {
         "name": "调用 getCommercePermission",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/getCommercePermission",
         "request_body": {},
         "extract_vars": {},
@@ -281,7 +291,8 @@
       {
         "name": "调用 requirementMetrics(ruleType=Targeting)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/requirementMetrics",
         "request_body": {
           "ruleType": "Targeting"
@@ -309,7 +320,8 @@
       {
         "name": "调用 ruleTypes(productLine=amazon)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/ruleTypes",
         "request_body": {
           "productLine": "amazon"
@@ -337,7 +349,8 @@
       {
         "name": "调用 ruleTypes(无过滤)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/ruleTypes",
         "request_body": {},
         "extract_vars": {},
@@ -363,8 +376,9 @@
       {
         "name": "调用 RuleActionMetrics(POST)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/config/RuleActionMetrics?productLine={{platform}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/config/RuleActionMetrics?productLine={{variables.platform}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -375,7 +389,7 @@
   },
   {
     "name": "POST /config/openAddOn - productLine=amazon",
-    "description": "单接口测试：POST /config/openAddOn。请求体字段(productLine/region/clientId)以ES真实样本{'productLine':'amazon','clientId':'3375','region':'us'}为结构依据(clientId替换为测试账号{{client_id}})。该接口90天内6条真实样本中1次返回code:200成功开通，其余因目标账号已开通该Add-On返回code:405\"Still has Commerce permission\"——即该接口对已开通的账号天然非幂等，本用例按真实成功样本的请求结构断言code:200，若测试账号已处于开通状态可能复现405，属真实业务限制而非缺陷。",
+    "description": "单接口测试：POST /config/openAddOn。请求体字段(productLine/region/clientId)以ES真实样本{'productLine':'amazon','clientId':'3375','region':'us'}为结构依据(clientId替换为测试账号{{variables.client_id}})。该接口90天内6条真实样本中1次返回code:200成功开通，其余因目标账号已开通该Add-On返回code:405\"Still has Commerce permission\"——即该接口对已开通的账号天然非幂等，本用例按真实成功样本的请求结构断言code:200，若测试账号已处于开通状态可能复现405，属真实业务限制而非缺陷。",
     "module": "config-controller",
     "granularity": "API",
     "since": "init",
@@ -386,12 +400,13 @@
       {
         "name": "调用 openAddOn",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/openAddOn",
         "request_body": {
           "productLine": "amazon",
           "region": "us",
-          "clientId": "{{client_id}}"
+          "clientId": "{{variables.client_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -413,7 +428,8 @@
       {
         "name": "调用 supportedTimeZones",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/config/supportedTimeZones",
         "request_body": {},
         "extract_vars": {},

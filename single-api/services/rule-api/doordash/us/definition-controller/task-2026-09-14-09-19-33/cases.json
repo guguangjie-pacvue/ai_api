@@ -12,17 +12,18 @@
       {
         "name": "创建doordash AdGroup规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "isPaused": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "targetType": "[\"Manual\"]",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every2days",
           "mode": "Auto",
           "productLine": "doordash",
@@ -31,11 +32,11 @@
             "ruleTargetType": [
               "Manual"
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -93,12 +94,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -106,7 +108,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_CreateAdGroup_Cleanup"
@@ -134,7 +136,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -151,7 +154,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{adg_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -177,25 +181,26 @@
       {
         "name": "创建doordash Keyword规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every3days",
           "productLine": "doordash",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -249,12 +254,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -262,7 +268,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_CreateKeyword_Cleanup"
@@ -290,7 +296,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -307,7 +314,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{kw_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -333,17 +341,18 @@
       {
         "name": "创建临时规则用于GET验证",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "isPaused": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "targetType": "[\"Manual\"]",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every2days",
           "mode": "Auto",
           "productLine": "doordash",
@@ -352,11 +361,11 @@
             "ruleTargetType": [
               "Manual"
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -414,12 +423,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -427,7 +437,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_GetById_Cleanup"
@@ -455,7 +465,8 @@
       {
         "name": "GET 定义详情",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{get_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -469,7 +480,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -498,25 +510,26 @@
       {
         "name": "创建临时规则用于追加应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every3days",
           "productLine": "doordash",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -570,12 +583,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -583,7 +597,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_AddAppliedObj_Cleanup"
@@ -611,19 +625,20 @@
       {
         "name": "追加应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/addAppliedObj",
         "request_body": {
           "productLine": "doordash",
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "ids": [
             "{{aao_rule_id}}"
           ],
           "ruleTarget": {
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -641,7 +656,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -670,7 +686,8 @@
       {
         "name": "调用 calculateNextExecutionTime(Weekly)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
           "productLine": "doordash",
@@ -690,7 +707,7 @@
   },
   {
     "name": "POST /definition/changeOwners - 变更自建规则负责人(自包含,可重复)",
-    "description": "单接口测试:POST /definition/changeOwners。该接口请求体不含productLine字段(session/JWT范围调用,无法按平台归因),按GET同等对待使用全平台90天基线(67条样本,单ruleId占比62.7%(42/67)为最高频模式,属≥1%场景)。本case自建临时规则后,将其owner显式设置为测试账号自身({{user_id}}/autoui_acount,与本账号真实创建记录中的userId/userName完全一致),验证成功后归档删除。500条随机样本中占比约62.7%(42次,全平台基线)。",
+    "description": "单接口测试:POST /definition/changeOwners。该接口请求体不含productLine字段(session/JWT范围调用,无法按平台归因),按GET同等对待使用全平台90天基线(67条样本,单ruleId占比62.7%(42/67)为最高频模式,属≥1%场景)。本case自建临时规则后,将其owner显式设置为测试账号自身({{variables.user_id}}/autoui_acount,与本账号真实创建记录中的userId/userName完全一致),验证成功后归档删除。500条随机样本中占比约62.7%(42次,全平台基线)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -701,17 +718,18 @@
       {
         "name": "创建临时规则用于变更负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "isPaused": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "targetType": "[\"Manual\"]",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every2days",
           "mode": "Auto",
           "productLine": "doordash",
@@ -720,11 +738,11 @@
             "ruleTargetType": [
               "Manual"
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -782,12 +800,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -795,7 +814,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_ChangeOwners_Cleanup"
@@ -823,14 +842,15 @@
       {
         "name": "变更规则负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeOwners",
         "request_body": {
           "ruleIds": [
             "{{co_rule_id}}"
           ],
           "userName": "autoui_acount",
-          "userId": "{{user_id}}"
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -840,7 +860,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -869,17 +890,18 @@
       {
         "name": "创建临时规则用于暂停测试",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "isPaused": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "targetType": "[\"Manual\"]",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every2days",
           "mode": "Auto",
           "productLine": "doordash",
@@ -888,11 +910,11 @@
             "ruleTargetType": [
               "Manual"
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -950,12 +972,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -963,7 +986,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_PauseStatus_Cleanup"
@@ -991,7 +1014,8 @@
       {
         "name": "暂停规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1007,7 +1031,8 @@
       {
         "name": "验证已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{pause_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1021,7 +1046,8 @@
       {
         "name": "后置清理-彻底删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1050,17 +1076,18 @@
       {
         "name": "创建临时规则用于恢复测试",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "isPaused": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "targetType": "[\"Manual\"]",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every2days",
           "mode": "Auto",
           "productLine": "doordash",
@@ -1069,11 +1096,11 @@
             "ruleTargetType": [
               "Manual"
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1131,12 +1158,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1144,7 +1172,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_ResumeStatus_Cleanup"
@@ -1172,7 +1200,8 @@
       {
         "name": "前置-先暂停规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1188,7 +1217,8 @@
       {
         "name": "恢复规则(isPaused:false)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1204,7 +1234,8 @@
       {
         "name": "验证已恢复(isPaused:false)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{resume_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1218,7 +1249,8 @@
       {
         "name": "后置清理-彻底删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1247,7 +1279,8 @@
       {
         "name": "查询commerceRuleClient",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleClient",
         "request_body": {},
         "extract_vars": {},
@@ -1270,17 +1303,18 @@
       {
         "name": "创建doordash AdGroup规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "isPaused": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "targetType": "[\"Manual\"]",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "mode": "Auto",
           "productLine": "doordash",
@@ -1289,11 +1323,11 @@
             "ruleTargetType": [
               "Manual"
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1352,12 +1386,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1365,7 +1400,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_EditAdGroup_Cleanup"
@@ -1393,18 +1428,19 @@
       {
         "name": "编辑规则(frequency->Daily)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/editRule",
         "request_body": {
           "id": "{{er_adg_rule_id}}",
           "isPaused": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "targetType": "[\"Manual\"]",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Daily",
           "mode": "Auto",
           "productLine": "doordash",
@@ -1413,11 +1449,11 @@
             "ruleTargetType": [
               "Manual"
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1475,7 +1511,8 @@
       {
         "name": "验证frequency已变更为Daily",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{er_adg_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1489,7 +1526,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1518,25 +1556,26 @@
       {
         "name": "创建doordash Keyword规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "doordash",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1591,12 +1630,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1604,7 +1644,7 @@
           },
           "timeZone": "UTC",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Doordash_EditKeyword_Cleanup"
@@ -1632,26 +1672,27 @@
       {
         "name": "编辑规则(frequency->Every3days)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/editRule",
         "request_body": {
           "id": "{{er_kw_rule_id}}",
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "UTC",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every3days",
           "productLine": "doordash",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1705,7 +1746,8 @@
       {
         "name": "验证frequency已变更为Every3days",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{er_kw_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1719,7 +1761,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [

@@ -12,17 +12,22 @@
       {
         "name": "查询广告组下的Amazon广告",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/GetAmazonAds",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "adgroupIds": ["{{ad_adgroup_id}}"]
+          "profileId": "{{variables.profile_id}}",
+          "adgroupIds": [
+            "{{variables.ad_adgroup_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -40,15 +45,16 @@
       {
         "name": "更新STV广告视频asset",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/STV/Video",
         "request_body": {
           "updates": [
             {
-              "profileId": "{{stv_profile_id}}",
-              "campaignId": "{{stv_campaign_id}}",
-              "adGroupId": "{{stv_adgroup_id}}",
-              "adId": "{{stv_ad_id}}",
+              "profileId": "{{variables.stv_profile_id}}",
+              "campaignId": "{{variables.stv_campaign_id}}",
+              "adGroupId": "{{variables.stv_adgroup_id}}",
+              "adId": "{{variables.stv_ad_id}}",
               "video": {
                 "assetId": "amzn1.assetlibrary.asset1.6f64b99f63aa0164b0f71cc1deb19270",
                 "assetVersion": "version_v1"
@@ -65,17 +71,18 @@
       {
         "name": "后置恢复-广告视频asset还原",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/STV/Video",
         "request_body": {
           "updates": [
             {
-              "profileId": "{{stv_profile_id}}",
-              "campaignId": "{{stv_campaign_id}}",
-              "adGroupId": "{{stv_adgroup_id}}",
-              "adId": "{{stv_ad_id}}",
+              "profileId": "{{variables.stv_profile_id}}",
+              "campaignId": "{{variables.stv_campaign_id}}",
+              "adGroupId": "{{variables.stv_adgroup_id}}",
+              "adId": "{{variables.stv_ad_id}}",
               "video": {
-                "assetId": "{{stv_asset_id_original}}",
+                "assetId": "{{variables.stv_asset_id_original}}",
                 "assetVersion": "version_v1"
               }
             }
@@ -102,15 +109,16 @@
       {
         "name": "暂停广告",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/UpdateAd",
         "request_body": {
           "Updates": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
-              "AdGroupId": "{{ad_adgroup_id}}",
-              "AdId": "{{ad_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
+              "AdGroupId": "{{variables.ad_adgroup_id}}",
+              "AdId": "{{variables.ad_id}}",
               "State": "PAUSED"
             }
           ]
@@ -124,15 +132,16 @@
       {
         "name": "后置恢复-广告状态改回ENABLED",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/UpdateAd",
         "request_body": {
           "Updates": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
-              "AdGroupId": "{{ad_adgroup_id}}",
-              "AdId": "{{ad_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
+              "AdGroupId": "{{variables.ad_adgroup_id}}",
+              "AdId": "{{variables.ad_id}}",
               "State": "ENABLED"
             }
           ]
@@ -158,15 +167,16 @@
       {
         "name": "启用广告",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/UpdateAd",
         "request_body": {
           "Updates": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
-              "AdGroupId": "{{ad_adgroup_id}}",
-              "AdId": "{{ad_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
+              "AdGroupId": "{{variables.ad_adgroup_id}}",
+              "AdId": "{{variables.ad_id}}",
               "State": "ENABLED"
             }
           ]
@@ -180,15 +190,16 @@
       {
         "name": "后置恢复-广告状态改回PAUSED",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/UpdateAd",
         "request_body": {
           "Updates": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
-              "AdGroupId": "{{ad_adgroup_id}}",
-              "AdId": "{{ad_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
+              "AdGroupId": "{{variables.ad_adgroup_id}}",
+              "AdId": "{{variables.ad_id}}",
               "State": "PAUSED"
             }
           ]
@@ -214,15 +225,16 @@
       {
         "name": "更新广告名称",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/UpdateAd",
         "request_body": {
           "Updates": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
-              "AdGroupId": "{{ad_adgroup_id}}",
-              "AdId": "{{ad_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
+              "AdGroupId": "{{variables.ad_adgroup_id}}",
+              "AdId": "{{variables.ad_id}}",
               "Name": "AutoCase_Ad_Updated"
             }
           ]
@@ -236,15 +248,16 @@
       {
         "name": "后置恢复-广告名称改回原名称",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAds/UpdateAd",
         "request_body": {
           "Updates": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
-              "AdGroupId": "{{ad_adgroup_id}}",
-              "AdId": "{{ad_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
+              "AdGroupId": "{{variables.ad_adgroup_id}}",
+              "AdId": "{{variables.ad_id}}",
               "Name": "12341234"
             }
           ]

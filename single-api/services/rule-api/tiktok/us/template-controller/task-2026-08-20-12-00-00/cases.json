@@ -12,7 +12,8 @@
       {
         "name": "查询收藏模板列表（onlyFavorite:true）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -40,7 +41,8 @@
       {
         "name": "查询全部模板分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
@@ -68,13 +70,16 @@
       {
         "name": "查询Targeting类型模板分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
           "onlyFavorite": false,
           "defaultCategory": false,
-          "ruleType": ["Targeting"]
+          "ruleType": [
+            "Targeting"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -96,7 +101,8 @@
       {
         "name": "获取模板创建者列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getOwners",
         "request_body": {},
         "extract_vars": {},
@@ -119,7 +125,8 @@
       {
         "name": "获取默认模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultTemplate",
         "request_body": {
           "creator": [],
@@ -147,7 +154,8 @@
       {
         "name": "获取默认模板分类列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultCategory",
         "request_body": {
           "creator": [],
@@ -175,7 +183,8 @@
       {
         "name": "通过分享密码获取模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplateListFromSharePass",
         "request_body": {
           "shareId": "TC_SYNTHETIC_SHARE_ID_001",
@@ -201,7 +210,8 @@
       {
         "name": "通过直链分享获取模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplateListFromDirectShare",
         "request_body": {
           "shareId": "TC_SYNTHETIC_DIRECT_SHARE_ID_001"
@@ -226,7 +236,8 @@
       {
         "name": "创建模板分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category",
         "request_body": {
           "categoryName": "TC_TikTok_Cat_Cleanup"
@@ -239,7 +250,8 @@
       {
         "name": "查询分类列表提取categoryId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
@@ -247,7 +259,9 @@
           "defaultCategory": false,
           "ruleType": []
         },
-        "extract_vars": {"tmp_category_id": "data[0].id"},
+        "extract_vars": {
+          "tmp_category_id": "data[0].id"
+        },
         "expected_response": {
           "code": 200
         }
@@ -255,7 +269,8 @@
       {
         "name": "编辑分类名称",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/editCategory",
         "request_body": {
           "id": "{{tmp_category_id}}",
@@ -269,7 +284,8 @@
       {
         "name": "后置清理-删除临时分类",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category/{{tmp_category_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -292,7 +308,8 @@
       {
         "name": "单个创建TikTok BudgetBoost模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template",
         "request_body": {
           "templateName": "TC_TikTok_TPL_Single_R2",
@@ -301,9 +318,27 @@
           "categoryId": null,
           "automation": [
             {
-              "requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]],
-              "dateIndex": {"length": 7, "index": 0},
-              "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
             }
           ]
         },
@@ -315,7 +350,8 @@
       {
         "name": "批量创建模板（templateRequestList格式）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/bulk",
         "request_body": {
           "templateRequestList": [
@@ -326,9 +362,27 @@
               "categoryId": null,
               "automation": [
                 {
-                  "requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]],
-                  "dateIndex": {"length": 7, "index": 0},
-                  "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}
+                  "requirements": [
+                    [
+                      {
+                        "field": "spend",
+                        "valueType": "Custom",
+                        "id": "req1",
+                        "value": "0",
+                        "operand": "GreaterOrEqual"
+                      }
+                    ]
+                  ],
+                  "dateIndex": {
+                    "length": 7,
+                    "index": 0
+                  },
+                  "action": {
+                    "action": "SetCreativeBudgetBoost",
+                    "budgetRate": 100,
+                    "value": 111,
+                    "actionName": "SetCreativeBudgetBoost"
+                  }
                 }
               ]
             }
@@ -354,7 +408,8 @@
       {
         "name": "收藏模板（isFavorite=true）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/addFavorite",
         "request_body": {
           "id": "TC_SYNTHETIC_TEMPLATE_ID",
@@ -368,7 +423,8 @@
       {
         "name": "取消收藏模板（isFavorite=false）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/addFavorite",
         "request_body": {
           "id": "TC_SYNTHETIC_TEMPLATE_ID",
@@ -394,7 +450,8 @@
       {
         "name": "前置-创建目标分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category",
         "request_body": {
           "categoryName": "TC_TikTok_MoveDst_Cleanup"
@@ -407,7 +464,8 @@
       {
         "name": "查询分类列表提取目标categoryId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
@@ -415,7 +473,9 @@
           "defaultCategory": false,
           "ruleType": []
         },
-        "extract_vars": {"tmp_move_cat_id": "data[0].id"},
+        "extract_vars": {
+          "tmp_move_cat_id": "data[0].id"
+        },
         "expected_response": {
           "code": 200
         }
@@ -423,10 +483,13 @@
       {
         "name": "移动模板到目标分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/moveTemplate",
         "request_body": {
-          "templateIds": ["TC_SYNTHETIC_TEMPLATE_ID"],
+          "templateIds": [
+            "TC_SYNTHETIC_TEMPLATE_ID"
+          ],
           "targetCategoryId": "{{tmp_move_cat_id}}"
         },
         "extract_vars": {},
@@ -437,7 +500,8 @@
       {
         "name": "后置清理-删除目标分类",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category/{{tmp_move_cat_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -460,7 +524,8 @@
       {
         "name": "前置-创建临时模板验证创建接口",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template",
         "request_body": {
           "templateName": "TC_TikTok_TPL_Edit_R2",
@@ -469,9 +534,27 @@
           "categoryId": null,
           "automation": [
             {
-              "requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]],
-              "dateIndex": {"length": 7, "index": 0},
-              "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
             }
           ]
         },
@@ -483,7 +566,8 @@
       {
         "name": "getTemplate(onlyFavorite:true)验证模板查询接口可达",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -511,7 +595,8 @@
       {
         "name": "查询收藏模板列表（探测是否有可删除的收藏模板）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -519,7 +604,9 @@
           "defaultCategory": false,
           "ruleType": []
         },
-        "extract_vars": {"tmp_del_tpl_id": "data[0].id"},
+        "extract_vars": {
+          "tmp_del_tpl_id": "data[0].id"
+        },
         "expected_response": {
           "code": 200
         }
@@ -527,7 +614,8 @@
       {
         "name": "前置-创建待删除模板（首次运行）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template",
         "request_body": {
           "templateName": "TC_TikTok_TPL_Del_R2",
@@ -544,7 +632,8 @@
       {
         "name": "收藏新创建的模板（需获取ID后才能有效操作）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/addFavorite",
         "request_body": {
           "id": "{{tmp_del_tpl_id}}",
@@ -570,7 +659,8 @@
       {
         "name": "查询默认模板列表（验证getDefaultTemplate）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultTemplate",
         "request_body": {
           "creator": [],
@@ -598,7 +688,8 @@
       {
         "name": "查询默认模板分类列表（验证getDefaultCategory）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultCategory",
         "request_body": {
           "creator": [],
@@ -614,7 +705,8 @@
       {
         "name": "editDefaultCategory验证端点可达（宽松校验，id为null返回200）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/editDefaultCategory",
         "request_body": {
           "categoryName": "TC_Default_Category_NoOp_Test"
@@ -639,7 +731,8 @@
       {
         "name": "查询默认模板提取ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultTemplate",
         "request_body": {
           "creator": [],
@@ -647,7 +740,9 @@
           "defaultCategory": true,
           "ruleType": []
         },
-        "extract_vars": {"default_tmpl_move_id": "data[0].id"},
+        "extract_vars": {
+          "default_tmpl_move_id": "data[0].id"
+        },
         "expected_response": {
           "code": 200
         }
@@ -655,7 +750,8 @@
       {
         "name": "查询默认分类提取目标分类ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultCategory",
         "request_body": {
           "creator": [],
@@ -663,7 +759,9 @@
           "defaultCategory": true,
           "ruleType": []
         },
-        "extract_vars": {"default_cat_move_id": "data[0].id"},
+        "extract_vars": {
+          "default_cat_move_id": "data[0].id"
+        },
         "expected_response": {
           "code": 200
         }
@@ -671,10 +769,13 @@
       {
         "name": "移动默认模板到默认分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/moveDefaultTemplate",
         "request_body": {
-          "templateIds": ["{{default_tmpl_move_id}}"],
+          "templateIds": [
+            "{{default_tmpl_move_id}}"
+          ],
           "targetCategoryId": "{{default_cat_move_id}}"
         },
         "extract_vars": {},

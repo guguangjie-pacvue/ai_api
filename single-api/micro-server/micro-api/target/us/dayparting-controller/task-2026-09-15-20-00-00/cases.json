@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /bulk/verify/apply - 批量校验单个campaign是否可应用dayparting(不提交)",
-    "description": "单接口测试：POST /bulk/verify/apply。批量校验单个campaign是否可应用dayparting(不提交)，真实流量中最常见的场景。500条随机样本中占比约96.6%（483次）。使用本账号自有campaign({{real_campaign_id}})+profile({{profile_id}})校验，替代ES样本中其他真实客户的campaignId/profileId。",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验单个campaign是否可应用dayparting(不提交)，真实流量中最常见的场景。500条随机样本中占比约96.6%（483次）。使用本账号自有campaign({{variables.real_campaign_id}})+profile({{variables.profile_id}})校验，替代ES样本中其他真实客户的campaignId/profileId。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -12,13 +12,14 @@
       {
         "name": "调用 bulk/verify/apply（单campaign）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/bulk/verify/apply",
         "request_body": [
           {
             "productLine": "target",
-            "campaignId": "{{real_campaign_id}}",
-            "profileId": "{{profile_id}}",
+            "campaignId": "{{variables.real_campaign_id}}",
+            "profileId": "{{variables.profile_id}}",
             "name": null,
             "tempId": null
           }
@@ -35,7 +36,7 @@
   },
   {
     "name": "POST /bulk/verify/apply - 批量校验多个campaign是否可应用dayparting(不提交)",
-    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否可应用dayparting(不提交)。500条随机样本中占比约1.4%（7次）。ES样本campaignId/profileId均为其他真实客户，已换成本账号自有campaign({{real_campaign_id}})+profile({{profile_id}})，数组内重复该值占位第二个元素以体现批量校验结构（本账号当前仅验证到该1个真实campaign）。",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否可应用dayparting(不提交)。500条随机样本中占比约1.4%（7次）。ES样本campaignId/profileId均为其他真实客户，已换成本账号自有campaign({{variables.real_campaign_id}})+profile({{variables.profile_id}})，数组内重复该值占位第二个元素以体现批量校验结构（本账号当前仅验证到该1个真实campaign）。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -46,20 +47,21 @@
       {
         "name": "调用 bulk/verify/apply（多campaign）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/bulk/verify/apply",
         "request_body": [
           {
             "productLine": "target",
-            "campaignId": "{{real_campaign_id}}",
-            "profileId": "{{profile_id}}",
+            "campaignId": "{{variables.real_campaign_id}}",
+            "profileId": "{{variables.profile_id}}",
             "name": null,
             "tempId": null
           },
           {
             "productLine": "target",
-            "campaignId": "{{real_campaign_id}}",
-            "profileId": "{{profile_id}}",
+            "campaignId": "{{variables.real_campaign_id}}",
+            "profileId": "{{variables.profile_id}}",
             "name": null,
             "tempId": null
           }
@@ -87,24 +89,25 @@
       {
         "name": "调用 amazonCampaignTag/tree",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/amazonCampaignTag/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 2,
           "tagIds": [],
           "daypartingType": 1,
           "isFilter": false,
           "name": "",
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "tempId": 0,
           "states": null,
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ]
         },
         "extract_vars": {},
@@ -130,7 +133,8 @@
       {
         "name": "调用 dayparting/apply（applyLevel=2,多profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/apply",
         "request_body": {
           "pageInfo": {
@@ -139,8 +143,8 @@
             "orderBy": null
           },
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "applyItems": null,
           "states": null,
@@ -179,7 +183,8 @@
       {
         "name": "调用 dayparting/apply（applyLevel=2,单profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/apply",
         "request_body": {
           "pageInfo": {
@@ -188,7 +193,7 @@
             "orderBy": "createdAt desc"
           },
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "applyItems": null,
           "states": null,
@@ -227,7 +232,8 @@
       {
         "name": "调用 dayparting/apply（applyLevel=1,单profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/apply",
         "request_body": {
           "pageInfo": {
@@ -236,7 +242,7 @@
             "orderBy": "createdAt desc"
           },
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "applyItems": null,
           "states": null,
@@ -275,7 +281,8 @@
       {
         "name": "调用 dayparting/apply（applyLevel=1,多profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/apply",
         "request_body": {
           "pageInfo": {
@@ -284,8 +291,8 @@
             "orderBy": "createdAt desc"
           },
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "applyItems": null,
           "states": null,
@@ -324,7 +331,8 @@
       {
         "name": "调用 applyTargetSum（lineItemIds）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/applyTargetSum",
         "request_body": {
           "productLine": "target",
@@ -358,7 +366,8 @@
       {
         "name": "调用 applyTargetSum（lineItemTags）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/applyTargetSum",
         "request_body": {
           "productLine": "target",
@@ -392,7 +401,8 @@
       {
         "name": "调用 applyTargetSum（无过滤）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/applyTargetSum",
         "request_body": {
           "productLine": "target",
@@ -419,7 +429,8 @@
       {
         "name": "调用 applyTargetSum（ids+tags）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/applyTargetSum",
         "request_body": {
           "productLine": "target",
@@ -460,23 +471,24 @@
       {
         "name": "调用 campaign/tree（多profile+全部状态）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "daypartingType": 1,
           "name": "",
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "tempId": 41430,
           "states": [
@@ -510,23 +522,24 @@
       {
         "name": "调用 campaign/tree（多profile+Active）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "daypartingType": 1,
           "name": "",
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "tempId": 58066,
           "states": [
@@ -556,22 +569,23 @@
       {
         "name": "调用 campaign/tree（单profile+Active）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "tagIds": [],
           "daypartingType": 1,
           "isFilter": true,
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "name": "",
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "tempId": 0,
           "states": [
@@ -601,22 +615,23 @@
       {
         "name": "调用 campaign/tree（单profile+全部状态）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "daypartingType": 1,
           "name": "",
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "tempId": 0,
           "states": [
@@ -650,22 +665,23 @@
       {
         "name": "调用 campaign/tree（单profile,isFilter=false）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "tagIds": [],
           "daypartingType": 1,
           "isFilter": false,
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "name": "",
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "tempId": 0,
           "states": []
@@ -682,7 +698,7 @@
   },
   {
     "name": "POST /dayparting/campaignApply - 查询campaign冲突应用情况",
-    "description": "单接口测试：POST /dayparting/campaignApply。查询campaign冲突应用情况，真实流量中唯一的场景(500条随机样本中占比100%/203次，实际总命中203条)。ES样本campaignId/profileId均为其他真实客户，已换成本账号自有campaign({{real_campaign_id}})+profile({{profile_id}})。",
+    "description": "单接口测试：POST /dayparting/campaignApply。查询campaign冲突应用情况，真实流量中唯一的场景(500条随机样本中占比100%/203次，实际总命中203条)。ES样本campaignId/profileId均为其他真实客户，已换成本账号自有campaign({{variables.real_campaign_id}})+profile({{variables.profile_id}})。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -693,12 +709,13 @@
       {
         "name": "调用 campaignApply",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaignApply",
         "request_body": {
           "productLine": "target",
-          "campaignId": "{{real_campaign_id}}",
-          "profileId": "{{profile_id}}",
+          "campaignId": "{{variables.real_campaign_id}}",
+          "profileId": "{{variables.profile_id}}",
           "name": null,
           "tempId": null
         },
@@ -725,13 +742,14 @@
       {
         "name": "调用 checkDeletePermission（单profile+单id）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/checkDeletePermission",
         "request_body": {
           "clientId": null,
           "pageInfo": null,
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "productLine": "target",
           "preferenceZone": "America/Los_Angeles",
@@ -766,14 +784,15 @@
       {
         "name": "调用 checkDeletePermission（多profile+单id）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/checkDeletePermission",
         "request_body": {
           "clientId": null,
           "pageInfo": null,
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "productLine": "target",
           "preferenceZone": "America/Los_Angeles",
@@ -808,14 +827,15 @@
       {
         "name": "调用 checkDeletePermission（多profile+多id）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/checkDeletePermission",
         "request_body": {
           "clientId": null,
           "pageInfo": null,
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "productLine": "target",
           "preferenceZone": "America/Los_Angeles",
@@ -851,13 +871,14 @@
       {
         "name": "调用 checkDeletePermission（单profile+多id）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/checkDeletePermission",
         "request_body": {
           "clientId": null,
           "pageInfo": null,
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "productLine": "target",
           "preferenceZone": "America/Los_Angeles",
@@ -901,7 +922,8 @@
       {
         "name": "调用 detailApply（applyLevels=1+2,多profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/detailApply",
         "request_body": {
           "pageInfo": {
@@ -910,8 +932,8 @@
             "orderBy": "createdAt desc"
           },
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "applyItems": [],
           "states": [],
@@ -953,7 +975,8 @@
       {
         "name": "调用 detailApply（applyLevels=1+2,单profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/detailApply",
         "request_body": {
           "pageInfo": {
@@ -962,7 +985,7 @@
             "orderBy": null
           },
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "applyItems": [],
           "states": [],
@@ -1004,7 +1027,8 @@
       {
         "name": "调用 detailApply（仅applyLevels=1,多profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/detailApply",
         "request_body": {
           "pageInfo": {
@@ -1013,8 +1037,8 @@
             "orderBy": null
           },
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "applyItems": null,
           "states": [],
@@ -1055,7 +1079,8 @@
       {
         "name": "调用 detailApply（仅applyLevels=1,单profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/detailApply",
         "request_body": {
           "pageInfo": {
@@ -1064,7 +1089,7 @@
             "orderBy": null
           },
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "applyItems": null,
           "states": [],
@@ -1105,17 +1130,18 @@
       {
         "name": "调用 profile/campaignTag/tree（不筛选tempId）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/profile/campaignTag/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 2,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "daypartingType": 1,
           "name": "",
@@ -1146,17 +1172,18 @@
       {
         "name": "调用 profile/campaignTag/tree（按tempId过滤）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/profile/campaignTag/tree",
         "request_body": {
           "productLine": "target",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 2,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "daypartingType": 1,
           "name": "",
@@ -1187,7 +1214,8 @@
       {
         "name": "调用 template/operation-log",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/template/operation-log",
         "request_body": {
           "productLine": "target",
@@ -1214,8 +1242,8 @@
     ]
   },
   {
-    "name": "POST /dayparting/template/operators?productLine=target&tempId={{fixture_template_id}} - 查询模板可操作人列表",
-    "description": "单接口测试：POST /dayparting/template/operators。查询模板可操作人列表，query参数productLine+tempId，请求体为空。500条随机样本中占比100%/19次，实际总命中19条。tempId使用本账号自有模板{{fixture_template_id}}(而非ES样本中其他真实客户的tempId)，避免跨client查询。",
+    "name": "POST /dayparting/template/operators?productLine=target&tempId={{variables.fixture_template_id}} - 查询模板可操作人列表",
+    "description": "单接口测试：POST /dayparting/template/operators。查询模板可操作人列表，query参数productLine+tempId，请求体为空。500条随机样本中占比100%/19次，实际总命中19条。tempId使用本账号自有模板{{variables.fixture_template_id}}(而非ES样本中其他真实客户的tempId)，避免跨client查询。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -1226,8 +1254,9 @@
       {
         "name": "调用 template/operators",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
-        "path": "/dayparting/template/operators?productLine=target&tempId={{fixture_template_id}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
+        "path": "/dayparting/template/operators?productLine=target&tempId={{variables.fixture_template_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -1252,18 +1281,19 @@
       {
         "name": "调用 templateNames（多profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/templateNames",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "pageInfo": {
             "pageIndex": 1,
             "pageSize": 2147483647,
             "orderBy": "createdAt desc"
           },
           "profileIds": [
-            "{{profile_id}}",
-            "{{profile_id}}"
+            "{{variables.profile_id}}",
+            "{{variables.profile_id}}"
           ],
           "productLine": "target",
           "preferenceZone": "America/Los_Angeles",
@@ -1272,7 +1302,7 @@
           "fliterQuery": false,
           "datePattern": null,
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ids": null,
           "applyCampaign": null,
@@ -1303,17 +1333,18 @@
       {
         "name": "调用 templateNames（单profile）",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/templateNames",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "pageInfo": {
             "pageIndex": 1,
             "pageSize": 2147483647,
             "orderBy": "createdAt desc"
           },
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "productLine": "target",
           "preferenceZone": "America/Los_Angeles",
@@ -1322,7 +1353,7 @@
           "fliterQuery": false,
           "datePattern": null,
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ids": null,
           "applyCampaign": null,
@@ -1342,7 +1373,7 @@
   },
   {
     "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
-    "description": "单接口测试：POST /findDayParting/campaign。按campaign查询dayparting应用，真实流量中唯一的场景(500条随机样本中占比100%/500次，实际总命中1582条)。ES样本campaignId/profileId均为其他真实客户，已换成本账号自有campaign({{real_campaign_id}})+profile({{profile_id}})。",
+    "description": "单接口测试：POST /findDayParting/campaign。按campaign查询dayparting应用，真实流量中唯一的场景(500条随机样本中占比100%/500次，实际总命中1582条)。ES样本campaignId/profileId均为其他真实客户，已换成本账号自有campaign({{variables.real_campaign_id}})+profile({{variables.profile_id}})。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -1353,12 +1384,13 @@
       {
         "name": "调用 findDayParting/campaign",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/findDayParting/campaign",
         "request_body": {
           "productLine": "target",
-          "campaignId": "{{real_campaign_id}}",
-          "profileId": "{{profile_id}}",
+          "campaignId": "{{variables.real_campaign_id}}",
+          "profileId": "{{variables.profile_id}}",
           "name": null,
           "tempId": null
         },

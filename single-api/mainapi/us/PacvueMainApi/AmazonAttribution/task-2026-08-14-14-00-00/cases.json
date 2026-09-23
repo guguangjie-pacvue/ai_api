@@ -12,8 +12,9 @@
       {
         "name": "获取归因广告主列表",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
-        "path": "/AmazonAttribution/Advertisers/{{profile_id}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/AmazonAttribution/Advertisers/{{variables.profile_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -36,8 +37,9 @@
       {
         "name": "获取归因发布商列表",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
-        "path": "/AmazonAttribution/Publishers/{{profile_id}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/AmazonAttribution/Publishers/{{variables.profile_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -63,10 +65,11 @@
       {
         "name": "获取Attribution宏标签（单宏publisher）",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAttribution/Tags/MacroTag",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "publisherIds": [
             "1"
           ]
@@ -95,10 +98,11 @@
       {
         "name": "获取Attribution宏标签（多宏publishers）",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAttribution/Tags/MacroTag",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "publisherIds": [
             "1",
             "2",
@@ -130,10 +134,11 @@
       {
         "name": "获取Attribution非宏模板标签（单非宏publisher）",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAttribution/Tags/NonMacroTemplateTag",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "publisherIds": [
             "9"
           ]
@@ -162,10 +167,11 @@
       {
         "name": "获取Attribution非宏模板标签（多非宏publishers）",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/AmazonAttribution/Tags/NonMacroTemplateTag",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "publisherIds": [
             "9",
             "10"
@@ -195,19 +201,22 @@
       {
         "name": "查询归因性能报表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/v1/amz/attribution/performance/query",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "reportDateStartTime": "{{date_start}}",
-          "reportDateEndTime": "{{date_end}}",
+          "profileId": "{{variables.profile_id}}",
+          "reportDateStartTime": "{{variables.date_start}}",
+          "reportDateEndTime": "{{variables.date_end}}",
           "publisher": "Display - Other"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -225,11 +234,12 @@
       {
         "name": "查询归因商品报表（开放结束日期）",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/v1/amz/attribution/product/query",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "reportDateStartTime": "{{date_start}}",
+          "profileId": "{{variables.profile_id}}",
+          "reportDateStartTime": "{{variables.date_start}}",
           "reportDateEndTime": null,
           "publisher": "Display - Other"
         },
@@ -237,7 +247,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -255,19 +267,22 @@
       {
         "name": "查询归因商品报表（完整日期范围）",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/v1/amz/attribution/product/query",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "reportDateStartTime": "{{date_start}}",
-          "reportDateEndTime": "{{date_end}}",
+          "profileId": "{{variables.profile_id}}",
+          "reportDateStartTime": "{{variables.date_start}}",
+          "reportDateEndTime": "{{variables.date_end}}",
           "publisher": "Display - Other"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]

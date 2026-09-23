@@ -12,32 +12,33 @@
       {
         "name": "为受控搜索词添加测试标签",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/BulkSaveKeywordsTags",
         "request_body": {
           "EditKeywordTagIds": [
-            "{{test_keyword_tag_id}}"
+            "{{variables.test_keyword_tag_id}}"
           ],
           "DeleteKeywordTagIds": [],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{searchterm_campaign_id}}"
+            "{{variables.searchterm_campaign_id}}"
           ],
           "AdgroupIds": [
-            "{{searchterm_adgroup_id}}"
+            "{{variables.searchterm_adgroup_id}}"
           ],
           "TextFilters": [
             {
               "Field": "query",
               "Operand": "LikeOr",
-              "Value": "{{searchterm_query_text}}",
+              "Value": "{{variables.searchterm_query_text}}",
               "isNot": 0
             }
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "ToMarket": "US",
           "Columns": [
@@ -76,32 +77,33 @@
       {
         "name": "后置清理-删除本次添加的测试标签",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/BulkSaveKeywordsTags",
         "request_body": {
           "EditKeywordTagIds": [],
           "DeleteKeywordTagIds": [
-            "{{test_keyword_tag_id}}"
+            "{{variables.test_keyword_tag_id}}"
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{searchterm_campaign_id}}"
+            "{{variables.searchterm_campaign_id}}"
           ],
           "AdgroupIds": [
-            "{{searchterm_adgroup_id}}"
+            "{{variables.searchterm_adgroup_id}}"
           ],
           "TextFilters": [
             {
               "Field": "query",
               "Operand": "LikeOr",
-              "Value": "{{searchterm_query_text}}",
+              "Value": "{{variables.searchterm_query_text}}",
               "isNot": 0
             }
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "ToMarket": "US",
           "Columns": [
@@ -152,24 +154,25 @@
       {
         "name": "将受控目标出价调整为0.51",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/BulkUpdateTargetBidForSearchTerm",
         "request_body": {
           "Input": {
             "ProfileIds": [
-              "{{profile_id}}"
+              "{{variables.profile_id}}"
             ],
             "CampaignIds": [
-              "{{exist_sp_campaign_id}}"
+              "{{variables.exist_sp_campaign_id}}"
             ],
             "AdgroupIds": [
-              "{{adgroup_id}}"
+              "{{variables.adgroup_id}}"
             ],
             "TargetIds": [
-              "{{target_id}}"
+              "{{variables.target_id}}"
             ],
-            "Start": "{{date_start_mdy}}",
-            "End": "{{date_end_mdy}}",
+            "Start": "{{variables.date_start_mdy}}",
+            "End": "{{variables.date_end_mdy}}",
             "Dim": "ytd",
             "ToMarket": "US",
             "Columns": [
@@ -212,24 +215,25 @@
       {
         "name": "后置清理-恢复受控目标原出价0.50",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/BulkUpdateTargetBidForSearchTerm",
         "request_body": {
           "Input": {
             "ProfileIds": [
-              "{{profile_id}}"
+              "{{variables.profile_id}}"
             ],
             "CampaignIds": [
-              "{{exist_sp_campaign_id}}"
+              "{{variables.exist_sp_campaign_id}}"
             ],
             "AdgroupIds": [
-              "{{adgroup_id}}"
+              "{{variables.adgroup_id}}"
             ],
             "TargetIds": [
-              "{{target_id}}"
+              "{{variables.target_id}}"
             ],
-            "Start": "{{date_start_mdy}}",
-            "End": "{{date_end_mdy}}",
+            "Start": "{{variables.date_start_mdy}}",
+            "End": "{{variables.date_end_mdy}}",
             "Dim": "ytd",
             "ToMarket": "US",
             "Columns": [
@@ -284,17 +288,18 @@
       {
         "name": "将受控否定关键词暂停为paused",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/ChangeSearchTermNegativeKeywordState",
         "request_body": {
           "state": "paused",
           "items": [
             {
-              "profileId": "{{profile_id}}",
-              "campaignId": "{{searchterm_campaign_id}}",
-              "adgroupId": "{{searchterm_adgroup_id}}",
-              "entityId": "{{test_sp_negative_keyword_id}}",
-              "keywordText": "{{searchterm_query_text}}",
+              "profileId": "{{variables.profile_id}}",
+              "campaignId": "{{variables.searchterm_campaign_id}}",
+              "adgroupId": "{{variables.searchterm_adgroup_id}}",
+              "entityId": "{{variables.test_sp_negative_keyword_id}}",
+              "keywordText": "{{variables.searchterm_query_text}}",
               "negativeType": "keywords"
             }
           ]
@@ -313,17 +318,18 @@
       {
         "name": "后置清理-还原受控否定关键词为enabled",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/ChangeSearchTermNegativeKeywordState",
         "request_body": {
           "state": "enabled",
           "items": [
             {
-              "profileId": "{{profile_id}}",
-              "campaignId": "{{searchterm_campaign_id}}",
-              "adgroupId": "{{searchterm_adgroup_id}}",
-              "entityId": "{{test_sp_negative_keyword_id}}",
-              "keywordText": "{{searchterm_query_text}}",
+              "profileId": "{{variables.profile_id}}",
+              "campaignId": "{{variables.searchterm_campaign_id}}",
+              "adgroupId": "{{variables.searchterm_adgroup_id}}",
+              "entityId": "{{variables.test_sp_negative_keyword_id}}",
+              "keywordText": "{{variables.searchterm_query_text}}",
               "negativeType": "keywords"
             }
           ]
@@ -354,14 +360,15 @@
       {
         "name": "调用 GetChart 默认汇总趋势",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetChart",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -413,17 +420,18 @@
       {
         "name": "调用 GetChart 活动钻取趋势",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetChart",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{searchterm_campaign_id}}"
+            "{{variables.searchterm_campaign_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -474,14 +482,15 @@
       {
         "name": "调用 GetChart 逐日趋势",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetChart",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "date",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -533,13 +542,14 @@
       {
         "name": "调用 GetNegetiveStateByKeywordText",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetNegetiveStateByKeywordText",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "campaignId": "{{searchterm_campaign_id}}",
-          "adgroupId": "{{searchterm_adgroup_id}}",
-          "KeywordText": "{{searchterm_query_text}}",
+          "profileId": "{{variables.profile_id}}",
+          "campaignId": "{{variables.searchterm_campaign_id}}",
+          "adgroupId": "{{variables.searchterm_adgroup_id}}",
+          "KeywordText": "{{variables.searchterm_query_text}}",
           "IsKeyword": true
         },
         "extract_vars": {},
@@ -566,7 +576,8 @@
       {
         "name": "调用 GetQuerySelectAll Click与ROAS筛选",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetQuerySelectAll",
         "request_body": {
           "Filters": [
@@ -584,10 +595,10 @@
             }
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -650,7 +661,8 @@
       {
         "name": "调用 GetQuerySelectAll 零转化筛选",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetQuerySelectAll",
         "request_body": {
           "Filters": [
@@ -674,10 +686,10 @@
             }
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -740,17 +752,18 @@
       {
         "name": "调用 GetReport 活动钻取分页",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetReport",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{searchterm_campaign_id}}"
+            "{{variables.searchterm_campaign_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -815,14 +828,15 @@
       {
         "name": "调用 GetReport 默认分页",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetReport",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -888,14 +902,15 @@
       {
         "name": "调用 GetReport 大页导出浏览",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetReport",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -956,14 +971,15 @@
       {
         "name": "调用 GetReport 逐日报表",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetReport",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "date",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -1029,14 +1045,15 @@
       {
         "name": "调用 GetTotal 默认汇总",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetTotal",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -1100,17 +1117,18 @@
       {
         "name": "调用 GetTotal 活动钻取汇总",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetTotal",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{searchterm_campaign_id}}"
+            "{{variables.searchterm_campaign_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "QueryType": [],
           "CampaignTypeItems": [],
@@ -1173,14 +1191,15 @@
       {
         "name": "调用 GetTotal 逐日口径汇总",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "SearchTerm/GetTotal",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "date",
           "QueryType": [],
           "CampaignTypeItems": [],

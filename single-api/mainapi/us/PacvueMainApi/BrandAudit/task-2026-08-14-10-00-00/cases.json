@@ -12,7 +12,8 @@
       {
         "name": "新建品牌追踪(US市场)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "BrandAudit/v3/BrandAsinAdd",
         "request_body": {
           "brand": "Pacvue Test Brand 20260814",
@@ -40,7 +41,8 @@
       {
         "name": "新建品牌追踪(UK市场)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "BrandAudit/v3/BrandAsinAdd",
         "request_body": {
           "brand": "Miracle-Gro UK",
@@ -68,13 +70,14 @@
       {
         "name": "更新品牌ASIN列表(CA市场,含brandId)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "BrandAudit/v3/BrandAsinAdd",
         "request_body": {
           "brand": "Enfagrow",
           "countryCode": "CA",
           "asins": "B09BG839PD,B09BG8SMGM,B07XR3HQD8,B07XL4TZ9Y",
-          "brandId": "{{brand_audit_update_brand_id}}"
+          "brandId": "{{variables.brand_audit_update_brand_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -97,10 +100,11 @@
       {
         "name": "触发品牌审计(单品牌)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "BrandAudit/v3/BrandAuditAction",
         "request_body": {
-          "brand": "{{brand_audit_id}}"
+          "brand": "{{variables.brand_audit_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -123,10 +127,14 @@
       {
         "name": "批量触发品牌审计",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "BrandAudit/v3/BrandAuditActionBulk",
         "request_body": {
-          "brands": ["{{brand_audit_id}}", "{{brand_audit_id2}}"]
+          "brands": [
+            "{{variables.brand_audit_id}}",
+            "{{variables.brand_audit_id2}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -149,10 +157,13 @@
       {
         "name": "删除品牌追踪记录(单品牌)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "BrandAudit/v3/DeleteBrandAsync",
         "request_body": {
-          "brands": ["{{brand_audit_delete_id}}"]
+          "brands": [
+            "{{variables.brand_audit_delete_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {

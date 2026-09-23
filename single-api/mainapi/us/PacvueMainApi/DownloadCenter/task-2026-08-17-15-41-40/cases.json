@@ -12,7 +12,8 @@
       {
         "name": "调用 List",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/DownloadCenter/v3/List",
         "request_body": {
           "PageInfo": {
@@ -46,7 +47,8 @@
       {
         "name": "调用 List 取下载任务",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/DownloadCenter/v3/List",
         "request_body": {
           "PageInfo": {
@@ -68,7 +70,8 @@
       {
         "name": "调用 DownloadFile",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/DownloadCenter/v3/DownloadFile",
         "request_body": {
           "id": "{{download_file_id}}",
@@ -83,7 +86,7 @@
   },
   {
     "name": "POST /api/DownloadCenter/v3/DownloadCampaignPageData - 导出Campaign报表(单日Dim=date)",
-    "description": "单接口测试：POST /api/DownloadCenter/v3/DownloadCampaignPageData。功能验证：导出 Campaign 报表，Dim=date 按日、单 Profile、单日范围({{date_end_mdy}})、最小指标列。DownloadCenter 路由 ES 零流量，入参取自同 DTO(CampaignPerfInput)的真实生产样本（真实调用走 /api/Campaign/v3/DownloadCampaignPageData，占比100%(37357次)），profileId 与日期已变量化。返回 ApiResponseBase<String>。已知限制：测试超管账号 profile 数据量过大，即便单日/2列/无过滤，后端同步导出仍触发 SQL『expression services limit』/执行超时(业务code 513)，属测试账号数据规模的后端限制，非接口契约缺陷。",
+    "description": "单接口测试：POST /api/DownloadCenter/v3/DownloadCampaignPageData。功能验证：导出 Campaign 报表，Dim=date 按日、单 Profile、单日范围({{variables.date_end_mdy}})、最小指标列。DownloadCenter 路由 ES 零流量，入参取自同 DTO(CampaignPerfInput)的真实生产样本（真实调用走 /api/Campaign/v3/DownloadCampaignPageData，占比100%(37357次)），profileId 与日期已变量化。返回 ApiResponseBase<String>。已知限制：测试超管账号 profile 数据量过大，即便单日/2列/无过滤，后端同步导出仍触发 SQL『expression services limit』/执行超时(业务code 513)，属测试账号数据规模的后端限制，非接口契约缺陷。",
     "module": "DownloadCenter",
     "granularity": "API",
     "since": "init",
@@ -94,20 +97,21 @@
       {
         "name": "调用 DownloadCampaignPageData",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/DownloadCenter/v3/DownloadCampaignPageData",
         "request_body": {
           "Dim": "date",
           "IsFead": 0,
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ToMarket": "US",
           "MetricIds": [],
           "Filters": [
             {
               "filterFieldName": "ReportDateTime",
-              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{date_end_mdy}}\",\"end\":\"{{date_end_mdy}}\"}}"
+              "filterContent": "{\"type\":1,\"FilterBetween\":{\"start\":\"{{variables.date_end_mdy}}\",\"end\":\"{{variables.date_end_mdy}}\"}}"
             }
           ],
           "OutPutFields": [

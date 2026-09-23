@@ -12,13 +12,14 @@
       {
         "name": "查询历史执行记录列表(通用)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "startDate": "2026-08-01",
           "endDate": "2026-08-31",
@@ -47,7 +48,7 @@
   },
   {
     "name": "POST /getHistoryList - 按具体规则下钻查看执行历史",
-    "description": "单接口测试：POST /getHistoryList。场景2：带mode=Auto+ruleDefinitionId+ruleName，下钻查看某一具体规则的执行历史(点击规则名进入详情)。使用测试账号自身真实规则{{real_rule_id}}。500条随机样本中占比约57.0%（285次）。",
+    "description": "单接口测试：POST /getHistoryList。场景2：带mode=Auto+ruleDefinitionId+ruleName，下钻查看某一具体规则的执行历史(点击规则名进入详情)。使用测试账号自身真实规则{{variables.real_rule_id}}。500条随机样本中占比约57.0%（285次）。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -58,16 +59,17 @@
       {
         "name": "查询历史执行记录列表(按规则下钻)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "mode": "Auto",
-          "ruleDefinitionId": "{{real_rule_id}}",
+          "ruleDefinitionId": "{{variables.real_rule_id}}",
           "ruleName": "AutoOPTCeate_Product_09zK4",
           "startDate": "2026-08-01",
           "endDate": "2026-08-31",
@@ -107,13 +109,14 @@
       {
         "name": "查询待处理规则列表(按规则名搜索)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ruleType": [],
           "ruleName": "无效词-高转换 点击>50 成交0/周",
@@ -149,13 +152,14 @@
       {
         "name": "查询待处理规则列表(无过滤)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ruleType": [],
           "pageInfo": {
@@ -190,7 +194,8 @@
       {
         "name": "查询待处理规则数量",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingRuleNum",
         "request_body": {},
         "extract_vars": {},
@@ -205,7 +210,7 @@
   },
   {
     "name": "POST /getProfiles - 执行日志Profile列表",
-    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(11821次)。场景：仅带ruleExecutionLogId(不带profileIds过滤)。500条随机样本中占比约99.0%（495次），使用测试账号自身真实执行日志{{real_execution_log_id}}。",
+    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(11821次)。场景：仅带ruleExecutionLogId(不带profileIds过滤)。500条随机样本中占比约99.0%（495次），使用测试账号自身真实执行日志{{variables.real_execution_log_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -216,12 +221,13 @@
       {
         "name": "查询执行日志Profile列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getProfiles",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
@@ -250,13 +256,14 @@
       {
         "name": "查询规则告警计数",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleAlertCount",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "dismissedRuleIds": [],
           "timeZone": "America/Los_Angeles",
@@ -287,7 +294,8 @@
       {
         "name": "查询规则失效详情",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleDeadDetail",
         "request_body": {
           "removeApplied": false,
@@ -310,7 +318,7 @@
   },
   {
     "name": "POST /queryRuleSnapshots - 按规则+实体查询执行快照",
-    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(6709次)。场景1：entityIds非空(带具体实体过滤)。500条随机样本中占比约84.2%（421次），使用测试账号自身真实规则{{real_rule_id}}+profile{{profile_id}}+entity{{target_id}}。",
+    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(6709次)。场景1：entityIds非空(带具体实体过滤)。500条随机样本中占比约84.2%（421次），使用测试账号自身真实规则{{variables.real_rule_id}}+profile{{variables.profile_id}}+entity{{variables.target_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -321,20 +329,21 @@
       {
         "name": "查询规则执行快照(带entityIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/queryRuleSnapshots",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "batchIds": [
             "00000000-0000-0000-0000-000000000000"
           ],
           "entityIds": [
-            "{{target_id}}"
+            "{{variables.target_id}}"
           ]
         },
         "extract_vars": {},
@@ -360,14 +369,15 @@
       {
         "name": "查询规则执行快照(entityIds为空)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/queryRuleSnapshots",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "batchIds": [
             "00000000-0000-0000-0000-000000000000"
@@ -386,7 +396,7 @@
   },
   {
     "name": "POST /setIgnored - 设置忽略操作(含后置还原,可重复)",
-    "description": "单接口测试：POST /setIgnored。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(1057次)。operation字段97.8%为add、2.2%为remove，均为真实业务场景(add=忽略,remove=取消忽略)。使用测试账号真实执行日志{{real_execution_log_id}}+占位detail id(0，测试账号暂无真实detail记录，服务端不校验id是否存在)。主步骤add后以remove还原，覆盖两种真实场景且保证幂等可重复执行。",
+    "description": "单接口测试：POST /setIgnored。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(1057次)。operation字段97.8%为add、2.2%为remove，均为真实业务场景(add=忽略,remove=取消忽略)。使用测试账号真实执行日志{{variables.real_execution_log_id}}+占位detail id(0，测试账号暂无真实detail记录，服务端不校验id是否存在)。主步骤add后以remove还原，覆盖两种真实场景且保证幂等可重复执行。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -397,11 +407,12 @@
       {
         "name": "设置忽略(add)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setIgnored",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],
@@ -416,11 +427,12 @@
       {
         "name": "后置还原-取消忽略(remove)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setIgnored",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],
@@ -436,7 +448,7 @@
   },
   {
     "name": "POST /setRemarks - 设置执行日志备注(含后置还原,可重复)",
-    "description": "单接口测试：POST /setRemarks。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(仅7次，样本较少)。100%为clientId+ruleExecutionLogId+ids+remarks结构。使用测试账号真实执行日志{{real_execution_log_id}}+占位detail id(0，服务端不校验id是否存在)。主步骤写入备注后以空字符串清空还原，保证幂等可重复执行。",
+    "description": "单接口测试：POST /setRemarks。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(仅7次，样本较少)。100%为clientId+ruleExecutionLogId+ids+remarks结构。使用测试账号真实执行日志{{variables.real_execution_log_id}}+占位detail id(0，服务端不校验id是否存在)。主步骤写入备注后以空字符串清空还原，保证幂等可重复执行。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -447,11 +459,12 @@
       {
         "name": "设置执行日志备注",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setRemarks",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],
@@ -466,11 +479,12 @@
       {
         "name": "后置还原-清空备注",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setRemarks",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],

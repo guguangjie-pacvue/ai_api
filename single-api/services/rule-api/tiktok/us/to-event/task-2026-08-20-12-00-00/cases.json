@@ -12,7 +12,8 @@
       {
         "name": "前置-创建临时BudgetBoost规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "clientId": "62",
@@ -20,13 +21,18 @@
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "superAdmin0913",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "tiktok",
           "mode": "Auto",
           "applyTarget": {
             "clientId": "62",
-            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
             "nonnullFrequencyCap": false,
             "nonnullMaxCpc": false,
             "nonnullDailyBudget": false,
@@ -34,32 +40,89 @@
           },
           "dayOfWeek": 4,
           "automation": [
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req2",
+                    "value": "0",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "StopCreativeBudgetBoost",
+                "budgetRate": 100,
+                "actionName": "StopCreativeBudgetBoost"
+              }
+            }
           ],
           "hour": 0,
           "ruleType": "BudgetBoost",
           "ruleName": "TC_TikTok_GetRuleDefinition_Cleanup",
-          "ruleNames": ["TC_TikTok_GetRuleDefinition_Cleanup"],
+          "ruleNames": [
+            "TC_TikTok_GetRuleDefinition_Cleanup"
+          ],
           "startDate": "2026-08-20T00:00:00",
           "isPaused": false,
           "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
-          "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
           "timeZone": "America/Los_Angeles",
-          "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_GetRuleDefinition_Cleanup"],
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_GetRuleDefinition_Cleanup"
+          ],
           "ruleNameSearchOperand": "Equal",
           "fromSnapShot": false,
           "mode": "Auto",
@@ -69,31 +132,48 @@
           "currency": "$",
           "status": []
         },
-        "extract_vars": {"tmp_rule_id_def": "data.list[0].id"},
-        "expected_response": {"code": 200}
+        "extract_vars": {
+          "tmp_rule_id_def": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "按ruleIds批量获取规则定义",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleDefinition",
         "request_body": {
-          "ruleIds": ["{{tmp_rule_id_def}}"]
+          "ruleIds": [
+            "{{tmp_rule_id_def}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       },
       {
         "name": "后置清理-删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{tmp_rule_id_def}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{tmp_rule_id_def}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -110,14 +190,19 @@
       {
         "name": "按userId统计规则数量",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleCountByUserIds",
         "request_body": {
           "productLine": "tiktok",
           "clientId": "62",
-          "userIds": ["{{user_id}}"],
+          "userIds": [
+            "{{variables.user_id}}"
+          ],
           "start": "2026-08-01 07:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "end": "2026-09-01 06:59:59"
         },
         "extract_vars": {},
@@ -140,13 +225,16 @@
       {
         "name": "获取规则类型列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleTypes",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -164,7 +252,8 @@
       {
         "name": "清除规则缓存类型",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/clearCacheTypes",
         "request_body": {},
         "extract_vars": {},
@@ -187,12 +276,19 @@
       {
         "name": "按campaignId统计规则数量",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleCountByCampaignIds",
         "request_body": {
           "productLine": "tiktok",
-          "profileIds": ["{{profile_id}}"],
-          "campaignIds": ["1852465957222417", "1869461375946946", "1866507316811025"]
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "campaignIds": [
+            "1852465957222417",
+            "1869461375946946",
+            "1866507316811025"
+          ]
         },
         "extract_vars": {},
         "expected_response": {

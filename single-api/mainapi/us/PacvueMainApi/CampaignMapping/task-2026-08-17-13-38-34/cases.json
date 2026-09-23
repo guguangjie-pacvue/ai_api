@@ -12,14 +12,17 @@
       {
         "name": "查询CampaignMapping列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetCampaignMapping",
         "request_body": {
           "profileIds": [],
           "multiSortList": [],
           "kindType": "Default",
           "dim": "ytd",
-          "SourceProfileId": ["{{profile_id}}"],
+          "SourceProfileId": [
+            "{{variables.profile_id}}"
+          ],
           "SourceCampaignId": [],
           "SourceAdgroupId": [],
           "DestinationProfileId": [],
@@ -31,8 +34,8 @@
           "taggingIds": [],
           "taggingSubIds": [],
           "campaignNameOperand": "LikeOr",
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}",
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
           "states": [],
           "isFead": 0,
           "__dim__": "ytd",
@@ -50,7 +53,9 @@
           "code": 200,
           "success": true,
           "data": {
-            "PageInfo": { "$not_empty": true }
+            "PageInfo": {
+              "$not_empty": true
+            }
           }
         }
       }
@@ -69,21 +74,35 @@
       {
         "name": "查询广告组列表(ExludeFixedPrice过滤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetAdgroups",
         "request_body": {
-          "ProfileIds": ["{{profile_id}}"],
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "CampaignTagIds": [],
-          "CampaignState": ["enabled", "paused"],
-          "TargetingType": ["null", "manual-keyword"],
-          "AdgroupState": ["enabled", "paused"],
+          "CampaignState": [
+            "enabled",
+            "paused"
+          ],
+          "TargetingType": [
+            "null",
+            "manual-keyword"
+          ],
+          "AdgroupState": [
+            "enabled",
+            "paused"
+          ],
           "ExludeFixedPrice": "1"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -101,21 +120,32 @@
       {
         "name": "查询广告组列表(IsFilterKeyword过滤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetAdgroups",
         "request_body": {
-          "ProfileIds": ["{{profile_id}}"],
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "CampaignTagIds": [],
           "TargetingType": [],
-          "AdgroupState": ["enabled", "paused"],
-          "CampaignState": ["enabled", "paused"],
+          "AdgroupState": [
+            "enabled",
+            "paused"
+          ],
+          "CampaignState": [
+            "enabled",
+            "paused"
+          ],
           "IsFilterKeyword": false
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -133,22 +163,38 @@
       {
         "name": "查询广告组列表(Tactics+市场过滤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetAdgroups",
         "request_body": {
-          "ProfileIds": ["{{profile_id}}"],
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "CampaignTagIds": [],
-          "CampaignState": ["enabled", "paused"],
-          "TargetingType": ["null", "manual-keyword"],
-          "AdgroupState": ["enabled", "paused"],
+          "CampaignState": [
+            "enabled",
+            "paused"
+          ],
+          "TargetingType": [
+            "null",
+            "manual-keyword"
+          ],
+          "AdgroupState": [
+            "enabled",
+            "paused"
+          ],
           "toMarket": "US",
-          "Tactics": ["T00020"]
+          "Tactics": [
+            "T00020"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -166,21 +212,37 @@
       {
         "name": "查询广告组列表(CampaignTagIds+ExludeFixedPrice过滤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetAdgroups",
         "request_body": {
-          "ProfileIds": ["{{profile_id}}"],
-          "CampaignTagIds": ["164694"],
-          "CampaignState": ["enabled", "paused"],
-          "TargetingType": ["null", "manual-keyword"],
-          "AdgroupState": ["enabled", "paused"],
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "CampaignTagIds": [
+            "164694"
+          ],
+          "CampaignState": [
+            "enabled",
+            "paused"
+          ],
+          "TargetingType": [
+            "null",
+            "manual-keyword"
+          ],
+          "AdgroupState": [
+            "enabled",
+            "paused"
+          ],
           "ExludeFixedPrice": "1"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -198,21 +260,34 @@
       {
         "name": "查询广告组列表(CampaignTagIds+IsFilterKeyword过滤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetAdgroups",
         "request_body": {
-          "ProfileIds": ["{{profile_id}}"],
-          "CampaignTagIds": ["610246"],
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "CampaignTagIds": [
+            "610246"
+          ],
           "TargetingType": [],
-          "AdgroupState": ["enabled", "paused"],
-          "CampaignState": ["enabled", "paused"],
+          "AdgroupState": [
+            "enabled",
+            "paused"
+          ],
+          "CampaignState": [
+            "enabled",
+            "paused"
+          ],
           "IsFilterKeyword": false
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -230,21 +305,37 @@
       {
         "name": "查询广告组列表(TargetingType+市场过滤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetAdgroups",
         "request_body": {
-          "ProfileIds": ["{{profile_id}}", "611929851593111", "779877532535614"],
+          "ProfileIds": [
+            "{{variables.profile_id}}",
+            "611929851593111",
+            "779877532535614"
+          ],
           "CampaignTagIds": [],
-          "CampaignState": ["enabled", "paused"],
-          "TargetingType": ["null", "manual-keyword"],
-          "AdgroupState": ["enabled", "paused"],
+          "CampaignState": [
+            "enabled",
+            "paused"
+          ],
+          "TargetingType": [
+            "null",
+            "manual-keyword"
+          ],
+          "AdgroupState": [
+            "enabled",
+            "paused"
+          ],
           "toMarket": "US"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -262,14 +353,17 @@
       {
         "name": "获取标签列表",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetLabel",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -287,7 +381,8 @@
       {
         "name": "下载映射列表(无筛选)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/DownloadCampaignMapping",
         "request_body": {
           "SourceAdgroupTagId": [],
@@ -320,20 +415,23 @@
       {
         "name": "创建CampaignMapping(SP->SD)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/UpsertCampaignMapping",
         "request_body": {
-          "SourceProfileId": "{{profile_id}}",
-          "SourceCampaignId": "{{sp_manual_pat_campaign_id}}",
-          "SourceAdgroupId": "{{sp_manual_pat_adgroup_id}}",
+          "SourceProfileId": "{{variables.profile_id}}",
+          "SourceCampaignId": "{{variables.sp_manual_pat_campaign_id}}",
+          "SourceAdgroupId": "{{variables.sp_manual_pat_adgroup_id}}",
           "NegativeInSource": [],
           "CampaignMappingDestination": [
             {
-              "DestinationProfileId": "{{profile_id}}",
-              "DestinationCampaignId": "{{sd_campaign_id}}",
-              "DestinationAdgroupId": "{{sd_adgroup_id}}",
+              "DestinationProfileId": "{{variables.profile_id}}",
+              "DestinationCampaignId": "{{variables.sd_campaign_id}}",
+              "DestinationAdgroupId": "{{variables.sd_adgroup_id}}",
               "LabelId": 0,
-              "MatchType": ["PT"],
+              "MatchType": [
+                "PT"
+              ],
               "TargetingType": "manual-PAT"
             }
           ]
@@ -343,19 +441,28 @@
           "code": 200,
           "success": true,
           "data": {
-            "successCount": { "$gte": 1 }
+            "successCount": {
+              "$gte": 1
+            }
           }
         }
       },
       {
         "name": "定位新建映射的真实Id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetCampaignMapping",
         "request_body": {
-          "SourceProfileId": ["{{profile_id}}"],
-          "SourceCampaignId": ["{{sp_manual_pat_campaign_id}}"],
-          "SourceAdgroupId": ["{{sp_manual_pat_adgroup_id}}"],
+          "SourceProfileId": [
+            "{{variables.profile_id}}"
+          ],
+          "SourceCampaignId": [
+            "{{variables.sp_manual_pat_campaign_id}}"
+          ],
+          "SourceAdgroupId": [
+            "{{variables.sp_manual_pat_adgroup_id}}"
+          ],
           "toMarket": "US",
           "pageInfo": {
             "pageIndex": 1,
@@ -371,17 +478,22 @@
           "code": 200,
           "success": true,
           "data": {
-            "Data": { "$not_empty": true }
+            "Data": {
+              "$not_empty": true
+            }
           }
         }
       },
       {
         "name": "后置清理-删除新建映射",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/BulkDeleteCampaignMapping",
         "request_body": {
-          "ids": ["{{created_mapping_id}}"]
+          "ids": [
+            "{{created_mapping_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -404,7 +516,8 @@
       {
         "name": "获取一个真实存在的标签Id",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetLabel",
         "request_body": {},
         "extract_vars": {
@@ -413,26 +526,31 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       },
       {
         "name": "创建一次性测试映射",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/UpsertCampaignMapping",
         "request_body": {
-          "SourceProfileId": "{{profile_id}}",
-          "SourceCampaignId": "{{sp_manual_pat_campaign_id}}",
-          "SourceAdgroupId": "{{sp_manual_pat_adgroup_id}}",
+          "SourceProfileId": "{{variables.profile_id}}",
+          "SourceCampaignId": "{{variables.sp_manual_pat_campaign_id}}",
+          "SourceAdgroupId": "{{variables.sp_manual_pat_adgroup_id}}",
           "NegativeInSource": [],
           "CampaignMappingDestination": [
             {
-              "DestinationProfileId": "{{profile_id}}",
-              "DestinationCampaignId": "{{sd_campaign_id}}",
-              "DestinationAdgroupId": "{{sd_adgroup_id}}",
+              "DestinationProfileId": "{{variables.profile_id}}",
+              "DestinationCampaignId": "{{variables.sd_campaign_id}}",
+              "DestinationAdgroupId": "{{variables.sd_adgroup_id}}",
               "LabelId": 0,
-              "MatchType": ["PT"],
+              "MatchType": [
+                "PT"
+              ],
               "TargetingType": "manual-PAT"
             }
           ]
@@ -442,19 +560,28 @@
           "code": 200,
           "success": true,
           "data": {
-            "successCount": { "$gte": 1 }
+            "successCount": {
+              "$gte": 1
+            }
           }
         }
       },
       {
         "name": "定位新建映射的真实Id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/GetCampaignMapping",
         "request_body": {
-          "SourceProfileId": ["{{profile_id}}"],
-          "SourceCampaignId": ["{{sp_manual_pat_campaign_id}}"],
-          "SourceAdgroupId": ["{{sp_manual_pat_adgroup_id}}"],
+          "SourceProfileId": [
+            "{{variables.profile_id}}"
+          ],
+          "SourceCampaignId": [
+            "{{variables.sp_manual_pat_campaign_id}}"
+          ],
+          "SourceAdgroupId": [
+            "{{variables.sp_manual_pat_adgroup_id}}"
+          ],
           "toMarket": "US",
           "pageInfo": {
             "pageIndex": 1,
@@ -470,21 +597,24 @@
           "code": 200,
           "success": true,
           "data": {
-            "Data": { "$not_empty": true }
+            "Data": {
+              "$not_empty": true
+            }
           }
         }
       },
       {
         "name": "批量设置标签(主测试步骤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/BulkSetLabel",
         "request_body": [
           {
             "CampaignMappingId": "{{created_mapping_id}}",
-            "DestinationProfileId": "{{profile_id}}",
-            "DestinationCampaignId": "{{sd_campaign_id}}",
-            "DestinationAdgroupId": "{{sd_adgroup_id}}",
+            "DestinationProfileId": "{{variables.profile_id}}",
+            "DestinationCampaignId": "{{variables.sd_campaign_id}}",
+            "DestinationAdgroupId": "{{variables.sd_adgroup_id}}",
             "LabelId": "{{existing_label_id}}"
           }
         ],
@@ -497,10 +627,13 @@
       {
         "name": "后置清理-删除临时映射",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/BulkDeleteCampaignMapping",
         "request_body": {
-          "ids": ["{{created_mapping_id}}"]
+          "ids": [
+            "{{created_mapping_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -523,7 +656,8 @@
       {
         "name": "创建标签",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/UpsertLabel",
         "request_body": {
           "Name": "TC-CampaignMapping-AutoTestLabel"
@@ -534,13 +668,16 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "后置清理-删除新建标签",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignMapping/V3/DeleteLabel",
         "request_body": {
           "Id": "{{new_label_id}}"

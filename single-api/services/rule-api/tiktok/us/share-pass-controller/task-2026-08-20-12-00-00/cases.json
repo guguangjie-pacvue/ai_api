@@ -12,7 +12,8 @@
       {
         "name": "查询共享通行证列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/list",
         "request_body": {
           "pageInfo": {
@@ -20,7 +21,7 @@
             "orderBy": "created_at desc",
             "pageSize": 20
           },
-          "userId": "{{user_id}}"
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -42,7 +43,8 @@
       {
         "name": "获取可共享账户列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/getAccounts",
         "request_body": {},
         "extract_vars": {},
@@ -65,7 +67,8 @@
       {
         "name": "获取创建者列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/creators",
         "request_body": {},
         "extract_vars": {},
@@ -88,7 +91,8 @@
       {
         "name": "校验共享通行证",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/check",
         "request_body": {
           "clientId": "515",
@@ -115,7 +119,8 @@
       {
         "name": "创建共享通行证",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/create",
         "request_body": {
           "targetType": "template",
@@ -126,7 +131,7 @@
             }
           ],
           "timeZone": "America/Los_Angeles",
-          "userId": "{{user_id}}"
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {
           "created_share_pass_id": "data[0]"
@@ -138,9 +143,12 @@
       {
         "name": "后置清理-删除创建的共享通行证",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/delete",
-        "request_body": ["{{created_share_pass_id}}"],
+        "request_body": [
+          "{{created_share_pass_id}}"
+        ],
         "extract_vars": {},
         "expected_response": {
           "code": 200
@@ -161,11 +169,14 @@
       {
         "name": "获取可共享平台列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/getSharePlatforms",
         "request_body": {
           "productLine": "amazon",
-          "userIds": ["27440"],
+          "userIds": [
+            "27440"
+          ],
           "userId": "2962"
         },
         "extract_vars": {},
@@ -188,7 +199,8 @@
       {
         "name": "获取共享通行证关联规则ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/getRuleIdsFromSharePass",
         "request_body": {
           "clientId": "3925",
@@ -214,7 +226,8 @@
       {
         "name": "编辑共享通行证",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/sharePass/edit",
         "request_body": {
           "id": "[NEEDS_REAL_VALUE]",
@@ -227,7 +240,7 @@
             }
           ],
           "timeZone": "America/Los_Angeles",
-          "userId": "{{user_id}}"
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
