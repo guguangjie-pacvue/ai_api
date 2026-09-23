@@ -12,21 +12,31 @@
       {
         "name": "查询Auto模式规则列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "targetLevels": [],
-          "ownerIds": ["{{user_id}}"],
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
           "pageInfo": {
             "pageIndex": 1,
-            "multiSort": [{"sortType": "desc", "sortData": "createdAt"}],
+            "multiSort": [
+              {
+                "sortType": "desc",
+                "sortData": "createdAt"
+              }
+            ],
             "pageSize": 20,
             "orderBy": "createdAt desc"
           },
           "profileIds": [],
           "timeZone": "America/Los_Angeles",
-          "managedProfileIds": ["{{profile_id}}"],
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "ruleNameList": [],
           "frequency": [],
           "fromSnapShot": false,
@@ -61,7 +71,8 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "clientId": "62",
@@ -69,13 +80,18 @@
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "superAdmin0913",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "tiktok",
           "mode": "Auto",
           "applyTarget": {
             "clientId": "62",
-            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
             "nonnullFrequencyCap": false,
             "nonnullMaxCpc": false,
             "nonnullDailyBudget": false,
@@ -83,32 +99,89 @@
           },
           "dayOfWeek": 4,
           "automation": [
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req2",
+                    "value": "0",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "StopCreativeBudgetBoost",
+                "budgetRate": 100,
+                "actionName": "StopCreativeBudgetBoost"
+              }
+            }
           ],
           "hour": 0,
           "ruleType": "BudgetBoost",
           "ruleName": "TC_TikTok_GetByRuleId_Cleanup",
-          "ruleNames": ["TC_TikTok_GetByRuleId_Cleanup"],
+          "ruleNames": [
+            "TC_TikTok_GetByRuleId_Cleanup"
+          ],
           "startDate": "2026-08-20T00:00:00",
           "isPaused": false,
           "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "前置-按名称查询并提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
-          "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
           "timeZone": "America/Los_Angeles",
-          "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_GetByRuleId_Cleanup"],
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_GetByRuleId_Cleanup"
+          ],
           "ruleNameSearchOperand": "Equal",
           "fromSnapShot": false,
           "mode": "Auto",
@@ -118,40 +191,64 @@
           "currency": "$",
           "status": []
         },
-        "extract_vars": {"tmp_rule_id_getrule": "data.list[0].id"},
-        "expected_response": {"code": 200}
+        "extract_vars": {
+          "tmp_rule_id_getrule": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "按ruleIds精确查询规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
-          "ruleIds": ["{{tmp_rule_id_getrule}}"],
+          "ruleIds": [
+            "{{tmp_rule_id_getrule}}"
+          ],
           "download": false,
-          "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 10},
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 10
+          },
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
-          "managedProfileIds": ["{{profile_id}}"],
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "fromSnapShot": false
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$not_empty": true}
+          "data": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "后置清理-删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{tmp_rule_id_getrule}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{tmp_rule_id_getrule}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -168,21 +265,31 @@
       {
         "name": "查询Manual模式规则列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "targetLevels": [],
-          "ownerIds": ["{{user_id}}"],
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
           "pageInfo": {
             "pageIndex": 1,
-            "multiSort": [{"sortType": "desc", "sortData": "createdAt"}],
+            "multiSort": [
+              {
+                "sortType": "desc",
+                "sortData": "createdAt"
+              }
+            ],
             "pageSize": 20,
             "orderBy": "createdAt desc"
           },
           "profileIds": [],
           "timeZone": "America/Los_Angeles",
-          "managedProfileIds": ["{{profile_id}}"],
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "ruleNameList": [],
           "frequency": [],
           "fromSnapShot": false,
@@ -197,7 +304,9 @@
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$not_empty": true}
+          "data": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -215,7 +324,8 @@
       {
         "name": "获取Auto模式规则负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -229,7 +339,9 @@
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -247,7 +359,8 @@
       {
         "name": "获取Manual模式规则负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -261,7 +374,9 @@
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -279,7 +394,8 @@
       {
         "name": "获取AutoCommerce模式规则负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -293,7 +409,9 @@
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -311,15 +429,20 @@
       {
         "name": "校验新规则名称",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkRuleName",
         "request_body": {
           "emailOption": "NoEmails",
           "ruleName": "TikTok Test Rule Name Check",
-          "ruleNames": ["TikTok Test Rule Name Check"]
+          "ruleNames": [
+            "TikTok Test Rule Name Check"
+          ]
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -336,61 +459,168 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
-          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
-          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
-          "applyTarget": {"clientId": "62", "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}], "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false, "targetLevel": "CampaignProductCreative"},
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{variables.user_id}}",
+          "frequency": "Weekly",
+          "productLine": "tiktok",
+          "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
           "dayOfWeek": 4,
           "automation": [
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req2",
+                    "value": "0",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "StopCreativeBudgetBoost",
+                "budgetRate": 100,
+                "actionName": "StopCreativeBudgetBoost"
+              }
+            }
           ],
-          "hour": 0, "ruleType": "BudgetBoost", "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
-          "ruleNames": ["TC_TikTok_CheckName_Edit_Cleanup"], "startDate": "2026-08-20T00:00:00", "isPaused": false, "sendFailEmail": false
+          "hour": 0,
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
+          "ruleNames": [
+            "TC_TikTok_CheckName_Edit_Cleanup"
+          ],
+          "startDate": "2026-08-20T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
-          "removeApplied": false, "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
-          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_CheckName_Edit_Cleanup"], "ruleNameSearchOperand": "Equal",
-          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+          "removeApplied": false,
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_CheckName_Edit_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
         },
-        "extract_vars": {"tmp_rule_id_checkname": "data.list[0].id"},
-        "expected_response": {"code": 200}
+        "extract_vars": {
+          "tmp_rule_id_checkname": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "编辑规则时校验名称（携带id排除自身）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkRuleName",
         "request_body": {
           "emailOption": "NoEmails",
           "ruleName": "TC_TikTok_CheckName_Edit_Cleanup",
-          "ruleNames": ["TC_TikTok_CheckName_Edit_Cleanup"],
+          "ruleNames": [
+            "TC_TikTok_CheckName_Edit_Cleanup"
+          ],
           "id": "{{tmp_rule_id_checkname}}"
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "后置清理-删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{tmp_rule_id_checkname}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{tmp_rule_id_checkname}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -407,11 +637,14 @@
       {
         "name": "查询ClickHit模式支持情况",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/hasClickHitMode",
         "request_body": {},
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -428,12 +661,15 @@
       {
         "name": "查询规则应用列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getApplyRule",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "ownerIds": ["{{user_id}}"],
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
@@ -442,7 +678,9 @@
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -460,11 +698,14 @@
       {
         "name": "查询AutoRefill规则关联profile列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleProfileIds",
         "request_body": {},
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -481,11 +722,14 @@
       {
         "name": "查询可转移规则负责人列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/transferableOwnerList",
         "request_body": {},
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -502,65 +746,183 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
-          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
-          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
-          "applyTarget": {"clientId": "62", "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}], "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false, "targetLevel": "CampaignProductCreative"},
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{variables.user_id}}",
+          "frequency": "Weekly",
+          "productLine": "tiktok",
+          "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
           "dayOfWeek": 4,
           "automation": [
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req2",
+                    "value": "0",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "StopCreativeBudgetBoost",
+                "budgetRate": 100,
+                "actionName": "StopCreativeBudgetBoost"
+              }
+            }
           ],
-          "hour": 0, "ruleType": "BudgetBoost", "ruleName": "TC_TikTok_ChangeStatus_Cleanup",
-          "ruleNames": ["TC_TikTok_ChangeStatus_Cleanup"], "startDate": "2026-08-20T00:00:00", "isPaused": false, "sendFailEmail": false
+          "hour": 0,
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_ChangeStatus_Cleanup",
+          "ruleNames": [
+            "TC_TikTok_ChangeStatus_Cleanup"
+          ],
+          "startDate": "2026-08-20T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
-          "removeApplied": false, "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
-          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_ChangeStatus_Cleanup"], "ruleNameSearchOperand": "Equal",
-          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+          "removeApplied": false,
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_ChangeStatus_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
         },
-        "extract_vars": {"tmp_rule_id_cstatus": "data.list[0].id"},
-        "expected_response": {"code": 200}
+        "extract_vars": {
+          "tmp_rule_id_cstatus": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "暂停规则（isPaused=true）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"isPaused": true, "ruleIds": ["{{tmp_rule_id_cstatus}}"]},
+        "request_body": {
+          "isPaused": true,
+          "ruleIds": [
+            "{{tmp_rule_id_cstatus}}"
+          ]
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "恢复规则（isPaused=false）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"isPaused": false, "ruleIds": ["{{tmp_rule_id_cstatus}}"]},
+        "request_body": {
+          "isPaused": false,
+          "ruleIds": [
+            "{{tmp_rule_id_cstatus}}"
+          ]
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "后置清理-删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{tmp_rule_id_cstatus}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{tmp_rule_id_cstatus}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -577,7 +939,8 @@
       {
         "name": "创建TikTok BudgetBoost规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
           "clientId": "62",
@@ -585,13 +948,18 @@
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "superAdmin0913",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "tiktok",
           "mode": "Auto",
           "applyTarget": {
             "clientId": "62",
-            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
             "nonnullFrequencyCap": false,
             "nonnullMaxCpc": false,
             "nonnullDailyBudget": false,
@@ -599,46 +967,124 @@
           },
           "dayOfWeek": 4,
           "automation": [
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req2",
+                    "value": "0",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "StopCreativeBudgetBoost",
+                "budgetRate": 100,
+                "actionName": "StopCreativeBudgetBoost"
+              }
+            }
           ],
           "hour": 0,
           "ruleType": "BudgetBoost",
           "ruleName": "TC_TikTok_Create_Cleanup",
-          "ruleNames": ["TC_TikTok_Create_Cleanup"],
+          "ruleNames": [
+            "TC_TikTok_Create_Cleanup"
+          ],
           "startDate": "2026-08-20T00:00:00",
           "isPaused": false,
           "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "查询新建规则以验证创建成功并提取ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
-          "removeApplied": false, "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
-          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_Create_Cleanup"], "ruleNameSearchOperand": "Equal",
-          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+          "removeApplied": false,
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_Create_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
         },
-        "extract_vars": {"created_rule_id": "data.list[0].id"},
+        "extract_vars": {
+          "created_rule_id": "data.list[0].id"
+        },
         "expected_response": {
           "code": 200,
-          "data": {"$not_empty": true}
+          "data": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "后置清理-删除新建规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{created_rule_id}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{created_rule_id}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -655,64 +1101,152 @@
       {
         "name": "前置-创建临时BudgetBoost规则（TikTok不支持Campaign类型）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
-          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
-          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{variables.user_id}}",
+          "frequency": "Weekly",
+          "productLine": "tiktok",
+          "mode": "Auto",
           "applyTarget": {
             "clientId": "62",
-            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
-            "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false,
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
             "targetLevel": "CampaignProductCreative"
           },
-          "dayOfWeek": 4, "hour": 0,
+          "dayOfWeek": 4,
+          "hour": 0,
           "automation": [
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req2",
+                    "value": "0",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "StopCreativeBudgetBoost",
+                "budgetRate": 100,
+                "actionName": "StopCreativeBudgetBoost"
+              }
+            }
           ],
           "ruleType": "BudgetBoost",
           "ruleName": "TC_TikTok_EditRule_Cleanup",
-          "ruleNames": ["TC_TikTok_EditRule_Cleanup"],
+          "ruleNames": [
+            "TC_TikTok_EditRule_Cleanup"
+          ],
           "startDate": "2026-08-20T00:00:00",
-          "isPaused": false, "sendFailEmail": false
+          "isPaused": false,
+          "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
-          "removeApplied": false, "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
-          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_EditRule_Cleanup"], "ruleNameSearchOperand": "Equal",
-          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+          "removeApplied": false,
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_EditRule_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
         },
         "extract_vars": {
           "tmp_rule_id_edit": "data.list[0].id"
         },
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "前置-GET /definition/{ruleId}获取完整规则提取automationId",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{tmp_rule_id_edit}}",
         "request_body": {},
         "extract_vars": {
           "tmp_automation_id": "data.automation[0].automationId"
         },
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "编辑BudgetBoost规则-修改执行频次为Every3days",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/editRule",
         "request_body": {
           "id": "{{tmp_rule_id_edit}}",
@@ -722,14 +1256,21 @@
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "superAdmin0913",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Every3days",
           "productLine": "tiktok",
           "mode": "Auto",
           "applyTarget": {
             "clientId": "62",
-            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
-            "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false,
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
             "targetLevel": "CampaignProductCreative"
           },
           "dayOfWeek": 4,
@@ -737,28 +1278,58 @@
           "automation": [
             {
               "automationId": "{{tmp_automation_id}}",
-              "requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]],
-              "dateIndex": {"length": 7, "index": 0},
-              "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
             }
           ],
           "ruleType": "BudgetBoost",
           "ruleName": "TC_TikTok_EditRule_Cleanup",
-          "ruleNames": ["TC_TikTok_EditRule_Cleanup"],
+          "ruleNames": [
+            "TC_TikTok_EditRule_Cleanup"
+          ],
           "startDate": "2026-08-20T00:00:00",
           "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "后置清理-删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{tmp_rule_id_edit}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{tmp_rule_id_edit}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -775,48 +1346,148 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "62", "emailSettings": [], "emailOption": "NoEmails",
-          "timeZone": "America/Los_Angeles", "userName": "superAdmin0913", "userId": "{{user_id}}",
-          "frequency": "Weekly", "productLine": "tiktok", "mode": "Auto",
-          "applyTarget": {"clientId": "62", "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}], "nonnullFrequencyCap": false, "nonnullMaxCpc": false, "nonnullDailyBudget": false, "targetLevel": "CampaignProductCreative"},
+          "clientId": "62",
+          "emailSettings": [],
+          "emailOption": "NoEmails",
+          "timeZone": "America/Los_Angeles",
+          "userName": "superAdmin0913",
+          "userId": "{{variables.user_id}}",
+          "frequency": "Weekly",
+          "productLine": "tiktok",
+          "mode": "Auto",
+          "applyTarget": {
+            "clientId": "62",
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
+            "nonnullFrequencyCap": false,
+            "nonnullMaxCpc": false,
+            "nonnullDailyBudget": false,
+            "targetLevel": "CampaignProductCreative"
+          },
           "dayOfWeek": 4,
           "automation": [
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req1", "value": "0", "operand": "GreaterOrEqual"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "SetCreativeBudgetBoost", "budgetRate": 100, "value": 111, "actionName": "SetCreativeBudgetBoost"}},
-            {"requirements": [[{"field": "spend", "valueType": "Custom", "id": "req2", "value": "0", "operand": "Less"}]], "dateIndex": {"length": 7, "index": 0}, "action": {"action": "StopCreativeBudgetBoost", "budgetRate": 100, "actionName": "StopCreativeBudgetBoost"}}
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req1",
+                    "value": "0",
+                    "operand": "GreaterOrEqual"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "SetCreativeBudgetBoost",
+                "budgetRate": 100,
+                "value": 111,
+                "actionName": "SetCreativeBudgetBoost"
+              }
+            },
+            {
+              "requirements": [
+                [
+                  {
+                    "field": "spend",
+                    "valueType": "Custom",
+                    "id": "req2",
+                    "value": "0",
+                    "operand": "Less"
+                  }
+                ]
+              ],
+              "dateIndex": {
+                "length": 7,
+                "index": 0
+              },
+              "action": {
+                "action": "StopCreativeBudgetBoost",
+                "budgetRate": 100,
+                "actionName": "StopCreativeBudgetBoost"
+              }
+            }
           ],
-          "hour": 0, "ruleType": "BudgetBoost", "ruleName": "TC_TikTok_UpdateApplied_Cleanup",
-          "ruleNames": ["TC_TikTok_UpdateApplied_Cleanup"], "startDate": "2026-08-20T00:00:00", "isPaused": false, "sendFailEmail": false
+          "hour": 0,
+          "ruleType": "BudgetBoost",
+          "ruleName": "TC_TikTok_UpdateApplied_Cleanup",
+          "ruleNames": [
+            "TC_TikTok_UpdateApplied_Cleanup"
+          ],
+          "startDate": "2026-08-20T00:00:00",
+          "isPaused": false,
+          "sendFailEmail": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
-          "removeApplied": false, "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
-          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_UpdateApplied_Cleanup"], "ruleNameSearchOperand": "Equal",
-          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+          "removeApplied": false,
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_UpdateApplied_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
         },
-        "extract_vars": {"tmp_rule_id_update": "data.list[0].id"},
-        "expected_response": {"code": 200}
+        "extract_vars": {
+          "tmp_rule_id_update": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "更新规则应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/updateAppliedObj",
         "request_body": {
           "applyTarget": {
             "relationShipForAnd": false,
-            "targetInfo": [{"targetId": "1852465957222417,1732063442031841689,7552800357299145998", "profileId": "{{profile_id}}"}],
+            "targetInfo": [
+              {
+                "targetId": "1852465957222417,1732063442031841689,7552800357299145998",
+                "profileId": "{{variables.profile_id}}"
+              }
+            ],
             "nonnullFrequencyCap": false,
             "nonnullMaxCpc": false,
             "nonnullDailyBudget": false,
@@ -829,16 +1500,26 @@
           "campaignTagProfileIds": []
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "后置清理-删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{tmp_rule_id_update}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{tmp_rule_id_update}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -855,23 +1536,33 @@
       {
         "name": "查询Campaign级RoasExplorer规则ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/query-rule-ids/tiktok/roas-explorer",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "targetLevels": ["Campaign"],
-          "targetIds": ["1869461375946946", "1868989261580450"],
+          "targetLevels": [
+            "Campaign"
+          ],
+          "targetIds": [
+            "1869461375946946",
+            "1868989261580450"
+          ],
           "queryRuleType": "RoasExplorer",
           "timeZone": "America/Los_Angeles",
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "ignore": false,
           "currency": "$",
           "targetLevel": "Campaign",
           "fromSnapShot": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -888,12 +1579,15 @@
       {
         "name": "查询CampaignProduct级BudgetBoost规则ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/query-rule-ids/tiktok/smart-budget-boost",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "targetLevels": ["CampaignProduct"],
+          "targetLevels": [
+            "CampaignProduct"
+          ],
           "targetIds": [
             "1861337972421745,1732182496994103705",
             "1867057928434850,1731795620550578585"
@@ -901,13 +1595,17 @@
           "queryRuleType": "BudgetBoost",
           "timeZone": "America/Los_Angeles",
           "ignore": false,
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "currency": "$",
           "targetLevel": "CampaignProduct",
           "fromSnapShot": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -924,12 +1622,15 @@
       {
         "name": "查询CampaignProductCreative级BudgetBoost规则ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/query-rule-ids/tiktok/smart-budget-boost",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "targetLevels": ["CampaignProductCreative"],
+          "targetLevels": [
+            "CampaignProductCreative"
+          ],
           "targetIds": [
             "1853469417438225,1732182487156167065,7552800357299145998",
             "1850915249103889,1731795605504627097,7552802593487998222",
@@ -937,14 +1638,18 @@
           ],
           "queryRuleType": "BudgetBoost",
           "timeZone": "America/Los_Angeles",
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "ignore": false,
           "currency": "$",
           "targetLevel": "CampaignProductCreative",
           "fromSnapShot": false
         },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   },
@@ -961,7 +1666,8 @@
       {
         "name": "批量创建TikTok RoasExplorer规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/bulk-create/tiktok/roas-explorer",
         "request_body": {
           "ruleRequests": [
@@ -972,28 +1678,46 @@
               "emailOption": "NoEmails",
               "timeZone": "America/Los_Angeles",
               "userName": "superAdmin0913",
-              "userId": "{{user_id}}",
+              "userId": "{{variables.user_id}}",
               "frequency": "Every3days",
               "productLine": "tiktok",
               "mode": "Auto",
               "applyTarget": {
                 "nonnullFrequencyCap": false,
-                "targetInfo": [{"targetId": "1866507316811025", "profileId": "{{profile_id}}"}],
+                "targetInfo": [
+                  {
+                    "targetId": "1866507316811025",
+                    "profileId": "{{variables.profile_id}}"
+                  }
+                ],
                 "nonnullMaxCpc": false,
                 "nonnullDailyBudget": false,
                 "targetLevel": "Campaign"
               },
               "automation": [
                 {
-                  "requirements": [[]],
-                  "dateIndex": {"length": 3, "days": 14, "index": 0},
-                  "action": {"settings": "{\"maxBudget\":500,\"maxTargetRoas\":20,\"minBudget\":10,\"minTargetRoas\":0.1}", "action": "RoasExplorer", "budgetRate": 100, "actionName": "RoasExplorer"}
+                  "requirements": [
+                    []
+                  ],
+                  "dateIndex": {
+                    "length": 3,
+                    "days": 14,
+                    "index": 0
+                  },
+                  "action": {
+                    "settings": "{\"maxBudget\":500,\"maxTargetRoas\":20,\"minBudget\":10,\"minTargetRoas\":0.1}",
+                    "action": "RoasExplorer",
+                    "budgetRate": 100,
+                    "actionName": "RoasExplorer"
+                  }
                 }
               ],
               "hour": 1,
               "ruleType": "RoasExplorer",
               "ruleName": "TC_TikTok_BulkCreate_RoasExplorer_Cleanup",
-              "ruleNames": ["TC_TikTok_BulkCreate_RoasExplorer_Cleanup"],
+              "ruleNames": [
+                "TC_TikTok_BulkCreate_RoasExplorer_Cleanup"
+              ],
               "startDate": "2026-08-20T00:00:00"
             }
           ]
@@ -1001,32 +1725,65 @@
         "extract_vars": {},
         "expected_response": {
           "code": 200,
-          "data": {"$is_array": true}
+          "data": {
+            "$is_array": true
+          }
         }
       },
       {
         "name": "查询新建规则提取ID（若创建成功）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
-          "removeApplied": false, "ownerIds": ["{{user_id}}"],
-          "pageInfo": {"pageIndex": 1, "pageSize": 5},
-          "timeZone": "America/Los_Angeles", "managedProfileIds": ["{{profile_id}}"],
-          "ruleNameList": ["TC_TikTok_BulkCreate_RoasExplorer_Cleanup"], "ruleNameSearchOperand": "Equal",
-          "fromSnapShot": false, "mode": "Auto", "download": false, "ruleType": [], "ignore": false, "currency": "$", "status": []
+          "removeApplied": false,
+          "ownerIds": [
+            "{{variables.user_id}}"
+          ],
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 5
+          },
+          "timeZone": "America/Los_Angeles",
+          "managedProfileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "ruleNameList": [
+            "TC_TikTok_BulkCreate_RoasExplorer_Cleanup"
+          ],
+          "ruleNameSearchOperand": "Equal",
+          "fromSnapShot": false,
+          "mode": "Auto",
+          "download": false,
+          "ruleType": [],
+          "ignore": false,
+          "currency": "$",
+          "status": []
         },
-        "extract_vars": {"bulk_roas_rule_id": "data.list[0].id"},
-        "expected_response": {"code": 200}
+        "extract_vars": {
+          "bulk_roas_rule_id": "data.list[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
       },
       {
         "name": "后置清理-删除批量创建的规则（若存在）",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
-        "request_body": {"ruleIds": ["{{bulk_roas_rule_id}}"], "isDelete": true},
+        "request_body": {
+          "ruleIds": [
+            "{{bulk_roas_rule_id}}"
+          ],
+          "isDelete": true
+        },
         "extract_vars": {},
-        "expected_response": {"code": 200}
+        "expected_response": {
+          "code": 200
+        }
       }
     ]
   }

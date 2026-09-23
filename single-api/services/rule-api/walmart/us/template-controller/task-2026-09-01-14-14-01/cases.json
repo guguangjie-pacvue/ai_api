@@ -12,7 +12,8 @@
       {
         "name": "查询分类列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
@@ -43,7 +44,8 @@
       {
         "name": "查询默认分类列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultCategory",
         "request_body": {
           "creator": [],
@@ -74,7 +76,8 @@
       {
         "name": "查询默认模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultTemplate",
         "request_body": {
           "creator": [],
@@ -105,7 +108,8 @@
       {
         "name": "查询模板所有者列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getOwners",
         "request_body": {},
         "extract_vars": {},
@@ -128,14 +132,15 @@
       {
         "name": "查询推荐模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getRecommendation",
         "request_body": {
           "creator": [],
           "onlyFavorite": false,
           "defaultCategory": false,
           "ruleType": [],
-          "templateId": "{{fixture_template_id}}"
+          "templateId": "{{variables.fixture_template_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -157,7 +162,8 @@
       {
         "name": "按ruleType查询模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -179,7 +185,7 @@
   },
   {
     "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板",
-    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。该接口近90天ES样本仅2条(amazon平台)。使用测试账号真实模板({{fixture_template_id}})构造该场景，验证接口基础可用性。walmart平台。",
+    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。该接口近90天ES样本仅2条(amazon平台)。使用测试账号真实模板({{variables.fixture_template_id}})构造该场景，验证接口基础可用性。walmart平台。",
     "module": "template-controller",
     "granularity": "API",
     "since": "init",
@@ -190,14 +196,15 @@
       {
         "name": "查询DirectShare模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplateListFromDirectShare",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "sourceProductLine": "walmart",
           "targetProductLine": "walmart",
           "templateIds": [
-            "{{fixture_template_id}}"
+            "{{variables.fixture_template_id}}"
           ]
         },
         "extract_vars": {},
@@ -209,7 +216,7 @@
   },
   {
     "name": "模板生命周期(创建/编辑/收藏/移动/删除) - walmart",
-    "description": "【运维事故记录，非常规测试结果】本case执行中产生了一个无法通过API清理的脏数据：第一次尝试时误用了amazon的ruleType取值\"Targeting\"创建模板(walmart平台真实枚举值应为Keyword/Item/Campaign/SOV Bid，不包含Targeting)，创建请求本身返回200成功，但该模板的ruleType在walmart下不存在有效元数据映射，导致后续任何不带ruleType过滤(或过滤条件包含Targeting)的 POST /template/getTemplate 调用都会抛服务端异常\"productLine: walmart, rule type: Targeting not exists\"(code:405)——这本身也是一个真实缺陷：接口对无效ruleType的历史/异常数据没有容错，应返回该记录的降级展示而不是让整个列表查询失败。由于getTemplate现在对walmart无过滤/或按categoryId={{fixture_category_id}}过滤时必现500风格错误，我无法再通过API查询到该脏模板的templateId，因此无法调用DELETE清理，此模板会长期滞留在测试账号(clientId=3186)的walmart数据下。标识信息：productLine=walmart, clientId=3186, categoryId=1912039549025972226(Rule Kickstart), templateName=\"autotest_lifecycle_template\", ruleType=\"Targeting\"(无效值)。需要有数据库访问权限的同学手动定位并删除该条rule_template记录(以及关联的rule_automation记录)才能恢复walmart测试账号的getTemplate(无ruleType过滤)接口可用性。第二次改用正确的ruleType=\"Keyword\"重试创建时，因同名被服务端判重(code:10002 \"Rule Template Name Repeat\")而未再产生第二条脏数据，未造成二次污染。",
+    "description": "【运维事故记录，非常规测试结果】本case执行中产生了一个无法通过API清理的脏数据：第一次尝试时误用了amazon的ruleType取值\"Targeting\"创建模板(walmart平台真实枚举值应为Keyword/Item/Campaign/SOV Bid，不包含Targeting)，创建请求本身返回200成功，但该模板的ruleType在walmart下不存在有效元数据映射，导致后续任何不带ruleType过滤(或过滤条件包含Targeting)的 POST /template/getTemplate 调用都会抛服务端异常\"productLine: walmart, rule type: Targeting not exists\"(code:405)——这本身也是一个真实缺陷：接口对无效ruleType的历史/异常数据没有容错，应返回该记录的降级展示而不是让整个列表查询失败。由于getTemplate现在对walmart无过滤/或按categoryId={{variables.fixture_category_id}}过滤时必现500风格错误，我无法再通过API查询到该脏模板的templateId，因此无法调用DELETE清理，此模板会长期滞留在测试账号(clientId=3186)的walmart数据下。标识信息：productLine=walmart, clientId=3186, categoryId=1912039549025972226(Rule Kickstart), templateName=\"autotest_lifecycle_template\", ruleType=\"Targeting\"(无效值)。需要有数据库访问权限的同学手动定位并删除该条rule_template记录(以及关联的rule_automation记录)才能恢复walmart测试账号的getTemplate(无ruleType过滤)接口可用性。第二次改用正确的ruleType=\"Keyword\"重试创建时，因同名被服务端判重(code:10002 \"Rule Template Name Repeat\")而未再产生第二条脏数据，未造成二次污染。",
     "module": "template-controller",
     "granularity": "API",
     "since": "init",
@@ -220,12 +227,13 @@
       {
         "name": "创建模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template",
         "request_body": {
           "templateName": "autotest_lifecycle_template",
           "description": "自动化测试用临时模板，用例结束后会被删除",
-          "categoryId": "{{fixture_category_id}}",
+          "categoryId": "{{variables.fixture_category_id}}",
           "ruleType": "Keyword",
           "isFavorite": false,
           "defaultTemplate": false,
@@ -269,7 +277,8 @@
       {
         "name": "查询新建模板的ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -290,13 +299,14 @@
       {
         "name": "编辑模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/editTemplate",
         "request_body": {
           "templateId": "{{created_template_id}}",
           "templateName": "autotest_lifecycle_template_edited",
           "description": "自动化测试用临时模板(已编辑)",
-          "categoryId": "{{fixture_category_id}}",
+          "categoryId": "{{variables.fixture_category_id}}",
           "ruleType": "Keyword",
           "isFavorite": false,
           "defaultTemplate": false,
@@ -340,7 +350,8 @@
       {
         "name": "收藏模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/addFavorite",
         "request_body": {
           "templateId": "{{created_template_id}}",
@@ -355,11 +366,12 @@
       {
         "name": "移动模板到另一分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/moveTemplate",
         "request_body": {
           "templateId": "{{created_template_id}}",
-          "categoryId": "{{fixture_category_id_2}}",
+          "categoryId": "{{variables.fixture_category_id_2}}",
           "defaultTemplate": false
         },
         "extract_vars": {},
@@ -370,7 +382,8 @@
       {
         "name": "清理-删除模板",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/{{created_template_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -393,7 +406,8 @@
       {
         "name": "创建分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category",
         "request_body": {
           "name": "autotest_lifecycle_category",
@@ -403,8 +417,8 @@
           "defaultCategory": false,
           "is1p": 0,
           "isChild": false,
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}"
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -414,7 +428,8 @@
       {
         "name": "查询新建分类的ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
@@ -435,7 +450,8 @@
       {
         "name": "编辑分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/editCategory",
         "request_body": {
           "categoryId": "{{created_category_id}}",
@@ -446,8 +462,8 @@
           "defaultCategory": false,
           "is1p": 0,
           "isChild": false,
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}"
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -457,7 +473,8 @@
       {
         "name": "清理-删除分类",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category/{{created_category_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -480,14 +497,15 @@
       {
         "name": "批量创建模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/bulk",
         "request_body": {
           "templateRequestList": [
             {
               "templateName": "autotest_bulk_template",
               "description": "自动化测试用临时模板(bulk创建)，用例结束后会被删除",
-              "categoryId": "{{fixture_category_id}}",
+              "categoryId": "{{variables.fixture_category_id}}",
               "ruleType": "Keyword",
               "isFavorite": false,
               "defaultTemplate": false,
@@ -536,7 +554,8 @@
       {
         "name": "查询bulk新建模板的ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -557,7 +576,8 @@
       {
         "name": "清理-删除bulk创建的模板",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/{{created_bulk_template_id}}",
         "request_body": {},
         "extract_vars": {},

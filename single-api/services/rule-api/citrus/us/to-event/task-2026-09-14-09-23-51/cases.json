@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /event/getRuleDefinition - 测试账号真实citrus规则",
-    "description": "单接口测试：POST /event/getRuleDefinition。按ruleIds查询规则完整定义。ES近30天该接口调用量约168万次(排除测试账号)，但body只含ruleIds(雪花/自增ID)无productLine/平台标识字段(es_helper productline-agg与platform agg均确认bucket_sum=0)，按services.json post_fallback_no_productline_field约定用全平台基线；citrus无法被单独识别。真实样本中单ruleId查询与批量查询均存在，本场景用单ruleId查询(样本中大量出现的模式)，实参用测试账号下真实可查的citrus规则({{real_rule_id}}，已通过GET /definition/{id}验证为200真实数据)。响应体为裸数组(不含code/data/msg包装)，与Swagger声明的array-of-RuleDefinition返回类型一致。",
+    "description": "单接口测试：POST /event/getRuleDefinition。按ruleIds查询规则完整定义。ES近30天该接口调用量约168万次(排除测试账号)，但body只含ruleIds(雪花/自增ID)无productLine/平台标识字段(es_helper productline-agg与platform agg均确认bucket_sum=0)，按services.json post_fallback_no_productline_field约定用全平台基线；citrus无法被单独识别。真实样本中单ruleId查询与批量查询均存在，本场景用单ruleId查询(样本中大量出现的模式)，实参用测试账号下真实可查的citrus规则({{variables.real_rule_id}}，已通过GET /definition/{id}验证为200真实数据)。响应体为裸数组(不含code/data/msg包装)，与Swagger声明的array-of-RuleDefinition返回类型一致。",
     "module": "to-event",
     "granularity": "API",
     "since": "init",
@@ -12,11 +12,12 @@
       {
         "name": "查询规则定义",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleDefinition",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ]
         },
         "extract_vars": {},
@@ -39,7 +40,8 @@
       {
         "name": "查询规则类型列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleTypes",
         "request_body": {},
         "extract_vars": {},

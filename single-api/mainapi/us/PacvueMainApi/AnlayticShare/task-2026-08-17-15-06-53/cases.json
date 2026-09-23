@@ -12,13 +12,16 @@
       {
         "name": "创建分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/AddShareLink",
         "request_body": {
           "Description": "TC-AnalyticShare-AutoTest",
           "ExpiredDate": "",
-          "UserID": "{{user_id}}",
-          "ProfileIds": ["{{profile_id}}"],
+          "UserID": "{{variables.user_id}}",
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "DspAdvertisers": [],
           "AttributionAdvertisers": [],
           "CampaignTags": [],
@@ -31,13 +34,16 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.TotalShareCount": { "$not_empty": true }
+          "data.TotalShareCount": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "定位新建分享链接的真实ID",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetShareLinkList",
         "request_body": {
           "pageInfo": {
@@ -54,16 +60,21 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.Data": { "$is_array": true }
+          "data.Data": {
+            "$is_array": true
+          }
         }
       },
       {
         "name": "后置清理-删除新建分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/DeleteShareLink",
         "request_body": {
-          "Ids": ["{{created_share_id}}"]
+          "Ids": [
+            "{{created_share_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -86,7 +97,8 @@
       {
         "name": "查询全部分享链接列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetShareLinkList",
         "request_body": {
           "pageInfo": {
@@ -95,13 +107,17 @@
             "pageIndex": 1,
             "pageSize": 50
           },
-          "userIds": ["{{user_id}}"]
+          "userIds": [
+            "{{variables.user_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.PageInfo": { "$not_empty": true }
+          "data.PageInfo": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -119,13 +135,16 @@
       {
         "name": "创建临时分享链接用于查询",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/AddShareLink",
         "request_body": {
           "Description": "TC-AnalyticShare-QueryById",
           "ExpiredDate": "",
-          "UserID": "{{user_id}}",
-          "ProfileIds": ["{{profile_id}}"],
+          "UserID": "{{variables.user_id}}",
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "DspAdvertisers": [],
           "AttributionAdvertisers": [],
           "CampaignTags": [],
@@ -143,7 +162,8 @@
       {
         "name": "定位新建分享链接的真实ID",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetShareLinkList",
         "request_body": {
           "pageInfo": {
@@ -165,7 +185,8 @@
       {
         "name": "按指定ID查询分享链接状态(主测试步骤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetShareLinkList",
         "request_body": {
           "pageInfo": {
@@ -174,22 +195,29 @@
             "pageIndex": 1,
             "pageSize": 50
           },
-          "Ids": ["{{created_share_id}}"]
+          "Ids": [
+            "{{created_share_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.Data": { "$not_empty": true }
+          "data.Data": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "后置清理-删除临时分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/DeleteShareLink",
         "request_body": {
-          "Ids": ["{{created_share_id}}"]
+          "Ids": [
+            "{{created_share_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -212,13 +240,16 @@
       {
         "name": "创建一次性分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/AddShareLink",
         "request_body": {
           "Description": "TC-AnalyticShare-UpdateTest",
           "ExpiredDate": "",
-          "UserID": "{{user_id}}",
-          "ProfileIds": ["{{profile_id}}"],
+          "UserID": "{{variables.user_id}}",
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "DspAdvertisers": [],
           "AttributionAdvertisers": [],
           "CampaignTags": [],
@@ -236,7 +267,8 @@
       {
         "name": "定位新建分享链接的真实ID",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetShareLinkList",
         "request_body": {
           "pageInfo": {
@@ -258,13 +290,16 @@
       {
         "name": "编辑分享链接完整信息(主测试步骤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/UpdateShareLink",
         "request_body": {
           "Description": "TC-AnalyticShare-UpdateTest-Edited",
           "ExpiredDate": "",
-          "UserID": "{{user_id}}",
-          "ProfileIds": ["{{profile_id}}"],
+          "UserID": "{{variables.user_id}}",
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "DspAdvertisers": [],
           "AttributionAdvertisers": [],
           "CampaignTags": [],
@@ -282,10 +317,13 @@
       {
         "name": "后置清理-删除分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/DeleteShareLink",
         "request_body": {
-          "Ids": ["{{created_share_id}}"]
+          "Ids": [
+            "{{created_share_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -308,13 +346,16 @@
       {
         "name": "创建一次性分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/AddShareLink",
         "request_body": {
           "Description": "TC-AnalyticShare-DescTest",
           "ExpiredDate": "",
-          "UserID": "{{user_id}}",
-          "ProfileIds": ["{{profile_id}}"],
+          "UserID": "{{variables.user_id}}",
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "DspAdvertisers": [],
           "AttributionAdvertisers": [],
           "CampaignTags": [],
@@ -332,7 +373,8 @@
       {
         "name": "定位新建分享链接的真实ID",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetShareLinkList",
         "request_body": {
           "pageInfo": {
@@ -354,10 +396,13 @@
       {
         "name": "编辑分享链接描述(主测试步骤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/UpdateShareLinkDescription",
         "request_body": {
-          "Ids": ["{{created_share_id}}"],
+          "Ids": [
+            "{{created_share_id}}"
+          ],
           "Description": "autotest"
         },
         "extract_vars": {},
@@ -369,10 +414,13 @@
       {
         "name": "后置清理-删除分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/DeleteShareLink",
         "request_body": {
-          "Ids": ["{{created_share_id}}"]
+          "Ids": [
+            "{{created_share_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -395,13 +443,16 @@
       {
         "name": "创建一次性分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/AddShareLink",
         "request_body": {
           "Description": "TC-AnalyticShare-ExpiryTest",
           "ExpiredDate": "",
-          "UserID": "{{user_id}}",
-          "ProfileIds": ["{{profile_id}}"],
+          "UserID": "{{variables.user_id}}",
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "DspAdvertisers": [],
           "AttributionAdvertisers": [],
           "CampaignTags": [],
@@ -419,7 +470,8 @@
       {
         "name": "定位新建分享链接的真实ID",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetShareLinkList",
         "request_body": {
           "pageInfo": {
@@ -441,10 +493,13 @@
       {
         "name": "编辑分享链接过期时间(主测试步骤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/UpdateShareLinkExpiredDate",
         "request_body": {
-          "Ids": ["{{created_share_id}}"],
+          "Ids": [
+            "{{created_share_id}}"
+          ],
           "HasExpiredDate": 0,
           "ExpiredDate": null
         },
@@ -457,10 +512,13 @@
       {
         "name": "后置清理-删除分享链接",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/DeleteShareLink",
         "request_body": {
-          "Ids": ["{{created_share_id}}"]
+          "Ids": [
+            "{{created_share_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -483,16 +541,21 @@
       {
         "name": "查询品牌/非品牌标签树",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/GetBrandtag",
         "request_body": {
-          "profileIds": ["{{profile_id}}"]
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.brands": { "$is_array": true }
+          "data.brands": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -510,11 +573,16 @@
       {
         "name": "设置品牌/非品牌标签(主测试步骤)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/SaveBrandtag",
         "request_body": {
-          "BrandCampaignTagIds": ["545447"],
-          "NonBrandCampaignTagIds": ["545460"]
+          "BrandCampaignTagIds": [
+            "545447"
+          ],
+          "NonBrandCampaignTagIds": [
+            "545460"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
@@ -525,7 +593,8 @@
       {
         "name": "后置清理-还原为空(测试账号原始状态)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AnlayticShare/v3/SaveBrandtag",
         "request_body": {
           "BrandCampaignTagIds": [],

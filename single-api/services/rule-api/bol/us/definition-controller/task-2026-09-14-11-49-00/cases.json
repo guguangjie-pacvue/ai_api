@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /definition - 创建Targeting类型规则(bol账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=Targeting占比约50.0%(3/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约50.0%(3/6)",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=Targeting占比约50.0%(3/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{variables.profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约50.0%(3/6)",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -12,18 +12,19 @@
       {
         "name": "创建bol Targeting规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "endDate": "2026-09-30T23:59:59",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "Europe/Amsterdam",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Daily",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
@@ -33,11 +34,11 @@
               "ProductPage"
             ],
             "excludePausedTargetings": true,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{target_id_campaign}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id_campaign}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -121,12 +122,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Bol_CreateTargeting_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -135,7 +137,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Bol_CreateTargeting_Cleanup"
@@ -145,7 +147,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -163,7 +165,8 @@
       {
         "name": "后置清理-归档(isDelete+isPaused)新建规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -180,7 +183,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -195,7 +199,7 @@
   },
   {
     "name": "POST /definition - 创建Campaign类型规则(bol账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=Campaign占比约33.3%(2/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约33.3%(2/6)",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=Campaign占比约33.3%(2/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{variables.profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约33.3%(2/6)",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -206,29 +210,30 @@
       {
         "name": "创建bol Campaign规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "endDate": "2026-09-30T23:59:59",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "Europe/Amsterdam",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Daily",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
             "targetInfo": [
               {
-                "targetId": "{{target_id_campaign}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id_campaign}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "excludePausedCampaigns": true,
             "nonnullMaxCpc": false,
             "profiteroBrandInfoList": [],
@@ -290,12 +295,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Bol_CreateCampaign_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -304,7 +310,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Bol_CreateCampaign_Cleanup"
@@ -314,7 +320,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -332,7 +338,8 @@
       {
         "name": "后置清理-归档(isDelete+isPaused)新建规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -349,7 +356,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -364,7 +372,7 @@
   },
   {
     "name": "POST /definition - 创建SOV Bid类型规则(bol账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=SOV Bid占比约16.7%(1/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约16.7%(1/6)",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=bolv2过滤180天ES真实样本(90天仅2条，样本量小于10已放宽窗口至180天，共6条真实客户调用，已排除clientId 62/3186测试账号)：ruleType=SOV Bid占比约16.7%(1/6)。写操作只能安全落在QA账号(client_id=62)自建数据上，复用bol账号自身真实profile({{variables.profile_id}})和真实target_id构造applyTarget(结构取自真实客户样本，仅替换clientId/userId/targetId为QA账号自有真实值)，创建后按ruleName查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约16.7%(1/6)",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -375,15 +383,16 @@
       {
         "name": "创建bol SOV Bid规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "sovKeywordTag": [],
           "frequency": "Weekly",
           "dayOfWeek": 7,
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "automation": [
             {
@@ -427,12 +436,12 @@
             "relationShipForAnd": false,
             "targetInfo": [
               {
-                "targetId": "{{target_id_adgroup}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.target_id_adgroup}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "excludePausedCampaigns": true,
             "nonnullMaxCpc": false,
             "nonnullDailyBudget": false,
@@ -440,17 +449,17 @@
             "targetLevel": "AdGroup"
           },
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "emailOption": "NoEmails",
           "timeZone": "Europe/Amsterdam",
           "applyTarget": {
             "nonnullFrequencyCap": false,
             "targetInfo": [
               {
-                "targetId": "{{target_id_item}}"
+                "targetId": "{{variables.target_id_item}}"
               }
             ],
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "nonnullMaxCpc": false,
             "nonnullDailyBudget": false,
             "targetLevel": "Item"
@@ -467,12 +476,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Bol_CreateSOVBid_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -481,7 +491,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Bol_CreateSOVBid_Cleanup"
@@ -491,7 +501,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -509,7 +519,8 @@
       {
         "name": "后置清理-归档(isDelete+isPaused)新建规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -526,7 +537,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -552,24 +564,25 @@
       {
         "name": "批量创建bol Targeting规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/bulkCreateRule",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
           "userName": "autoui_acount",
           "createByShare": false,
           "ruleRequests": [
             {
-              "clientId": "{{client_id}}",
+              "clientId": "{{variables.client_id}}",
               "endDate": "2026-09-30T23:59:59",
               "emailSettings": [],
               "emailOption": "NoEmails",
               "timeZone": "Europe/Amsterdam",
               "userName": "autoui_acount",
-              "userId": "{{user_id}}",
+              "userId": "{{variables.user_id}}",
               "frequency": "Daily",
-              "productLine": "{{platform}}",
+              "productLine": "{{variables.platform}}",
               "mode": "Auto",
               "applyTarget": {
                 "relationShipForAnd": false,
@@ -579,11 +592,11 @@
                   "ProductPage"
                 ],
                 "excludePausedTargetings": true,
-                "clientId": "{{client_id}}",
+                "clientId": "{{variables.client_id}}",
                 "targetInfo": [
                   {
-                    "targetId": "{{target_id_campaign}}",
-                    "profileId": "{{profile_id}}"
+                    "targetId": "{{variables.target_id_campaign}}",
+                    "profileId": "{{variables.profile_id}}"
                   }
                 ],
                 "nonnullFrequencyCap": false,
@@ -674,12 +687,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Bol_BulkCreateTargeting_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -688,7 +702,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Bol_BulkCreateTargeting_Cleanup"
@@ -698,7 +712,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -716,7 +730,8 @@
       {
         "name": "后置清理-归档(isDelete+isPaused)新建规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -733,7 +748,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_bulk_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -759,11 +775,12 @@
       {
         "name": "暂停real_rule_id_targeting",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id_targeting}}"
+            "{{variables.real_rule_id_targeting}}"
           ],
           "isPaused": true
         },
@@ -775,8 +792,9 @@
       {
         "name": "验证已暂停",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/{{real_rule_id_targeting}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/{{variables.real_rule_id_targeting}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -789,11 +807,12 @@
       {
         "name": "后置逆操作-恢复原状态(isPaused=false)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id_targeting}}"
+            "{{variables.real_rule_id_targeting}}"
           ],
           "isPaused": false
         },
@@ -805,8 +824,9 @@
       {
         "name": "后置验证-确认已恢复原状态",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/{{real_rule_id_targeting}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/{{variables.real_rule_id_targeting}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -820,7 +840,7 @@
   },
   {
     "name": "POST /definition/changeOwners - 变更规则Owner(全平台真实存量分布,幂等无副作用写法,可重复)",
-    "description": "单接口测试：POST /definition/changeOwners。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(67次真实客户调用，已排除62/3186)：{ruleIds,userName,userId}为唯一模式，占比100%。写操作复用bol账号(client_id=62)已存在的真实规则real_rule_id_campaign(非本次新建)，已实测确认该规则当前owner即为{{user_id}}/autoui_acount，故本用例将owner设置为其自身(真实、已验证的值，非编造)，属无副作用幂等操作，不改变规则实际owner，可安全重复执行。500条随机样本中占比约100.0%(67/67)。",
+    "description": "单接口测试：POST /definition/changeOwners。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(67次真实客户调用，已排除62/3186)：{ruleIds,userName,userId}为唯一模式，占比100%。写操作复用bol账号(client_id=62)已存在的真实规则real_rule_id_campaign(非本次新建)，已实测确认该规则当前owner即为{{variables.user_id}}/autoui_acount，故本用例将owner设置为其自身(真实、已验证的值，非编造)，属无副作用幂等操作，不改变规则实际owner，可安全重复执行。500条随机样本中占比约100.0%(67/67)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -831,13 +851,14 @@
       {
         "name": "变更real_rule_id_campaign的owner为自身(幂等)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeOwners",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id_campaign}}"
+            "{{variables.real_rule_id_campaign}}"
           ],
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "userName": "autoui_acount"
         },
         "extract_vars": {},
@@ -846,10 +867,11 @@
         }
       },
       {
-        "name": "验证owner未变化(仍为{{user_id}})",
+        "name": "验证owner未变化(仍为{{variables.user_id}})",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/{{real_rule_id_campaign}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/{{variables.real_rule_id_campaign}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -874,10 +896,11 @@
       {
         "name": "按ruleId查询targetInfo",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleTargetInfoByRuleIds",
         "request_body": [
-          "{{real_rule_id}}"
+          "{{variables.real_rule_id}}"
         ],
         "extract_vars": {},
         "expected_response": {
@@ -902,14 +925,15 @@
       {
         "name": "按userIds查询Owner(已知会405-后端Long/String cast缺陷)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
           "mode": "Auto",
           "download": false,
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -925,7 +949,7 @@
   },
   {
     "name": "POST /definition/getApplyRule - 按ownerIds查询可应用规则(全平台真实存量分布)",
-    "description": "单接口测试：POST /definition/getApplyRule。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(7543次真实客户调用，已排除62/3186)：{ownerIds,timeZone,currency,...}为主流模式。使用bol账号自身真实userId({{user_id}})作为ownerIds查询，纯读操作无副作用，实测返回200。500条随机样本中占比约100.0%(7543/7543)。",
+    "description": "单接口测试：POST /definition/getApplyRule。该接口body无productLine字段(NO_PRODUCTLINE_FIELD)，按fallback规则使用全平台90天真实流量为基线(7543次真实客户调用，已排除62/3186)：{ownerIds,timeZone,currency,...}为主流模式。使用bol账号自身真实userId({{variables.user_id}})作为ownerIds查询，纯读操作无副作用，实测返回200。500条随机样本中占比约100.0%(7543/7543)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -936,13 +960,14 @@
       {
         "name": "按ownerIds查询可应用规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getApplyRule",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -972,7 +997,8 @@
       {
         "name": "查询By Client分组规则周报",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleReport",
         "request_body": {
           "removeApplied": false,
@@ -1010,13 +1036,14 @@
       {
         "name": "导出规则列表(xlsx)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/export",
         "request_body": {
           "removeApplied": false,
           "targetLevels": [],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1028,7 +1055,7 @@
           "language": "EN",
           "commonCampaigns": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "frequency": [],
           "fromSnapShot": false,
@@ -1063,8 +1090,9 @@
       {
         "name": "查询规则详情",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/{{real_rule_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/{{variables.real_rule_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -1089,7 +1117,8 @@
       {
         "name": "查询商用规则Client列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleClient",
         "request_body": {},
         "extract_vars": {},
@@ -1115,7 +1144,8 @@
       {
         "name": "查询AutoRefill规则ProfileId列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleProfileIds",
         "request_body": {},
         "extract_vars": {},
@@ -1141,7 +1171,8 @@
       {
         "name": "查询是否存在ClickHit模式规则",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/hasClickHitMode",
         "request_body": {},
         "extract_vars": {},
@@ -1164,7 +1195,8 @@
       {
         "name": "查询可转移Owner列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/transferableOwnerList",
         "request_body": {},
         "extract_vars": {},

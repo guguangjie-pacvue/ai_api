@@ -12,18 +12,21 @@
       {
         "name": "查询品牌分类列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/GetBrandsAndCategory",
         "request_body": {
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}",
-          "profileId": "{{profile_id}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
+          "profileId": "{{variables.profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -41,19 +44,22 @@
       {
         "name": "查询品牌分类列表(含shareId)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/GetBrandsAndCategory",
         "request_body": {
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}",
-          "profileId": "{{profile_id}}",
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
+          "profileId": "{{variables.profile_id}}",
           "shareId": ""
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -71,12 +77,15 @@
       {
         "name": "查询Benchmark趋势(基础维度)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/GetBenchmarkDashboardTrendChart",
         "request_body": {
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "toMarket": "US",
           "isExchange": 0,
           "adProduct": "SP",
@@ -91,7 +100,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -109,12 +120,15 @@
       {
         "name": "查询Benchmark趋势(含adFormat+campaignGoal)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/GetBenchmarkDashboardTrendChart",
         "request_body": {
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "toMarket": "US",
           "isExchange": 0,
           "adProduct": "SD",
@@ -129,7 +143,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -147,19 +163,26 @@
       {
         "name": "导出Home看板(关键词维度)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/DownloadHomeForShare",
         "request_body": {
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],
           "isExchange": 1,
           "homeWidgetExports": [
-            { "widgetName": "TopImprovers" },
-            { "widgetName": "TopPerformers" }
+            {
+              "widgetName": "TopImprovers"
+            },
+            {
+              "widgetName": "TopPerformers"
+            }
           ],
           "performanceGroupBy": "TYD",
           "efficiencyGroupBy": "TYD",
@@ -200,12 +223,15 @@
       {
         "name": "查询超预算Campaign汇总",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/GetCampaignOutofBudgetTotal",
         "request_body": {
-          "start": "{{date_start}}T00:00:00",
-          "end": "{{date_end}}T00:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start}}T00:00:00",
+          "end": "{{variables.date_end}}T00:00:00",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],
@@ -216,7 +242,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -234,12 +262,15 @@
       {
         "name": "查询转化效率看板数据",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/GetConversionInfo",
         "request_body": {
-          "start": "{{date_start}}T00:00:00",
-          "end": "{{date_end}}T00:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start}}T00:00:00",
+          "end": "{{variables.date_end}}T00:00:00",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],
@@ -259,7 +290,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -277,12 +310,15 @@
       {
         "name": "查询ROAS看板数据",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/ROASDashboard",
         "request_body": {
-          "start": "{{date_start}}T00:00:00",
-          "end": "{{date_end}}T00:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start}}T00:00:00",
+          "end": "{{variables.date_end}}T00:00:00",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],
@@ -294,7 +330,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -312,12 +350,15 @@
       {
         "name": "查询Campaign目标ACOS达成情况",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/TargetACOS",
         "request_body": {
-          "start": "{{date_start}}T00:00:00",
-          "end": "{{date_end}}T00:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start}}T00:00:00",
+          "end": "{{variables.date_end}}T00:00:00",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],
@@ -342,12 +383,15 @@
       {
         "name": "查询Campaign目标CPA达成情况",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/TargetData",
         "request_body": {
-          "start": "{{date_start}}T00:00:00",
-          "end": "{{date_end}}T00:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start}}T00:00:00",
+          "end": "{{variables.date_end}}T00:00:00",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],
@@ -358,7 +402,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -376,12 +422,15 @@
       {
         "name": "查询Campaign目标CPC达成情况",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/TargetDataViewCPC",
         "request_body": {
-          "start": "{{date_start}}T00:00:00",
-          "end": "{{date_end}}T00:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start}}T00:00:00",
+          "end": "{{variables.date_end}}T00:00:00",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],
@@ -406,12 +455,15 @@
       {
         "name": "查询Campaign目标ROAS达成情况",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Dashboard/v3/TargetROAS",
         "request_body": {
-          "start": "{{date_start}}T00:00:00",
-          "end": "{{date_end}}T00:00:00",
-          "profileIds": ["{{profile_id}}"],
+          "start": "{{variables.date_start}}T00:00:00",
+          "end": "{{variables.date_end}}T00:00:00",
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignTagIds": [],
           "amzPortfolioIds": [],
           "campaignIds": [],

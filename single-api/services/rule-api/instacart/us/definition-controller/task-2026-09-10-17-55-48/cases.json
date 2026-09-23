@@ -12,7 +12,8 @@
       {
         "name": "调用 commerceRuleClient",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleClient",
         "request_body": {},
         "extract_vars": {},
@@ -38,7 +39,8 @@
       {
         "name": "调用 getAutoRefillRuleProfileIds",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleProfileIds",
         "request_body": {},
         "extract_vars": {},
@@ -61,7 +63,8 @@
       {
         "name": "调用 hasClickHitMode",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/hasClickHitMode",
         "request_body": {},
         "extract_vars": {},
@@ -87,7 +90,8 @@
       {
         "name": "调用 transferableOwnerList",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/transferableOwnerList",
         "request_body": {},
         "extract_vars": {},
@@ -102,7 +106,7 @@
   },
   {
     "name": "GET /definition/{ruleId} - 测试账号真实instacart规则详情",
-    "description": "单接口测试：GET /definition/{ruleId}。使用instacart测试账号(clientId=62)真实存在的Campaign类型规则ID({{real_rule_id}})查询详情，该规则为其他模块共用的只读fixture，本case仅查询不做任何修改。",
+    "description": "单接口测试：GET /definition/{ruleId}。使用instacart测试账号(clientId=62)真实存在的Campaign类型规则ID({{variables.real_rule_id}})查询详情，该规则为其他模块共用的只读fixture，本case仅查询不做任何修改。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -113,8 +117,9 @@
       {
         "name": "调用 定义详情",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/{{real_rule_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/{{variables.real_rule_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -128,7 +133,7 @@
   },
   {
     "name": "GET /definition/checkCustom/{ruleId} - 测试账号真实instacart规则",
-    "description": "单接口测试：GET /definition/checkCustom/{ruleId}。该接口ES无instacart专属流量记录；使用测试账号真实存在的规则ID({{real_rule_id}})构造该场景（与amazon模块同结构验证过的接口形态一致）。",
+    "description": "单接口测试：GET /definition/checkCustom/{ruleId}。该接口ES无instacart专属流量记录；使用测试账号真实存在的规则ID({{variables.real_rule_id}})构造该场景（与amazon模块同结构验证过的接口形态一致）。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -139,8 +144,9 @@
       {
         "name": "调用 checkCustom",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/checkCustom/{{real_rule_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/checkCustom/{{variables.real_rule_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -151,7 +157,7 @@
   },
   {
     "name": "GET /definition/getRuleTargetInfo - ruleId=测试账号真实instacart规则",
-    "description": "单接口测试：GET /definition/getRuleTargetInfo。ruleId为必填查询参数(Swagger声明in:query)。实测验证：该参数必须以URL查询字符串形式传递，若像POST一样放入JSON body，服务端ruleId解析为null，进而在RuleDefinition.getExcludePausedCampaigns()上抛NPE(code:405)——已用query string方式规避（本地Python版run_cases.py不会像Windows版工具那样自动把GET的request_body转成query string，故此处直接在path中拼接查询字符串）。ES无instacart专属调用记录；使用测试账号真实存在的规则ID({{real_rule_id}})构造该场景。",
+    "description": "单接口测试：GET /definition/getRuleTargetInfo。ruleId为必填查询参数(Swagger声明in:query)。实测验证：该参数必须以URL查询字符串形式传递，若像POST一样放入JSON body，服务端ruleId解析为null，进而在RuleDefinition.getExcludePausedCampaigns()上抛NPE(code:405)——已用query string方式规避（本地Python版run_cases.py不会像Windows版工具那样自动把GET的request_body转成query string，故此处直接在path中拼接查询字符串）。ES无instacart专属调用记录；使用测试账号真实存在的规则ID({{variables.real_rule_id}})构造该场景。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -162,8 +168,9 @@
       {
         "name": "调用 getRuleTargetInfo",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/getRuleTargetInfo?ruleId={{real_rule_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/getRuleTargetInfo?ruleId={{variables.real_rule_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -177,7 +184,7 @@
   },
   {
     "name": "GET /definition/adtomicRules/settings/{profileId} - 测试账号真实instacart profile(复现已知缺陷)",
-    "description": "单接口测试：GET /definition/adtomicRules/settings/{profileId}。使用测试账号真实profileId({{profile_id}})查询。amazon模块同接口已实测发现服务端SQLSyntaxErrorException: Table 'rule.adtomic_rule_default_setting' doesn't exist（生产环境该表缺失），属服务级真实缺陷、与平台无关。本case用于验证该缺陷在instacart侧同样复现，如实记录实测结果（预期非200/异常），不为了让case变绿而修改断言。",
+    "description": "单接口测试：GET /definition/adtomicRules/settings/{profileId}。使用测试账号真实profileId({{variables.profile_id}})查询。amazon模块同接口已实测发现服务端SQLSyntaxErrorException: Table 'rule.adtomic_rule_default_setting' doesn't exist（生产环境该表缺失），属服务级真实缺陷、与平台无关。本case用于验证该缺陷在instacart侧同样复现，如实记录实测结果（预期非200/异常），不为了让case变绿而修改断言。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -188,8 +195,9 @@
       {
         "name": "调用 adtomicRules settings(GET)",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/adtomicRules/settings/{{profile_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/adtomicRules/settings/{{variables.profile_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -211,7 +219,8 @@
       {
         "name": "调用 commerceRuleReport",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleReport",
         "request_body": {
           "removeApplied": false,
@@ -238,7 +247,7 @@
   },
   {
     "name": "POST /definition/export - 导出规则列表(Auto模式,按创建时间排序)",
-    "description": "单接口测试：POST /definition/export。请求体结构取自amazon模块真实样本(132条,90天)最常见模式{'pageInfo':{pageSize:MAX,orderBy:'createdAt desc'},'mode':'Auto','download':true,...}，ownerIds替换为instacart测试账号真实userId({{user_id}})。download=true时返回二进制文件流(非JSON)，断言改为$binary。",
+    "description": "单接口测试：POST /definition/export。请求体结构取自amazon模块真实样本(132条,90天)最常见模式{'pageInfo':{pageSize:MAX,orderBy:'createdAt desc'},'mode':'Auto','download':true,...}，ownerIds替换为instacart测试账号真实userId({{variables.user_id}})。download=true时返回二进制文件流(非JSON)，断言改为$binary。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -249,13 +258,14 @@
       {
         "name": "调用 export",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/export",
         "request_body": {
           "removeApplied": false,
           "targetLevels": [],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -300,7 +310,8 @@
       {
         "name": "调用 export commerceRuleReport",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/export/commerceRuleReport",
         "request_body": {
           "removeApplied": false,
@@ -326,7 +337,7 @@
   },
   {
     "name": "POST /definition/getAdtomicRules - instacart profile查询(构造)",
-    "description": "单接口测试：POST /definition/getAdtomicRules。该接口ES无instacart调用记录；amazon模块同接口实测发现adtomicProfileIds为空时服务端对null List直接.get(0)抛NPE(code:405)——传入非空真实profile可规避。本case复用该修正后的可用输入(productLine=instacart, adtomicProfileIds=[{{profile_id}}])，Adtomic为跨平台共享的建议规则子系统，instacart账号大概率无关联Adtomic数据，返回空列表属真实业务结果。",
+    "description": "单接口测试：POST /definition/getAdtomicRules。该接口ES无instacart调用记录；amazon模块同接口实测发现adtomicProfileIds为空时服务端对null List直接.get(0)抛NPE(code:405)——传入非空真实profile可规避。本case复用该修正后的可用输入(productLine=instacart, adtomicProfileIds=[{{variables.profile_id}}])，Adtomic为跨平台共享的建议规则子系统，instacart账号大概率无关联Adtomic数据，返回空列表属真实业务结果。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -337,7 +348,8 @@
       {
         "name": "调用 getAdtomicRules",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAdtomicRules",
         "request_body": {
           "productLine": "instacart",
@@ -346,7 +358,7 @@
             "pageSize": 20
           },
           "adtomicProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -358,7 +370,7 @@
   },
   {
     "name": "POST /definition/getApplyRule - 按owner查询已应用规则列表",
-    "description": "单接口测试：POST /definition/getApplyRule。该接口无productLine字段，amazon模块90天内7566条真实样本常见模式为{'ownerIds':[...],'download':false}；ownerIds替换为instacart测试账号真实userId({{user_id}})。",
+    "description": "单接口测试：POST /definition/getApplyRule。该接口无productLine字段，amazon模块90天内7566条真实样本常见模式为{'ownerIds':[...],'download':false}；ownerIds替换为instacart测试账号真实userId({{variables.user_id}})。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -369,13 +381,14 @@
       {
         "name": "调用 getApplyRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getApplyRule",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -394,7 +407,7 @@
   },
   {
     "name": "POST /definition/getAsinRelatedRule - 按测试账号真实instacart target查询",
-    "description": "单接口测试：POST /definition/getAsinRelatedRule。amazon模块实测发现itemIds为空数组时服务端拼接SQL会生成非法的\"IN ()\"语句直接报SQL语法错误(code:405)——这是真实缺陷；改为传入非空真实target ID({{target_id}})后可正常返回。本case使用instacart测试账号真实target固化为Happy Path。",
+    "description": "单接口测试：POST /definition/getAsinRelatedRule。amazon模块实测发现itemIds为空数组时服务端拼接SQL会生成非法的\"IN ()\"语句直接报SQL语法错误(code:405)——这是真实缺陷；改为传入非空真实target ID({{variables.target_id}})后可正常返回。本case使用instacart测试账号真实target固化为Happy Path。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -405,12 +418,13 @@
       {
         "name": "调用 getAsinRelatedRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAsinRelatedRule",
         "request_body": [
           {
             "itemIds": [
-              "{{target_id}}"
+              "{{variables.target_id}}"
             ],
             "asinIdentity": ""
           }
@@ -427,7 +441,7 @@
   },
   {
     "name": "POST /definition/getAutoRefillRuleApplyTagCampaigns - 按instacart profile查询",
-    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTagCampaigns。该接口ES无instacart专属流量(amazon模块90天内2637条均为amazon)；复用amazon真实结构{'productLine':...,'profileIds':[...]}，productLine替换为instacart，profileIds替换为测试账号真实profile({{profile_id}})。Auto Refill为跨平台共享功能，instacart侧可能返回空列表，属真实业务结果。",
+    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTagCampaigns。该接口ES无instacart专属流量(amazon模块90天内2637条均为amazon)；复用amazon真实结构{'productLine':...,'profileIds':[...]}，productLine替换为instacart，profileIds替换为测试账号真实profile({{variables.profile_id}})。Auto Refill为跨平台共享功能，instacart侧可能返回空列表，属真实业务结果。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -438,7 +452,8 @@
       {
         "name": "调用 getAutoRefillRuleApplyTagCampaigns",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTagCampaigns",
         "request_body": {
           "productLine": "instacart",
@@ -446,7 +461,7 @@
           "download": false,
           "timeZone": "America/Los_Angeles",
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ignore": false,
           "currency": "$",
@@ -464,7 +479,7 @@
   },
   {
     "name": "POST /definition/getAutoRefillRuleApplyTags - 按instacart client查询",
-    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTags。该接口ES无instacart专属流量(amazon模块90天内1847条均为amazon)；复用amazon真实结构{'productLine':...,'clientId':...}，替换为instacart测试账号真实ClientId({{client_id}})。",
+    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTags。该接口ES无instacart专属流量(amazon模块90天内1847条均为amazon)；复用amazon真实结构{'productLine':...,'clientId':...}，替换为instacart测试账号真实ClientId({{variables.client_id}})。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -475,13 +490,14 @@
       {
         "name": "调用 getAutoRefillRuleApplyTags",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTags",
         "request_body": {
           "productLine": "instacart",
           "removeApplied": false,
           "download": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
@@ -499,7 +515,7 @@
   },
   {
     "name": "POST /definition/getAutoRefillRuleApplyTargets - 按instacart client查询",
-    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTargets。该接口ES无instacart专属流量(amazon模块90天内2934条均为amazon)；复用amazon真实结构{'productLine':...,'clientId':...}，替换为instacart测试账号真实ClientId({{client_id}})。",
+    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTargets。该接口ES无instacart专属流量(amazon模块90天内2934条均为amazon)；复用amazon真实结构{'productLine':...,'clientId':...}，替换为instacart测试账号真实ClientId({{variables.client_id}})。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -510,13 +526,14 @@
       {
         "name": "调用 getAutoRefillRuleApplyTargets",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTargets",
         "request_body": {
           "productLine": "instacart",
           "removeApplied": false,
           "download": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
@@ -534,7 +551,7 @@
   },
   {
     "name": "POST /definition/getCampaignWithRule - 按测试账号真实instacart campaign查询",
-    "description": "单接口测试：POST /definition/getCampaignWithRule。amazon模块实测发现该接口字符串数组为空时同样触发SQL \"IN ()\"语法错误(code:405)——与getAsinRelatedRule同源的真实缺陷；改为传入非空真实campaignId({{real_campaign_id}})后可正常返回。本case使用instacart测试账号真实campaign固化为Happy Path。",
+    "description": "单接口测试：POST /definition/getCampaignWithRule。amazon模块实测发现该接口字符串数组为空时同样触发SQL \"IN ()\"语法错误(code:405)——与getAsinRelatedRule同源的真实缺陷；改为传入非空真实campaignId({{variables.real_campaign_id}})后可正常返回。本case使用instacart测试账号真实campaign固化为Happy Path。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -545,10 +562,11 @@
       {
         "name": "调用 getCampaignWithRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getCampaignWithRule",
         "request_body": [
-          "{{real_campaign_id}}"
+          "{{variables.real_campaign_id}}"
         ],
         "extract_vars": {},
         "expected_response": {
@@ -573,7 +591,8 @@
       {
         "name": "调用 getOwners(默认)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -596,7 +615,7 @@
   },
   {
     "name": "POST /definition/getOwners - 带userIds过滤(真实缺陷,已复核确认)",
-    "description": "单接口测试：POST /definition/getOwners。amazon模块曾记录\"userIds非空即抛ClassCastException\"的缺陷；本次ES全平台90天抽样(150797条)显示生产环境大量真实请求携带非空userIds且正常返回(如{'userIds':['12772','12792',...]})，与amazon记录的结论看似矛盾。用instacart测试账号真实userId({{user_id}})复核后，实测确认该缺陷在instacart侧同样必现：服务端报'class java.lang.Long cannot be cast to class java.lang.String'(code:405)，与请求体结构/数值本身无关——即使字段类型与真实生产成功样本完全一致仍会触发，怀疑是特定代码路径下的强制类型转换bug，与amazon模块记录一致，如实保留FAIL状态记录该真实缺陷，不为了让case变绿而修改断言。",
+    "description": "单接口测试：POST /definition/getOwners。amazon模块曾记录\"userIds非空即抛ClassCastException\"的缺陷；本次ES全平台90天抽样(150797条)显示生产环境大量真实请求携带非空userIds且正常返回(如{'userIds':['12772','12792',...]})，与amazon记录的结论看似矛盾。用instacart测试账号真实userId({{variables.user_id}})复核后，实测确认该缺陷在instacart侧同样必现：服务端报'class java.lang.Long cannot be cast to class java.lang.String'(code:405)，与请求体结构/数值本身无关——即使字段类型与真实生产成功样本完全一致仍会触发，怀疑是特定代码路径下的强制类型转换bug，与amazon模块记录一致，如实保留FAIL状态记录该真实缺陷，不为了让case变绿而修改断言。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -607,14 +626,15 @@
       {
         "name": "调用 getOwners(带userIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
           "mode": "Auto",
           "download": false,
           "userIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -641,7 +661,8 @@
       {
         "name": "调用 getProfile",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getProfile",
         "request_body": {
           "productLine": "instacart"
@@ -669,7 +690,8 @@
       {
         "name": "调用 getRule(默认列表)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
@@ -683,7 +705,7 @@
           "timeZone": "America/Los_Angeles",
           "profileIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [],
           "frequency": [],
@@ -708,7 +730,7 @@
   },
   {
     "name": "POST /definition/getRule - 按ruleType=Campaign过滤",
-    "description": "单接口测试：POST /definition/getRule。真实样本中大量请求携带ruleType过滤按规则类型缩小列表；instacart测试账号(clientId=62)下真实存在ruleType=Campaign的规则({{real_rule_id}})，用该维度构造过滤场景。",
+    "description": "单接口测试：POST /definition/getRule。真实样本中大量请求携带ruleType过滤按规则类型缩小列表；instacart测试账号(clientId=62)下真实存在ruleType=Campaign的规则({{variables.real_rule_id}})，用该维度构造过滤场景。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -719,7 +741,8 @@
       {
         "name": "调用 getRule(ruleType过滤)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
@@ -733,7 +756,7 @@
           "timeZone": "America/Los_Angeles",
           "profileIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [],
           "frequency": [],
@@ -760,7 +783,7 @@
   },
   {
     "name": "POST /definition/getRuleInfoByCampaignId - 测试账号真实instacart campaign",
-    "description": "单接口测试：POST /definition/getRuleInfoByCampaignId。该接口ES无instacart专属流量(amazon模块90天内1363条均为amazon)；复用amazon真实结构{'productLine':...,'clientId':..,'campaignId':..,'profileId':..}，全部替换为instacart测试账号真实值，campaignId使用测试账号下真实campaign({{real_campaign_id}})。该campaign若无关联规则，data可能为空对象，属真实业务结果，不作强断言。",
+    "description": "单接口测试：POST /definition/getRuleInfoByCampaignId。该接口ES无instacart专属流量(amazon模块90天内1363条均为amazon)；复用amazon真实结构{'productLine':...,'clientId':..,'campaignId':..,'profileId':..}，全部替换为instacart测试账号真实值，campaignId使用测试账号下真实campaign({{variables.real_campaign_id}})。该campaign若无关联规则，data可能为空对象，属真实业务结果，不作强断言。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -771,15 +794,16 @@
       {
         "name": "调用 getRuleInfoByCampaignId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleInfoByCampaignId",
         "request_body": {
           "productLine": "instacart",
           "removeApplied": false,
           "download": false,
-          "clientId": "{{client_id}}",
-          "campaignId": "{{real_campaign_id}}",
-          "profileId": "{{profile_id}}",
+          "clientId": "{{variables.client_id}}",
+          "campaignId": "{{variables.real_campaign_id}}",
+          "profileId": "{{variables.profile_id}}",
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
@@ -794,7 +818,7 @@
   },
   {
     "name": "POST /definition/getRuleTargetInfoByRuleIds - 测试账号真实instacart规则ID",
-    "description": "单接口测试：POST /definition/getRuleTargetInfoByRuleIds。请求体为字符串数组类型(Swagger声明)，ES未采集到该接口真实body内容；本case使用instacart测试账号真实存在的规则ID({{real_rule_id}})构造该场景（当前config仅有1个已验证真实规则ID，故数组长度为1，区别于amazon模块使用2个ID的写法）。",
+    "description": "单接口测试：POST /definition/getRuleTargetInfoByRuleIds。请求体为字符串数组类型(Swagger声明)，ES未采集到该接口真实body内容；本case使用instacart测试账号真实存在的规则ID({{variables.real_rule_id}})构造该场景（当前config仅有1个已验证真实规则ID，故数组长度为1，区别于amazon模块使用2个ID的写法）。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -805,10 +829,11 @@
       {
         "name": "调用 getRuleTargetInfoByRuleIds",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleTargetInfoByRuleIds",
         "request_body": [
-          "{{real_rule_id}}"
+          "{{variables.real_rule_id}}"
         ],
         "extract_vars": {},
         "expected_response": {
@@ -833,7 +858,8 @@
       {
         "name": "调用 getTarget",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getTarget",
         "request_body": {
           "productLine": "instacart"
@@ -847,7 +873,7 @@
   },
   {
     "name": "POST /getRuleViewList - 按测试账号真实instacart规则ID查询",
-    "description": "单接口测试：POST /getRuleViewList。该接口无productLine字段，amazon模块90天内37条真实样本均为{'ruleIds':[int64,...]}结构，占比100%；本case使用instacart测试账号真实存在的规则ID({{real_rule_id}})构造该场景。",
+    "description": "单接口测试：POST /getRuleViewList。该接口无productLine字段，amazon模块90天内37条真实样本均为{'ruleIds':[int64,...]}结构，占比100%；本case使用instacart测试账号真实存在的规则ID({{variables.real_rule_id}})构造该场景。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -858,12 +884,13 @@
       {
         "name": "调用 getRuleViewList",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getRuleViewList",
         "request_body": {
           "removeApplied": false,
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ],
           "download": false,
           "timeZone": "America/Los_Angeles",
@@ -894,7 +921,8 @@
       {
         "name": "调用 checkRuleName",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkRuleName",
         "request_body": {
           "emailOption": "NoEmails",
@@ -915,7 +943,7 @@
   },
   {
     "name": "POST /definition/checkAutoRefillRule - Auto Refill目标校验(测试账号真实instacart campaign)",
-    "description": "单接口测试：POST /definition/checkAutoRefillRule。该接口ES无instacart专属流量(amazon模块90天内884条均为amazon)；复用amazon真实结构{'applyTarget':{targetInfo:[{targetId}],targetLevel,...},'clientId':..,'ruleType':'Auto Refill'}，clientId替换为instacart测试账号真实值，targetInfo使用测试账号真实campaign({{real_campaign_id}})+targetLevel='Campaign'构造。该接口仅做校验不产生写入。",
+    "description": "单接口测试：POST /definition/checkAutoRefillRule。该接口ES无instacart专属流量(amazon模块90天内884条均为amazon)；复用amazon真实结构{'applyTarget':{targetInfo:[{targetId}],targetLevel,...},'clientId':..,'ruleType':'Auto Refill'}，clientId替换为instacart测试账号真实值，targetInfo使用测试账号真实campaign({{variables.real_campaign_id}})+targetLevel='Campaign'构造。该接口仅做校验不产生写入。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -926,7 +954,8 @@
       {
         "name": "调用 checkAutoRefillRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkAutoRefillRule",
         "request_body": {
           "productLine": "instacart",
@@ -934,7 +963,7 @@
             "relationShipForAnd": false,
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}"
+                "targetId": "{{variables.real_campaign_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -943,7 +972,7 @@
             "nonnullDailyBudget": false,
             "targetLevel": "Campaign"
           },
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "ruleType": "Auto Refill",
           "emailOption": "NoEmails"
         },
@@ -970,7 +999,8 @@
       {
         "name": "调用 calculateNextExecutionTime",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
           "productLine": "instacart",
@@ -1003,10 +1033,11 @@
       {
         "name": "调用 adtomicRules settings(POST)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/adtomicRules/settings",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "ruleType": "Keyword",
           "minimumOrdersRateThreshold": 10,
           "maximumAcos": 50.0,
@@ -1022,7 +1053,7 @@
   },
   {
     "name": "POST /definition - 创建Keyword类型规则(Campaign级目标,含后置暂停验证,可重复)",
-    "description": "单接口测试：POST /definition。ES实测：instacart在90天标准窗口内该接口流量为0，扩大至730天窗口后采集到154条真实instacart样本，其中ruleType=Keyword占比约76%(117/154)为最常见模式。本case使用该真实占比最高的场景结构，targetLevel=Campaign+ruleTargetType=[OverrideKeywords,DefaultKeywords]，target使用测试账号已验证有效的真实campaign({{real_campaign_id}})——该结构已在本会话中被验证可成功创建(此前遗留的2条临时规则均为此结构且已确认Paused)。第2步查询提取ruleId，第3步删除清理(changeStatus{isPaused:true,isDelete:true}，实测确认isDelete=true单独调用不会自动置isPaused=true，需两字段同传才能同时满足'最终状态为Paused'与'释放ruleName保证可重复执行'两个要求)，第4步GET验证isPaused=true，保证用例可重复执行。",
+    "description": "单接口测试：POST /definition。ES实测：instacart在90天标准窗口内该接口流量为0，扩大至730天窗口后采集到154条真实instacart样本，其中ruleType=Keyword占比约76%(117/154)为最常见模式。本case使用该真实占比最高的场景结构，targetLevel=Campaign+ruleTargetType=[OverrideKeywords,DefaultKeywords]，target使用测试账号已验证有效的真实campaign({{variables.real_campaign_id}})——该结构已在本会话中被验证可成功创建(此前遗留的2条临时规则均为此结构且已确认Paused)。第2步查询提取ruleId，第3步删除清理(changeStatus{isPaused:true,isDelete:true}，实测确认isDelete=true单独调用不会自动置isPaused=true，需两字段同传才能同时满足'最终状态为Paused'与'释放ruleName保证可重复执行'两个要求)，第4步GET验证isPaused=true，保证用例可重复执行。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -1033,15 +1064,16 @@
       {
         "name": "创建instacart Keyword规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -1053,8 +1085,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1111,12 +1143,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1124,7 +1157,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_CreateKeyword_0910_Cleanup"
@@ -1151,7 +1184,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1168,7 +1202,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{kw_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1194,15 +1229,16 @@
       {
         "name": "创建instacart Campaign规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -1210,8 +1246,8 @@
             "relationShipForAnd": false,
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1268,12 +1304,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1281,7 +1318,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_CreateCampaign_0910_Cleanup"
@@ -1308,7 +1345,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1325,7 +1363,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{camp_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1351,15 +1390,16 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -1371,8 +1411,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1429,12 +1469,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1442,7 +1483,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_EditRule_0910_Cleanup"
@@ -1469,7 +1510,8 @@
       {
         "name": "前置-GET详情提取automationId",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{edit_rule_id}}",
         "request_body": {},
         "extract_vars": {
@@ -1482,15 +1524,16 @@
       {
         "name": "编辑规则-修改频次与出价",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/editRule",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Daily",
           "productLine": "instacart",
           "mode": "Auto",
@@ -1502,8 +1545,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1562,7 +1605,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1579,7 +1623,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{edit_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1605,15 +1650,16 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -1625,8 +1671,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1683,12 +1729,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1696,7 +1743,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_UpdateApplied_0910_Cleanup"
@@ -1723,7 +1770,8 @@
       {
         "name": "更新规则应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/updateAppliedObj",
         "request_body": {
           "applyTarget": {
@@ -1734,8 +1782,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1757,7 +1805,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1774,7 +1823,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{upd_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1800,15 +1850,16 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -1820,8 +1871,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1878,12 +1929,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1891,7 +1943,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_AddApplied_0910_Cleanup"
@@ -1918,19 +1970,20 @@
       {
         "name": "追加规则应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/addAppliedObj",
         "request_body": {
           "productLine": "instacart",
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "ids": [
             "{{add_rule_id}}"
           ],
           "ruleTarget": {
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1948,7 +2001,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1965,7 +2019,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{add_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1991,15 +2046,16 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -2011,8 +2067,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2069,12 +2125,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2082,7 +2139,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_AddAppliedSep_0910_Cleanup"
@@ -2109,11 +2166,12 @@
       {
         "name": "按独立规则追加应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/addAppliedObjBySeparateRule",
         "request_body": [
           {
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "productLine": "instacart",
             "ids": [
               "{{addsep_rule_id}}"
@@ -2121,8 +2179,8 @@
             "ruleTarget": {
               "targetInfo": [
                 {
-                  "targetId": "{{real_campaign_id}}",
-                  "profileId": "{{profile_id}}"
+                  "targetId": "{{variables.real_campaign_id}}",
+                  "profileId": "{{variables.profile_id}}"
                 }
               ],
               "nonnullFrequencyCap": false,
@@ -2141,7 +2199,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2158,7 +2217,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{addsep_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2173,7 +2233,7 @@
   },
   {
     "name": "POST /definition/changeOwners - 变更规则负责人(创建临时规则,可重复)",
-    "description": "单接口测试：POST /definition/changeOwners。该接口ES无instacart专属流量(全平台90天内67条，365天240条)，真实样本结构为{'ruleIds':[...],'userName':...,'userId':...}(不含clientId/isPaused/isDelete，与Swagger声明的通用DTO不同，以ES真实字段为准)。第1步创建临时规则，第2步查出ruleId，第3步将负责人变更为测试账号自身({{user_id}})，第4步删除清理(changeStatus{isPaused:true,isDelete:true}，同时确保Paused状态并释放ruleName保证可重复执行)，第5步验证已Paused。",
+    "description": "单接口测试：POST /definition/changeOwners。该接口ES无instacart专属流量(全平台90天内67条，365天240条)，真实样本结构为{'ruleIds':[...],'userName':...,'userId':...}(不含clientId/isPaused/isDelete，与Swagger声明的通用DTO不同，以ES真实字段为准)。第1步创建临时规则，第2步查出ruleId，第3步将负责人变更为测试账号自身({{variables.user_id}})，第4步删除清理(changeStatus{isPaused:true,isDelete:true}，同时确保Paused状态并释放ruleName保证可重复执行)，第5步验证已Paused。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -2184,15 +2244,16 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -2204,8 +2265,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2262,12 +2323,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2275,7 +2337,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_ChangeOwners_0910_Cleanup"
@@ -2302,13 +2364,14 @@
       {
         "name": "变更规则负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeOwners",
         "request_body": {
           "ruleIds": [
             "{{own_rule_id}}"
           ],
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "userName": "autoui_acount"
         },
         "extract_vars": {},
@@ -2319,7 +2382,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2336,7 +2400,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{own_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2362,15 +2427,16 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -2382,8 +2448,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2440,12 +2506,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2453,7 +2520,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_ChangeStatus_0910_Cleanup"
@@ -2480,7 +2547,8 @@
       {
         "name": "暂停规则(isPaused=true)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2496,7 +2564,8 @@
       {
         "name": "验证已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{cs_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2510,7 +2579,8 @@
       {
         "name": "恢复规则(isPaused=false)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2526,7 +2596,8 @@
       {
         "name": "验证已恢复Enabled",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{cs_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2540,7 +2611,8 @@
       {
         "name": "最终收尾-删除(isDelete)避免残留Enabled规则并释放规则名",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2557,7 +2629,8 @@
       {
         "name": "最终验证-确认收尾后为Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{cs_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2583,15 +2656,16 @@
       {
         "name": "前置-创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
           "productLine": "instacart",
           "mode": "Auto",
@@ -2603,8 +2677,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2661,12 +2735,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2674,7 +2749,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_UpdateAutomation_0910_Cleanup"
@@ -2701,7 +2776,8 @@
       {
         "name": "前置-GET详情提取automationId",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{ua_rule_id}}",
         "request_body": {},
         "extract_vars": {
@@ -2714,15 +2790,16 @@
       {
         "name": "更新自动化配置",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/updateAutomation",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Daily",
           "productLine": "instacart",
           "mode": "Auto",
@@ -2734,8 +2811,8 @@
             ],
             "targetInfo": [
               {
-                "targetId": "{{real_campaign_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.real_campaign_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2794,7 +2871,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2811,7 +2889,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{ua_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2837,21 +2916,22 @@
       {
         "name": "批量创建instacart规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/bulkCreateRule",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
           "userName": "autoui_acount",
           "createByShare": false,
           "ruleRequests": [
             {
-              "clientId": "{{client_id}}",
+              "clientId": "{{variables.client_id}}",
               "emailSettings": [],
               "emailOption": "NoEmails",
               "timeZone": "America/Los_Angeles",
               "userName": "autoui_acount",
-              "userId": "{{user_id}}",
+              "userId": "{{variables.user_id}}",
               "frequency": "Weekly",
               "productLine": "instacart",
               "mode": "Auto",
@@ -2863,8 +2943,8 @@
                 ],
                 "targetInfo": [
                   {
-                    "targetId": "{{real_campaign_id}}",
-                    "profileId": "{{profile_id}}"
+                    "targetId": "{{variables.real_campaign_id}}",
+                    "profileId": "{{variables.profile_id}}"
                   }
                 ],
                 "nonnullFrequencyCap": false,
@@ -2923,12 +3003,13 @@
       {
         "name": "前置-按名称查询提取ruleId",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2936,7 +3017,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Instacart_BulkCreate2_0910_Cleanup"
@@ -2963,7 +3044,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2980,7 +3062,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{bulk_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -3008,7 +3091,8 @@
       {
         "name": "(skip) 调用 /automationPauseAsins",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/automationPauseAsins",
         "request_body": {},
         "extract_vars": {},
@@ -3033,7 +3117,8 @@
       {
         "name": "(skip) 调用 /terminatedClientRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/terminatedClientRule",
         "request_body": {},
         "extract_vars": {},
@@ -3058,7 +3143,8 @@
       {
         "name": "(skip) 调用 /bulk-create/tiktok/roas-explorer",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/bulk-create/tiktok/roas-explorer",
         "request_body": {},
         "extract_vars": {},
@@ -3083,7 +3169,8 @@
       {
         "name": "(skip) 调用 /bulk-create/tiktok/smart-budget-boost",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/bulk-create/tiktok/smart-budget-boost",
         "request_body": {},
         "extract_vars": {},
@@ -3108,7 +3195,8 @@
       {
         "name": "(skip) 调用 /query-rule-ids/tiktok/roas-explorer",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/query-rule-ids/tiktok/roas-explorer",
         "request_body": {},
         "extract_vars": {},
@@ -3133,7 +3221,8 @@
       {
         "name": "(skip) 调用 /query-rule-ids/tiktok/smart-budget-boost",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/query-rule-ids/tiktok/smart-budget-boost",
         "request_body": {},
         "extract_vars": {},
@@ -3158,7 +3247,8 @@
       {
         "name": "(skip) 调用 /tiktok/roas-explorer/reminder",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/tiktok/roas-explorer/reminder",
         "request_body": {},
         "extract_vars": {},
@@ -3183,7 +3273,8 @@
       {
         "name": "(skip) 调用 /definition/adtomic/{adtomicRuleId}",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/adtomic/{adtomicRuleId}",
         "request_body": {},
         "extract_vars": {},
@@ -3208,7 +3299,8 @@
       {
         "name": "(skip) 调用 /createAdtomicRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/createAdtomicRule",
         "request_body": {},
         "extract_vars": {},
@@ -3233,7 +3325,8 @@
       {
         "name": "(skip) 调用 /definition/editAdtomicRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/editAdtomicRule",
         "request_body": {},
         "extract_vars": {},
@@ -3258,7 +3351,8 @@
       {
         "name": "(skip) 调用 /definition/delete/{adtomicRuleId}",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/delete/{adtomicRuleId}",
         "request_body": {},
         "extract_vars": {},
@@ -3283,7 +3377,8 @@
       {
         "name": "(skip) 调用 /downloadMapping",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/downloadMapping",
         "request_body": {},
         "extract_vars": {},
@@ -3308,7 +3403,8 @@
       {
         "name": "(skip) 调用 /downloadMapping/{id}",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/downloadMapping/{id}",
         "request_body": {},
         "extract_vars": {},

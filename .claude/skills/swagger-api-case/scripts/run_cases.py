@@ -64,25 +64,77 @@ def get_path(obj, path):
     return cur
 
 
-VAR_RE = re.compile(r"\{\{(\w+)\}\}")
+# Supports dotted, namespaced references like {{variables.platform}} and
+# {{base_urls.RULEBASEURL}}, as well as flat names {{token}} / extracted vars.
+VAR_RE = re.compile(r"\{\{([\w.]+)\}\}")
+
+_MISSING = object()
 
 
-def substitute(obj, variables):
+def resolve_var(key, context):
+    """Resolve a (possibly dotted) variable key against the context dict.
+
+    Lookup order:
+      1. dotted path navigation, e.g. "variables.platform" -> context["variables"]["platform"]
+      2. backward-compat fallback for a flat name: search the "variables" and
+         "base_urls" namespaces so old-style {{platform}} / {{BASEURL}} still resolve.
+    Returns _MISSING when the key cannot be resolved.
+    """
+    cur = context
+    ok = True
+    for part in key.split("."):
+        if isinstance(cur, dict) and part in cur:
+            cur = cur[part]
+        else:
+            ok = False
+            break
+    if ok:
+        return cur
+    if "." not in key:
+        for ns in ("variables", "base_urls"):
+            d = context.get(ns)
+            if isinstance(d, dict) and key in d:
+                return d[key]
+    return _MISSING
+
+
+def substitute(obj, context):
     if isinstance(obj, str):
         m = VAR_RE.fullmatch(obj)
-        if m and m.group(1) in variables:
-            return variables[m.group(1)]
+        if m:
+            val = resolve_var(m.group(1), context)
+            if val is not _MISSING:
+                return val
 
         def repl(match):
-            key = match.group(1)
-            return str(variables.get(key, match.group(0)))
+            val = resolve_var(match.group(1), context)
+            return match.group(0) if val is _MISSING else str(val)
 
         return VAR_RE.sub(repl, obj)
     if isinstance(obj, dict):
-        return {k: substitute(v, variables) for k, v in obj.items()}
+        return {k: substitute(v, context) for k, v in obj.items()}
     if isinstance(obj, list):
-        return [substitute(v, variables) for v in obj]
+        return [substitute(v, context) for v in obj]
     return obj
+
+
+def build_context(config, token, extra=None):
+    """Namespaced substitution context.
+
+    - {{variables.X}}  -> config.variables.X
+    - {{base_urls.X}}  -> config.base_urls.X
+    - {{token}}        -> fresh login token (top-level, NOT config.variables.token)
+    - {{extracted}}    -> values pulled from earlier step responses (top-level)
+    Flat legacy names still resolve via resolve_var's fallback.
+    """
+    ctx = {
+        "variables": dict(config.get("variables", {})),
+        "base_urls": dict(config.get("base_urls", {})),
+        "token": token,
+    }
+    if extra:
+        ctx.update(extra)
+    return ctx
 
 
 def http_request(method, url, headers, body):
@@ -152,28 +204,43 @@ def check_assertion(expected, actual, path_prefix, failures):
         failures.append(f"{path_prefix}: expected {expected!r}, got {actual!r}")
 
 
-def run_case(case, config, base_variables, base_headers):
-    case_vars = dict(base_variables)
+def run_case(case, config, base_context, base_headers):
+    case_ctx = dict(base_context)
     step_reports = []
     case_pass = True
     for step in case["steps"]:
         method = step["method"]
         base_url_raw = step.get("base_url", "")
-        base_url = substitute(base_url_raw, case_vars)
-        base_url_name = VAR_RE.search(base_url_raw)
-        if base_url_name:
-            base_url = config["base_urls"].get(base_url_name.group(1), base_url)
-        path = substitute(step.get("path", ""), case_vars)
+        base_url = substitute(base_url_raw, case_ctx)
+        path = substitute(step.get("path", ""), case_ctx)
         if path:
             url = base_url.rstrip("/") + path if path.startswith("/") else base_url.rstrip("/") + "/" + path
         else:
             url = base_url
-        request_body = substitute(step.get("request_body", {}), case_vars)
-        headers = dict(base_headers)
+        request_body = substitute(step.get("request_body", {}), case_ctx)
+
+        def build_headers():
+            # step-level headers override config default; {{headers}} resolves to
+            # the config's resolved headers object. Falls back to base_headers.
+            if "headers" in step:
+                resolved = substitute(step["headers"], case_ctx)
+                return dict(resolved) if isinstance(resolved, dict) else dict(base_headers)
+            return dict(base_headers)
 
         t0 = time.time()
         try:
+            headers = build_headers()
             status_code, raw = http_request(method, url, headers, request_body)
+            if status_code == 401:
+                # token expired mid-run: re-login, refresh the shared token so
+                # this and all later cases use it, then retry once.
+                new_token = login(config)
+                base_context["token"] = new_token
+                case_ctx["token"] = new_token
+                if isinstance(base_headers, dict) and "Authorization" in base_headers:
+                    base_headers["Authorization"] = new_token  # in place -> {{headers}} sees it
+                headers = build_headers()
+                status_code, raw = http_request(method, url, headers, request_body)
         except Exception as e:
             step_reports.append({
                 "name": step.get("name", ""), "method": method, "url": url,
@@ -204,11 +271,11 @@ def run_case(case, config, base_variables, base_headers):
         else:
             check_assertion(expected, resp_json, "resp", failures)
 
-        # propagate extracted vars for later steps in this case
+        # propagate extracted vars for later steps in this case (top-level / flat)
         for var_name, extract_path in step.get("extract_vars", {}).items():
             val = get_path(resp_json, extract_path)
             if val is not None:
-                case_vars[var_name] = val
+                case_ctx[var_name] = val
 
         data = resp_json.get("data") if isinstance(resp_json, dict) else None
         step_pass = status_code == 200 and not failures
@@ -243,9 +310,10 @@ def main():
         cases = json.load(f)
 
     token = login(config)
-    base_variables = dict(config.get("variables", {}))
-    base_variables["token"] = token
-    base_headers = substitute(config.get("headers", {}), base_variables)
+    base_context = build_context(config, token)
+    base_headers = substitute(config.get("headers", {}), base_context)
+    # expose the resolved config headers so cases can reference them via {{headers}}
+    base_context["headers"] = base_headers
 
     started_at = now_iso()
     case_reports = []
@@ -258,7 +326,7 @@ def main():
             })
             skipped += 1
             continue
-        report = run_case(case, config, base_variables, base_headers)
+        report = run_case(case, config, base_context, base_headers)
         case_reports.append(report)
         if report["pass"]:
             passed += 1

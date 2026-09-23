@@ -12,14 +12,15 @@
       {
         "name": "调用 GetActualSpend - 按campaignId查询",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/GetActualSpend",
         "request_body": {
-          "profileId": "{{profile_id_single}}",
+          "profileId": "{{variables.profile_id_single}}",
           "campaignId": "426321",
           "campaignIds": null,
-          "start": "{{date_start}}",
-          "end": "{{date_end}}"
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -41,7 +42,8 @@
       {
         "name": "调用 GetActualSpend - 按tagId查询",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/GetActualSpend",
         "request_body": {
           "profileId": "245057",
@@ -70,15 +72,16 @@
       {
         "name": "调用 GetActualSpend/v2",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/GetActualSpend/v2",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
-          "start": "{{date_start}}",
-          "end": "{{date_end}}"
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -103,7 +106,8 @@
       {
         "name": "调用 getProfilesByUser",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/getProfilesByUser",
         "request_body": [],
         "extract_vars": {},
@@ -129,14 +133,15 @@
       {
         "name": "调用 Automation/tag",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/tag",
         "request_body": {
-          "profileIds": "{{profile_id}}",
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "profileIds": "{{variables.profile_id}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "tagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "clientId": 62
         },
@@ -163,15 +168,16 @@
       {
         "name": "调用 budgetTagReport - timeType=ytd",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/budgetTagReport",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "timeType": "ytd",
           "pageInfo": {
             "pageSize": 10000,
@@ -201,15 +207,16 @@
       {
         "name": "调用 budgetTagReport - timeType=date",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/budgetTagReport",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "timeType": "date",
           "pageInfo": {
             "pageSize": 10000,
@@ -239,15 +246,16 @@
       {
         "name": "调用 budgetTagReport - 旧版citrus/criteoPageInfo",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/budgetTagReport",
         "request_body": {
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
-          "profileIds": "{{profile_id}}",
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "profileIds": "{{variables.profile_id}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "filters": [],
           "timeType": "ytd",
           "pageInfo": {
@@ -290,18 +298,28 @@
       {
         "name": "POST Automation/UpdateTargeting 设置测试campaign 426322",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Automation/UpdateTargeting",
         "request_body": {
-          "campaignIds": ["426322"],
+          "campaignIds": [
+            "426322"
+          ],
           "tagIds": [],
           "campaignTagIds": [],
           "targetROAS": 10,
           "targetACOS": 15.0,
           "targetCPA": null,
           "profileId": "16274451",
-          "profileIds": ["16274451"],
-          "campaigns": [{"profileId": "16274451", "campaignId": "426322"}]
+          "profileIds": [
+            "16274451"
+          ],
+          "campaigns": [
+            {
+              "profileId": "16274451",
+              "campaignId": "426322"
+            }
+          ]
         },
         "extract_vars": {},
         "expected_response": {

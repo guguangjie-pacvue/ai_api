@@ -12,11 +12,12 @@
       {
         "name": "创建campaign备注",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/UpsertCampaignNote",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sp_campaign_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sp_campaign_id}}",
           "Note": "swagger-api-case 自动化测试备注(可删除)",
           "Id": 0
         },
@@ -34,11 +35,12 @@
       {
         "name": "取最新备注id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/GetCampaignNote",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sp_campaign_id}}"
+          "ProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sp_campaign_id}}"
         },
         "extract_vars": {
           "created_note_id": "data[0].Id"
@@ -51,7 +53,8 @@
       {
         "name": "后置清理-删除新建备注",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/DeleteCampaignNote?id={{created_note_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -75,11 +78,12 @@
       {
         "name": "前置创建-新增一条备注",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/UpsertCampaignNote",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sp_campaign_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sp_campaign_id}}",
           "Note": "swagger-api-case 待删除备注",
           "Id": 0
         },
@@ -97,11 +101,12 @@
       {
         "name": "取最新备注id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/GetCampaignNote",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sp_campaign_id}}"
+          "ProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sp_campaign_id}}"
         },
         "extract_vars": {
           "note_id_to_delete": "data[0].Id"
@@ -114,7 +119,8 @@
       {
         "name": "删除备注",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/DeleteCampaignNote?id={{note_id_to_delete}}",
         "request_body": {},
         "extract_vars": {},
@@ -138,14 +144,15 @@
       {
         "name": "设置campaign结束日期",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/BulkCampaignEndDate",
         "request_body": {
           "campaignIds": [
-            "{{exist_sp_campaign_id}}"
+            "{{variables.exist_sp_campaign_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "enddate": "20991231"
         },
@@ -163,14 +170,15 @@
       {
         "name": "后置还原-恢复原结束日期",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/BulkCampaignEndDate",
         "request_body": {
           "campaignIds": [
-            "{{exist_sp_campaign_id}}"
+            "{{variables.exist_sp_campaign_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "enddate": "20990101"
         },
@@ -200,11 +208,12 @@
       {
         "name": "前置读取-当前SP竞价策略",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/GetCampaignSetting",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "campaignId": "{{exist_sp_campaign_id}}"
+          "profileId": "{{variables.profile_id}}",
+          "campaignId": "{{variables.exist_sp_campaign_id}}"
         },
         "extract_vars": {
           "orig_sp_bidding": "data.data.biddingStrategy"
@@ -217,17 +226,18 @@
       {
         "name": "回写SP竞价策略(值不变)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/UpdateCampaignBidForSbAndSp",
         "request_body": {
           "eventType": 1,
           "updateSp": true,
           "updateSpEntity": {
             "profileIds": [
-              "{{profile_id}}"
+              "{{variables.profile_id}}"
             ],
             "campaignIds": [
-              "{{exist_sp_campaign_id}}"
+              "{{variables.exist_sp_campaign_id}}"
             ],
             "biddingStrategy": "{{orig_sp_bidding}}"
           }
@@ -258,11 +268,12 @@
       {
         "name": "读取当前名称",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/GetCampaignSetting",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "campaignId": "{{exist_sp_campaign_id}}"
+          "profileId": "{{variables.profile_id}}",
+          "campaignId": "{{variables.exist_sp_campaign_id}}"
         },
         "extract_vars": {
           "orig_sp_name": "data.data.name"
@@ -275,11 +286,12 @@
       {
         "name": "回写名称(值不变)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/UpdateCampaignName",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "campaignId": "{{exist_sp_campaign_id}}",
+          "profileId": "{{variables.profile_id}}",
+          "campaignId": "{{variables.exist_sp_campaign_id}}",
           "name": "{{orig_sp_name}}"
         },
         "extract_vars": {},
@@ -303,14 +315,15 @@
       {
         "name": "回写SB竞价优化",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/UpdateCampaignBidForSB",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaignIds": [
-            "{{exist_sb_campaign_id}}"
+            "{{variables.exist_sb_campaign_id}}"
           ],
           "bidOptimization": 0,
           "BidAdjustments": [
@@ -358,14 +371,15 @@
       {
         "name": "设置portfolio(值不变)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/BulkUpdateCampaignPortfolio",
         "request_body": {
           "portfolioId": "204806772208933",
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaigns": [
             {
-              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignId": "{{variables.exist_sp_campaign_id}}",
               "campaignType": "sponsoredProducts"
             }
           ]
@@ -396,13 +410,14 @@
       {
         "name": "从portfolio移除",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/BulkDeleteCampaignFromPortfolio",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaigns": [
             {
-              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignId": "{{variables.exist_sp_campaign_id}}",
               "campaignType": "sponsoredProducts"
             }
           ]
@@ -421,14 +436,15 @@
       {
         "name": "后置还原-加回原portfolio",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/BulkUpdateCampaignPortfolio",
         "request_body": {
           "portfolioId": "204806772208933",
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaigns": [
             {
-              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignId": "{{variables.exist_sp_campaign_id}}",
               "campaignType": "sponsoredProducts"
             }
           ]
@@ -459,16 +475,17 @@
       {
         "name": "复制SP campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/CopyCampaign",
         "request_body": {
-          "ToProfileId": "{{profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
           "Campaign": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sp_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sp_campaign_id}}",
             "CampaignName": "ZZ-swagger-autotest-CopyCampaign",
             "DailyBudget": "5",
-            "StartDate": "{{date_start}}",
+            "StartDate": "{{variables.date_start}}",
             "EndDate": null,
             "Tags": [],
             "PlacementBidAdjustments": [],
@@ -488,17 +505,18 @@
       {
         "name": "后置归档-归档复制的campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/CampaignUpdateBatch",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaigns": [
             {
               "campaignType": "sponsoredProducts",
               "campaignId": "{{copied_sp_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ]
@@ -529,16 +547,17 @@
       {
         "name": "复制SP campaign(V2)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/CopyCampaignV2",
         "request_body": {
-          "ToProfileId": "{{profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
           "Campaign": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sp_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sp_campaign_id}}",
             "CampaignName": "ZZ-swagger-autotest-CopyCampaignV2",
             "DailyBudget": "5",
-            "StartDate": "{{date_start}}",
+            "StartDate": "{{variables.date_start}}",
             "EndDate": null,
             "Tags": [],
             "PlacementBidAdjustments": [],
@@ -559,17 +578,18 @@
       {
         "name": "后置归档-归档复制的campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/CampaignUpdateBatch",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaigns": [
             {
               "campaignType": "sponsoredProducts",
               "campaignId": "{{copied_v2_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ]
@@ -600,18 +620,19 @@
       {
         "name": "批量复制SP campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/BulkCopyCampaign",
         "request_body": {
           "SP": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sp_campaign_id}}"
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sp_campaign_id}}"
             }
           ],
           "SB": [],
           "SD": [],
-          "StartDate": "{{date_start}}",
+          "StartDate": "{{variables.date_start}}",
           "EndDate": null,
           "State": 2,
           "copyTag": false,
@@ -628,17 +649,18 @@
       {
         "name": "后置归档-归档复制的campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/CampaignUpdateBatch",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaigns": [
             {
               "campaignType": "sponsoredProducts",
               "campaignId": "{{bulk_copied_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ]
@@ -669,10 +691,11 @@
       {
         "name": "取AMC受众id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/GetAmazonAmcAudienceId",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
+          "ProfileId": "{{variables.profile_id}}",
           "CampaignType": 0,
           "AudienceId": "x"
         },
@@ -687,11 +710,12 @@
       {
         "name": "设置shopper cohort竞价",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/SaveCampaignShopperCohortBidding",
         "request_body": {
-          "campaignId": "{{exist_sp_campaign_id}}",
-          "profileId": "{{profile_id}}",
+          "campaignId": "{{variables.exist_sp_campaign_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaignType": "sponsoredProducts",
           "shopperCohortBidding": [
             {
@@ -715,11 +739,12 @@
       {
         "name": "后置清除-清空shopper cohort竞价",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/SaveCampaignShopperCohortBidding",
         "request_body": {
-          "campaignId": "{{exist_sp_campaign_id}}",
-          "profileId": "{{profile_id}}",
+          "campaignId": "{{variables.exist_sp_campaign_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaignType": "sponsoredProducts",
           "shopperCohortBidding": []
         },
@@ -744,10 +769,11 @@
       {
         "name": "取AMC受众id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/GetAmazonAmcAudienceId",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
+          "ProfileId": "{{variables.profile_id}}",
           "CampaignType": 0,
           "AudienceId": "x"
         },
@@ -762,19 +788,20 @@
       {
         "name": "更新受众竞价百分比",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp",
         "request_body": {
           "campaignIds": [
-            "{{exist_sp_campaign_id}}"
+            "{{variables.exist_sp_campaign_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "updateEntity": [
             {
-              "campaignId": "{{exist_sp_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "campaignId": "{{variables.exist_sp_campaign_id}}",
+              "profileId": "{{variables.profile_id}}",
               "shopperCohortBidding": [
                 {
                   "ShopperCohortType": "AUDIENCE_SEGMENT",
@@ -800,19 +827,20 @@
       {
         "name": "后置清除-清空受众竞价",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/UpdateCampaignAudiencePercentageForSbAndSp",
         "request_body": {
           "campaignIds": [
-            "{{exist_sp_campaign_id}}"
+            "{{variables.exist_sp_campaign_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "updateEntity": [
             {
-              "campaignId": "{{exist_sp_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "campaignId": "{{variables.exist_sp_campaign_id}}",
+              "profileId": "{{variables.profile_id}}",
               "shopperCohortBidding": []
             }
           ],
@@ -839,17 +867,18 @@
       {
         "name": "回写campaign(值不变)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v3/CampaignUpdateBatch",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaigns": [
             {
               "campaignType": "sponsoredProducts",
-              "campaignId": "{{exist_sp_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "campaignId": "{{variables.exist_sp_campaign_id}}",
+              "profileId": "{{variables.profile_id}}",
               "name": "TC-SP-CampaignUpdate-Test",
               "budget": 5,
               "state": "enabled",

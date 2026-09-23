@@ -12,7 +12,8 @@
       {
         "name": "查询执行历史列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "startDate": "2025-01-01",
@@ -45,7 +46,8 @@
       {
         "name": "查询待处理列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingList",
         "request_body": {
           "pageInfo": {
@@ -76,7 +78,8 @@
       {
         "name": "查询待处理规则数",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingRuleNum",
         "request_body": {},
         "extract_vars": {},
@@ -99,7 +102,8 @@
       {
         "name": "查询Profile列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getProfiles",
         "request_body": {
           "pageInfo": {
@@ -127,7 +131,8 @@
       {
         "name": "查询规则告警数",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleAlertCount",
         "request_body": {
           "pageInfo": {
@@ -158,7 +163,8 @@
       {
         "name": "查询规则告警详情",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleAlertDetail",
         "request_body": {
           "pageInfo": {
@@ -189,7 +195,8 @@
       {
         "name": "查询规则失效详情",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleDeadDetail",
         "request_body": {
           "startDate": "2025-01-01",
@@ -211,7 +218,7 @@
   },
   {
     "name": "POST /queryRuleSnapshots - entityIds为空的批次级查询",
-    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线。empty batchIds会触发后端SQL \"IN()\"空列表拼接缺陷(已在template/getRecommendation同类复现)，故按target/kroger/chewy平台已验证过的规避方式传入占位batchId(\"00000000-0000-0000-0000-000000000000\")+跨平台真实存在的ruleId({{cross_platform_rule_id}})+profile_id，规避该缺陷验证接口基础可用性。entityIds非空的场景因samsclub账号当前无自有campaign/target数据(definition-controller模块尚未创建)暂无法用真实ID覆盖。samsclub测试账号验证：code:200，返回空数组(无匹配快照)。samsclub平台，真实账号验证。",
+    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台流量作为场景基线。empty batchIds会触发后端SQL \"IN()\"空列表拼接缺陷(已在template/getRecommendation同类复现)，故按target/kroger/chewy平台已验证过的规避方式传入占位batchId(\"00000000-0000-0000-0000-000000000000\")+跨平台真实存在的ruleId({{variables.cross_platform_rule_id}})+profile_id，规避该缺陷验证接口基础可用性。entityIds非空的场景因samsclub账号当前无自有campaign/target数据(definition-controller模块尚未创建)暂无法用真实ID覆盖。samsclub测试账号验证：code:200，返回空数组(无匹配快照)。samsclub平台，真实账号验证。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -222,14 +229,15 @@
       {
         "name": "查询规则执行快照(entityIds为空)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/queryRuleSnapshots",
         "request_body": {
           "ruleIds": [
-            "{{cross_platform_rule_id}}"
+            "{{variables.cross_platform_rule_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "batchIds": [
             "00000000-0000-0000-0000-000000000000"
@@ -259,7 +267,8 @@
       {
         "name": "查询自动规则明细日志",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getAutoRuleDetailLog",
         "request_body": {
           "pageInfo": {
@@ -291,7 +300,8 @@
       {
         "name": "查询自动规则明细日志过滤项",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getAutoRuleDetailLogFilter",
         "request_body": {
           "pageInfo": {

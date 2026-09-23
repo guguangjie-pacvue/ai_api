@@ -112,5 +112,29 @@
       "assertion_l1": { "code": 200 },
       "platform_filter": null
     }
+  },
+  "criteo-api": {
+    "github_repo": "pacvue/criteo-api",
+    "swaggers": [
+      {
+        "title": "CriteoApi",
+        "url": "https://api.pacvue.com/criteo/swagger-ui/index.html",
+        "_note": "该 spec 的 info.title 字段字面量是 \"Swagger\"（无实际业务含义，与 rule-api/micro-api 一样），此处用 CriteoApi 作为可读的服务标识；实际接口文档地址为 https://api.pacvue.com/criteo/v3/api-docs（swagger-ui 首页通过 swagger-initializer.js 的 configUrl 间接指向）"
+      }
+    ],
+    "es_index": {
+      "us": "criteo-access-*"
+    },
+    "config": "single-api/criteo-api/{env}/config.json",
+    "es": {
+      "path_field": "urlReferrer.keyword",
+      "method_field": "method.keyword",
+      "body_field": "body",
+      "body_is_json_string": true,
+      "clientid_exclude": [62, 3186],
+      "assertion_l1": { "code": 200 },
+      "platform_filter": null,
+      "_note": "字段结构已探测确认（2026-09-23）：urlReferrer 为请求路径（不含 /criteo 前缀，与 swagger paths 直接对应）；body 为 JSON 字符串（与 mainapi 一致，需二次解析）；responseBody 字段含业务响应（本服务无 success 布尔字段，只有 code，故 assertion_l1 与 rule-api 一致）；90天流量统计已按路径中纯数字段归一化为 {id} 后与 method 组合去重比对（DELETE 方法本索引 90 天内全平台 0 条记录，非本服务特有）"
+    }
   }
 }

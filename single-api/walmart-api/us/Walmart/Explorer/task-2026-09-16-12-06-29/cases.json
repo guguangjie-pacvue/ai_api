@@ -1,68 +1,70 @@
 [
- {
-  "name": "POST /api/Report/explorer/tree - onlyActive=true主流场景",
-  "description": "单接口测试：POST /api/Report/explorer/tree。查询Report Explorer的campaign树结构(供左侧导航展开)。场景：onlyActive=true+IsExcelActive=true，27条真实样本中占比约81.5%。🔴🔴新发现严重后端bug：稳定复现HTTP 500 \"Ambiguous column name 'IsDeleted'\"(SqlException，疑似多表JOIN都有IsDeleted列未加表别名限定)。已用ES真实样本原始profileId(362664，非测试账号)+完全相同参数重新验证，同样500——排除测试账号数据问题，是真实存在于生产环境的SQL缺陷。2轮验证稳定复现。全模块6接口中仅本接口有真实流量，其余5个(tree/adGroups、tree/campaigns、tree/campaignSubTags、tree/campaignTags、tree/root)365天零流量。",
-  "module": "Explorer",
-  "granularity": "API",
-  "since": "init",
-  "last_modified": "init",
-  "change_type": "NEW",
-  "generated_by": "swagger-api-case",
-  "steps": [
-   {
-    "name": "调用 explorer/tree - onlyActive=true",
-    "method": "POST",
-    "base_url": "{{WALMARTBASEURL}}",
-    "path": "Report/explorer/tree",
-    "request_body": {
-     "profileIds": "{{profile_id}}",
-     "campaignStatus": [],
-     "onlyActive": true,
-     "IsExcelActive": true,
-     "targetingType": 0,
-     "start": "{{date_start_mdy}}",
-     "end": "{{date_end_mdy}}",
-     "sortType": 1,
-     "searchKeyword": ""
-    },
-    "extract_vars": {},
-    "expected_response": {
-     "code": 200
-    }
-   }
-  ]
- },
- {
-  "name": "POST /api/Report/explorer/tree - onlyActive=false场景",
-  "description": "单接口测试：POST /api/Report/explorer/tree。场景：onlyActive=false+IsExcelActive=false，27条真实样本中占比约18.5%。🔴新发现另一个不同根因的后端bug：稳定复现HTTP 500 \"An item with the same key has already been added. Key: 1849834430\"(疑似ToDictionary/Add对重复key未去重，与onlyActive=true场景的IsDeleted歧义列是两个不同的异常签名)。已用ES真实样本原始profileId(362664)+完全相同参数验证，同样500，排除测试账号数据问题。2轮验证稳定复现。**结合两个场景，该接口100%真实流量覆盖的两种主流参数组合目前均完全不可用**。",
-  "module": "Explorer",
-  "granularity": "API",
-  "since": "init",
-  "last_modified": "init",
-  "change_type": "NEW",
-  "generated_by": "swagger-api-case",
-  "steps": [
-   {
-    "name": "调用 explorer/tree - onlyActive=false",
-    "method": "POST",
-    "base_url": "{{WALMARTBASEURL}}",
-    "path": "Report/explorer/tree",
-    "request_body": {
-     "profileIds": "{{profile_id}}",
-     "campaignStatus": [],
-     "onlyActive": false,
-     "IsExcelActive": false,
-     "targetingType": 0,
-     "start": "{{date_start_mdy}}",
-     "end": "{{date_end_mdy}}",
-     "sortType": 1,
-     "searchKeyword": ""
-    },
-    "extract_vars": {},
-    "expected_response": {
-     "code": 200
-    }
-   }
-  ]
- }
+  {
+    "name": "POST /api/Report/explorer/tree - onlyActive=true主流场景",
+    "description": "单接口测试：POST /api/Report/explorer/tree。查询Report Explorer的campaign树结构(供左侧导航展开)。场景：onlyActive=true+IsExcelActive=true，27条真实样本中占比约81.5%。🔴🔴新发现严重后端bug：稳定复现HTTP 500 \"Ambiguous column name 'IsDeleted'\"(SqlException，疑似多表JOIN都有IsDeleted列未加表别名限定)。已用ES真实样本原始profileId(362664，非测试账号)+完全相同参数重新验证，同样500——排除测试账号数据问题，是真实存在于生产环境的SQL缺陷。2轮验证稳定复现。全模块6接口中仅本接口有真实流量，其余5个(tree/adGroups、tree/campaigns、tree/campaignSubTags、tree/campaignTags、tree/root)365天零流量。",
+    "module": "Explorer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 explorer/tree - onlyActive=true",
+        "method": "POST",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Report/explorer/tree",
+        "request_body": {
+          "profileIds": "{{variables.profile_id}}",
+          "campaignStatus": [],
+          "onlyActive": true,
+          "IsExcelActive": true,
+          "targetingType": 0,
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
+          "sortType": 1,
+          "searchKeyword": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Report/explorer/tree - onlyActive=false场景",
+    "description": "单接口测试：POST /api/Report/explorer/tree。场景：onlyActive=false+IsExcelActive=false，27条真实样本中占比约18.5%。🔴新发现另一个不同根因的后端bug：稳定复现HTTP 500 \"An item with the same key has already been added. Key: 1849834430\"(疑似ToDictionary/Add对重复key未去重，与onlyActive=true场景的IsDeleted歧义列是两个不同的异常签名)。已用ES真实样本原始profileId(362664)+完全相同参数验证，同样500，排除测试账号数据问题。2轮验证稳定复现。**结合两个场景，该接口100%真实流量覆盖的两种主流参数组合目前均完全不可用**。",
+    "module": "Explorer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 explorer/tree - onlyActive=false",
+        "method": "POST",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Report/explorer/tree",
+        "request_body": {
+          "profileIds": "{{variables.profile_id}}",
+          "campaignStatus": [],
+          "onlyActive": false,
+          "IsExcelActive": false,
+          "targetingType": 0,
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
+          "sortType": 1,
+          "searchKeyword": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
 ]

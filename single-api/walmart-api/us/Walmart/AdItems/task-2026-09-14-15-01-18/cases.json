@@ -12,13 +12,14 @@
       {
         "name": "调用 ByAdgroups(对象形式)",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/ByAdgroups",
         "request_body": {
           "adgroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
-          "profileIds": "{{profile_id}}"
+          "profileIds": "{{variables.profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -43,10 +44,11 @@
       {
         "name": "调用 ByAdgroups(纯数组形式)",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/ByAdgroups",
         "request_body": [
-          "{{adgroup_id}}"
+          "{{variables.adgroup_id}}"
         ],
         "extract_vars": {},
         "expected_response": {
@@ -71,10 +73,11 @@
       {
         "name": "调用 search(空搜索)",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/search",
         "request_body": {
-          "advertiserId": "{{profile_id_single}}",
+          "advertiserId": "{{variables.profile_id_single}}",
           "searchItemIds": [],
           "searchText": "",
           "categories": [],
@@ -103,10 +106,11 @@
       {
         "name": "调用 search(按ID过滤)",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/search",
         "request_body": {
-          "advertiserId": "{{profile_id_single}}",
+          "advertiserId": "{{variables.profile_id_single}}",
           "searchItemIds": [
             "559010244"
           ]
@@ -134,7 +138,8 @@
       {
         "name": "调用 searchItemCategroy",
         "method": "GET",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/searchItemCategroy",
         "request_body": {},
         "extract_vars": {},
@@ -157,7 +162,8 @@
       {
         "name": "尝试创建AdItem(itemId不在目标campaign商品池内)",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems",
         "request_body": [
           {
@@ -189,7 +195,8 @@
       {
         "name": "刷新商品信息",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/UpdateItemInfo",
         "request_body": {
           "advertiserId": 16274451,
@@ -216,7 +223,8 @@
       {
         "name": "修改出价(示例，ids需替换为真实值)",
         "method": "PATCH",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/bid",
         "request_body": {
           "ids": [
@@ -245,7 +253,8 @@
       {
         "name": "修改状态(示例，ids需替换为真实值)",
         "method": "PATCH",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/status",
         "request_body": {
           "ids": [
@@ -262,7 +271,7 @@
   },
   {
     "name": "【已执行-测试账号版本】PATCH /api/AdItems/bid/byConditions - 按条件批量改出价(限定测试账号campaign+adGroup)",
-    "description": "单接口测试：PATCH /api/AdItems/bid/byConditions。ByCondition批量更新类，按项目规则\"只允许限定在自建测试实体\"改造：conditions.profileIds/campaignIds/adGroupIds显式限定为测试账号profile 16274451下的campaign 426321(Brand-SP-Manual-Category)+adGroup 770991122(Brand-SP-Manual-Broad-Category-10324542，2个真实目录商品)，不再使用会命中全账号范围的空数组，也不再使用config默认的{{campaign_id}}(=3564，实际属于Display测试账号16354252，与AdItems/Sponsored场景不匹配，已通过只读接口Report/adgroup/list核实)。⚠️该操作为原地批量改价，无法可靠还原到\"改前值\"(byConditions场景下受影响AdItem集合可能不止一个，且bid/byConditions本身不含GET原值的配对读接口)，执行前需人工确认该campaign/adGroup下测试数据可被随意改价不影响其他验证。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
+    "description": "单接口测试：PATCH /api/AdItems/bid/byConditions。ByCondition批量更新类，按项目规则\"只允许限定在自建测试实体\"改造：conditions.profileIds/campaignIds/adGroupIds显式限定为测试账号profile 16274451下的campaign 426321(Brand-SP-Manual-Category)+adGroup 770991122(Brand-SP-Manual-Broad-Category-10324542，2个真实目录商品)，不再使用会命中全账号范围的空数组，也不再使用config默认的{{variables.campaign_id}}(=3564，实际属于Display测试账号16354252，与AdItems/Sponsored场景不匹配，已通过只读接口Report/adgroup/list核实)。⚠️该操作为原地批量改价，无法可靠还原到\"改前值\"(byConditions场景下受影响AdItem集合可能不止一个，且bid/byConditions本身不含GET原值的配对读接口)，执行前需人工确认该campaign/adGroup下测试数据可被随意改价不影响其他验证。 [2026-09-15改造：已适配测试账号自建实体，因数据库故障(事务日志写满)暂未执行验证，待恢复后由主会话执行]",
     "module": "AdItems",
     "granularity": "API",
     "since": "init",
@@ -273,7 +282,8 @@
       {
         "name": "按条件批量改出价(限定测试账号campaign 426321+adGroup 770991122)",
         "method": "PATCH",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/bid/byConditions",
         "request_body": {
           "setBidType": 1,
@@ -314,7 +324,8 @@
       {
         "name": "按条件批量改状态(限定测试账号campaign 426321+adGroup 770991122)",
         "method": "PATCH",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdItems/status/byConditions",
         "request_body": {
           "status": 1,

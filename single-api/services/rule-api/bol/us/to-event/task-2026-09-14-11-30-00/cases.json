@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /event/getRuleDefinition - 单个ruleId查询规则定义",
-    "description": "单接口测试：POST /event/getRuleDefinition。按ruleIds查询规则完整定义。ES近90天该接口调用量约362万次(排除测试账号)，但body只含ruleIds(雪花ID)无productLine/平台标识字段(productline-agg确认NO_PRODUCTLINE_FIELD)，按services.json post_fallback_no_productline_field约定用全平台基线。500条随机样本中单ruleId查询占比约97.2%（486次），批量查询占比约2.8%（14次），本场景覆盖单ruleId查询。实参用bol测试账号下真实可查的规则({{real_rule_id}})。响应体为裸数组(不含code/data/msg包装)，与Swagger声明的array-of-RuleDefinition返回类型一致。",
+    "description": "单接口测试：POST /event/getRuleDefinition。按ruleIds查询规则完整定义。ES近90天该接口调用量约362万次(排除测试账号)，但body只含ruleIds(雪花ID)无productLine/平台标识字段(productline-agg确认NO_PRODUCTLINE_FIELD)，按services.json post_fallback_no_productline_field约定用全平台基线。500条随机样本中单ruleId查询占比约97.2%（486次），批量查询占比约2.8%（14次），本场景覆盖单ruleId查询。实参用bol测试账号下真实可查的规则({{variables.real_rule_id}})。响应体为裸数组(不含code/data/msg包装)，与Swagger声明的array-of-RuleDefinition返回类型一致。",
     "module": "to-event",
     "granularity": "API",
     "since": "init",
@@ -12,11 +12,12 @@
       {
         "name": "查询规则定义(单个)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleDefinition",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ]
         },
         "extract_vars": {},
@@ -28,7 +29,7 @@
   },
   {
     "name": "POST /event/getRuleDefinition - 批量ruleIds查询规则定义",
-    "description": "单接口测试：POST /event/getRuleDefinition。场景2：批量ruleIds查询(界面批量刷新/批量查看多个规则定义)。500条随机样本中占比约2.8%（14次）。实参用bol测试账号下4个真实存在的不同规则({{real_rule_id_targeting}}/{{real_rule_id_campaign}}/{{real_rule_id_sov_bid}}/{{real_rule_id_harvest_keywords}})，均为真实ID非编造，仅为批量组合场景需要临时拼装。",
+    "description": "单接口测试：POST /event/getRuleDefinition。场景2：批量ruleIds查询(界面批量刷新/批量查看多个规则定义)。500条随机样本中占比约2.8%（14次）。实参用bol测试账号下4个真实存在的不同规则({{variables.real_rule_id_targeting}}/{{variables.real_rule_id_campaign}}/{{variables.real_rule_id_sov_bid}}/{{variables.real_rule_id_harvest_keywords}})，均为真实ID非编造，仅为批量组合场景需要临时拼装。",
     "module": "to-event",
     "granularity": "API",
     "since": "init",
@@ -39,14 +40,15 @@
       {
         "name": "查询规则定义(批量)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleDefinition",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id_targeting}}",
-            "{{real_rule_id_campaign}}",
-            "{{real_rule_id_sov_bid}}",
-            "{{real_rule_id_harvest_keywords}}"
+            "{{variables.real_rule_id_targeting}}",
+            "{{variables.real_rule_id_campaign}}",
+            "{{variables.real_rule_id_sov_bid}}",
+            "{{variables.real_rule_id_harvest_keywords}}"
           ]
         },
         "extract_vars": {},
@@ -69,7 +71,8 @@
       {
         "name": "查询规则类型列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/event/getRuleTypes",
         "request_body": {},
         "extract_vars": {},

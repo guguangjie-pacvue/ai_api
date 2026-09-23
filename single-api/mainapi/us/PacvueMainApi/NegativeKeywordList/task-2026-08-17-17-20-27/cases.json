@@ -12,14 +12,17 @@
       {
         "name": "查询全部否定关键词列表",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -37,7 +40,8 @@
       {
         "name": "创建否定关键词列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/CreateNegativeKeywordList",
         "request_body": {
           "ListName": "TC-NKL-Lifecycle-Test",
@@ -48,17 +52,22 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.successCount": { "$not_empty": true }
+          "data.successCount": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "按ListName定位新建列表的真实Id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
         "request_body": {
           "ListName": "TC-NKL-Lifecycle-Test",
-          "profileIds": ["{{profile_id}}"]
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ]
         },
         "extract_vars": {
           "created_list_id": "data[0].Id"
@@ -66,29 +75,37 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "向列表添加否定关键词",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/CreateNegativeKeywordListKeyword",
         "request_body": {
           "NegativeKeywordListId": "{{created_list_id}}",
-          "KeywordText": ["tc-autotest-negkw"]
+          "KeywordText": [
+            "tc-autotest-negkw"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.successCount": { "$not_empty": true }
+          "data.successCount": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "按列表Id查关键词表定位关键词Id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/NegativeKeywordListKeywordTable",
         "request_body": {
           "Id": "{{created_list_id}}"
@@ -99,19 +116,25 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       },
       {
         "name": "将列表应用到真实Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/CreateNegativeKeywordListCampaign",
         "request_body": {
           "NegativeKeywordListId": "{{created_list_id}}",
           "CampaignTagIds": [],
           "Campaigns": [
-            { "ProfileId": "{{profile_id}}", "CampaignId": "{{sp_manual_pat_campaign_id}}" }
+            {
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.sp_manual_pat_campaign_id}}"
+            }
           ],
           "Type": "campaign"
         },
@@ -124,7 +147,8 @@
       {
         "name": "查看列表应用详情",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetNegativeKeywordListDetail",
         "request_body": {
           "Id": "{{created_list_id}}"
@@ -133,13 +157,16 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       },
       {
         "name": "查看列表关键词纯文本",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/NegativeKeywordListKeywords",
         "request_body": {
           "Id": "{{created_list_id}}"
@@ -148,13 +175,16 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       },
       {
         "name": "重命名列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/UpdateNegativeKeywordList",
         "request_body": {
           "Id": "{{created_list_id}}",
@@ -169,10 +199,13 @@
       {
         "name": "删除刚添加的关键词",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/DeleteNegativeKeywordListKeyword",
         "request_body": {
-          "NegativeKeywordListKeywordId": ["{{created_keyword_id}}"],
+          "NegativeKeywordListKeywordId": [
+            "{{created_keyword_id}}"
+          ],
           "DeleteType": "delete"
         },
         "extract_vars": {},
@@ -184,7 +217,8 @@
       {
         "name": "后置清理-删除整个列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/DeleteNegativeKeywordList",
         "request_body": {
           "Id": "{{created_list_id}}",
@@ -211,7 +245,8 @@
       {
         "name": "前置-创建一次性列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/CreateNegativeKeywordList",
         "request_body": {
           "ListName": "TC-NKL-SaveCamp-Test",
@@ -219,44 +254,68 @@
           "Level": "campaign"
         },
         "extract_vars": {},
-        "expected_response": { "code": 200, "success": true }
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
       },
       {
         "name": "按ListName定位新建列表的真实Id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
         "request_body": {
           "ListName": "TC-NKL-SaveCamp-Test",
-          "profileIds": ["{{profile_id}}"]
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ]
         },
-        "extract_vars": { "created_list_id": "data[0].Id" },
-        "expected_response": { "code": 200, "success": true, "data": { "$not_empty": true } }
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
       },
       {
         "name": "为Campaign直接应用列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/SaveCampaignNegativeKeyword",
         "request_body": {
-          "profileId": "{{profile_id}}",
-          "campaignId": "{{sp_manual_pat_campaign_id}}",
-          "negativeKeywordListId": ["{{created_list_id}}"]
+          "profileId": "{{variables.profile_id}}",
+          "campaignId": "{{variables.sp_manual_pat_campaign_id}}",
+          "negativeKeywordListId": [
+            "{{created_list_id}}"
+          ]
         },
         "extract_vars": {},
-        "expected_response": { "code": 200, "success": true }
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
       },
       {
         "name": "后置清理-删除列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/DeleteNegativeKeywordList",
         "request_body": {
           "Id": "{{created_list_id}}",
           "ListName": "TC-NKL-SaveCamp-Test"
         },
         "extract_vars": {},
-        "expected_response": { "code": 200, "success": true }
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
       }
     ]
   },
@@ -273,7 +332,8 @@
       {
         "name": "前置-创建一次性列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/CreateNegativeKeywordList",
         "request_body": {
           "ListName": "TC-NKL-BulkKW-Test",
@@ -281,43 +341,72 @@
           "Level": "adgroup"
         },
         "extract_vars": {},
-        "expected_response": { "code": 200, "success": true }
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
       },
       {
         "name": "按ListName定位新建列表的真实Id",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetNegativeKeywordListTable",
         "request_body": {
           "ListName": "TC-NKL-BulkKW-Test",
-          "profileIds": ["{{profile_id}}"]
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ]
         },
-        "extract_vars": { "created_list_id": "data[0].Id" },
-        "expected_response": { "code": 200, "success": true, "data": { "$not_empty": true } }
+        "extract_vars": {
+          "created_list_id": "data[0].Id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
       },
       {
         "name": "批量为多个列表添加关键词",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/CreateBulkNegativeKeywordListKeyword",
         "request_body": {
-          "keywordText": ["tc-bulk-negkw"],
-          "negativeKeywordListIds": ["{{created_list_id}}"]
+          "keywordText": [
+            "tc-bulk-negkw"
+          ],
+          "negativeKeywordListIds": [
+            "{{created_list_id}}"
+          ]
         },
         "extract_vars": {},
-        "expected_response": { "code": 200, "success": true, "data.successCount": { "$not_empty": true } }
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data.successCount": {
+            "$not_empty": true
+          }
+        }
       },
       {
         "name": "后置清理-删除列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/DeleteNegativeKeywordList",
         "request_body": {
           "Id": "{{created_list_id}}",
           "ListName": "TC-NKL-BulkKW-Test"
         },
         "extract_vars": {},
-        "expected_response": { "code": 200, "success": true }
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
       }
     ]
   },
@@ -334,10 +423,11 @@
       {
         "name": "前置-创建一次性SP Campaign+AdGroup",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaign": {
             "campaignType": "sponsoredProducts",
             "targetingType": "manual",
@@ -347,7 +437,10 @@
             "startDate": "2026/08/17",
             "endDate": "",
             "costType": "",
-            "bidding": { "Strategy": "legacyForSales", "Adjustments": [] }
+            "bidding": {
+              "Strategy": "legacyForSales",
+              "Adjustments": []
+            }
           },
           "duration": 0,
           "adgroupName": "TC-NKL-BulkCopy-AG",
@@ -362,16 +455,19 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.padidstr": { "$not_empty": true }
+          "data.padidstr": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "批量创建AdGroup级否定关键词",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/BulkCopyToNegativeKeywordMult",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "new_keywords": [
             {
               "state": "enabled",
@@ -386,20 +482,25 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.successCount": { "$not_empty": true }
+          "data.successCount": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "后置清理-归档一次性Campaign",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Campaign/V4/Update",
         "request_body": {
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaigns": [
             {
               "campaignId": "{{created_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived",
               "campaignType": "sponsoredProducts"
             }
@@ -409,7 +510,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.successCount": { "$not_empty": true }
+          "data.successCount": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -427,10 +530,13 @@
       {
         "name": "查询AdGroup列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetAdgroupsByPortfolioOrProfile",
         "request_body": {
-          "ProfileIds": ["{{profile_id}}"],
+          "ProfileIds": [
+            "{{variables.profile_id}}"
+          ],
           "state": "",
           "adGroupState": ""
         },
@@ -438,7 +544,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -456,17 +564,22 @@
       {
         "name": "查询AdGroup已有否定关键词",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetAdgroupsNegativeKeywordByCampaignId",
         "request_body": {
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaignIds": []
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -484,17 +597,24 @@
       {
         "name": "查询AdGroup定位信息",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetAdgroupsTargetByCampaignId",
         "request_body": {
-          "profileIds": ["{{profile_id}}"],
-          "campaignIds": ["{{sp_manual_pat_campaign_id}}"]
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "campaignIds": [
+            "{{variables.sp_manual_pat_campaign_id}}"
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -512,17 +632,20 @@
       {
         "name": "查询关联品牌列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetBrandByKW",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "keyword": "vitamins"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -540,17 +663,20 @@
       {
         "name": "查询自动化探索状态",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetCampaignExploreAutomation",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "CampaignId": "{{sp_manual_pat_campaign_id}}"
+          "ProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.sp_manual_pat_campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -568,10 +694,11 @@
       {
         "name": "查询可选Campaign列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetCampaingsByNegativeKeyword",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "state": [],
           "level": "campaign",
           "campaignTagIds": []
@@ -580,7 +707,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -598,7 +727,8 @@
       {
         "name": "查询列表详情(分享链接)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/GetNegativeKeywordListDetailForLink",
         "request_body": {
           "Id": 3358
@@ -607,7 +737,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -625,14 +757,17 @@
       {
         "name": "查询CampaignTag自动化否定统计",
         "method": "GET",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/ListAutomationNegativeByCampaignTag/1",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -650,14 +785,17 @@
       {
         "name": "查询Campaign关联的否定关键词列表",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/CampaignNegativeKeyword?profileId=2755545444012419&campaignId=331759186953136",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$not_empty": true }
+          "data": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -675,7 +813,8 @@
       {
         "name": "刷新应用状态明细(v1)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/AppliedNegativeKeywordList",
         "request_body": {
           "NegativeKeywordListId": 9170,
@@ -703,7 +842,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -721,17 +862,22 @@
       {
         "name": "刷新应用状态明细(v2)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/AppliedNegativeKeywordListV2",
         "request_body": {
           "NegativeKeywordListId": 3358,
-          "ItemIds": [495661]
+          "ItemIds": [
+            495661
+          ]
         },
         "extract_vars": {},
         "expected_response": {
           "code": 200,
           "success": true,
-          "data": { "$is_array": true }
+          "data": {
+            "$is_array": true
+          }
         }
       }
     ]
@@ -749,10 +895,13 @@
       {
         "name": "查询关键词级应用状态",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "NegativeKeywordList/v3/NegativeKeywordListAppliedStatus",
         "request_body": {
-          "Ids": [3358],
+          "Ids": [
+            3358
+          ],
           "pageInfo": {
             "pageIndex": 1,
             "pageSize": 10,
@@ -764,7 +913,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.PageInfo": { "$not_empty": true }
+          "data.PageInfo": {
+            "$not_empty": true
+          }
         }
       }
     ]
