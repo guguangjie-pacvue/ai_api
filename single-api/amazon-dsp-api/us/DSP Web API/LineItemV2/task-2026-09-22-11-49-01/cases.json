@@ -1,0 +1,4956 @@
+[
+  {
+    "name": "GET /api/LineItemV2/GetCampaignTargetSetting - 查询指定lineItem的目标设置",
+    "description": "单接口测试：GET /api/LineItemV2/GetCampaignTargetSetting。按lineItemId查询该LineItem当前的自定义目标设置(targetSetting)。500条随机样本中占比约100%(7次，样本量较少)。当前测试lineItem尚无自定义目标设置(Data为null属真实状态，不作数据非空断言)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCampaignTargetSetting",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetCampaignTargetSetting?lineItemId={{lineitem_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/LineItemV2/GetLineItemDetailWithSync - 查询LineItem详情(含同步)",
+    "description": "单接口测试：GET /api/LineItemV2/GetLineItemDetailWithSync。按lineItemId+advertiserId+profileId查询LineItem完整详情。500条随机样本中占比约100%(500次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLineItemDetailWithSync",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetLineItemDetailWithSync?lineItemId={{lineitem_id}}&advertiserId={{advertiser_id_single}}&profileId={{profile_id_single}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/GetLineItemIdList - 按广告主查询LineItem ID列表(isImpressions=true)",
+    "description": "单接口测试：POST /api/LineItemV2/GetLineItemIdList。场景：isImpressions=true(仅查展示型投放的LineItem)。37条随机样本中占比约78.4%(29次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLineItemIdList - isImpressions=true",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetLineItemIdList",
+        "request_body": {
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "isImpressions": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/GetLineItemIdList - 按广告主查询LineItem ID列表(isImpressions=false)",
+    "description": "单接口测试：POST /api/LineItemV2/GetLineItemIdList。场景：isImpressions=false(查询全部LineItem，不限展示型)。37条随机样本中占比约21.6%(8次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLineItemIdList - isImpressions=false",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetLineItemIdList",
+        "request_body": {
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "isImpressions": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/GetLineItemNameAndStatus - 按Order查询LineItem名称与投放状态",
+    "description": "单接口测试：POST /api/LineItemV2/GetLineItemNameAndStatus。按orderIds+默认名称过滤(空值)查询LineItem名称/状态列表，为该接口最典型的默认调用模式。500条随机样本中占比约100%(500次，模式高度一致)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLineItemNameAndStatus",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetLineItemNameAndStatus",
+        "request_body": {
+          "orderIds": [
+            "{{order_id}}"
+          ],
+          "DeliveryStatus": [],
+          "nameFilters": [
+            {
+              "field": "lineNameFilter",
+              "operand": "LikeOr",
+              "value": ""
+            }
+          ],
+          "lineItemType": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/LineItemV2/GetLineItemSimpleDetailWithSync - 查询LineItem精简详情(含同步)",
+    "description": "单接口测试：GET /api/LineItemV2/GetLineItemSimpleDetailWithSync。按lineItemId+advertiserId+profileId查询LineItem精简详情。500条随机样本中占比约100%(500次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLineItemSimpleDetailWithSync",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetLineItemSimpleDetailWithSync?lineItemId={{lineitem_id}}&advertiserId={{advertiser_id_single}}&profileId={{profile_id_single}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/LineItemV2/GetTargetSettingViewLogSub - 查询目标设置批量导入检查日志",
+    "description": "单接口测试：GET /api/LineItemV2/GetTargetSettingViewLogSub。按fileCheckId查询一次历史Excel批量导入目标设置的检查结果子项。2条随机样本中占比约100%(2次，样本量很少)。使用ES真实样本中的历史fileCheckId(只读查询，无副作用)；因本任务未能执行UploadTargetSettingExcel(见待补清单)，无法产生本账号自己的fileCheckId，暂用样本真实值验证接口连通性。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTargetSettingViewLogSub",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetTargetSettingViewLogSub?fileCheckId=206",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/GetTargetViewLog - 查询目标设置查看日志(空条件)",
+    "description": "单接口测试：POST /api/LineItemV2/GetTargetViewLog。真实调用请求体固定为空数组[]，为该接口唯一真实调用模式。5条随机样本中占比约100%(5次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTargetViewLog",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetTargetViewLog",
+        "request_body": [],
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/ListDspAdGroupInventorySourceTargets - 查询LineItem当前库存源定向",
+    "description": "单接口测试：POST /api/LineItemV2/ListDspAdGroupInventorySourceTargets。按profileIds+advertiserIds+lineitemIds查询当前库存源(inventorySource)定向配置。34条随机样本中占比约100%(34次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ListDspAdGroupInventorySourceTargets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/ListDspAdGroupInventorySourceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineitemIds": [
+            "{{lineitem_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/LineItemV2/SyncNativeDayparting - 同步查询原生分时段设置",
+    "description": "单接口测试：GET /api/LineItemV2/SyncNativeDayparting。按profileId+advertiserId+lineItemId查询该LineItem的原生(native)分时段投放设置(只读查询，无写副作用)。498条随机样本中占比约100%(带lineItemId的典型查询模式)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SyncNativeDayparting",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/SyncNativeDayparting?profileId={{profile_id_single}}&advertiserId={{advertiser_id_single}}&lineItemId={{lineitem_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/CreateReachForecasts - 生成LineItem触达量预测(只读计算，不产生持久化实体)",
+    "description": "单接口测试：POST /api/LineItemV2/CreateReachForecasts。基于真实定向条件(受众/设备/库存源等)计算预估触达量，属无副作用的预测计算类接口(不创建/修改任何实体)。500条随机样本中占比约100%(500次，结构高度一致)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateReachForecasts",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/CreateReachForecasts",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineItemId": "{{lineitem_id}}",
+          "lineItemType": "DISPLAY",
+          "orderId": "{{order_id}}",
+          "startDateTime": "01/23/2026 00:00:00",
+          "endDateTime": "01/31/2026 23:59:00",
+          "budgetCaps": [
+            {
+              "recurrenceTimePeriod": "UNCAPPED"
+            }
+          ],
+          "currencyCode": null,
+          "frequencyCap": {
+            "type": "UNCAPPED"
+          },
+          "baseTargeting": {
+            "audienceTarget": {
+              "segmentGroups": [
+                {
+                  "segments": [
+                    {
+                      "segmentName": "Smartbones-ProductViews-7D",
+                      "segmentId": "381627726723475119",
+                      "category": "Custom-built",
+                      "subCategory": "Product",
+                      "dspFee": 0,
+                      "isNot": false
+                    }
+                  ],
+                  "interOperator": "ALL",
+                  "intraOperator": "OR"
+                },
+                {
+                  "segments": [
+                    {
+                      "segmentName": "Smartbones-ProductPurchase-360D",
+                      "segmentId": "416129419055061593",
+                      "category": "Custom-built",
+                      "subCategory": "Product",
+                      "dspFee": 0,
+                      "isNot": true
+                    }
+                  ],
+                  "interOperator": "ALL",
+                  "intraOperator": "AND"
+                }
+              ]
+            },
+            "locationTarget": [],
+            "domainTarget": {
+              "negative": "false",
+              "domainName": [],
+              "inheritFromAdvertiser": true
+            },
+            "appTarget": [],
+            "deviceTarget": {
+              "deviceType": [
+                "MOBILE",
+                "DESKTOP"
+              ],
+              "mobileDevice": [
+                "IPHONE",
+                "IPAD",
+                "KINDLE_FIRE_HD",
+                "ANDROID",
+                "KINDLE_FIRE"
+              ],
+              "mobileEnvironment": [
+                "APP",
+                "WEB"
+              ],
+              "deviceOrientation": [
+                "PORTRAIT",
+                "LANDSCAPE"
+              ],
+              "mobileOS": [
+                "ANDROID",
+                "IOS"
+              ]
+            },
+            "inventorySourceTarget": [
+              {
+                "inventorySourceId": "304724410646999250",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "Amazon",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "348526288302042694",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "320371346470971423",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "338350882876675746",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "IMDb",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "334013060388967871",
+                "inventorySourceType": "AMAZON"
+              }
+            ],
+            "thirdPartyTarget": {},
+            "iabCategoryTarget": [],
+            "adPlayerSizeTarget": [
+              "SMALL",
+              "MEDIUM",
+              "LARGE",
+              "UNKNOWN"
+            ],
+            "adInitiationTarget": [
+              "USER_INITIATED",
+              "AUTOPLAY",
+              "UNKNOWN"
+            ],
+            "videoAdFormatTarget": [
+              "INSTREAM",
+              "OUTSTREAM"
+            ],
+            "contentGenreTarget": [],
+            "contentRatingTarget": [],
+            "twitchContentRatingTarget": [
+              "TWITCH_MODERATE"
+            ],
+            "productTarget": [],
+            "productCategoryTarget": [],
+            "autoTarget": [],
+            "keywordTarget": [],
+            "keywordTargetMatchType": "MULTISIGNAL_BROAD"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/DownloadTargetSettingTemplate - 下载目标设置Excel模板",
+    "description": "单接口测试：POST /api/LineItemV2/DownloadTargetSettingTemplate。按lineItemId数组下载对应LineItem当前目标设置的Excel模板文件(只读导出，无副作用)。17条随机样本中占比约100%(17次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadTargetSettingTemplate",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/DownloadTargetSettingTemplate",
+        "request_body": [
+          "{{lineitem_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/CreateLineItem - 创建LineItem(自建测试数据，起止日期已过期=创建即无投放)",
+    "description": "单接口测试：POST /api/LineItemV2/CreateLineItem。使用本任务自建测试LineItem(命名test+HHMMSS)，基于真实历史成功调用的完整字段模板(crontab/baseTargeting/bidding/pacing等)，profileId/advertiserId沿用本任务账号，orderId替换为本任务已知真实LineItem所属的order(587181782611093941)以确保起止时间落在该order真实有效期内、name为自建标识、startDateTime/endDateTime设为该order真实窗口内的近未来极短区间(实测发现：结束日期必须至少30分钟以后且不能早于开始日期在过去，起止必须落在所属order有效期内，此前尝试用已过去日期在创建时直接归档被后端业务校验拒绝)，到期后自然结束投放(等效归档，LineItemV2无独立归档/删除接口)。2279条随机样本中占比约100%(500次抽样)。【实测修正】发现真实样本中的videoCompletionTier=ALL_TIERS字段对DISPLAY类型LineItem无效(实测报错Video completion tier cannot be set for DISPLAY inventoryType)，已移除该字段。补充修正：baseTargeting.inventorySourceTarget改用本任务已知LineItem当前真实有效的库存源列表(避免样本中部分库存源ID对DISPLAY类型无效，实测报错not eligible for the ad group type)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateLineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/CreateLineItem",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "isCopyWithCreatives": false,
+          "crontab": {
+            "rangeStartDate": "",
+            "rangeEndDate": "",
+            "excludeStartDate": "",
+            "excludeEndDate": "",
+            "periodTime": [],
+            "daypartingTag": false,
+            "daypartingScheduleId": null,
+            "daypartingType": 1,
+            "timeZone": "USER_TIMEZONE",
+            "action": [
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ]
+            ],
+            "isPause": true,
+            "mode": 0
+          },
+          "lineItemType": "DISPLAY",
+          "thirdPartyFees": [],
+          "comments": "",
+          "orderId": "587181782611093941",
+          "startDateTime": "09/23/2026 00:00:00",
+          "endDateTime": "09/24/2026 23:00:00",
+          "productCategories": [
+            "288527685592199530"
+          ],
+          "budgetCaps": [
+            {
+              "recurrenceTimePeriod": "UNCAPPED"
+            }
+          ],
+          "pacing": {
+            "deliveryProfile": "EVEN",
+            "catchUpBoostPercentage": 0
+          },
+          "targetingSettings": {
+            "defaultAudienceTargetingMatchType": "EXACT",
+            "amazonViewability": {
+              "viewabilityTier": "ALL_TIERS",
+              "includeUnmeasurableImpressions": false
+            },
+            "timeZoneType": "USER_TIMEZONE",
+            "userLocation": "US",
+            "userLocationSignal": "CURRENT",
+            "enableLanguageTargeting": false
+          },
+          "totalBudgetAmount": "1",
+          "optimization": {
+            "budgetOptimization": false,
+            "bidStrategy": ""
+          },
+          "externalId": "",
+          "name": "test114901",
+          "currencyCode": null,
+          "bidding": {
+            "baseSupplyBid": "0.5",
+            "maxSupplyBid": 0
+          },
+          "frequencies": [
+            {
+              "frequencyType": "UNCAPPED"
+            }
+          ],
+          "baseTargeting": {
+            "audienceTarget": {
+              "segmentGroups": []
+            },
+            "locationTarget": [],
+            "domainTarget": {
+              "negative": "false",
+              "domainName": [],
+              "inheritFromAdvertiser": true
+            },
+            "appTarget": [],
+            "deviceTarget": {
+              "deviceType": [
+                "DESKTOP",
+                "MOBILE"
+              ],
+              "mobileDevice": [
+                "IPHONE",
+                "IPAD",
+                "ANDROID",
+                "KINDLE_FIRE",
+                "KINDLE_FIRE_HD"
+              ],
+              "mobileEnvironment": [
+                "WEB",
+                "APP"
+              ],
+              "deviceOrientation": [
+                "PORTRAIT",
+                "LANDSCAPE"
+              ],
+              "mobileOS": [
+                "IOS",
+                "ANDROID"
+              ]
+            },
+            "inventorySourceTarget": [
+              {
+                "inventorySourceId": "298503986826000670",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "317470916297712654",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "338350882876675746",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "323286776686507917",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "330812463749947374",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "318732341248906837",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "296560903047013107",
+                "inventorySourceType": "APD"
+              },
+              {
+                "inventorySourceId": "306889907810268720",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "326503173270886023",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "288616302702850143",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "299908546763323779",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "332631256730411076",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "302702139316505343",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "345480766720908375",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "321993584700483488",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "315153005982735861",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "337264781993809236",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "328475224005406810",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "299784561093827836",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "300672874857424322",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "320392101593409257",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "357371056514583346",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "347757189080660920",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "302149982007545159",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "329726620197209741",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "348526288302042694",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "318072342687921733",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "294752001732893210",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "322673007638101935",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "338565570317768395",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "332862730927834277",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "334013060388967871",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "313491074545260275",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "295681717474685075",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "337469760247135547",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "320371346470971423",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "329053738674750038",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "328293175082645347",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "331796102670857668",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "350545658681831597",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "294767906577865899",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "312599788081647507",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "294052211326159552",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "350795237853580110",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "320281799748581463",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "304724410646999250",
+                "inventorySourceType": "AMAZON"
+              },
+              {
+                "inventorySourceId": "300944086364546629",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "308156206486522741",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "309120617050457523",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "307895638058396414",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "339090580164080378",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              },
+              {
+                "inventorySourceId": "321502414429957819",
+                "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+              }
+            ],
+            "thirdPartyTarget": {},
+            "iabCategoryTarget": [],
+            "adPlayerSizeTarget": [
+              "SMALL",
+              "MEDIUM",
+              "LARGE",
+              "UNKNOWN"
+            ],
+            "adInitiationTarget": [
+              "USER_INITIATED",
+              "AUTOPLAY",
+              "UNKNOWN"
+            ],
+            "videoAdFormatTarget": [
+              "INSTREAM",
+              "OUTSTREAM"
+            ],
+            "contentGenreTarget": [],
+            "contentRatingTarget": [],
+            "twitchContentRatingTarget": [
+              "TWITCH_MODERATE"
+            ],
+            "productTarget": [],
+            "productCategoryTarget": [],
+            "autoTarget": [],
+            "keywordTarget": []
+          },
+          "extraSetting": "{\"targetingSetting\":[\"Audience\",\"Location\",\"Content\",\"Domain\",\"Contextual\"]}"
+        },
+        "extract_vars": {
+          "created_lineitem_id": "Data.lineItemId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/UpdateLineItem - 更新已存在LineItem(整单保存真实当前配置)",
+    "description": "单接口测试：POST /api/LineItemV2/UpdateLineItem。对本任务已知真实LineItem(577321116875613595)做整单更新，orderId/name/起止时间取其探测到的真实当前值(避免误挂错order/误改名/误改投放窗口)，其余字段(crontab/baseTargeting/bidding等)取自真实历史成功调用样本。因UpdateLineItem为整单替换写操作、且GetLineItemDetailWithSync的读结构与本接口写结构字段命名存在差异(如Action/actionType大小写、RunTimeZone等)，未做逐字段读取-回填，改用固定真实取值保证两次执行结果一致(幂等)。3928条随机样本中占比约100%(500次抽样，结构高度一致)。【实测修正】首次探测发现3处真实业务校验：①optimization.bidStrategy必须与当前真实值(USE_CAMPAIGN_STRATEGY)一致，传空字符串会触发'tacticsConvertersExclusionType'校验失败；②pacing不能带catchUpBoostPercentage字段(会触发'Invalid catch up boost')；③baseTargeting改为实时读取当前真实值整体回填(而非用其他LineItem样本的库存源列表)，因样本中的部分inventorySourceId对DISPLAY类型LineItem无效(实测报错'not eligible for the ad group type')。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置读取当前完整定向(baseTargeting)",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetLineItemDetailWithSync?lineItemId={{lineitem_id}}&advertiserId={{advertiser_id_single}}&profileId={{profile_id_single}}",
+        "request_body": {},
+        "extract_vars": {
+          "cur_base_targeting_for_update": "Data.baseTargeting"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "调用 UpdateLineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/UpdateLineItem",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineItemId": "{{lineitem_id}}",
+          "isCopyWithCreatives": false,
+          "bidAdjustmentRuleId": "",
+          "crontab": {
+            "rangeStartDate": "",
+            "rangeEndDate": "",
+            "excludeStartDate": "",
+            "excludeEndDate": "",
+            "periodTime": [],
+            "daypartingTag": false,
+            "daypartingScheduleId": null,
+            "daypartingType": 1,
+            "timeZone": "USER_TIMEZONE",
+            "action": [
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ],
+              [
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                },
+                {
+                  "value": 0,
+                  "ActionType": 0,
+                  "cap": 0
+                }
+              ]
+            ],
+            "isPause": true,
+            "mode": 1
+          },
+          "lineItemType": "DISPLAY",
+          "thirdPartyFees": [],
+          "comments": null,
+          "orderId": "587181782611093941",
+          "startDateTime": "09/18/2026 00:00:00",
+          "endDateTime": "09/24/2026 23:59:00",
+          "productCategories": [
+            "348975681822021842",
+            "290785213775387842",
+            "300216459075512284",
+            "328884528929337997",
+            "326468073436769102",
+            "332155662275869765",
+            "344754756441397351",
+            "309483665099703659",
+            "295721159100986856",
+            "290927367219483554",
+            "295199813452177608"
+          ],
+          "budgetCaps": [
+            {
+              "recurrenceTimePeriod": "UNCAPPED"
+            }
+          ],
+          "pacing": {
+            "deliveryProfile": "EVEN"
+          },
+          "targetingSettings": {
+            "defaultAudienceTargetingMatchType": "EXACT",
+            "videoCompletionTier": null,
+            "amazonViewability": {
+              "viewabilityTier": "ALL_TIERS",
+              "includeUnmeasurableImpressions": false
+            },
+            "timeZoneType": "USER_TIMEZONE",
+            "userLocation": "EVERYWHERE",
+            "userLocationSignal": "CURRENT",
+            "enableLanguageTargeting": false,
+            "tacticsConvertersExclusionType": "RECENT_PURCHASERS"
+          },
+          "totalBudgetAmount": "1",
+          "optimization": {
+            "budgetOptimization": false,
+            "bidStrategy": "USE_CAMPAIGN_STRATEGY"
+          },
+          "externalId": null,
+          "name": "autoTestCreation_lineItem_20260917132906",
+          "currencyCode": null,
+          "bidding": {
+            "baseSupplyBid": 2.24,
+            "maxSupplyBid": 0
+          },
+          "frequencies": [
+            {
+              "maxImpressions": "4",
+              "frequencyType": "CUSTOM",
+              "timeUnitCount": "1",
+              "timeUnit": "DAYS",
+              "levelType": "USER"
+            }
+          ],
+          "baseTargeting": "{{cur_base_targeting_for_update}}",
+          "extraSetting": "{\"targetingSetting\":[\"Keyword\",\"Audience\",\"Location\",\"Domain\"]}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/UpdateAndAddTargetSetting - 新增LineItem目标设置(roas)",
+    "description": "单接口测试：POST /api/LineItemV2/UpdateAndAddTargetSetting。对本任务LineItem新增一条roas目标设置(真实字段结构取自ES样本)。74条随机样本中占比约100%(74次，均为id:0新增模式，未见对已有id更新的真实样本)。已知限制：探测确认该LineItem当前无任何自定义目标设置(GetCampaignTargetSetting返回Data=null)，接口本身未提供\"清除目标设置\"能力，id:0每次执行都是新增一条记录而非覆盖，因此重复执行会在该LineItem上累积多条roas设置记录(非破坏性，仅数据冗余，已在风险点中说明)。【顺序说明】本case需排在UpdateLineItem之后执行：实测发现一旦本LineItem被加上任意目标设置(targetSetting)，后续UpdateLineItem整单更新会触发'tacticsConvertersExclusionType can be changed only if automatedTactic is eligible for exclusion'业务校验失败，属真实发现的跨接口耦合限制，已在风险点中说明；本task-cases.json中已将UpdateLineItem排在本case之前以避免同批次内相互影响，但由于UpdateAndAddTargetSetting无清理/删除能力，第二轮完整重跑时UpdateLineItem会因本case遗留的目标设置而必现失败(非本次新增缺陷，是真实业务规则限制)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateAndAddTargetSetting",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/UpdateAndAddTargetSetting",
+        "request_body": {
+          "targetSettingJson": [
+            {
+              "profileId": "{{profile_id_single}}",
+              "advertiserId": "{{advertiser_id_single}}",
+              "lineItemId": "{{lineitem_id}}",
+              "id": 0,
+              "targetSettingData": [
+                {
+                  "type": "roas",
+                  "key": "replaceallvalue",
+                  "value": "1",
+                  "startDate": "{{date_start}}",
+                  "endDate": "{{date_end}}",
+                  "lowerValue": null,
+                  "higherValue": null
+                }
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkAddDspAdGroupInventorySourceTargets - 批量新增库存源定向",
+    "description": "单接口测试：POST /api/LineItemV2/BulkAddDspAdGroupInventorySourceTargets。为本任务LineItem新增一个库存源定向(inventorySourceId=304724410646999250/AMAZON，该ID探测确认已存在于当前定向列表中，属于安全的无实质变化调用，避免破坏该LineItem现有~100条库存源定向配置)。18条随机样本中占比约100%(18次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkAddDspAdGroupInventorySourceTargets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkAddDspAdGroupInventorySourceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "inventorySources": [
+            {
+              "inventorySourceId": "304724410646999250",
+              "inventorySourceType": "AMAZON"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkRemoveDspAdGroupInventorySourceTargets - 批量移除库存源定向(执行后用Add接口还原)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkRemoveDspAdGroupInventorySourceTargets。移除本任务LineItem当前定向列表中真实存在的一个库存源(inventorySourceId=296560903047013107/APD)，随后调用BulkAddDspAdGroupInventorySourceTargets将其加回，实现写操作自清理、可重复执行。10条随机样本中占比约100%(10次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkRemoveDspAdGroupInventorySourceTargets - 移除",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkRemoveDspAdGroupInventorySourceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "inventorySources": [
+            {
+              "inventorySourceId": "296560903047013107",
+              "inventorySourceType": "APD"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - 调用 BulkAddDspAdGroupInventorySourceTargets 加回",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkAddDspAdGroupInventorySourceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "inventorySources": [
+            {
+              "inventorySourceId": "296560903047013107",
+              "inventorySourceType": "APD"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkReplaceDspAdGroupInventorySourceTargets - 批量替换库存源定向(读原值->替换->还原)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkReplaceDspAdGroupInventorySourceTargets。整体替换为单一测试库存源，再替换回本任务探测记录的真实原始完整列表(52条，不再依赖同批次内其他write case可能已改动的实时读取值，避免多个写case顺序依赖导致的连锁数据丢失——实测发现过该问题，见风险点)。3条随机样本中占比约100%(3次，样本量很少)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkReplaceDspAdGroupInventorySourceTargets - 替换为测试值",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkReplaceDspAdGroupInventorySourceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "inventorySources": [
+            {
+              "inventorySourceId": "304724410646999250",
+              "inventorySourceType": "AMAZON"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - 替换回本任务记录的真实原始完整列表",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkReplaceDspAdGroupInventorySourceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "inventorySources": [
+            {
+              "inventorySourceId": "298503986826000670",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "317470916297712654",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "338350882876675746",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "323286776686507917",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "330812463749947374",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "318732341248906837",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "296560903047013107",
+              "inventorySourceType": "APD"
+            },
+            {
+              "inventorySourceId": "306889907810268720",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "326503173270886023",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "288616302702850143",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "299908546763323779",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "332631256730411076",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "302702139316505343",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "345480766720908375",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "321993584700483488",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "315153005982735861",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "337264781993809236",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "328475224005406810",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "299784561093827836",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "300672874857424322",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "320392101593409257",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "357371056514583346",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "347757189080660920",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "302149982007545159",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "329726620197209741",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "348526288302042694",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "318072342687921733",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "294752001732893210",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "322673007638101935",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "338565570317768395",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "332862730927834277",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "334013060388967871",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "313491074545260275",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "295681717474685075",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "337469760247135547",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "320371346470971423",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "329053738674750038",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "328293175082645347",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "331796102670857668",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "350545658681831597",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "294767906577865899",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "312599788081647507",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "294052211326159552",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "350795237853580110",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "320281799748581463",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "304724410646999250",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "300944086364546629",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "308156206486522741",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "309120617050457523",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "307895638058396414",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "339090580164080378",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "321502414429957819",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkChangeLineitemDeviceTargets - 批量修改设备定向(读原值->改->还原)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkChangeLineitemDeviceTargets。先读取该LineItem当前设备定向(deviceTarget)并提取，改为真实样本中出现的CONNECTED_TV定向，再还原为提取的原始设备定向，读原值-改-还原、可重复执行。32条随机样本中占比约100%(32次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置读取当前设备定向",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/GetLineItemDetailWithSync?lineItemId={{lineitem_id}}&advertiserId={{advertiser_id_single}}&profileId={{profile_id_single}}",
+        "request_body": {},
+        "extract_vars": {
+          "orig_device_target": "Data.baseTargeting.deviceTarget"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "调用 BulkChangeLineitemDeviceTargets - 改为CONNECTED_TV",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkChangeLineitemDeviceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineitemIds": [
+            "{{lineitem_id}}"
+          ],
+          "deviceTarget": {
+            "deviceType": [
+              "CONNECTED_TV"
+            ],
+            "mobileDevice": [],
+            "mobileEnvironment": [],
+            "deviceOrientation": [],
+            "mobileOS": []
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - 改回原始设备定向",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkChangeLineitemDeviceTargets",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineitemIds": [
+            "{{lineitem_id}}"
+          ],
+          "deviceTarget": "{{orig_device_target}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkChangeLineitemInventoryTargets - 批量修改库存源定向(读原值->改->还原)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkChangeLineitemInventoryTargets。operationType在18条真实样本中出现0(16.7%)/1(33.3%)/2(50%)三种真实取值，真实业务含义未经逐一验证(未做0/1/2的行为差异对比测试，仅在风险点中说明)；本case使用出现频率最高的operationType=2，改为单一测试值后再用operationType=2整体替换回本任务探测记录的真实原始列表(52条，不依赖实时读取，原因同BulkReplace case)。18条随机样本中占比约50%(9次，operationType=2场景)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkChangeLineitemInventoryTargets - operationType=2改为测试值",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkChangeLineitemInventoryTargets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineitemIds": [
+            "{{lineitem_id}}"
+          ],
+          "operationType": 2,
+          "inventorySources": [
+            {
+              "inventorySourceId": "304724410646999250",
+              "inventorySourceType": "AMAZON"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - operationType=2改回本任务记录的真实原始列表",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkChangeLineitemInventoryTargets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineitemIds": [
+            "{{lineitem_id}}"
+          ],
+          "operationType": 2,
+          "inventorySources": [
+            {
+              "inventorySourceId": "298503986826000670",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "317470916297712654",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "338350882876675746",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "323286776686507917",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "330812463749947374",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "318732341248906837",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "296560903047013107",
+              "inventorySourceType": "APD"
+            },
+            {
+              "inventorySourceId": "306889907810268720",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "326503173270886023",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "288616302702850143",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "299908546763323779",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "332631256730411076",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "302702139316505343",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "345480766720908375",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "321993584700483488",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "315153005982735861",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "337264781993809236",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "328475224005406810",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "299784561093827836",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "300672874857424322",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "320392101593409257",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "357371056514583346",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "347757189080660920",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "302149982007545159",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "329726620197209741",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "348526288302042694",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "318072342687921733",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "294752001732893210",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "322673007638101935",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "338565570317768395",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "332862730927834277",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "334013060388967871",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "313491074545260275",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "295681717474685075",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "337469760247135547",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "320371346470971423",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "329053738674750038",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "328293175082645347",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "331796102670857668",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "350545658681831597",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "294767906577865899",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "312599788081647507",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "294052211326159552",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "350795237853580110",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "320281799748581463",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "304724410646999250",
+              "inventorySourceType": "AMAZON"
+            },
+            {
+              "inventorySourceId": "300944086364546629",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "308156206486522741",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "309120617050457523",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "307895638058396414",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "339090580164080378",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            },
+            {
+              "inventorySourceId": "321502414429957819",
+              "inventorySourceType": "THIRD_PARTY_EXCHANGE"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkChangeLineitemLocationTargets - 批量修改地域定向(加一条真实地域->清空还原)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkChangeLineitemLocationTargets。探测确认该LineItem当前locationTarget为空(无地域定向)；本case加入ES真实样本中出现的地域编码(geoLocation为跨账号通用的地域字典值)，再改为空数组还原为初始的无地域定向状态。34条随机样本中占比约100%(34次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkChangeLineitemLocationTargets - 加入测试地域",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkChangeLineitemLocationTargets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineitemIds": [
+            "{{lineitem_id}}"
+          ],
+          "locations": [
+            {
+              "negative": false,
+              "geoLocation": "XHvCjcKHXsKUwos="
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - 清空地域定向",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkChangeLineitemLocationTargets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineitemIds": [
+            "{{lineitem_id}}"
+          ],
+          "locations": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkDayPartingSave - 批量保存分时段出价策略",
+    "description": "单接口测试：POST /api/LineItemV2/BulkDayPartingSave。对本任务LineItem应用真实样本结构的分时段(dayparting)策略(全零值=不做时段加减价，apply=true启用框架但无实际出价调整，属安全的默认态配置，7x24=168个时段全部actionType=0/value=0/cap=0)。22条随机样本中占比约100%(22次，结构高度一致)。已知限制：GetLineItemDetailWithSync返回的crontab字段结构(Action/RunTimeZone等)与本接口campaignCrontabForMicroApi写入结构字段命名不同，未做读原值精确回填，本LineItem当前已配置有dayparting(daypartingScheduleId=40663)，执行后会被本case的全零策略�covered，未逐一验证是否完全等效还原，已在风险点中说明。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkDayPartingSave",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkDayPartingSave",
+        "request_body": {
+          "campaignCrontabForMicroApi": {
+            "apply": true,
+            "action": [
+              [
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                }
+              ],
+              [
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                }
+              ],
+              [
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                }
+              ],
+              [
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                }
+              ],
+              [
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                }
+              ],
+              [
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                }
+              ],
+              [
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                },
+                {
+                  "actionType": 0,
+                  "value": 0,
+                  "cap": 0,
+                  "openMaxBid": false
+                }
+              ]
+            ],
+            "tempName": null,
+            "status": true,
+            "timeZonePlatform": null,
+            "lineItemIds": [
+              {
+                "applyLevel": 1,
+                "relId": "{{lineitem_id}}",
+                "profileId": "{{profile_id_single}}",
+                "name": "autoTestCreation_lineItem_20260917132906",
+                "itemName": "autoTestCreation_lineItem_20260917132906"
+              }
+            ],
+            "lineItemTags": [],
+            "type": 1,
+            "daypartingType": 1,
+            "bidBoostType": 1,
+            "timeZoneType": "USER_TIMEZONE",
+            "timezoneSel": null,
+            "rangeStartDate": "",
+            "rangeEndDate": ""
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkLineitemInventoryExclude - 批量排除库存域名/App(加一条真实排除->清空还原)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkLineitemInventoryExclude。为本任务LineItem设置一条ES真实样本中出现的域名排除，再改为空数组清空还原(该字段在GetLineItemDetailWithSync详情响应中未见对应回显字段，无法读原值，假定初始为空是合理的，因该LineItem为本任务新建/专用测试实体)。37条随机样本中占比约100%(37次)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkLineitemInventoryExclude - 加入测试排除域名",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkLineitemInventoryExclude",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineItemId": "{{lineitem_id}}",
+          "supplySources": [],
+          "domainOrApps": [
+            "weather - the weather channel (ID: com.weather.Weather)"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - 清空排除列表",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkLineitemInventoryExclude",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "lineItemId": "{{lineitem_id}}",
+          "supplySources": [],
+          "domainOrApps": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkSetAudience - 新增受众定向(optimizeType=Add，执行后用Remove清理)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkSetAudience。场景：optimizeType=Add(新增受众分群定向)，为该接口最高频真实场景。229条随机样本中占比约36.2%(83次)。执行后用optimizeType=Remove移除同一分群，避免在本任务LineItem上累积额外受众定向。【实测修正】发现Remove操作会清空整个受众定向分组(而非只移除新增的测试分群，曾导致本LineItem真实原始受众定向被误清空)，因此清理步骤统一改为Replace回真实原始受众定向(已实测恢复成功)，不再依赖Remove的假定语义。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkSetAudience - Add",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Add",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "Custom-built",
+                    "dspFee": 0,
+                    "segmentId": "396260445469875029",
+                    "segmentName": "AMC DSP | CPD | TEST SEGMENT",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - Replace回真实原始受众定向",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Replace",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "In-market",
+                    "dspFee": 0,
+                    "segmentId": "421501250181888677",
+                    "segmentName": "IM - Seasoning & Spice Choppers",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkSetAudience - 排除受众定向(optimizeType=Exclude，执行后用Remove清理)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkSetAudience。场景：optimizeType=Exclude(将分群设为排除定向)。229条随机样本中占比约26.2%(60次)。执行后用optimizeType=Remove移除同一分群，避免残留。【实测修正】清理步骤改为Replace回真实原始受众定向，原因同Add场景(Remove会清空整个分组)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkSetAudience - Exclude",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Exclude",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "Custom-built",
+                    "dspFee": 0,
+                    "segmentId": "396260445469875029",
+                    "segmentName": "AMC DSP | CPD | TEST SEGMENT",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - Replace回真实原始受众定向",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Replace",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "In-market",
+                    "dspFee": 0,
+                    "segmentId": "421501250181888677",
+                    "segmentName": "IM - Seasoning & Spice Choppers",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkSetAudience - 整体替换受众定向(optimizeType=Replace，读原值->替换->还原)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkSetAudience。场景：optimizeType=Replace(整体替换受众定向)。229条随机样本中占比约24.0%(55次)。替换为测试分群后，Replace回本任务探测记录的真实原始受众定向(不再依赖同批次内其他case可能已改动的实时读取值，避免同一账号内多个写case之间的执行顺序依赖)。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 BulkSetAudience - Replace为测试分群",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Replace",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "Custom-built",
+                    "dspFee": 0,
+                    "segmentId": "396260445469875029",
+                    "segmentName": "AMC DSP | CPD | TEST SEGMENT",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理还原 - Replace回真实原始受众定向",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Replace",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "In-market",
+                    "dspFee": 0,
+                    "segmentId": "421501250181888677",
+                    "segmentName": "IM - Seasoning & Spice Choppers",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LineItemV2/BulkSetAudience - 移除受众定向(optimizeType=Remove)",
+    "description": "单接口测试：POST /api/LineItemV2/BulkSetAudience。场景：optimizeType=Remove(移除指定分群定向)。229条随机样本中占比约13.5%(31次)。前置步骤先Add同一分群作为铺垫数据，主测步骤再Remove移除，净效果为零残留。【实测修正】新增第3步安全网：Remove被实测发现会清空整个受众分组而非仅移除指定分群，因此额外补一步Replace回真实原始受众定向，避免误清空该LineItem原有的真实受众定向。",
+    "module": "LineItemV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置铺垫 - 先Add测试分群",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Add",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "Custom-built",
+                    "dspFee": 0,
+                    "segmentId": "396260445469875029",
+                    "segmentName": "AMC DSP | CPD | TEST SEGMENT",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "调用 BulkSetAudience - Remove",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Remove",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "Custom-built",
+                    "dspFee": 0,
+                    "segmentId": "396260445469875029",
+                    "segmentName": "AMC DSP | CPD | TEST SEGMENT",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "安全网还原 - Replace回真实原始受众定向",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LineItemV2/BulkSetAudience",
+        "request_body": {
+          "optimizeType": "Replace",
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "advertiserId": "{{advertiser_id_single}}",
+          "addToNewGroup": false,
+          "segmentTargeting": {
+            "segmentGroups": [
+              {
+                "segments": [
+                  {
+                    "category": "In-market",
+                    "dspFee": 0,
+                    "segmentId": "421501250181888677",
+                    "segmentName": "IM - Seasoning & Spice Choppers",
+                    "isNot": false
+                  }
+                ],
+                "interOperator": "ALL",
+                "intraOperator": "OR"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,903 @@
+[
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Daily+advertiserIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约55.2%(276次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "ExchangeCode"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "CampaignReport",
+            "timeSegmentation": "Daily",
+            "reportBreakdowns": [],
+            "dateRange": "Last30Days",
+            "weekStartOn": "Sunday",
+            "currency": "USD"
+          },
+          "filters": {
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Weekly+advertiserIds+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约8.4%(42次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "TimeColumn",
+            "AdvertiserId",
+            "AdvertiserName",
+            "OrderName",
+            "FlightName",
+            "FlightStartDate",
+            "FlightEndDate",
+            "FlightBudget",
+            "TotalCost"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "CampaignReport",
+            "timeSegmentation": "Weekly",
+            "reportBreakdowns": [
+              "Advertiser",
+              "Order",
+              "Flight"
+            ],
+            "dateRange": "Custom",
+            "dateFormat": "YYYY-MM-DD",
+            "weekStartOn": "Sunday",
+            "customStartDate": "{{date_start}}",
+            "customEndDate": "{{date_end}}",
+            "currency": "USD"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ],
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ]
+          },
+          "showLastPeriod": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Summary+advertiserIds+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约6.4%(32次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "AdvertiserName",
+            "OrderName",
+            "OrderId",
+            "LineItemName",
+            "LineItemId",
+            "LineItemType",
+            "TotalCost",
+            "ProductSales",
+            "ROAS",
+            "TotalROAS",
+            "Impressions",
+            "Purchases",
+            "eCPM",
+            "PercentOfPurchasesNewToBrand"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "CampaignReport",
+            "timeSegmentation": "Summary",
+            "reportBreakdowns": [
+              "Advertiser",
+              "Order",
+              "LineItem"
+            ],
+            "dateRange": "Custom",
+            "customStartDate": "{{date_start}}",
+            "customEndDate": "{{date_end}}",
+            "currency": "USD"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ],
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ]
+          },
+          "showLastPeriod": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Summary+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约4.0%(20次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "AdvertiserName",
+            "CreativeName",
+            "CreativeId",
+            "TotalCost",
+            "Impressions",
+            "Purchases",
+            "ProductSales",
+            "ROAS",
+            "PercentOfPurchasesNewToBrand",
+            "NewToBrandPurchases"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "CampaignReport",
+            "timeSegmentation": "Summary",
+            "reportBreakdowns": [
+              "Advertiser",
+              "Creative"
+            ],
+            "dateRange": "Custom",
+            "dateFormat": "YYYY-MM-DD",
+            "customStartDate": "{{date_start}}",
+            "customEndDate": "{{date_end}}",
+            "currency": "USD"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Daily+无filters",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约2.4%(12次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "ExchangeCode"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "CampaignReport",
+            "timeSegmentation": "Daily",
+            "reportBreakdowns": [],
+            "dateRange": "Last30Days",
+            "weekStartOn": "Sunday",
+            "currency": "USD"
+          },
+          "filters": {}
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Daily+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约2.2%(11次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "TimeColumn",
+            "TotalCost",
+            "Impressions",
+            "TotalProductSales"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "CampaignReport",
+            "timeSegmentation": "Daily"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ]
+          },
+          "showLastPeriod": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Daily+advertiserIds+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约2.0%(10次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "TimeColumn",
+            "TotalCost",
+            "Impressions",
+            "TotalProductSales"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "timeSegmentation": "Daily"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ],
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ]
+          },
+          "requirements": {},
+          "showLastPeriod": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - ProductReport+Daily+advertiserIds+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约1.4%(7次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "ProductReport",
+          "columns": [
+            "TimeColumn",
+            "ReportGranularity",
+            "ASIN",
+            "ParentASIN",
+            "CountryCode",
+            "ConversionType",
+            "AdvertiserName",
+            "AdvertiserId",
+            "OrderName",
+            "OrderId",
+            "LineItemName",
+            "LineItemId",
+            "TotalPurchases",
+            "TotalUnitsSold",
+            "ProductSales",
+            "BrandHaloProductSales"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "ProductReport",
+            "timeSegmentation": "Daily",
+            "reportBreakdowns": [
+              "Advertiser",
+              "Order",
+              "LineItem"
+            ],
+            "dateRange": "Custom",
+            "dateFormat": "YYYY-MM-DD",
+            "customStartDate": "{{date_start}}",
+            "customEndDate": "{{date_end}}",
+            "currency": "USD"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ],
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - CampaignReport+Monthly+advertiserIds+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约1.4%(7次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "CampaignReport",
+          "columns": [
+            "TimeColumn",
+            "IntervalStart",
+            "IntervalEnd",
+            "AdvertiserName",
+            "OrderName",
+            "LineItemName",
+            "LineItemTag",
+            "TotalCost",
+            "Impressions",
+            "ClickThroughs",
+            "CTR",
+            "Purchases",
+            "TotalPurchases",
+            "ProductSales",
+            "TotalProductSales",
+            "ROAS",
+            "TotalROAS",
+            "ConversionRate",
+            "eCPC",
+            "UnitsSold"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "CampaignReport",
+            "timeSegmentation": "Monthly",
+            "reportBreakdowns": [
+              "Advertiser",
+              "Order",
+              "LineItem"
+            ],
+            "dateRange": "Custom",
+            "dateFormat": "YYYY-MM-DD",
+            "customStartDate": "{{date_start}}",
+            "customEndDate": "{{date_end}}",
+            "currency": "USD"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ],
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ]
+          },
+          "showLastPeriod": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - InventoryReport+Weekly+advertiserIds+lineItemIds+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约1.2%(6次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "InventoryReport",
+          "columns": [
+            "TimeColumn",
+            "IntervalStart",
+            "IntervalEnd",
+            "EntityName",
+            "EntityId",
+            "AdvertiserName",
+            "AdvertiserId",
+            "CountryCode",
+            "OrderName",
+            "OrderId",
+            "LineItemName",
+            "LineItemId",
+            "SiteName",
+            "SupplySourceName",
+            "Impressions",
+            "ClickThroughs",
+            "CTR",
+            "eCPM",
+            "eCPC"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "2",
+            "timeSegmentation": "Weekly",
+            "reportBreakdowns": [
+              0,
+              2,
+              4,
+              5,
+              1
+            ],
+            "dateFormat": "DD/MM/YYYY",
+            "weekStartOn": "Sunday"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ],
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ],
+            "lineItemIds": [
+              "{{lineitem_id}}"
+            ]
+          },
+          "showLastPeriod": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/data - InventoryReport+Summary+advertiserIds+profileIds",
+    "description": "单接口测试：POST /report-mcp/data。MCP工具调用fetchReportData获取报表数据(实为调用MyReportService.DirectPreview直出预览数据，非异步任务)。filters里的profileIds/advertiserIds/lineItemIds替换为本账号真实实体，columns/configs保留ES真实字段组合(报表列名/维度枚举，非账号私有数据)。500条随机样本中占比约1.2%(6次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/data",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/data",
+        "request_body": {
+          "reportType": "InventoryReport",
+          "columns": [
+            "AdvertiserName",
+            "SupplySourceName",
+            "ExchangeCode",
+            "TotalCost",
+            "Impressions",
+            "ProductSales",
+            "TotalProductSales",
+            "Purchases"
+          ],
+          "startDate": "{{date_start}}",
+          "endDate": "{{date_end}}",
+          "configs": {
+            "reportType": "InventoryReport",
+            "timeSegmentation": "Summary",
+            "reportBreakdowns": [
+              "Advertiser",
+              "Supply"
+            ],
+            "dateRange": "Custom",
+            "dateFormat": "YYYY-MM-DD",
+            "customStartDate": "{{date_start}}",
+            "customEndDate": "{{date_end}}",
+            "currency": "USD"
+          },
+          "filters": {
+            "profileIds": [
+              "{{profile_id_single}}"
+            ],
+            "advertiserIds": [
+              "{{advertiser_id_single}}"
+            ]
+          },
+          "showLastPeriod": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/materials - materialType=advertiser",
+    "description": "单接口测试：POST /report-mcp/materials。MCP物料列表解析工具，按materialType解析自然语言名称到真实ID(names/ids均可为null，仅按materialType返回该维度可选项列表供报表构建器使用)。已用本账号真实实体ids辅助校验(ids非必填，可为null，本场景固定按ES真实值传null，仅materialType变化)。500条随机样本中占比约81.6%(408次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/materials",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/materials",
+        "request_body": [
+          {
+            "materialType": "advertiser",
+            "names": null,
+            "ids": null,
+            "context": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/materials - materialType=profile",
+    "description": "单接口测试：POST /report-mcp/materials。MCP物料列表解析工具，按materialType解析自然语言名称到真实ID(names/ids均可为null，仅按materialType返回该维度可选项列表供报表构建器使用)。已用本账号真实实体ids辅助校验(ids非必填，可为null，本场景固定按ES真实值传null，仅materialType变化)。500条随机样本中占比约9.4%(47次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/materials",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/materials",
+        "request_body": [
+          {
+            "materialType": "profile",
+            "names": null,
+            "ids": null,
+            "context": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/materials - materialType=order",
+    "description": "单接口测试：POST /report-mcp/materials。MCP物料列表解析工具，按materialType解析自然语言名称到真实ID(names/ids均可为null，仅按materialType返回该维度可选项列表供报表构建器使用)。已用本账号真实实体ids辅助校验(ids非必填，可为null，本场景固定按ES真实值传null，仅materialType变化)。500条随机样本中占比约3.4%(17次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/materials",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/materials",
+        "request_body": [
+          {
+            "materialType": "order",
+            "names": null,
+            "ids": null,
+            "context": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/materials - materialType=order_tag",
+    "description": "单接口测试：POST /report-mcp/materials。MCP物料列表解析工具，按materialType解析自然语言名称到真实ID(names/ids均可为null，仅按materialType返回该维度可选项列表供报表构建器使用)。已用本账号真实实体ids辅助校验(ids非必填，可为null，本场景固定按ES真实值传null，仅materialType变化)。500条随机样本中占比约2.4%(12次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/materials",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/materials",
+        "request_body": [
+          {
+            "materialType": "order_tag",
+            "names": null,
+            "ids": null,
+            "context": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /report-mcp/materials - materialType=creative_tag",
+    "description": "单接口测试：POST /report-mcp/materials。MCP物料列表解析工具，按materialType解析自然语言名称到真实ID(names/ids均可为null，仅按materialType返回该维度可选项列表供报表构建器使用)。已用本账号真实实体ids辅助校验(ids非必填，可为null，本场景固定按ES真实值传null，仅materialType变化)。500条随机样本中占比约1.2%(6次)。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/materials",
+        "method": "POST",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/materials",
+        "request_body": [
+          {
+            "materialType": "creative_tag",
+            "names": null,
+            "ids": null,
+            "context": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report-mcp/schema - reportType=CampaignReport",
+    "description": "单接口测试：GET /report-mcp/schema。MCP工具fetch_report_schema，按reportType返回该报表类型可用列的schema定义(供AI报表构建器/MCP client发现可用字段)。reportType为固定业务枚举值，非账号私有数据，ES真实值可直接使用。300条随机样本(命中总数3794)中占比约81.0%。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/schema",
+        "method": "GET",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/schema",
+        "request_body": {
+          "reportType": "CampaignReport"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report-mcp/schema - reportType=InventoryReport",
+    "description": "单接口测试：GET /report-mcp/schema。MCP工具fetch_report_schema，按reportType返回该报表类型可用列的schema定义(供AI报表构建器/MCP client发现可用字段)。reportType为固定业务枚举值，非账号私有数据，ES真实值可直接使用。300条随机样本(命中总数3794)中占比约8.3%。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/schema",
+        "method": "GET",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/schema",
+        "request_body": {
+          "reportType": "InventoryReport"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report-mcp/schema - reportType=ProductReport",
+    "description": "单接口测试：GET /report-mcp/schema。MCP工具fetch_report_schema，按reportType返回该报表类型可用列的schema定义(供AI报表构建器/MCP client发现可用字段)。reportType为固定业务枚举值，非账号私有数据，ES真实值可直接使用。300条随机样本(命中总数3794)中占比约5.7%。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/schema",
+        "method": "GET",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/schema",
+        "request_body": {
+          "reportType": "ProductReport"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report-mcp/schema - reportType=AudienceReport",
+    "description": "单接口测试：GET /report-mcp/schema。MCP工具fetch_report_schema，按reportType返回该报表类型可用列的schema定义(供AI报表构建器/MCP client发现可用字段)。reportType为固定业务枚举值，非账号私有数据，ES真实值可直接使用。300条随机样本(命中总数3794)中占比约3.7%。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/schema",
+        "method": "GET",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/schema",
+        "request_body": {
+          "reportType": "AudienceReport"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /report-mcp/schema - reportType=TagReport",
+    "description": "单接口测试：GET /report-mcp/schema。MCP工具fetch_report_schema，按reportType返回该报表类型可用列的schema定义(供AI报表构建器/MCP client发现可用字段)。reportType为固定业务枚举值，非账号私有数据，ES真实值可直接使用。300条随机样本(命中总数3794)中占比约1.3%。",
+    "module": "ReportMcp",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 report-mcp/schema",
+        "method": "GET",
+        "base_url": "{{DSPROOTURL}}",
+        "path": "report-mcp/schema",
+        "request_body": {
+          "reportType": "TagReport"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

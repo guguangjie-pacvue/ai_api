@@ -1,0 +1,479 @@
+[
+  {
+    "name": "POST /api/Product/DownloadAsins - 导出非空ASIN研究列表(xlsx二进制)",
+    "description": "单接口测试：POST /api/Product/DownloadAsins。用户在ASIN研究列表页勾选/筛选出ASIN后点击下载,后端直出xlsx二进制文件。500条随机样本中占比约94.7%（18次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadAsins",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/DownloadAsins",
+        "request_body": {
+          "asins": [
+            {
+              "asin": "B0DFCSXC1S",
+              "imgUrl": "https://m.media-amazon.com/images/I/41zYqCG7VIL._SX450_.jpg",
+              "brand": "Ninja",
+              "marketplace": "amazon.de",
+              "title": "Ninja Luxe Premier 3-in-1 Kaffeemaschine mit Mahlwerk, Aufschaumer fur Latte, Cappuccino, Cold Brew & Espresso, bis 2 Tassen, 4 Aufschaum-Voreinstellungen, Silber",
+              "reviews": 530,
+              "stars": 4.4,
+              "price": 464.31,
+              "priceMin": 464.31,
+              "priceMax": 466.31,
+              "countryCode": "DE",
+              "parentAsin": "B0FNK6BZQM",
+              "salesRank": "2493",
+              "lastUpdateTime": "2026-05-08T14:43:40.8606929Z",
+              "currencySymbol": "EUR",
+              "Source": "reaserch",
+              "_isChild_": false,
+              "_level_": 0,
+              "key": 0
+            },
+            {
+              "asin": "B0BHH1MKPF",
+              "imgUrl": "https://m.media-amazon.com/images/I/71UOZ2zy21L._SX450_.jpg",
+              "brand": "Solis",
+              "marketplace": "amazon.de",
+              "title": "Solis Barista Perfetta Plus Espressomaschine, Halbautomatische Kaffeemaschine mit Milchschaumer",
+              "reviews": 61,
+              "stars": 4,
+              "price": 349.9,
+              "priceMin": 349.9,
+              "priceMax": 315.9,
+              "countryCode": "DE",
+              "parentAsin": "B0F8JC9PMY",
+              "salesRank": "87450",
+              "lastUpdateTime": "2026-05-08T14:43:40.8607025Z",
+              "currencySymbol": "EUR",
+              "Source": "reaserch",
+              "_isChild_": false,
+              "_level_": 0,
+              "key": 2
+            },
+            {
+              "asin": "B0FHL3C7KP",
+              "imgUrl": "https://m.media-amazon.com/images/I/811J8urmwwL._SX450_.jpg",
+              "brand": "Ninja",
+              "marketplace": "amazon.de",
+              "title": "Ninja Luxe Premier 3-in-1 Kaffeemaschine, fur Espresso, Cold Brew & Filterkaffee",
+              "reviews": 193,
+              "stars": 4.5,
+              "price": 399.99,
+              "priceMin": 399.99,
+              "priceMax": 368.99,
+              "countryCode": "DE",
+              "parentAsin": "B0FNK6BZQM",
+              "salesRank": "2493",
+              "lastUpdateTime": "2026-05-08T14:43:40.8607076Z",
+              "currencySymbol": "EUR",
+              "Source": "reaserch",
+              "_isChild_": false,
+              "_level_": 0,
+              "key": 3
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/DownloadAsins - 空ASIN列表下载(疑似bug)",
+    "description": "单接口测试：POST /api/Product/DownloadAsins。asins为空数组场景(用户在无勾选/筛选结果为空时点击下载)。500条随机样本中占比约5.3%（1次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadAsins",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/DownloadAsins",
+        "request_body": {
+          "asins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/GetAsinsInfo - 按advertiserId+asins批量查ASIN信息",
+    "description": "单接口测试：POST /api/Product/GetAsinsInfo。按广告主+ASIN列表批量查询ASIN基础信息(图片/品牌/价格等),真实调用filters/asinCountry/includeEligibility均未使用。500条随机样本中占比约100%（500次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAsinsInfo",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/GetAsinsInfo",
+        "request_body": {
+          "asins": [
+            "B00PC5S0PA"
+          ],
+          "advertiserId": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/GetAsinsWithCompetitive - 1个ASIN竞品对比查询",
+    "description": "单接口测试：POST /api/Product/GetAsinsWithCompetitive。查询1个ASIN的竞品对比数据(selfAsins等)。500条随机样本中占比约90.4%（452次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAsinsWithCompetitive",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/GetAsinsWithCompetitive",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "asins": [
+            "B0GL2FQ2QF"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/GetAsinsWithCompetitive - 10个ASIN竞品对比查询",
+    "description": "单接口测试：POST /api/Product/GetAsinsWithCompetitive。查询10个ASIN的竞品对比数据(selfAsins等)。500条随机样本中占比约4.2%（21次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAsinsWithCompetitive",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/GetAsinsWithCompetitive",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "asins": [
+            "B0BRXZ9SXZ",
+            "B0F8NSS1XV",
+            "B0FFTFPR1K",
+            "B0DRGG64SQ",
+            "B0F6LJ11Q5",
+            "B09QMB3573",
+            "B0C555LB8G",
+            "B08JD2FF62",
+            "B0BFGWRJ6M",
+            "B0CN8X3MNX"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/GetAsinsWithCompetitive - 5个ASIN竞品对比查询",
+    "description": "单接口测试：POST /api/Product/GetAsinsWithCompetitive。查询5个ASIN的竞品对比数据(selfAsins等)。500条随机样本中占比约1.4%（7次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAsinsWithCompetitive",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/GetAsinsWithCompetitive",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "asins": [
+            "B0CW6LQSYK",
+            "B0BNJW92L5",
+            "B08L9PY6WY",
+            "B08DP3CK9N",
+            "B007XW2Y8O"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/GetAsinsWithCompetitive - 9个ASIN竞品对比查询",
+    "description": "单接口测试：POST /api/Product/GetAsinsWithCompetitive。查询9个ASIN的竞品对比数据(selfAsins等)。500条随机样本中占比约1.2%（6次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAsinsWithCompetitive",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/GetAsinsWithCompetitive",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "asins": [
+            "B0CKTXN3L1",
+            "B074H6M2XS",
+            "B09BDBMF3G",
+            "B0D1Z5LP2N",
+            "B083D74DQJ",
+            "B0CT6192ZL",
+            "B08R51GZWR",
+            "B0CT5Y1C2Z",
+            "B06XJGM923"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/GetAsinsWithCompetitive - 8个ASIN竞品对比查询",
+    "description": "单接口测试：POST /api/Product/GetAsinsWithCompetitive。查询8个ASIN的竞品对比数据(selfAsins等)。500条随机样本中占比约1.0%（5次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAsinsWithCompetitive",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/GetAsinsWithCompetitive",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "asins": [
+            "B07DG1GC3Q",
+            "B077YC1H37",
+            "B08X68PRP7",
+            "B093LYQHPL",
+            "B0B44WMCJS",
+            "B0106HMA0Y",
+            "B089YY953J",
+            "B0CFFSKQ4B"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/GetKeywordsByKeyword - 按关键词查相关关键词数据",
+    "description": "单接口测试：POST /api/Product/GetKeywordsByKeyword。按advertiserId+keyword查询关键词黑盒分析数据(年龄/品类/触达潜力等),真实调用countryCode均未使用。500条随机样本中占比约100%（173次,样本量173条<500全量覆盖）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetKeywordsByKeyword",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/GetKeywordsByKeyword",
+        "request_body": {
+          "keyword": "bag",
+          "advertiserId": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Product/SearchAsinsInfo - 按ASIN搜索",
+    "description": "单接口测试：GET /api/Product/SearchAsinsInfo。searchText传入ASIN字符串进行精确搜索(用户在ASIN输入框粘贴ASIN),searchCountry未使用。500条随机样本中占比约79.9%（238次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SearchAsinsInfo",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/SearchAsinsInfo",
+        "request_body": {
+          "aid": "{{advertiser_id_single}}",
+          "searchText": "B0BWF17Q5T"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Product/SearchAsinsInfo - 按关键词文本搜索",
+    "description": "单接口测试：GET /api/Product/SearchAsinsInfo。searchText传入普通关键词文本(非ASIN格式)进行模糊搜索。500条随机样本中占比约20.1%（60次）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SearchAsinsInfo",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/SearchAsinsInfo",
+        "request_body": {
+          "aid": "{{advertiser_id_single}}",
+          "searchText": "cat"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/UploadSimpleAsinsFile - 上传ASIN批量导入文件(仅生成不执行)",
+    "description": "单接口测试：POST /api/Product/UploadSimpleAsinsFile。用户上传xlsx/csv文件批量导入ASIN,query参数advertiserId。技术受限：run-cases.py执行引擎不支持multipart/form-data文件上传,仅生成case供人工/专用脚本执行,不纳入自动化执行。500条随机样本中占比约100%（3次,样本量3条<500全量覆盖）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UploadSimpleAsinsFile",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/UploadSimpleAsinsFile?advertiserId={{advertiser_id_single}}",
+        "request_body": {
+          "__multipart_file__": "AsinTemplate.csv real ES sample content starts with: ASIN bulk import template / List ASINs you would like to add",
+          "__note__": "[NEEDS_REAL_VALUE] multipart/form-data file bytes, run-cases.py does not support multipart, case generated for structure reference only, not executed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Product/UploadSimpleAsinsFileAudience - 上传ASIN Audience批量导入文件(仅生成不执行)",
+    "description": "单接口测试：POST /api/Product/UploadSimpleAsinsFileAudience。用户上传xlsx/csv文件批量导入ASIN(Audience场景),query参数advertiserId。技术受限：run-cases.py执行引擎不支持multipart/form-data文件上传,仅生成case供人工/专用脚本执行,不纳入自动化执行。500条随机样本中占比约100%（34次,样本量34条<500全量覆盖）。",
+    "module": "Product",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UploadSimpleAsinsFileAudience",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Product/UploadSimpleAsinsFileAudience?advertiserId={{advertiser_id_single}}",
+        "request_body": {
+          "__multipart_file__": "AsinTemplate.csv real ES sample content starts with: ASIN bulk import template / List ASINs you would like to add",
+          "__note__": "[NEEDS_REAL_VALUE] multipart/form-data file bytes, run-cases.py does not support multipart, case generated for structure reference only, not executed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,1142 @@
+[
+  {
+    "name": "POST /api/ShareLink/GetList - 查询ShareLink列表(默认分页+当前profile)",
+    "description": "单接口测试：POST /api/ShareLink/GetList。查询用户名下ShareLink列表，pageSize=30/按创建时间倒序，为真实用户高频场景。500条随机样本中占比约100%（500次，其中origin为product.pacvue.com占97.8%/489次，其余为测试域名/本地环境，属部署环境差异非独立业务场景）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询ShareLink列表",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/GetList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 30,
+            "orderAsc": false,
+            "orderByField": "Createtime"
+          },
+          "isNewUI": true,
+          "origin": "https://product.pacvue.com",
+          "profileIds": "{{profile_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          },
+          "PageInfo": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ShareLink/GetDetailV2 - 按shareId查询ShareLink明细",
+    "description": "单接口测试：GET /api/ShareLink/GetDetailV2。先创建ShareLink获取真实shareId，再查询其明细，最后归档清理保证可重复执行。500条随机样本中占比约100%（469次，按shareId单值查询为唯一模式）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "sl_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "查询ShareLink明细",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/GetDetailV2",
+        "request_body": {
+          "shareId": "{{sl_share_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{sl_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ShareLink/GetTopParamsV2 - 获取分享页顶部参数",
+    "description": "单接口测试：GET /api/ShareLink/GetTopParamsV2。先创建ShareLink获取真实shareId，再获取分享页顶部参数(Profile/Advertiser/TagList等)，最后归档清理保证可重复执行。500条随机样本中占比约100%（359次，按shareId单值查询为唯一模式）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "sl_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "获取分享页顶部参数",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/GetTopParamsV2",
+        "request_body": {
+          "shareId": "{{sl_share_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{sl_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/Tk - 通过shareId换取用户token",
+    "description": "单接口测试：POST /api/ShareLink/Tk。先创建ShareLink获取真实shareId，再调用Tk换取token，最后归档清理保证可重复执行。500条随机样本中占比约100%（3次，365天仅3次真实调用，样本极少，覆盖可能不全）。观察：实测无论shareId是否有效/platform参数是否传递，响应均为空对象{}，与Swagger声明的string返回类型不符，未能获取到非空token，可能是该接口的真实使用场景是仅供特定内部服务/旧版shareId格式调用。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "sl_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "Tk换取token",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/Tk",
+        "request_body": {
+          "shareId": "{{sl_share_id}}",
+          "platform": "amazon"
+        },
+        "extract_vars": {},
+        "expected_response": {}
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{sl_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/Export - 导出ShareLink",
+    "description": "单接口测试：POST /api/ShareLink/Export。先创建ShareLink获取真实shareId，再导出为Excel文件，最后归档清理保证可重复执行。500条随机样本中占比约100%（358次，shareIds长度均为1/isNewUI恒true/origin恒为product.pacvue.com）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "sl_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "导出ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/Export",
+        "request_body": {
+          "shareIds": [
+            "{{sl_share_id}}"
+          ],
+          "isNewUI": true,
+          "origin": "https://product.pacvue.com"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{sl_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/BulkDelete - 批量/单个删除ShareLink",
+    "description": "单接口测试：POST /api/ShareLink/BulkDelete。先创建ShareLink，再对其执行删除(即本接口本身)，删除后不再需要额外清理，天然可重复执行。500条随机样本中占比约99.7%（369次，shareIds数组长度=1为主）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "bd_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "删除ShareLink(被测)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{bd_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "验证已删除(明细应不存在)",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/GetDetailV2",
+        "request_body": {
+          "shareId": "{{bd_share_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": false
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/BulkEditDateRange - 批量修改DateRange(dateRangeType=1)",
+    "description": "单接口测试：POST /api/ShareLink/BulkEditDateRange。先创建ShareLink，再修改其DateRangeType为1(高频预设)，最后归档清理保证可重复执行。500条随机样本中占比约93.7%（358次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "dr1_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "修改DateRange(type=1)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkEditDateRange",
+        "request_body": {
+          "shareIds": [
+            "{{dr1_share_id}}"
+          ],
+          "startDate": null,
+          "endDate": null,
+          "dateRangeType": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{dr1_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/BulkEditDateRange - 批量修改DateRange(dateRangeType=14)",
+    "description": "单接口测试：POST /api/ShareLink/BulkEditDateRange。先创建ShareLink，再修改其DateRangeType为14(次高频预设)，最后归档清理保证可重复执行。500条随机样本中占比约4.5%（17次）。观察：实测传入不存在的shareId调用本接口同样返回IsSuccessStatusCode:true/Data:null(与真实shareId成功响应完全一致)，接口未校验shareId是否存在，存在潜在静默失败风险。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "dr14_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "修改DateRange(type=14)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkEditDateRange",
+        "request_body": {
+          "shareIds": [
+            "{{dr14_share_id}}"
+          ],
+          "startDate": null,
+          "endDate": null,
+          "dateRangeType": 14
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{dr14_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/BulkEditDescription - 批量修改Description",
+    "description": "单接口测试：POST /api/ShareLink/BulkEditDescription。先创建ShareLink，再修改其Description，最后归档清理保证可重复执行。500条随机样本中占比约98.6%（358次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "desc_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "修改Description",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkEditDescription",
+        "request_body": {
+          "shareIds": [
+            "{{desc_share_id}}"
+          ],
+          "descreption": "autoTest Desc"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{desc_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/BulkEditExpiredDate - 批量修改ExpiredDate",
+    "description": "单接口测试：POST /api/ShareLink/BulkEditExpiredDate。先创建ShareLink，再修改其ExpiredDate为null(永不过期，高频场景)，最后归档清理保证可重复执行。500条随机样本中占比约98.9%（358次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "exp_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "修改ExpiredDate(null)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkEditExpiredDate",
+        "request_body": {
+          "shareIds": [
+            "{{exp_share_id}}"
+          ],
+          "expiredDate": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{exp_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/CreateV2 - 创建ShareLink(勾选OrderTag)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ShareLink/CreateV2。创建ShareLink并勾选OrderTag过滤(orderTagIsCheck=true)，第2步后置操作将新建实体归档，保证用例可重复执行。500条随机样本中占比约90.6%（378次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(勾选OrderTag,被测)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": true,
+          "orderTagId": "{{share_link_order_tag_ids}}",
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "c1_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{c1_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/CreateV2 - 创建ShareLink(不勾选OrderTag)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ShareLink/CreateV2。创建ShareLink且不勾选OrderTag过滤(orderTagIsCheck=false)，第2步后置操作将新建实体归档，保证用例可重复执行。500条随机样本中占比约9.4%（39次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(不勾选OrderTag,被测)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 14,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "c2_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{c2_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/EditV2 - 修改ShareLink(勾选OrderTag+自定义模板1)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ShareLink/EditV2。先创建ShareLink，再修改为勾选OrderTag+userWidgetTemplate=1，最后归档清理保证可重复执行。500条随机样本中占比约84.7%（359次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "e1_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "修改ShareLink(被测)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/EditV2",
+        "request_body": {
+          "countryCode": "US",
+          "shareId": "{{e1_share_id}}",
+          "orderTagIsCheck": true,
+          "orderTagId": "{{share_link_order_tag_ids}}",
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "amsProfileIds": [],
+          "userWidgetTemplate": "1",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{e1_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/EditV2 - 修改ShareLink(勾选OrderTag+默认模板0)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ShareLink/EditV2。先创建ShareLink，再修改为勾选OrderTag+userWidgetTemplate=0，最后归档清理保证可重复执行。500条随机样本中占比约9.0%（38次）。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "e2_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "修改ShareLink(被测)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/EditV2",
+        "request_body": {
+          "countryCode": "US",
+          "shareId": "{{e2_share_id}}",
+          "orderTagIsCheck": true,
+          "orderTagId": "{{share_link_order_tag_ids}}",
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "amsProfileIds": [],
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{e2_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/EditV2 - 修改ShareLink(不勾选OrderTag+默认模板0)(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/ShareLink/EditV2。先创建ShareLink，再修改为不勾选OrderTag+userWidgetTemplate=0，最后归档清理保证可重复执行。500条随机样本中占比约3.8%（16次）。另有勾选OrderTag+勾选CreativeTag场景占比1.4%(6次)因账号缺少真实creativeTagId([NEEDS_REAL_VALUE])未生成case，技术受限。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建ShareLink(前置)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/CreateV2",
+        "request_body": {
+          "countryCode": "US",
+          "profileIds": "{{profile_id}}",
+          "advertiserIds": "{{advertiser_id}}",
+          "createForEachAdvertiser": false,
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "startDate": null,
+          "endDate": null,
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}",
+          "dateRangeType": 10,
+          "expiredDate": null,
+          "descreption": "",
+          "amsProfileIds": []
+        },
+        "extract_vars": {
+          "e3_share_id": "Data.shareId"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "修改ShareLink(被测)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/EditV2",
+        "request_body": {
+          "countryCode": "US",
+          "shareId": "{{e3_share_id}}",
+          "orderTagIsCheck": false,
+          "orderTagId": [],
+          "lineItemTagIsCheck": false,
+          "lineItemTagId": [],
+          "creativeTagIsCheck": false,
+          "creativeTagId": [],
+          "amsProfileIds": [],
+          "userWidgetTemplate": "0",
+          "widgetIDAndIsCheckList": "{{share_link_widget_list}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      },
+      {
+        "name": "后置清理-删除ShareLink",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": {
+          "shareIds": [
+            "{{e3_share_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": null
+        }
+      }
+    ]
+  }
+]

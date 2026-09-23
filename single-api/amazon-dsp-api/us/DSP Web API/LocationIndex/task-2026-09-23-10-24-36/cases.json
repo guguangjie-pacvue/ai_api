@@ -1,0 +1,131 @@
+[
+  {
+    "name": "POST /api/LocationIndex/CreateGeoLocations - 创建SmartLocation地理位置索引 [仅生成不执行-无清理接口]",
+    "description": "单接口测试：POST /api/LocationIndex/CreateGeoLocations。基于SmartLocation(按指数百分位)创建地理位置索引数据；LocationIndex tag内7个接口全部为Create/Import/Get/List/Retrieve/Update，没有任何Delete/Archive接口，一旦执行会产生无法清理的持久化地理索引数据，按无清理接口默认规则仅生成不执行。请求体为ES真实样本(profileId/advertiserId为其他真实客户所有，非本测试账号，case不会被执行，仅作结构留存参考)。58条样本中占比约100%（58次，100%来自同一真实客户账号）。",
+    "module": "LocationIndex",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateGeoLocations",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LocationIndex/CreateGeoLocations",
+        "request_body": {
+          "profileId": 666963308033875,
+          "advertiserId": 5614853100001,
+          "content": {
+            "geoLocations": [
+              {
+                "location": {
+                  "smartLocation": {
+                    "locationIndexId": "708be661-9833-42df-9c62-cab8fabf5ee1",
+                    "minIndexValuePercentile": 70,
+                    "maxIndexValuePercentile": 100,
+                    "name": "Q2-2026-Seattle-Performance-Index-1"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LocationIndex/GetGeoLocationDetail - 按profileId+advertiserId+geoLocationId查询详情(跨租户校验)",
+    "description": "单接口测试：POST /api/LocationIndex/GetGeoLocationDetail。按profileId+advertiserId+geoLocationId查询地理位置索引详情；真实调用100%为同一种参数模式。三个字段均取自ES真实样本，该profileId/advertiserId属于其他真实客户、非本测试账号可访问范围。探测确认接口对profileId/advertiserId做了正确的账号授权校验：本测试账号调用返回HTTP 200外层包装、业务层HttpStatusCode=403、Error.message=\"Unauthorized profile or advertiser.\"，判定为预期的多租户权限隔离(非bug)，与TemplateV2的GetChildTemplate/GetTemplate形成正面对照(那两个接口缺少同样的校验)。66条样本中占比约100%（66次）。",
+    "module": "LocationIndex",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetGeoLocationDetail",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LocationIndex/GetGeoLocationDetail",
+        "request_body": {
+          "profileId": 666963308033875,
+          "advertiserId": 5614853100001,
+          "geoLocationId": "XHvCjcKHXsKGfcKLaMKMwoh_wpHCkWzChcKHfH_CjsKFT04tOTZkNGYzMTQtZTcyOS00NGViLWIyMmYtNzYyMjg3NzFiOWVk"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "HttpStatusCode": 403,
+          "Error.message": "Unauthorized profile or advertiser."
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LocationIndex/ListLocationIndexes - 按profileId+advertiserId查询本账号地理位置索引列表",
+    "description": "单接口测试：POST /api/LocationIndex/ListLocationIndexes。按profileId+advertiserId查询该广告主下所有已创建的地理位置索引列表；请求体结构100%为{profileId,advertiserId}，真实样本中恰好包含本测试账号自己的一次真实调用(1251036855266063/578107614358724215，占样本2.2%)，直接采用。验证结果：本账号下暂无已创建的LocationIndex实体，返回IsSuccessStatusCode=true+Data=[]，属于真实的\"成功空结果\"。同一请求结构如换成ES里其他真实客户的profileId/advertiserId(占比78.2%的多数场景)会被正确拒绝(HttpStatusCode=403 Unauthorized profile or advertiser，已在GetGeoLocationDetail case中验证过同一机制，此处不重复执行)。500条随机样本中本账号占比约2.2%（11次）。",
+    "module": "LocationIndex",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ListLocationIndexes",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LocationIndex/ListLocationIndexes",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/LocationIndex/RetrieveLocationIndexes - 按profileId+advertiserId+indexIds批量查询索引详情(跨租户校验)",
+    "description": "单接口测试：POST /api/LocationIndex/RetrieveLocationIndexes。按profileId+advertiserId+content.indexIds批量查询地理位置索引详情；真实调用100%为同一种参数模式。三个字段均取自ES真实样本(其他真实客户，非本测试账号)。探测确认与GetGeoLocationDetail一致的正确多租户校验：本测试账号调用返回HTTP 200外层包装、业务层HttpStatusCode=403、Message=\"Unauthorized profile or advertiser.\"，判定为预期安全隔离(非bug)。261条样本中占比约70.9%（185次，为该接口最高频的单一(profileId,advertiserId)组合，其余组合均为该组合的同结构变体，仅indexIds取值不同）。",
+    "module": "LocationIndex",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 RetrieveLocationIndexes",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "LocationIndex/RetrieveLocationIndexes",
+        "request_body": {
+          "profileId": 666963308033875,
+          "advertiserId": 5614853100001,
+          "content": {
+            "indexIds": [
+              "708be661-9833-42df-9c62-cab8fabf5ee1"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "HttpStatusCode": 403,
+          "Message": "Unauthorized profile or advertiser."
+        }
+      }
+    ]
+  }
+]

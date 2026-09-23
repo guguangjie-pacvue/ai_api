@@ -1,0 +1,54 @@
+[
+  {
+    "name": "GET /api/asc/GetAdvertiserBaseInfo/GetAdvertiserBaseInfo - 查询本账号真实advertiser基础信息",
+    "description": "单接口测试：GET /api/asc/GetAdvertiserBaseInfo/GetAdvertiserBaseInfo。按aid(advertiserId)查询advertiser基础信息，aid使用本账号真实advertiser(578107614358724215)，该值在ES 500条随机样本中出现17次(占比约3.4%)，是样本里可确认归属本账号的真实调用。500条随机样本中该接口整体占比约100%(500次，仅aid取值不同，均为单一query参数场景)。",
+    "module": "Advertiser",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdvertiserBaseInfo",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "asc/GetAdvertiserBaseInfo/GetAdvertiserBaseInfo",
+        "request_body": {
+          "aid": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/asc/RefreshClientAdminAdvertisers/RefreshClientAdminAdvertisers - 刷新profile的Amazon管理员advertiser列表(仅生成不执行,无清理接口默认不执行)",
+    "description": "单接口测试：POST /api/asc/RefreshClientAdminAdvertisers/RefreshClientAdminAdvertisers。按profileIds向Amazon拉取/刷新该profile的管理员advertiser关联列表并写回Pacvue数据库。本接口在最初的DSP限制清单里被明确点名为高危('会影响account/advertiser')，本tag(Advertiser)内只有GetAdvertiserBaseInfo/GetAdvertiserTimeZone/RefreshClientAdminAdvertisers三个接口，无任何撤销/回滚该刷新结果的配套接口，按无清理接口默认判定仅生成不执行。profileIds使用本账号真实profile_id(而非ES样本里其他客户的profileId)，避免触碰不属于本任务的第三方账号数据；未发现除'无清理接口'外的新颖风险点。404条随机样本中占比约100%(每条profileIds均为单profile数组，结构一致)。",
+    "module": "Advertiser",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 RefreshClientAdminAdvertisers(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "asc/RefreshClientAdminAdvertisers/RefreshClientAdminAdvertisers",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]

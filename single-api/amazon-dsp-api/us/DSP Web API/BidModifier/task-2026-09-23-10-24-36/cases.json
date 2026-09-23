@@ -1,0 +1,126 @@
+[
+  {
+    "name": "POST /api/BidModifier/GetAllBidModifiers - 按advertiserIds过滤",
+    "description": "单接口测试：POST /api/BidModifier/GetAllBidModifiers。按单个advertiserId过滤查询出价调整规则列表；用本测试账号自己的advertiserId，账号内实际存在2条历史遗留测试规则(test235900probe/test174500safemulti)，验证真实返回非空数据。500条随机样本中占比约93.0%（465次）。",
+    "module": "BidModifier",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAllBidModifiers",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "BidModifier/GetAllBidModifiers",
+        "request_body": {
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BidModifier/GetAllBidModifiers - 不传advertiserIds(空body)",
+    "description": "单接口测试：POST /api/BidModifier/GetAllBidModifiers。请求体为空对象，不传advertiserIds过滤条件。500条随机样本中占比约7.0%（35次）。",
+    "module": "BidModifier",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAllBidModifiers",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "BidModifier/GetAllBidModifiers",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BidModifier/GetBidModifierList - 默认分页查询(无过滤条件)",
+    "description": "单接口测试：POST /api/BidModifier/GetBidModifierList。不携带任何过滤条件的默认分页查询(pageSize=25,pageIndex=1,按CreatedTime倒序)，为绝对主流调用模式。用本测试账号profileId+advertiserId过滤，验证真实返回2条历史遗留测试规则。834条样本中占比约98.0%（490次）。",
+    "module": "BidModifier",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBidModifierList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "BidModifier/GetBidModifierList",
+        "request_body": {
+          "ruleIds": [],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "lineItemIds": [],
+          "matchMethods": [],
+          "pageInfo": {
+            "orderByField": "CreatedTime",
+            "orderAsc": false,
+            "pageSize": 25,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/BidModifier/GetBidModifierMapList - 按profileId+advertiserId+ruleId查询规则关联的LineItem",
+    "description": "单接口测试：POST /api/BidModifier/GetBidModifierMapList。查询指定出价调整规则关联的LineItem映射列表；三个字段真实调用100%同时携带。使用本测试账号真实存在的历史规则ruleId(3c4161d3-e6d5-420d-9b6b-44a30efe0842，来自账号内遗留测试规则test235900probe)。19条样本中占比约100%（19次）。",
+    "module": "BidModifier",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetBidModifierMapList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "BidModifier/GetBidModifierMapList",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "ruleId": "3c4161d3-e6d5-420d-9b6b-44a30efe0842"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "lineItemTargets": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

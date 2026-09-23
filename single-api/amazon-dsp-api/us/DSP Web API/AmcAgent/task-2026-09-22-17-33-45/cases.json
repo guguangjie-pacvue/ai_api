@@ -1,0 +1,548 @@
+[
+  {
+    "name": "GET /api/AmcAgent/Category - type=insight",
+    "description": "单接口测试：GET /api/AmcAgent/Category。按userId+reportId查询单条report的AI对话分类记录，真实调用几乎全部为type=insight(配合reportId使用)。500条随机样本中占比约99.8%（499次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 Category",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/Category",
+        "request_body": {
+          "userId": "20121",
+          "type": "insight",
+          "reportId": "40073"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AmcAgent/CategoryGrouped - type=query",
+    "description": "单接口测试：GET /api/AmcAgent/CategoryGrouped。按userId+type查询该用户AI对话历史分组(Today/Last7Days/Last14Days/Last30Days)，真实调用以type=query(自定义SQL问答)为主。500条随机样本中占比约77.8%（182次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CategoryGrouped",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/CategoryGrouped",
+        "request_body": {
+          "userId": "15390",
+          "type": "query"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AmcAgent/CategoryGrouped - type=query-audience",
+    "description": "单接口测试：GET /api/AmcAgent/CategoryGrouped。同上场景，type=query-audience(受众相关问答)为第二高频场景。500条随机样本中占比约22.2%（52次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CategoryGrouped",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/CategoryGrouped",
+        "request_body": {
+          "userId": "14495",
+          "type": "query-audience"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcAgent/GetSqlChatParameters - reportinfo默认参数",
+    "description": "单接口测试：POST /api/AmcAgent/GetSqlChatParameters。用于AMC custom sql agent获取sql占位符信息，真实调用几乎全部只传reportinfo(不含CurrentSQL/SQLVersion，AMCRequirement各字段为空数组)，本身不触发AMC云端查询(仅本地解析占位符)。instanceId替换为本任务真实验证过的AMC实例amcgd4jvzeh。500条随机样本中占比约99.8%（499次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSqlChatParameters",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/GetSqlChatParameters",
+        "request_body": {
+          "reportinfo": {
+            "InstanceId": "amcgd4jvzeh",
+            "TimeZone": null,
+            "ReportPeriod": "Custom",
+            "customLastDays": null,
+            "CustomStartDate": "{{date_start}}",
+            "CustomEndDate": "{{date_end}}",
+            "SQLVersion": null,
+            "CurrentSQL": null,
+            "AMCRequirement": {
+              "AMSProfiles": [],
+              "DSPAdvertisers": [],
+              "AMSCampaigns": [],
+              "AMSSelfCampaigns": [],
+              "AMSCampaignTags": [],
+              "AMSSelfCampaignTags": [],
+              "DSPOrders": [],
+              "DSPSelfOrders": [],
+              "DSPOrderTags": [],
+              "DSPSelfOrderTags": [],
+              "Asins": []
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Items": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcAgent/ListSqlVersions - sessionId为数字时间戳形态",
+    "description": "单接口测试：POST /api/AmcAgent/ListSqlVersions。按sessionId数组查询该会话下SQL版本历史，属只读列表查询(POST传参，非写操作)。真实调用中sessionId主要是数字时间戳字符串形态(如'1775022341299')。500条随机样本中占比约73.4%（367次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ListSqlVersions",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/ListSqlVersions",
+        "request_body": {
+          "sessionId": [
+            "1775022341299"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.List": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AmcAgent/ListSqlVersions - sessionId为UUID形态",
+    "description": "单接口测试：POST /api/AmcAgent/ListSqlVersions。同上接口，sessionId为标准UUID形态为第二种真实场景。500条随机样本中占比约26.6%（133次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ListSqlVersions",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/ListSqlVersions",
+        "request_body": {
+          "sessionId": [
+            "08d58c22-01ab-4d9d-ba10-fad7606132d3"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.List": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/AmcAgent/SessionLogs - 按sessionId查询",
+    "description": "单接口测试：GET /api/AmcAgent/SessionLogs。按sessionId查询该会话的问答日志列表，真实调用参数形态单一(仅sessionId一个UUID参数)。该接口真实调用仅此1种模式，已全覆盖。500条随机样本中占比100%（500次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SessionLogs",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/SessionLogs",
+        "request_body": {
+          "sessionId": "74f0fb86-f335-4cb8-98f0-7b6bdd671989"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddLog - type=query",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddLog。写入AI对话问答日志(sessionId/question/answer持久化到ChatSessionLog表)。风险判定：AmcAgent tag内14个接口中无任何删除/清空日志的接口，写入后无法撤销，遵照2026-09-22规则默认仅生成不执行。真实调用中type=query(自定义SQL问答记录)为最高频场景。500条随机样本中占比约56.4%（282次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddLog",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddLog",
+        "request_body": {
+          "sessionId": "test173345",
+          "logId": "test173345",
+          "type": "query",
+          "title": "Create a query for a monthly NTB trend analysis, including spend, orders, NTB orders, sales, NTB sales, NTB ROAS, and the count of NTB purchasing users.",
+          "userId": 20121,
+          "question": "{\"role\":\"user\",\"content\":\"Create a query for a monthly NTB trend analysis, including spend, orders, NTB orders, sales, NTB sales, NTB ROAS, and the count of NTB purchasing users.\"}",
+          "answer": "{\"role\":\"AI\",\"content\":[{\"type\":\"text\",\"text\":\"test\"}]}",
+          "reportHistoryId": null,
+          "reportId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddLog - type=insight",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddLog。风险同上(无清理接口，仅生成不执行)。真实调用中type=insight(报表分析对话，带reportId/reportHistoryId)为第二高频场景。500条随机样本中占比约27.2%（136次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddLog",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddLog",
+        "request_body": {
+          "sessionId": "test173345i",
+          "logId": "test173345i",
+          "type": "insight",
+          "title": "test insight log",
+          "userId": 20121,
+          "question": "{\"conversationId\":\"\",\"data\":\"test\",\"event\":\"text\",\"role\":\"user\"}",
+          "answer": "test answer",
+          "reportHistoryId": 102286,
+          "reportId": 26570
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddLog - type=query-audience",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddLog。风险同上(无清理接口，仅生成不执行)。真实调用中type=query-audience(受众创建对话记录)为第三场景。500条随机样本中占比约13.6%（68次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddLog",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddLog",
+        "request_body": {
+          "sessionId": "test173345a",
+          "logId": "test173345a",
+          "type": "query-audience",
+          "title": "Create an audience based on customers who searched keywords but didn't purchase.",
+          "userId": 14495,
+          "question": "{\"role\":\"user\",\"content\":\"Create an audience based on customers who searched keywords but didn't purchase.\"}",
+          "answer": "test answer",
+          "reportHistoryId": null,
+          "reportId": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddLog - type=template",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddLog。风险同上(无清理接口，仅生成不执行)。真实调用中type=template(模板类对话)占比虽较低但仍≥1%，判定为独立真实场景。500条随机样本中占比约2.8%（14次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddLog",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddLog",
+        "request_body": {
+          "sessionId": "test173345t",
+          "logId": "test173345t",
+          "type": "template",
+          "title": "test template log",
+          "userId": 20152,
+          "question": "{\"conversationId\":\"test173345t\",\"data\":\"test\",\"event\":\"text\",\"role\":\"user\"}",
+          "answer": "test answer",
+          "reportHistoryId": 176951,
+          "reportId": 64646
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddSqlVersion - 仅sql无parameterText",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddSqlVersion。写入自定义SQL的一个新版本快照(snapId/sql持久化)。风险判定：AmcAgent tag内无删除SQL版本的接口，写入后无法撤销，遵照2026-09-22规则默认仅生成不执行。真实调用中仅传sql不传parameterText为最主要场景。500条随机样本中占比约96.2%（481次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddSqlVersion",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddSqlVersion",
+        "request_body": {
+          "sessionId": "test173345",
+          "snapId": "test173345snap1",
+          "sql": "SELECT COUNT(*) AS impression_count, SUM(impressions) AS total_impressions FROM dsp_impressions WHERE impressions > 0",
+          "parameterText": null,
+          "queries": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddSqlVersion - sql+parameterText",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddSqlVersion。风险同上(无清理接口，仅生成不执行)。真实调用中同时传parameterText(占位符说明文本)为第二场景。500条随机样本中占比约3.8%（19次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddSqlVersion",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddSqlVersion",
+        "request_body": {
+          "sessionId": "test173345",
+          "snapId": "test173345snap2",
+          "sql": "ROUND(b.cv_24h * 100.0 / NULLIF(b.total_cv,0), 2)",
+          "parameterText": "dsp_campaigns:\n  description: List of DSP impression campaign IDs\n  columnType: DIMENSION",
+          "queries": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddVote - voteType=1(点赞)",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddVote。对某条AI对话日志(logId)进行点赞/点踩反馈打分。风险判定：AmcAgent tag内无删除/撤销投票的接口，写入后无法撤销，遵照2026-09-22规则默认仅生成不执行。真实调用中voteType=1(点赞/正向反馈)为最高频场景。22条真实样本中占比约81.8%（18次），样本量少于500因该接口调用频率本身较低。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddVote",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddVote",
+        "request_body": {
+          "userId": 20152,
+          "sessionId": "test173345",
+          "logId": "test173345",
+          "clientId": 2938,
+          "voteType": 1,
+          "feedback": "test feedback"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【无清理接口-仅生成不执行】POST /api/AmcAgent/AddVote - voteType=2(点踩)",
+    "description": "【无清理接口-仅生成不执行】单接口测试：POST /api/AmcAgent/AddVote。风险同上(无清理接口，仅生成不执行)。真实调用中voteType=2(点踩/负向反馈)为第二场景。22条真实样本中占比约18.2%（4次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AddVote",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AddVote",
+        "request_body": {
+          "userId": 20152,
+          "sessionId": "test173345v2",
+          "logId": "test173345v2",
+          "clientId": 2938,
+          "voteType": 2,
+          "feedback": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "【WebSocket协议-仅生成不执行】GET /api/AmcAgent/AMCInsightChat - 携带token握手",
+    "description": "【WebSocket协议-仅生成不执行】单接口测试：GET /api/AmcAgent/AMCInsightChat。Swagger标注为WebSocket接口，真实请求仅携带token查询参数用于握手鉴权，无JSON响应体。经实测探测：用普通HTTP GET(无Upgrade/Connection握手头)直接调用返回HTTP 400+空响应体(非业务失败，是协议层不匹配)，run-cases.py是纯HTTP client无法完成WebSocket握手协商，结构性无法验证该接口的真实业务行为，故仅生成case记录真实入参结构，不执行。500条随机样本中占比100%（155次，均为握手形态）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AMCInsightChat",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/AMCInsightChat",
+        "request_body": {
+          "token": "{{token}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "status_code": 101
+        }
+      }
+    ]
+  },
+  {
+    "name": "【WebSocket协议-仅生成不执行】GET /api/AmcAgent/ReportBuilderChat - 携带token握手",
+    "description": "【WebSocket协议-仅生成不执行】单接口测试：GET /api/AmcAgent/ReportBuilderChat。风险与探测结论同AMCInsightChat(WebSocket握手接口，run-cases.py结构性无法测试，普通HTTP GET实测返回400空body)，仅生成不执行。500条随机样本中占比100%（64次）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ReportBuilderChat",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/ReportBuilderChat",
+        "request_body": {
+          "token": "{{token}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "status_code": 101
+        }
+      }
+    ]
+  },
+  {
+    "name": "【WebSocket协议-仅生成不执行】GET /api/AmcAgent/ReportCustomSqlChat - 携带token握手",
+    "description": "【WebSocket协议-仅生成不执行】单接口测试：GET /api/AmcAgent/ReportCustomSqlChat。风险与探测结论同AMCInsightChat(WebSocket握手接口，run-cases.py结构性无法测试，普通HTTP GET实测返回400空body)，仅生成不执行。该接口是自定义SQL对话的WS通道，实际业务会话中还会触发AI生成SQL并在AMC云端执行查询，属于真实计费风险点，双重原因不执行。500条随机样本中占比100%（500次，均为握手形态）。",
+    "module": "AmcAgent",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ReportCustomSqlChat",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AmcAgent/ReportCustomSqlChat",
+        "request_body": {
+          "token": "{{token}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "status_code": 101
+        }
+      }
+    ]
+  }
+]

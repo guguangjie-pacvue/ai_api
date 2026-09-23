@@ -1,0 +1,276 @@
+[
+  {
+    "name": "POST /api/Audit/HistoryList - 仅按profileIds查询",
+    "description": "单接口测试：POST /api/Audit/HistoryList。仅传profileIds，不传orderIds/advertiserIds/orderTagIds，查询该profile下的Audit历史记录列表。500条随机样本中占比约95.6%（478次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 HistoryList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/HistoryList",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [],
+          "orderIds": [],
+          "orderTagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audit/HistoryList - orderIds+profileIds组合查询",
+    "description": "单接口测试：POST /api/Audit/HistoryList。同时传orderIds和profileIds，按指定order缩小查询Audit历史记录范围。500条随机样本中占比约2.0%（10次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 HistoryList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/HistoryList",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [],
+          "orderIds": [
+            "{{order_id}}"
+          ],
+          "orderTagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audit/HistoryList - 空过滤条件查询全部",
+    "description": "单接口测试：POST /api/Audit/HistoryList。不传任何过滤字段（profileIds/advertiserIds/orderIds/orderTagIds均为空），查询用户可见的全部Audit历史记录。500条随机样本中占比约1.8%（9次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 HistoryList",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/HistoryList",
+        "request_body": {
+          "profileIds": [],
+          "advertiserIds": [],
+          "orderIds": [],
+          "orderTagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audit/GetAuditOrderNameAndId - profileIds+14天默认周期",
+    "description": "单接口测试：POST /api/Audit/GetAuditOrderNameAndId。传profileIds+timeRangeDays=14（AuditCenter默认时间窗口），获取可选Order列表。500条随机样本中占比约54.8%（274次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAuditOrderNameAndId",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/GetAuditOrderNameAndId",
+        "request_body": {
+          "orderTagId": null,
+          "orderIds": [],
+          "advertiserIds": [],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "timeRangeDays": 14
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audit/GetAuditOrderNameAndId - 仅profileIds不传周期",
+    "description": "单接口测试：POST /api/Audit/GetAuditOrderNameAndId。仅传profileIds，不传timeRangeDays，获取该profile下全部可选Order列表。500条随机样本中占比约27.2%（136次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAuditOrderNameAndId",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/GetAuditOrderNameAndId",
+        "request_body": {
+          "orderTagId": null,
+          "orderIds": [],
+          "advertiserIds": [],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audit/GetAuditOrderNameAndId - advertiserIds+profileIds+14天",
+    "description": "单接口测试：POST /api/Audit/GetAuditOrderNameAndId。同时传advertiserIds+profileIds+timeRangeDays=14，按广告主缩小Order列表范围。500条随机样本中占比约13.4%（67次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAuditOrderNameAndId",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/GetAuditOrderNameAndId",
+        "request_body": {
+          "orderTagId": null,
+          "orderIds": [],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "timeRangeDays": 14
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audit/GetAuditOrderNameAndId - 空过滤条件查询全部",
+    "description": "单接口测试：POST /api/Audit/GetAuditOrderNameAndId。不传任何过滤字段，查询用户可见的全部可选Order列表。500条随机样本中占比约2.4%（12次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAuditOrderNameAndId",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/GetAuditOrderNameAndId",
+        "request_body": {
+          "orderTagId": null,
+          "orderIds": [],
+          "advertiserIds": [],
+          "profileIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Audit/GetAuditOrderNameAndId - advertiserIds+profileIds+7天周期",
+    "description": "单接口测试：POST /api/Audit/GetAuditOrderNameAndId。同时传advertiserIds+profileIds+timeRangeDays=7（近7天窗口），获取可选Order列表。500条随机样本中占比约1.6%（8次）。",
+    "module": "Audit",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAuditOrderNameAndId",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Audit/GetAuditOrderNameAndId",
+        "request_body": {
+          "orderTagId": null,
+          "orderIds": [],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ],
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "timeRangeDays": 7
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

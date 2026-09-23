@@ -1,0 +1,666 @@
+[
+  {
+    "name": "POST /api/Creative/GetCreativeByAdvertiser - profileIds+advertiserIds同时传",
+    "description": "单接口测试：POST /api/Creative/GetCreativeByAdvertiser。按profile+advertiser同时过滤查询广告主下creative列表。场景：profileIds+advertiserIds同时传。500条随机样本中占比约44.8%(224次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreativeByAdvertiser",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetCreativeByAdvertiser",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/GetCreativeByAdvertiser - 仅传profileIds",
+    "description": "单接口测试：POST /api/Creative/GetCreativeByAdvertiser。仅按profile过滤查询creative列表。场景：仅传profileIds。500条随机样本中占比约29.8%(149次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreativeByAdvertiser",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetCreativeByAdvertiser",
+        "request_body": {
+          "profileIds": [
+            "{{profile_id_single}}"
+          ],
+          "advertiserIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/GetCreativeByAdvertiser - 两者均不传",
+    "description": "单接口测试：POST /api/Creative/GetCreativeByAdvertiser。不带任何过滤条件查询。场景：profileIds/advertiserIds均为空。500条随机样本中占比约14.2%(71次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreativeByAdvertiser",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetCreativeByAdvertiser",
+        "request_body": {
+          "profileIds": [],
+          "advertiserIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/GetCreativeByAdvertiser - 仅传advertiserIds",
+    "description": "单接口测试：POST /api/Creative/GetCreativeByAdvertiser。仅按advertiser过滤查询creative列表。场景：仅传advertiserIds。500条随机样本中占比约11.2%(56次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreativeByAdvertiser",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetCreativeByAdvertiser",
+        "request_body": {
+          "profileIds": [],
+          "advertiserIds": [
+            "{{advertiser_id_single}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/GetAsset - 按assetId查询素材详情",
+    "description": "单接口测试：POST /api/Creative/GetAsset。按profileId+assetId+assetVersion查询单个素材详情(真实参数走query string，非body)。默认调用。1588条流量中唯一真实模式，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAsset",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetAsset?profileId={{profile_id_single}}&assetId={{asset_id_standarddisplay}}&assetVersion=version_v1",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Creative/GetCreatives - 按profileId+lineItemId查询可关联creative列表",
+    "description": "单接口测试：GET /api/Creative/GetCreatives。按profileId+lineItemId查询该lineItem下可选/已关联的creative列表。默认调用。500条随机样本中100%均为profileId+lineItemId组合，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreatives",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "lineItemId": "{{lineitem_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "availableCreative": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/GetCreativeTagCreativeIds - 不按标签过滤(tagIds为空)",
+    "description": "单接口测试：POST /api/Creative/GetCreativeTagCreativeIds。按advertiserId查询、tagIds为空数组(不按标签过滤)。场景：tagIds=[]。15条样本中占比约33.3%(5次)。注：另一真实场景tagIds非空(占比66.7%,10次)因账号缺少真实creative_tag_id未覆盖，见报告。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCreativeTagCreativeIds",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetCreativeTagCreativeIds",
+        "request_body": {
+          "advertiserId": "{{advertiser_id_single}}",
+          "tagIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Creative/GetLineItemByCreative - 按creativeId查询关联lineItem",
+    "description": "单接口测试：GET /api/Creative/GetLineItemByCreative。按creativeId+aid(advertiserId)查询该creative关联的lineItem列表。默认调用。267条流量中唯一真实模式，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetLineItemByCreative",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetLineItemByCreative",
+        "request_body": {
+          "creativeId": "{{creative_id}}",
+          "aid": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/GetRecCreative - 按creativeId查询REC素材详情",
+    "description": "单接口测试：POST /api/Creative/GetRecCreative。按profileId+creativeId查询单个REC(Responsive eCommerce)类型creative详情。默认调用。3条流量中唯一真实模式，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetRecCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetRecCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "creativeId": "{{creative_id_rec}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Creative/GetSDAsset - 按assetId查询StandardDisplay素材",
+    "description": "单接口测试：GET /api/Creative/GetSDAsset。按profileId+assetVersion+assetId查询StandardDisplay素材详情。默认调用。140条流量中唯一真实模式，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetSDAsset",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetSDAsset",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "assetVersion": "version_v1",
+          "assetId": "{{asset_id_standarddisplay}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/GetStandardDisplayCreative - 按creativeId查询StandardDisplay素材详情",
+    "description": "单接口测试：POST /api/Creative/GetStandardDisplayCreative。按profileId+creativeId查询StandardDisplay creative详情。默认调用。696条流量中唯一真实模式，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetStandardDisplayCreative",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/GetStandardDisplayCreative",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "creativeId": "{{creative_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/SearchAssets - 无过滤条件浏览素材库",
+    "description": "单接口测试：POST /api/Creative/SearchAssets。不带任何text/filter条件浏览素材库。场景：无过滤条件。500条随机样本中占比约55.8%(279次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SearchAssets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/SearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "originSearchBody": {
+            "text": "",
+            "filterCriteria": {
+              "rangeFilters": [],
+              "valueFilters": []
+            },
+            "pageCriteria": {
+              "identifier": {
+                "pageNumber": 1
+              },
+              "size": 50
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/SearchAssets - 按ASSET_TYPE值过滤(valueFilters)",
+    "description": "单接口测试：POST /api/Creative/SearchAssets。按valueFilters(如ASSET_TYPE=VIDEO)过滤素材库。场景：valueFilters过滤。500条随机样本中占比约33.8%(169次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SearchAssets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/SearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "originSearchBody": {
+            "text": "",
+            "filterCriteria": {
+              "rangeFilters": [],
+              "valueFilters": [
+                {
+                  "valueField": "ASSET_TYPE",
+                  "values": [
+                    "VIDEO"
+                  ]
+                }
+              ]
+            },
+            "pageCriteria": {
+              "identifier": {
+                "pageNumber": 1
+              },
+              "size": 50
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/SearchAssets - 关键词文本搜索",
+    "description": "单接口测试：POST /api/Creative/SearchAssets。按text关键词搜索素材库并按创建时间排序。场景：text文本搜索。500条随机样本中占比约7.4%(37次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SearchAssets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/SearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "originSearchBody": {
+            "text": "600",
+            "filterCriteria": {
+              "rangeFilters": [],
+              "valueFilters": []
+            },
+            "pageCriteria": {
+              "identifier": {
+                "pageNumber": 1,
+                "token": null
+              },
+              "size": 50
+            },
+            "sortCriteria": {
+              "field": "CREATED_TIME",
+              "order": "DESC"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/SearchAssets - 按文件大小区间过滤(rangeFilters)",
+    "description": "单接口测试：POST /api/Creative/SearchAssets。按rangeFilters(SIZE区间)过滤素材库。场景：rangeFilters过滤。500条随机样本中占比约1.0%(5次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SearchAssets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/SearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "originSearchBody": {
+            "text": "",
+            "filterCriteria": {
+              "rangeFilters": [
+                {
+                  "rangeField": "SIZE",
+                  "ranges": [
+                    {
+                      "start": 0,
+                      "end": 1000000
+                    }
+                  ]
+                }
+              ],
+              "valueFilters": []
+            },
+            "pageCriteria": {
+              "identifier": {
+                "pageNumber": 1,
+                "token": null
+              },
+              "size": 50
+            },
+            "sortCriteria": {
+              "field": "CREATED_TIME",
+              "order": "DESC"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/SearchAssets - 区间过滤+值过滤组合",
+    "description": "单接口测试：POST /api/Creative/SearchAssets。同时使用rangeFilters(SIZE区间)与valueFilters(ASSET_TYPE)组合过滤。场景：rangeFilters+valueFilters组合。500条随机样本中占比约1.0%(5次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 SearchAssets",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/SearchAssets",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "originSearchBody": {
+            "text": "",
+            "filterCriteria": {
+              "rangeFilters": [
+                {
+                  "rangeField": "SIZE",
+                  "ranges": [
+                    {
+                      "start": 500000000,
+                      "end": 100000000000000
+                    }
+                  ]
+                }
+              ],
+              "valueFilters": [
+                {
+                  "valueField": "ASSET_TYPE",
+                  "values": [
+                    "AUTHOR_IMAGE"
+                  ]
+                }
+              ]
+            },
+            "pageCriteria": {
+              "identifier": {
+                "pageNumber": 1,
+                "token": null
+              },
+              "size": 50
+            },
+            "sortCriteria": {
+              "field": "CREATED_TIME",
+              "order": "DESC"
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Creative/StandardDisplayImageCreativesPreview - 单图片StandardDisplay预览",
+    "description": "单接口测试：POST /api/Creative/StandardDisplayImageCreativesPreview。用单个图片素材预览StandardDisplay创意渲染效果(不持久化)。默认调用。500条随机样本中占比约99.4%(497次)。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 StandardDisplayImageCreativesPreview",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/StandardDisplayImageCreativesPreview",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "creative": {
+            "adExperience": "STANDARD_DISPLAY",
+            "creative": {
+              "country": "US",
+              "adCreativeFormatType": "DISPLAY",
+              "name": "test250922",
+              "language": "en",
+              "hostedType": "AMAZON_HOSTED",
+              "adCreativeFormatProperties": {
+                "adCreativeFormatType": "DISPLAY",
+                "assets": [
+                  {
+                    "assetId": "{{asset_id_standarddisplay}}",
+                    "assetVersion": "version_v1",
+                    "associatedAdExperience": "STANDARD_DISPLAY"
+                  }
+                ],
+                "creativeSizes": [
+                  {
+                    "width": "250",
+                    "height": "250"
+                  }
+                ],
+                "clickActions": [
+                  {
+                    "clickActionType": "URL",
+                    "urlDestination": "https://www.amazon.com/dp/B07CPDKQCD",
+                    "associatedAdExperience": "STANDARD_DISPLAY"
+                  }
+                ]
+              }
+            },
+            "previewOverrides": {
+              "sizeFilter": {
+                "previewSite": "ON_AMAZON",
+                "width": "250",
+                "height": "250"
+              }
+            }
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Creative/DownloadBulkNameTemplate - 下载批量改名模板",
+    "description": "单接口测试：GET /api/Creative/DownloadBulkNameTemplate。下载批量修改creative名称用的Excel模板文件，无需入参。默认调用。10条流量中唯一真实模式，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadBulkNameTemplate",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/DownloadBulkNameTemplate",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 100
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Creative/DownloadSimpleAsinTemplate - 下载ASIN模板",
+    "description": "单接口测试：GET /api/Creative/DownloadSimpleAsinTemplate。下载简易ASIN录入Excel模板文件，无需入参。默认调用。12条流量中唯一真实模式，已全覆盖。",
+    "module": "Creative",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 DownloadSimpleAsinTemplate",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Creative/DownloadSimpleAsinTemplate",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 50
+          }
+        }
+      }
+    ]
+  }
+]

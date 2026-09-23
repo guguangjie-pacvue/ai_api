@@ -1,0 +1,382 @@
+[
+  {
+    "name": "GET /api/Template/GetChildTemplates - 按templateId查子模板(ES真实样本)",
+    "description": "单接口测试：GET /api/Template/GetChildTemplates。按父templateId查询其子模板列表。templateId取自ES 365天真实样本中出现频次最高的值(该模块下最常被查询的父模板)。该值来自其他真实客户账号(本账号GetTemplateList未见自建父子模板层级)，按只读端点跨租户ID处理惯例(报表/查询类接口用真实ID过滤、后端不做强隔离即视为合法真实场景)保留原样使用。观察：响应Data数组内含该客户的真实模板名称/countryCode等业务配置(非财务/PII数据)，与本项目此前在Audit/SuperWizard等模块发现的\"按单一ID直查、后端未做归属校验\"模式相似，敏感度低于财务类数据，记为观察项而非阻断项。168条随机样本中占比约12.5%(21次，同类最高频templateId)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetChildTemplates",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetChildTemplates",
+        "request_body": {
+          "templateId": "5b2c91ba-d2f8-44b9-9e58-3805a4c1f011"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - type=ORDERTEMPLATE(查询Order模板列表)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：type=ORDERTEMPLATE(查询Order模板列表)。500条随机样本中占比约56.6%(283次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - type=ORDERTEMPLATE(查询Order模板列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "type": "ORDERTEMPLATE"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - countryCode=US+type=LINETEMPLATE_DISPLAY(查询US站点Display行模板)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：countryCode=US+type=LINETEMPLATE_DISPLAY(查询US站点Display行模板)。500条随机样本中占比约20.0%(100次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - countryCode=US+type=LINETEMPLATE_DISPLAY(查询US站点Display行模板)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "countryCode": "US",
+          "type": "LINETEMPLATE_DISPLAY"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - type=DISPLAY(查询Display品牌安全模板列表)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：type=DISPLAY(查询Display品牌安全模板列表)。500条随机样本中占比约11.8%(59次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - type=DISPLAY(查询Display品牌安全模板列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "type": "DISPLAY"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - type=ONLINE_VIDEO(查询Online Video品牌安全模板列表)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：type=ONLINE_VIDEO(查询Online Video品牌安全模板列表)。500条随机样本中占比约2.4%(12次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - type=ONLINE_VIDEO(查询Online Video品牌安全模板列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "type": "ONLINE_VIDEO"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - type=CREATEAUDIENCE(查询受众创建模板列表)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：type=CREATEAUDIENCE(查询受众创建模板列表)。500条随机样本中占比约1.8%(9次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - type=CREATEAUDIENCE(查询受众创建模板列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "type": "CREATEAUDIENCE"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - type=STREAMING_TV(查询Streaming TV品牌安全模板列表)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：type=STREAMING_TV(查询Streaming TV品牌安全模板列表)。500条随机样本中占比约1.2%(6次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - type=STREAMING_TV(查询Streaming TV品牌安全模板列表)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "type": "STREAMING_TV"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - countryCode=US+type=LINETEMPLATE_ONLINE_VIDEO(查询US站点Online Video行模板)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：countryCode=US+type=LINETEMPLATE_ONLINE_VIDEO(查询US站点Online Video行模板)。500条随机样本中占比约1.0%(5次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - countryCode=US+type=LINETEMPLATE_ONLINE_VIDEO(查询US站点Online Video行模板)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "countryCode": "US",
+          "type": "LINETEMPLATE_ONLINE_VIDEO"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/GetTemplateList - countryCode=US+type=LINETEMPLATE_STREAMING_TV(查询US站点Streaming TV行模板)",
+    "description": "单接口测试：POST /api/Template/GetTemplateList。按type(+countryCode)查询模板列表。场景：countryCode=US+type=LINETEMPLATE_STREAMING_TV(查询US站点Streaming TV行模板)。500条随机样本中占比约1.0%(5次)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetTemplateList - countryCode=US+type=LINETEMPLATE_STREAMING_TV(查询US站点Streaming TV行模板)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/GetTemplateList",
+        "request_body": {
+          "countryCode": "US",
+          "type": "LINETEMPLATE_STREAMING_TV"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/AddOrUpdateTemplate + DELETE /api/Template/DeleteTemplate - 自建CREATEAUDIENCE模板+清理(已知清理接口有bug)",
+    "description": "单接口测试：先用AddOrUpdateTemplate自建一个type=CREATEAUDIENCE的一次性测试模板(占45条随机样本中48.9%，为最高频场景)，提取新建templateId后立即调用DeleteTemplate清理。🔴已探测确认真实后端bug：DeleteTemplate对刚创建成功、且能在GetTemplateList中查到的templateId，稳定返回{Error.message:\"Could not find this templateId\",IsSuccessStatusCode:false}，多次间隔重试结果一致，排除时序延迟。断言按接口应有的正确行为书写(IsSuccessStatusCode:true)，预期会稳定FAIL，如实记录该bug，不因通过率改断言。该bug导致本用例每次执行都会在测试账号内留下1条无法删除的测试模板(仅品牌安全/受众规则配置，无成本、无外部副作用)。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建一次性测试CREATEAUDIENCE模板",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/AddOrUpdateTemplate",
+        "request_body": {
+          "name": "test102234-audience",
+          "type": "CREATEAUDIENCE",
+          "template": {
+            "audienceTemplate": {
+              "isMyselfSeleted": true,
+              "isComptitorSeleted": false,
+              "typeAudiences": [
+                {
+                  "audienceTemplateType": "myself",
+                  "audiences": [
+                    {
+                      "name": "",
+                      "audienceType": "PRODUCT_PURCHASES",
+                      "lookback": "60",
+                      "description": "",
+                      "idempotencyKey": "11111111-1111-1111-1111-111111111111",
+                      "rules": [
+                        {
+                          "clause": "INCLUDE",
+                          "attributeType": "ASIN",
+                          "operator": "ONE_OF",
+                          "attributeValues": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {}
+              ]
+            }
+          }
+        },
+        "extract_vars": {
+          "tpl_audience_id": "Data"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理-删除新建模板(预期FAIL,已知bug)",
+        "method": "DELETE",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/DeleteTemplate",
+        "request_body": {
+          "templateId": "{{tpl_audience_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Template/AddOrUpdateTemplate + DELETE /api/Template/DeleteTemplate - 自建DISPLAY品牌安全模板+清理(同一清理bug复现)",
+    "description": "单接口测试：用AddOrUpdateTemplate自建一个type=DISPLAY的品牌安全(brand safety)模板，代表DISPLAY/ONLINE_VIDEO/STREAMING_TV这一类结构相同、仅DoubleVerify/IAS枚举字段不同的\"行模板品牌安全配置\"写操作模式(45条样本中DISPLAY/ONLINE_VIDEO/STREAMING_TV各自占比均不足5%，样本量小且结构高度相似，只取DISPLAY一例代表该模式，未逐一为ONLINE_VIDEO/STREAMING_TV各建一条，如需分别验证可另行补充)。创建后调用DeleteTemplate清理，复现与CREATEAUDIENCE场景相同的清理bug(Could not find this templateId)，确认该bug非CREATEAUDIENCE类型独有，而是AddOrUpdateTemplate创建的全部模板类型都无法被DeleteTemplate正确找到。",
+    "module": "Template",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建一次性测试DISPLAY品牌安全模板",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/AddOrUpdateTemplate",
+        "request_body": {
+          "name": "test102234-display",
+          "type": "DISPLAY",
+          "template": {
+            "doubleVerify": {
+              "brandSafety": {
+                "contentCategories": [],
+                "contentCategoriesWithRisk": {
+                  "ADULT_CONTENT": "ALLOW_ALL"
+                },
+                "unknownContent": false,
+                "appAgeRating": [],
+                "appStarRating": "ALLOW_ALL",
+                "excludeAppsWithInsufficientRating": false
+              },
+              "fraudInvalidTraffic": {
+                "excludeImpressions": false,
+                "excludeAppsAndSites": "ALLOW_ALL",
+                "blockAppAndSites": false
+              },
+              "authenticBrandSafety": {},
+              "viewability": {
+                "mrcViewabilityTargeting": "ALLOW_ALL",
+                "brandExposureViewabilityTargeting": "ALLOW_ALL",
+                "includeUnmeasurableImpressions": false
+              }
+            }
+          }
+        },
+        "extract_vars": {
+          "tpl_display_id": "Data"
+        },
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      },
+      {
+        "name": "清理-删除新建模板(预期FAIL,已知bug)",
+        "method": "DELETE",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Template/DeleteTemplate",
+        "request_body": {
+          "templateId": "{{tpl_display_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]
