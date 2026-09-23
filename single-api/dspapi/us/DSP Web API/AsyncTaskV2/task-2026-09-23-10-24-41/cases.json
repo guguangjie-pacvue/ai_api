@@ -1,0 +1,257 @@
+[
+  {
+    "name": "POST /api/AsyncTaskV2/BulkAssociateCreativesToLineItems - 基础关联(仅id) + 后置移除还原",
+    "description": "单接口测试：POST /api/AsyncTaskV2/BulkAssociateCreativesToLineItems。将创意批量关联到LineItem(异步任务，Data返回任务jobId字符串，非实际数据，符合项目已知的'Download/*Report/async job'模式)。使用本账号真实自有profileId/lineitem_id/creative_id_rec，主步骤关联后用同tag内BulkRemoveLineCreatives做后置逆操作移除，保证可重复执行、账号内无残留关联。500条随机样本中占比约43.6%(218次)。",
+    "module": "AsyncTaskV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "关联创意到LineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkAssociateCreativesToLineItems",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "creativeIds": [
+            "{{creative_id_rec}}"
+          ],
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置移除还原",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkRemoveLineCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "creativeIds": [
+            "{{creative_id_rec}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AsyncTaskV2/BulkAssociateCreativesToLineItems - 带投放起止日期 + 后置移除还原",
+    "description": "单接口测试：POST /api/AsyncTaskV2/BulkAssociateCreativesToLineItems。关联创意到LineItem时额外指定该创意在此LineItem下的投放起止日期(startDate/endDate)。使用本账号真实自有实体，主步骤后用BulkRemoveLineCreatives还原。500条随机样本中占比约29%(145次)。",
+    "module": "AsyncTaskV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "关联创意到LineItem(带日期)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkAssociateCreativesToLineItems",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "creativeIds": [
+            "{{creative_id_rec}}"
+          ],
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "startDate": "{{date_start}} 00:00:00",
+          "endDate": "{{date_end}} 23:59:00"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置移除还原",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkRemoveLineCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "creativeIds": [
+            "{{creative_id_rec}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AsyncTaskV2/BulkAssociateCreativesToLineItems - 带advertiserId+isAdd标记 + 后置移除还原",
+    "description": "单接口测试：POST /api/AsyncTaskV2/BulkAssociateCreativesToLineItems。关联创意到LineItem时额外传advertiserId+isAdd=true(显式标记本次为新增关联，非移除)。使用本账号真实自有实体，主步骤后用BulkRemoveLineCreatives还原。500条随机样本中占比约27.4%(137次)。",
+    "module": "AsyncTaskV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "关联创意到LineItem(带advertiserId+isAdd)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkAssociateCreativesToLineItems",
+        "request_body": {
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "creativeIds": [
+            "{{creative_id_rec}}"
+          ],
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "isAdd": true,
+          "startDate": "{{date_start}} 00:00:00",
+          "endDate": "{{date_end}} 23:59:00"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置移除还原",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkRemoveLineCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "lineItemIds": [
+            "{{lineitem_id}}"
+          ],
+          "creativeIds": [
+            "{{creative_id_rec}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AsyncTaskV2/BulkAssociateLineCreatives - 按LineItem整体设置创意列表 [仅生成不执行，待用户决策]",
+    "description": "单接口测试：POST /api/AsyncTaskV2/BulkAssociateLineCreatives。[仅生成不执行，待用户决策]。与BulkAssociateCreativesToLineItems(M:N新增关联)不同，本接口的请求结构是associations:[{lineItemId,creativeIds}]，ES真实样本(10条，100%)里creativeIds全部为空数组，判断其语义更可能是'将该LineItem的创意列表整体替换/清空为传入值'(而非仅新增)，属于潜在破坏性的全量替换操作。因AsyncTaskV2 tag内没有可确认与之精确配对的'恢复原有创意列表'的读取接口(无法在写之前先100%可靠拿到原始creativeIds做还原)，无法安全验证'成对可重跑'，故不执行，仅生成case供人工评估。已用本账号真实自有lineitem_id替换ES样本里其他账号的profileId/lineItemId。10条随机样本中占比约100%(10次)。",
+    "module": "AsyncTaskV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "按LineItem整体设置创意列表",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkAssociateLineCreatives",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "associations": [
+            {
+              "lineItemId": "{{lineitem_id}}",
+              "creativeIds": []
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AsyncTaskV2/BulkCreateLineItems - 批量创建LineItem [仅生成不执行]",
+    "description": "单接口测试：POST /api/AsyncTaskV2/BulkCreateLineItems。[仅生成不执行，因无清理接口默认不执行]。会在Amazon DSP下真实创建新的LineItem实体(异步任务，Data返回jobId)，AsyncTaskV2 tag内没有对应的批量删除/归档LineItem接口，按项目默认规则(无清理接口的创建类写操作默认仅生成不执行)处理。已用本账号真实自有profileId/advertiserId替换ES样本值；lineTemplateId为其他客户的真实Amazon线上模板GUID，本账号无对应实体，标记待补。68条随机样本中占比约100%(单一请求结构，profileId+lineItems数组，内部dayparting/预算等字段因客户而异)。",
+    "module": "AsyncTaskV2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建LineItem",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "AsyncTaskV2/BulkCreateLineItems",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "lineItems": [
+            {
+              "profileId": "{{profile_id_single}}",
+              "advertiserId": "{{advertiser_id_single}}",
+              "lineTemplateId": "[NEEDS_REAL_VALUE-本账号无真实lineTemplateId实体]",
+              "isCopyWithCreatives": false,
+              "crontab": {
+                "rangeStartDate": "",
+                "rangeEndDate": "",
+                "excludeStartDate": "",
+                "excludeEndDate": "",
+                "periodTime": [],
+                "daypartingTag": false,
+                "daypartingScheduleId": null,
+                "daypartingType": 1,
+                "timeZone": "USER_TIMEZONE"
+              }
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  }
+]
