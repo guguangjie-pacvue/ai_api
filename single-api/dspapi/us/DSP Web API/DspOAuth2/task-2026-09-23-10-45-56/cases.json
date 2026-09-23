@@ -1,0 +1,117 @@
+[
+  {
+    "name": "POST /api/DspOAuth2/ConfirmBindAdvertiser - advertiserBinds为空(不确认任何绑定)",
+    "description": "单接口测试：POST /api/DspOAuth2/ConfirmBindAdvertiser。OAuth授权流程中确认要绑定到本Pacvue账号的profile/advertiser列表，advertiserBinds传空数组表示本次不确认绑定任何实体，是账号内最高频真实调用形态，属于无副作用的安全场景。493条随机样本中占比约22.3%(110次)。",
+    "module": "DspOAuth2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ConfirmBindAdvertiser(空绑定)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "DspOAuth2/ConfirmBindAdvertiser",
+        "request_body": {
+          "advertiserBinds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/DspOAuth2/ConfirmBindAdvertiser - 确认真实profile/advertiser绑定(仅生成不执行,无清理接口默认不执行)",
+    "description": "单接口测试：POST /api/DspOAuth2/ConfirmBindAdvertiser。advertiserBinds非空时会把指定的profile/advertiser正式确认绑定到发起调用的Pacvue客户端账号——这是一次性写入账号归属关系的操作，本tag(DspOAuth2)内只有ConfirmBindAdvertiser/GetRedirectAdvertiser/GetUnauthorizedAdvertiser三个接口，没有任何'解绑/撤销绑定'的配套接口，按无清理接口默认判定仅生成不执行。此外该场景涉及把ES样本里其他真实客户(非本测试账号)的真实profile/advertiser绑定关系写入测试环境，风险不仅是'无法撤销'，还涉及跨租户身份归属，双重原因均不执行。request_body保留ES真实值(profileId/advertiserId/名称为业务ID非凭据，按项目惯例不脱敏)。493条随机样本中占比约3.9%(19次，该具体profile/advertiser组合)。",
+    "module": "DspOAuth2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ConfirmBindAdvertiser(真实绑定,未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "DspOAuth2/ConfirmBindAdvertiser",
+        "request_body": {
+          "advertiserBinds": [
+            {
+              "profileId": "4387445024041464",
+              "profileName": "One Brands: US",
+              "advertiserId": "580883185841865845",
+              "advertiserName": "Cadbury",
+              "currency": "USD",
+              "url": "https://www.hersheyland.com/cadbury",
+              "country": "US",
+              "timezone": "America/New_York",
+              "isManaged": true,
+              "isChecked": true
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/DspOAuth2/GetRedirectAdvertiser - 按OAuth token查询可跳转advertiser(技术受限-仅生成不执行)",
+    "description": "单接口测试：POST /api/DspOAuth2/GetRedirectAdvertiser。需要一个真实有效的Amazon LWA OAuth access_token/refresh_token才能查询该token对应用户可跳转的advertiser列表——这类token是一次性、有时效的真实登录凭据，无法通过只读探测安全获取，也不应把ES样本里其他真实用户的access_token/refresh_token明文写入产物(参见ES样本凭据脱敏规则)。已将token字段替换为占位符，判定技术受限，仅生成不执行；如需覆盖正向路径需向用户单独申请一个可入库的测试OAuth token。330条随机样本中占比约100%(每条token均唯一，无法归纳出低于100%的其他场景)。",
+    "module": "DspOAuth2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetRedirectAdvertiser(未执行,token已脱敏)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "DspOAuth2/GetRedirectAdvertiser",
+        "request_body": {
+          "accountAll": {},
+          "token": {
+            "access_token": "[REDACTED-TEST-CREDENTIAL]",
+            "refresh_token": "[REDACTED-TEST-CREDENTIAL]"
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/DspOAuth2/GetUnauthorizedAdvertiser - 查询当前登录用户未授权的advertiser",
+    "description": "单接口测试：POST /api/DspOAuth2/GetUnauthorizedAdvertiser。按当前认证用户(登录token)查询其在Amazon侧尚未授权/绑定给Pacvue的advertiser列表，接口不接受请求体参数，结果完全由认证身份决定，属于安全的只读操作。500条随机样本中占比约100%(500次，请求体均为空)。",
+    "module": "DspOAuth2",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetUnauthorizedAdvertiser",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "DspOAuth2/GetUnauthorizedAdvertiser",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]
