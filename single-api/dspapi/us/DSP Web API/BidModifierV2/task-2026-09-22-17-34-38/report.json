@@ -1,0 +1,905 @@
+{
+  "config": "dspapi (us)",
+  "started_at": "2026-09-23T01:58:40.496615+00:00",
+  "total": 14,
+  "passed": 12,
+  "failed": 2,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "GET /api/BidModifierV2/GetBidAdjustment - 查询出价调整规则详情",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1943,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询出价调整规则详情",
+          "method": "GET",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/GetBidAdjustment?ruleId=ee2d8c14-e3dd-4002-a569-1bbda17cc57a",
+          "status_code": 200,
+          "ms": 993,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "lineItemTargets",
+            "Terms",
+            "lineItemCount",
+            "CreatedTimePST",
+            "UpdatedTimePST",
+            "lineItemIds",
+            "Id",
+            "RuleId",
+            "ProfileId",
+            "AdvertiserId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 1495,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/BidModifierV2/GetLineItemByBidAdjustmentRule - profileId+advertiserId+lineItemId查询关联规则",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1619,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-绑定LineItem到规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/AddBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 1391,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "按profileId+advertiserId+lineItemId查询关联规则",
+          "method": "GET",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/GetLineItemByBidAdjustmentRule?profileId=1251036855266063&advertiserId=578107614358724215&lineItemId=577321116875613595",
+          "status_code": 200,
+          "ms": 1108,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-解绑LineItem",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 2217,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 2155,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/BidModifierV2/GetLineItemByBidAdjustmentRule - 仅profileId+lineItemId查询(无advertiserId)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "按profileId+lineItemId查询(无advertiserId)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/GetLineItemByBidAdjustmentRule?profileId=1251036855266063&lineItemId=577321116875613595",
+          "status_code": 200,
+          "ms": 804,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/CreateBidAdjustment - 创建空条件占位规则(含后置清理,可重复) [后端按Swagger minItems:1正确拒绝terms:[]，预期FAIL非bug]",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建空条件规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 400,
+          "ms": 14508,
+          "pass": false,
+          "failures": [
+            "IsSuccessStatusCode expected True, got null",
+            "Data expected not_empty, got null",
+            "http 400 {\"errors\": {\"Terms\": [\"The field Terms must be a string or array type with a minimum length of '1'.\"]}, \"type\": \"https://tools.ietf.org/html/rfc7231#section-6.5.1\", \"title\": \"One or more validation er"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "errors",
+            "type",
+            "title",
+            "status",
+            "traceId"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 962,
+          "pass": false,
+          "failures": [
+            "IsSuccessStatusCode expected True, got false"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/CreateBidAdjustment - 创建单维度单条件规则(含后置清理,可重复)",
+      "status": "failed",
+      "pass": false,
+      "steps": [
+        {
+          "name": "创建单维度单条件规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 14726,
+          "pass": false,
+          "failures": [
+            "IsSuccessStatusCode expected True, got false",
+            "Data expected not_empty, got null"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 676,
+          "pass": false,
+          "failures": [
+            "IsSuccessStatusCode expected True, got false"
+          ],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/CreateBidAdjustment - 创建多条件复合规则(含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建多条件复合规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 2880,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 1576,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/DeleteBidBidAdjustment - 正常删除已存在规则(自建数据,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建待删除规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1193,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "删除规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 1335,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/AddBidAdjustmentTarget - 添加投放LineItem到规则(含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1470,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "添加投放LineItem到规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/AddBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 2114,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-解绑LineItem",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 1289,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 1135,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule - ruleId为已存在规则时批量添加(含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1437,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "批量添加AdGroup(LineItem)到已存在规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule",
+          "status_code": 200,
+          "ms": 1321,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-解绑LineItem",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 1375,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 1232,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule - ruleId为空字符串时批量添加",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "批量添加(ruleId为空)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule",
+          "status_code": 200,
+          "ms": 2060,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/UpdateBidAdjustment - 更新为单条件规则(含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建初始规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1163,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "更新规则为单条件(city)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustment",
+          "status_code": 200,
+          "ms": 1200,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 2904,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/UpdateBidAdjustment - 更新为含大量重复条件的规则(含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建初始规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1326,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "更新规则为含重复term的复合条件",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustment",
+          "status_code": 200,
+          "ms": 1616,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 3495,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/UpdateBidAdjustmentTarget - 添加LineItem绑定(含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 1765,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "添加LineItem绑定",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 3836,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-移除LineItem绑定",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 20091,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 2940,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/BidModifierV2/UpdateBidAdjustmentTarget - 提交空绑定变更(add/delete均为空)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/CreateBidAdjustment",
+          "status_code": 200,
+          "ms": 2698,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "提交空绑定变更",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/UpdateBidAdjustmentTarget",
+          "status_code": 200,
+          "ms": 1173,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除测试规则",
+          "method": "POST",
+          "url": "https://api.pacvue.com/dspapi/api/BidModifierV2/DeleteBidBidAdjustment",
+          "status_code": 200,
+          "ms": 2492,
+          "pass": true,
+          "failures": [],
+          "resp_code": null,
+          "resp_keys": [
+            "Error",
+            "Data",
+            "IsSuccessStatusCode",
+            "HttpStatusCode",
+            "ResponseString"
+          ],
+          "data_shape": "NoneType",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-09-23T02:00:32.230404+00:00"
+}

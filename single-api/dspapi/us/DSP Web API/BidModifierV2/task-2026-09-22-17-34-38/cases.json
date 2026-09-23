@@ -1,0 +1,1065 @@
+[
+ {
+  "name": "GET /api/BidModifierV2/GetBidAdjustment - 查询出价调整规则详情",
+  "description": "单接口测试：GET /api/BidModifierV2/GetBidAdjustment。按ruleId查询规则详情，真实调用仅此一种参数模式（唯一query参数ruleId）。因该接口按登录账号权限校验ruleId归属，跨账号ruleId返回空对象{}，故用前置自建规则验证查询链路；前后置步骤仅为搭建可访问数据，非被测操作本身。27条样本中占比约100%（27次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c01",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for GetBidAdjustment, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "查询出价调整规则详情",
+    "method": "GET",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/GetBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "RuleId": {
+      "$not_empty": true
+     },
+     "Terms": {
+      "$is_array": true
+     }
+    }
+   },
+   {
+    "name": "后置清理-删除测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "GET /api/BidModifierV2/GetLineItemByBidAdjustmentRule - profileId+advertiserId+lineItemId查询关联规则",
+  "description": "单接口测试：GET /api/BidModifierV2/GetLineItemByBidAdjustmentRule。携带完整profileId+advertiserId+lineItemId查询该LineItem关联的出价调整规则，为最常见调用模式。前置创建规则并绑定LineItem，保证查询返回非空数据；后置解绑+删除规则还原。18条样本中占比约94.4%（17次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c02",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for GetLineItemByBidAdjustmentRule, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "前置-绑定LineItem到规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/AddBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "targetIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data.success": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "按profileId+advertiserId+lineItemId查询关联规则",
+    "method": "GET",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/GetLineItemByBidAdjustmentRule",
+    "request_body": {
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "lineItemId": "{{lineitem_id}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "后置清理-解绑LineItem",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "addLineItemIds": [],
+     "deleteLineItemIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-删除测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "GET /api/BidModifierV2/GetLineItemByBidAdjustmentRule - 仅profileId+lineItemId查询(无advertiserId)",
+  "description": "单接口测试：GET /api/BidModifierV2/GetLineItemByBidAdjustmentRule。真实样本中存在不携带advertiserId、仅profileId+lineItemId的调用模式。该LineItem当前无关联规则时Data为null也属正常成功响应，故仅断言接口成功返回。18条样本中占比约5.6%（1次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "按profileId+lineItemId查询(无advertiserId)",
+    "method": "GET",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/GetLineItemByBidAdjustmentRule",
+    "request_body": {
+     "profileId": "{{profile_id_single}}",
+     "lineItemId": "{{lineitem_id}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/CreateBidAdjustment - 创建空条件占位规则(含后置清理,可重复) [后端按Swagger minItems:1正确拒绝terms:[]，预期FAIL非bug]",
+  "description": "单接口测试：POST /api/BidModifierV2/CreateBidAdjustment。terms为空数组的占位规则创建，真实用户常先建空规则再逐步补充条件（Swagger对terms声明minItems:1，但真实生产流量约1/4为terms:[]，与文档不符，属观察点非阻断性bug）。第2步后置操作删除新建规则，保证用例可重复执行。41条样本中占比约26.8%（11次）。【实测结论更正：terms:[]被后端稳定拒绝(HTTP 400 The field Terms must be a string or array type with a minimum length of 1)，与Swagger声明一致；说明ES样本里terms:[]的26.8%访问记录本身就是失败请求(用户操作失败/UI校验漏发)，不是\"能成功创建空规则\"，本case预期FAIL，非后端bug。】",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "创建空条件规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c04",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "test",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": []
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "后置清理-删除新建规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/CreateBidAdjustment - 创建单维度单条件规则(含后置清理,可重复) [ES样本DMA代码已过期，预期FAIL非bug]",
+  "description": "单接口测试：POST /api/BidModifierV2/CreateBidAdjustment。terms含1个term对象且term内仅1个维度字段(如dma/adFormat/city/deviceMake等)，是最主流的规则创建方式；样本中dma使用最频繁，作为代表场景（不同维度字段在Swagger中为并列枚举属性，结构完全一致，仅取值不同，故合并为同一结构场景）。第2步后置操作删除新建规则，保证用例可重复执行。41条样本中占比约61.0%（25次，含dma/adFormat/deviceMake/supplySourceType/supplySource/city/behavioralSegment/deviceType等单维度term）。【注：ES样本dma数组末尾带一个空字符串元素，实测会被后端拒绝(The dimension values cannot be empty)，已去除该空元素，改为5个真实DMA代码的干净单维度场景。】【实测结论更正：ES样本里的5个US-DMA代码(US-DMA501/803/602/623/524)已去除末尾空字符串后仍100%被后端判定为Invalid DMA value(s)，即这些历史DMA代码已不在当前有效列表中；swagger范围内未找到DMA值发现/枚举接口(BidModifierV2/LocationIndex/DiscoveryV2均未提供)，无法在不猜测的前提下补一个当前真实有效的DMA代码，故本case预期FAIL，非后端bug，待用户提供当前有效DMA代码或跳过该维度覆盖。】",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "创建单维度单条件规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c05",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "Ubeauty - Bid boost 3 - DMA",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "dma": [
+        "US-DMA501",
+        "US-DMA803",
+        "US-DMA602",
+        "US-DMA623",
+        "US-DMA524"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "后置清理-删除新建规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/CreateBidAdjustment - 创建多条件复合规则(含后置清理,可重复)",
+  "description": "单接口测试：POST /api/BidModifierV2/CreateBidAdjustment。terms含2个及以上term对象(多维度组合投放条件)，用于复合定向出价调整场景，真实样本(clientId=3438,即本测试沙盒账号)含city+supplySourceType两个term。第2步后置操作删除新建规则，保证用例可重复执行。41条样本中占比约12.2%（5次，含多term数组及单term多key两类复合结构）。【注：ES样本supplySourceType=[\"3p\",\"\"]实测均为无效值(后端报Invalid supply source type value(s))，已探测确认\"Amazon\"是该字段有效值，改为该值验证多条件复合创建的正向路径。】",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "创建多条件复合规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c06",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "vv",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "city": [
+        "madrid"
+       ],
+       "bidAdjustment": "5",
+       "negative": false
+      },
+      {
+       "supplySourceType": [
+        "Amazon"
+       ],
+       "bidAdjustment": "0",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "后置清理-删除新建规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/DeleteBidBidAdjustment - 正常删除已存在规则(自建数据,可重复)",
+  "description": "单接口测试：POST /api/BidModifierV2/DeleteBidBidAdjustment。按ruleId+profileId+advertiserId删除已存在的出价调整规则，真实调用为单一模式(ruleId/profileId/advertiserId三字段)。前置自建一条待删规则，验证删除接口本身；删除即为清理动作，无需再后置还原。3条样本中占比约100%（3次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建待删除规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c07",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for DeleteBidBidAdjustment, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "删除规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/AddBidAdjustmentTarget - 添加投放LineItem到规则(含后置清理,可重复)",
+  "description": "单接口测试：POST /api/BidModifierV2/AddBidAdjustmentTarget。按ruleId批量添加targetIds(LineItemId)绑定，真实样本均为该单一结构(仅targetIds数量不同)。第3步后置操作用UpdateBidAdjustmentTarget的deleteLineItemIds解绑(已验证targetIds与UpdateBidAdjustmentTarget的LineItemIds为同一ID空间)，第4步删除测试规则，保证用例可重复执行。3条样本中占比约100%（3次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c08",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for AddBidAdjustmentTarget, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "添加投放LineItem到规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/AddBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "targetIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data.success": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "后置清理-解绑LineItem",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "addLineItemIds": [],
+     "deleteLineItemIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-删除测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule - ruleId为已存在规则时批量添加(含后置清理,可重复)",
+  "description": "单接口测试：POST /api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule。ruleId传已存在规则ID、targetIds传LineItemId列表；请求体结构与AddBidAdjustmentTarget共用同一Swagger schema，但响应体不同(本接口Data为新增成功计数字符串，AddBidAdjustmentTarget的Data为{success:[],error:[]}对象，属观察到的接口不一致点)。第3步后置解绑，第4步删除测试规则，保证用例可重复执行。6条样本中占比约50%（3次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c09",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for BulkAdd, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "批量添加AdGroup(LineItem)到已存在规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "targetIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "后置清理-解绑LineItem",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "addLineItemIds": [],
+     "deleteLineItemIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-删除测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule - ruleId为空字符串时批量添加",
+  "description": "单接口测试：POST /api/BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule。真实样本中约一半调用ruleId传空字符串\"\"（Swagger未标注ruleId必填）。已探测该场景后端不报错，静默返回成功计数0(无实际写入)，不产生可清理的残留数据，故无需后置步骤；此为观察到的接口容错行为，非阻断性bug，但前端理论上不应允许空ruleId提交。6条样本中占比约50%（3次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "批量添加(ruleId为空)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/BulkAddDspAdGroupToBidAdjustmentRule",
+    "request_body": {
+     "ruleId": "",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "targetIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": "0"
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/UpdateBidAdjustment - 更新为单条件规则(含后置清理,可重复)",
+  "description": "单接口测试：POST /api/BidModifierV2/UpdateBidAdjustment。更新已有规则的terms为单个维度条件，是最主流的更新方式（不直接使用ES样本中出现的真实客户ruleId，改为对本测试沙盒自建规则执行更新，避免误改他人生产数据）。前置创建初始规则、主步骤更新terms、后置删除规则，保证用例可重复执行。6条样本中占比约83.3%（5次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建初始规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c11",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for UpdateBidAdjustment, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "1",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "更新规则为单条件(city)",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "name": "test173729c11",
+     "description": "updated",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "city": [
+        "Houston"
+       ],
+       "bidAdjustment": "5",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-删除规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/UpdateBidAdjustment - 更新为含大量重复条件的规则(含后置清理,可重复)",
+  "description": "单接口测试：POST /api/BidModifierV2/UpdateBidAdjustment。真实样本(clientId=4618，本测试沙盒账号)中出现terms含98个完全相同的city:\"New York\"重复term对象的异常调用（推测为前端重复提交/去重缺失导致）；本用例按相同结构复现但将重复项从98条压缩为3条以控制payload体积，结构特征保留。前置创建初始规则、主步骤更新为该异常结构、后置删除规则，保证用例可重复执行。6条样本中占比约16.7%（1次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建初始规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c12",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for UpdateBidAdjustment dup-terms, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "1",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "更新规则为含重复term的复合条件",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "name": "test173729c12",
+     "description": "updated dup",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "0",
+       "negative": true
+      },
+      {
+       "appId": [
+        "123456"
+       ],
+       "bidAdjustment": "0",
+       "negative": false
+      },
+      {
+       "city": [
+        "New York"
+       ],
+       "bidAdjustment": "0",
+       "negative": false
+      },
+      {
+       "city": [
+        "New York"
+       ],
+       "bidAdjustment": "0",
+       "negative": false
+      },
+      {
+       "city": [
+        "New York"
+       ],
+       "bidAdjustment": "0",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-删除规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/UpdateBidAdjustmentTarget - 添加LineItem绑定(含后置清理,可重复)",
+  "description": "单接口测试：POST /api/BidModifierV2/UpdateBidAdjustmentTarget。addLineItemIds非空、deleteLineItemIds为空，是最主流的绑定变更方式。第3步用相同接口反向调用(addLineItemIds空/deleteLineItemIds为已添加的LineItem)自清理绑定关系，第4步删除测试规则，保证用例可重复执行。6条样本中占比约66.7%（4次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c13",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for UpdateBidAdjustmentTarget, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "添加LineItem绑定",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "addLineItemIds": [
+      "{{lineitem_id}}"
+     ],
+     "deleteLineItemIds": []
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-移除LineItem绑定",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "addLineItemIds": [],
+     "deleteLineItemIds": [
+      "{{lineitem_id}}"
+     ]
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-删除测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/BidModifierV2/UpdateBidAdjustmentTarget - 提交空绑定变更(add/delete均为空)",
+  "description": "单接口测试：POST /api/BidModifierV2/UpdateBidAdjustmentTarget。addLineItemIds和deleteLineItemIds均为空数组，真实存在但无实际绑定变更（可能是前端未选择变更项即提交，或保存无修改的表单）。前置创建测试规则、主步骤提交空变更、后置删除规则，保证用例可重复执行。6条样本中占比约33.3%（2次）。",
+  "module": "BidModifierV2",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "前置-创建测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/CreateBidAdjustment",
+    "request_body": {
+     "name": "test173729c14",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "description": "swagger-api-case probe rule for UpdateBidAdjustmentTarget noop, safe to delete",
+     "onMultipleMatches": "APPLY_PRODUCT",
+     "lineItemIds": [],
+     "terms": [
+      {
+       "adFormat": [
+        "DISPLAY"
+       ],
+       "bidAdjustment": "2",
+       "negative": false
+      }
+     ]
+    },
+    "extract_vars": {
+     "created_rule_id": "Data"
+    },
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   },
+   {
+    "name": "提交空绑定变更",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/UpdateBidAdjustmentTarget",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}",
+     "addLineItemIds": [],
+     "deleteLineItemIds": []
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   },
+   {
+    "name": "后置清理-删除测试规则",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "BidModifierV2/DeleteBidBidAdjustment",
+    "request_body": {
+     "ruleId": "{{created_rule_id}}",
+     "profileId": "{{profile_id_single}}",
+     "advertiserId": "{{advertiser_id_single}}"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true
+    }
+   }
+  ]
+ }
+]
