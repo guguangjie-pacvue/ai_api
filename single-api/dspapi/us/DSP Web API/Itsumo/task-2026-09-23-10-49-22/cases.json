@@ -1,0 +1,2227 @@
+[
+ {
+  "name": "GET /api/Itsumo/GetInstanceList - 查询本账号AMC实例列表",
+  "description": "单接口测试：GET /api/Itsumo/GetInstanceList。查询当前登录账号可用的Itsumo/AMC实例列表。500条随机样本中占比约100%（测试账号本身零实例，返回空数组也是合法成功响应）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetInstanceList",
+    "method": "GET",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetInstanceList",
+    "request_body": {},
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetHistoryList - 不指定instanceId查全部历史",
+  "description": "单接口测试：POST /api/Itsumo/GetHistoryList。reportType=ItsumoAsinPurchaseAnalysis，instanceId为空字符串，代表不按实例过滤查询本账号历史记录。500条随机样本中占比约55.0%（275次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetHistoryList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetHistoryList",
+    "request_body": {
+     "reportType": "ItsumoAsinPurchaseAnalysis",
+     "instanceId": ""
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetHistoryList - 按真实instanceId查历史",
+  "description": "单接口测试：POST /api/Itsumo/GetHistoryList。reportType=ItsumoAsinPurchaseAnalysis，instanceId为ES真实样本值(amcd7yy1lhh)，跨租户查询验证。500条随机样本中占比约45.0%（225次）。断言已探测确认：返回其他真实客户的历史记录(非本账号数据)，疑似IDOR越权访问，与项目已发现的5次同类模式一致。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetHistoryList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetHistoryList",
+    "request_body": {
+     "reportType": "ItsumoAsinPurchaseAnalysis",
+     "instanceId": "amcd7yy1lhh"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/AsinPurchase - 按historyId查询ASIN购买明细",
+  "description": "单接口测试：POST /api/Itsumo/AsinPurchase。categories/brands/asiNs均为空数组(不筛选)，historyId为ES真实样本高频值。500条随机样本中该historyId出现29次。断言已探测确认：返回真实第三方客户业务数据(真实销售额/币种)，疑似IDOR，与GetHistoryList同源发现。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "AsinPurchase",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/AsinPurchase",
+    "request_body": {
+     "categories": [],
+     "brands": [],
+     "asiNs": [],
+     "historyId": "171162"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadAsinPurchase - 导出ASIN购买明细文件",
+  "description": "单接口测试：POST /api/Itsumo/DownloadAsinPurchase。categories/brands/asiNs为空数组，historyId取ES真实样本值，导出Excel/CSV文件。26条真实流量样本中的典型场景。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadAsinPurchase",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadAsinPurchase",
+    "request_body": {
+     "categories": [],
+     "brands": [],
+     "asiNs": [],
+     "historyId": "171162"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetAdvancedRepeatAnalysisAsinList - 按真实instanceId查ASIN列表",
+  "description": "单接口测试：POST /api/Itsumo/GetAdvancedRepeatAnalysisAsinList。instanceId为ES真实样本值，查询该AMC实例下可选ASIN列表。500条随机样本中占比约83.8%（419次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetAdvancedRepeatAnalysisAsinList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetAdvancedRepeatAnalysisAsinList",
+    "request_body": {
+     "instanceId": "amcuxvtfonu",
+     "startMonth": "2025-10-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetAdvancedRepeatAnalysisAsinList - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/GetAdvancedRepeatAnalysisAsinList。instanceId为空字符串，不指定实例查询。500条随机样本中占比约16.2%（81次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetAdvancedRepeatAnalysisAsinList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetAdvancedRepeatAnalysisAsinList",
+    "request_body": {
+     "instanceId": "",
+     "startMonth": "2025-09-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/AdvancedRepeatAnalysis - category=account",
+  "description": "单接口测试：POST /api/Itsumo/AdvancedRepeatAnalysis。category=account，metric=ad_sales，instanceId为ES真实样本值(跨租户)。500条随机样本中占比约79.4%（397次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "AdvancedRepeatAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/AdvancedRepeatAnalysis",
+    "request_body": {
+     "instanceId": "amc4dzlspj0",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-03-01",
+     "asinTags": [],
+     "asins": [],
+     "metric": "ad_sales",
+     "category": "account"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/AdvancedRepeatAnalysis - category=asinSelection",
+  "description": "单接口测试：POST /api/Itsumo/AdvancedRepeatAnalysis。category=asinSelection，metric=all_sales，instanceId为ES真实样本值(跨租户)。500条随机样本中占比约11.0%（55次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "AdvancedRepeatAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/AdvancedRepeatAnalysis",
+    "request_body": {
+     "instanceId": "amctw1b5k6o",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01",
+     "asinTags": [],
+     "asins": [],
+     "metric": "all_sales",
+     "category": "asinSelection"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/AdvancedRepeatAnalysis - category=asinTop10",
+  "description": "单接口测试：POST /api/Itsumo/AdvancedRepeatAnalysis。category=asinTop10，metric=ad_cvr，instanceId为ES真实样本值(跨租户)。500条随机样本中占比约5.2%（26次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "AdvancedRepeatAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/AdvancedRepeatAnalysis",
+    "request_body": {
+     "instanceId": "amccqkbyljp",
+     "startMonth": "2025-08-01",
+     "endMonth": "2026-01-01",
+     "asinTags": [],
+     "asins": [],
+     "metric": "ad_cvr",
+     "category": "asinTop10"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/AdvancedRepeatAnalysis - category=productTag",
+  "description": "单接口测试：POST /api/Itsumo/AdvancedRepeatAnalysis。category=productTag，metric=organic_arpu，instanceId为ES真实样本值(跨租户)。500条随机样本中占比约4.4%（22次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "AdvancedRepeatAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/AdvancedRepeatAnalysis",
+    "request_body": {
+     "instanceId": "amcd7yy1lhh",
+     "startMonth": "2025-11-01",
+     "endMonth": "2026-04-01",
+     "asinTags": [
+      134632,
+      134631,
+      134612,
+      132074,
+      136370,
+      136465,
+      152860,
+      152861,
+      152862,
+      152863,
+      152864,
+      152865,
+      152866,
+      152867,
+      152868,
+      152869,
+      152870,
+      152871,
+      152872,
+      152873,
+      152874,
+      152875,
+      152876,
+      219520,
+      219521,
+      231866,
+      154055,
+      154057,
+      154059,
+      154061,
+      154063,
+      154065,
+      154067,
+      154069,
+      154071,
+      154075,
+      154077,
+      154081,
+      154083,
+      154089,
+      154095,
+      154097,
+      154103,
+      167852,
+      167853,
+      167854,
+      167855,
+      167856,
+      167857,
+      167858,
+      167859,
+      167860,
+      167861,
+      167862,
+      167863,
+      167864,
+      167865,
+      167866,
+      167867,
+      167868,
+      167869,
+      167870,
+      167871,
+      167872,
+      167873,
+      167874,
+      167875,
+      167876,
+      167877,
+      167878,
+      167879,
+      167880,
+      167881,
+      167882,
+      167883,
+      167884,
+      167885,
+      167886,
+      167887,
+      167888,
+      167889,
+      167890,
+      167891,
+      167902,
+      167903,
+      167904,
+      167905,
+      167906,
+      167907,
+      167908,
+      167909,
+      167910,
+      167911,
+      167912,
+      167913,
+      167914,
+      167915,
+      167916,
+      167917,
+      167918,
+      167919,
+      167920,
+      167921,
+      167922,
+      167923,
+      167924,
+      167925,
+      167926,
+      167927,
+      167928,
+      167929,
+      167930,
+      167931,
+      167932,
+      167933,
+      167934,
+      167935,
+      167937,
+      167938,
+      167939,
+      167940,
+      167941,
+      167942,
+      167943,
+      167944,
+      167945,
+      167946,
+      167947,
+      167948,
+      167949,
+      167950,
+      167951,
+      167952,
+      167953,
+      167954,
+      167955,
+      167956,
+      167957,
+      167958,
+      170810,
+      170811,
+      171121,
+      171123,
+      171269,
+      171270,
+      171271,
+      171272,
+      171273,
+      171274,
+      171275,
+      171276,
+      171277,
+      171278,
+      171279,
+      171280,
+      171281,
+      171282,
+      171283
+     ],
+     "asins": [],
+     "metric": "organic_arpu",
+     "category": "productTag"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadAdvancedRepeatAnalysis - category=account 导出文件",
+  "description": "单接口测试：POST /api/Itsumo/DownloadAdvancedRepeatAnalysis。category=account，metric=all_sales，导出Excel/CSV文件。50条真实流量样本中占比约60.0%（30次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadAdvancedRepeatAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadAdvancedRepeatAnalysis",
+    "request_body": {
+     "instanceId": "amc8mnopcga",
+     "startMonth": "2026-02-01",
+     "endMonth": "2026-07-01",
+     "asinTags": [],
+     "asins": [],
+     "metric": "all_sales",
+     "category": "account"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadAdvancedRepeatAnalysis - category=asinSelection 导出文件",
+  "description": "单接口测试：POST /api/Itsumo/DownloadAdvancedRepeatAnalysis。category=asinSelection，metric=all_sales，导出Excel/CSV文件。50条真实流量样本中占比约32.0%（16次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadAdvancedRepeatAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadAdvancedRepeatAnalysis",
+    "request_body": {
+     "instanceId": "amctw1b5k6o",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01",
+     "asinTags": [],
+     "asins": [
+      "B0DVZ5YX2J"
+     ],
+     "metric": "all_sales",
+     "category": "asinSelection"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadAdvancedRepeatAnalysis - category=asinTop10 导出文件",
+  "description": "单接口测试：POST /api/Itsumo/DownloadAdvancedRepeatAnalysis。category=asinTop10，metric=all_sales，导出Excel/CSV文件。50条真实流量样本中占比约8.0%（4次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadAdvancedRepeatAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadAdvancedRepeatAnalysis",
+    "request_body": {
+     "instanceId": "amctw1b5k6o",
+     "startMonth": "2025-11-01",
+     "endMonth": "2026-04-01",
+     "asinTags": [],
+     "asins": [],
+     "metric": "all_sales",
+     "category": "asinTop10"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/FrequencyGroupAnalysis - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/FrequencyGroupAnalysis。brandType=30day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约70.8%（354次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "FrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/FrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcd7yy1lhh",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/FrequencyGroupAnalysis - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/FrequencyGroupAnalysis。brandType=120day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约3.4%（17次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "FrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/FrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amc3zideruy",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-07-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/FrequencyGroupAnalysis - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/FrequencyGroupAnalysis。brandType=90day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约3.4%（17次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "FrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/FrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcnsnjhyct",
+     "brandType": "90day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/FrequencyGroupAnalysis - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/FrequencyGroupAnalysis。brandType=60day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约2.0%（10次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "FrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/FrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcnsnjhyct",
+     "brandType": "60day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/FrequencyGroupAnalysis - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/FrequencyGroupAnalysis。instanceId为空字符串，不指定实例查询(本账号自身场景)。500条随机样本中占比约20.4%（102次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "FrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/FrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-06-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadFrequencyGroupAnalysis - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadFrequencyGroupAnalysis。brandType=30day(跨租户真实instanceId)，brands为空不筛选。31条真实流量样本中占比约87.1%（27次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadFrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadFrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amc9mjr5wdr",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-05-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadFrequencyGroupAnalysis - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadFrequencyGroupAnalysis。brandType=90day(跨租户真实instanceId)，brands为空不筛选。31条真实流量样本中占比约6.5%（2次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadFrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadFrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcnsnjhyct",
+     "brandType": "90day",
+     "startMonth": "2025-09-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadFrequencyGroupAnalysis - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadFrequencyGroupAnalysis。brandType=60day(跨租户真实instanceId)，brands为空不筛选。31条真实流量样本中占比约3.2%（1次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadFrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadFrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcnsnjhyct",
+     "brandType": "60day",
+     "startMonth": "2025-09-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadFrequencyGroupAnalysis - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadFrequencyGroupAnalysis。brandType=120day(跨租户真实instanceId)，brands为空不筛选。31条真实流量样本中占比约3.2%（1次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadFrequencyGroupAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadFrequencyGroupAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amctw1b5k6o",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-01-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetRFMBrandList - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/GetRFMBrandList。brandType=30day(跨租户真实instanceId)。500条随机样本中占比约67.4%（337次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetRFMBrandList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetRFMBrandList",
+    "request_body": {
+     "instanceId": "amc9mjr5wdr",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetRFMBrandList - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/GetRFMBrandList。brandType=120day(跨租户真实instanceId)。500条随机样本中占比约5.4%（27次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetRFMBrandList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetRFMBrandList",
+    "request_body": {
+     "instanceId": "amcerji85rn",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-05-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetRFMBrandList - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/GetRFMBrandList。brandType=90day(跨租户真实instanceId)。500条随机样本中占比约3.4%（17次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetRFMBrandList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetRFMBrandList",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "90day",
+     "startMonth": "2026-03-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetRFMBrandList - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/GetRFMBrandList。brandType=60day(跨租户真实instanceId)。500条随机样本中占比约2.0%（10次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetRFMBrandList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetRFMBrandList",
+    "request_body": {
+     "instanceId": "amckmuyql37",
+     "brandType": "60day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/GetRFMBrandList - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/GetRFMBrandList。instanceId为空字符串，不指定实例查询(本账号自身场景)。500条随机样本中占比约21.8%（109次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetRFMBrandList",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetRFMBrandList",
+    "request_body": {
+     "instanceId": "",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-06-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/NumberTrendOfUserRank - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/NumberTrendOfUserRank。brandType=30day(跨租户真实instanceId)。500条随机样本中占比约69.6%（348次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "NumberTrendOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/NumberTrendOfUserRank",
+    "request_body": {
+     "instanceId": "amckmuyql37",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/NumberTrendOfUserRank - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/NumberTrendOfUserRank。brandType=120day(跨租户真实instanceId)。500条随机样本中占比约5.0%（25次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "NumberTrendOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/NumberTrendOfUserRank",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "120day",
+     "startMonth": "2026-02-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/NumberTrendOfUserRank - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/NumberTrendOfUserRank。brandType=60day(跨租户真实instanceId)。500条随机样本中占比约2.8%（14次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "NumberTrendOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/NumberTrendOfUserRank",
+    "request_body": {
+     "instanceId": "amca1aj0td0",
+     "brandType": "60day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/NumberTrendOfUserRank - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/NumberTrendOfUserRank。brandType=90day(跨租户真实instanceId)。500条随机样本中占比约2.6%（13次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "NumberTrendOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/NumberTrendOfUserRank",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "90day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/NumberTrendOfUserRank - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/NumberTrendOfUserRank。instanceId为空字符串，不指定实例查询(本账号自身场景)。500条随机样本中占比约20.0%（100次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "NumberTrendOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/NumberTrendOfUserRank",
+    "request_body": {
+     "instanceId": "",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadNumberTrendOfUserRank - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadNumberTrendOfUserRank。brandType=30day(跨租户真实instanceId)。12条真实流量样本中占比约91.7%（11次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadNumberTrendOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadNumberTrendOfUserRank",
+    "request_body": {
+     "instanceId": "amcnsnjhyct",
+     "brandType": "30day",
+     "startMonth": "2025-08-01",
+     "endMonth": "2026-06-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadNumberTrendOfUserRank - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadNumberTrendOfUserRank。brandType=120day(跨租户真实instanceId)。12条真实流量样本中占比约8.3%（1次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadNumberTrendOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadNumberTrendOfUserRank",
+    "request_body": {
+     "instanceId": "amctw1b5k6o",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-01-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisBrand - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisBrand。brandType=30day(跨租户真实instanceId)。500条随机样本中占比约66.3%（59次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisBrand",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisBrand",
+    "request_body": {
+     "instanceId": "amcd7yy1lhh",
+     "brandType": "30day",
+     "startMonth": "2026-05-01",
+     "endMonth": "2026-05-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisBrand - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisBrand。brandType=90day(跨租户真实instanceId)。500条随机样本中占比约16.9%（15次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisBrand",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisBrand",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "90day",
+     "startMonth": "2026-01-01",
+     "endMonth": "2026-01-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisBrand - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisBrand。brandType=60day(跨租户真实instanceId)。500条随机样本中占比约10.1%（9次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisBrand",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisBrand",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "60day",
+     "startMonth": "2026-02-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisBrand - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisBrand。brandType=120day(跨租户真实instanceId)。500条随机样本中占比约5.6%（5次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisBrand",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisBrand",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "120day",
+     "startMonth": "2026-02-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisBrand - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisBrand。instanceId为空字符串，不指定实例查询(本账号自身场景)。500条随机样本中占比约1.1%（1次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisBrand",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisBrand",
+    "request_body": {
+     "instanceId": "",
+     "brandType": "30day",
+     "startMonth": "2026-04-01",
+     "endMonth": "2026-05-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMAnalysisBrand - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMAnalysisBrand。brandType=30day(跨租户真实instanceId)，brands为空不筛选。16条真实流量样本中占比约50.0%（8次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMAnalysisBrand",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMAnalysisBrand",
+    "request_body": {
+     "brands": [
+      "Barilla"
+     ],
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "30day",
+     "startMonth": "2025-09-01",
+     "endMonth": "2025-09-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMAnalysisBrand - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMAnalysisBrand。brandType=90day(跨租户真实instanceId)，brands为空不筛选。16条真实流量样本中占比约50.0%（8次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMAnalysisBrand",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMAnalysisBrand",
+    "request_body": {
+     "brands": [
+      "Barilla"
+     ],
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "90day",
+     "startMonth": "2025-12-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisUserRank - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisUserRank。brandType=30day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约70.0%（350次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "amctr0ugcky",
+     "brandType": "30day",
+     "startMonth": "2026-03-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisUserRank - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisUserRank。brandType=120day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约5.0%（25次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "amcvp1tfpxo",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisUserRank - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisUserRank。brandType=60day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约2.8%（14次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisUserRank",
+    "request_body": {
+     "brands": [
+      "Barilla"
+     ],
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "60day",
+     "startMonth": "2026-01-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisUserRank - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisUserRank。brandType=90day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约2.4%（12次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "amcnsnjhyct",
+     "brandType": "90day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMAnalysisUserRank - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/RFMAnalysisUserRank。instanceId为空字符串，不指定实例查询(本账号自身场景)。500条随机样本中占比约19.8%（99次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-01-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMAnalysisUserRank - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMAnalysisUserRank。brandType=30day(跨租户真实instanceId)，brands为空不筛选。37条真实流量样本中占比约45.9%（17次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "amcd7yy1lhh",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-07-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMAnalysisUserRank - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMAnalysisUserRank。brandType=120day(跨租户真实instanceId)，brands为空不筛选。37条真实流量样本中占比约27.0%（10次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "amc4y0j4roy",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMAnalysisUserRank - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMAnalysisUserRank。brandType=60day(跨租户真实instanceId)，brands为空不筛选。37条真实流量样本中占比约13.5%（5次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "amcvp1tfpxo",
+     "brandType": "60day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMAnalysisUserRank - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMAnalysisUserRank。brandType=90day(跨租户真实instanceId)，brands为空不筛选。37条真实流量样本中占比约10.8%（4次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMAnalysisUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMAnalysisUserRank",
+    "request_body": {
+     "brands": "",
+     "instanceId": "amca1aj0td0",
+     "brandType": "90day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMPurchaseValueAnalysis - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/RFMPurchaseValueAnalysis。brandType=30day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约70.0%（350次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMPurchaseValueAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMPurchaseValueAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcn39cuqu2",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-08-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMPurchaseValueAnalysis - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/RFMPurchaseValueAnalysis。brandType=120day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约4.8%（24次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMPurchaseValueAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMPurchaseValueAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcn75jmfge",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMPurchaseValueAnalysis - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/RFMPurchaseValueAnalysis。brandType=90day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约3.4%（17次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMPurchaseValueAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMPurchaseValueAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amctr0ugcky",
+     "brandType": "90day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMPurchaseValueAnalysis - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/RFMPurchaseValueAnalysis。brandType=60day(跨租户真实instanceId)，brands为空不筛选。500条随机样本中占比约1.8%（9次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMPurchaseValueAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMPurchaseValueAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcvp1tfpxo",
+     "brandType": "60day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/RFMPurchaseValueAnalysis - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/RFMPurchaseValueAnalysis。instanceId为空字符串，不指定实例查询(本账号自身场景)。500条随机样本中占比约20.0%（100次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "RFMPurchaseValueAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/RFMPurchaseValueAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMPurchaseValueAnalysis - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMPurchaseValueAnalysis。brandType=30day(跨租户真实instanceId)，brands为空不筛选。6条真实流量样本中占比约83.3%（5次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMPurchaseValueAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMPurchaseValueAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amcrstozowo",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadRFMPurchaseValueAnalysis - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadRFMPurchaseValueAnalysis。brandType=120day(跨租户真实instanceId)，brands为空不筛选。6条真实流量样本中占比约16.7%（1次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadRFMPurchaseValueAnalysis",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadRFMPurchaseValueAnalysis",
+    "request_body": {
+     "brands": [],
+     "instanceId": "amctw1b5k6o",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-01-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/SalesOfUserRank - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/SalesOfUserRank。brandType=30day(跨租户真实instanceId)。500条随机样本中占比约68.2%（341次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "SalesOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/SalesOfUserRank",
+    "request_body": {
+     "instanceId": "amcnbfvna7e",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-12-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/SalesOfUserRank - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/SalesOfUserRank。brandType=120day(跨租户真实instanceId)。500条随机样本中占比约4.6%（23次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "SalesOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/SalesOfUserRank",
+    "request_body": {
+     "instanceId": "amcvp1tfpxo",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-03-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/SalesOfUserRank - brandType=90day",
+  "description": "单接口测试：POST /api/Itsumo/SalesOfUserRank。brandType=90day(跨租户真实instanceId)。500条随机样本中占比约2.8%（14次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "SalesOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/SalesOfUserRank",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "90day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-02-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/SalesOfUserRank - brandType=60day",
+  "description": "单接口测试：POST /api/Itsumo/SalesOfUserRank。brandType=60day(跨租户真实instanceId)。500条随机样本中占比约1.8%（9次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "SalesOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/SalesOfUserRank",
+    "request_body": {
+     "instanceId": "amcvxi9j0tm",
+     "brandType": "60day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2025-07-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/SalesOfUserRank - instanceId为空",
+  "description": "单接口测试：POST /api/Itsumo/SalesOfUserRank。instanceId为空字符串，不指定实例查询(本账号自身场景)。500条随机样本中占比约22.6%（113次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "SalesOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/SalesOfUserRank",
+    "request_body": {
+     "instanceId": "",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-05-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$is_array": true
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadSalesOfUserRank - brandType=30day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadSalesOfUserRank。brandType=30day(跨租户真实instanceId)。11条真实流量样本中占比约81.8%（9次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadSalesOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadSalesOfUserRank",
+    "request_body": {
+     "instanceId": "amc9mjr5wdr",
+     "brandType": "30day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-05-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "POST /api/Itsumo/DownloadSalesOfUserRank - brandType=120day",
+  "description": "单接口测试：POST /api/Itsumo/DownloadSalesOfUserRank。brandType=120day(跨租户真实instanceId)。11条真实流量样本中占比约9.1%（1次）。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "DownloadSalesOfUserRank",
+    "method": "POST",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/DownloadSalesOfUserRank",
+    "request_body": {
+     "instanceId": "amctw1b5k6o",
+     "brandType": "120day",
+     "startMonth": "2025-07-01",
+     "endMonth": "2026-01-01"
+    },
+    "extract_vars": {},
+    "expected_response": {
+     "$binary": {
+      "$min_size": 1
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "GET /api/Itsumo/GetAsinBrandCategoryList - 按historyId查询分类/品牌/ASIN列表",
+  "description": "单接口测试：GET /api/Itsumo/GetAsinBrandCategoryList?historyId=163556。historyId为ES真实样本高频值，查询该次分析对应的品类/品牌/ASIN候选列表。500条随机样本中该historyId出现31次。断言已探测确认返回真实第三方客户数据(疑似IDOR，同源问题)。",
+  "module": "Itsumo",
+  "granularity": "API",
+  "since": "init",
+  "last_modified": "init",
+  "change_type": "NEW",
+  "generated_by": "swagger-api-case",
+  "steps": [
+   {
+    "name": "GetAsinBrandCategoryList",
+    "method": "GET",
+    "base_url": "{{DSPBASEURL}}",
+    "path": "Itsumo/GetAsinBrandCategoryList?historyId=163556",
+    "request_body": {},
+    "extract_vars": {},
+    "expected_response": {
+     "IsSuccessStatusCode": true,
+     "Data": {
+      "$not_empty": true
+     }
+    }
+   }
+  ]
+ }
+]
