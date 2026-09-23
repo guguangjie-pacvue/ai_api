@@ -12,10 +12,11 @@
       {
         "name": "前置-创建一次性SP Campaign+AdGroup+ProductAd",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaign": {
             "campaignType": "sponsoredProducts",
             "targetingType": "manual",
@@ -25,7 +26,10 @@
             "startDate": "2026/08/17",
             "endDate": "",
             "costType": "",
-            "bidding": { "Strategy": "legacyForSales", "Adjustments": [] }
+            "bidding": {
+              "Strategy": "legacyForSales",
+              "Adjustments": []
+            }
           },
           "duration": 0,
           "adgroupName": "TC-ProductAd-Legacy-AG",
@@ -40,13 +44,16 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.padidstr": { "$not_empty": true }
+          "data.padidstr": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "批量更新ProductAd状态(旧版接口)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "ProductAd/BulkUpdateProductAdState",
         "request_body": [
           {
@@ -54,7 +61,7 @@
             "AdId": "{{created_ad_id}}",
             "State": "paused",
             "CampaignType": "sponsoredProducts",
-            "profileId": "{{profile_id}}"
+            "profileId": "{{variables.profile_id}}"
           }
         ],
         "extract_vars": {},
@@ -66,14 +73,17 @@
       {
         "name": "后置清理-归档一次性Campaign",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Campaign/V4/Update",
         "request_body": {
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaigns": [
             {
               "campaignId": "{{created_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived",
               "campaignType": "sponsoredProducts"
             }
@@ -83,7 +93,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.successCount": { "$not_empty": true }
+          "data.successCount": {
+            "$not_empty": true
+          }
         }
       }
     ]
@@ -101,10 +113,11 @@
       {
         "name": "前置-创建一次性SP Campaign+AdGroup+ProductAd",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignCreate/V3/CreateCampaignandAdGroup",
         "request_body": {
-          "profileId": "{{profile_id}}",
+          "profileId": "{{variables.profile_id}}",
           "campaign": {
             "campaignType": "sponsoredProducts",
             "targetingType": "manual",
@@ -114,7 +127,10 @@
             "startDate": "2026/08/17",
             "endDate": "",
             "costType": "",
-            "bidding": { "Strategy": "legacyForSales", "Adjustments": [] }
+            "bidding": {
+              "Strategy": "legacyForSales",
+              "Adjustments": []
+            }
           },
           "duration": 0,
           "adgroupName": "TC-ProductAd-V3-AG",
@@ -129,19 +145,22 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.padidstr": { "$not_empty": true }
+          "data.padidstr": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "批量更新ProductAd状态(v3接口)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "ProductAd/v3/BulkChangeState",
         "request_body": {
           "adIds": [
             {
               "entityID": "{{created_ad_id}}",
-              "profileId": "{{profile_id}}"
+              "profileId": "{{variables.profile_id}}"
             }
           ],
           "state": "paused"
@@ -150,20 +169,25 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.successCount": { "$not_empty": true }
+          "data.successCount": {
+            "$not_empty": true
+          }
         }
       },
       {
         "name": "后置清理-归档一次性Campaign",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Campaign/V4/Update",
         "request_body": {
-          "profileIds": ["{{profile_id}}"],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
           "campaigns": [
             {
               "campaignId": "{{created_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived",
               "campaignType": "sponsoredProducts"
             }
@@ -173,7 +197,9 @@
         "expected_response": {
           "code": 200,
           "success": true,
-          "data.successCount": { "$not_empty": true }
+          "data.successCount": {
+            "$not_empty": true
+          }
         }
       }
     ]

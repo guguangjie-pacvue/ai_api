@@ -15,14 +15,14 @@
   "steps": [
     {
       "name": "创建 <实体>",
-      "method": "POST", "base_url": "{{BASEURL}}", "path": "/xxx/CreateXxx",
+      "method": "POST", "base_url": "{{base_urls.BASEURL}}", "headers": "{{headers}}", "path": "/xxx/CreateXxx",
       "request_body": { "...": "..." },
       "extract_vars": { "created_entity_id": "data.result[0].APIResult[0].entityId" },
       "expected_response": { "code": 200, "success": true, "data": { "successCount": { "$gte": 1 } } }
     },
     {
       "name": "后置清理-归档新建实体",
-      "method": "POST", "base_url": "{{BASEURL}}", "path": "/xxx/UpdateXxxStatus",
+      "method": "POST", "base_url": "{{base_urls.BASEURL}}", "headers": "{{headers}}", "path": "/xxx/UpdateXxxStatus",
       "request_body": { "Item": [ { "TargetId": "{{created_entity_id}}", "...": "..." } ], "state": "archived" },
       "extract_vars": {},
       "expected_response": { "code": 200, "success": true, "data": { "successCount": { "$gte": 1 } } }

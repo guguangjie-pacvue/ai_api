@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /getHistoryList - 按具体规则下钻查看执行历史",
-    "description": "单接口测试：POST /getHistoryList。该接口ES无productLine字段(近90天仅2/1593条带该字段且非citrus，视同无该字段)，视同GET，使用全平台近90天流量作为场景基线(1593次)。场景1：带mode=Auto+ruleDefinitionId+ruleName，下钻查看某一具体规则的执行历史(点击规则名进入详情)。使用citrus测试账号自身真实规则{{real_rule_id}}。500条随机样本中占比约51.4%（257次）。",
+    "description": "单接口测试：POST /getHistoryList。该接口ES无productLine字段(近90天仅2/1593条带该字段且非citrus，视同无该字段)，视同GET，使用全平台近90天流量作为场景基线(1593次)。场景1：带mode=Auto+ruleDefinitionId+ruleName，下钻查看某一具体规则的执行历史(点击规则名进入详情)。使用citrus测试账号自身真实规则{{variables.real_rule_id}}。500条随机样本中占比约51.4%（257次）。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -12,16 +12,17 @@
       {
         "name": "查询历史执行记录列表(按规则下钻)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "mode": "Auto",
-          "ruleDefinitionId": "{{real_rule_id}}",
+          "ruleDefinitionId": "{{variables.real_rule_id}}",
           "ruleName": "Medicated Ear Drops: PAT Category",
           "startDate": "2026-08-01",
           "endDate": "2026-08-31",
@@ -61,13 +62,14 @@
       {
         "name": "查询历史执行记录列表(通用)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "startDate": "2026-08-01",
           "endDate": "2026-08-31",
@@ -107,13 +109,14 @@
       {
         "name": "查询待处理列表(带规则名过滤)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ruleType": [],
           "ruleName": "L305-高ACOS(20%-50%)竟价降低规则",
@@ -149,13 +152,14 @@
       {
         "name": "查询待处理列表(无过滤)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ruleType": [],
           "ruleName": "",
@@ -191,7 +195,8 @@
       {
         "name": "查询待处理规则数量",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingRuleNum",
         "request_body": {},
         "extract_vars": {},
@@ -206,7 +211,7 @@
   },
   {
     "name": "POST /getProfiles - 仅按执行日志查询(不带profile过滤)",
-    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(11346次)。场景1：仅带ruleExecutionLogId，不带profileIds过滤。使用citrus测试账号自身真实执行日志{{real_execution_log_id}}(该id为跨rule-api平台共用fixture，因该类接口不带productLine字段、按clientId归属而非平台区分，已实测该id在productline:citrus请求头下返回200真实业务响应)。500条随机样本中占比约98.6%（493次）。",
+    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(11346次)。场景1：仅带ruleExecutionLogId，不带profileIds过滤。使用citrus测试账号自身真实执行日志{{variables.real_execution_log_id}}(该id为跨rule-api平台共用fixture，因该类接口不带productLine字段、按clientId归属而非平台区分，已实测该id在productline:citrus请求头下返回200真实业务响应)。500条随机样本中占比约98.6%（493次）。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -217,12 +222,13 @@
       {
         "name": "查询执行日志Profile列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getProfiles",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
@@ -240,7 +246,7 @@
   },
   {
     "name": "POST /getProfiles - 带profileIds过滤查询",
-    "description": "单接口测试：POST /getProfiles。场景2：带profileIds过滤数组(末尾含\"-1\"哨兵值，真实观测到的固定尾元素模式)。使用citrus真实profile({{profile_id}})+\"-1\"哨兵值。500条随机样本中占比约1.4%（7次）。",
+    "description": "单接口测试：POST /getProfiles。场景2：带profileIds过滤数组(末尾含\"-1\"哨兵值，真实观测到的固定尾元素模式)。使用citrus真实profile({{variables.profile_id}})+\"-1\"哨兵值。500条随机样本中占比约1.4%（7次）。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -251,15 +257,16 @@
       {
         "name": "查询执行日志Profile列表(带profileIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getProfiles",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "timeZone": "America/Los_Angeles",
           "profileIds": [
-            "{{profile_id}}",
+            "{{variables.profile_id}}",
             "-1"
           ],
           "ignore": false,
@@ -278,7 +285,7 @@
   },
   {
     "name": "POST /getAdGroups/{ruleExecutionLogId} - 执行日志AdGroup列表",
-    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。该接口不带productLine字段，按clientId+ruleExecutionLogId归属而非平台区分。字面量{ruleExecutionLogId}路径查询恒0命中，需用wildcard-agg按前缀通配探测：/getAdGroups/* 近90天全平台(排除clientId 62/3186测试账号)真实命中93次，涉及多个真实客户执行日志，典型结构为仅基础字段(不含campaignIds过滤)。使用citrus共用fixture真实执行日志({{real_execution_log_id}})，该账号下暂无关联campaign，campaignIds按空数组处理(真实预期结果，非编造)。",
+    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。该接口不带productLine字段，按clientId+ruleExecutionLogId归属而非平台区分。字面量{ruleExecutionLogId}路径查询恒0命中，需用wildcard-agg按前缀通配探测：/getAdGroups/* 近90天全平台(排除clientId 62/3186测试账号)真实命中93次，涉及多个真实客户执行日志，典型结构为仅基础字段(不含campaignIds过滤)。使用citrus共用fixture真实执行日志({{variables.real_execution_log_id}})，该账号下暂无关联campaign，campaignIds按空数组处理(真实预期结果，非编造)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -289,8 +296,9 @@
       {
         "name": "查询执行日志AdGroup列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getAdGroups/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getAdGroups/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -310,7 +318,7 @@
   },
   {
     "name": "POST /getCampaigns/{ruleExecutionLogId} - 执行日志Campaign列表",
-    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getCampaigns/* 近90天全平台(排除测试账号)真实命中14610次，跨大量真实客户执行日志，绝对主流结构为仅基础字段(不含profileIds/campaignIds过滤)。使用citrus共用fixture真实执行日志({{real_execution_log_id}})。",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getCampaigns/* 近90天全平台(排除测试账号)真实命中14610次，跨大量真实客户执行日志，绝对主流结构为仅基础字段(不含profileIds/campaignIds过滤)。使用citrus共用fixture真实执行日志({{variables.real_execution_log_id}})。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -321,8 +329,9 @@
       {
         "name": "查询执行日志Campaign列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getCampaigns/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -343,7 +352,7 @@
   },
   {
     "name": "POST /getCampaignTags/{ruleExecutionLogId} - 执行日志CampaignTag列表",
-    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getCampaignTags/* 近90天全平台(排除测试账号)真实命中12382次，绝对主流结构为仅基础字段。使用citrus共用fixture真实执行日志({{real_execution_log_id}})。",
+    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getCampaignTags/* 近90天全平台(排除测试账号)真实命中12382次，绝对主流结构为仅基础字段。使用citrus共用fixture真实执行日志({{variables.real_execution_log_id}})。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -354,8 +363,9 @@
       {
         "name": "查询执行日志CampaignTag列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getCampaignTags/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getCampaignTags/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -376,7 +386,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - 执行日志详情",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getDetail/* 近90天全平台(排除测试账号)真实命中17544次。抽样110条跨15个真实执行日志分析：keywordsOperand/keywords字段是否出现与是否有实际取值无关(出现时keywords经常为空数组[])，不构成独立业务场景，核心结构(applyStatusList+ownerIds+pageInfo+profileIds+campaignTagIds+adGroupIds+managedProfileIds+campaignIds等)高度一致，按单一真实模式覆盖。使用citrus共用fixture真实执行日志({{real_execution_log_id}})，profileIds/campaignTagIds/adGroupIds/managedProfileIds/campaignIds按空数组处理(生产样本中的大列表为其他真实客户profile，不适用于citrus测试账号)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/getDetail/* 近90天全平台(排除测试账号)真实命中17544次。抽样110条跨15个真实执行日志分析：keywordsOperand/keywords字段是否出现与是否有实际取值无关(出现时keywords经常为空数组[])，不构成独立业务场景，核心结构(applyStatusList+ownerIds+pageInfo+profileIds+campaignTagIds+adGroupIds+managedProfileIds+campaignIds等)高度一致，按单一真实模式覆盖。使用citrus共用fixture真实执行日志({{variables.real_execution_log_id}})，profileIds/campaignTagIds/adGroupIds/managedProfileIds/campaignIds按空数组处理(生产样本中的大列表为其他真实客户profile，不适用于citrus测试账号)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -387,8 +397,9 @@
       {
         "name": "查询执行日志详情",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -396,7 +407,7 @@
             "Not_Applied"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -425,7 +436,7 @@
   },
   {
     "name": "POST /getLineItems/{ruleExecutionLogId} - 执行日志LineItem列表(DSP)",
-    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}(DSP LineItem)。字面量路径恒0命中；近90天全平台(排除测试账号)真实命中为0，扩大至近180天真实命中36次(该DSP功能调用频率本身较低，样本较少，场景覆盖可能不全)，涉及多个真实客户执行日志，结构一致(基础字段+campaignIds非空)。使用citrus共用fixture真实执行日志({{real_execution_log_id}})，该id下暂无关联campaign，campaignIds按空数组处理(真实预期结果)。",
+    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}(DSP LineItem)。字面量路径恒0命中；近90天全平台(排除测试账号)真实命中为0，扩大至近180天真实命中36次(该DSP功能调用频率本身较低，样本较少，场景覆盖可能不全)，涉及多个真实客户执行日志，结构一致(基础字段+campaignIds非空)。使用citrus共用fixture真实执行日志({{variables.real_execution_log_id}})，该id下暂无关联campaign，campaignIds按空数组处理(真实预期结果)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -436,8 +447,9 @@
       {
         "name": "查询执行日志LineItem列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getLineItems/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getLineItems/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -457,7 +469,7 @@
   },
   {
     "name": "POST /history/export/{ruleExecutionLogId} - 导出执行日志",
-    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/history/export/* 近90天全平台(排除测试账号)真实命中316次，典型结构含exportHeaders/managedProfileIds/campaignTagIds/adGroupIds等真实字段。使用citrus共用fixture真实执行日志({{real_execution_log_id}})。该接口返回二进制文件流(非JSON)，本环境run_cases.py未实现$binary断言算子，故仅校验HTTP状态码200。",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/history/export/* 近90天全平台(排除测试账号)真实命中316次，典型结构含exportHeaders/managedProfileIds/campaignTagIds/adGroupIds等真实字段。使用citrus共用fixture真实执行日志({{variables.real_execution_log_id}})。该接口返回二进制文件流(非JSON)，本环境run_cases.py未实现$binary断言算子，故仅校验HTTP状态码200。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -468,8 +480,9 @@
       {
         "name": "导出执行日志",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/history/export/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/history/export/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -503,7 +516,7 @@
   },
   {
     "name": "POST /history/getRuleAlertCount - 标准告警计数查询",
-    "description": "单接口测试：POST /history/getRuleAlertCount。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(726616次)。核心字段组合(ownerIds+timeZone+currency等)高度一致；dismissedRuleIds字段出现与否(93.4%不出现/1.4%出现但值为[])不构成独立业务场景(空数组不影响查询结果)，按单一真实模式覆盖。使用citrus测试账号自身({{user_id}}/{{client_id}})。",
+    "description": "单接口测试：POST /history/getRuleAlertCount。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(726616次)。核心字段组合(ownerIds+timeZone+currency等)高度一致；dismissedRuleIds字段出现与否(93.4%不出现/1.4%出现但值为[])不构成独立业务场景(空数组不影响查询结果)，按单一真实模式覆盖。使用citrus测试账号自身({{variables.user_id}}/{{variables.client_id}})。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -514,14 +527,15 @@
       {
         "name": "查询规则告警计数",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleAlertCount",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -551,7 +565,8 @@
       {
         "name": "查询规则失效详情",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleDeadDetail",
         "request_body": {
           "removeApplied": false,
@@ -574,7 +589,7 @@
   },
   {
     "name": "POST /pending/export/{ruleExecutionLogId} - 导出待处理列表",
-    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/pending/export/* 近90天全平台(排除测试账号)真实命中143次，典型结构含exportHeaders/managedProfileIds等字段。使用citrus共用fixture真实执行日志({{real_execution_log_id}})+citrus真实profile({{profile_id}})。该接口返回二进制文件流(非JSON)，仅校验HTTP状态码200。",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。字面量路径恒0命中，wildcard-agg按前缀探测：/pending/export/* 近90天全平台(排除测试账号)真实命中143次，典型结构含exportHeaders/managedProfileIds等字段。使用citrus共用fixture真实执行日志({{variables.real_execution_log_id}})+citrus真实profile({{variables.profile_id}})。该接口返回二进制文件流(非JSON)，仅校验HTTP状态码200。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -585,8 +600,9 @@
       {
         "name": "导出待处理列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/pending/export/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/pending/export/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -595,7 +611,7 @@
             "Ignore"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -603,7 +619,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "language": "EN",
           "campaignTagIds": [],
@@ -633,7 +649,7 @@
   },
   {
     "name": "POST /queryRuleSnapshots - 按规则+实体查询执行快照",
-    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(6678次)。场景1：entityIds非空(带具体实体过滤)。500条随机样本中占比约81.0%（405次）。使用citrus测试账号自身真实规则({{real_rule_id}})+真实profile({{profile_id}})+真实实体({{target_id}})。",
+    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(6678次)。场景1：entityIds非空(带具体实体过滤)。500条随机样本中占比约81.0%（405次）。使用citrus测试账号自身真实规则({{variables.real_rule_id}})+真实profile({{variables.profile_id}})+真实实体({{variables.target_id}})。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -644,20 +660,21 @@
       {
         "name": "查询规则执行快照(带entityIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/queryRuleSnapshots",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "batchIds": [
             "00000000-0000-0000-0000-000000000000"
           ],
           "entityIds": [
-            "{{target_id}}"
+            "{{variables.target_id}}"
           ]
         },
         "extract_vars": {},
@@ -683,14 +700,15 @@
       {
         "name": "查询规则执行快照(entityIds为空)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/queryRuleSnapshots",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "batchIds": [
             "00000000-0000-0000-0000-000000000000"
@@ -709,7 +727,7 @@
   },
   {
     "name": "POST /setIgnored - 设置忽略操作(含后置还原,可重复)",
-    "description": "单接口测试：POST /setIgnored。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(1058次)。operation字段98.2%为add、1.8%为remove，两者均为真实业务场景(add=忽略,remove=取消忽略)，通过主步骤add+后置步骤remove在同一case内覆盖两种真实场景，且保证幂等可重复执行。使用citrus真实执行日志({{real_execution_log_id}})+占位detail id(0，测试账号暂无真实detail记录，服务端不校验id是否存在)。",
+    "description": "单接口测试：POST /setIgnored。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(1058次)。operation字段98.2%为add、1.8%为remove，两者均为真实业务场景(add=忽略,remove=取消忽略)，通过主步骤add+后置步骤remove在同一case内覆盖两种真实场景，且保证幂等可重复执行。使用citrus真实执行日志({{variables.real_execution_log_id}})+占位detail id(0，测试账号暂无真实detail记录，服务端不校验id是否存在)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -720,11 +738,12 @@
       {
         "name": "设置忽略(add)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setIgnored",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],
@@ -739,11 +758,12 @@
       {
         "name": "后置还原-取消忽略(remove)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setIgnored",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],
@@ -759,7 +779,7 @@
   },
   {
     "name": "POST /setRemarks - 设置执行日志备注(含后置还原,可重复)",
-    "description": "单接口测试：POST /setRemarks。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(仅7次，样本较少)。100%为clientId+ruleExecutionLogId+ids+remarks结构。使用citrus真实执行日志({{real_execution_log_id}})+占位detail id(0，服务端不校验id是否存在)。主步骤写入备注后以空字符串清空还原，保证幂等可重复执行。",
+    "description": "单接口测试：POST /setRemarks。该接口ES无productLine字段，视同GET，使用全平台近90天流量作为场景基线(仅7次，样本较少)。100%为clientId+ruleExecutionLogId+ids+remarks结构。使用citrus真实执行日志({{variables.real_execution_log_id}})+占位detail id(0，服务端不校验id是否存在)。主步骤写入备注后以空字符串清空还原，保证幂等可重复执行。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -770,11 +790,12 @@
       {
         "name": "设置执行日志备注",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setRemarks",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],
@@ -789,11 +810,12 @@
       {
         "name": "后置还原-清空备注",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/setRemarks",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "clientId": "{{variables.client_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "ids": [
             0
           ],

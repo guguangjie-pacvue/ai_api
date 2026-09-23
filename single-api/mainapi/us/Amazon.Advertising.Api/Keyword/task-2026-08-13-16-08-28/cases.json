@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /api/Keyword/BulkApplySuggestBid - 场景1_按CampaignId批量应用建议出价",
-    "description": "单接口测试：POST /api/Keyword/BulkApplySuggestBid。用户在Keyword页面按单个Campaign筛选后，对筛选出的关键词批量应用Amazon建议出价。ES 30天随机样本40条中此模式占比约48%(19次)，为最主要的真实使用场景。ProfileIds/CampaignIds已替换为测试账号专用测试campaign({{sp_manual_pat_campaign_id}})，未直接使用ES日志中其他真实客户的Profile/Campaign，避免误改真实客户出价。注意：该接口内部会将匹配到的关键词出价直接改为Amazon建议出价，无法程序化还原到调用前的原值（本次生成范围内未包含出价查询/回写接口），已限定作用范围为专用测试campaign，可接受出价漂移。",
+    "description": "单接口测试：POST /api/Keyword/BulkApplySuggestBid。用户在Keyword页面按单个Campaign筛选后，对筛选出的关键词批量应用Amazon建议出价。ES 30天随机样本40条中此模式占比约48%(19次)，为最主要的真实使用场景。ProfileIds/CampaignIds已替换为测试账号专用测试campaign({{variables.sp_manual_pat_campaign_id}})，未直接使用ES日志中其他真实客户的Profile/Campaign，避免误改真实客户出价。注意：该接口内部会将匹配到的关键词出价直接改为Amazon建议出价，无法程序化还原到调用前的原值（本次生成范围内未包含出价查询/回写接口），已限定作用范围为专用测试campaign，可接受出价漂移。",
     "module": "Keyword",
     "granularity": "API",
     "since": "init",
@@ -12,18 +12,19 @@
       {
         "name": "调用 BulkApplySuggestBid",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Keyword/BulkApplySuggestBid",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{sp_manual_pat_campaign_id}}"
+            "{{variables.sp_manual_pat_campaign_id}}"
           ],
           "AdgroupIds": [],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "ToMarket": "US",
           "IsAnd": 0,
@@ -62,7 +63,7 @@
   },
   {
     "name": "POST /api/Keyword/BulkApplySuggestBid - 场景2_按关键词标签TaggingIds批量应用建议出价",
-    "description": "单接口测试：POST /api/Keyword/BulkApplySuggestBid。用户在Keyword页面先按关键词标签(TaggingIds)筛选出目标关键词分组，再批量应用建议出价，常见于按标签批量管理出价策略的场景。ES样本中占比约20%(8/40)。TaggingIds使用测试账号已有的关键词标签{{test_keyword_tag_id}}(KeywordCount:0，不影响其他数据)。同上，出价变更不可逆，已限定在测试专用campaign范围内的关键词。",
+    "description": "单接口测试：POST /api/Keyword/BulkApplySuggestBid。用户在Keyword页面先按关键词标签(TaggingIds)筛选出目标关键词分组，再批量应用建议出价，常见于按标签批量管理出价策略的场景。ES样本中占比约20%(8/40)。TaggingIds使用测试账号已有的关键词标签{{variables.test_keyword_tag_id}}(KeywordCount:0，不影响其他数据)。同上，出价变更不可逆，已限定在测试专用campaign范围内的关键词。",
     "module": "Keyword",
     "granularity": "API",
     "since": "init",
@@ -73,21 +74,22 @@
       {
         "name": "调用 BulkApplySuggestBid",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Keyword/BulkApplySuggestBid",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{sp_manual_pat_campaign_id}}"
+            "{{variables.sp_manual_pat_campaign_id}}"
           ],
           "AdgroupIds": [],
           "TaggingIds": [
-            "{{test_keyword_tag_id}}"
+            "{{variables.test_keyword_tag_id}}"
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "ToMarket": "US",
           "IsAnd": 0,
@@ -136,14 +138,15 @@
       {
         "name": "调用 BulkApplySuggestBid",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Keyword/BulkApplySuggestBid",
         "request_body": {
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{sp_manual_pat_campaign_id}}"
+            "{{variables.sp_manual_pat_campaign_id}}"
           ],
           "AdgroupIds": [],
           "TextFilters": [
@@ -154,8 +157,8 @@
               "isNot": 0
             }
           ],
-          "Start": "{{date_start_mdy}}",
-          "End": "{{date_end_mdy}}",
+          "Start": "{{variables.date_start_mdy}}",
+          "End": "{{variables.date_end_mdy}}",
           "Dim": "ytd",
           "ToMarket": "US",
           "IsAnd": 0,
@@ -194,7 +197,7 @@
   },
   {
     "name": "POST /api/Keyword/BulkSaveKeywordTextToTags - 场景1_按关键词文本筛选打标签",
-    "description": "单接口测试：POST /api/Keyword/BulkSaveKeywordTextToTags。用户按关键词文本筛选(精确/模糊匹配)后批量对关键词打标签，为ES 30天样本中最常见模式，占比约52%(17/33)。TagIds使用测试账号已有标签{{test_keyword_tag_id}}(KeywordCount:0)。ProfileIds/CampaignIds已替换为测试账号自身数据，未使用ES日志中其他真实客户的Profile，避免误标真实客户关键词。",
+    "description": "单接口测试：POST /api/Keyword/BulkSaveKeywordTextToTags。用户按关键词文本筛选(精确/模糊匹配)后批量对关键词打标签，为ES 30天样本中最常见模式，占比约52%(17/33)。TagIds使用测试账号已有标签{{variables.test_keyword_tag_id}}(KeywordCount:0)。ProfileIds/CampaignIds已替换为测试账号自身数据，未使用ES日志中其他真实客户的Profile，避免误标真实客户关键词。",
     "module": "Keyword",
     "granularity": "API",
     "since": "init",
@@ -205,17 +208,18 @@
       {
         "name": "调用 BulkSaveKeywordTextToTags",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Keyword/BulkSaveKeywordTextToTags",
         "request_body": {
           "TagIds": [
-            "{{test_keyword_tag_id}}"
+            "{{variables.test_keyword_tag_id}}"
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{sp_manual_pat_campaign_id}}"
+            "{{variables.sp_manual_pat_campaign_id}}"
           ],
           "AdgroupIds": [],
           "TextFilters": [
@@ -268,17 +272,18 @@
       {
         "name": "调用 BulkSaveKeywordTextToTags",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Keyword/BulkSaveKeywordTextToTags",
         "request_body": {
           "TagIds": [
-            "{{test_keyword_tag_id}}"
+            "{{variables.test_keyword_tag_id}}"
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{sp_manual_pat_campaign_id}}"
+            "{{variables.sp_manual_pat_campaign_id}}"
           ],
           "AdgroupIds": [],
           "Filters": [
@@ -331,20 +336,21 @@
       {
         "name": "调用 BulkSaveKeywordTextToTags",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Keyword/BulkSaveKeywordTextToTags",
         "request_body": {
           "TagIds": [
-            "{{test_keyword_tag_id}}"
+            "{{variables.test_keyword_tag_id}}"
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{sp_manual_pat_campaign_id}}"
+            "{{variables.sp_manual_pat_campaign_id}}"
           ],
           "AdgroupIds": [
-            "{{sp_manual_pat_adgroup_id}}"
+            "{{variables.sp_manual_pat_adgroup_id}}"
           ],
           "TextFilters": [
             {
@@ -393,17 +399,18 @@
       {
         "name": "调用 BulkDeleteKeywordTextToTags",
         "method": "POST",
-        "base_url": "{{INDBASEURL}}",
+        "base_url": "{{base_urls.INDBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Keyword/BulkDeleteKeywordTextToTags",
         "request_body": {
           "TagIds": [
-            "{{test_keyword_tag_id}}"
+            "{{variables.test_keyword_tag_id}}"
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "CampaignIds": [
-            "{{sp_manual_pat_campaign_id}}"
+            "{{variables.sp_manual_pat_campaign_id}}"
           ],
           "AdgroupIds": [],
           "TextFilters": [

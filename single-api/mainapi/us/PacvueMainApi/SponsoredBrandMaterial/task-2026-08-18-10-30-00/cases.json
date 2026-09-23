@@ -12,15 +12,16 @@
       {
         "name": "创建SB ProductCollection活动",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/Campaign/Create",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
+          "ProfileId": "{{variables.profile_id}}",
           "Name": "autocase_sb_pc_create",
           "State": "PAUSED",
           "DailyBudget": "1",
           "BudgetType": "daily",
-          "StartDate": "{{date_start}}",
+          "StartDate": "{{variables.date_start}}",
           "SalesChannel": "AMAZON",
           "CostType": "CPC",
           "Goal": "CLICKS",
@@ -30,13 +31,13 @@
           "AdGroup": {
             "Name": "autocase_ag_pc_create",
             "State": "ENABLED",
-            "ProfileId": "{{profile_id}}"
+            "ProfileId": "{{variables.profile_id}}"
           },
           "Ads": [
             {
               "Name": "autocase_ad_pc_create",
               "State": "ENABLED",
-              "ProfileId": "{{profile_id}}",
+              "ProfileId": "{{variables.profile_id}}",
               "ProductCollectionSettings": {
                 "Brand": "TestBrand",
                 "Headlines": [
@@ -81,19 +82,20 @@
       {
         "name": "后置清理-归档新建SB ProductCollection活动",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v4/Update",
         "request_body": {
           "campaigns": [
             {
               "campaignType": "headlineSearch",
               "campaignId": "{{created_sb_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -117,15 +119,16 @@
       {
         "name": "创建SB Video活动",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/Campaign/Create",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
+          "ProfileId": "{{variables.profile_id}}",
           "Name": "autocase_sb_video_create",
           "State": "PAUSED",
           "DailyBudget": "10",
           "BudgetType": "DAILY",
-          "StartDate": "{{date_start}}",
+          "StartDate": "{{variables.date_start}}",
           "SalesChannel": "AMAZON",
           "CostType": "CPC",
           "Goal": "CLICKS",
@@ -135,7 +138,7 @@
           "AdGroup": {
             "Name": "autocase_ag_video_create",
             "State": "ENABLED",
-            "ProfileId": "{{profile_id}}"
+            "ProfileId": "{{variables.profile_id}}"
           },
           "Ads": [
             {
@@ -182,19 +185,20 @@
       {
         "name": "后置清理-归档新建SB Video活动",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v4/Update",
         "request_body": {
           "campaigns": [
             {
               "campaignType": "headlineSearch",
               "campaignId": "{{created_sb_video_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -218,16 +222,17 @@
       {
         "name": "复制SB活动到同profile",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/Campaign/Copy",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "ToProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sb_campaign_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sb_campaign_id}}",
           "CampaignName": "autocase_copy_sb_basic",
           "DailyBudget": "1",
           "totalBudget": 0,
-          "StartDate": "{{date_start}}",
+          "StartDate": "{{variables.date_start}}",
           "EndDate": null,
           "Tags": [],
           "portfolioId": "",
@@ -244,19 +249,20 @@
       {
         "name": "后置清理-归档复制的SB活动",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v4/Update",
         "request_body": {
           "campaigns": [
             {
               "campaignType": "headlineSearch",
               "campaignId": "{{copied_sb_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -280,16 +286,17 @@
       {
         "name": "复制SB活动并设置B2B站点限制",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/Campaign/Copy",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "ToProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sb_campaign_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sb_campaign_id}}",
           "CampaignName": "autocase_copy_sb_b2b",
           "DailyBudget": "5",
           "totalBudget": 0,
-          "StartDate": "{{date_start}}",
+          "StartDate": "{{variables.date_start}}",
           "EndDate": null,
           "Tags": [],
           "portfolioId": "",
@@ -309,19 +316,20 @@
       {
         "name": "后置清理-归档B2B复制的SB活动",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v4/Update",
         "request_body": {
           "campaigns": [
             {
               "campaignType": "headlineSearch",
               "campaignId": "{{copied_sb_b2b_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -345,19 +353,20 @@
       {
         "name": "复制SB活动并指定portfolio和终止日",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/Campaign/Copy",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "ToProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sb_campaign_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sb_campaign_id}}",
           "CampaignName": "autocase_copy_sb_portfolio",
           "DailyBudget": "20",
           "totalBudget": 0,
-          "StartDate": "{{date_start}}",
+          "StartDate": "{{variables.date_start}}",
           "EndDate": "2026-12-31",
           "Tags": [],
-          "portfolioId": "{{test_portfolio_id}}",
+          "portfolioId": "{{variables.test_portfolio_id}}",
           "State": "paused"
         },
         "extract_vars": {
@@ -371,19 +380,20 @@
       {
         "name": "后置清理-归档含portfolio复制的SB活动",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Campaign/v4/Update",
         "request_body": {
           "campaigns": [
             {
               "campaignType": "headlineSearch",
               "campaignId": "{{copied_sb_portfolio_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived"
             }
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -407,19 +417,20 @@
       {
         "name": "创建SB广告组+ProductCollection广告+phrase关键词",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/AdGroup/Create",
         "request_body": {
           "AdGroup": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sb_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sb_campaign_id}}",
             "Name": "autocase_ag_pc_phrase",
             "State": "ENABLED"
           },
           "Ads": [
             {
               "Name": "autocase_ad_pc_phrase",
-              "ProfileId": "{{profile_id}}",
+              "ProfileId": "{{variables.profile_id}}",
               "State": "ENABLED",
               "ProductCollectionSettings": {
                 "Brand": "TestBrand",
@@ -465,14 +476,15 @@
       {
         "name": "后置清理-归档新建SB广告组",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Adgroup/v3/BulkUpdataAdgroupState",
         "request_body": {
           "datas": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignType": "headlineSearch",
-              "campaignId": "{{exist_sb_campaign_id}}",
+              "campaignId": "{{variables.exist_sb_campaign_id}}",
               "adGroupId": "{{created_sb_adgroup_id}}"
             }
           ],
@@ -500,19 +512,20 @@
       {
         "name": "创建SB广告组+exact关键词+NegativeKeywords",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/AdGroup/Create",
         "request_body": {
           "AdGroup": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sb_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sb_campaign_id}}",
             "Name": "autocase_ag_pc_exact_neg",
             "State": "ENABLED"
           },
           "Ads": [
             {
               "Name": "autocase_ad_pc_exact",
-              "ProfileId": "{{profile_id}}",
+              "ProfileId": "{{variables.profile_id}}",
               "State": "ENABLED",
               "ProductCollectionSettings": {
                 "Brand": "TestBrand",
@@ -568,14 +581,15 @@
       {
         "name": "后置清理-归档新建SB广告组(exact+neg)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Adgroup/v3/BulkUpdataAdgroupState",
         "request_body": {
           "datas": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignType": "headlineSearch",
-              "campaignId": "{{exist_sb_campaign_id}}",
+              "campaignId": "{{variables.exist_sb_campaign_id}}",
               "adGroupId": "{{created_sb_adgroup_exact_id}}"
             }
           ],
@@ -603,12 +617,13 @@
       {
         "name": "预备-创建临时SB广告组(用于Ad/Create测试)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/AdGroup/Create",
         "request_body": {
           "AdGroup": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sb_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sb_campaign_id}}",
             "Name": "autocase_ag_for_ad_simple",
             "State": "ENABLED"
           },
@@ -632,14 +647,15 @@
       {
         "name": "在SB广告组下创建Video广告(简单结构)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/Ad/Create",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
+          "ProfileId": "{{variables.profile_id}}",
           "Ads": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
               "AdgroupId": "{{temp_sb_adgroup_id}}",
               "Name": "autocase_ad_video_simple",
               "State": "ENABLED",
@@ -669,14 +685,15 @@
       {
         "name": "后置清理-归档临时SB广告组(连同其下广告)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Adgroup/v3/BulkUpdataAdgroupState",
         "request_body": {
           "datas": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignType": "headlineSearch",
-              "campaignId": "{{exist_sb_campaign_id}}",
+              "campaignId": "{{variables.exist_sb_campaign_id}}",
               "adGroupId": "{{temp_sb_adgroup_id}}"
             }
           ],
@@ -704,12 +721,13 @@
       {
         "name": "预备-创建临时SB广告组(用于Ad/Create完整结构测试)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/AdGroup/Create",
         "request_body": {
           "AdGroup": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sb_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sb_campaign_id}}",
             "Name": "autocase_ag_for_ad_full",
             "State": "ENABLED"
           },
@@ -733,14 +751,15 @@
       {
         "name": "在SB广告组下创建Video广告(完整结构含Brand+LandingPage+BrandLogos)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/SponsoredBrandMaterial/Ad/Create",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
+          "ProfileId": "{{variables.profile_id}}",
           "Ads": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{exist_sb_campaign_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.exist_sb_campaign_id}}",
               "AdgroupId": "{{temp_sb_adgroup_full_id}}",
               "Name": "autocase_ad_video_full",
               "State": "ENABLED",
@@ -792,14 +811,15 @@
       {
         "name": "后置清理-归档临时SB广告组(完整结构测试后)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "/Adgroup/v3/BulkUpdataAdgroupState",
         "request_body": {
           "datas": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignType": "headlineSearch",
-              "campaignId": "{{exist_sb_campaign_id}}",
+              "campaignId": "{{variables.exist_sb_campaign_id}}",
               "adGroupId": "{{temp_sb_adgroup_full_id}}"
             }
           ],

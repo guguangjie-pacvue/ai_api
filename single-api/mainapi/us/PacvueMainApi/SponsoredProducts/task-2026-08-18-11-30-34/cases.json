@@ -12,19 +12,20 @@
       {
         "name": "创建SP Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredProducts/CreateCampaign",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
+          "ProfileId": "{{variables.profile_id}}",
           "TargetingType": "MANUAL",
           "Name": "TC-SponsoredProducts-CreateCampaign-AutoTest",
           "DailyBudget": "10",
           "State": "ENABLED",
-          "StartDate": "{{date_start_mdy}}",
+          "StartDate": "{{variables.date_start_mdy}}",
           "EndDate": "",
           "BidStrategy": "legacyForSales",
           "AdGroup": {
-            "ProfileId": "{{profile_id}}",
+            "ProfileId": "{{variables.profile_id}}",
             "Name": "TC-SP-CreateCampaign-AG",
             "DefaultBid": "0.5",
             "State": "ENABLED"
@@ -33,7 +34,7 @@
             {
               "State": "ENABLED",
               "ProductType": "ASIN",
-              "Product": "{{target_asin}}"
+              "Product": "{{variables.target_asin}}"
             }
           ]
         },
@@ -48,16 +49,17 @@
       {
         "name": "后置清理-归档新建的Campaign",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Campaign/V4/Update",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaigns": [
             {
               "campaignId": "{{created_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived",
               "campaignType": "sponsoredProducts"
             }
@@ -89,11 +91,12 @@
       {
         "name": "创建AdGroup",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredProducts/CreateAdGroup",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "CampaignId": "{{exist_sp_campaign_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "CampaignId": "{{variables.exist_sp_campaign_id}}",
           "Name": "TC-SponsoredProducts-CreateAdGroup-AutoTest",
           "DefaultBid": "0.5",
           "State": "ENABLED",
@@ -102,7 +105,7 @@
             {
               "State": "ENABLED",
               "ProductType": "ASIN",
-              "Product": "{{target_asin}}"
+              "Product": "{{variables.target_asin}}"
             }
           ]
         },
@@ -117,14 +120,15 @@
       {
         "name": "后置清理-归档新建的AdGroup",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Adgroup/v3/BulkUpdataAdgroupState",
         "request_body": {
           "datas": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignType": "sponsoredProducts",
-              "campaignId": "{{exist_sp_campaign_id}}",
+              "campaignId": "{{variables.exist_sp_campaign_id}}",
               "adGroupId": "{{created_adgroup_id}}"
             }
           ],
@@ -151,18 +155,19 @@
       {
         "name": "创建Ad",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredProducts/CreateAd",
         "request_body": {
-          "ProfileId": "{{profile_id}}",
-          "UserId": "{{user_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "UserId": "{{variables.user_id}}",
           "Ads": [
             {
-              "CampaignId": "{{sp_manual_pat_campaign_id}}",
-              "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
+              "CampaignId": "{{variables.sp_manual_pat_campaign_id}}",
+              "AdGroupId": "{{variables.sp_manual_pat_adgroup_id}}",
               "State": "ENABLED",
               "ProductType": "ASIN",
-              "Product": "{{target_asin}}"
+              "Product": "{{variables.target_asin}}"
             }
           ]
         },
@@ -177,13 +182,14 @@
       {
         "name": "后置清理-归档新建的Ad",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "ProductAd/v3/BulkChangeState",
         "request_body": {
           "adIds": [
             {
               "entityID": "{{created_ad_id}}",
-              "profileId": "{{profile_id}}"
+              "profileId": "{{variables.profile_id}}"
             }
           ],
           "state": "archived"
@@ -209,16 +215,17 @@
       {
         "name": "复制Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredProducts/CopyCampaign",
         "request_body": {
-          "ToProfileId": "{{profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
           "Campaign": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sp_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sp_campaign_id}}",
             "CampaignName": "copy of autoTest_CopyCampaign",
             "DailyBudget": "10",
-            "StartDate": "{{date_start_mdy}}",
+            "StartDate": "{{variables.date_start_mdy}}",
             "EndDate": "",
             "State": "paused"
           },
@@ -235,16 +242,17 @@
       {
         "name": "后置清理-归档复制出的新Campaign",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Campaign/V4/Update",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaigns": [
             {
               "campaignId": "{{created_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived",
               "campaignType": "sponsoredProducts"
             }
@@ -276,26 +284,27 @@
       {
         "name": "复制Campaign(V2,含AdGroupAsins)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredProducts/CopyCampaignV2",
         "request_body": {
-          "ToProfileId": "{{profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
           "Campaign": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{exist_sp_campaign_id}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.exist_sp_campaign_id}}",
             "CampaignName": "copy of autoTest_CopyCampaignV2",
             "DailyBudget": "10",
-            "StartDate": "{{date_start_mdy}}",
+            "StartDate": "{{variables.date_start_mdy}}",
             "EndDate": "",
             "State": "paused"
           },
           "CopySdCreative": 0,
           "AdGroupAsins": [
             {
-              "AdGroupId": "{{adgroup_id}}",
+              "AdGroupId": "{{variables.adgroup_id}}",
               "Name": "TC-CopyCampaignV2-AG",
               "Asins": [
-                "{{target_asin}}"
+                "{{variables.target_asin}}"
               ]
             }
           ]
@@ -311,16 +320,17 @@
       {
         "name": "后置清理-归档复制出的新Campaign",
         "method": "PUT",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Campaign/V4/Update",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "campaigns": [
             {
               "campaignId": "{{created_campaign_id}}",
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "state": "archived",
               "campaignType": "sponsoredProducts"
             }
@@ -352,16 +362,17 @@
       {
         "name": "调用 UpdateAdVideo",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredProducts/UpdateAdVideo",
         "request_body": {
-          "UserId": "{{user_id}}",
+          "UserId": "{{variables.user_id}}",
           "Ads": [
             {
-              "ProfileId": "{{profile_id}}",
-              "CampaignId": "{{sp_manual_pat_campaign_id}}",
-              "AdGroupId": "{{sp_manual_pat_adgroup_id}}",
-              "AdId": "{{test_ad_id}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "CampaignId": "{{variables.sp_manual_pat_campaign_id}}",
+              "AdGroupId": "{{variables.sp_manual_pat_adgroup_id}}",
+              "AdId": "{{variables.test_ad_id}}",
               "OptimizeText": false,
               "AddAssert": [],
               "RemoveAssert": [],
@@ -391,14 +402,15 @@
       {
         "name": "调用 UpdateCampaignBidding",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredProducts/UpdateCampaignBidding",
         "request_body": {
           "CampaignIds": [
-            "{{exist_sp_campaign_id}}"
+            "{{variables.exist_sp_campaign_id}}"
           ],
           "ProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "EventType": 0,
           "CreativeBidAdjustmentsDetail": {

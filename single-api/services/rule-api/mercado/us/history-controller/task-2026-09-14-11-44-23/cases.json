@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /getAdGroups/{ruleExecutionLogId} - 按campaignIds过滤(不带profileIds)",
-    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天39条真实抽样，全部无productLine)。场景1(唯一场景)：带campaignIds过滤，不带profileIds，该接口mercado场景下抽样39条100%为此模式。39条真实样本中占比约100%（39次）。ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)；实测该接口对不属于本账号的执行日志返回code:200+data:[]，故仅断言code。",
+    "description": "单接口测试：POST /getAdGroups/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天39条真实抽样，全部无productLine)。场景1(唯一场景)：带campaignIds过滤，不带profileIds，该接口mercado场景下抽样39条100%为此模式。39条真实样本中占比约100%（39次）。ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)；实测该接口对不属于本账号的执行日志返回code:200+data:[]，故仅断言code。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -12,8 +12,9 @@
       {
         "name": "查询规则执行的广告组列表(按campaignIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getAdGroups/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getAdGroups/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -35,7 +36,7 @@
   },
   {
     "name": "POST /getCampaigns/{ruleExecutionLogId} - 无额外过滤(仅按执行日志)",
-    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天135条真实抽样)。场景1：不带profileIds过滤，仅按执行日志查询。135条真实样本中占比约86.7%（117次）。ruleExecutionLogId使用{{real_execution_log_id}}；实测对foreign执行日志返回code:200+data:[]，仅断言code。",
+    "description": "单接口测试：POST /getCampaigns/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天135条真实抽样)。场景1：不带profileIds过滤，仅按执行日志查询。135条真实样本中占比约86.7%（117次）。ruleExecutionLogId使用{{variables.real_execution_log_id}}；实测对foreign执行日志返回code:200+data:[]，仅断言code。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -46,8 +47,9 @@
       {
         "name": "查询规则执行的Campaign列表(无过滤)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getCampaigns/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -76,8 +78,9 @@
       {
         "name": "查询规则执行的Campaign列表(按profileIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getCampaigns/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getCampaigns/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -98,7 +101,7 @@
   },
   {
     "name": "POST /getCampaignTags/{ruleExecutionLogId} - 标准查询",
-    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天120条真实抽样，100%同一模式)。场景1(唯一场景)：无额外过滤条件的标准查询。120条真实样本中占比约100%（120次）。ruleExecutionLogId使用{{real_execution_log_id}}；实测对foreign执行日志返回code:200+data:[]，仅断言code。",
+    "description": "单接口测试：POST /getCampaignTags/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天120条真实抽样，100%同一模式)。场景1(唯一场景)：无额外过滤条件的标准查询。120条真实样本中占比约100%（120次）。ruleExecutionLogId使用{{variables.real_execution_log_id}}；实测对foreign执行日志返回code:200+data:[]，仅断言code。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -109,8 +112,9 @@
       {
         "name": "查询规则执行的CampaignTags列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getCampaignTags/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getCampaignTags/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -128,7 +132,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - Applied+Not_Applied双状态查询(默认全量视图)",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天扩大抽样780条，覆盖60个真实执行日志)。场景1：applyStatusList=['Applied', 'Not_Applied']。780条真实样本中占比约71.28%（556次）。ownerIds替换为测试账号自身{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天扩大抽样780条，覆盖60个真实执行日志)。场景1：applyStatusList=['Applied', 'Not_Applied']。780条真实样本中占比约71.28%（556次）。ownerIds替换为测试账号自身{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}；ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -139,8 +143,9 @@
       {
         "name": "查询规则执行详情(applyStatusList=['Applied', 'Not_Applied'])",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -148,7 +153,7 @@
             "Not_Applied"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -159,7 +164,7 @@
           "campaignTagIds": [],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "fromSnapShot": false,
           "download": false,
@@ -177,7 +182,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - 仅Not_Applied单状态查询(待处理明细)",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景2：applyStatusList=['Not_Applied']。780条真实样本中占比约18.33%（143次）。ownerIds替换为测试账号自身{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景2：applyStatusList=['Not_Applied']。780条真实样本中占比约18.33%（143次）。ownerIds替换为测试账号自身{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}；ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -188,15 +193,16 @@
       {
         "name": "查询规则执行详情(applyStatusList=['Not_Applied'])",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
             "Not_Applied"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -207,7 +213,7 @@
           "campaignTagIds": [],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "fromSnapShot": false,
           "download": false,
@@ -226,7 +232,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - Not_Applied+Applied+Ignore三状态查询",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景3：applyStatusList=['Not_Applied', 'Applied', 'Ignore']。780条真实样本中占比约3.46%（27次）。ownerIds替换为测试账号自身{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景3：applyStatusList=['Not_Applied', 'Applied', 'Ignore']。780条真实样本中占比约3.46%（27次）。ownerIds替换为测试账号自身{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}；ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -237,8 +243,9 @@
       {
         "name": "查询规则执行详情(applyStatusList=['Not_Applied', 'Applied', 'Ignore'])",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -247,7 +254,7 @@
             "Ignore"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -260,7 +267,7 @@
           ],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "fromSnapShot": false,
           "download": false,
@@ -282,7 +289,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - Not_Applied+Ignore双状态查询",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景4：applyStatusList=['Not_Applied', 'Ignore']。780条真实样本中占比约3.21%（25次）。ownerIds替换为测试账号自身{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景4：applyStatusList=['Not_Applied', 'Ignore']。780条真实样本中占比约3.21%（25次）。ownerIds替换为测试账号自身{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}；ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -293,8 +300,9 @@
       {
         "name": "查询规则执行详情(applyStatusList=['Not_Applied', 'Ignore'])",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -302,7 +310,7 @@
             "Ignore"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -313,7 +321,7 @@
           "campaignTagIds": [],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "fromSnapShot": false,
           "download": false,
@@ -334,7 +342,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - 空applyStatusList查询(全量不筛状态)",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景5：applyStatusList=[]。780条真实样本中占比约1.41%（11次）。ownerIds替换为测试账号自身{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景5：applyStatusList=[]。780条真实样本中占比约1.41%（11次）。ownerIds替换为测试账号自身{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}；ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -345,13 +353,14 @@
       {
         "name": "查询规则执行详情(applyStatusList=[])",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -362,7 +371,7 @@
           "campaignTagIds": [],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "fromSnapShot": false,
           "download": false,
@@ -380,7 +389,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - 仅Ignore单状态查询(忽略明细)",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景6：applyStatusList=['Ignore']。780条真实样本中占比约1.28%（10次）。ownerIds替换为测试账号自身{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景6：applyStatusList=['Ignore']。780条真实样本中占比约1.28%（10次）。ownerIds替换为测试账号自身{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}；ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -391,15 +400,16 @@
       {
         "name": "查询规则执行详情(applyStatusList=['Ignore'])",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
             "Ignore"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -410,7 +420,7 @@
           "campaignTagIds": [],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "fromSnapShot": false,
           "download": false,
@@ -428,7 +438,7 @@
   },
   {
     "name": "POST /getDetail/{ruleExecutionLogId} - 仅Applied单状态查询(已生效明细)",
-    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景7：applyStatusList=['Applied']。780条真实样本中占比约1.03%（8次）。ownerIds替换为测试账号自身{{user_id}}，managedProfileIds替换为{{profile_id}}；ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
+    "description": "单接口测试：POST /getDetail/{ruleExecutionLogId}。场景7：applyStatusList=['Applied']。780条真实样本中占比约1.03%（8次）。ownerIds替换为测试账号自身{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}；ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -439,15 +449,16 @@
       {
         "name": "查询规则执行详情(applyStatusList=['Applied'])",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getDetail/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getDetail/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
             "Applied"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -458,7 +469,7 @@
           "campaignTagIds": [],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "fromSnapShot": false,
           "download": false,
@@ -480,7 +491,7 @@
   },
   {
     "name": "POST /getLineItems/{ruleExecutionLogId} - 按campaignIds查询行项目",
-    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线。近90天mercado测试账号自身流量外无真实调用(仅测试账号clientId 62/3186)，近180天发现36次真实(非测试账号)调用，样本较少但为真实业务流量，全部为同一模式：带campaignIds过滤，不带profileIds。36条真实样本中占比约100%（36次）。ruleExecutionLogId使用{{real_execution_log_id}}；实测对foreign执行日志返回code:200+data:[]，仅断言code。",
+    "description": "单接口测试：POST /getLineItems/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线。近90天mercado测试账号自身流量外无真实调用(仅测试账号clientId 62/3186)，近180天发现36次真实(非测试账号)调用，样本较少但为真实业务流量，全部为同一模式：带campaignIds过滤，不带profileIds。36条真实样本中占比约100%（36次）。ruleExecutionLogId使用{{variables.real_execution_log_id}}；实测对foreign执行日志返回code:200+data:[]，仅断言code。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -491,8 +502,9 @@
       {
         "name": "查询规则执行的行项目列表(按campaignIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/getLineItems/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/getLineItems/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "download": false,
@@ -514,7 +526,7 @@
   },
   {
     "name": "POST /getHistoryList - 通用历史列表查询(带ruleName搜索)",
-    "description": "单接口测试：POST /getHistoryList。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：不带mode/ruleDefinitionId(非下钻)，带ruleName搜索关键字。500条随机样本中占比约47.0%（235次）。ownerIds替换为{{user_id}}。",
+    "description": "单接口测试：POST /getHistoryList。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：不带mode/ruleDefinitionId(非下钻)，带ruleName搜索关键字。500条随机样本中占比约47.0%（235次）。ownerIds替换为{{variables.user_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -525,12 +537,13 @@
       {
         "name": "查询历史执行记录(通用列表+ruleName)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "endDate": "2026-08-12",
           "prevEndDate": "2026-07-28",
@@ -558,7 +571,7 @@
   },
   {
     "name": "POST /getHistoryList - 按具体规则下钻查看执行历史",
-    "description": "单接口测试：POST /getHistoryList。场景2：带mode=Auto+ruleDefinitionId，下钻查看某一具体规则的执行历史。500条随机样本中占比约45.4%（227次）。ownerIds替换为{{user_id}}，ruleDefinitionId替换为ES真实抽样规则{{real_rule_id}}(非测试账号自有，仅用于验证接口按规则过滤的结构正确性)。",
+    "description": "单接口测试：POST /getHistoryList。场景2：带mode=Auto+ruleDefinitionId，下钻查看某一具体规则的执行历史。500条随机样本中占比约45.4%（227次）。ownerIds替换为{{variables.user_id}}，ruleDefinitionId替换为ES真实抽样规则{{variables.real_rule_id}}(非测试账号自有，仅用于验证接口按规则过滤的结构正确性)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -569,12 +582,13 @@
       {
         "name": "查询历史执行记录(按规则下钻)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "endDate": "2026-09-07",
           "prevEndDate": "2026-08-23",
@@ -585,7 +599,7 @@
           "timeZone": "America/Los_Angeles",
           "fromSnapShot": false,
           "mode": "Auto",
-          "ruleDefinitionId": "{{real_rule_id}}",
+          "ruleDefinitionId": "{{variables.real_rule_id}}",
           "download": false,
           "ruleType": [],
           "ruleName": "Dave's > SP Targeting-60 > KW > Bid Up",
@@ -604,7 +618,7 @@
   },
   {
     "name": "POST /getHistoryList - 下钻查询+includeZeroCount",
-    "description": "单接口测试：POST /getHistoryList。场景3：带mode+ruleDefinitionId下钻，同时includeZeroCount=true(含零计数结果)。500条随机样本中占比约4.0%（20次）。ownerIds替换为{{user_id}}，ruleDefinitionId替换为{{real_rule_id}}。",
+    "description": "单接口测试：POST /getHistoryList。场景3：带mode+ruleDefinitionId下钻，同时includeZeroCount=true(含零计数结果)。500条随机样本中占比约4.0%（20次）。ownerIds替换为{{variables.user_id}}，ruleDefinitionId替换为{{variables.real_rule_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -615,12 +629,13 @@
       {
         "name": "查询历史执行记录(下钻+includeZeroCount)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "endDate": "2026-08-12",
           "prevEndDate": "2026-08-08",
@@ -631,7 +646,7 @@
           "timeZone": "Asia/Calcutta",
           "fromSnapShot": false,
           "mode": "Auto",
-          "ruleDefinitionId": "{{real_rule_id}}",
+          "ruleDefinitionId": "{{variables.real_rule_id}}",
           "download": false,
           "ruleType": [],
           "ruleName": "Shaktimaan Updated Auto refill rule",
@@ -650,7 +665,7 @@
   },
   {
     "name": "POST /getHistoryList - 空白查询(不带ruleName/下钻)",
-    "description": "单接口测试：POST /getHistoryList。场景4：不带ruleName、不下钻的空白查询(仅按日期范围)。500条随机样本中占比约2.6%（13次）。ownerIds替换为{{user_id}}。",
+    "description": "单接口测试：POST /getHistoryList。场景4：不带ruleName、不下钻的空白查询(仅按日期范围)。500条随机样本中占比约2.6%（13次）。ownerIds替换为{{variables.user_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -661,12 +676,13 @@
       {
         "name": "查询历史执行记录(空白查询)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getHistoryList",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "endDate": "2026-08-11",
           "prevEndDate": "2026-07-27",
@@ -694,7 +710,7 @@
   },
   {
     "name": "POST /getPendingList - 按规则名搜索待处理列表",
-    "description": "单接口测试：POST /getPendingList。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：带ruleName关键字搜索。500条随机样本中占比约88.0%（440次）。ownerIds替换为{{user_id}}。",
+    "description": "单接口测试：POST /getPendingList。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：带ruleName关键字搜索。500条随机样本中占比约88.0%（440次）。ownerIds替换为{{variables.user_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -705,13 +721,14 @@
       {
         "name": "查询待处理列表(按ruleName搜索)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ruleType": [],
           "pageInfo": {
@@ -733,7 +750,7 @@
   },
   {
     "name": "POST /getPendingList - 无过滤条件的空白搜索",
-    "description": "单接口测试：POST /getPendingList。场景2：不带ruleName的空白搜索。500条随机样本中占比约12.0%（60次）。ownerIds替换为{{user_id}}。",
+    "description": "单接口测试：POST /getPendingList。场景2：不带ruleName的空白搜索。500条随机样本中占比约12.0%（60次）。ownerIds替换为{{variables.user_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -744,13 +761,14 @@
       {
         "name": "查询待处理列表(空白搜索)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "ruleType": [],
           "pageInfo": {
@@ -783,7 +801,8 @@
       {
         "name": "查询待处理规则数量",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getPendingRuleNum",
         "request_body": {},
         "extract_vars": {},
@@ -798,7 +817,7 @@
   },
   {
     "name": "POST /getProfiles - 不带profileIds过滤(仅按执行日志)",
-    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：不带profileIds过滤，仅按ruleExecutionLogId查询。500条随机样本中占比约98.2%（491次）。ruleExecutionLogId使用{{real_execution_log_id}}。",
+    "description": "单接口测试：POST /getProfiles。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：不带profileIds过滤，仅按ruleExecutionLogId查询。500条随机样本中占比约98.2%（491次）。ruleExecutionLogId使用{{variables.real_execution_log_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -809,12 +828,13 @@
       {
         "name": "查询规则执行的Profile列表(无过滤)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getProfiles",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "timeZone": "America/Los_Angeles",
           "ignore": false,
           "currency": "$",
@@ -829,7 +849,7 @@
   },
   {
     "name": "POST /getProfiles - 带profileIds过滤",
-    "description": "单接口测试：POST /getProfiles。场景2：带profileIds过滤。500条随机样本中占比约1.8%（9次）。ruleExecutionLogId使用{{real_execution_log_id}}，profileIds替换为{{profile_id}}(原样本含'-1'哨兵值，保留)。",
+    "description": "单接口测试：POST /getProfiles。场景2：带profileIds过滤。500条随机样本中占比约1.8%（9次）。ruleExecutionLogId使用{{variables.real_execution_log_id}}，profileIds替换为{{variables.profile_id}}(原样本含'-1'哨兵值，保留)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -840,15 +860,16 @@
       {
         "name": "查询规则执行的Profile列表(按profileIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getProfiles",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "ruleExecutionLogId": "{{real_execution_log_id}}",
+          "ruleExecutionLogId": "{{variables.real_execution_log_id}}",
           "timeZone": "America/Los_Angeles",
           "profileIds": [
-            "{{profile_id}}",
+            "{{variables.profile_id}}",
             "-1"
           ],
           "ignore": false,
@@ -864,7 +885,7 @@
   },
   {
     "name": "POST /history/getRuleAlertCount - 标准告警计数查询",
-    "description": "单接口测试：POST /history/getRuleAlertCount。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：不带dismissedRuleIds的标准查询。500条随机样本中占比约98.2%（491次）。clientId替换为{{client_id}}，ownerIds替换为{{user_id}}(原样本ownerIds为数百个生产客户user的全选，已收敛为测试账号自身)。",
+    "description": "单接口测试：POST /history/getRuleAlertCount。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：不带dismissedRuleIds的标准查询。500条随机样本中占比约98.2%（491次）。clientId替换为{{variables.client_id}}，ownerIds替换为{{variables.user_id}}(原样本ownerIds为数百个生产客户user的全选，已收敛为测试账号自身)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -875,14 +896,15 @@
       {
         "name": "查询规则告警数量(标准)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleAlertCount",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "dismissedRuleIds": [],
           "timeZone": "America/Los_Angeles",
@@ -899,7 +921,7 @@
   },
   {
     "name": "POST /history/getRuleAlertCount - 带dismissedRuleIds过滤",
-    "description": "单接口测试：POST /history/getRuleAlertCount。场景2：带dismissedRuleIds(已忽略规则)过滤。500条随机样本中占比约1.8%（9次）。clientId替换为{{client_id}}，ownerIds替换为{{user_id}}，dismissedRuleIds保留ES真实抽样值(非测试账号自有，仅验证按已忽略规则过滤的结构正确性)。",
+    "description": "单接口测试：POST /history/getRuleAlertCount。场景2：带dismissedRuleIds(已忽略规则)过滤。500条随机样本中占比约1.8%（9次）。clientId替换为{{variables.client_id}}，ownerIds替换为{{variables.user_id}}，dismissedRuleIds保留ES真实抽样值(非测试账号自有，仅验证按已忽略规则过滤的结构正确性)。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -910,14 +932,15 @@
       {
         "name": "查询规则告警数量(带dismissedRuleIds)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleAlertCount",
         "request_body": {
           "removeApplied": false,
           "download": false,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "dismissedRuleIds": [
             1767329335786918000,
@@ -948,7 +971,8 @@
       {
         "name": "查询规则失效详情",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/history/getRuleDeadDetail",
         "request_body": {
           "removeApplied": false,
@@ -971,7 +995,7 @@
   },
   {
     "name": "POST /queryRuleSnapshots - 按规则+实体查询执行快照",
-    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：带entityIds的实体级查询。500条随机样本中占比约84.0%（420次）。ruleIds替换为{{real_rule_id}}，profileIds替换为{{profile_id}}，batchIds替换为占位UUID(原值为随机批次号，非业务含义)，entityIds替换为{{target_id}}。",
+    "description": "单接口测试：POST /queryRuleSnapshots。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天500条随机样本)。场景1：带entityIds的实体级查询。500条随机样本中占比约84.0%（420次）。ruleIds替换为{{variables.real_rule_id}}，profileIds替换为{{variables.profile_id}}，batchIds替换为占位UUID(原值为随机批次号，非业务含义)，entityIds替换为{{variables.target_id}}。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -982,20 +1006,21 @@
       {
         "name": "查询规则执行快照(按实体)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/queryRuleSnapshots",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "batchIds": [
             "00000000-0000-0000-0000-000000000000"
           ],
           "entityIds": [
-            "{{target_id}}"
+            "{{variables.target_id}}"
           ]
         },
         "extract_vars": {},
@@ -1010,7 +1035,7 @@
   },
   {
     "name": "POST /queryRuleSnapshots - entityIds为空的批次级查询",
-    "description": "单接口测试：POST /queryRuleSnapshots。场景2：entityIds为空的批次级查询。500条随机样本中占比约16.0%（80次）。ruleIds替换为{{real_rule_id}}，profileIds替换为{{profile_id}}，batchIds替换为占位UUID。",
+    "description": "单接口测试：POST /queryRuleSnapshots。场景2：entityIds为空的批次级查询。500条随机样本中占比约16.0%（80次）。ruleIds替换为{{variables.real_rule_id}}，profileIds替换为{{variables.profile_id}}，batchIds替换为占位UUID。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -1021,14 +1046,15 @@
       {
         "name": "查询规则执行快照(批次级)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/queryRuleSnapshots",
         "request_body": {
           "ruleIds": [
-            "{{real_rule_id}}"
+            "{{variables.real_rule_id}}"
           ],
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "batchIds": [
             "00000000-0000-0000-0000-000000000000"
@@ -1047,7 +1073,7 @@
   },
   {
     "name": "POST /history/export/{ruleExecutionLogId} - Budget Usage汇总报表导出",
-    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天24条真实抽样，来自12个真实执行日志)。场景1：exportHeaders为Campaign维度Budget Usage汇总报表(最常见列组合)。24条真实样本中占比约58.3%（14次）。实测返回二进制xlsx文件(而非JSON)，使用run_cases.py内建$binary断言校验文件大小。ruleExecutionLogId使用{{real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。注：exportHeaders(导出列)组合在ES中高度分散，均为用户自定义导出列的变体、非独立业务路径，本次仅覆盖占比最高的2种代表性报表维度(本场景+PAT审计场景)，Targeting维度(约16.7%)作为同类列选择变体不逐一生成case。",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天24条真实抽样，来自12个真实执行日志)。场景1：exportHeaders为Campaign维度Budget Usage汇总报表(最常见列组合)。24条真实样本中占比约58.3%（14次）。实测返回二进制xlsx文件(而非JSON)，使用run_cases.py内建$binary断言校验文件大小。ruleExecutionLogId使用{{variables.real_execution_log_id}}(ES真实抽样值，非测试账号自有数据)。注：exportHeaders(导出列)组合在ES中高度分散，均为用户自定义导出列的变体、非独立业务路径，本次仅覆盖占比最高的2种代表性报表维度(本场景+PAT审计场景)，Targeting维度(约16.7%)作为同类列选择变体不逐一生成case。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -1058,8 +1084,9 @@
       {
         "name": "导出规则执行历史(Budget Usage汇总)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/history/export/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/history/export/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -1102,7 +1129,7 @@
   },
   {
     "name": "POST /history/export/{ruleExecutionLogId} - PAT竞价调整审计报表导出",
-    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。场景2：exportHeaders为PAT竞价调整审计报表，与场景1属不同的报表内容维度。24条真实样本中占比约25.0%（6次）。ownerIds替换为{{user_id}}，managedProfileIds替换为{{profile_id}}(原样本为数百个生产客户profile的全选，已收敛为测试账号自身)。实测返回二进制xlsx文件，使用$binary断言。",
+    "description": "单接口测试：POST /history/export/{ruleExecutionLogId}。场景2：exportHeaders为PAT竞价调整审计报表，与场景1属不同的报表内容维度。24条真实样本中占比约25.0%（6次）。ownerIds替换为{{variables.user_id}}，managedProfileIds替换为{{variables.profile_id}}(原样本为数百个生产客户profile的全选，已收敛为测试账号自身)。实测返回二进制xlsx文件，使用$binary断言。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -1113,13 +1140,14 @@
       {
         "name": "导出规则执行历史(PAT竞价审计)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/history/export/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/history/export/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1131,7 +1159,7 @@
           "campaignTagIds": [],
           "adGroupIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "exportHeaders": [
             "PAT",
@@ -1161,7 +1189,7 @@
   },
   {
     "name": "POST /pending/export/{ruleExecutionLogId} - Product/SKU维度报表导出",
-    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天24条真实抽样)。场景1：exportHeaders为Product SKU/Product Name/Line Item维度报表。24条真实样本中占比约33.3%（8次）。实测返回二进制xlsx文件，使用$binary断言。ruleExecutionLogId使用{{real_execution_log_id}}。注：exportHeaders组合高度分散，均为用户自定义导出列变体，本次仅覆盖占比最高的2种代表性报表维度(本场景+Keyword竞价审计场景)，PAT(约12.5%)/Targeting(约8.3%)维度作为同类列选择变体不逐一生成case。",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。该接口ES无productLine字段(或实测未见mercado取值)，视同GET，使用全平台流量作为场景基线(近90天24条真实抽样)。场景1：exportHeaders为Product SKU/Product Name/Line Item维度报表。24条真实样本中占比约33.3%（8次）。实测返回二进制xlsx文件，使用$binary断言。ruleExecutionLogId使用{{variables.real_execution_log_id}}。注：exportHeaders组合高度分散，均为用户自定义导出列变体，本次仅覆盖占比最高的2种代表性报表维度(本场景+Keyword竞价审计场景)，PAT(约12.5%)/Targeting(约8.3%)维度作为同类列选择变体不逐一生成case。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -1172,8 +1200,9 @@
       {
         "name": "导出待处理列表(Product/SKU维度)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/pending/export/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/pending/export/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -1215,7 +1244,7 @@
   },
   {
     "name": "POST /pending/export/{ruleExecutionLogId} - Keyword竞价调整审计报表导出",
-    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。场景2：exportHeaders为Keyword维度竞价(Bid)调整审计报表，与场景1属不同的报表内容维度。24条真实样本中占比约45.8%（11次，含近似列组合变体合并统计）。ownerIds替换为{{user_id}}，实测返回二进制xlsx文件，使用$binary断言。",
+    "description": "单接口测试：POST /pending/export/{ruleExecutionLogId}。场景2：exportHeaders为Keyword维度竞价(Bid)调整审计报表，与场景1属不同的报表内容维度。24条真实样本中占比约45.8%（11次，含近似列组合变体合并统计）。ownerIds替换为{{variables.user_id}}，实测返回二进制xlsx文件，使用$binary断言。",
     "module": "history-controller",
     "granularity": "API",
     "since": "init",
@@ -1226,8 +1255,9 @@
       {
         "name": "导出待处理列表(Keyword竞价审计)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/pending/export/{{real_execution_log_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/pending/export/{{variables.real_execution_log_id}}",
         "request_body": {
           "removeApplied": false,
           "applyStatusList": [
@@ -1235,7 +1265,7 @@
             "Not_Applied"
           ],
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,

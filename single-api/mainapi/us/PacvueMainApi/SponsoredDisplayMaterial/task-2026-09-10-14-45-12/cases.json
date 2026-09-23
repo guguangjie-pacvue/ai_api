@@ -12,21 +12,22 @@
       {
         "name": "【高风险-仅生成不执行】创建SD Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredDisplay/Campaign/Create",
         "request_body": {
           "IsCreatedAsinLandPage": false,
-          "ProfileId": "{{profile_id}}",
-          "StartDate": "{{today}}",
-          "PortfolioId": "{{test_portfolio_id}}",
+          "ProfileId": "{{variables.profile_id}}",
+          "StartDate": "{{variables.today}}",
+          "PortfolioId": "{{variables.test_portfolio_id}}",
           "State": "enabled",
-          "Name": "autoTest_SD_Campaign_{{today}}",
+          "Name": "autoTest_SD_Campaign_{{variables.today}}",
           "DailyBudget": 10,
           "CostType": "VCPM",
           "CampaignTagIds": [],
           "AdGroup": {
-            "ProfileId": "{{profile_id}}",
-            "Name": "autoTest_SD_adg_{{today}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "Name": "autoTest_SD_adg_{{variables.today}}",
             "DefaultBid": 1,
             "State": "enabled",
             "BidOptimization": "reach",
@@ -35,12 +36,12 @@
           },
           "Ads": [
             {
-              "ProfileId": "{{profile_id}}",
+              "ProfileId": "{{variables.profile_id}}",
               "State": "enabled",
               "ResponsiveEcommerceSettings": {
                 "Products": [
                   {
-                    "ProductId": "{{target_asin}}",
+                    "ProductId": "{{variables.target_asin}}",
                     "ProductIdType": "ASIN"
                   }
                 ]
@@ -75,12 +76,13 @@
       {
         "name": "后置清理-归档新建Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
         "request_body": {
           "param": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignId": "{{created_sdm_campaign_id}}"
             }
           ],
@@ -96,7 +98,7 @@
   },
   {
     "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/AdGroup/Create - 在已有SD Campaign下新建广告组+广告(含后置归档,可重复)",
-    "description": "单接口测试：POST /api/SponsoredDisplay/AdGroup/Create。在测试账号已有SD Campaign({{sd_campaign_id}})下新建广告组及商品广告。365天内约9次真实调用，字段结构参照ES真实样本，换成测试账号自身campaign_id/asin。涉及真实创建广告组，仅生成case供人工评估，不自动执行；如需执行须人工确认后手动运行，并对新建AdGroup执行归档清理。",
+    "description": "单接口测试：POST /api/SponsoredDisplay/AdGroup/Create。在测试账号已有SD Campaign({{variables.sd_campaign_id}})下新建广告组及商品广告。365天内约9次真实调用，字段结构参照ES真实样本，换成测试账号自身campaign_id/asin。涉及真实创建广告组，仅生成case供人工评估，不自动执行；如需执行须人工确认后手动运行，并对新建AdGroup执行归档清理。",
     "module": "SponsoredDisplayMaterial",
     "granularity": "API",
     "since": "init",
@@ -107,13 +109,14 @@
       {
         "name": "【高风险-仅生成不执行】创建SD AdGroup",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredDisplay/AdGroup/Create",
         "request_body": {
           "AdGroup": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{sd_campaign_id}}",
-            "Name": "autoTest_SD_AdGroup_{{today}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.sd_campaign_id}}",
+            "Name": "autoTest_SD_AdGroup_{{variables.today}}",
             "DefaultBid": 1,
             "State": "enabled",
             "BidOptimization": "clicks",
@@ -122,12 +125,12 @@
           },
           "Ads": [
             {
-              "ProfileId": "{{profile_id}}",
+              "ProfileId": "{{variables.profile_id}}",
               "State": "enabled",
               "ResponsiveEcommerceSettings": {
                 "Products": [
                   {
-                    "ProductId": "{{target_asin}}",
+                    "ProductId": "{{variables.target_asin}}",
                     "ProductIdType": "ASIN"
                   }
                 ]
@@ -162,12 +165,13 @@
       {
         "name": "后置清理-归档新建AdGroup",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "AdGroupUpdate/V3/UpdateAdGroupsStatus",
         "request_body": {
           "param": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "adGroupId": "{{created_sdm_adgroup_id}}"
             }
           ],
@@ -183,7 +187,7 @@
   },
   {
     "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/Ad/Create - 在已有SD广告组下新建广告(含后置归档,可重复)",
-    "description": "单接口测试：POST /api/SponsoredDisplay/Ad/Create。在测试账号已有SD AdGroup({{sd_adgroup_id}})下新建商品广告。365天内仅1次真实调用，且该唯一样本使用的是{profileId,creativeRequests:[...]}结构、引用了他人账号已上传的图片素材assetId，与Swagger声明的入参结构(SourceName/Ads/UserId)不一致，疑似Swagger标注与实际部署有偏差。本case按Swagger结构+测试账号商品定向(ResponsiveEcommerceSettings.Products)构造，未使用assetId素材，执行前必须人工核实实际接口入参结构，不能直接当作已验证结构运行。仅生成case供人工评估，不自动执行。",
+    "description": "单接口测试：POST /api/SponsoredDisplay/Ad/Create。在测试账号已有SD AdGroup({{variables.sd_adgroup_id}})下新建商品广告。365天内仅1次真实调用，且该唯一样本使用的是{profileId,creativeRequests:[...]}结构、引用了他人账号已上传的图片素材assetId，与Swagger声明的入参结构(SourceName/Ads/UserId)不一致，疑似Swagger标注与实际部署有偏差。本case按Swagger结构+测试账号商品定向(ResponsiveEcommerceSettings.Products)构造，未使用assetId素材，执行前必须人工核实实际接口入参结构，不能直接当作已验证结构运行。仅生成case供人工评估，不自动执行。",
     "module": "SponsoredDisplayMaterial",
     "granularity": "API",
     "since": "init",
@@ -194,20 +198,21 @@
       {
         "name": "【高风险-仅生成不执行】创建SD Ad",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredDisplay/Ad/Create",
         "request_body": {
           "SourceName": "swagger-api-case-test",
           "Ads": [
             {
-              "ProfileId": "{{profile_id}}",
-              "AdgroupId": "{{sd_adgroup_id}}",
-              "Name": "autoTest_SD_Ad_{{today}}",
+              "ProfileId": "{{variables.profile_id}}",
+              "AdgroupId": "{{variables.sd_adgroup_id}}",
+              "Name": "autoTest_SD_Ad_{{variables.today}}",
               "State": "enabled",
               "ResponsiveEcommerceSettings": {
                 "Products": [
                   {
-                    "ProductId": "{{target_asin}}",
+                    "ProductId": "{{variables.target_asin}}",
                     "ProductIdType": "ASIN"
                   }
                 ]
@@ -226,12 +231,13 @@
       {
         "name": "后置清理-归档新建Ad",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "Ad/v3/BulkUpdateAds",
         "request_body": {
           "Inputs": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "AdId": "{{created_sdm_ad_id}}",
               "State": "archived"
             }
@@ -247,7 +253,7 @@
   },
   {
     "name": "【高风险-仅生成不执行】POST /api/SponsoredDisplay/Campaign/Copy - 同Profile内复制SD广告系列(含后置归档,可重复)",
-    "description": "单接口测试：POST /api/SponsoredDisplay/Campaign/Copy。将测试账号已有SD Campaign({{sd_campaign_id}})复制一份到同一profile下(CopySdCreative=1)。365天内约14次真实调用，字段结构参照ES真实样本，ToProfileId换成测试账号自身profile_id(无第二个可用测试profile，故做同profile复制)。涉及真实创建广告系列，仅生成case供人工评估，不自动执行；如需执行须人工确认后手动运行，并对新建campaign执行归档清理。",
+    "description": "单接口测试：POST /api/SponsoredDisplay/Campaign/Copy。将测试账号已有SD Campaign({{variables.sd_campaign_id}})复制一份到同一profile下(CopySdCreative=1)。365天内约14次真实调用，字段结构参照ES真实样本，ToProfileId换成测试账号自身profile_id(无第二个可用测试profile，故做同profile复制)。涉及真实创建广告系列，仅生成case供人工评估，不自动执行；如需执行须人工确认后手动运行，并对新建campaign执行归档清理。",
     "module": "SponsoredDisplayMaterial",
     "granularity": "API",
     "since": "init",
@@ -258,17 +264,18 @@
       {
         "name": "【高风险-仅生成不执行】复制SD Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredDisplay/Campaign/Copy",
         "request_body": {
-          "ToProfileId": "{{profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
           "Campaign": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{sd_campaign_id}}",
-            "CampaignName": "autoTest_SD_Copy_{{today}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.sd_campaign_id}}",
+            "CampaignName": "autoTest_SD_Copy_{{variables.today}}",
             "DailyBudget": 10,
-            "StartDate": "{{today}}",
-            "portfolioId": "{{test_portfolio_id}}",
+            "StartDate": "{{variables.today}}",
+            "portfolioId": "{{variables.test_portfolio_id}}",
             "State": "enabled",
             "Tags": []
           },
@@ -285,12 +292,13 @@
       {
         "name": "后置清理-归档新建Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
         "request_body": {
           "param": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignId": "{{created_sdm_copy_campaign_id}}"
             }
           ],
@@ -317,27 +325,28 @@
       {
         "name": "【高风险-仅生成不执行】复制SD Campaign(V2,含ASIN指定)",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "SponsoredDisplay/Campaign/CopyV2",
         "request_body": {
-          "ToProfileId": "{{profile_id}}",
+          "ToProfileId": "{{variables.profile_id}}",
           "Campaign": {
-            "ProfileId": "{{profile_id}}",
-            "CampaignId": "{{sd_campaign_id}}",
-            "CampaignName": "autoTest_SD_CopyV2_{{today}}",
+            "ProfileId": "{{variables.profile_id}}",
+            "CampaignId": "{{variables.sd_campaign_id}}",
+            "CampaignName": "autoTest_SD_CopyV2_{{variables.today}}",
             "DailyBudget": 10,
-            "StartDate": "{{today}}",
-            "portfolioId": "{{test_portfolio_id}}",
+            "StartDate": "{{variables.today}}",
+            "portfolioId": "{{variables.test_portfolio_id}}",
             "State": "enabled",
             "Tags": []
           },
           "CopySdCreative": 1,
           "AdGroupAsins": [
             {
-              "AdGroupId": "{{sd_adgroup_id}}",
+              "AdGroupId": "{{variables.sd_adgroup_id}}",
               "Name": "autoTest_SD_adg_copy",
               "Asins": [
-                "{{target_asin}}"
+                "{{variables.target_asin}}"
               ]
             }
           ]
@@ -353,12 +362,13 @@
       {
         "name": "后置清理-归档新建Campaign",
         "method": "POST",
-        "base_url": "{{BASEURL}}",
+        "base_url": "{{base_urls.BASEURL}}",
+        "headers": "{{headers}}",
         "path": "CampaignUpdate/V3/UpdateCampaignsStatus",
         "request_body": {
           "param": [
             {
-              "profileId": "{{profile_id}}",
+              "profileId": "{{variables.profile_id}}",
               "campaignId": "{{created_sdm_copyv2_campaign_id}}"
             }
           ],

@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /calendar/getApplyTagIdByProfileIds - 按profileIds批量查询applyTagId",
-    "description": "单接口测试：POST /calendar/getApplyTagIdByProfileIds。根据profileIds数组批量获取所有已应用的tagId(只读)。90天/365天内dsp平台该接口共6次真实调用(样本较少)，6条样本profileIds组合完全一致，占比100%（6次）。注：profileIds替换为测试账号自身(clientId=2938/dspautous)真实历史请求体中的固定组合({{profile_id_2}}/{{profile_id_3}})。",
+    "description": "单接口测试：POST /calendar/getApplyTagIdByProfileIds。根据profileIds数组批量获取所有已应用的tagId(只读)。90天/365天内dsp平台该接口共6次真实调用(样本较少)，6条样本profileIds组合完全一致，占比100%（6次）。注：profileIds替换为测试账号自身(clientId=2938/dspautous)真实历史请求体中的固定组合({{variables.profile_id_2}}/{{variables.profile_id_3}})。",
     "module": "calendar-center-controller",
     "granularity": "API",
     "since": "init",
@@ -12,13 +12,14 @@
       {
         "name": "调用 /calendar/getApplyTagIdByProfileIds",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/calendar/getApplyTagIdByProfileIds",
         "request_body": {
           "productLine": "dsp",
           "profileIds": [
-            "{{profile_id_2}}",
-            "{{profile_id_3}}"
+            "{{variables.profile_id_2}}",
+            "{{variables.profile_id_3}}"
           ]
         },
         "extract_vars": {},

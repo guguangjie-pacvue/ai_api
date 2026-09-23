@@ -12,7 +12,8 @@
       {
         "name": "查询profile列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getProfile",
         "request_body": {},
         "extract_vars": {},
@@ -24,7 +25,7 @@
   },
   {
     "name": "POST /definition/getTarget - 按chewy真实profile查询(Campaign级)",
-    "description": "单接口测试：POST /definition/getTarget。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{profile_id}})查询。实测code:200，返回空数组(该profile下Campaign级目标当前为空，属正常业务结果)。",
+    "description": "单接口测试：POST /definition/getTarget。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{variables.profile_id}})查询。实测code:200，返回空数组(该profile下Campaign级目标当前为空，属正常业务结果)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -35,11 +36,12 @@
       {
         "name": "查询target列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getTarget",
         "request_body": {
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "targetLevel": "Campaign"
         },
@@ -63,10 +65,11 @@
       {
         "name": "查询已关联规则的campaign",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getCampaignWithRule",
         "request_body": [
-          "{{profile_id}}"
+          "{{variables.profile_id}}"
         ],
         "extract_vars": {},
         "expected_response": {
@@ -88,11 +91,12 @@
       {
         "name": "按campaignId查询规则信息",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleInfoByCampaignId",
         "request_body": {
-          "campaignId": "{{fixture_target_id}}",
-          "profileId": "{{profile_id}}"
+          "campaignId": "{{variables.fixture_target_id}}",
+          "profileId": "{{variables.profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -114,14 +118,15 @@
       {
         "name": "查询ASIN关联规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAsinRelatedRule",
         "request_body": [
           {
             "itemIds": [
-              "{{fixture_target_id}}"
+              "{{variables.fixture_target_id}}"
             ],
-            "asinIdentity": "{{fixture_target_id}}"
+            "asinIdentity": "{{variables.fixture_target_id}}"
           }
         ],
         "extract_vars": {},
@@ -133,7 +138,7 @@
   },
   {
     "name": "POST /definition/getAutoRefillRuleApplyTags - 按chewy真实profile查询",
-    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTags。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{profile_id}})查询。实测code:200，返回空数组(该profile下暂无Auto Refill标签/目标数据，属正常业务结果)。",
+    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTags。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{variables.profile_id}})查询。实测code:200，返回空数组(该profile下暂无Auto Refill标签/目标数据，属正常业务结果)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -144,11 +149,12 @@
       {
         "name": "查询Auto Refill Tags",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTags",
         "request_body": {
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -160,7 +166,7 @@
   },
   {
     "name": "POST /definition/getAutoRefillRuleApplyTargets - 按chewy真实profile查询",
-    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTargets。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{profile_id}})查询。实测code:200，返回空数组(该profile下暂无Auto Refill标签/目标数据，属正常业务结果)。",
+    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTargets。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{variables.profile_id}})查询。实测code:200，返回空数组(该profile下暂无Auto Refill标签/目标数据，属正常业务结果)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -171,11 +177,12 @@
       {
         "name": "查询Auto Refill Targets",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTargets",
         "request_body": {
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -187,7 +194,7 @@
   },
   {
     "name": "POST /definition/getAutoRefillRuleApplyTagCampaigns - 按chewy真实profile查询",
-    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTagCampaigns。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{profile_id}})查询。实测code:200，返回空数组(该profile下暂无Auto Refill标签/目标数据，属正常业务结果)。",
+    "description": "单接口测试：POST /definition/getAutoRefillRuleApplyTagCampaigns。不含productLine字段，采用全平台流量结构，使用chewy账号真实profile({{variables.profile_id}})查询。实测code:200，返回空数组(该profile下暂无Auto Refill标签/目标数据，属正常业务结果)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -198,11 +205,12 @@
       {
         "name": "查询Auto Refill TagCampaigns",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTagCampaigns",
         "request_body": {
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -225,10 +233,11 @@
       {
         "name": "校验Auto Refill目标",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkAutoRefillRule",
         "request_body": {
-          "profileId": "{{profile_id}}"
+          "profileId": "{{variables.profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -250,7 +259,8 @@
       {
         "name": "调用 getAutoRefillRuleProfileIds",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleProfileIds",
         "request_body": {},
         "extract_vars": {},
@@ -276,13 +286,14 @@
       {
         "name": "调用 getApplyRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getApplyRule",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -301,7 +312,7 @@
   },
   {
     "name": "POST /definition/getRule - Auto模式列表浏览(chewy账号当前无自建规则)",
-    "description": "单接口测试：POST /definition/getRule。该接口请求体无productLine字段无法归因，采用全平台流量结构+chewy测试账号自身profile({{profile_id}})作为过滤条件。实测code:200，返回空列表(totalCount:0)——chewy账号当前(本次definition-controller模块处理前)无任何自建规则，Auto/Manual/AutoCommerce三种mode下均为空，无真实分布可区分，故只保留1个代表场景，如实说明。",
+    "description": "单接口测试：POST /definition/getRule。该接口请求体无productLine字段无法归因，采用全平台流量结构+chewy测试账号自身profile({{variables.profile_id}})作为过滤条件。实测code:200，返回空列表(totalCount:0)——chewy账号当前(本次definition-controller模块处理前)无任何自建规则，Auto/Manual/AutoCommerce三种mode下均为空，无真实分布可区分，故只保留1个代表场景，如实说明。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -312,7 +323,8 @@
       {
         "name": "调用 getRule(Auto)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
@@ -326,7 +338,7 @@
           "timeZone": "America/Los_Angeles",
           "profileIds": [],
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [],
           "frequency": [],
@@ -358,7 +370,8 @@
       {
         "name": "调用 getOwners(Auto)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -392,7 +405,8 @@
       {
         "name": "调用 getOwners(Manual)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -426,7 +440,8 @@
       {
         "name": "调用 getOwners(AutoCommerce)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -460,10 +475,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Daily)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Daily",
@@ -491,10 +507,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Weekly)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Weekly",
@@ -522,10 +539,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Every3days)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Every3days",
@@ -552,10 +570,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Every2weeks)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Every2weeks",
@@ -583,10 +602,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Every2days)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Every2days",
@@ -613,10 +633,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Every6days)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Every6days",
@@ -643,7 +664,8 @@
       {
         "name": "检查规则名(新建场景)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkRuleName",
         "request_body": {
           "emailOption": "NoEmails",
@@ -672,7 +694,8 @@
       {
         "name": "调用 commerceRuleClient",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleClient",
         "request_body": {},
         "extract_vars": {},
@@ -698,7 +721,8 @@
       {
         "name": "调用 commerceRuleReport(By Client)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleReport",
         "request_body": {
           "removeApplied": false,
@@ -736,7 +760,8 @@
       {
         "name": "调用 commerceRuleReport(By Rule Name)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleReport",
         "request_body": {
           "removeApplied": false,
@@ -773,13 +798,14 @@
       {
         "name": "导出规则列表(Auto)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/export",
         "request_body": {
           "mode": "Auto",
           "download": true,
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "language": "EN",
           "timeZone": "America/Los_Angeles",
@@ -807,7 +833,8 @@
       {
         "name": "导出Commerce客户维度报表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/export/commerceRuleReport",
         "request_body": {
           "commerceRuleReportGroupBy": "By Client",
@@ -839,7 +866,8 @@
       {
         "name": "调用 hasClickHitMode",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/hasClickHitMode",
         "request_body": {},
         "extract_vars": {},
@@ -862,7 +890,8 @@
       {
         "name": "调用 transferableOwnerList",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/transferableOwnerList",
         "request_body": {},
         "extract_vars": {},
@@ -888,8 +917,9 @@
       {
         "name": "查询Adtomic规则默认设置",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/adtomicRules/settings/{{profile_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/adtomicRules/settings/{{variables.profile_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -911,10 +941,11 @@
       {
         "name": "保存Adtomic规则默认设置",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/adtomicRules/settings",
         "request_body": {
-          "profileId": "{{profile_id}}"
+          "profileId": "{{variables.profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -936,11 +967,12 @@
       {
         "name": "查询Adtomic规则列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAdtomicRules",
         "request_body": {
           "adtomicProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -952,7 +984,7 @@
   },
   {
     "name": "POST /definition - 创建Product类型规则(chewy账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=chewyv2过滤近90天ES真实样本共97条：ruleType=Product占比约76.3%。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用chewy账号自身real profile({{profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约76.3%(按97条样本折算)。",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=chewyv2过滤近90天ES真实样本共97条：ruleType=Product占比约76.3%。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用chewy账号自身real profile({{variables.profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约76.3%(按97条样本折算)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -963,25 +995,26 @@
       {
         "name": "创建chewy Product规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1039,12 +1072,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_CreateProduct_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1052,7 +1086,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_CreateProduct_Cleanup"
@@ -1062,7 +1096,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -1080,7 +1114,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1097,7 +1132,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1112,7 +1148,7 @@
   },
   {
     "name": "POST /definition - 创建Bid Multiplier类型规则(chewy账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=chewyv2过滤近90天ES真实样本共97条：ruleType=Bid Multiplier占比约14.4%。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用chewy账号自身real profile({{profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约14.4%(按97条样本折算)。",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=chewyv2过滤近90天ES真实样本共97条：ruleType=Bid Multiplier占比约14.4%。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用chewy账号自身real profile({{variables.profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约14.4%(按97条样本折算)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -1123,25 +1159,26 @@
       {
         "name": "创建chewy Bid Multiplier规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1199,12 +1236,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_CreateBidMultiplier_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1212,7 +1250,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_CreateBidMultiplier_Cleanup"
@@ -1222,7 +1260,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -1240,7 +1278,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1257,7 +1296,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1272,7 +1312,7 @@
   },
   {
     "name": "POST /definition - 创建Campaign类型规则(chewy账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=chewyv2过滤近90天ES真实样本共97条：ruleType=Campaign占比约9.3%。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用chewy账号自身real profile({{profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约9.3%(按97条样本折算)。",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=chewyv2过滤近90天ES真实样本共97条：ruleType=Campaign占比约9.3%。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用chewy账号自身real profile({{variables.profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约9.3%(按97条样本折算)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -1283,25 +1323,26 @@
       {
         "name": "创建chewy Campaign规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1359,12 +1400,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_CreateCampaign_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1372,7 +1414,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_CreateCampaign_Cleanup"
@@ -1382,7 +1424,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -1400,7 +1442,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1417,7 +1460,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1443,25 +1487,26 @@
       {
         "name": "创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1519,12 +1564,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_FullLifecycle_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1532,7 +1578,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_FullLifecycle_Cleanup"
@@ -1542,7 +1588,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -1560,7 +1606,8 @@
       {
         "name": "只读-GET定义详情",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{lc_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1574,7 +1621,8 @@
       {
         "name": "只读-检查自定义字段",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkCustom/{{lc_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1585,7 +1633,8 @@
       {
         "name": "只读-查询规则应用对象信息",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleTargetInfo?ruleId={{lc_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1596,7 +1645,8 @@
       {
         "name": "只读-批量查询规则应用对象信息",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleTargetInfoByRuleIds",
         "request_body": [
           "{{lc_rule_id}}"
@@ -1609,7 +1659,8 @@
       {
         "name": "只读-调用getRuleViewList(单ruleId)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getRuleViewList",
         "request_body": {
           "removeApplied": false,
@@ -1630,7 +1681,8 @@
       {
         "name": "只读-检查规则名(编辑场景,排除自身)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkRuleName",
         "request_body": {
           "emailOption": "NoEmails",
@@ -1648,14 +1700,15 @@
       {
         "name": "变更规则负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeOwners",
         "request_body": {
           "ruleIds": [
             "{{lc_rule_id}}"
           ],
           "userName": "autoui_acount",
-          "userId": "{{user_id}}"
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1665,25 +1718,26 @@
       {
         "name": "编辑规则(frequency: Weekly -> Daily)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/editRule",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Daily",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1742,19 +1796,20 @@
       {
         "name": "追加应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/addAppliedObj",
         "request_body": {
-          "productLine": "{{platform}}",
-          "clientId": "{{client_id}}",
+          "productLine": "{{variables.platform}}",
+          "clientId": "{{variables.client_id}}",
           "ids": [
             "{{lc_rule_id}}"
           ],
           "ruleTarget": {
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1772,7 +1827,8 @@
       {
         "name": "更新规则应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/updateAppliedObj",
         "request_body": {
           "id": "{{lc_rule_id}}",
@@ -1784,8 +1840,8 @@
             "relationShipForAnd": false,
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1802,7 +1858,8 @@
       {
         "name": "更新规则自动化配置",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/updateAutomation",
         "request_body": {
           "id": "{{lc_rule_id}}",
@@ -1843,7 +1900,8 @@
       {
         "name": "暂停规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1859,7 +1917,8 @@
       {
         "name": "验证已暂停",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{lc_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1873,7 +1932,8 @@
       {
         "name": "恢复规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1889,7 +1949,8 @@
       {
         "name": "验证已恢复",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{lc_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -1903,7 +1964,8 @@
       {
         "name": "后置清理-彻底删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -1932,25 +1994,26 @@
       {
         "name": "创建临时规则A",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2008,25 +2071,26 @@
       {
         "name": "创建临时规则B",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2084,12 +2148,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_MultiView_A_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2097,7 +2162,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_MultiView_A_Cleanup"
@@ -2107,7 +2172,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -2125,12 +2190,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_MultiView_B_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2138,7 +2204,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_MultiView_B_Cleanup"
@@ -2148,7 +2214,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -2166,7 +2232,8 @@
       {
         "name": "调用 getRuleViewList(多ruleId)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getRuleViewList",
         "request_body": {
           "removeApplied": false,
@@ -2188,7 +2255,8 @@
       {
         "name": "后置清理-删除临时规则A",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2205,7 +2273,8 @@
       {
         "name": "后置清理-删除临时规则B",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2234,25 +2303,26 @@
       {
         "name": "创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{fixture_target_id}}",
-                "profileId": "{{profile_id}}"
+                "targetId": "{{variables.fixture_target_id}}",
+                "profileId": "{{variables.profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2310,12 +2380,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_AddAppliedObjSeparate_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2323,7 +2394,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_AddAppliedObjSeparate_Cleanup"
@@ -2333,7 +2404,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -2351,20 +2422,21 @@
       {
         "name": "按独立规则追加应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/addAppliedObjBySeparateRule",
         "request_body": [
           {
-            "productLine": "{{platform}}",
-            "clientId": "{{client_id}}",
+            "productLine": "{{variables.platform}}",
+            "clientId": "{{variables.client_id}}",
             "ids": [
               "{{sep_rule_id}}"
             ],
             "ruleTarget": {
               "targetInfo": [
                 {
-                  "targetId": "{{fixture_target_id}}",
-                  "profileId": "{{profile_id}}"
+                  "targetId": "{{variables.fixture_target_id}}",
+                  "profileId": "{{variables.profile_id}}"
                 }
               ],
               "nonnullFrequencyCap": false,
@@ -2383,7 +2455,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2412,30 +2485,31 @@
       {
         "name": "批量创建规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/bulkCreateRule",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
           "userName": "autoui_acount",
           "ruleRequests": [
             {
-              "clientId": "{{client_id}}",
+              "clientId": "{{variables.client_id}}",
               "emailSettings": [],
               "emailOption": "NoEmails",
               "timeZone": "America/Los_Angeles",
               "userName": "autoui_acount",
-              "userId": "{{user_id}}",
+              "userId": "{{variables.user_id}}",
               "frequency": "Weekly",
-              "productLine": "{{platform}}",
+              "productLine": "{{variables.platform}}",
               "mode": "Auto",
               "applyTarget": {
                 "relationShipForAnd": false,
-                "clientId": "{{client_id}}",
+                "clientId": "{{variables.client_id}}",
                 "targetInfo": [
                   {
-                    "targetId": "{{fixture_target_id}}",
-                    "profileId": "{{profile_id}}"
+                    "targetId": "{{variables.fixture_target_id}}",
+                    "profileId": "{{variables.profile_id}}"
                   }
                 ],
                 "nonnullFrequencyCap": false,
@@ -2495,12 +2569,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Chewy_BulkCreate_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2508,7 +2583,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "ruleNameList": [
             "TC_Chewy_BulkCreate_Cleanup"
@@ -2518,7 +2593,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -2536,7 +2611,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [

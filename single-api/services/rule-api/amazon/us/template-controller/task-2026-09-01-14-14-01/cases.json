@@ -12,7 +12,8 @@
       {
         "name": "查询分类列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
@@ -43,7 +44,8 @@
       {
         "name": "查询默认分类列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultCategory",
         "request_body": {
           "creator": [],
@@ -74,7 +76,8 @@
       {
         "name": "查询默认模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getDefaultTemplate",
         "request_body": {
           "creator": [],
@@ -105,7 +108,8 @@
       {
         "name": "查询模板所有者列表",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getOwners",
         "request_body": {},
         "extract_vars": {},
@@ -128,7 +132,8 @@
       {
         "name": "查询推荐模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getRecommendation",
         "request_body": {
           "creator": [],
@@ -156,7 +161,8 @@
       {
         "name": "按ruleType查询模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -178,7 +184,7 @@
   },
   {
     "name": "POST /template/getTemplateListFromDirectShare - 测试账号真实模板",
-    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。该接口近90天ES样本仅2条(amazon平台)。使用测试账号真实模板({{fixture_template_id}})构造该场景，验证接口基础可用性。amazon平台。",
+    "description": "单接口测试：POST /template/getTemplateListFromDirectShare。该接口近90天ES样本仅2条(amazon平台)。使用测试账号真实模板({{variables.fixture_template_id}})构造该场景，验证接口基础可用性。amazon平台。",
     "module": "template-controller",
     "granularity": "API",
     "since": "init",
@@ -189,14 +195,15 @@
       {
         "name": "查询DirectShare模板列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplateListFromDirectShare",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "sourceProductLine": "amazon",
           "targetProductLine": "amazon",
           "templateIds": [
-            "{{fixture_template_id}}"
+            "{{variables.fixture_template_id}}"
           ]
         },
         "extract_vars": {},
@@ -208,7 +215,7 @@
   },
   {
     "name": "模板生命周期(创建/编辑/收藏/移动/删除) - amazon",
-    "description": "单接口测试：串联 POST /template(创建) → POST /template/getTemplate(查询新建ID，创建接口本身不返回ID) → POST /template/editTemplate → POST /template/addFavorite → POST /template/moveTemplate → DELETE /template/{templateId}。创建一个临时测试模板，验证编辑/收藏/移动后，后置步骤删除，保证用例可重复执行。请求体结构取自ES真实样本。使用测试账号真实分类({{fixture_category_id}}/{{fixture_category_id_2}})。",
+    "description": "单接口测试：串联 POST /template(创建) → POST /template/getTemplate(查询新建ID，创建接口本身不返回ID) → POST /template/editTemplate → POST /template/addFavorite → POST /template/moveTemplate → DELETE /template/{templateId}。创建一个临时测试模板，验证编辑/收藏/移动后，后置步骤删除，保证用例可重复执行。请求体结构取自ES真实样本。使用测试账号真实分类({{variables.fixture_category_id}}/{{variables.fixture_category_id_2}})。",
     "module": "template-controller",
     "granularity": "API",
     "since": "init",
@@ -219,12 +226,13 @@
       {
         "name": "创建模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template",
         "request_body": {
           "templateName": "autotest_lifecycle_template",
           "description": "自动化测试用临时模板，用例结束后会被删除",
-          "categoryId": "{{fixture_category_id}}",
+          "categoryId": "{{variables.fixture_category_id}}",
           "ruleType": "Targeting",
           "isFavorite": false,
           "defaultTemplate": false,
@@ -268,7 +276,8 @@
       {
         "name": "查询新建模板的ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -289,13 +298,14 @@
       {
         "name": "编辑模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/editTemplate",
         "request_body": {
           "templateId": "{{created_template_id}}",
           "templateName": "autotest_lifecycle_template_edited",
           "description": "自动化测试用临时模板(已编辑)",
-          "categoryId": "{{fixture_category_id}}",
+          "categoryId": "{{variables.fixture_category_id}}",
           "ruleType": "Targeting",
           "isFavorite": false,
           "defaultTemplate": false,
@@ -339,7 +349,8 @@
       {
         "name": "收藏模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/addFavorite",
         "request_body": {
           "templateId": "{{created_template_id}}",
@@ -354,11 +365,12 @@
       {
         "name": "移动模板到另一分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/moveTemplate",
         "request_body": {
           "templateId": "{{created_template_id}}",
-          "categoryId": "{{fixture_category_id_2}}",
+          "categoryId": "{{variables.fixture_category_id_2}}",
           "defaultTemplate": false
         },
         "extract_vars": {},
@@ -369,7 +381,8 @@
       {
         "name": "清理-删除模板",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/{{created_template_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -392,7 +405,8 @@
       {
         "name": "创建分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category",
         "request_body": {
           "name": "autotest_lifecycle_category",
@@ -402,8 +416,8 @@
           "defaultCategory": false,
           "is1p": 0,
           "isChild": false,
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}"
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -413,7 +427,8 @@
       {
         "name": "查询新建分类的ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getCategory",
         "request_body": {
           "creator": [],
@@ -434,7 +449,8 @@
       {
         "name": "编辑分类",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/editCategory",
         "request_body": {
           "categoryId": "{{created_category_id}}",
@@ -445,8 +461,8 @@
           "defaultCategory": false,
           "is1p": 0,
           "isChild": false,
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}"
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -456,7 +472,8 @@
       {
         "name": "清理-删除分类",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/category/{{created_category_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -479,14 +496,15 @@
       {
         "name": "批量创建模板",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/bulk",
         "request_body": {
           "templateRequestList": [
             {
               "templateName": "autotest_bulk_template",
               "description": "自动化测试用临时模板(bulk创建)，用例结束后会被删除",
-              "categoryId": "{{fixture_category_id}}",
+              "categoryId": "{{variables.fixture_category_id}}",
               "ruleType": "Targeting",
               "isFavorite": false,
               "defaultTemplate": false,
@@ -535,7 +553,8 @@
       {
         "name": "查询bulk新建模板的ID",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/getTemplate",
         "request_body": {
           "creator": [],
@@ -556,7 +575,8 @@
       {
         "name": "清理-删除bulk创建的模板",
         "method": "DELETE",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/template/{{created_bulk_template_id}}",
         "request_body": {},
         "extract_vars": {},

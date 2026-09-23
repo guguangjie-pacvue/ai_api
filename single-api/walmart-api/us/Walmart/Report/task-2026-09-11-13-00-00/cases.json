@@ -12,13 +12,14 @@
       {
         "name": "调用 brands - 无Campaign过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/brands",
         "request_body": {
           "profileIds": [],
           "campaignIds": [],
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -43,15 +44,16 @@
       {
         "name": "调用 brands - 按Campaign过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/brands",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -76,7 +78,8 @@
       {
         "name": "调用 campaign - 按周(dim=2)+timeType=week",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign",
         "request_body": {
           "pageInfo": {
@@ -84,13 +87,13 @@
             "pageSize": "1000000"
           },
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "timeType": "week",
           "dim": 2,
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -115,7 +118,8 @@
       {
         "name": "调用 campaign - 按天(dim=1)+timeType=date",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign",
         "request_body": {
           "pageInfo": {
@@ -123,13 +127,13 @@
             "pageSize": "1000000"
           },
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "timeType": "date",
           "dim": 1,
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -154,16 +158,17 @@
       {
         "name": "调用 campaign - dim=0(汇总)+不传timeType",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "campaignIds": [],
           "dim": 0,
           "orderBy": "sales",
           "showPorfileName": true,
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}",
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}",
           "pageInfo": {
             "pageIndex": 1,
             "pageSize": 10,
@@ -193,7 +198,8 @@
       {
         "name": "调用 campaign - 按月(dim=3)+timeType=month",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign",
         "request_body": {
           "pageInfo": {
@@ -201,13 +207,13 @@
             "pageSize": "1000000"
           },
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "timeType": "month",
           "dim": 3,
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -232,7 +238,8 @@
       {
         "name": "调用 campaign - dim=0(汇总)+timeType=ytd",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign",
         "request_body": {
           "pageInfo": {
@@ -240,11 +247,11 @@
             "pageSize": "1000000"
           },
           "campaignIds": [],
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "timeType": "ytd",
           "dim": 0,
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -269,15 +276,16 @@
       {
         "name": "调用 list - 不传targetingTypes+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -289,7 +297,7 @@
           "tabGroupBy": "Campaign",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "date",
           "toMarket": "US",
@@ -339,15 +347,16 @@
       {
         "name": "调用 list - targetingTypes=[]+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -358,10 +367,10 @@
           "attrWindow": 2,
           "tabGroupBy": "Campaign",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupIds": [],
           "targetingTypes": [],
@@ -419,15 +428,16 @@
       {
         "name": "调用 list - targetingTypes=[]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -440,7 +450,7 @@
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -497,16 +507,17 @@
       {
         "name": "调用 list - targetingTypes=[]+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/list",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "attrWindow": 2,
           "tagCampaignLogic": 0,
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": "0",
           "pageInfo": {
             "pageIndex": 1,
@@ -517,7 +528,7 @@
           },
           "targetingTypes": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adgroupOperand": "Like",
           "toMarket": "US",
@@ -548,15 +559,16 @@
       {
         "name": "调用 list - 不传targetingTypes+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -567,14 +579,14 @@
           "attrWindow": 2,
           "tabGroupBy": "Campaign",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "adGroupStatus": [],
           "adGroupIds": [],
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "date",
           "noTagCampaigns": false,
@@ -625,15 +637,16 @@
       {
         "name": "调用 list - 不传targetingTypes+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -646,7 +659,7 @@
           "campaignTagIds": [],
           "tagCampaignLogic": 0,
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -699,15 +712,16 @@
       {
         "name": "调用 list - targetingTypes=[ids+]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -723,7 +737,7 @@
             1
           ],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "targetingTypes": [
             3,
@@ -733,7 +747,7 @@
             1
           ],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
@@ -788,11 +802,12 @@
       {
         "name": "调用 list - 按天(dim=1)+不传brands",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
@@ -806,7 +821,7 @@
           "kindType": "Campaign",
           "campaignTagIds": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignStatus": [],
           "targetingTypes": [],
@@ -836,7 +851,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -861,15 +876,16 @@
       {
         "name": "调用 list - 按天(dim=1)+brands=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -911,7 +927,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -936,11 +952,12 @@
       {
         "name": "调用 list - 按月(dim=3)+不传brands",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 3,
@@ -954,7 +971,7 @@
           "kindType": "Campaign",
           "campaignTagIds": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignStatus": [],
           "targetingTypes": [],
@@ -982,7 +999,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1007,15 +1024,16 @@
       {
         "name": "调用 list - 按月(dim=3)+brands=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 3,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -1024,7 +1042,7 @@
           ],
           "kindType": "Campaign",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignIds": [],
           "campaignStatus": [
@@ -1064,7 +1082,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1089,15 +1107,16 @@
       {
         "name": "调用 list - 按周(dim=2)+不传brands",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 2,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -1111,7 +1130,7 @@
           "automationStatuses": [],
           "tagCampaignLogic": 0,
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "CampaignTypeItems": [],
           "__dim__": "week",
@@ -1134,7 +1153,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1159,11 +1178,12 @@
       {
         "name": "调用 list - 按周(dim=2)+brands=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 2,
@@ -1220,7 +1240,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1245,11 +1265,12 @@
       {
         "name": "调用 list - dim=5+不传brands",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 5,
@@ -1263,7 +1284,7 @@
           "kindType": "Campaign",
           "campaignTagIds": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignStatus": [],
           "targetingTypes": [],
@@ -1293,7 +1314,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1318,15 +1339,16 @@
       {
         "name": "调用 list - dim=5+brands=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 5,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -1362,7 +1384,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1387,15 +1409,16 @@
       {
         "name": "调用 list - dim=4+不传brands",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/sub/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 4,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -1437,7 +1460,7 @@
             "orderBy": "spend desc"
           },
           "groupByLevel": 2,
-          "campaignId": "{{campaign_id}}"
+          "campaignId": "{{variables.campaign_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1462,15 +1485,16 @@
       {
         "name": "调用 total - 不传targetingTypes+status=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -1482,7 +1506,7 @@
           "tabGroupBy": "Campaign",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "date",
           "toMarket": "US",
@@ -1507,8 +1531,8 @@
             "ConvertMethodType": 0
           },
           "isExchange": 1,
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "clientId": 466
         },
         "extract_vars": {},
@@ -1534,16 +1558,17 @@
       {
         "name": "调用 total - targetingTypes=[]+不传status",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/total",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "attrWindow": 2,
           "tagCampaignLogic": 0,
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": "ytd",
           "pageInfo": {
             "pageIndex": 1,
@@ -1582,15 +1607,16 @@
       {
         "name": "调用 total - targetingTypes=[]+status=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -1600,12 +1626,12 @@
           "kindType": "Campaign",
           "attrWindow": 2,
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -1636,8 +1662,8 @@
             "ConvertMethodType": 0
           },
           "isExchange": 1,
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "clientId": 3165
         },
         "extract_vars": {},
@@ -1663,15 +1689,16 @@
       {
         "name": "调用 total - targetingTypes=[]+status=[ids+]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -1681,13 +1708,13 @@
           "kindType": "Campaign",
           "attrWindow": 2,
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignStatus": [
             1
           ],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignName": [],
           "tabGroupBy": "Campaign",
@@ -1750,15 +1777,16 @@
       {
         "name": "调用 total - targetingTypes=[ids+]+status=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -1771,7 +1799,7 @@
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -1803,8 +1831,8 @@
             "ConvertMethodType": 0
           },
           "isExchange": 1,
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "clientId": 3165
         },
         "extract_vars": {},
@@ -1830,15 +1858,16 @@
       {
         "name": "调用 total - targetingTypes=[ids+]+status=[ids+]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaign/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -1854,7 +1883,7 @@
             1
           ],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "targetingTypes": [
             1,
@@ -1864,7 +1893,7 @@
             1
           ],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
@@ -1894,8 +1923,8 @@
             "ConvertMethodType": 0
           },
           "isExchange": 1,
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "clientId": 1980
         },
         "extract_vars": {},
@@ -1921,13 +1950,14 @@
       {
         "name": "调用 list - 不传itemHealthFilters+不传bidFilters",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByBrand/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -1940,7 +1970,7 @@
           "tabGroupBy": "Brand",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -1984,15 +2014,16 @@
       {
         "name": "调用 list - itemHealthFilters=None+bidFilters=None",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByBrand/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2005,7 +2036,7 @@
           "tabGroupBy": "Brand",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2055,13 +2086,14 @@
       {
         "name": "调用 total - 不传itemHealthFilters+不传bidFilters",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByBrand/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2074,7 +2106,7 @@
           "tabGroupBy": "Brand",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2118,15 +2150,16 @@
       {
         "name": "调用 total - itemHealthFilters=None+bidFilters=None",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByBrand/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2139,7 +2172,7 @@
           "tabGroupBy": "Brand",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2189,13 +2222,14 @@
       {
         "name": "调用 campaignByBrandChart - 不传itemHealthFilters+不传bidFilters",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByBrandChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2208,7 +2242,7 @@
           "tabGroupBy": "Brand",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2245,15 +2279,16 @@
       {
         "name": "调用 campaignByBrandChart - itemHealthFilters=None+bidFilters=None",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByBrandChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2266,7 +2301,7 @@
           "tabGroupBy": "Brand",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2308,13 +2343,14 @@
       {
         "name": "调用 list - 不传itemHealthFilters+不传bidFilters",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByCategory/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2327,7 +2363,7 @@
           "tabGroupBy": "Category",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2371,15 +2407,16 @@
       {
         "name": "调用 list - itemHealthFilters=None+bidFilters=None",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByCategory/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2392,7 +2429,7 @@
           "tabGroupBy": "Category",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2442,13 +2479,14 @@
       {
         "name": "调用 total - 不传itemHealthFilters+不传bidFilters",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByCategory/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2461,7 +2499,7 @@
           "tabGroupBy": "Category",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2505,15 +2543,16 @@
       {
         "name": "调用 total - itemHealthFilters=None+bidFilters=None",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByCategory/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2526,7 +2565,7 @@
           "tabGroupBy": "Category",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2576,13 +2615,14 @@
       {
         "name": "调用 campaignByCategoryChart - 不传itemHealthFilters+不传bidFilters",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByCategoryChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2595,7 +2635,7 @@
           "tabGroupBy": "Category",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2632,15 +2672,16 @@
       {
         "name": "调用 campaignByCategoryChart - itemHealthFilters=None+bidFilters=None",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByCategoryChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2653,11 +2694,11 @@
           "tabGroupBy": "Category",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": true,
@@ -2697,15 +2738,16 @@
       {
         "name": "调用 list - customMetricLevels=[Pagetype]+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2718,7 +2760,7 @@
           "tabGroupBy": "PageType",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2768,13 +2810,14 @@
       {
         "name": "调用 list - 不传customMetricLevels+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2787,7 +2830,7 @@
           "tabGroupBy": "PageType",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -2831,15 +2874,16 @@
       {
         "name": "调用 list - customMetricLevels=[]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2857,7 +2901,7 @@
           "tagCampaignLogic": 0,
           "adGroupStatus": [],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
@@ -2908,15 +2952,16 @@
       {
         "name": "调用 list - customMetricLevels=[Pagetype]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -2930,7 +2975,7 @@
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -2987,15 +3032,16 @@
       {
         "name": "调用 list - customMetricLevels=[Pagetype]+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3007,14 +3053,14 @@
           "pageTypes": [],
           "tabGroupBy": "PageType",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "adGroupStatus": [],
           "adGroupIds": [],
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
@@ -3069,15 +3115,16 @@
       {
         "name": "调用 list - customMetricLevels=[]+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3086,7 +3133,7 @@
           ],
           "kindType": "PageType",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignIds": [],
           "campaignStatus": [],
@@ -3145,15 +3192,16 @@
       {
         "name": "调用 total - customMetricLevels=[Pagetype]+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3166,7 +3214,7 @@
           "tabGroupBy": "PageType",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -3216,13 +3264,14 @@
       {
         "name": "调用 total - 不传customMetricLevels+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3235,7 +3284,7 @@
           "tabGroupBy": "PageType",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -3279,15 +3328,16 @@
       {
         "name": "调用 total - customMetricLevels=[Pagetype]+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3299,14 +3349,14 @@
           "pageTypes": [],
           "tabGroupBy": "PageType",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "adGroupStatus": [],
           "adGroupIds": [],
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
@@ -3361,15 +3411,16 @@
       {
         "name": "调用 total - customMetricLevels=[Pagetype]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3383,7 +3434,7 @@
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -3440,15 +3491,16 @@
       {
         "name": "调用 total - customMetricLevels=[]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3466,7 +3518,7 @@
           "tagCampaignLogic": 0,
           "adGroupStatus": [],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
@@ -3517,11 +3569,12 @@
       {
         "name": "调用 total - customMetricLevels=[]+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "filters": [
             {
               "field": "spend",
@@ -3541,7 +3594,7 @@
           ],
           "kindType": "PageType",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignIds": [],
           "campaignStatus": [],
@@ -3567,8 +3620,8 @@
           ],
           "CampaignTypeItems": [],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "noTagCampaigns": false,
           "toMarket": "US",
           "status": [],
@@ -3615,11 +3668,12 @@
       {
         "name": "调用 total - customMetricLevels=[]+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageType/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
@@ -3636,8 +3690,8 @@
           "pageTypes": [],
           "CampaignTypeItems": [],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": true,
@@ -3683,15 +3737,16 @@
       {
         "name": "调用 campaignByPageTypeChart - customMetricLevels=[Pagetype]+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageTypeChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3704,7 +3759,7 @@
           "tabGroupBy": "PageType",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -3746,13 +3801,14 @@
       {
         "name": "调用 campaignByPageTypeChart - 不传customMetricLevels+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageTypeChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3765,7 +3821,7 @@
           "tabGroupBy": "PageType",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -3802,15 +3858,16 @@
       {
         "name": "调用 campaignByPageTypeChart - customMetricLevels=[Pagetype]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageTypeChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3824,7 +3881,7 @@
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -3873,15 +3930,16 @@
       {
         "name": "调用 campaignByPageTypeChart - customMetricLevels=[Pagetype]+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageTypeChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -3892,11 +3950,11 @@
           "attrWindow": 2,
           "pageTypes": [],
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -3945,11 +4003,12 @@
       {
         "name": "调用 campaignByPageTypeChart - customMetricLevels=[]+无CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageTypeChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
@@ -3963,7 +4022,7 @@
           "kindType": "PageType",
           "campaignTagIds": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignStatus": [],
           "targetingTypes": [],
@@ -4010,15 +4069,16 @@
       {
         "name": "调用 campaignByPageTypeChart - customMetricLevels=[]+按CampaignTag过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageTypeChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4027,10 +4087,10 @@
           ],
           "kindType": "PageType",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignStatus": [],
           "targetingTypes": [],
@@ -4080,11 +4140,12 @@
       {
         "name": "调用 campaignByPageTypeChart - customMetricLevels=[]+不传campaignTagIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPageTypeChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
@@ -4101,8 +4162,8 @@
           "pageTypes": [],
           "CampaignTypeItems": [],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": true,
@@ -4140,15 +4201,16 @@
       {
         "name": "调用 list - adGroupStatus=[]+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4163,11 +4225,11 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": false,
@@ -4215,13 +4277,14 @@
       {
         "name": "调用 list - 不传adGroupStatus+不传adGroupIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4234,7 +4297,7 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -4278,15 +4341,16 @@
       {
         "name": "调用 list - adGroupStatus=[ids+]+按AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4305,16 +4369,16 @@
             1
           ],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": false,
@@ -4362,15 +4426,16 @@
       {
         "name": "调用 list - adGroupStatus=[ids+]+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4392,11 +4457,11 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": false,
@@ -4444,15 +4509,16 @@
       {
         "name": "调用 list - 不传adGroupStatus+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4466,7 +4532,7 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -4516,15 +4582,16 @@
       {
         "name": "调用 list - adGroupStatus=[]+按AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/list",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4536,12 +4603,12 @@
           "platforms": [],
           "adGroupStatus": [],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -4591,15 +4658,16 @@
       {
         "name": "调用 total - adGroupStatus=[]+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4614,7 +4682,7 @@
           "adGroupStatus": [],
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -4664,13 +4732,14 @@
       {
         "name": "调用 total - 不传adGroupStatus+不传adGroupIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4683,7 +4752,7 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -4727,15 +4796,16 @@
       {
         "name": "调用 total - adGroupStatus=[ids+]+按AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4754,16 +4824,16 @@
             1
           ],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": true,
@@ -4811,15 +4881,16 @@
       {
         "name": "调用 total - adGroupStatus=[ids+]+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4841,11 +4912,11 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": true,
@@ -4893,15 +4964,16 @@
       {
         "name": "调用 total - 不传adGroupStatus+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatform/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4915,7 +4987,7 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -4965,15 +5037,16 @@
       {
         "name": "调用 campaignByPlatformChart - adGroupStatus=[]+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatformChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -4988,7 +5061,7 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -5030,13 +5103,14 @@
       {
         "name": "调用 campaignByPlatformChart - 不传adGroupStatus+不传adGroupIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatformChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5049,7 +5123,7 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -5086,15 +5160,16 @@
       {
         "name": "调用 campaignByPlatformChart - adGroupStatus=[ids+]+按AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatformChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5113,16 +5188,16 @@
             1
           ],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": true,
@@ -5162,15 +5237,16 @@
       {
         "name": "调用 campaignByPlatformChart - adGroupStatus=[ids+]+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatformChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5192,11 +5268,11 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [],
           "isExchangeRate": true,
@@ -5236,15 +5312,16 @@
       {
         "name": "调用 campaignByPlatformChart - 不传adGroupStatus+无AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatformChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5258,7 +5335,7 @@
           "tabGroupBy": "Platform",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "toMarket": "US",
@@ -5300,15 +5377,16 @@
       {
         "name": "调用 campaignByPlatformChart - adGroupStatus=[]+按AdGroup过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignByPlatformChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5331,15 +5409,15 @@
           "tagCampaignLogic": 0,
           "adGroupStatus": [],
           "adGroupIds": [
-            "{{adgroup_id}}"
+            "{{variables.adgroup_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
           "ItemIds": [],
           "CampaignTypeItems": [],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "toMarket": "US",
           "status": [
             1
@@ -5379,20 +5457,21 @@
       {
         "name": "调用 CampaignExplorerHourly - 不传campaignTagIds+不传isExplorer",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/CampaignExplorerHourly",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 6,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [],
           "kindType": "RealTime",
           "attrWindow": 2,
           "tabGroupBy": "RealTime",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "hour",
           "toMarket": "US",
@@ -5431,20 +5510,21 @@
       {
         "name": "调用 CampaignExplorerHourly - 不传campaignTagIds+isExplorer=true",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/CampaignExplorerHourly",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 6,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [],
           "kindType": "RealTime",
           "attrWindow": 2,
           "tabGroupBy": "RealTime",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "hour",
           "toMarket": "US",
@@ -5490,15 +5570,16 @@
       {
         "name": "调用 CampaignExplorerHourly - 无CampaignTag过滤+不传isExplorer",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/CampaignExplorerHourly",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 6,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [],
           "kindType": "RealTime",
           "attrWindow": 2,
@@ -5506,7 +5587,7 @@
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -5557,24 +5638,25 @@
       {
         "name": "调用 CampaignExplorerHourly - 按CampaignTag过滤+不传isExplorer",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/CampaignExplorerHourly",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 6,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [],
           "kindType": "RealTime",
           "attrWindow": 2,
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "tabGroupBy": "RealTime",
           "adGroupStatus": [],
@@ -5623,15 +5705,16 @@
       {
         "name": "调用 CampaignExplorerHourly - 无CampaignTag过滤+isExplorer=true",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/CampaignExplorerHourly",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 6,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [],
           "kindType": "RealTime",
           "attrWindow": 2,
@@ -5639,7 +5722,7 @@
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -5698,26 +5781,27 @@
       {
         "name": "调用 CampaignExplorerHourly - 按CampaignTag过滤+isExplorer=true",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/CampaignExplorerHourly",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 6,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [],
           "kindType": "RealTime",
           "attrWindow": 2,
           "tabGroupBy": "RealTime",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -5776,15 +5860,16 @@
       {
         "name": "调用 campaignForIds - 不传_taggingIds+不传_taggingSubIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignForIds",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": "ytd",
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5793,7 +5878,7 @@
           ],
           "kindType": "Campaign",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignIds": [],
           "campaignStatus": [
@@ -5809,8 +5894,8 @@
           "campaignNameOperand": "Like",
           "CampaignTypeItems": [],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "noTagCampaigns": false,
           "toMarket": "US",
           "status": [
@@ -5864,15 +5949,16 @@
       {
         "name": "调用 campaignForIds - _taggingIds=[]+_taggingSubIds=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignForIds",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": "ytd",
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5938,15 +6024,16 @@
       {
         "name": "调用 campaignForIds - _taggingIds=[ids+]+_taggingSubIds=[ids+]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignForIds",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": "ytd",
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -5955,7 +6042,7 @@
           ],
           "kindType": "Campaign",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "_taggingIds": [
             "13027"
@@ -5996,8 +6083,8 @@
           ],
           "CampaignTypeItems": [],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "noTagCampaigns": false,
           "toMarket": "US",
           "status": [],
@@ -6043,11 +6130,12 @@
       {
         "name": "调用 campaignForIds - _taggingIds=[ids+]+_taggingSubIds=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignForIds",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": "ytd",
@@ -6135,15 +6223,16 @@
       {
         "name": "调用 campaignForIds - _taggingIds=[]+_taggingSubIds=[ids+]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignForIds",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": "ytd",
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -6152,7 +6241,7 @@
           ],
           "kindType": "Campaign",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "campaignIds": [],
           "campaignStatus": [],
@@ -6214,11 +6303,12 @@
       {
         "name": "调用 campaignLandScape - 不传status+adGroupStatus=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignLandScape",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
@@ -6233,7 +6323,7 @@
           "campaignTagIds": [],
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -6286,15 +6376,16 @@
       {
         "name": "调用 campaignLandScape - status=[]+不传adGroupStatus",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignLandScape",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -6303,7 +6394,7 @@
           ],
           "kindType": "Default",
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignTagIds": [],
           "_taggingIds": [],
@@ -6322,8 +6413,8 @@
             }
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "status": [],
           "toMarket": "US",
           "adGroupKeywordText": 0,
@@ -6364,11 +6455,12 @@
       {
         "name": "调用 campaignLandScape - 不传status+不传adGroupStatus",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignLandScape",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
@@ -6381,7 +6473,7 @@
           ],
           "kindType": "Default",
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "keywordTagIds": [],
           "tabGroupBy": "AdGroup",
@@ -6429,15 +6521,16 @@
       {
         "name": "调用 campaignLandScape - status=[]+adGroupStatus=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignLandScape",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -6456,7 +6549,7 @@
           "tagKeywordLogic": 0,
           "keywordOperand": "Like",
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
           "status": [],
@@ -6500,15 +6593,16 @@
       {
         "name": "调用 campaignLandScape - status=[ids+]+adGroupStatus=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignLandScape",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -6529,11 +6623,11 @@
           "searchType": "0",
           "keywordOperand": "Like",
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "status": [
             1
           ],
@@ -6577,15 +6671,16 @@
       {
         "name": "调用 campaignLandScape - status=[ids+]+不传adGroupStatus",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignLandScape",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -6609,7 +6704,7 @@
           "__isStandard__": true,
           "includeZeroPerformance": false,
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignStatus": [],
           "targetingTypes": [],
@@ -6617,8 +6712,8 @@
           "campaignName": [],
           "adGroupIds": [],
           "__dim__": "ytd",
-          "startDateCompared": "{{date_cmp_start}}",
-          "endDateCompared": "{{date_cmp_end}}",
+          "startDateCompared": "{{variables.date_cmp_start}}",
+          "endDateCompared": "{{variables.date_cmp_end}}",
           "status": [
             1
           ],
@@ -6660,15 +6755,16 @@
       {
         "name": "调用 campaignLandScape - status=[]+adGroupStatus=[ids+]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/campaignLandScape",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -6689,7 +6785,7 @@
           "searchType": "0",
           "keywordOperand": "Like",
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "targetingTypes": [
@@ -6697,7 +6793,7 @@
           ],
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "campaignName": [],
           "campaignNameOperand": "Like",
@@ -6744,13 +6840,14 @@
       {
         "name": "调用 categories - 无Campaign过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/categories",
         "request_body": {
           "profileIds": [],
           "campaignIds": [],
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -6775,15 +6872,16 @@
       {
         "name": "调用 categories - 按Campaign过滤",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/categories",
         "request_body": {
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
-          "start": "{{date_start_mdy}}",
-          "end": "{{date_end_mdy}}"
+          "start": "{{variables.date_start_mdy}}",
+          "end": "{{variables.date_end_mdy}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -6808,15 +6906,16 @@
       {
         "name": "调用 chart - 不传targetingTypes+customMetricIds=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/chart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -6828,7 +6927,7 @@
           "tabGroupBy": "Campaign",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "date",
           "toMarket": "US",
@@ -6870,7 +6969,8 @@
       {
         "name": "调用 chart - targetingTypes=[]+不传customMetricIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/chart",
         "request_body": {
           "campaignStatus": [],
@@ -6878,9 +6978,9 @@
           "tagIds": [],
           "tagLogicGate": 0,
           "campaignTagIds": [],
-          "profileIds": "{{profile_id}}",
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "profileIds": "{{variables.profile_id}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "ProducttagLogicGate": 0,
           "productStatus": [],
           "productTagIds": [],
@@ -6912,15 +7012,16 @@
       {
         "name": "调用 chart - targetingTypes=[]+customMetricIds=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/chart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -6930,12 +7031,12 @@
           "kindType": "Campaign",
           "attrWindow": 2,
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -6985,17 +7086,18 @@
       {
         "name": "调用 chart - targetingTypes=[ids+]+不传customMetricIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/chart",
         "request_body": {
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "attrWindow": 2,
           "tagCampaignLogic": 0,
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": "0",
           "pageInfo": {
             "pageIndex": 1,
@@ -7042,13 +7144,14 @@
       {
         "name": "调用 chart - 不传targetingTypes+不传customMetricIds",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/chart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -7060,7 +7163,7 @@
           "tabGroupBy": "Campaign",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "date",
           "toMarket": "US",
@@ -7097,15 +7200,16 @@
       {
         "name": "调用 chart - targetingTypes=[ids+]+customMetricIds=[]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/chart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -7115,12 +7219,12 @@
           "kindType": "Campaign",
           "attrWindow": 2,
           "campaignTagIds": [
-            "{{campaign_tag_id}}"
+            "{{variables.campaign_tag_id}}"
           ],
           "tagCampaignLogic": 0,
           "campaignStatus": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "adGroupStatus": [],
           "adGroupIds": [],
@@ -7173,15 +7277,16 @@
       {
         "name": "调用 chart - 不传targetingTypes+customMetricIds=[ids+]",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/chart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "bidFilters": null,
           "itemHealthFilters": null,
           "dim": 1,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "dateTime",
@@ -7193,7 +7298,7 @@
           "tabGroupBy": "Campaign",
           "CampaignTypeItems": [],
           "campaignIds": [
-            "{{campaign_id}}"
+            "{{variables.campaign_id}}"
           ],
           "__dim__": "date",
           "toMarket": "US",
@@ -7237,13 +7342,14 @@
       {
         "name": "调用 total - 默认调用",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/realTimeCampaign/total",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -7304,13 +7410,14 @@
       {
         "name": "调用 realTimeCampaignChart - 默认调用",
         "method": "POST",
-        "base_url": "{{WALMARTBASEURL}}",
+        "base_url": "{{base_urls.WALMARTBASEURL}}",
+        "headers": "{{headers}}",
         "path": "Report/realTimeCampaignChart",
         "request_body": {
-          "start": "{{date_start}}",
-          "end": "{{date_end}}",
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
           "dim": 0,
-          "profileIds": "{{profile_id}}",
+          "profileIds": "{{variables.profile_id}}",
           "multiSortList": [
             {
               "sortData": "spend",
@@ -7364,7 +7471,8 @@
       {
         "name": "调用 data - reportType=QueryReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "QueryReport",
@@ -7392,8 +7500,8 @@
             "roas14d",
             "cvr14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "timeSegmentation": "Daily",
             "currencyExchange": "US"
@@ -7427,22 +7535,23 @@
       {
         "name": "调用 data - reportType=ProfileReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "ProfileReport",
           "columns": [
             "onlineAdSKUOrders14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "channel": "All",
             "timeSegmentation": "Summary",
             "weekStartOn": "Sunday"
           },
           "filters": {
-            "profileIds": "{{profile_id}}"
+            "profileIds": "{{variables.profile_id}}"
           },
           "userId": 18183,
           "clientId": 3186,
@@ -7471,7 +7580,8 @@
       {
         "name": "调用 data - reportType=ItemReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "ItemReport",
@@ -7487,14 +7597,14 @@
             "totalAdSKUSales14d",
             "totalAdSKUSales30d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "channel": "Search",
             "timeSegmentation": "Monthly"
           },
           "filters": {
-            "profileIds": "{{profile_id}}"
+            "profileIds": "{{variables.profile_id}}"
           },
           "showLastPeriod": false,
           "userId": 5688,
@@ -7524,7 +7634,8 @@
       {
         "name": "调用 data - reportType=CampaignReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "CampaignReport",
@@ -7557,8 +7668,8 @@
             "ntbOrders14d",
             "ntbUnits14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "timeSegmentation": "Daily",
             "currencyExchange": "US"
@@ -7593,7 +7704,8 @@
       {
         "name": "调用 data - reportType=PurchasedItemReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "PurchasedItemReport",
@@ -7609,8 +7721,8 @@
             "adGroupName",
             "adGroupId"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "timeSegmentation": "Daily",
             "currencyExchange": "US"
@@ -7644,7 +7756,8 @@
       {
         "name": "调用 data - reportType=PlacementReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "PlacementReport",
@@ -7671,8 +7784,8 @@
             "totalACOS14d",
             "totalROAS14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "timeSegmentation": "Daily",
             "currencyExchange": "US"
@@ -7707,7 +7820,8 @@
       {
         "name": "调用 data - reportType=PlatformReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "PlatformReport",
@@ -7734,8 +7848,8 @@
             "totalACOS14d",
             "totalROAS14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "timeSegmentation": "Daily",
             "currencyExchange": "US"
@@ -7769,7 +7883,8 @@
       {
         "name": "调用 data - reportType=PageTypeReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "PageTypeReport",
@@ -7796,8 +7911,8 @@
             "totalACOS14d",
             "totalROAS14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "timeSegmentation": "Daily",
             "currencyExchange": "US"
@@ -7831,7 +7946,8 @@
       {
         "name": "调用 data - reportType=KeywordReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "KeywordReport",
@@ -7861,8 +7977,8 @@
             "totalACOS14d",
             "totalROAS14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "timeSegmentation": "Daily",
             "currencyExchange": "US"
@@ -7896,7 +8012,8 @@
       {
         "name": "调用 data - reportType=CampaignOutOfDailyBudgetReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "CampaignOutOfDailyBudgetReport",
@@ -7908,14 +8025,14 @@
             "spend",
             "sales14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "dateFormat": "MMDDYYYY",
             "timeSegmentation": "Daily"
           },
           "filters": {
-            "profileIds": "{{profile_id}}"
+            "profileIds": "{{variables.profile_id}}"
           },
           "userId": 32327,
           "clientId": 3925,
@@ -7944,7 +8061,8 @@
       {
         "name": "调用 data - reportType=TagReport",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "/report-mcp/data",
         "request_body": {
           "reportType": "TagReport",
@@ -7962,17 +8080,17 @@
             "totalROAS14d",
             "ntbSalesPercent14d"
           ],
-          "startDate": "{{date_start}}",
-          "endDate": "{{date_end}}",
+          "startDate": "{{variables.date_start}}",
+          "endDate": "{{variables.date_end}}",
           "configs": {
             "channel": "All",
             "tagType": "CampaignTag",
             "timeSegmentation": "Monthly"
           },
           "filters": {
-            "profileIds": "{{profile_id}}",
+            "profileIds": "{{variables.profile_id}}",
             "campaignTagIds": [
-              "{{campaign_tag_id}}"
+              "{{variables.campaign_tag_id}}"
             ]
           },
           "showLastPeriod": true,
@@ -8003,7 +8121,8 @@
       {
         "name": "调用 schema - reportType=ProfileReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=ProfileReport",
         "request_body": {},
         "extract_vars": {},
@@ -8029,7 +8148,8 @@
       {
         "name": "调用 schema - reportType=QueryReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=QueryReport",
         "request_body": {},
         "extract_vars": {},
@@ -8055,7 +8175,8 @@
       {
         "name": "调用 schema - reportType=ItemReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=ItemReport",
         "request_body": {},
         "extract_vars": {},
@@ -8081,7 +8202,8 @@
       {
         "name": "调用 schema - reportType=CampaignReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=CampaignReport",
         "request_body": {},
         "extract_vars": {},
@@ -8107,7 +8229,8 @@
       {
         "name": "调用 schema - reportType=CampaignOutOfDailyBudgetReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=CampaignOutOfDailyBudgetReport",
         "request_body": {},
         "extract_vars": {},
@@ -8133,7 +8256,8 @@
       {
         "name": "调用 schema - reportType=PlacementReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=PlacementReport",
         "request_body": {},
         "extract_vars": {},
@@ -8159,7 +8283,8 @@
       {
         "name": "调用 schema - reportType=PurchasedItemReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=PurchasedItemReport",
         "request_body": {},
         "extract_vars": {},
@@ -8185,7 +8310,8 @@
       {
         "name": "调用 schema - reportType=PlatformReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=PlatformReport",
         "request_body": {},
         "extract_vars": {},
@@ -8211,7 +8337,8 @@
       {
         "name": "调用 schema - reportType=KeywordReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=KeywordReport",
         "request_body": {},
         "extract_vars": {},
@@ -8237,7 +8364,8 @@
       {
         "name": "调用 schema - reportType=PageTypeReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=PageTypeReport",
         "request_body": {},
         "extract_vars": {},
@@ -8263,7 +8391,8 @@
       {
         "name": "调用 schema - reportType=TagReport",
         "method": "GET",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/schema?reportType=TagReport",
         "request_body": {},
         "extract_vars": {},
@@ -8289,7 +8418,8 @@
       {
         "name": "调用 materials - materialType=Profile",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/materials",
         "request_body": [
           {
@@ -8322,7 +8452,8 @@
       {
         "name": "调用 materials - materialType=profile",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/materials",
         "request_body": [
           {
@@ -8355,7 +8486,8 @@
       {
         "name": "调用 materials - materialType=CampaignTag",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/materials",
         "request_body": [
           {
@@ -8388,7 +8520,8 @@
       {
         "name": "调用 materials - materialType=Campaign",
         "method": "POST",
-        "base_url": "{{WALMARTROOTURL}}",
+        "base_url": "{{base_urls.WALMARTROOTURL}}",
+        "headers": "{{headers}}",
         "path": "report-mcp/materials",
         "request_body": [
           {

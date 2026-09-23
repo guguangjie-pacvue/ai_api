@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /definition - 创建Product类型规则(kroger账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=Product占比约40.0%(6/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约40.0%(6/15)。",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=Product占比约40.0%(6/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{variables.kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约40.0%(6/15)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -12,25 +12,26 @@
       {
         "name": "创建kroger Product规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -88,12 +89,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Kroger_CreateProduct_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -101,7 +103,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [
             "TC_Kroger_CreateProduct_Cleanup"
@@ -111,7 +113,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -129,7 +131,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -146,7 +149,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_product_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -161,7 +165,7 @@
   },
   {
     "name": "POST /definition - 创建AdGroup类型规则(kroger账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=AdGroup占比约33.3%(5/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约33.3%(5/15)。",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=AdGroup占比约33.3%(5/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{variables.kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约33.3%(5/15)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -172,25 +176,26 @@
       {
         "name": "创建kroger AdGroup规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -248,12 +253,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Kroger_CreateAdGroup_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -261,7 +267,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [
             "TC_Kroger_CreateAdGroup_Cleanup"
@@ -271,7 +277,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -289,7 +295,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -306,7 +313,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_adgroup_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -321,7 +329,7 @@
   },
   {
     "name": "POST /definition - 创建Keyword类型规则(kroger账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=Keyword占比约20.0%(3/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约20.0%(3/15)。",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=Keyword占比约20.0%(3/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{variables.kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约20.0%(3/15)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -332,25 +340,26 @@
       {
         "name": "创建kroger Keyword规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -408,12 +417,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Kroger_CreateKeyword_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -421,7 +431,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [
             "TC_Kroger_CreateKeyword_Cleanup"
@@ -431,7 +441,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -449,7 +459,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -466,7 +477,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_keyword_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -481,7 +493,7 @@
   },
   {
     "name": "POST /definition - 创建Campaign类型规则(kroger账号真实存量分布,含后置清理,可重复)",
-    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=Campaign占比约6.7%(1/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约6.7%(1/15)。",
+    "description": "单接口测试：POST /definition。该接口body含productLine字段可归因，按body.productLine.keyword=krogerv3过滤近90天ES真实样本共15条(样本量小于10已适度放宽窗口，样本较少场景覆盖可能不全，已在对话中说明)：ruleType=Campaign占比约6.7%(1/15)。写操作只能安全落在QA账号(client_id=62)自建数据上，故复用kroger账号自身真实profile({{variables.kroger_real_profile_id}})构造targetInfo，创建后查询提取ruleId并立即归档清理(isPaused+isDelete)，保证用例可重复执行。500条随机样本中占比约6.7%(1/15)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -492,25 +504,26 @@
       {
         "name": "创建kroger Campaign规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -568,12 +581,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Kroger_CreateCampaign_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -581,7 +595,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [
             "TC_Kroger_CreateCampaign_Cleanup"
@@ -591,7 +605,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -609,7 +623,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -626,7 +641,8 @@
       {
         "name": "后置验证-确认规则已Paused",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{created_campaign_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -652,8 +668,9 @@
       {
         "name": "GET 定义详情",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/{{real_rule_id_auto}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/{{variables.real_rule_id_auto}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -678,8 +695,9 @@
       {
         "name": "检查自定义字段",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/checkCustom/{{real_rule_id_auto}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/checkCustom/{{variables.real_rule_id_auto}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -701,8 +719,9 @@
       {
         "name": "查询规则应用对象信息",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/getRuleTargetInfo?ruleId={{real_rule_id_auto}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/getRuleTargetInfo?ruleId={{variables.real_rule_id_auto}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -724,10 +743,11 @@
       {
         "name": "批量查询规则应用对象信息",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleTargetInfoByRuleIds",
         "request_body": [
-          "{{real_rule_id_auto}}"
+          "{{variables.real_rule_id_auto}}"
         ],
         "extract_vars": {},
         "expected_response": {
@@ -749,13 +769,14 @@
       {
         "name": "调用 getRuleViewList(单ruleId)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getRuleViewList",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ruleIds": [
-            "{{real_rule_id_auto}}"
+            "{{variables.real_rule_id_auto}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -782,14 +803,15 @@
       {
         "name": "调用 getRuleViewList(多ruleId)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/getRuleViewList",
         "request_body": {
           "removeApplied": false,
           "ruleIds": [
-            "{{real_rule_id_auto}}",
-            "{{real_rule_id_manual}}",
-            "{{real_rule_id_auto_2}}"
+            "{{variables.real_rule_id_auto}}",
+            "{{variables.real_rule_id_manual}}",
+            "{{variables.real_rule_id_auto_2}}"
           ],
           "download": false,
           "timeZone": "America/Los_Angeles",
@@ -806,7 +828,7 @@
   },
   {
     "name": "POST /definition/getRule - Auto模式列表浏览(kroger账号真实存量)",
-    "description": "单接口测试：POST /definition/getRule。该接口请求体无productLine字段无法归因，采用全平台流量结构+kroger测试账号自身profile({{kroger_real_profile_id}})作为过滤条件。kroger账号当前3条真实存量规则中mode=Auto占比约67%(2/3条本账号存量规则)。",
+    "description": "单接口测试：POST /definition/getRule。该接口请求体无productLine字段无法归因，采用全平台流量结构+kroger测试账号自身profile({{variables.kroger_real_profile_id}})作为过滤条件。kroger账号当前3条真实存量规则中mode=Auto占比约67%(2/3条本账号存量规则)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -817,7 +839,8 @@
       {
         "name": "调用 getRule(Auto)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
@@ -831,7 +854,7 @@
           "timeZone": "America/Los_Angeles",
           "profileIds": [],
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [],
           "frequency": [],
@@ -855,7 +878,7 @@
   },
   {
     "name": "POST /definition/getRule - Manual模式列表浏览(kroger账号真实存量)",
-    "description": "单接口测试：POST /definition/getRule。该接口请求体无productLine字段无法归因，采用全平台流量结构+kroger测试账号自身profile({{kroger_real_profile_id}})作为过滤条件。kroger账号当前3条真实存量规则中mode=Manual占比约33%(1/3条本账号存量规则)。",
+    "description": "单接口测试：POST /definition/getRule。该接口请求体无productLine字段无法归因，采用全平台流量结构+kroger测试账号自身profile({{variables.kroger_real_profile_id}})作为过滤条件。kroger账号当前3条真实存量规则中mode=Manual占比约33%(1/3条本账号存量规则)。",
     "module": "definition-controller",
     "granularity": "API",
     "since": "init",
@@ -866,7 +889,8 @@
       {
         "name": "调用 getRule(Manual)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
@@ -880,7 +904,7 @@
           "timeZone": "America/Los_Angeles",
           "profileIds": [],
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [],
           "frequency": [],
@@ -915,7 +939,8 @@
       {
         "name": "调用 getOwners(Auto)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -949,7 +974,8 @@
       {
         "name": "调用 getOwners(Manual)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -983,7 +1009,8 @@
       {
         "name": "调用 getOwners(AutoCommerce)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getOwners",
         "request_body": {
           "removeApplied": false,
@@ -1017,13 +1044,14 @@
       {
         "name": "调用 getApplyRule",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getApplyRule",
         "request_body": {
           "removeApplied": false,
           "download": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "timeZone": "America/Los_Angeles",
           "ignore": false,
@@ -1053,10 +1081,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Daily)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Daily",
@@ -1084,10 +1113,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Every3days)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Every3days",
@@ -1114,10 +1144,11 @@
       {
         "name": "调用 calculateNextExecutionTime(Weekly)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/calculateNextExecutionTime",
         "request_body": {
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "emailOption": "NoEmails",
           "timeZone": "America/New_York",
           "frequency": "Weekly",
@@ -1145,7 +1176,8 @@
       {
         "name": "检查规则名(新建场景)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkRuleName",
         "request_body": {
           "emailOption": "NoEmails",
@@ -1174,7 +1206,8 @@
       {
         "name": "检查规则名(编辑场景,排除自身)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkRuleName",
         "request_body": {
           "emailOption": "NoEmails",
@@ -1182,7 +1215,7 @@
           "ruleNames": [
             "autoTest_Adgroup"
           ],
-          "id": "{{real_rule_id_auto}}"
+          "id": "{{variables.real_rule_id_auto}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1204,7 +1237,8 @@
       {
         "name": "调用 commerceRuleClient",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleClient",
         "request_body": {},
         "extract_vars": {},
@@ -1230,7 +1264,8 @@
       {
         "name": "调用 commerceRuleReport(By Client)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleReport",
         "request_body": {
           "removeApplied": false,
@@ -1268,7 +1303,8 @@
       {
         "name": "调用 commerceRuleReport(By Rule Name)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/commerceRuleReport",
         "request_body": {
           "removeApplied": false,
@@ -1305,13 +1341,14 @@
       {
         "name": "导出规则列表(Auto)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/export",
         "request_body": {
           "mode": "Auto",
           "download": true,
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "language": "EN",
           "timeZone": "America/Los_Angeles",
@@ -1339,7 +1376,8 @@
       {
         "name": "导出Commerce客户维度报表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/export/commerceRuleReport",
         "request_body": {
           "commerceRuleReportGroupBy": "By Client",
@@ -1371,7 +1409,8 @@
       {
         "name": "查询profile列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getProfile",
         "request_body": {},
         "extract_vars": {},
@@ -1397,11 +1436,12 @@
       {
         "name": "查询target列表",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getTarget",
         "request_body": {
           "profileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "targetLevel": "Campaign"
         },
@@ -1425,10 +1465,11 @@
       {
         "name": "查询已关联规则的campaign",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getCampaignWithRule",
         "request_body": [
-          "{{kroger_real_profile_id}}"
+          "{{variables.kroger_real_profile_id}}"
         ],
         "extract_vars": {},
         "expected_response": {
@@ -1450,11 +1491,12 @@
       {
         "name": "按campaignId查询规则信息",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRuleInfoByCampaignId",
         "request_body": {
-          "campaignId": "{{kroger_real_target_id}}",
-          "profileId": "{{kroger_real_profile_id}}"
+          "campaignId": "{{variables.kroger_real_target_id}}",
+          "profileId": "{{variables.kroger_real_profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1476,14 +1518,15 @@
       {
         "name": "查询ASIN关联规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAsinRelatedRule",
         "request_body": [
           {
             "itemIds": [
-              "{{kroger_real_target_id}}"
+              "{{variables.kroger_real_target_id}}"
             ],
-            "asinIdentity": "{{kroger_real_target_id}}"
+            "asinIdentity": "{{variables.kroger_real_target_id}}"
           }
         ],
         "extract_vars": {},
@@ -1506,11 +1549,12 @@
       {
         "name": "查询Auto Refill Tags",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTags",
         "request_body": {
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -1533,11 +1577,12 @@
       {
         "name": "查询Auto Refill Targets",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTargets",
         "request_body": {
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -1560,11 +1605,12 @@
       {
         "name": "查询Auto Refill TagCampaigns",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleApplyTagCampaigns",
         "request_body": {
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ]
         },
         "extract_vars": {},
@@ -1587,10 +1633,11 @@
       {
         "name": "校验Auto Refill目标",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/checkAutoRefillRule",
         "request_body": {
-          "profileId": "{{kroger_real_profile_id}}"
+          "profileId": "{{variables.kroger_real_profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1612,7 +1659,8 @@
       {
         "name": "调用 getAutoRefillRuleProfileIds",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getAutoRefillRuleProfileIds",
         "request_body": {},
         "extract_vars": {},
@@ -1638,7 +1686,8 @@
       {
         "name": "调用 hasClickHitMode",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/hasClickHitMode",
         "request_body": {},
         "extract_vars": {},
@@ -1664,7 +1713,8 @@
       {
         "name": "调用 transferableOwnerList",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/transferableOwnerList",
         "request_body": {},
         "extract_vars": {},
@@ -1690,8 +1740,9 @@
       {
         "name": "查询Adtomic规则默认设置",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
-        "path": "/definition/adtomicRules/settings/{{kroger_real_profile_id}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/definition/adtomicRules/settings/{{variables.kroger_real_profile_id}}",
         "request_body": {},
         "extract_vars": {},
         "expected_response": {
@@ -1713,10 +1764,11 @@
       {
         "name": "保存Adtomic规则默认设置",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/adtomicRules/settings",
         "request_body": {
-          "profileId": "{{kroger_real_profile_id}}"
+          "profileId": "{{variables.kroger_real_profile_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1738,25 +1790,26 @@
       {
         "name": "创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1814,12 +1867,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Kroger_FullLifecycle_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -1827,7 +1881,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [
             "TC_Kroger_FullLifecycle_Cleanup"
@@ -1837,7 +1891,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -1855,14 +1909,15 @@
       {
         "name": "变更规则负责人",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeOwners",
         "request_body": {
           "ruleIds": [
             "{{lc_rule_id}}"
           ],
           "userName": "autoui_acount",
-          "userId": "{{user_id}}"
+          "userId": "{{variables.user_id}}"
         },
         "extract_vars": {},
         "expected_response": {
@@ -1872,25 +1927,26 @@
       {
         "name": "编辑规则(frequency: Weekly -> Daily)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/editRule",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Daily",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1949,19 +2005,20 @@
       {
         "name": "追加应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/addAppliedObj",
         "request_body": {
-          "productLine": "{{platform}}",
-          "clientId": "{{client_id}}",
+          "productLine": "{{variables.platform}}",
+          "clientId": "{{variables.client_id}}",
           "ids": [
             "{{lc_rule_id}}"
           ],
           "ruleTarget": {
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -1979,7 +2036,8 @@
       {
         "name": "更新规则应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/updateAppliedObj",
         "request_body": {
           "id": "{{lc_rule_id}}",
@@ -1991,8 +2049,8 @@
             "relationShipForAnd": false,
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2009,7 +2067,8 @@
       {
         "name": "更新规则自动化配置",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/updateAutomation",
         "request_body": {
           "id": "{{lc_rule_id}}",
@@ -2050,7 +2109,8 @@
       {
         "name": "暂停规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2066,7 +2126,8 @@
       {
         "name": "验证已暂停",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{lc_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2080,7 +2141,8 @@
       {
         "name": "恢复规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2096,7 +2158,8 @@
       {
         "name": "验证已恢复",
         "method": "GET",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/{{lc_rule_id}}",
         "request_body": {},
         "extract_vars": {},
@@ -2110,7 +2173,8 @@
       {
         "name": "后置清理-彻底删除临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2139,25 +2203,26 @@
       {
         "name": "创建临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "emailSettings": [],
           "emailOption": "NoEmails",
           "timeZone": "America/Los_Angeles",
           "userName": "autoui_acount",
-          "userId": "{{user_id}}",
+          "userId": "{{variables.user_id}}",
           "frequency": "Weekly",
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "mode": "Auto",
           "applyTarget": {
             "relationShipForAnd": false,
-            "clientId": "{{client_id}}",
+            "clientId": "{{variables.client_id}}",
             "targetInfo": [
               {
-                "targetId": "{{kroger_real_target_id}}",
-                "profileId": "{{kroger_real_profile_id}}"
+                "targetId": "{{variables.kroger_real_target_id}}",
+                "profileId": "{{variables.kroger_real_profile_id}}"
               }
             ],
             "nonnullFrequencyCap": false,
@@ -2215,12 +2280,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Kroger_AddAppliedObjSeparate_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2228,7 +2294,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [
             "TC_Kroger_AddAppliedObjSeparate_Cleanup"
@@ -2238,7 +2304,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -2256,20 +2322,21 @@
       {
         "name": "按独立规则追加应用对象",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/addAppliedObjBySeparateRule",
         "request_body": [
           {
-            "productLine": "{{platform}}",
-            "clientId": "{{client_id}}",
+            "productLine": "{{variables.platform}}",
+            "clientId": "{{variables.client_id}}",
             "ids": [
               "{{sep_rule_id}}"
             ],
             "ruleTarget": {
               "targetInfo": [
                 {
-                  "targetId": "{{kroger_real_target_id}}",
-                  "profileId": "{{kroger_real_profile_id}}"
+                  "targetId": "{{variables.kroger_real_target_id}}",
+                  "profileId": "{{variables.kroger_real_profile_id}}"
                 }
               ],
               "nonnullFrequencyCap": false,
@@ -2288,7 +2355,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [
@@ -2317,30 +2385,31 @@
       {
         "name": "批量创建规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/bulkCreateRule",
         "request_body": {
-          "clientId": "{{client_id}}",
-          "userId": "{{user_id}}",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
           "userName": "autoui_acount",
           "ruleRequests": [
             {
-              "clientId": "{{client_id}}",
+              "clientId": "{{variables.client_id}}",
               "emailSettings": [],
               "emailOption": "NoEmails",
               "timeZone": "America/Los_Angeles",
               "userName": "autoui_acount",
-              "userId": "{{user_id}}",
+              "userId": "{{variables.user_id}}",
               "frequency": "Weekly",
-              "productLine": "{{platform}}",
+              "productLine": "{{variables.platform}}",
               "mode": "Auto",
               "applyTarget": {
                 "relationShipForAnd": false,
-                "clientId": "{{client_id}}",
+                "clientId": "{{variables.client_id}}",
                 "targetInfo": [
                   {
-                    "targetId": "{{kroger_real_target_id}}",
-                    "profileId": "{{kroger_real_profile_id}}"
+                    "targetId": "{{variables.kroger_real_target_id}}",
+                    "profileId": "{{variables.kroger_real_profile_id}}"
                   }
                 ],
                 "nonnullFrequencyCap": false,
@@ -2400,12 +2469,13 @@
       {
         "name": "前置-按名称查询提取ruleId(TC_Kroger_BulkCreate_Cleanup)",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/getRule",
         "request_body": {
           "removeApplied": false,
           "ownerIds": [
-            "{{user_id}}"
+            "{{variables.user_id}}"
           ],
           "pageInfo": {
             "pageIndex": 1,
@@ -2413,7 +2483,7 @@
           },
           "timeZone": "America/Los_Angeles",
           "managedProfileIds": [
-            "{{kroger_real_profile_id}}"
+            "{{variables.kroger_real_profile_id}}"
           ],
           "ruleNameList": [
             "TC_Kroger_BulkCreate_Cleanup"
@@ -2423,7 +2493,7 @@
           "mode": "Auto",
           "download": false,
           "ruleType": [],
-          "productLine": "{{platform}}",
+          "productLine": "{{variables.platform}}",
           "ignore": false,
           "currency": "$",
           "status": []
@@ -2441,7 +2511,8 @@
       {
         "name": "后置清理-删除(isDelete+isPaused)临时规则",
         "method": "POST",
-        "base_url": "{{RULEBASEURL}}",
+        "base_url": "{{base_urls.RULEBASEURL}}",
+        "headers": "{{headers}}",
         "path": "/definition/changeStatus",
         "request_body": {
           "ruleIds": [

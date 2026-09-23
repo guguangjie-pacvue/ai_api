@@ -1,7 +1,7 @@
 [
   {
     "name": "POST /bulk/verify/apply - 校验单个campaign是否可应用dayparting(不提交)",
-    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否可应用dayparting(不提交)。占比约83.3%（10次，90天内真实流量[排除clientId 3186，mercado平台该索引100%流量来自本账号clientId=62，已用query_es.py --client-id-exclude 3186独立核实]共12条）。identity字段(campaignId/profileId)已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}，未使用ES样本中其他任何硬编码具体值。",
+    "description": "单接口测试：POST /bulk/verify/apply。校验单个campaign是否可应用dayparting(不提交)。占比约83.3%（10次，90天内真实流量[排除clientId 3186，mercado平台该索引100%流量来自本账号clientId=62，已用query_es.py --client-id-exclude 3186独立核实]共12条）。identity字段(campaignId/profileId)已替换为本测试账号自有的{{variables.real_campaign_id}}/{{variables.profile_id}}，未使用ES样本中其他任何硬编码具体值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -12,13 +12,14 @@
       {
         "name": "调用 apply",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/bulk/verify/apply",
         "request_body": [
           {
             "productLine": "mercado",
-            "campaignId": "{{real_campaign_id}}",
-            "profileId": "{{profile_id}}",
+            "campaignId": "{{variables.real_campaign_id}}",
+            "profileId": "{{variables.profile_id}}",
             "name": null,
             "tempId": null
           }
@@ -35,7 +36,7 @@
   },
   {
     "name": "POST /bulk/verify/apply - 批量校验多个campaign是否可应用dayparting(不提交)",
-    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否可应用dayparting(不提交)。占比约16.7%（2次，90天内真实流量[排除clientId 3186]共12条，其中1条为2元素数组、1条为3元素数组，均为批量校验结构）。identity字段已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}+{{real_campaign_id_2}}/{{profile_id_2}}两组真实值组合，保留“批量校验多campaign”的结构语义，未使用ES样本中其他任何硬编码具体值。",
+    "description": "单接口测试：POST /bulk/verify/apply。批量校验多个campaign是否可应用dayparting(不提交)。占比约16.7%（2次，90天内真实流量[排除clientId 3186]共12条，其中1条为2元素数组、1条为3元素数组，均为批量校验结构）。identity字段已替换为本测试账号自有的{{variables.real_campaign_id}}/{{variables.profile_id}}+{{variables.real_campaign_id_2}}/{{variables.profile_id_2}}两组真实值组合，保留“批量校验多campaign”的结构语义，未使用ES样本中其他任何硬编码具体值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -46,20 +47,21 @@
       {
         "name": "调用 apply(批量)",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/bulk/verify/apply",
         "request_body": [
           {
             "productLine": "mercado",
-            "campaignId": "{{real_campaign_id}}",
-            "profileId": "{{profile_id}}",
+            "campaignId": "{{variables.real_campaign_id}}",
+            "profileId": "{{variables.profile_id}}",
             "name": null,
             "tempId": null
           },
           {
             "productLine": "mercado",
-            "campaignId": "{{real_campaign_id_2}}",
-            "profileId": "{{profile_id_2}}",
+            "campaignId": "{{variables.real_campaign_id_2}}",
+            "profileId": "{{variables.profile_id_2}}",
             "name": null,
             "tempId": null
           }
@@ -76,7 +78,7 @@
   },
   {
     "name": "POST /dayparting/apply - 按多profile+模板分页查询apply列表(applyLevel=2)",
-    "description": "单接口测试：POST /dayparting/apply。按多个profileId+模板tempId分页查询apply列表(applyLevel=2)。90天内真实流量[排除clientId 3186]共5条，全部为同一业务模式，占比约100%，已全量覆盖。profileIds数组中已知本测试账号自有的profileId(3679)替换为{{profile_id}}；数组内其余7个profileId经ES平台级核实(mercado该索引90天内所有流量的clientId均为62，即本账号自己)确认同属本账号可访问的历史真实数据，非借用其他真实客户数据，保留ES真实值；tempId为业务过滤字段，保留ES真实值。",
+    "description": "单接口测试：POST /dayparting/apply。按多个profileId+模板tempId分页查询apply列表(applyLevel=2)。90天内真实流量[排除clientId 3186]共5条，全部为同一业务模式，占比约100%，已全量覆盖。profileIds数组中已知本测试账号自有的profileId(3679)替换为{{variables.profile_id}}；数组内其余7个profileId经ES平台级核实(mercado该索引90天内所有流量的clientId均为62，即本账号自己)确认同属本账号可访问的历史真实数据，非借用其他真实客户数据，保留ES真实值；tempId为业务过滤字段，保留ES真实值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -87,7 +89,8 @@
       {
         "name": "调用 apply",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/apply",
         "request_body": {
           "pageInfo": {
@@ -102,7 +105,7 @@
             "1914700210127884290",
             "1611231681552945153",
             "1914700210371153922",
-            "{{profile_id}}",
+            "{{variables.profile_id}}",
             "1914507472455454722"
           ],
           "applyItems": null,
@@ -142,7 +145,8 @@
       {
         "name": "调用 applyTargetSum",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/applyTargetSum",
         "request_body": {
           "productLine": "mercado",
@@ -171,7 +175,7 @@
   },
   {
     "name": "POST /dayparting/campaign/tree - 按多profile+全部状态过滤查询campaign树",
-    "description": "单接口测试：POST /dayparting/campaign/tree。按多个profileId查询campaign树，states过滤为全部3种状态(active/paused/deleted)。占比约72.7%（8次，90天内真实流量[排除clientId 3186]共11条）。identity字段(clientId/userIds)已替换为本测试账号自有的{{client_id}}/{{user_id_2}}(真实值93，与该接口90天内全部流量一致，另一真实userId 18589用于其他接口)；profileIds数组中已知的{{profile_id}}(3679)已替换为变量，其余7个profileId经ES平台级核实(mercado该索引100%流量clientId=62)确认同属本账号历史数据，保留ES真实值；tempId/states为业务过滤字段，保留ES真实值。",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按多个profileId查询campaign树，states过滤为全部3种状态(active/paused/deleted)。占比约72.7%（8次，90天内真实流量[排除clientId 3186]共11条）。identity字段(clientId/userIds)已替换为本测试账号自有的{{variables.client_id}}/{{variables.user_id_2}}(真实值93，与该接口90天内全部流量一致，另一真实userId 18589用于其他接口)；profileIds数组中已知的{{variables.profile_id}}(3679)已替换为变量，其余7个profileId经ES平台级核实(mercado该索引100%流量clientId=62)确认同属本账号历史数据，保留ES真实值；tempId/states为业务过滤字段，保留ES真实值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -182,17 +186,18 @@
       {
         "name": "调用 tree",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "mercado",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id_2}}"
+            "{{variables.user_id_2}}"
           ],
           "daypartingType": 1,
           "name": "",
@@ -203,7 +208,7 @@
             "1914700210127884290",
             "1611231681552945153",
             "1914700210371153922",
-            "{{profile_id}}",
+            "{{variables.profile_id}}",
             "1914507472455454722"
           ],
           "tempId": 11908,
@@ -225,7 +230,7 @@
   },
   {
     "name": "POST /dayparting/campaign/tree - 按多profile+paused/enabled状态过滤查询campaign树",
-    "description": "单接口测试：POST /dayparting/campaign/tree。按多个profileId查询campaign树，states过滤为[paused,enabled]。占比约18.2%（2次，90天内真实流量[排除clientId 3186]共11条），占比≥1%阈值，按规则全覆盖。identity字段处理同场景1：{{client_id}}/{{user_id_2}}，profileIds中{{profile_id}}替换、其余7个保留ES真实值(同属本账号历史数据)；tempId/states为业务过滤字段，保留ES真实值。",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按多个profileId查询campaign树，states过滤为[paused,enabled]。占比约18.2%（2次，90天内真实流量[排除clientId 3186]共11条），占比≥1%阈值，按规则全覆盖。identity字段处理同场景1：{{variables.client_id}}/{{variables.user_id_2}}，profileIds中{{variables.profile_id}}替换、其余7个保留ES真实值(同属本账号历史数据)；tempId/states为业务过滤字段，保留ES真实值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -236,17 +241,18 @@
       {
         "name": "调用 tree(paused/enabled)",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "mercado",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id_2}}"
+            "{{variables.user_id_2}}"
           ],
           "daypartingType": 1,
           "name": "",
@@ -257,7 +263,7 @@
             "1914700210127884290",
             "1611231681552945153",
             "1914700210371153922",
-            "{{profile_id}}",
+            "{{variables.profile_id}}",
             "1914507472455454722"
           ],
           "tempId": 11908,
@@ -278,7 +284,7 @@
   },
   {
     "name": "POST /dayparting/campaign/tree - 按单profile+全部状态过滤查询campaign树",
-    "description": "单接口测试：POST /dayparting/campaign/tree。按单个profileId查询campaign树，states过滤为全部3种状态(active/paused/deleted)。占比约9.1%（1次，90天内真实流量[排除clientId 3186]共11条），占比恰为1%以上阈值，按规则覆盖，不编造。identity字段(clientId/userIds/profileIds)已全部替换为本测试账号自有的{{client_id}}/{{user_id_2}}/{{profile_id}}；tempId/states为业务过滤字段，保留ES真实值。",
+    "description": "单接口测试：POST /dayparting/campaign/tree。按单个profileId查询campaign树，states过滤为全部3种状态(active/paused/deleted)。占比约9.1%（1次，90天内真实流量[排除clientId 3186]共11条），占比恰为1%以上阈值，按规则覆盖，不编造。identity字段(clientId/userIds/profileIds)已全部替换为本测试账号自有的{{variables.client_id}}/{{variables.user_id_2}}/{{variables.profile_id}}；tempId/states为业务过滤字段，保留ES真实值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -289,22 +295,23 @@
       {
         "name": "调用 tree(单profile)",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaign/tree",
         "request_body": {
           "productLine": "mercado",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 1,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
-            "{{user_id_2}}"
+            "{{variables.user_id_2}}"
           ],
           "daypartingType": 1,
           "name": "",
           "profileIds": [
-            "{{profile_id}}"
+            "{{variables.profile_id}}"
           ],
           "tempId": 11908,
           "states": [
@@ -325,7 +332,7 @@
   },
   {
     "name": "POST /dayparting/campaignTag/tree - 查询全部团队成员维度campaign标签树",
-    "description": "单接口测试：POST /dayparting/campaignTag/tree。不筛选profileIds/tagIds，userIds携带本账号(clientId=62)完整团队成员名单(1942个真实userId)查询campaign标签树，等价于前端“全部用户”场景。90天内真实流量[排除clientId 3186]共5条，全部为同一业务模式(userIds数组完全一致)，占比约100%，已全量覆盖。identity字段(clientId)已替换为{{client_id}}；userIds数组中已知的{{user_id}}(18589)/{{user_id_2}}(93)已替换为变量，其余userId经ES平台级核实(mercado该索引100%流量clientId=62)确认同属本账号团队真实历史数据，非借用其他真实客户数据，保留ES真实值；tempId为业务过滤字段，保留ES真实值。",
+    "description": "单接口测试：POST /dayparting/campaignTag/tree。不筛选profileIds/tagIds，userIds携带本账号(clientId=62)完整团队成员名单(1942个真实userId)查询campaign标签树，等价于前端“全部用户”场景。90天内真实流量[排除clientId 3186]共5条，全部为同一业务模式(userIds数组完全一致)，占比约100%，已全量覆盖。identity字段(clientId)已替换为{{variables.client_id}}；userIds数组中已知的{{variables.user_id}}(18589)/{{variables.user_id_2}}(93)已替换为变量，其余userId经ES平台级核实(mercado该索引100%流量clientId=62)确认同属本账号团队真实历史数据，非借用其他真实客户数据，保留ES真实值；tempId为业务过滤字段，保留ES真实值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -336,18 +343,19 @@
       {
         "name": "调用 campaignTag/tree",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/campaignTag/tree",
         "request_body": {
           "productLine": "mercado",
           "advertiserIds": null,
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "applyLevel": 2,
           "isFilter": true,
           "tagIds": [],
           "userIds": [
             52,
-            "{{user_id_2}}",
+            "{{variables.user_id_2}}",
             390,
             1031,
             8781,
@@ -1063,7 +1071,7 @@
             18381,
             18382,
             18415,
-            "{{user_id}}",
+            "{{variables.user_id}}",
             18593,
             18594,
             18611,
@@ -2307,7 +2315,7 @@
   },
   {
     "name": "POST /dayparting/templateNames - 按多profile+多团队成员查询模板名称列表",
-    "description": "单接口测试：POST /dayparting/templateNames。按多个profileId+多个团队成员userIds查询模板名称列表(不筛选)。90天内真实流量[排除clientId 3186]共12条，其中11条(91.7%)userIds为完整1942人团队名单、1条(8.3%)为231人子集，二者均为“不筛选、查询当前可见全部模板”这同一个业务动作，不构成独立业务场景，收敛为1个场景，占比约100%（12次，二者合计）。🔴已验证：占比更高的完整1942人名单样本原样回放今日(执行时)复现HTTP 500(而ES历史记录的responseCode均为200，说明该名单中部分历史userId在约3周后的今天已失效/被移除，触发后端解析用户信息时的异常，属团队roster随时间漂移导致的数据陈旧问题，非本次新引入的缺陷)；改用占比8.3%但今日回放仍稳定返回HTTP 200的231人子集样本作为本场景代表(同样是真实历史流量，只是roster规模较小、当前仍完全有效)，以保证Happy Path用例长期可重复执行。identity字段(clientId)已替换为{{client_id}}；profileIds中已知的{{profile_id}}(3679)已替换、其余7个profileId保留ES真实值；userIds数组中已知的{{user_id}}(18589)已替换为变量，其余保留ES真实值(经ES平台级核实mercado该索引100%流量clientId=62，同属本账号历史数据，非借用其他真实客户数据)。",
+    "description": "单接口测试：POST /dayparting/templateNames。按多个profileId+多个团队成员userIds查询模板名称列表(不筛选)。90天内真实流量[排除clientId 3186]共12条，其中11条(91.7%)userIds为完整1942人团队名单、1条(8.3%)为231人子集，二者均为“不筛选、查询当前可见全部模板”这同一个业务动作，不构成独立业务场景，收敛为1个场景，占比约100%（12次，二者合计）。🔴已验证：占比更高的完整1942人名单样本原样回放今日(执行时)复现HTTP 500(而ES历史记录的responseCode均为200，说明该名单中部分历史userId在约3周后的今天已失效/被移除，触发后端解析用户信息时的异常，属团队roster随时间漂移导致的数据陈旧问题，非本次新引入的缺陷)；改用占比8.3%但今日回放仍稳定返回HTTP 200的231人子集样本作为本场景代表(同样是真实历史流量，只是roster规模较小、当前仍完全有效)，以保证Happy Path用例长期可重复执行。identity字段(clientId)已替换为{{variables.client_id}}；profileIds中已知的{{variables.profile_id}}(3679)已替换、其余7个profileId保留ES真实值；userIds数组中已知的{{variables.user_id}}(18589)已替换为变量，其余保留ES真实值(经ES平台级核实mercado该索引100%流量clientId=62，同属本账号历史数据，非借用其他真实客户数据)。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -2318,10 +2326,11 @@
       {
         "name": "调用 templateNames",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/dayparting/templateNames",
         "request_body": {
-          "clientId": "{{client_id}}",
+          "clientId": "{{variables.client_id}}",
           "pageInfo": {
             "pageIndex": 1,
             "pageSize": 2147483647,
@@ -2334,7 +2343,7 @@
             "1914700210127884290",
             "1611231681552945153",
             "1914700210371153922",
-            "{{profile_id}}",
+            "{{variables.profile_id}}",
             "1914507472455454722"
           ],
           "productLine": "mercado",
@@ -2465,7 +2474,7 @@
             16312,
             16819,
             16916,
-            "{{user_id}}",
+            "{{variables.user_id}}",
             20909,
             21513,
             21550,
@@ -2594,7 +2603,7 @@
   },
   {
     "name": "POST /findDayParting/campaign - 按campaign查询dayparting应用",
-    "description": "单接口测试：POST /findDayParting/campaign。按单个campaign+profile查询dayparting应用情况。90天内真实流量[排除clientId 3186]共10条，全部为同一业务模式(单campaign+单profile查询，仅具体campaignId不同，代表本账号历史上依次查询过的不同campaign)，占比约100%，已全量覆盖。identity字段(campaignId/profileId)已替换为本测试账号自有的{{real_campaign_id}}/{{profile_id}}，未使用ES样本中其他任何硬编码具体值。",
+    "description": "单接口测试：POST /findDayParting/campaign。按单个campaign+profile查询dayparting应用情况。90天内真实流量[排除clientId 3186]共10条，全部为同一业务模式(单campaign+单profile查询，仅具体campaignId不同，代表本账号历史上依次查询过的不同campaign)，占比约100%，已全量覆盖。identity字段(campaignId/profileId)已替换为本测试账号自有的{{variables.real_campaign_id}}/{{variables.profile_id}}，未使用ES样本中其他任何硬编码具体值。",
     "module": "dayparting-controller",
     "granularity": "API",
     "since": "init",
@@ -2605,12 +2614,13 @@
       {
         "name": "调用 campaign",
         "method": "POST",
-        "base_url": "{{DAYPARTING}}",
+        "base_url": "{{base_urls.DAYPARTING}}",
+        "headers": "{{headers}}",
         "path": "/findDayParting/campaign",
         "request_body": {
           "productLine": "mercado",
-          "campaignId": "{{real_campaign_id}}",
-          "profileId": "{{profile_id}}",
+          "campaignId": "{{variables.real_campaign_id}}",
+          "profileId": "{{variables.profile_id}}",
           "name": null,
           "tempId": null
         },
