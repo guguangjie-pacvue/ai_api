@@ -1,0 +1,90 @@
+[
+  {
+    "name": "POST /api/Event/EventRevertV2 - 回滚历史变更事件(仅生成不执行,涉及真实第三方在投预算,新颖风险需用户知悉)",
+    "description": "单接口测试：POST /api/Event/EventRevertV2。按变更事件历史记录，将Order/LineItem的预算等设置回滚到变更前的值。🔴新颖风险(不属于'无清理接口默认跳过'这一类，特此标注，非本agent自行拍板执行/不执行，仅按安全默认值处理为不执行)：ES真实样本显示该接口作用对象是其他真实客户账号(profileId 3997053350924997)正在投放中的真实Order/LineItem的真实预算(budget amount)，revert操作会真实调用到Amazon DSP侧修改该客户当前生效的预算配置，属于'对真实第三方生产环境实体做不可预知副作用变更'的风险类别，与此前DealV2误提交Amazon Publisher Direct Proposal的事故性质相似(会产生真实外部生效的影响)，故不使用默认的'无清理接口即执行'判断，也不用ES里其他客户的数据去验证，仅生成保留结构，不执行。请求体取自ES真实样本结构(effectLevel/campaignId/adGroupId/entityId/actionType/value等字段)。7条随机样本中占比约100%(budget类型revert为唯一观察到的模式)。",
+    "module": "Event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 EventRevertV2(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Event/EventRevertV2",
+        "request_body": [
+          {
+            "profileId": "{{profile_id_single}}",
+            "effectLevel": "Lineitem",
+            "campaignId": "{{order_id_active}}",
+            "adGroupId": "{{lineitem_id}}",
+            "entityId": "{{lineitem_id}}",
+            "syncSource": "Pacvue Bulk Manual Edit",
+            "value": "[{\"recurrenceTimePeriod\":\"DAILY\",\"amount\":22.75}]",
+            "actionType": "budget",
+            "actionTypeInt": null,
+            "extendField": null,
+            "keywordText": null,
+            "advertiserId": "{{advertiser_id_single}}"
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Event/GetAdvertiserAudiences - 查询当前账号可用受众列表",
+    "description": "单接口测试：GET /api/Event/GetAdvertiserAudiences。无请求参数，按登录token所属账号返回其可用的Amazon受众(Audience)列表(裸数组响应，非{code,data}包装)。7条随机样本中占比约100%(接口本身不接受任何参数，无场景分化)。",
+    "module": "Event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetAdvertiserAudiences",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Event/GetAdvertiserAudiences",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Event/GetRules - 查询当前账号规则列表",
+    "description": "单接口测试：GET /api/Event/GetRules。无请求参数，按登录token所属账号返回其规则(Rule)列表(裸数组响应)。3条随机样本中占比约100%(接口本身不接受任何参数，无场景分化)。",
+    "module": "Event",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetRules",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Event/GetRules",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "$root": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]
