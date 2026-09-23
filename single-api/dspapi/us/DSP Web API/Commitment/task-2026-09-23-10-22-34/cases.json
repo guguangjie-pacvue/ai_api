@@ -1,0 +1,464 @@
+[
+  {
+    "name": "POST /api/Commitment/CreateCommitments - 创建Commitment(仅生成不执行,无清理接口)",
+    "description": "单接口测试：POST /api/Commitment/CreateCommitments。创建一条Commitment(承诺消耗)记录。已确认本模块(Commitment tag全部8个接口)内没有任何删除/归档Commitment的接口，按默认规则'写操作无清理接口默认判定仅生成不执行'处理，不执行。请求体结构取自ES真实样本形状，但profileId/advertiserId已替换为本账号真实实体(不使用ES样本中其他真实客户的profileId 666963308033875，避免即便误执行也不会波及他人数据)。committedSpend/currencyCode/日期为示例值。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 CreateCommitments(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/CreateCommitments",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "content": {
+            "commitments": [
+              {
+                "advertiserIds": [
+                  "{{advertiser_id_single}}"
+                ],
+                "campaignIds": null,
+                "commitmentName": "test102234-commitment",
+                "committedSpend": "1",
+                "currencyCode": "USD",
+                "dealIds": [],
+                "fulfillmentLevel": "LEVEL_0",
+                "startDateTime": "{{date_start_iso}}",
+                "endDateTime": "{{date_end_iso}}"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Commitment/UpdateCommitments - 更新Commitment(仅生成不执行,无清理接口且无自建commitmentId)",
+    "description": "单接口测试：POST /api/Commitment/UpdateCommitments。更新一条已存在Commitment的内容。同CreateCommitments一样，本tag内无清理/归档接口，按默认规则仅生成不执行。另因CreateCommitments未执行，本账号没有可安全复用的自建commitmentId，commitmentId字段列为待补真实值(不可用ES样本中其他真实客户的commitmentId去改动对方数据)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 UpdateCommitments(未执行)",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/UpdateCommitments",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "content": {
+            "commitments": [
+              {
+                "commitmentId": "[NEEDS_REAL_VALUE]",
+                "advertiserIds": [
+                  "{{advertiser_id_single}}"
+                ],
+                "campaignIds": null,
+                "commitmentName": "test102234-commitment-update",
+                "committedSpend": "1",
+                "currencyCode": "USD",
+                "dealIds": [],
+                "fulfillmentLevel": "LEVEL_0",
+                "startDateTime": "{{date_start_iso}}",
+                "endDateTime": "{{date_end_iso}}"
+              }
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Commitment/ExportCommitmentsExcel - 导出本账号Commitment列表为Excel",
+    "description": "单接口测试：POST /api/Commitment/ExportCommitmentsExcel。按profileId+status多选+分页导出Commitment列表Excel文件。profileId替换为本账号真实profile。响应为二进制xlsx文件(探测确认content_type=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)。179条随机样本中占比约100%(单一调用形态，仅profileId数组长度/是否传status有差异，属过滤参数差异非独立业务场景)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ExportCommitmentsExcel",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/ExportCommitmentsExcel",
+        "request_body": {
+          "profileId": [
+            "{{profile_id_single}}"
+          ],
+          "status": [
+            "Delivering: on track",
+            "Delivering: at risk",
+            "Not ready",
+            "Upcoming: ready",
+            "Upcoming: not ready",
+            "Ended"
+          ],
+          "pageInfo": {
+            "orderByField": "daysLeft",
+            "orderAsc": true,
+            "pageSize": 100,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Commitment/GetCommitmentDetail - 查询本账号自有Commitment详情(安全场景)",
+    "description": "单接口测试：GET /api/Commitment/GetCommitmentDetail。按内部自增id查询Commitment详情。探测确认本账号(profileId 1251036855266063)历史上已自建过Commitment(Autotest*系列，非本次任务产生)，本用例使用其中一条本账号真实拥有的记录(Id=138)，验证正常读取路径安全、结果ProfileId确实等于本账号profileId。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCommitmentDetail(own)",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/GetCommitmentDetail",
+        "request_body": {
+          "id": 138
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true,
+          "Data.ProfileId": "1251036855266063"
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Commitment/GetCommitmentDetail - 用ES真实样本id直查(疑似IDOR观察项)",
+    "description": "单接口测试：GET /api/Commitment/GetCommitmentDetail。🔴安全观察：该接口仅接受一个裸整数id参数，不带profileId/advertiserId等任何租户范围限制(Swagger确认参数列表只有id:int32一项)。用ES 365天真实样本中出现的id=1实测，返回了完整真实数据：{Data:{Id:1,ProfileId:\"666963308033875\",commitmentId:\"3TCPS18D821FY2NZ79HY3Q7H\",commitmentName:\"test260511_1\",status:\"Ended\",committedSpend:2.0,currencyCode:...}}——ProfileId 666963308033875与本测试账号(1251036855266063)完全不同，属于其他真实客户的真实Commitment(含承诺消耗金额、币种、名称等商业数据)。这是本项目第4次发现同类模式(此前Audit/GetDetail+GetOpportunities、SuperWizard(V1)日志接口、SuperWizardV3 Preview接口共3次)，且本次涉及真实商业承诺金额数据，敏感度高于前3次的运营日志类数据，建议优先登记进Jira P0清单。接口本身HTTP/业务层面均\"成功\"，故仍断言IsSuccessStatusCode:true(接口未见异常)，问题记录在description与最终报告中。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCommitmentDetail(ES样本id=1)",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/GetCommitmentDetail",
+        "request_body": {
+          "id": 1
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Commitment/GetCommitmentList - 多profile+全部状态过滤(ES真实多租户过滤组合)",
+    "description": "单接口测试：POST /api/Commitment/GetCommitmentList。按profileId数组(代理商/多profile视角)+状态多选查询Commitment列表(分页对象响应{Data,PageInfo,CustomData})。profileId数组保留ES真实样本值(其中包含本账号profileId 1251036855266063，属于同一多profile聚合查询的真实场景，其余为其他真实客户profileId，按报表类接口对真实ID过滤、后端不做强隔离的项目惯例保留原样)。273条随机样本中占比约53.5%(146次，最高频组合)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCommitmentList - 多profile+全状态",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/GetCommitmentList",
+        "request_body": {
+          "profileId": [
+            "4134953098107514",
+            "4282036796451224",
+            "3489117214353732",
+            "604315247166903",
+            "274081198490153",
+            "666963308033875",
+            "619414206362405",
+            "73944067710692",
+            "1660703034314311",
+            "4246072319777481",
+            "4330355775683437",
+            "2498011050189164",
+            "875269533337772"
+          ],
+          "status": [
+            "Delivering: on track",
+            "Delivering: at risk",
+            "Not ready",
+            "Upcoming: ready",
+            "Upcoming: not ready"
+          ],
+          "pageInfo": {
+            "orderByField": "daysLeft",
+            "orderAsc": true,
+            "pageSize": 25,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Commitment/GetCommitmentList - 多profile+不传状态过滤",
+    "description": "单接口测试：POST /api/Commitment/GetCommitmentList。多profile聚合查询，不传status(查全部状态)。profileId数组含本账号profileId，保留ES真实值(同上惯例)。273条随机样本中占比约28.9%(79次)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCommitmentList - 多profile+不传状态",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/GetCommitmentList",
+        "request_body": {
+          "profileId": [
+            "1034595754382468",
+            "909854831721851",
+            "666963308033875",
+            "1496281784209707",
+            "4246072319777481",
+            "2498011050189164",
+            "1251036855266063"
+          ],
+          "pageInfo": {
+            "orderByField": "daysLeft",
+            "orderAsc": true,
+            "pageSize": 25,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Commitment/GetCommitmentList - 单profile(本账号)+全部状态过滤",
+    "description": "单接口测试：POST /api/Commitment/GetCommitmentList。单profile查询(仅查本账号)，全部状态多选。profileId替换为本账号真实profile。273条随机样本中占比约13.6%(37次)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCommitmentList - 单profile+全状态",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/GetCommitmentList",
+        "request_body": {
+          "profileId": [
+            "{{profile_id_single}}"
+          ],
+          "status": [
+            "Delivering: on track",
+            "Delivering: at risk",
+            "Not ready",
+            "Upcoming: ready",
+            "Upcoming: not ready"
+          ],
+          "pageInfo": {
+            "orderByField": "daysLeft",
+            "orderAsc": true,
+            "pageSize": 25,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "Data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Commitment/GetCommitmentCount - 单profile(本账号)",
+    "description": "单接口测试：POST /api/Commitment/GetCommitmentCount。按profileId数组统计Commitment数量。单profile场景替换为本账号真实profile。179条随机样本中占比约40.8%(73次)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCommitmentCount - 单profile",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/GetCommitmentCount",
+        "request_body": {
+          "profileId": [
+            "{{profile_id_single}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Commitment/GetCommitmentCount - 多profile(ES真实多租户组合)",
+    "description": "单接口测试：POST /api/Commitment/GetCommitmentCount。多profile聚合统计，profileId数组保留ES真实样本值(报表类接口真实ID过滤惯例)。179条随机样本中占比约59.2%(106次)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetCommitmentCount - 多profile",
+        "method": "POST",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/GetCommitmentCount",
+        "request_body": {
+          "profileId": [
+            "4134953098107514",
+            "4282036796451224",
+            "3489117214353732",
+            "604315247166903",
+            "274081198490153",
+            "666963308033875",
+            "619414206362405",
+            "73944067710692",
+            "1660703034314311",
+            "4246072319777481",
+            "4330355775683437",
+            "2498011050189164",
+            "875269533337772"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Commitment/OrderCommitments - 指定orderId查询Order关联Commitment(本账号)",
+    "description": "单接口测试：GET /api/Commitment/OrderCommitments。按profileId+advertiserId+orderId查询该Order已关联/可选的Commitment(响应{Data:{Select:[],UnSelect:[]}}结构)。profileId/advertiserId/orderId替换为本账号真实实体。3853条随机样本中占比约82.2%(传orderId的场景)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 OrderCommitments - 指定orderId",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/OrderCommitments",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": "{{order_id_active}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Commitment/OrderCommitments - 不指定orderId(仅按profile+advertiser)",
+    "description": "单接口测试：GET /api/Commitment/OrderCommitments。不传orderId，按profileId+advertiserId查询。替换为本账号真实实体。3853条随机样本中占比约17.8%(不传orderId的场景)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 OrderCommitments - 不指定orderId",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/OrderCommitments",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}",
+          "orderId": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Commitment/OrderNonCommitments - 查询未关联Commitment的候选(本账号)",
+    "description": "单接口测试：GET /api/Commitment/OrderNonCommitments。按profileId+advertiserId查询该advertiser下尚未关联到任何Order的Commitment候选列表。替换为本账号真实实体。500条随机样本中占比约100%(结构固定，仅profileId/advertiserId取值变化，无其他业务分化维度)。",
+    "module": "Commitment",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 OrderNonCommitments",
+        "method": "GET",
+        "base_url": "{{DSPBASEURL}}",
+        "path": "Commitment/OrderNonCommitments",
+        "request_body": {
+          "profileId": "{{profile_id_single}}",
+          "advertiserId": "{{advertiser_id_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "IsSuccessStatusCode": true
+        }
+      }
+    ]
+  }
+]
