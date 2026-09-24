@@ -158,5 +158,29 @@
       "platform_filter": null,
       "_note": "字段结构已探测确认（2026-09-23）：urlReferrer 为请求路径（不含 /criteo 前缀，与 swagger paths 直接对应）；body 为 JSON 字符串（与 mainapi 一致，需二次解析）；responseBody 字段含业务响应（本服务无 success 布尔字段，只有 code，故 assertion_l1 与 rule-api 一致）；90天流量统计已按路径中纯数字段归一化为 {id} 后与 method 组合去重比对（DELETE 方法本索引 90 天内全平台 0 条记录，非本服务特有）"
     }
+  },
+  "target-api": {
+    "github_repo": "pacvue/target-api",
+    "swaggers": [
+      {
+        "title": "TargetApi",
+        "url": "https://api.pacvue.com/target/v3/api-docs",
+        "_note": "该 spec 的 info.title 字段字面量是 \"Swagger\"（无实际业务含义，与 criteo/rule-api/micro-api 一样），此处用 TargetApi 作为可读的服务标识；swagger-ui 首页 https://api.pacvue.com/target/swagger-ui/index.html 通过 configUrl 间接指向实际文档 https://api.pacvue.com/target/v3/api-docs（共 648 个有效接口，42 个模块）"
+      }
+    ],
+    "es_index": {
+      "us": "target-access-*"
+    },
+    "config": "single-api/target-api/{env}/config.json",
+    "es": {
+      "path_field": "urlReferrer.keyword",
+      "method_field": "method.keyword",
+      "body_field": "body",
+      "body_is_json_string": false,
+      "clientid_exclude": [62, 3186],
+      "assertion_l1": { "code": 200 },
+      "platform_filter": null,
+      "_note": "字段结构已探测确认（2026-09-24）：urlReferrer 为请求路径，但大小写/前缀不统一——同一批流量里既有 /api/Report/... 也有 /budget/report/...、/apply/...、/user/...，与 swagger paths 比对时需大小写不敏感 + 兼容有无 /api 前缀；body 字段已是对象（非字符串，body_is_json_string=false，与 rule-api 一致；另有 body_str 为字符串镜像；注意很多 GET 接口 body 为空，真实入参在 header/queryString）；responseBody 为 JSON 字符串，含业务响应，只有 code 无 success 布尔字段，故 assertion_l1 只用 {code:200}（与 criteo/rule-api 一致）；productLine 字段为空（target 为单平台服务，platform_filter=null）；近30天全平台流量约183万条"
+    }
   }
 }
