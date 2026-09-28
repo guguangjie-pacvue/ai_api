@@ -1,0 +1,502 @@
+[
+  {
+    "name": "POST /api/sov/retailer/addKeywords - US / retailerIds=[7](Kroger唯一retailer) / deviceTypes=[0](PC) / 无daypart(含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。该接口90天kroger平台真实调用样本(共71条)中，countryCode=US/isDaypart=false/deviceTypes=[0]/retailerIds=[7]/storeIds=[]/zipCodes=[\"\"]在全部71条样本中保持完全一致——kroger平台业务上只有唯一retailer(retailerId=7,即Kroger自身)，不存在daypart/多设备/多retailer/zipcode等可选维度，属单一真实场景，唯一变化的只是keywords内容(非结构性维度，不单独成场景)。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(kroger平台，共71条)中占比约100%（71次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_20260928165928",
+          "categoryName": "AutoTest_Category_RetailerAK_20260928165928",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-ak-20260928165928",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "gallo salami",
+            "gallo salami italian dry",
+            "gallo pepperoni"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            7
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-kroger-retailer-ak-20260928165928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(kroger平台，共168条)中该模式占比约76.8%（129次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_1_20260928165928",
+          "categoryName": "AutoTest_Category_RetailerBC_1_20260928165928",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-bc-1-20260928165928",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "taco seasoning"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            7
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-bc-1-20260928165928",
+          "startDate": "2026-06-23",
+          "endDate": "2026-07-22",
+          "keywords": [
+            "taco seasoning"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "McCormick",
+              "brands": [
+                "McCormick&nbsp;store Official",
+                "Grill Mates",
+                "McCormick Store official",
+                "McCormick Culinary",
+                "McCormick"
+              ]
+            },
+            {
+              "aggregationBrandName": "Pepsi",
+              "brands": [
+                "Pepsi"
+              ]
+            },
+            {
+              "aggregationBrandName": "Goya",
+              "brands": [
+                "GOYA",
+                "Goya WRK"
+              ]
+            },
+            {
+              "aggregationBrandName": "Generic",
+              "brands": [
+                "Generic",
+                "Generic3"
+              ]
+            },
+            {
+              "aggregationBrandName": "Clorox",
+              "brands": [
+                "KINGSFORD",
+                "HIDDEN VALLEY",
+                "CLOROX 2",
+                "Clorox"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-kroger-retailer-bc-1-20260928165928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(kroger平台，共168条)中该模式占比约22.0%（37次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_2_20260928165928",
+          "categoryName": "AutoTest_Category_RetailerBC_2_20260928165928",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-bc-2-20260928165928",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "tortilla chip"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            7
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-bc-2-20260928165928",
+          "startDate": "2026-08-13",
+          "endDate": "2026-09-11",
+          "keywords": [
+            "tortilla chip"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Utz",
+              "brands": [
+                "Product of Utz",
+                "Utz Quality Foods",
+                "UTZ",
+                "UTZ Chips",
+                "Utz Z@"
+              ]
+            },
+            {
+              "aggregationBrandName": "Zapp's",
+              "brands": [
+                "Zapp's Potato Chips",
+                "Zapp's"
+              ]
+            },
+            {
+              "aggregationBrandName": "Boulder Canyon",
+              "brands": [
+                "Boulder Canyon"
+              ]
+            },
+            {
+              "aggregationBrandName": "Great Value",
+              "brands": [
+                "Great Value"
+              ]
+            },
+            {
+              "aggregationBrandName": "Unbranded",
+              "brands": [
+                "Unbranded"
+              ]
+            }
+          ],
+          "splitBySubChannel": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-kroger-retailer-bc-2-20260928165928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/retailer/editCategoryName + editBrandName + keywords + deleteKeywords - Category全生命周期编辑(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：串联测试 Retailer Category 的完整编辑生命周期(kroger平台)。第1步创建Category A(3个初始关键词)，第2步创建Category B(1个初始关键词，作为editBrandName所需的第二个categoryBatchId)，第3步 editCategoryName 修改Category A名称(90天真实调用2条，均为单categoryBatchId+categoryName的简单模式，占比100%)，第4步 editBrandName 对[A,B]两个categoryBatchId批量改品牌名(90天真实调用4条，categoryBatchIds数量分布为1个25%/2个50%/3个25%，本步代表最高频的2个categoryBatchId批量改名模式，占比50%)，第5步 keywords(PUT) 对Category A全量替换关键词列表，从3个初始关键词收缩为2个已注册关键词(90天真实调用14条，均为对某个categoryBatchId整份提交keywordTexts的全量替换模式，占比100%)，第6步 deleteKeywords 从Category A删除1个已注册关键词(90天真实调用仅1条，样本极少，占比100%)，第7步 deleteCategories 同时删除[A,B]两个categoryBatchId做最终清理(90天真实调用13条中，批量删2个占比最高，约61.5%(8次)为主流模式，本步代表该模式；单个删除模式已在addKeywords/brandComparison等其它case的后置清理步骤中充分覆盖，占比约38.5%)，保证用例可重复执行。这些编辑类接口(editCategoryName/editBrandName/keywords-PUT/deleteKeywords)样本量均较小(1~14条不等)且均围绕同一组Category实体操作，故合并为一条完整生命周期case，而非拆分成多条各自建删的独立case。🔴 kroger平台业务上retailerIds固定为[7](唯一retailer即Kroger自身)、deviceTypes固定为[0]、isDaypart固定为false、zipCodes固定为[\"\"](addKeywords全部71条真实样本一致，无任何例外)，与之对应的 editRetailers/editZipCode/editDeviceType/editDayParting 四个接口在kroger平台90天及365天历史交叉验证均为0调用(真实无流量，用户在kroger平台的UI/业务流程上本就不具备这几项的自定义操作)，均不纳入本生命周期。convert-batch-ids/keywords-copy/getBrands/getBrandSov(及其bySubChannel变体)/products-top-sov(及其bySubChannel变体)/high-growth-bySubChannel/brands-cross-retailer/brands-listBrandOfCategory/check-duplicate/keywords-date-range/selectKeywordsWithCategory/convert-batch-id(GET,路径模板)在kroger平台90天及365天历史交叉验证同样均为0调用，均判定为ES无流量，未生成case。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category A",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerLifecycle_A_20260928165928",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_A_20260928165928",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-lc-a-20260928165928",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "dry dog food",
+            "dog dry food",
+            "dog food"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            7
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "创建Category B",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerLifecycle_B_20260928165928",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_B_20260928165928",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-lc-b-20260928165928",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "dog food dry"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            7
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改Category A名称",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editCategoryName",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-lc-a-20260928165928",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_Renamed_20260928165928"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量修改品牌名称(A+B)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editBrandName",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-kroger-retailer-lc-a-20260928165928",
+            "AutoTest-sovhub-kroger-retailer-lc-b-20260928165928"
+          ],
+          "brandName": "AutoTest_Brand_RetailerLifecycle_Renamed_20260928165928"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量编辑关键词(全量替换,A)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/keywords",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "KROGER",
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-lc-a-20260928165928",
+          "keywordTexts": [
+            "dry dog food",
+            "dog dry food"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除Category A的1个关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteKeywords",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-kroger-retailer-lc-a-20260928165928",
+          "keywordTexts": [
+            "dog dry food"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-批量删除Category A+B",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-kroger-retailer-lc-a-20260928165928",
+            "AutoTest-sovhub-kroger-retailer-lc-b-20260928165928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

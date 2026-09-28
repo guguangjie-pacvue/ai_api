@@ -56,7 +56,7 @@
       "platform_filter": { "get": "all", "post": "body.productLine.keyword:<platform>", "post_fallback_no_productline_field": "all (endpoint request body has no productLine field, e.g. getHistoryList/getRuleViewList/template.getTemplate -- cannot attribute to a single platform via ES, treat like GET: use all-platform traffic as baseline)" }
     }
   },
-  "micro-api": {
+ "micro-api" : {
     "github_repo": "pacvue/micro-server",
     "swaggers": [
       {
@@ -158,6 +158,37 @@
       "platform_filter": null,
       "_note": "字段结构已探测确认（2026-09-23）：urlReferrer 为请求路径（不含 /criteo 前缀，与 swagger paths 直接对应）；body 为 JSON 字符串（与 mainapi 一致，需二次解析）；responseBody 字段含业务响应（本服务无 success 布尔字段，只有 code，故 assertion_l1 与 rule-api 一致）；90天流量统计已按路径中纯数字段归一化为 {id} 后与 method 组合去重比对（DELETE 方法本索引 90 天内全平台 0 条记录，非本服务特有）"
     }
+  },
+  "sov-hub": {
+    "github_repo": "Pacvue/sov-hub",
+    "swaggers": [
+      {
+        "title": "SovHub",
+        "url": "https://api.pacvue.com/sov-hub/v3/api-docs",
+        "_note": "该 spec 的 info.title 字段字面量是 \"Swagger\"（无实际业务含义，与 criteo/target/rule-api/micro-api 一样），此处用 SovHub 作为可读的服务标识；swagger-ui 首页 https://api.pacvue.com/sov-hub/swagger-ui/index.html 通过 configUrl 间接指向实际文档（共 299 个有效接口/操作，35 个模块，0 个 deprecated）"
+      }
+    ],
+    "platforms": ["amazon", "walmart", "instacart", "criteo", "target", "kroger", "chewy", "citrus", "doordash", "samsclub", "bol"],
+    "platform_login_alias": {
+      "kroger": "krogerv3",
+      "bol": "bolv2",
+      "chewy": "chewyv2",
+      "_comment": "登录体系为 apiuser.pacvue.com（与 rule-api/micro-api/criteo-api/target-api 相同），已用 amazon 平台实测确认可登录；实际使用的测试账号是 superAdmin0913(clientId=3186)，不是其它服务常用的 autoui_acount(clientId=62)——两者都是内部测试号，都在 clientid_exclude 里。kroger/bol/chewy 别名沿用其它服务的既有结论，尚未针对 sov-hub 单独验证，首次登录若返回406需重新确认"
+    },
+    "es_index": { "us": "sov-hub-*" },
+    "config": "single-api/sov-hub/{platform}/{env}/config.json",
+    "es": {
+      "path_field": "urlReferrer.keyword",
+      "method_field": "httpMethod.keyword",
+      "body_field": "body",
+      "body_is_json_string": true,
+      "clientid_exclude": [62, 3186],
+      "assertion_l1": { "code": 200, "success": true },
+      "platform_filter": { "field": "productLine.keyword", "applies_to": "all_methods" },
+      "_note": "2026-09-24 已实测探测确认：索引为按天分割的 sov-hub-YYYY.MM.DD（通配 sov-hub-*，注意不能用 sov-hub-access-*，那个不存在）；urlReferrer 为完整路径且自带 /api 前缀，与 swagger paths 直接对应；body 是字符串需二次解析（与 mainapi 一致）；productLine 是顶层字段（不嵌套在 body 里，与 micro-api 一致），POST/GET 均可直接按 productLine.keyword 过滤，不需要区分方法；responseBody 也是字符串但该索引未见记录（历史文档为 null），断言以实际调用响应为准，不依赖 ES 里的 responseBody"
+    },
+    "exclude_endpoints_file": "single-api/sov-hub/excluded-endpoints.json",
+    "_note": "exclude_endpoints_file 内 64 个接口为用户明确指定不测试/不执行的接口（来自 14 张 swagger-ui 截图，2026-09-24），与 ES 90天无流量清单是两套独立机制，生成 case 前先读取该文件跳过"
   },
   "target-api": {
     "github_repo": "pacvue/target-api",

@@ -1,0 +1,148 @@
+[
+  {
+    "name": "PUT /api/sov/setting/weight - 开启加权SOV开关(含前置读取原值/后置还原,可重复)",
+    "description": "单接口测试：PUT /api/sov/setting/weight。前置GET读取当前client+productLine的加权SOV开关原值,PUT设置enabled=true,再GET验证生效,后置PUT还原为读取到的原值,保证账号级配置不被测试污染、可重复执行。500条随机样本中占比约50.0%（5次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-读取原始开关值",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {},
+        "extract_vars": {
+          "weight_enabled_original_1": "data.isEnabled"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "开启加权SOV",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {
+          "enabled": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证开关已生效",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "isEnabled": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-还原原始开关值",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {
+          "enabled": "{{weight_enabled_original_1}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/setting/weight - 关闭加权SOV开关(含前置读取原值/后置还原,可重复)",
+    "description": "单接口测试：PUT /api/sov/setting/weight。前置GET读取当前client+productLine的加权SOV开关原值,PUT设置enabled=false,再GET验证生效,后置PUT还原为读取到的原值,保证账号级配置不被测试污染、可重复执行。500条随机样本中占比约50.0%（5次）。",
+    "module": "Setting",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-读取原始开关值",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {},
+        "extract_vars": {
+          "weight_enabled_original_2": "data.isEnabled"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "关闭加权SOV",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {
+          "enabled": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证开关已生效",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "isEnabled": false
+          }
+        }
+      },
+      {
+        "name": "后置清理-还原原始开关值",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/setting/weight",
+        "request_body": {
+          "enabled": "{{weight_enabled_original_2}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,235 @@
+{
+  "config": "sov-hub (walmart, us)",
+  "started_at": "2026-09-28T03:36:48.719674+00:00",
+  "finished_at": "2026-09-28T03:37:02.937410+00:00",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "MonitorKeyword 生命周期(主场景) - 批量添加/列表验证/全局搜索验证/批量删除清理",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "1. 批量添加测试关键词(主测试 POST /keyword/batch，deviceTypes=[0,1,2] 全设备，86.9%占比场景)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/batch",
+          "status_code": 200,
+          "ms": 1247,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "2. 列表验证已添加(POST /keyword/list，按 categoryId+keywordText 过滤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/list",
+          "status_code": 200,
+          "ms": 2536,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "3. 全局搜索验证可搜到(GET /keyword/search，当前 client+productLine)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_walmart_kw_1790566522",
+          "status_code": 200,
+          "ms": 1107,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "4. 清理：批量删除测试关键词(主测试 DELETE /keyword/batch)",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/batch",
+          "status_code": 200,
+          "ms": 927,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "5. 复查删除生效(POST /keyword/list 应返回空，确认业务成功信号而非仅code:200)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/list",
+          "status_code": 200,
+          "ms": 1797,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "MonitorKeyword 生命周期(次场景) - 单一设备类型(deviceTypes=[0])批量添加/验证/清理",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "1. 批量添加测试关键词(deviceTypes=[0] 单设备，7.2%占比场景)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/batch",
+          "status_code": 200,
+          "ms": 1222,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "2. 列表验证已添加(POST /keyword/list)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/list",
+          "status_code": 200,
+          "ms": 887,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "3. 全局搜索验证可搜到(GET /keyword/search)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_walmart_kw_1790566522",
+          "status_code": 200,
+          "ms": 1620,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "4. 清理：批量删除测试关键词(DELETE /keyword/batch)",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/batch",
+          "status_code": 200,
+          "ms": 890,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "5. 复查删除生效(POST /keyword/list 应返回空)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/list",
+          "status_code": 200,
+          "ms": 1980,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

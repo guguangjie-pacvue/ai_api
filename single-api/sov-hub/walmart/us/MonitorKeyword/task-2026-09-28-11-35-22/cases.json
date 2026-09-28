@@ -1,0 +1,248 @@
+[
+  {
+    "name": "MonitorKeyword 生命周期(主场景) - 批量添加/列表验证/全局搜索验证/批量删除清理",
+    "description": "单接口测试：POST /api/sov/keyword/batch + POST /api/sov/keyword/list + GET /api/sov/keyword/search + DELETE /api/sov/keyword/batch。四个接口构成一个完整生命周期：先批量添加2个自动化测试专用关键词(zzautotest_walmart_kw_1790566522_1/_2，deviceTypes=[0,1,2])到真实存在数据的 walmart category(90554)，再用 POST /keyword/list 按 categoryId+keywordText 过滤验证已入库，再用 GET /keyword/search 做当前client+productLine下的全局模糊搜索验证可搜到，最后 DELETE 批量删除清理，并再次 POST /keyword/list 验证已删除(data为空)，确保可重复执行且不留残留。deviceTypes=[0,1,2] 这一组合是walmart平台90天真实调用中占比最高的场景(320条批量添加样本中278条=86.9%)，zipCodes=[\"98007\"]为最高频真实取值(64.1%)。POST /keyword/batch 500条随机样本中占比约86.9%（278次）；DELETE /keyword/batch 由本case自建自删闭环覆盖；POST /keyword/list 与 GET /keyword/search 近90天walmart平台均为0调用(ES无流量)，按约定纳入生命周期case执行验证，不作为无流量跳过。",
+    "module": "MonitorKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 批量添加测试关键词(主测试 POST /keyword/batch，deviceTypes=[0,1,2] 全设备，86.9%占比场景)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryId": "{{variables.category_id}}",
+          "productLine": "WALMART",
+          "isDaypart": null,
+          "logOperationType": null,
+          "countryCode": "US",
+          "keywords": [
+            "zzautotest_walmart_kw_1790566522_1",
+            "zzautotest_walmart_kw_1790566522_2"
+          ],
+          "deviceTypes": [
+            0,
+            1,
+            2
+          ],
+          "zipCodes": [
+            "98007"
+          ],
+          "retailerIds": [],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 列表验证已添加(POST /keyword/list，按 categoryId+keywordText 过滤)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_walmart_kw_1790566522"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 2
+          }
+        }
+      },
+      {
+        "name": "3. 全局搜索验证可搜到(GET /keyword/search，当前 client+productLine)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_walmart_kw_1790566522",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 2
+          }
+        }
+      },
+      {
+        "name": "4. 清理：批量删除测试关键词(主测试 DELETE /keyword/batch)",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "keywordTexts": [
+            "zzautotest_walmart_kw_1790566522_1",
+            "zzautotest_walmart_kw_1790566522_2"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "5. 复查删除生效(POST /keyword/list 应返回空，确认业务成功信号而非仅code:200)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_walmart_kw_1790566522"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "MonitorKeyword 生命周期(次场景) - 单一设备类型(deviceTypes=[0])批量添加/验证/清理",
+    "description": "单接口测试：同上4个接口的生命周期闭环，覆盖 walmart 平台第二高频的 deviceTypes 组合场景：deviceTypes=[0]单一设备类型(320条批量添加样本中23条=7.2%)，用于补充主场景之外真实存在的≥1%设备类型差异。同样用自建的自动化测试专用关键词(zzautotest_walmart_kw_1790566522_3/_4)，添加→列表验证→搜索验证→删除清理→复查删除生效，全程不影响 category(90554) 下已有的真实监控关键词。POST /keyword/batch 500条随机样本中占比约7.2%（23次）。",
+    "module": "MonitorKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 批量添加测试关键词(deviceTypes=[0] 单设备，7.2%占比场景)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryId": "{{variables.category_id}}",
+          "productLine": "WALMART",
+          "isDaypart": null,
+          "logOperationType": null,
+          "countryCode": "US",
+          "keywords": [
+            "zzautotest_walmart_kw_1790566522_3",
+            "zzautotest_walmart_kw_1790566522_4"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            "98007"
+          ],
+          "retailerIds": [],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 列表验证已添加(POST /keyword/list)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_walmart_kw_1790566522"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 2
+          }
+        }
+      },
+      {
+        "name": "3. 全局搜索验证可搜到(GET /keyword/search)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_walmart_kw_1790566522",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 2
+          }
+        }
+      },
+      {
+        "name": "4. 清理：批量删除测试关键词(DELETE /keyword/batch)",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "keywordTexts": [
+            "zzautotest_walmart_kw_1790566522_3",
+            "zzautotest_walmart_kw_1790566522_4"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "5. 复查删除生效(POST /keyword/list 应返回空)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_walmart_kw_1790566522"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      }
+    ]
+  }
+]

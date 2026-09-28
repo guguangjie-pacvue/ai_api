@@ -1,0 +1,144 @@
+{
+  "config": "sov-hub (criteo, us)",
+  "started_at": "2026-09-28T07:23:26.578633+00:00",
+  "finished_at": "2026-09-28T07:23:34.814213+00:00",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "MonitorKeyword 生命周期(主场景) - 添加/列表验证/全局搜索验证/删除清理(单关键词，控制共享账号配额争用)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "1. 添加测试关键词(主测试 POST /keyword/batch，deviceTypes=[0]+zipCodes=[] 100%占比场景，retailerIds=[80]+storeIds=[0]为最高频真实组合40.9%；仅add 1个关键词以控制对共享账号配额的争用)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/batch",
+          "status_code": 200,
+          "ms": 1700,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "2. 列表验证已添加(POST /keyword/list，按 categoryIds+keywordText 过滤)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/list",
+          "status_code": 200,
+          "ms": 865,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "3. 全局搜索验证可搜到(GET /keyword/search，当前 client+productLine，返回字符串数组)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_criteo_kw_1790579939",
+          "status_code": 200,
+          "ms": 1818,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "4. 清理：删除测试关键词(主测试 DELETE /keyword/batch，与ES真实样本100%的单关键词结构一致)",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/batch",
+          "status_code": 200,
+          "ms": 1148,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "5. 复查删除生效(POST /keyword/list 应返回空数组，确认业务成功信号而非仅code:200)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/list",
+          "status_code": 200,
+          "ms": 1625,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        },
+        {
+          "name": "6. 复查搜索也不再命中(GET /keyword/search 应返回空数组)",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_criteo_kw_1790579939",
+          "status_code": 200,
+          "ms": 1076,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

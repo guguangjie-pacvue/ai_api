@@ -1,0 +1,270 @@
+{
+  "config": "sov-hub (criteo, us)",
+  "started_at": "2026-09-28T06:45:27.372174+00:00",
+  "finished_at": "2026-09-28T06:45:47.447838+00:00",
+  "total": 4,
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/sov/brand-mapping/saveMergeBrand - 新建品牌合并(create) + 删除清理",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建合并品牌(主测试)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/saveMergeBrand",
+          "status_code": 200,
+          "ms": 1843,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "清理：删除刚创建的合并品牌",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/deleteMergeBrand",
+          "status_code": 200,
+          "ms": 1036,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/brand-mapping/deleteMergeBrand - 删除已创建的品牌合并",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置：创建待删除的合并品牌",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/saveMergeBrand",
+          "status_code": 200,
+          "ms": 1675,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "主测试：删除合并品牌",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/deleteMergeBrand",
+          "status_code": 200,
+          "ms": 2088,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/brand-mapping/asMyBrand - 标记为我的品牌 + 取消 + 删除清理",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置：创建测试用合并品牌(myBrand=false)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/saveMergeBrand",
+          "status_code": 200,
+          "ms": 1090,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "主测试：标记为我的品牌(myBrand=true)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/asMyBrand",
+          "status_code": 200,
+          "ms": 3872,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "反向操作：取消我的品牌标记(myBrand=false)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/asMyBrand",
+          "status_code": 200,
+          "ms": 2378,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "清理：删除测试用合并品牌",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/deleteMergeBrand",
+          "status_code": 200,
+          "ms": 1116,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/brand-mapping/setBrandColor - 设置合并品牌颜色 + 删除清理",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置：创建测试用合并品牌",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/saveMergeBrand",
+          "status_code": 200,
+          "ms": 2157,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "主测试：设置合并品牌颜色",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/setBrandColor",
+          "status_code": 200,
+          "ms": 929,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "清理：删除测试用合并品牌",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-mapping/deleteMergeBrand",
+          "status_code": 200,
+          "ms": 1886,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

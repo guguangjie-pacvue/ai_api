@@ -1,0 +1,116 @@
+[
+  {
+    "name": "POST /api/sov/insight/asin - 唯一真实模式(ASIN维度洞察)",
+    "description": "单接口测试：POST /api/sov/insight/asin。真实90天流量2222次，全部为同一结构模式(dim=YTD/deviceMode=Aggregated/pageInfo固定/insight=false)，唯一差异是调用方自己的categoryIds+selectedBrands(即“我的品牌”)，已全覆盖，不编造额外场景。",
+    "module": "SOV Insight",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 asin 洞察",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/insight/asin",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "AMAZON",
+          "realProductLine": "amazon",
+          "startDate": "2026-08-25",
+          "endDate": "2026-09-24",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "dim": "YTD",
+          "deviceMode": "Aggregated",
+          "deviceTypes": null,
+          "keywords": null,
+          "keywordTagIds": null,
+          "tagIntersect": 0,
+          "zipCodes": null,
+          "retailerIds": null,
+          "storeIds": null,
+          "keywordPoolIds": null,
+          "weekStart": "Sunday",
+          "useWeight": false,
+          "splitMark": 0,
+          "orderBy": null,
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1,
+            "orderBy": "shareOfShelf desc",
+            "orderBySnakeCase": "share_of_shelf DESC"
+          },
+          "dateFormat": null,
+          "filterSql": null,
+          "selectedBrands": [
+            "Apple"
+          ],
+          "asins": null,
+          "keywordTexts": null,
+          "startAvgPosition": null,
+          "endAvgPosition": null,
+          "startCVR": null,
+          "endCVR": null,
+          "insight": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/insight/anomaly-setting - 保存当前已选异常类型(读回填,不改变现有设置)",
+    "description": "单接口测试：GET /api/sov/insight/anomaly-setting + POST /api/sov/insight/anomaly-setting。真实90天流量110次，样本显示 types 恒为 [0,1,2,3,4,5,6](即全选)。为避免覆盖账号里其它同事的实际设置，先 GET 读出账号当前值，POST 时把读到的值原样存回，等价于一次真实的“重新保存当前设置”操作，不产生实际变更。",
+    "module": "SOV Insight",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 读取当前异常类型设置",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/insight/anomaly-setting",
+        "request_body": {},
+        "extract_vars": {
+          "current_anomaly_types": "data"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 原样存回(主测试)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/insight/anomaly-setting",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "productLine": "AMAZON",
+          "types": "{{current_anomaly_types}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

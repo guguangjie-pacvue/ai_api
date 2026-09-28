@@ -1,0 +1,201 @@
+[
+  {
+    "name": "DELETE /api/sov/bulk/brand - 按品牌名批量删除 category(含前置创建+验证)",
+    "description": "单接口测试：DELETE /api/sov/bulk/brand。kroger平台90天真实流量2次，真实样本均为{brandName,countryCode}结构(如'GVS'/'4Sisters')，占比100%，仅brandName取值不同、结构完全一致。因该接口按品牌名批量物理清空该品牌下的真实生产category，不可直接复用ES样本里的真实品牌名(会误删真实用户数据)，改用测试专用临时创建的category(brandName='ZZ-AutoTest-KR-DeleteBrand-Brand')验证：先创建，用 category/page 按 searchGroupName 确认存在(data.total>=1)，再调用本接口删除，最后再次查询确认 data.total=0，即为业务成功信号(而非仅code:200)。保证幂等可重复执行。500条随机样本中占比约100%（2次）。",
+    "module": "Bulk Operation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试专用临时 category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-KR-DeleteBrand-Brand",
+          "categoryName": "ZZ-AutoTest-KR-DeleteBrand-Category",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "zzautotestkeyword"
+          ],
+          "deviceTypes": [
+            0
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认临时 category 已创建",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-KR-DeleteBrand-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "主测试：按品牌名批量删除",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/brand",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-KR-DeleteBrand-Brand",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认该品牌下 category 已被删除(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-KR-DeleteBrand-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/bulk/import-sov-template - 导入 SOV 模板数据(含验证+品牌名清理)",
+    "description": "单接口测试：POST /api/sov/bulk/import-sov-template。kroger平台90天真实流量2次，真实样本均为brand+category+market(null)+devices(null)+isDaypart+keywords[]+retailers结构的数组(单条record，keywords 30+条)，retailers真实值恒为null，market/devices也恒为null，占比100%——与walmart/target(retailers为null)一致，kroger平台经独立验证同样不要求retailers。改用测试专用brand/category('ZZ-AutoTest-KR-Import-Brand'/'ZZ-AutoTest-KR-Import-Category')按真实schema构造最小可用的1条导入记录验证功能正确性(market/devices/retailers均传null，与kroger平台真实流量完全一致)，导入后用 category/page 按 searchGroupName 验证已生成(data.total>=1，业务成功信号)，最后用 DELETE /api/sov/bulk/brand 按品牌名清理并二次验证 data.total=0，保证幂等可重复执行、不留残留。500条随机样本中占比约100%（2次）。",
+    "module": "Bulk Operation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "主测试：导入 SOV 模板数据(测试专用brand/category)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/import-sov-template",
+        "request_body": [
+          {
+            "brand": "ZZ-AutoTest-KR-Import-Brand",
+            "category": "ZZ-AutoTest-KR-Import-Category",
+            "market": null,
+            "devices": null,
+            "isDaypart": false,
+            "keywords": [
+              {
+                "keywordText": "zzautotestimportkeyword"
+              }
+            ],
+            "retailers": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认导入数据已生成真实 category(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-KR-Import-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "清理：按品牌名删除导入生成的 category",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/brand",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-KR-Import-Brand",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认清理彻底(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-KR-Import-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": 0
+          }
+        }
+      }
+    ]
+  }
+]

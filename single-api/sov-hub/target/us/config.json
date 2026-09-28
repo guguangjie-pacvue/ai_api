@@ -1,0 +1,51 @@
+{
+  "name": "sov-hub (target, us)",
+  "variables": {
+    "platform": "target",
+    "user_id": 18589,
+    "client_id": 62,
+    "category_id": 148915,
+    "category_name": "Phone",
+    "brand_name": "Apple",
+    "category_ids_multi": [
+      149364,
+      148915,
+      148946,
+      149730,
+      149365,
+      149682,
+      149562,
+      148890,
+      149218,
+      149703,
+      149921
+    ],
+    "period_date": "2026-09-01",
+    "_note_account": "sov-hub target 平台使用 autoui_acount (clientId=62, userId=18589)，与 walmart/instacart/amazon 平台是同一个共享测试账号，只是 productline header 不同",
+    "_note_category_id": "category_id=148915 (categoryName='Phone', brandName='autoTest_Phone', countryCode=US) 通过 POST /api/sov/category/filter 实测确认为该账号 target 平台下的真实 category，brandName 明确标注为自动化测试用；已用 POST /api/sov/asin/page 实测确认可正常返回数据（886条，日期范围 2026-08-01~2026-09-27），brand_name='Apple' 为该 category 下真实高频品牌（Top1，100条抽样中出现31次）",
+    "_note_category_ids_multi": "该账号 target 平台下逐一探测确认为真实有数据的 11 个 category id（POST /api/sov/asin/page 实测均返回非零 total，81 个 category 全部有数据，此处取 total 较高的前几个），用于替换 ES 日志里那些一次查询多个 categoryId 的批量场景",
+    "_note_brand_share_board_keeper": "2026-09-28 生成 Brand Share Board 模块测试 case 前实测发现该账号 target 平台下仅有 1 个看板(id=2770, boardName='Default Board')，DELETE /api/sov/brand-share-board/{id} 有业务规则 code=400505 'At least one board must be retained'（按 productline 隔离计数），若不预留兜底看板会导致创建+删除配对用例在只剩1个看板时无法删除。已手动创建兜底看板 boardName='zz-keeper-do-not-delete-target' (id=2771, categoryIds=['148915'], brands=[Apple/isMyBrand=true])，永久保留、后续任何清理流程不得删除此看板，保证 target 平台下删除操作时账号始终 >=2 个看板",
+    "_note_category_retailer_target": "2026-09-28 生成 Category 模块测试 case 时实测确认：target 平台下 retailer 主数据仅有唯一一条 retailerId=1('Target'自身，retailerCount≈93/94)，与 walmart(实测配额remain=2)/instacart(实测配额不生效)的多retailer/多store模式完全不同；PUT /{id}/retailers 传入跨平台retailerId(如5/34/16/119等)最多10个均返回success:true但不会被真实识别选中(GET selected仍只显示retailerId=1)，说明target侧未复现walmart式配额报错，业务上唯一有效值只有[1]。🔴另发现 DELETE /{id}/retailers 删光该唯一retailer会触发Swagger描述的'级联删除category'，此时再显式调用 DELETE /{id} 会返回 code=400101/success=false(因category已不存在)，级联删除后无需再手动删除。🔴还发现 target productline 未铺设 ZipCode 主数据：GET /zip-codes?countryCode=US 返回0条(同账号 walmart productline 返回3172条)，POST /zip-codes/lookup、POST /walmart/zip-codes 对 target 均返回空数组；PUT /{id}/zipcodes 写入返回success:true但不会持久生效(category详情zipCodes始终为[])。POST /walmart/zip-codes 接口对 target productline 请求同样返回200成功(不报平台限制错误)，与 instacart 侧结论一致，是历史命名沿用非真正平台白名单限制。"
+  },
+  "base_urls": {
+    "SOVHUBBASEURL": "https://api.pacvue.com/sov-hub/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "target"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjZGNEIxQ0Y5NENFNTE0M0M5MUQ2MjhCQTJGRjEyNEM1NkQ0QjdCRkIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJiMHNjLVV6bEZEeVIxaWk2TF9Fa3hXMUxlX3MifQ.eyJuYmYiOjE3OTA1NzM4NjgsImV4cCI6MTc5MDYwOTg2OCwiaXNzIjoiaHR0cDovL2lkZW50aXR5IiwiYXVkIjpbImh0dHA6Ly9pZGVudGl0eS9yZXNvdXJjZXMiLCJhcGkxIl0sImNsaWVudF9pZCI6ImNsaWVudC5qd3QiLCJzdWIiOiIxODU4OSIsImF1dGhfdGltZSI6MTc5MDU3Mzg2OCwiaWRwIjoibG9jYWwiLCJ1c2VySWQiOiIxODU4OSIsInJvbGUiOiJVc2VyIiwidXNlckluZm8iOiJ7XCJEZWZhdWx0Q3VycmVuY3lcIjpcIlVTXCIsXCJ1c2VyTmFtZVwiOlwiYXV0b3VpX2Fjb3VudFwiLFwidXNlclJvbGVcIjpcIlVzZXJcIixcImF2YWlsYWJsZVBsYXRmb3Jtc1wiOltcImFtYXpvblwiLFwiYm9sdjJcIixcImNoZXd5djJcIixcImNpdHJ1c1wiLFwiY29tbWVyY2VcIixcImNvbW1lcmNlLXRhcmdldFwiLFwiY29tbWVyY2UtdGlrdG9rXCIsXCJjb21tZXJjZS13YWxtYXJ0XCIsXCJjcml0ZW9cIixcImRvb3JkYXNoXCIsXCJkc3BcIixcImViYXlcIixcImluc3RhY2FydFwiLFwia3JvZ2VydjNcIixcIm1lcmNhZG9cIixcInJhc1wiLFwicmV0YWlsZXJcIixcInNhbXNjbHViXCIsXCJ0YXJnZXRcIixcInRpa3Rva1wiLFwidHRkXCIsXCJ3YWxtYXJ0XCIsXCJtdDM2MFwiXSxcImF2YWlsYWJsZUNvbW1lcmNlUGxhdGZvcm1zXCI6W1wiYW1hem9uXCIsXCJ3YWxtYXJ0XCJdLFwiQ2xpZW50SWRcIjo2MixcInNvdXJjZVR5cGVcIjowLFwiUm9vdFVzZXJJZFwiOjkzLFwiSXNWY1wiOjAsXCJpc0ZvcmV2ZXJcIjowLFwiU3Vic2NyaWJlU3RhdHVzXCI6MSxcImxhc3REYXlzXCI6MCxcIlF1b3RhXCI6MTAwMCxcIklzUmV0YWlsZXJEYXNoYm9hcmRBdmFpbGFibGVcIjp0cnVlLFwiYnlQYWN2dWVyXCI6XCJcIixcImlzUmVhbFRpbWVEYXRhXCI6dHJ1ZSxcIk1haWxcIjpcInpoYW5nc2hhb2JvQHBhY3Z1ZS5jb21cIixcImFkbWluUGxhdGZvcm1zXCI6W1wicmV0YWlsZXJcIl0sXCJhZG1pbkNvbW1lcmNlUGxhdGZvcm1zXCI6W10sXCJMZXZlbFwiOlwiQWRtaW5cIixcImlzQ2FuYXJ5XCI6ZmFsc2UsXCJpc0VtYWlsVmFsaWRhdGVkXCI6ZmFsc2V9Iiwic2NvcGUiOlsib3BlbmlkIiwiYXBpMSIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJhdXRodG9rZW4iXX0.JluZnYx8l1byvT9WcnwRZvRdr3UC62S_HStFFap0wswaGn5JAD2xDiMTVFG3QyNqTsOXZlc0R0vqu5j48glIosy9IhFuWyC7tXVGpnNc_wW2R1cNizkXDw4jakPLFj-MABD098L207_2l3AJdNYRmBZfqlC_q3byBBjMRJZ7FYnQOJjXnJWiLgenoCpUbo2uRPEvV9tBUfNc-hR9NKSfhLKBR2wj6zGxMwpd6XwYnkQ3orVkLxKjjYsa9vyKvcMajUexy3V0uKgG9hVOJLpTs3eE-3sGdUfQTYknhertrzp4VkuffaaImUvjJJesewBGartsxX551UK1sRn8TxzdUw",
+    "Content-Type": "application/json",
+    "productline": "target"
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "config": "sov-hub (criteo, us)",
+  "started_at": "2026-09-28T07:14:38.460170+00:00",
+  "finished_at": "2026-09-28T07:15:03.380423+00:00",
+  "total": 6,
+  "passed": 6,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/sov/keyword-tag - 空categoryIds查询全部标签",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询标签(空categoryIds)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag",
+          "status_code": 200,
+          "ms": 850,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/keyword-tag - 单个categoryId查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询标签(单个categoryId)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag",
+          "status_code": 200,
+          "ms": 875,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/keyword-tag - 多个categoryId查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "查询标签(多个categoryId)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag",
+          "status_code": 200,
+          "ms": 3618,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 9,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/keyword-tag/create - 单个标签名创建(含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建单个标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/create",
+          "status_code": 200,
+          "ms": 1146,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询获取新建tagId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/list",
+          "status_code": 200,
+          "ms": 1157,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 13,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/delete",
+          "status_code": 200,
+          "ms": 2102,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/keyword-tag/addKeywords - appendOnly=false覆盖模式(含前置建/后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/create",
+          "status_code": 200,
+          "ms": 887,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-获取tagId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/list",
+          "status_code": 200,
+          "ms": 2196,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 13,
+          "msg": null
+        },
+        {
+          "name": "关联关键词(覆盖模式)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/addKeywords",
+          "status_code": 200,
+          "ms": 1921,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/delete",
+          "status_code": 200,
+          "ms": 2462,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/keyword-tag/sub-tag/create - 批量创建多个子标签moveKeywords=true(含前置建/后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-创建父标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/create",
+          "status_code": 200,
+          "ms": 948,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "前置-获取父tagId",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/list",
+          "status_code": 200,
+          "ms": 2424,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 13,
+          "msg": null
+        },
+        {
+          "name": "批量创建2个子标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/sub-tag/create",
+          "status_code": 200,
+          "ms": 2561,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "int",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除父标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/keyword-tag/delete",
+          "status_code": 200,
+          "ms": 1764,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

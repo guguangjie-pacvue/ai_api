@@ -1,0 +1,198 @@
+[
+  {
+    "name": "POST /api/sov/permission/category-tree - 查询完整类目树(不限国家)",
+    "description": "单接口测试：POST /api/sov/permission/category-tree。countryCodes传空值查询当前client下按brand+country分组的完整类目树(含isSelected授权回显)。500条随机样本中该业务意图(不限国家)共占比100.0%（469次countryCodes=[]占93.8%+31次countryCodes=null占6.2%,两者语义等价均为不限国家,合并为同一场景）。",
+    "module": "SOV Permission",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询类目树",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/category-tree",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "countryCodes": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/permission/group - 清空类目授权(含后置恢复默认单类目,可重复)",
+    "description": "单接口测试：PUT /api/sov/permission/group。传当前用户+categoryIds=[]全量清空该用户在本client下的类目访问授权,后置恢复为默认单类目授权(category_id),保证账号级配置可重复执行、不影响其它模块用例依赖的类目权限。500条随机样本中占比约80.0%（4次）。",
+    "module": "SOV Permission",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "清空类目授权",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/group",
+        "request_body": {
+          "userId": "{{variables.user_id}}",
+          "categoryIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-恢复默认单类目授权",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/group",
+        "request_body": {
+          "userId": "{{variables.user_id}}",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/permission/group - 设置多类目授权列表(含后置恢复默认单类目,可重复)",
+    "description": "单接口测试：PUT /api/sov/permission/group。传当前用户+多个categoryIds全量替换该用户在本client下的类目访问授权列表,后置恢复为默认单类目授权(category_id),保证可重复执行。500条随机样本中占比约20.0%（1次）。",
+    "module": "SOV Permission",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "设置多类目授权列表",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/group",
+        "request_body": {
+          "userId": "{{variables.user_id}}",
+          "categoryIds": "{{variables.category_ids_multi}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-恢复默认单类目授权",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/group",
+        "request_body": {
+          "userId": "{{variables.user_id}}",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/permission/specify - 关闭仅可访问被授权SOV模式(含后置保持默认关闭,可重复)",
+    "description": "单接口测试：PUT /api/sov/permission/specify。传当前用户+enabled=false,切换关闭仅可访问被授权SOV模式,保持账号默认状态、可重复执行。500条随机样本中占比约60.0%（3次）。",
+    "module": "SOV Permission",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "关闭仅可访问被授权SOV模式",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/specify",
+        "request_body": {
+          "userId": "{{variables.user_id}}",
+          "enabled": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/permission/specify - 启用仅可访问被授权SOV模式(含后置恢复默认关闭,可重复)",
+    "description": "单接口测试：PUT /api/sov/permission/specify。传当前用户+enabled=true,切换为仅可访问被授权SOV模式,后置恢复为默认关闭(enabled=false),保证不影响其它模块用例的类目访问范围、可重复执行。500条随机样本中占比约40.0%（2次）。",
+    "module": "SOV Permission",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "启用仅可访问被授权SOV模式",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/specify",
+        "request_body": {
+          "userId": "{{variables.user_id}}",
+          "enabled": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-恢复默认关闭",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/permission/specify",
+        "request_body": {
+          "userId": "{{variables.user_id}}",
+          "enabled": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

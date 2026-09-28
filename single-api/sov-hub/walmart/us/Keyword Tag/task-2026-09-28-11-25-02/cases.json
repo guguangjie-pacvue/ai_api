@@ -1,0 +1,618 @@
+[
+  {
+    "name": "POST /api/sov/keyword-tag - 空categoryIds查询全部标签",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传空数组,查询账号下全部关键词标签(不按category过滤)。500条随机样本中占比约13%（65次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(空categoryIds)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 单个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传单个category,查询该分类下出现过的关键词标签。500条随机样本中占比约71.4%（357次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(单个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 多个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传多个category(合并覆盖真实样本中2/3/4/6/12/16/17/22等多种计数),查询多分类下出现过的关键词标签。500条随机样本中占比约15.6%（78次,含categoryIds数量2~39不等的多种计数场景,合并统计）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(多个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": "{{variables.category_ids_multi}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/create - 单个标签名创建(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/create。tagNames传单个标签名创建一级标签(自动化专用命名前缀AutoTest_,避免与共享账号已有真实标签混淆),后置调用delete移除,保证可重复执行,同时覆盖POST /api/sov/keyword-tag/delete(该接口90天内walmart平台真实调用4次,100%为单tagId模式)。500条随机样本中占比约93.75%（30次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建单个标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_single_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "查询获取新建tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_single_id": "data[tagName=AutoTest_kwtag_single_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_single_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/create - 批量创建多个标签名(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/create。tagNames一次传3个标签名批量创建(自动化专用命名前缀AutoTest_),后置逐个调用delete移除,保证可重复执行。500条随机样本中占比约6.25%（2次,含真实样本里的2/5等批量计数,取代表性3个合并统计）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建3个标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_batch_20260928_1",
+            "AutoTest_kwtag_batch_20260928_2",
+            "AutoTest_kwtag_batch_20260928_3"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 3
+          }
+        }
+      },
+      {
+        "name": "查询获取3个新建tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_batch_id_1": "data[tagName=AutoTest_kwtag_batch_20260928_1].tagId",
+          "kwtag_batch_id_2": "data[tagName=AutoTest_kwtag_batch_20260928_2].tagId",
+          "kwtag_batch_id_3": "data[tagName=AutoTest_kwtag_batch_20260928_3].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除标签1",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_batch_id_1}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除标签2",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_batch_id_2}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除标签3",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_batch_id_3}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/addKeywords - appendOnly=false覆盖模式(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/addKeywords。前置创建1个自动化专用标签,以appendOnly=false覆盖模式关联真实健康护理类关键词样本(zyrtec/allergy medicine等),后置删除标签(级联清理关键词)保证可重复执行。500条随机样本中占比约100%（31次,walmart平台90天内appendOnly全部为false,未见true样本,不编造true场景）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_addkw_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "前置-获取tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_addkw_id": "data[tagName=AutoTest_kwtag_addkw_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "关联关键词(覆盖模式)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/addKeywords",
+        "request_body": {
+          "tagId": "{{kwtag_addkw_id}}",
+          "keywordTexts": [
+            "zyrtec",
+            "allergy medicine",
+            "allergy pills",
+            "cetrizine"
+          ],
+          "appendOnly": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_addkw_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/sub-tag/create - 单个子标签创建moveKeywords=false(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/sub-tag/create。前置创建1个自动化专用一级标签,subTagNames传单个子标签名(真实样本值'Categories')创建,moveKeywords=false(与真实样本中单个创建场景一致),后置删除父标签(级联清理子标签)保证可重复执行。90天内walmart平台该接口共9次真实调用,单个子标签+moveKeywords=false占比约22.2%（2次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_subtag_single_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "前置-获取父tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_subtag_single_id": "data[tagName=AutoTest_kwtag_subtag_single_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "创建单个子标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/sub-tag/create",
+        "request_body": {
+          "tagId": "{{kwtag_subtag_single_id}}",
+          "subTagNames": [
+            "Categories"
+          ],
+          "moveKeywords": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_subtag_single_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/sub-tag/create - 批量创建多个子标签moveKeywords=true(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/sub-tag/create。前置创建1个自动化专用一级标签,subTagNames一次传3个子标签名(真实样本值'Top NB'/'Top B'/'Top Comp')批量创建,moveKeywords=true(真实样本中占比最高的组合),后置删除父标签(级联清理子标签)保证可重复执行。90天内walmart平台该接口共9次真实调用,批量创建(合并3/6个计数)占比约77.8%（7次）,其中批量+moveKeywords=true占比约44.4%（4次,为最典型代表场景）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_subtag_batch_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "前置-获取父tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_subtag_batch_id": "data[tagName=AutoTest_kwtag_subtag_batch_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "批量创建3个子标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/sub-tag/create",
+        "request_body": {
+          "tagId": "{{kwtag_subtag_batch_id}}",
+          "subTagNames": [
+            "Top NB",
+            "Top B",
+            "Top Comp"
+          ],
+          "moveKeywords": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 3
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_subtag_batch_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/update - 重命名标签(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/update。前置创建自动化专用一级标签,以tagId重命名标签名,后置删除标签保证可重复执行。500条随机样本中占比约100%（23次,walmart平台90天内均为单tagId+tagName重命名模式）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_update_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "前置-获取tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_update_id": "data[tagName=AutoTest_kwtag_update_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "重命名标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/update",
+        "request_body": {
+          "tagId": "{{kwtag_update_id}}",
+          "tagName": "AutoTest_kwtag_update_20260928-renamed"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_update_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

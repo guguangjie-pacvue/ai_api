@@ -1,0 +1,449 @@
+[
+  {
+    "name": "POST /api/sov/asin-group - 创建自定义ASIN分组(仅命名,不含ASIN,含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/asin-group。asins 为空数组，仅先建立分组名称，稍后再编辑添加ASIN，是最常见的建组方式。第2步用 GET /groups 按 groupName 匹配提取新建分组ID，第3步删除该分组，保证用例可重复执行。90天ES真实调用样本(amazon平台，共7条，样本较少)中占比约57.1%（4次）。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分组(空ASIN列表)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-empty-group",
+          "countryCode": "US",
+          "asins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_empty": "data[groupName=swagger-api-case-empty-group].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_empty}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group - 创建自定义ASIN分组(建组时直接填入ASIN,含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/asin-group。asins 建组时即填入一批真实ASIN。第2步用 GET /groups 按 groupName 匹配提取新建分组ID，第3步删除该分组，保证用例可重复执行。90天ES真实调用样本(amazon平台，共7条，样本较少)中占比约42.9%（3次）。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分组(含ASIN列表)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-with-asins",
+          "countryCode": "US",
+          "asins": [
+            "B0844J7BVD",
+            "B0844D4H7X",
+            "B0844JF4DB",
+            "B0844K5Z7M",
+            "B0844DYPG9",
+            "B0844JZHT8",
+            "B0844DSCRM",
+            "B0844G1MGG",
+            "B0844FK1K7",
+            "B0844JJZ8H"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_withasins": "data[groupName=swagger-api-case-with-asins].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_withasins}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/asin-group/{id} - 编辑自定义ASIN分组(为空分组补充ASIN,含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：PUT /api/sov/asin-group/{id}。第1步前置创建一个空ASIN分组，第2步用 GET /groups 按 groupName 匹配提取该分组ID，第3步编辑该分组补充ASIN列表，第4步删除该分组，保证用例可重复执行。90天ES真实PUT调用样本(amazon平台，共7条，样本较少)中，全部(100%，7次)都是为分组补充/更新ASIN列表，无空ASIN编辑的真实样本。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-空ASIN分组",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-edit-flow",
+          "countryCode": "US",
+          "asins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_edit": "data[groupName=swagger-api-case-edit-flow].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "编辑分组(补充ASIN列表)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_edit}}",
+        "request_body": {
+          "id": "{{group_id_edit}}",
+          "groupName": "swagger-api-case-edit-flow",
+          "countryCode": "US",
+          "asins": [
+            "B00A8O1OXK",
+            "B00A8O1Q74",
+            "B00A8O1R9Q",
+            "B00A8O8JL0",
+            "B00A8O8JLU",
+            "B00A8O8JNI",
+            "B00A8O8LRC",
+            "B00A8O8LSQ"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_edit}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group/sov/by-dim - 自定义分组SOV(Aggregated设备/无keywords过滤/无分组过滤)",
+    "description": "单接口测试：POST /api/sov/asin-group/sov/by-dim。deviceMode=Aggregated，无keywords过滤，groupIds为空表示查看全部自定义分组(不筛选特定分组)，是最主要的使用方式。500条随机样本中占比约80.2%（81/101次，90天全部样本）。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 by-dim",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/sov/by-dim",
+        "request_body": {
+          "deviceTypes": null,
+          "keywords": null,
+          "zipCodes": null,
+          "retailerIds": [],
+          "storeIds": null,
+          "keywordPoolIds": null,
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "AMAZON",
+          "realProductLine": "amazon",
+          "startDate": "2026-08-23",
+          "endDate": "2026-08-29",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "dim": "YTD",
+          "deviceMode": "Aggregated",
+          "keywordTagIds": [],
+          "tagIntersect": 0,
+          "weekStart": "Sunday",
+          "useWeight": false,
+          "splitMark": 0,
+          "orderBy": null,
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": "groupName desc",
+            "orderBySnakeCase": "group_name DESC"
+          },
+          "dateFormat": null,
+          "filterSql": null,
+          "asins": null,
+          "excludeAsins": null,
+          "brands": [],
+          "topN": 10,
+          "searchKeyword": "",
+          "startAvgPosition": null,
+          "endAvgPosition": null,
+          "insight": null,
+          "filters": null,
+          "countryCode": "US",
+          "groupIds": null,
+          "subBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group/sov/by-dim - 自定义分组SOV(Aggregated设备/含keywords过滤)",
+    "description": "单接口测试：POST /api/sov/asin-group/sov/by-dim。deviceMode=Aggregated，含keywords过滤，用于查看特定关键词下各自定义分组的SOV表现。90天全部样本(101条)中占比约10.9%（11次）。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 by-dim",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/sov/by-dim",
+        "request_body": {
+          "deviceTypes": null,
+          "keywords": [
+            "shampoo and conditioner"
+          ],
+          "zipCodes": null,
+          "retailerIds": [],
+          "storeIds": null,
+          "keywordPoolIds": null,
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "AMAZON",
+          "realProductLine": "amazon",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-29",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "dim": "YTD",
+          "deviceMode": "Aggregated",
+          "keywordTagIds": [],
+          "tagIntersect": 0,
+          "weekStart": "Sunday",
+          "useWeight": false,
+          "splitMark": 0,
+          "orderBy": null,
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": "groupName desc",
+            "orderBySnakeCase": "group_name DESC"
+          },
+          "dateFormat": null,
+          "filterSql": null,
+          "asins": null,
+          "excludeAsins": null,
+          "brands": [
+            "Pantene",
+            "Aussie",
+            "Herbal Essences"
+          ],
+          "topN": 10,
+          "searchKeyword": "",
+          "startAvgPosition": null,
+          "endAvgPosition": null,
+          "insight": null,
+          "filters": null,
+          "countryCode": "US",
+          "groupIds": null,
+          "subBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group/sov/by-dim - 自定义分组SOV(PC设备/无keywords过滤/多品类)",
+    "description": "单接口测试：POST /api/sov/asin-group/sov/by-dim。deviceMode=PC，无keywords过滤，含多个categoryIds。90天全部样本(101条)中占比约5.0%（5次）。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 by-dim",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/sov/by-dim",
+        "request_body": {
+          "deviceTypes": null,
+          "keywords": null,
+          "zipCodes": null,
+          "retailerIds": [],
+          "storeIds": null,
+          "keywordPoolIds": null,
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "AMAZON",
+          "realProductLine": "amazon",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-14",
+          "categoryIds": "{{variables.category_ids_multi}}",
+          "dim": "YTD",
+          "deviceMode": "PC",
+          "keywordTagIds": [],
+          "tagIntersect": 0,
+          "weekStart": "Sunday",
+          "useWeight": false,
+          "splitMark": 0,
+          "orderBy": null,
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": "groupName desc",
+            "orderBySnakeCase": "group_name DESC"
+          },
+          "dateFormat": null,
+          "filterSql": null,
+          "asins": null,
+          "excludeAsins": null,
+          "brands": [],
+          "topN": 10,
+          "searchKeyword": "",
+          "startAvgPosition": null,
+          "endAvgPosition": null,
+          "insight": null,
+          "filters": null,
+          "countryCode": "US",
+          "groupIds": null,
+          "subBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  }
+]

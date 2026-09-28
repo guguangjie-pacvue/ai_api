@@ -1,0 +1,88 @@
+{
+  "config": "sov-hub (amazon, us)",
+  "started_at": "2026-09-28T02:15:58.028743+00:00",
+  "finished_at": "2026-09-28T02:16:07.898858+00:00",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/sov/insight/asin - 唯一真实模式(ASIN维度洞察)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 asin 洞察",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/asin",
+          "status_code": 200,
+          "ms": 6481,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 339,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/insight/anomaly-setting - 保存当前已选异常类型(读回填,不改变现有设置)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "1. 读取当前异常类型设置",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/anomaly-setting",
+          "status_code": 200,
+          "ms": 1347,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 7,
+          "msg": null
+        },
+        {
+          "name": "2. 原样存回(主测试)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/anomaly-setting",
+          "status_code": 200,
+          "ms": 2038,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

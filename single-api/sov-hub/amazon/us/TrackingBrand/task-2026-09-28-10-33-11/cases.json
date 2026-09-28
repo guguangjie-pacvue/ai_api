@@ -1,0 +1,149 @@
+[
+  {
+    "name": "TrackingBrand 生命周期 - 保存追踪品牌/查询验证/还原清理",
+    "description": "单接口测试：PUT /api/sov/tracking-brand/config + GET /api/sov/tracking-brand + POST /api/sov/tracking-brand/config/list。真实90天流量32次(PUT /config)。写操作只作用在本账号已有的真实 category(91177, Phone)上——该 category 之前从未配置过追踪品牌(GET基线为空数组)，先设置为[\"Apple\"]验证保存成功，再还原回空数组，不留下任何变更、也不影响其它同事的分组/类目。",
+    "module": "TrackingBrand",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 读取基线(应为空)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/tracking-brand?categoryId={{variables.category_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 设置追踪品牌(主测试 PUT /config)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/tracking-brand/config",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "AMAZON",
+          "realProductLine": "amazon",
+          "startDate": "2026-08-25",
+          "endDate": "2026-09-28",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "dim": "YTD",
+          "deviceMode": "Aggregated",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1
+          },
+          "sovCategoryFilter": [
+            {
+              "categoryId": "{{variables.category_id}}",
+              "trackingBrands": [
+                "Apple"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "3. 验证已保存",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/tracking-brand?categoryId={{variables.category_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "4. 查询追踪品牌配置列表(POST /config/list)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/tracking-brand/config/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "startDate": "2026-08-25",
+          "endDate": "2026-09-28"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "5. 清理：还原为空(PUT /config)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/tracking-brand/config",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "AMAZON",
+          "realProductLine": "amazon",
+          "startDate": "2026-08-25",
+          "endDate": "2026-09-28",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "dim": "YTD",
+          "deviceMode": "Aggregated",
+          "pageInfo": {
+            "pageSize": 20,
+            "pageIndex": 1
+          },
+          "sovCategoryFilter": [
+            {
+              "categoryId": "{{variables.category_id}}",
+              "trackingBrands": []
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "6. 验证已还原为空",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/tracking-brand?categoryId={{variables.category_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

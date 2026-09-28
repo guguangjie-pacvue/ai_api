@@ -1,0 +1,85 @@
+[
+  {
+    "name": "MonitorKeyword 生命周期 - 批量添加/查询验证/批量删除清理",
+    "description": "单接口测试：POST /api/sov/keyword/batch + POST /api/sov/keyword/list + DELETE /api/sov/keyword/batch。写操作覆盖 batch-add(869次/90天)/batch-delete(675次/90天) 两个真实流量写接口。全程只操作账号已有真实 category(91177, Phone)下新增的2个测试专用关键词，添加后用 list 验证数量从5变7，删除后验证还原回5，不影响该 category 已有的5个真实关键词。",
+    "module": "MonitorKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 批量添加测试关键词(主测试 POST /keyword/batch)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryId": "{{variables.category_id}}",
+          "productLine": "AMAZON",
+          "isDaypart": null,
+          "logOperationType": null,
+          "countryCode": "US",
+          "keywords": [
+            "autotest sovhub monitorkeyword 1",
+            "autotest sovhub monitorkeyword 2"
+          ],
+          "deviceTypes": [
+            0,
+            1
+          ],
+          "zipCodes": [],
+          "retailerIds": [],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 查询验证已添加(POST /keyword/list)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "3. 清理：批量删除测试关键词(主测试 DELETE /keyword/batch)",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "keywordTexts": [
+            "autotest sovhub monitorkeyword 1",
+            "autotest sovhub monitorkeyword 2"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

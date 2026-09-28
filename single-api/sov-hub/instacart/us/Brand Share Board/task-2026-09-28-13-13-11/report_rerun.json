@@ -1,0 +1,305 @@
+{
+  "config": "sov-hub (instacart, us)",
+  "started_at": "2026-09-28T05:18:04.811252+00:00",
+  "finished_at": "2026-09-28T05:18:26.490997+00:00",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/sov/brand-share-board - 创建品牌份额看板(自有品牌+竞品对比,含存在性/详情验证与后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建看板(自有品牌+竞品)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board",
+          "status_code": 200,
+          "ms": 2490,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "校验看板名已存在",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/exist?name=swagger-api-case-instacart-mixed",
+          "status_code": 200,
+          "ms": 1573,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询看板列表定位新建看板ID",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/list",
+          "status_code": 200,
+          "ms": 1850,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "按ID查询看板详情校验字段",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/2767",
+          "status_code": 200,
+          "ms": 877,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "dict",
+          "data_len": 11,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建看板",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/2767",
+          "status_code": 200,
+          "ms": 2474,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/brand-share-board - 创建品牌份额看板(仅自有品牌,含后置清理,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建看板(仅自有品牌)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board",
+          "status_code": 200,
+          "ms": 2626,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询看板列表定位新建看板ID",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/list",
+          "status_code": 200,
+          "ms": 878,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除新建看板",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/2768",
+          "status_code": 200,
+          "ms": 1442,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "PUT /api/sov/brand-share-board/{id} - 编辑品牌份额看板(为已有看板新增竞品对比,含前置建/详情校验/后置删,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置创建-仅自有品牌看板",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board",
+          "status_code": 200,
+          "ms": 1111,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "查询看板列表定位新建看板ID",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/list",
+          "status_code": 200,
+          "ms": 2071,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "编辑看板(新增竞品对比+多类目)",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/2769",
+          "status_code": 200,
+          "ms": 1764,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "按ID查询看板详情校验编辑已生效",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/2769",
+          "status_code": 200,
+          "ms": 858,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "dict",
+          "data_len": 11,
+          "msg": null
+        },
+        {
+          "name": "后置清理-删除看板",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/brand-share-board/2769",
+          "status_code": 200,
+          "ms": 1657,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

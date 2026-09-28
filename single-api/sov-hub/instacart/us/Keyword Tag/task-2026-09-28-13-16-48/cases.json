@@ -1,0 +1,359 @@
+[
+  {
+    "name": "POST /api/sov/keyword-tag - 空categoryIds查询全部标签",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传空数组,查询账号下全部关键词标签(不按category过滤)。500条随机样本中占比约2%（10次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(空categoryIds)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 单个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传单个category,查询该分类下出现过的关键词标签。500条随机样本中占比约84.2%（421次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(单个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 多个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传多个category(合并覆盖真实样本中2/3/4/5/6/8/12/13/19/27/55等多种计数),查询多分类下出现过的关键词标签。500条随机样本中占比约13.8%（69次,取代表性场景合并统计）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(多个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": [
+            144528,
+            144084,
+            144729
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/create - 单个标签名创建(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/create。tagNames传单个标签名创建一级标签,后置调用delete移除,保证可重复执行,同时覆盖POST /api/sov/keyword-tag/delete(该接口90天内instacart平台仅2次真实调用,均为单tagId,已全覆盖)。该接口90天内instacart平台共4次真实调用,其中3次为单个tagNames,占75%（3次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建单个标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_20260928131648_kwtag_single"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "查询获取新建tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_single_id": "data[tagName=AutoTest_20260928131648_kwtag_single].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_single_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/create - 批量创建多个标签名(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/create。tagNames一次传3个标签名批量创建,后置逐个调用delete移除(与delete接口90天内instacart真实调用100%单tagId/次的模式一致),保证可重复执行。该接口90天内instacart平台共4次真实调用,其中1次为批量tagNames(该次真实批量数为52个,本case用3个代表性数量覆盖同一结构特征),占25%（1次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量创建3个标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_20260928131648_kwtag_batch-1",
+            "AutoTest_20260928131648_kwtag_batch-2",
+            "AutoTest_20260928131648_kwtag_batch-3"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 3
+          }
+        }
+      },
+      {
+        "name": "查询获取3个新建tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_batch_id_1": "data[tagName=AutoTest_20260928131648_kwtag_batch-1].tagId",
+          "kwtag_batch_id_2": "data[tagName=AutoTest_20260928131648_kwtag_batch-2].tagId",
+          "kwtag_batch_id_3": "data[tagName=AutoTest_20260928131648_kwtag_batch-3].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除标签1",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_batch_id_1}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除标签2",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_batch_id_2}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除标签3",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_batch_id_3}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/sub-tag/create - 单个子标签创建moveKeywords=true(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/sub-tag/create。前置创建1个一级标签,subTagNames传单个子标签名创建,moveKeywords=true,后置删除父标签(级联清理子标签)保证可重复执行。该接口90天内instacart平台共2次真实调用,均为单个subTagNames+moveKeywords=true,占100%（2次）,已全覆盖。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_20260928131648_kwtag_subtag"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "前置-获取父tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_subtag_id": "data[tagName=AutoTest_20260928131648_kwtag_subtag].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "创建单个子标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/sub-tag/create",
+        "request_body": {
+          "tagId": "{{kwtag_subtag_id}}",
+          "subTagNames": [
+            "non brand"
+          ],
+          "moveKeywords": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_subtag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

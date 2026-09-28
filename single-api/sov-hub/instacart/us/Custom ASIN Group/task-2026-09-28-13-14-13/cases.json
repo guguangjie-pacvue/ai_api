@@ -1,0 +1,603 @@
+[
+  {
+    "name": "POST /api/sov/asin-group - 创建自定义ASIN分组(仅命名,不含ASIN,含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/asin-group。asins 为空数组，仅先建立分组名称，稍后再编辑添加ASIN，是最常见的建组方式。第2步用 GET /groups 按 groupName 匹配提取新建分组ID，第3步删除该分组，保证用例可重复执行。90天ES真实调用样本(全平台仅7条，instacart平台本身0条)中该模式占比约57.1%（4次）。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分组(空ASIN列表)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-instacart-empty-group",
+          "countryCode": "US",
+          "asins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_empty": "data[groupName=swagger-api-case-instacart-empty-group].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_empty}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group - 创建自定义ASIN分组(建组时直接填入ASIN,含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/asin-group。asins 建组时即填入一批真实instacart ASIN(来自category_id=144084/countryCode=US，经 POST /api/sov/asin/page 实测确认为真实存在的商品，涵盖 darigold/fairlife/kirkland signature 等多个真实品牌)。第2步用 GET /groups 按 groupName 匹配提取新建分组ID，第3步删除该分组，保证用例可重复执行。90天ES真实调用样本(全平台仅7条，instacart平台本身0条)中该模式占比约42.9%（3次）。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分组(含ASIN列表)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-instacart-with-asins",
+          "countryCode": "US",
+          "asins": [
+            "19208138",
+            "17315429",
+            "3146403",
+            "111657417",
+            "18509399",
+            "17018883",
+            "25691969",
+            "287505",
+            "21345525",
+            "20657438"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_withasins": "data[groupName=swagger-api-case-instacart-with-asins].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_withasins}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/asin-group/{id} - 编辑自定义ASIN分组(为空分组补充ASIN,含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：PUT /api/sov/asin-group/{id}。第1步前置创建一个空ASIN分组，第2步用 GET /groups 按 groupName 匹配提取该分组ID，第3步编辑该分组补充真实instacart ASIN列表(同样来自category_id=144084)，第4步删除该分组，保证用例可重复执行。该接口90天内ES全平台(含instacart)均无历史调用记录(0条)；作为写操作按Phase 3.5参照 POST 创建接口观测到的真实建组模式(先建空组、再补充ASIN)构造编辑场景，使用instacart真实测试账号数据。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-空ASIN分组",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-instacart-edit-flow",
+          "countryCode": "US",
+          "asins": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_edit": "data[groupName=swagger-api-case-instacart-edit-flow].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "编辑分组(补充ASIN列表)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_edit}}",
+        "request_body": {
+          "id": "{{group_id_edit}}",
+          "groupName": "swagger-api-case-instacart-edit-flow",
+          "countryCode": "US",
+          "asins": [
+            "19297269",
+            "21854161",
+            "27452985",
+            "21500497",
+            "21482484",
+            "99493546",
+            "25359548",
+            "120774395"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_edit}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/sov/asin-group/groups - 查询自定义ASIN分组列表(简版)",
+    "description": "单接口测试：GET /api/sov/asin-group/groups。只读接口，查询当前账号(instacart平台)下全部自定义ASIN分组的简版列表(id+groupName)，用于分组管理页展示及其它写操作流程内定位分组ID。90天ES全平台(含instacart)均无历史调用记录(0条)；作为查询类只读接口不产生副作用，可反复执行，此处单独验证其返回结构。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询自定义ASIN分组列表",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group/list - 按groupId查询自定义分组详情(编辑回显asins,含前置建/后置删,可重复)",
+    "description": "单接口测试(自清理)：POST /api/sov/asin-group/list。该接口90天内ES全平台(含instacart)均无历史调用记录(0条)，按交付要求用创建流程产生的真实分组数据构造合理查询case：第1步前置创建一个含真实instacart ASIN(category_id=144084)的分组，第2步用 GET /groups 定位该分组ID，第3步按 groupId 查询详情验证asins正确回显(用于编辑页打开分组时回显)，第4步删除该分组，保证用例可重复执行。请求体字段(groupId)对齐Swagger CustomAsinGroupListInput定义。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-含ASIN分组",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-instacart-list-group",
+          "countryCode": "US",
+          "asins": [
+            "2595131",
+            "117837688",
+            "21391289",
+            "3146389",
+            "25351127",
+            "19976660",
+            "50658100",
+            "26481973"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_list": "data[groupName=swagger-api-case-instacart-list-group].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按groupId查询分组详情(回显asins)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/list",
+        "request_body": {
+          "groupId": "{{group_id_list}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_list}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group/sov/by-dim - 自定义分组SOV查询(基于新建分组,Aggregated设备,含前置建/后置删,可重复)",
+    "description": "单接口测试(自清理)：POST /api/sov/asin-group/sov/by-dim。该接口90天内instacart平台ES无历史调用记录(全平台111条样本均为amazon(101条,91.0%)与target(10条,9.0%)产生，无一条instacart)，按交付要求用创建流程产生的真实分组数据构造合理查询case：第1步前置创建一个含真实instacart ASIN的分组，第2步用 GET /groups 定位该分组ID，第3步以该groupId过滤查询SOV(deviceMode=Aggregated,category_id=144084,不含keywords过滤，对齐全平台占比最高91.9%(102/111)的主流场景结构)，第4步删除该分组，保证用例可重复执行。请求体字段对齐Swagger CustomAsinGroupSovByDimInput定义。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-含ASIN分组",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-instacart-bydim-group",
+          "countryCode": "US",
+          "asins": [
+            "19208138",
+            "111657417",
+            "25691969",
+            "21150792",
+            "20137005",
+            "121926683",
+            "19231237",
+            "32017"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_bydim": "data[groupName=swagger-api-case-instacart-bydim-group].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "调用 by-dim(按分组过滤)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/sov/by-dim",
+        "request_body": {
+          "deviceTypes": null,
+          "keywords": null,
+          "zipCodes": null,
+          "retailerIds": [],
+          "storeIds": null,
+          "keywordPoolIds": null,
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "realProductLine": "instacart",
+          "startDate": "2026-08-23",
+          "endDate": "2026-09-27",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "dim": "YTD",
+          "deviceMode": "Aggregated",
+          "keywordTagIds": [],
+          "tagIntersect": 0,
+          "weekStart": "Sunday",
+          "useWeight": false,
+          "splitMark": 0,
+          "orderBy": null,
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": "groupName desc",
+            "orderBySnakeCase": "group_name DESC"
+          },
+          "dateFormat": null,
+          "filterSql": null,
+          "asins": null,
+          "excludeAsins": null,
+          "brands": [],
+          "topN": 10,
+          "searchKeyword": "",
+          "startAvgPosition": null,
+          "endAvgPosition": null,
+          "insight": null,
+          "filters": null,
+          "countryCode": "US",
+          "groupIds": [
+            "{{group_id_bydim}}"
+          ],
+          "subBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "list": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_bydim}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/asin-group/sov/by-dim/download - 下载自定义分组SOV(基于新建分组,Aggregated设备,含前置建/后置删,可重复)",
+    "description": "单接口测试(自清理)：POST /api/sov/asin-group/sov/by-dim/download。该接口90天内ES全平台(含instacart)均无历史调用记录(0条)，与 by-dim 共用同一请求体结构(Swagger CustomAsinGroupSovByDimInput)，按交付要求用创建流程产生的真实分组数据构造合理查询case：第1步前置创建一个含真实instacart ASIN的分组，第2步用 GET /groups 定位该分组ID，第3步以该groupId过滤下载SOV数据(deviceMode=Aggregated,category_id=144084,不含keywords过滤，与 by-dim 全平台主流场景结构一致)，第4步删除该分组，保证用例可重复执行。实测确认该接口返回二进制文件流(非JSON，无code/success字段)，故该步骤按 run_cases.py 的 $binary 断言方式验证响应体非空(HTTP 200 + 字节数>=1)，与 JSON 类接口断言方式区分开。",
+    "module": "Custom ASIN Group",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-含ASIN分组",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group",
+        "request_body": {
+          "id": null,
+          "groupName": "swagger-api-case-instacart-download-group",
+          "countryCode": "US",
+          "asins": [
+            "19297269",
+            "21854161",
+            "27452985",
+            "21500497",
+            "21482484",
+            "99493546",
+            "25359548",
+            "120774395"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询分组列表定位新建分组ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/groups",
+        "request_body": {},
+        "extract_vars": {
+          "group_id_download": "data[groupName=swagger-api-case-instacart-download-group].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "调用 by-dim/download(按分组过滤)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/sov/by-dim/download",
+        "request_body": {
+          "deviceTypes": null,
+          "keywords": null,
+          "zipCodes": null,
+          "retailerIds": [],
+          "storeIds": null,
+          "keywordPoolIds": null,
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "realProductLine": "instacart",
+          "startDate": "2026-08-23",
+          "endDate": "2026-09-27",
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "dim": "YTD",
+          "deviceMode": "Aggregated",
+          "keywordTagIds": [],
+          "tagIntersect": 0,
+          "weekStart": "Sunday",
+          "useWeight": false,
+          "splitMark": 0,
+          "orderBy": null,
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": "groupName desc",
+            "orderBySnakeCase": "group_name DESC"
+          },
+          "dateFormat": null,
+          "filterSql": null,
+          "asins": null,
+          "excludeAsins": null,
+          "brands": [],
+          "topN": 10,
+          "searchKeyword": "",
+          "startAvgPosition": null,
+          "endAvgPosition": null,
+          "insight": null,
+          "filters": null,
+          "countryCode": "US",
+          "groupIds": [
+            "{{group_id_download}}"
+          ],
+          "subBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "$binary": {
+            "$min_size": 1
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除分组",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/asin-group/{{group_id_download}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

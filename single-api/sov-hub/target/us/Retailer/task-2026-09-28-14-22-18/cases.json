@@ -1,0 +1,657 @@
+[
+  {
+    "name": "POST /api/sov/retailer/addKeywords - US / 无daypart / deviceTypes=[0](含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。countryCode=US、isDaypart=false、deviceTypes=[0]、retailerIds=[1]、storeIds=[]、zipCodes=[\"\"]均为该接口90天target样本中100%常量分布(target平台唯一retailer即Target自身，retailerId恒为1)，仅isDaypart存在真实差异。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(target平台，共70条)中占比约85.7%（60次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_A_20260928142218",
+          "categoryName": "AutoTest_Category_RetailerAK_A_20260928142218",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-ak-a-20260928142218",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "bluetooth headphones"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-target-retailer-ak-a-20260928142218"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/addKeywords - US / 含daypart / deviceTypes=[0](含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。isDaypart=true(该接口90天target样本中的第二种真实模式，其余字段countryCode=US/deviceTypes=[0]/retailerIds=[1]/storeIds=[]/zipCodes=[\"\"]与主场景一致)。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(target平台，共70条)中占比约14.3%（10次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_B_20260928142218",
+          "categoryName": "AutoTest_Category_RetailerAK_B_20260928142218",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-ak-b-20260928142218",
+          "countryCode": "US",
+          "isDaypart": true,
+          "keywords": [
+            "phone case"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-target-retailer-ak-b-20260928142218"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(target平台，共203条)中该模式占比约71.4%（145次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_1_20260928142218",
+          "categoryName": "AutoTest_Category_RetailerBC_1_20260928142218",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-bc-1-20260928142218",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "organic taco seasoning",
+            "taco seasoning packets",
+            "taco seasoning mix",
+            "taco seasoning"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "TARGET",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-bc-1-20260928142218",
+          "startDate": "2026-07-21",
+          "endDate": "2026-08-19",
+          "keywords": [
+            "organic taco seasoning",
+            "taco seasoning packets",
+            "taco seasoning mix",
+            "taco seasoning"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "McCormick",
+              "brands": [
+                "McCormick&nbsp;store Official",
+                "Grill Mates",
+                "McCormick Store official",
+                "McCormick Culinary",
+                "McCormick"
+              ]
+            },
+            {
+              "aggregationBrandName": "Simple Mills",
+              "brands": [
+                "Simple Mills"
+              ]
+            },
+            {
+              "aggregationBrandName": "Trejo's Tacos",
+              "brands": [
+                "Trejo's Tacos"
+              ]
+            },
+            {
+              "aggregationBrandName": "Aroma One",
+              "brands": [
+                "Aroma One"
+              ]
+            },
+            {
+              "aggregationBrandName": "Pinch Spice Market",
+              "brands": [
+                "Pinch Spice Market"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-target-retailer-bc-1-20260928142218"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(target平台，共203条)中该模式占比约27.6%（56次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_2_20260928142218",
+          "categoryName": "AutoTest_Category_RetailerBC_2_20260928142218",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-bc-2-20260928142218",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "apple sauce",
+            "applesauce cups",
+            "apple sauce pouches",
+            "applesauce squeeze pouches",
+            "applesauce"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "TARGET",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-bc-2-20260928142218",
+          "startDate": "2026-07-20",
+          "endDate": "2026-08-18",
+          "keywords": [
+            "apple sauce",
+            "applesauce cups",
+            "apple sauce pouches",
+            "applesauce squeeze pouches",
+            "applesauce"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Great Value",
+              "brands": [
+                "Great Value"
+              ]
+            },
+            {
+              "aggregationBrandName": "Mott's",
+              "brands": [
+                "motts applesauce variety",
+                "MOTTS at The Neighborhood Corner Store",
+                "Mott's-Store",
+                "Mott's Store",
+                "Mott's Smoothie",
+                "motts applesauce ms",
+                "MOTT'S",
+                "Mott's Cups",
+                "motts 100% juice ms",
+                "Mott's",
+                "motts applesauce ss",
+                "motts for tots ss",
+                "Mott's Pouch",
+                "Mott's Juice Bottle",
+                "motts for tots ms"
+              ]
+            },
+            {
+              "aggregationBrandName": "Brainiac Kids",
+              "brands": [
+                "Brainiac Kids"
+              ]
+            },
+            {
+              "aggregationBrandName": "Dole",
+              "brands": [
+                "Dole",
+                "Dole Fruit Bowls",
+                "Dole Fruit Snacks",
+                "dole whip",
+                "dole whip/dole whip"
+              ]
+            }
+          ],
+          "splitBySubChannel": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-target-retailer-bc-2-20260928142218"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/deleteCategories - 批量删除2个categoryBatchId(含前置建2个Category,可重复)",
+    "description": "单接口测试(写操作,自清理)：第1/2步各前置创建1个Category，第3步用同一次调用批量删除这2个categoryBatchId，覆盖 deleteCategories 的批量删除模式(与单个删除模式并列的另一真实场景，单个删除模式已在其它case的后置清理步骤中覆盖)。90天ES真实调用样本(target平台，共13条)中：传1个categoryBatchId占比约38.5%（5次，已在其它case后置清理步骤覆盖），传多个(本case代表2个)categoryBatchId占比约61.5%（8次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category1",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerDC_1_20260928142218",
+          "categoryName": "AutoTest_Category_RetailerDC_1_20260928142218",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-dc-batch1-20260928142218",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "wireless earbuds"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置创建-Category2",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerDC_2_20260928142218",
+          "categoryName": "AutoTest_Category_RetailerDC_2_20260928142218",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-dc-batch2-20260928142218",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "wireless earbuds"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量删除2个Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-target-retailer-dc-batch1-20260928142218",
+            "AutoTest-sovhub-target-retailer-dc-batch2-20260928142218"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/retailer/editBrandName - Category编辑操作生命周期(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：串联测试 Retailer Category 的完整编辑生命周期(target平台)。第1步创建Category(3个初始关键词)，第2步 editBrandName 改品牌名(90天真实调用3条，其中2/3为传多个categoryBatchId、1/3为传单个，本case代表单个categoryBatchId改名的真实模式，占比约33.3%)，第3步 editDayParting 改daypart开关(90天真实调用2条，100%daypart=true)，第4步 editRetailers 全量替换retailer列表(90天真实调用3条，100%为retailerIds=[1]+storeIds=[]，因target平台该账号下唯一retailer即Target自身)，第5步 keywords(PUT) 全量替换关键词列表，从3个初始关键词收缩为2个(90天真实调用32条，均为全量替换同一Category下若干关键词)，第6步 deleteKeywords 再删除1个关键词(90天真实调用4条，均为单个关键词删除)，第7步 deleteCategories 传单个categoryBatchId做最终清理(与deleteCategories另一批量删除场景并列，本步代表90天13条真实调用中占比约38.5%的单个删除模式)，保证用例可重复执行。这4个编辑类接口(editBrandName/editDayParting/editRetailers/keywords-PUT/deleteKeywords)样本量均较小(2~32条不等)且均围绕同一Category实体操作，故合并为一条完整生命周期case，而非拆分成多条各自建删的独立case。🔴 target平台下 editCategoryName 90天真实调用为0(365天全平台历史交叉验证有16条，但均为90天窗口之外的历史调用，判定为近90天无流量)；editDeviceType、editZipCode 90天及365天交叉验证均为0调用，真实无流量，均不纳入本生命周期。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerLifecycle_20260928142218",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_20260928142218",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-lifecycle-20260928142218",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "dry dog food",
+            "dog dry food",
+            "dog food dry"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改品牌名称",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editBrandName",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-target-retailer-lifecycle-20260928142218"
+          ],
+          "brandName": "AutoTest_Brand_RetailerLifecycle_Renamed_20260928142218"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改Daypart开关",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editDayParting",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-lifecycle-20260928142218",
+          "daypart": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "全量替换Retailer列表",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editRetailers",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-lifecycle-20260928142218",
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量编辑关键词(全量替换)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/keywords",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "TARGET",
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-lifecycle-20260928142218",
+          "keywordTexts": [
+            "dry dog food",
+            "dog dry food"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除单个关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteKeywords",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-target-retailer-lifecycle-20260928142218",
+          "keywordTexts": [
+            "dog dry food"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-target-retailer-lifecycle-20260928142218"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

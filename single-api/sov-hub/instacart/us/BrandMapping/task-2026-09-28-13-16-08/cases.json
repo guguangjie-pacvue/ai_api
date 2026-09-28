@@ -1,0 +1,242 @@
+[
+  {
+    "name": "POST /api/sov/brand-mapping/saveMergeBrand - 新建品牌合并(create) + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/saveMergeBrand。instacart平台90天真实流量27次，均为新建/编辑合并品牌名(mergedName+brandList，部分带oldMergedName表示编辑既有合并，新建约55%/编辑约45%)。用测试专用 mergedName + 真实未合并品牌(brandList来自instacart平台实测调用/api/sov/brand-mapping/getUnmergedBrandList，categoryId=144084返回的真实未合并品牌'doritos')创建，后置步骤 deleteMergeBrand 清理，避免在账号里留残留。500条随机样本中占比约100%（27次，新建/编辑合并操作）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建合并品牌(主测试)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save_IC",
+          "oldMergedName": null,
+          "brandList": [
+            "doritos"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除刚创建的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save_IC",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/deleteMergeBrand - 删除已创建的品牌合并",
+    "description": "单接口测试：POST /api/sov/brand-mapping/deleteMergeBrand。instacart平台90天真实流量1次（{mergedName:'Uncrustables',myBrand:false}）。前置用 saveMergeBrand 建一个测试专用合并品牌(brandList使用instacart真实未合并品牌'corona extra')，再调用本接口删除，删除动作本身即为主测试步骤，无残留。500条随机样本中占比约100%（1次）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建待删除的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete_IC",
+          "oldMergedName": null,
+          "brandList": [
+            "corona extra"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：删除合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete_IC",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/asMyBrand - 标记为我的品牌 + 取消 + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/asMyBrand。instacart平台90天真实流量20次，绝大多数(19/20约95%)为myBrand:true标记(如 snapple、electrolit、welch's、milk-bone 等真实合并品牌)，少数(1/20约5%)为myBrand:false取消标记。前置用测试专用合并品牌(brandList使用instacart真实未合并品牌'sprite')，切换 true 再切回 false 验证幂等，最后删除清理，覆盖真实存在的两种取值。500条随机样本中占比约100%（20次，myBrand标记切换）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试用合并品牌(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_IC",
+          "oldMergedName": null,
+          "brandList": [
+            "sprite"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：标记为我的品牌(myBrand=true)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_IC",
+          "myBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "反向操作：取消我的品牌标记(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_IC",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_IC",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/setBrandColor - 设置合并品牌颜色 + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/setBrandColor。instacart平台90天该接口本身ES无流量（全平台90天内也是0命中），但作为写操作按Phase 3.5要求仍构造真实场景验证：颜色取值参考同索引 saveMergeBrand 请求体里真实出现过的 color 字段值(如 #7367F0，来自其它平台真实调用样本)。前置用测试专用合并品牌(brandList使用instacart真实未合并品牌'barebells')，主测试设置颜色，最后删除清理，保证可重复执行。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_IC",
+          "oldMergedName": null,
+          "brandList": [
+            "barebells"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：设置合并品牌颜色",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/setBrandColor",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_IC",
+          "color": "#7367F0"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_IC",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
