@@ -182,5 +182,50 @@
       "platform_filter": null,
       "_note": "字段结构已探测确认（2026-09-24）：urlReferrer 为请求路径，但大小写/前缀不统一——同一批流量里既有 /api/Report/... 也有 /budget/report/...、/apply/...、/user/...，与 swagger paths 比对时需大小写不敏感 + 兼容有无 /api 前缀；body 字段已是对象（非字符串，body_is_json_string=false，与 rule-api 一致；另有 body_str 为字符串镜像；注意很多 GET 接口 body 为空，真实入参在 header/queryString）；responseBody 为 JSON 字符串，含业务响应，只有 code 无 success 布尔字段，故 assertion_l1 只用 {code:200}（与 criteo/rule-api 一致）；productLine 字段为空（target 为单平台服务，platform_filter=null）；近30天全平台流量约183万条"
     }
-  }
+  },
+    "instacart-api": {
+      "github_repo": "pacvue/instacart-api",
+      "swaggers": [
+        {
+          "title": "Instacart",
+          "url": "https://api.pacvue.com/instacart-newui/swagger/v1/swagger.json"
+        }
+      ],
+      "es_index": {
+        "us": "instacart-access-*"
+      },
+      "config": "single-api/instacart-api/{env}/config.json",
+      "es": {
+        "path_field": "apiEndpoint.keyword",
+        "method_field": "method.keyword",
+        "body_field": "body",
+        "body_is_json_string": true,
+        "clientid_exclude": [
+          0,
+          62,
+          3186
+        ],
+        "assertion_l1": {
+          "code": 200
+        },
+        "platform_filter": null,
+        "_note": "字段结构已探测确认（2026-09-24）：索引 instacart-access-* 真实存在，90天总量约1428万条；body/responseBody 均为JSON字符串(与mainapi/walmart/dsp一致，需二次解析)，responseBody 只有 code 无 success 布尔字段(与walmart/dsp/criteo/target一致)，部分写接口 data 内有 successCount/totalCount 可用于业务成功断言；clientId=0 占比约94.5%(1349万/1428万)且实测为内部调度任务流量(sourceName如Budget_Scheduler_Weekday/Budget_Control_AutoPacing，非真实用户操作)，故 clientid_exclude 在默认[62,3186]基础上额外加了 0(与walmart-api同类处理)；真实外部用户流量样本核对通过(如GET /api/CampaignTags clientId=4037/userId=26011，6.8万次)；responseBody 500 错误堆栈路径确认 github_repo 实际就是 pacvue/instacart-api(路径 /home/runner/work/instacart-api/instacart-api/...)"
+      },
+      "_note": "2026-09-24 新增，准备阶段登记：service目录名按 walmart-newui→walmart-api 的改名先例取 instacart-api（原 swagger URL 段为 instacart-newui，base_url 仍用原始 URL 段）；es_index 已实测确认存在且有真实流量；es 字段块已按 Phase 2.1 探测结果回填"
+    },
+    "samsclub-api": {
+      "github_repo": "pacvue/samsclub-api",
+      "swaggers": [
+        {
+          "title": "Samsclub",
+          "url": "https://api.pacvue.com/samsclub-api/swagger/v1/swagger.json"
+        }
+      ],
+      "es_index": {
+        "us": "samsclub-access-*"
+      },
+      "config": "single-api/samsclub-api/{env}/config.json",
+      "es": {},
+      "_note": "2026-09-24 新增，准备阶段登记：service目录名与 swagger URL 段一致；github_repo 为按同规律推测，未与用户核实；es_index 为按同类服务 <name>-access-* 规律推测，尚未探测确认，es 字段块留空，接入时按 Phase 2.1 探测后回填"
+    }
 }

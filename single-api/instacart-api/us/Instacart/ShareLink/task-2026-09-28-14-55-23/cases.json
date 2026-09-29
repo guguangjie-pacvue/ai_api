@@ -1,0 +1,168 @@
+[
+  {
+    "name": "POST /api/ShareLink/GetShareLinkList - 默认调用无过滤",
+    "description": "单接口测试：POST /api/ShareLink/GetShareLinkList。默认调用无过滤。500条随机样本中占比约100.0%。 修正：ES样本userIds混入了别的客户的真实userId，已替换成本账号自己的userId(18589)。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetShareLinkList",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ShareLink/GetShareLinkList",
+        "request_body": {
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderBy": "createTime desc"
+          },
+          "userIds": [
+            18589
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ShareLink/shareLink - 按自己账号的secretKey查询",
+    "description": "单接口测试：GET /api/ShareLink/shareLink?secretKey=x。按分享链接密钥查询详情，探测发现本账号(userId=18589)名下已有一条历史分享链接(id=319)，用它自己的secretKey测试，避免使用别的客户的secretKey。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 shareLink",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ShareLink/shareLink?secretKey=22bc0a9e13fa422cb0830771b551482d",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/ShareLink/shareToken - 按自己账号的secretKey查询",
+    "description": "单接口测试：GET /api/ShareLink/shareToken?secretKey=x。按分享链接密钥获取访问token，同样用本账号自己的历史分享链接secretKey测试。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 shareToken",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ShareLink/shareToken?secretKey=22bc0a9e13fa422cb0830771b551482d",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ShareLink/shareLink - 创建分享链接(自建测试数据)+连带测试改日期范围/清理删除",
+    "description": "写操作：为自己profile创建新分享链接，验证成功后PATCH改日期范围(dateRange 10->30)，最后DELETE BulkDelete清理删除。用户2026-09-28拍板执行。已用curl手工验证过一遍完整链路成功(id=409)。BulkDelete请求体是裸数组[id]不是{ids:[id]}，实测发现的坑。",
+    "module": "ShareLink",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分享链接",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ShareLink/shareLink",
+        "request_body": {
+          "isCrateEveryProfile": false,
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "keywordTagIds": [],
+          "productTagIds": [],
+          "dateRange": 10,
+          "widgets": [
+            {
+              "id": 1005,
+              "isCheck": true,
+              "name": "Performance",
+              "showOrder": 0,
+              "thumbnail": "",
+              "title": "Performance",
+              "type": "Performance"
+            }
+          ],
+          "ids": [
+            0
+          ],
+          "categoryIds": [],
+          "isNew": true,
+          "campaignTagIds": []
+        },
+        "extract_vars": {
+          "new_sharelink_id": "data.result[0].id"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "改日期范围",
+        "method": "PATCH",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ShareLink/UpdateShareLinkDateRange",
+        "request_body": {
+          "dateRange": 30,
+          "ids": [
+            "{{new_sharelink_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理：删除分享链接",
+        "method": "DELETE",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ShareLink/BulkDelete",
+        "request_body": [
+          "{{new_sharelink_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

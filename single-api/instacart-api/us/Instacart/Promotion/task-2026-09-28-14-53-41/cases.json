@@ -1,0 +1,186 @@
+[
+  {
+    "name": "POST /api/Promotion/GetPromotions - 默认调用无过滤",
+    "description": "单接口测试：POST /api/Promotion/GetPromotions。默认调用无过滤。500条随机样本中占比约85.5%。",
+    "module": "Promotion",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPromotions",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Promotion/GetPromotions",
+        "request_body": {
+          "profileIds": [],
+          "promotionGroups": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Promotion/GetPromotions - 按profileIds过滤",
+    "description": "单接口测试：POST /api/Promotion/GetPromotions。按profileIds过滤。500条随机样本中占比约7.7%。",
+    "module": "Promotion",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPromotions",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Promotion/GetPromotions",
+        "request_body": {
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "promotionGroups": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/Promotion/GetPromotions - promotionGroups",
+    "description": "单接口测试：POST /api/Promotion/GetPromotions。promotionGroups。500条随机样本中占比约2.6%。",
+    "module": "Promotion",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPromotions",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Promotion/GetPromotions",
+        "request_body": {
+          "profileIds": [],
+          "promotionGroups": [
+            "73381e82-292d-4646-977a-ad7322151448",
+            "8d5a496b-0945-4569-a72a-61915c7cfd4f",
+            "17a506fc-91b5-4bfe-a641-0c40a2d11a7f",
+            "1f6c3a1d-1cfa-4a4c-a7c0-3ddce78ce795",
+            "3e12153a-e5fd-444b-8948-7c737eb7e1e9",
+            "440c720b-9b23-445e-acb6-6c202955c666",
+            "8d8a69be-869b-43cf-86d4-08e99f2557fc",
+            "8eef59e3-0941-4746-ba8f-6b767bd3f9a1",
+            "914346a6-3f5a-408c-851f-daa941316b4b",
+            "b42ddc11-8883-4e71-90bc-7f7dd084ac32",
+            "b9ceee5c-0a56-4f45-8c30-bf7f78eff28f",
+            "d9430b68-dcd1-46b1-92b4-d38caf737734",
+            "e824f7a3-bc3b-4b7d-906f-f88cfdeb64b0"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/Promotion/GetPromotionStatus - 默认调用无过滤",
+    "description": "单接口测试：GET /api/Promotion/GetPromotionStatus。查询促销活动状态枚举，无查询参数，90天真实流量64次全部无queryString。",
+    "module": "Promotion",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 GetPromotionStatus",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Promotion/GetPromotionStatus",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/Promotion/bulkUpdatePromotionProductState - 暂停自己promotion下的产品+恢复",
+    "description": "写操作：对自己promotion_id(autoTest_promotion_20250928062023)下的测试产品(16270473)先暂停(paused:true)再恢复(paused:false)。用户2026-09-28拍板执行。",
+    "module": "Promotion",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "暂停促销产品",
+        "method": "PUT",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Promotion/bulkUpdatePromotionProductState",
+        "request_body": {
+          "promotionProducts": [
+            {
+              "profileId": "{{variables.profile_id}}",
+              "promotionId": "{{variables.promotion_id}}",
+              "productId": "16270473"
+            }
+          ],
+          "paused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "恢复促销产品(还原)",
+        "method": "PUT",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Promotion/bulkUpdatePromotionProductState",
+        "request_body": {
+          "promotionProducts": [
+            {
+              "profileId": "{{variables.profile_id}}",
+              "promotionId": "{{variables.promotion_id}}",
+              "productId": "16270473"
+            }
+          ],
+          "paused": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

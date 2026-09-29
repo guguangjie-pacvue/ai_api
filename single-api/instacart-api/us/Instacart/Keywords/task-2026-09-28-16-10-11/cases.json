@@ -1,0 +1,167 @@
+[
+  {
+    "name": "POST /api/Keywords - 创建关键词(自建测试数据)+连带测试改出价(单个+批量条件)/批量建关键词到多广告组",
+    "description": "写操作：在测试adgroup下创建关键词(test161011kw)，依次验证：PATCH bid改单个出价(ids字段是keywordText+adGroupId拼接的复合key，无分隔符，实测发现的坑)、PATCH bid/byConditions按条件批量改出价(缩小范围到自己campaign_id+profile_id)、CreateKeywordForMultiAdGroup批量建第二个关键词(test161011kw2)到测试adgroup。用户2026-09-28拍板执行。Keywords模块没有找到关键词级别的删除/归档接口，两个测试关键词会作为低出价(0.30-0.35)的inert记录留在测试adgroup下，不产生实际花费影响(sandbox本身已有多个历史autoTest_*遗留实体，属于可接受的既有噪音模式)。2026-09-28收尾复核发现：PATCH bid/byConditions的ids字段不起限定作用，按conditions范围(整个campaign)把广告组内全部关键词出价都改成了0.32(响应totalCount=5/successCount=5)；经ES历史快照核对原始出价为lemon 0.35、两个中文关键词0.3、test160719kw创建值0.3。恢复原值的PATCH在自动模式下被权限拦截未执行，待人工用PATCH /api/Keywords/bid(ids=keywordText+adGroupId复合key)逐个改回。",
+    "module": "Keywords",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Keywords",
+        "request_body": {
+          "profileId": "{{variables.profile_id}}",
+          "keywords": [
+            {
+              "keyword": "test161011kw",
+              "matching_type": "exact",
+              "cpc_bid": 0.3,
+              "enabled": true
+            }
+          ],
+          "ad_group_id": "{{variables.adgroup_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查找新关键词的keywordUuid",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Report/v2/keyword/List",
+        "request_body": {
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "campaignIds": [
+            "{{variables.campaign_id}}"
+          ],
+          "start": "{{variables.date_start}}",
+          "end": "{{variables.date_end}}",
+          "dim": 0,
+          "kindType": "Default",
+          "toMarket": "US",
+          "pageInfo": {
+            "pageIndex": 1,
+            "pageSize": 50,
+            "orderAsc": false,
+            "orderBy": "spend desc",
+            "orderByField": "spend"
+          }
+        },
+        "extract_vars": {
+          "new_kw_uuid": "data[keywordText=test161011kw].keywordUuid"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "改单个关键词出价(复合id=keywordText+adGroupId)",
+        "method": "PATCH",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Keywords/bid",
+        "request_body": {
+          "ids": [
+            "test161011kw{{variables.adgroup_id}}"
+          ],
+          "setBidType": 0,
+          "targetBid": 0.35
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "按条件批量改出价(缩小到自己campaign)",
+        "method": "PATCH",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Keywords/bid/byConditions",
+        "request_body": {
+          "ids": [
+            "{{new_kw_uuid}}"
+          ],
+          "setBidType": 0,
+          "targetBid": 0.32,
+          "excludedIds": [],
+          "conditions": {
+            "start": "{{variables.date_start}}",
+            "end": "{{variables.date_end}}",
+            "bidFilters": null,
+            "dim": "ytd",
+            "profileIds": [
+              "{{variables.profile_id}}"
+            ],
+            "multiSortList": [],
+            "kindType": "Default",
+            "campaignIds": [
+              "{{variables.campaign_id}}"
+            ],
+            "campaignTagIds": [],
+            "keywordText": [],
+            "keywordTagIds": [],
+            "groupBy": "AdGroup",
+            "bidTypes": [],
+            "campaignTypes": [],
+            "bid": [],
+            "campaignStatus": [],
+            "keywordOperand": "Like",
+            "TagLogicGate": 0,
+            "keywordTagLogicGate": 0,
+            "toMarket": "US",
+            "groupByParam": "AdGroup",
+            "tagIds": [],
+            "keywordMatchType": 0,
+            "keywordStatus": 0,
+            "includeZero": false
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "CreateKeywordForMultiAdGroup批量建关键词到多广告组",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "Keywords/CreateKeywordForMultiAdGroup",
+        "request_body": {
+          "profileId": "{{variables.profile_id}}",
+          "keywords": [
+            {
+              "keyword": "test161011kw2",
+              "matching_type": "exact",
+              "cpc_bid": 0.3,
+              "enabled": true,
+              "KeywordTagIds": []
+            }
+          ],
+          "adGroups": [
+            {
+              "adGroupId": "{{variables.adgroup_id}}",
+              "adGroupName": "test-bm-0625-222-adgroup"
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

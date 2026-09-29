@@ -1,0 +1,191 @@
+[
+  {
+    "name": "GET /api/EmailNotification - 默认调用无过滤",
+    "description": "单接口测试：GET /api/EmailNotification。查看邮件通知配置列表，90天真实流量312次里约87%无查询参数。 观察：测试profile下该type无对应通知配置，data为null，属正常业务状态，断言放宽为只验证调用成功。",
+    "module": "EmailNotification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "EmailNotification",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "EmailNotification",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/EmailNotification - 按type=0过滤",
+    "description": "单接口测试：GET /api/EmailNotification?type=0。按通知类型过滤，ES样本约占7%。 观察：测试profile下该type无对应通知配置，data为null，属正常业务状态，断言放宽为只验证调用成功。",
+    "module": "EmailNotification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "EmailNotification",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "EmailNotification?type=0",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "GET /api/EmailNotification - 按type=1过滤",
+    "description": "单接口测试：GET /api/EmailNotification?type=1。按通知类型过滤，ES样本约占7%。 观察：响应data是单个配置对象(非数组)，含isOpen/email/request等字段，断言放宽为只验证调用成功。",
+    "module": "EmailNotification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "EmailNotification",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "EmailNotification?type=1",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {}
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/EmailNotification/AddOrUpdateCampaignBudgetNotification - 开启预算通知+连带测试产品通知+改回关闭",
+    "description": "写操作：用test@pacvue.com(占位测试邮箱，非真实客户邮箱)开启campaign预算通知和产品通知配置，验证成功后改回isOpen:false关闭(还原)。用户2026-09-28拍板执行。",
+    "module": "EmailNotification",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "开启预算通知",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "EmailNotification/AddOrUpdateCampaignBudgetNotification",
+        "request_body": {
+          "isOpen": true,
+          "email": [
+            "test@pacvue.com"
+          ],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "tagIds": [],
+          "request": {
+            "remainingBudget": 1,
+            "remainingPercentage": 10
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "关闭预算通知(还原)",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "EmailNotification/AddOrUpdateCampaignBudgetNotification",
+        "request_body": {
+          "isOpen": false,
+          "email": [
+            "test@pacvue.com"
+          ],
+          "profileIds": [
+            "{{variables.profile_id}}"
+          ],
+          "tagIds": [],
+          "request": {
+            "remainingBudget": 1,
+            "remainingPercentage": 10
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "开启产品通知",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "EmailNotification/AddOrUpdateProductNotification",
+        "request_body": {
+          "isOpen": true,
+          "email": [
+            "test@pacvue.com"
+          ],
+          "profileids": [
+            "{{variables.profile_id}}"
+          ],
+          "tagIds": [],
+          "request": {
+            "productStatus": [
+              "unavailable_product",
+              "unavailable_image"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "关闭产品通知(还原)",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "EmailNotification/AddOrUpdateProductNotification",
+        "request_body": {
+          "isOpen": false,
+          "email": [
+            "test@pacvue.com"
+          ],
+          "profileids": [
+            "{{variables.profile_id}}"
+          ],
+          "tagIds": [],
+          "request": {
+            "productStatus": [
+              "unavailable_product",
+              "unavailable_image"
+            ]
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]
