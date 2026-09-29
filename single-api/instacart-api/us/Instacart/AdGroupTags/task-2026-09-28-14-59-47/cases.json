@@ -1,0 +1,162 @@
+[
+  {
+    "name": "GET /api/AdGroupTags - 默认调用无过滤",
+    "description": "单接口测试：GET /api/AdGroupTags。查看当前账号下全部广告组标签列表，无查询参数，90天真实流量773次全部无queryString。",
+    "module": "AdGroupTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 AdGroupTags",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/AdGroupTags/tagsByAdGroupIds - 按adGroupId查询",
+    "description": "单接口测试：POST /api/AdGroupTags/tagsByAdGroupIds。按广告组id批量查询绑定的标签，ES样本body为adGroupId字符串数组，改用自己的adgroup_id。",
+    "module": "AdGroupTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tagsByAdGroupIds",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags/tagsByAdGroupIds",
+        "request_body": [
+          "{{variables.adgroup_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/AdGroupTags - 创建标签(自建测试数据,虽然创建接口本身零流量但用作前置准备)+连带测试改名/绑定解绑广告组/清理删除",
+    "description": "写操作：创建测试标签(test161947_adgrouptag)用作前置准备，依次验证：PUT改名、POST adgroups绑定测试adgroup、DELETE adgroups解绑、DELETE清理删除标签。用户2026-09-28拍板执行(改名+绑定这2个有真实流量的接口)。",
+    "module": "AdGroupTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建标签(前置准备)",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags",
+        "request_body": {
+          "tagNames": [
+            "test161947_adgrouptag"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查找新建标签的id",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id": "data[tagName=test161947_adgrouptag].tagId"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "改名",
+        "method": "PUT",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags",
+        "request_body": {
+          "tagName": "test161947_adgrouptag_renamed",
+          "id": "{{new_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "绑定测试广告组",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags/adgroups",
+        "request_body": {
+          "tagIds": [
+            "{{new_tag_id}}"
+          ],
+          "AdGroupIds": [
+            "{{variables.adgroup_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "解绑测试广告组(清理)",
+        "method": "DELETE",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags/adgroups",
+        "request_body": {
+          "tagIds": [
+            "{{new_tag_id}}"
+          ],
+          "AdGroupIds": [
+            "{{variables.adgroup_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理：删除标签",
+        "method": "DELETE",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "AdGroupTags?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

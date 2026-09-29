@@ -1,0 +1,185 @@
+{
+  "config": "instacart-api (us)",
+  "started_at": "2026-09-28T08:06:21.863158+00:00",
+  "finished_at": "2026-09-28T08:06:31.937802+00:00",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "GET /api/ProductTags - 默认调用无过滤",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 ProductTags",
+          "method": "GET",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags",
+          "status_code": 200,
+          "ms": 878,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 53,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/ProductTags/tagsByUpcs - 按UPC查询",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 tagsByUpcs",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags/tagsByUpcs",
+          "status_code": 200,
+          "ms": 1610,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 0,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/ProductTags - 创建标签(自建测试数据)+连带测试改名/绑定产品(2种方式)/解绑/清理删除",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags",
+          "status_code": 200,
+          "ms": 1347,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "查找新建标签的id",
+          "method": "GET",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags",
+          "status_code": 200,
+          "ms": 812,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 54,
+          "msg": null
+        },
+        {
+          "name": "改名",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags",
+          "status_code": 200,
+          "ms": 1207,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "ProductsForSingleTag批量绑定UPC",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags/ProductsForSingleTag",
+          "status_code": 200,
+          "ms": 1593,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "tagProducts绑定UPC",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags/tagProducts",
+          "status_code": 200,
+          "ms": 713,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 1,
+          "msg": null
+        },
+        {
+          "name": "tagProducts解绑UPC",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags/tagProducts",
+          "status_code": 200,
+          "ms": 860,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "清理：删除标签",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/instacart-newui/api/ProductTags?id=6302",
+          "status_code": 200,
+          "ms": 1049,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

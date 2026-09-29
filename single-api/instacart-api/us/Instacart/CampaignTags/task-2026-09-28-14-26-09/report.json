@@ -1,0 +1,250 @@
+{
+  "config": "instacart-api (us)",
+  "started_at": "2026-09-28T07:59:33.249397+00:00",
+  "finished_at": "2026-09-28T07:59:54.196483+00:00",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "GET /api/CampaignTags - 默认调用无过滤",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 CampaignTags",
+          "method": "GET",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1401,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 471,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/CampaignTags/campaigns - 按id过滤",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 campaigns?id={{variables.campaign_tag_id}}",
+          "method": "GET",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/campaigns?id=5193",
+          "status_code": 200,
+          "ms": 777,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 2,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "GET /api/CampaignTags/ShareLink - 默认调用无过滤",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 ShareLink",
+          "method": "GET",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/ShareLink",
+          "status_code": 200,
+          "ms": 1014,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 3,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/CampaignTags/tagsByCampaignIds - 默认调用无过滤",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "调用 tagsByCampaignIds",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/tagsByCampaignIds",
+          "status_code": 200,
+          "ms": 6950,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 6,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/CampaignTags - 创建标签(自建测试数据)+连带测试设置目标/改名/绑定campaign/解绑/清理删除",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建标签",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1683,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "查找新建标签的id",
+          "method": "GET",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags",
+          "status_code": 200,
+          "ms": 1317,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "list",
+          "data_len": 472,
+          "msg": null
+        },
+        {
+          "name": "设置acos/roas目标",
+          "method": "PUT",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/targetSetting",
+          "status_code": 200,
+          "ms": 1759,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "bool",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "改名",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/name?id=17857",
+          "status_code": 200,
+          "ms": 1167,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "绑定到测试campaign",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/CampaignBindTagCheckAndSaveWithMiddlePlatform",
+          "status_code": 200,
+          "ms": 1838,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "验证绑定成功",
+          "method": "GET",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/campaigns?id=17857",
+          "status_code": 200,
+          "ms": 801,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 2,
+          "msg": null
+        },
+        {
+          "name": "解绑",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags/campaigns",
+          "status_code": 200,
+          "ms": 973,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "msg"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": "success"
+        },
+        {
+          "name": "清理：删除标签",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/instacart-newui/api/CampaignTags?id=17857",
+          "status_code": 200,
+          "ms": 1259,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 1,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

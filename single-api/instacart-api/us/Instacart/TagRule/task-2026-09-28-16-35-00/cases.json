@@ -1,0 +1,46 @@
+[
+  {
+    "name": "POST /api/TagRule - 创建1个代表性自动化标签规则(paused状态)",
+    "description": "写操作：创建1个代表性场景(targetType=4按campaign名称匹配，targetId用自己的campaign_tag_id=5193，条件按campaign名称包含test-bm匹配，isPaused=true创建后即为暂停/不生效状态，避免真实触发批量自动打标签)。用户2026-09-28拍板只测1-2个代表场景，不复现全部40种真实场景差异。TagRule模块没有找到删除接口(GET/PUT /api/TagRule/{id}均为零流量，模块本身没有DELETE)，规则会作为paused(不生效)状态永久保留在测试账号下。",
+    "module": "TagRule",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建规则(paused)",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "TagRule",
+        "request_body": {
+          "targetType": 4,
+          "targetId": "{{variables.campaign_tag_id}}",
+          "tagConditions": {
+            "profileIds": [
+              "{{variables.profile_id}}"
+            ],
+            "campaignStatus": true,
+            "campaignNameMode": 1
+          },
+          "requirementsList": [
+            [
+              {
+                "operand": "7",
+                "value": "test-bm",
+                "field": "name"
+              }
+            ]
+          ],
+          "isPaused": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

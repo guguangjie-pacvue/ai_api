@@ -1,0 +1,181 @@
+[
+  {
+    "name": "GET /api/ProductTags - 默认调用无过滤",
+    "description": "单接口测试：GET /api/ProductTags。查看当前账号下全部产品标签列表，无查询参数，90天真实流量2387次全部无queryString。",
+    "module": "ProductTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 ProductTags",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTags/tagsByUpcs - 按UPC查询",
+    "description": "单接口测试：POST /api/ProductTags/tagsByUpcs。按UPC条码批量查询关联的产品标签，ES样本body为UPC字符串数组(公开商品条码，非客户隐私数据)，沿用样本值。",
+    "module": "ProductTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 tagsByUpcs",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags/tagsByUpcs",
+        "request_body": [
+          "00850062639218",
+          "00850062639201",
+          "00860439001050"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/ProductTags - 创建标签(自建测试数据)+连带测试改名/绑定产品(2种方式)/解绑/清理删除",
+    "description": "写操作：创建测试标签(test_prod160514)，依次验证：改名、ProductsForSingleTag批量绑定UPC、tagProducts绑定/解绑UPC，最后DELETE清理删除标签。用户2026-09-28拍板执行。",
+    "module": "ProductTags",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建标签",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags",
+        "request_body": {
+          "tagNames": [
+            "test_prod160514"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "查找新建标签的id",
+        "method": "GET",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags",
+        "request_body": {},
+        "extract_vars": {
+          "new_tag_id": "data[tagName=test_prod160514].tagId"
+        },
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "改名",
+        "method": "PUT",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags",
+        "request_body": {
+          "tagName": "test_prod160514_renamed",
+          "id": "{{new_tag_id}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "ProductsForSingleTag批量绑定UPC",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags/ProductsForSingleTag",
+        "request_body": {
+          "tagId": "{{new_tag_id}}",
+          "upcs": [
+            "00111111111117"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "tagProducts绑定UPC",
+        "method": "POST",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags/tagProducts",
+        "request_body": {
+          "tagIds": [
+            "{{new_tag_id}}"
+          ],
+          "upcs": [
+            "00111111111117"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "tagProducts解绑UPC",
+        "method": "DELETE",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags/tagProducts",
+        "request_body": {
+          "tagIds": [
+            "{{new_tag_id}}"
+          ],
+          "upcs": [
+            "00111111111117"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      },
+      {
+        "name": "清理：删除标签",
+        "method": "DELETE",
+        "base_url": "{{base_urls.INSTACARTBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "ProductTags?id={{new_tag_id}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200
+        }
+      }
+    ]
+  }
+]

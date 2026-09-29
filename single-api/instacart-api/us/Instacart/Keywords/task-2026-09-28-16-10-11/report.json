@@ -1,0 +1,103 @@
+{
+  "config": "instacart-api (us)",
+  "started_at": "2026-09-28T08:10:52.999785+00:00",
+  "finished_at": "2026-09-28T08:11:11.662302+00:00",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/Keywords - 创建关键词(自建测试数据)+连带测试改出价(单个+批量条件)/批量建关键词到多广告组",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "创建关键词",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/Keywords",
+          "status_code": 200,
+          "ms": 3282,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "查找新关键词的keywordUuid",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/Report/v2/keyword/List",
+          "status_code": 200,
+          "ms": 2489,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "改单个关键词出价(复合id=keywordText+adGroupId)",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/instacart-newui/api/Keywords/bid",
+          "status_code": 200,
+          "ms": 2271,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "按条件批量改出价(缩小到自己campaign)",
+          "method": "PATCH",
+          "url": "https://api.pacvue.com/instacart-newui/api/Keywords/bid/byConditions",
+          "status_code": 200,
+          "ms": 7464,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 3,
+          "msg": null
+        },
+        {
+          "name": "CreateKeywordForMultiAdGroup批量建关键词到多广告组",
+          "method": "POST",
+          "url": "https://api.pacvue.com/instacart-newui/api/Keywords/CreateKeywordForMultiAdGroup",
+          "status_code": 200,
+          "ms": 3152,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}
