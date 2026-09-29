@@ -119,19 +119,6 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report, platform=None):
         steps = c.get('steps', [])
         if not steps:
             continue
-        # 优先从 case name 提取方法和路径（格式："{METHOD} /api/xxx - desc"）
-        name_m = re.match(r'^([A-Z]+)\s+(/\S+)', c.get('name', ''))
-        if name_m:
-            case_method = name_m.group(1).upper()
-            raw_path    = name_m.group(2)
-            ref_step    = steps[0]
-        else:
-            # fallback: 取最后一步（实际被测接口）
-            last = steps[-1]
-            case_method = (last.get('method') or '').upper()
-            raw_path    = last.get('path', '')
-            ref_step    = last
-        full_path = norm(raw_path, ref_step.get('base_url', ''))
         name = c.get('name', '')
         desc = c.get('description', '')
         label_raw = name.split(' - ', 1)[1] if ' - ' in name else name
@@ -144,7 +131,35 @@ def update_scenario_col(wb, swagger_sheet, env, cases, report, platform=None):
             entry = label + '（无ES流量）'
         else:
             entry = label
-        method_path_scenarios[(case_method, full_path)].append(entry)
+
+        # 优先从 case name 提取方法和路径（格式："{METHOD} /api/xxx - desc"）：单接口 case，
+        # 只标注这一个 (method, path)。
+        name_m = re.match(r'^([A-Z]+)\s+(/\S+)', name)
+        if name_m:
+            case_method = name_m.group(1).upper()
+            raw_path    = name_m.group(2)
+            full_path   = norm(raw_path, steps[0].get('base_url', ''))
+            method_path_scenarios[(case_method, full_path)].append(entry)
+            continue
+
+        # 多步骤复合 case（如"全生命周期"创建+清理串联、前置查/设置/还原）：case name 本身不是
+        # 单个接口，需要把同一个 label 标注到它实际测试的"每一个"接口上，而不是只标最后一步——
+        # 否则 daypart/device-types/retailers 增改删/zipcodes/brand-name 等步骤各自的接口行会
+        # 永远拿不到场景覆盖文本。判定"这一步是不是在测某个接口"：步骤名里带"主测试"标记的，或
+        # 序列中的第一步（通常是本 case 的创建/入口动作）；纯粹为了拿 ID 做的中间查询步骤（如
+        # 创建后用 page 接口查回 id）不带标记也不是第一步，天然被跳过，不会污染 page 自己的场景列表。
+        seen_keys = set()
+        for idx, s in enumerate(steps):
+            s_name = s.get('name', '')
+            if idx != 0 and '主测试' not in s_name:
+                continue
+            s_method = (s.get('method') or '').upper()
+            s_path   = norm(s.get('path', ''), s.get('base_url', ''))
+            key = (s_method, s_path)
+            if key in seen_keys:
+                continue
+            seen_keys.add(key)
+            method_path_scenarios[key].append(entry)
 
     # 找列位置：方法列 + 接口路径列 + 既有「场景覆盖」列
     env_col  = next((c for c in range(1, ws.max_column + 1) if '环境' in str(ws.cell(1, c).value or '')), None)

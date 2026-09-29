@@ -1,0 +1,140 @@
+[
+  {
+    "name": "MonitorKeyword 生命周期(主场景) - 批量添加/列表验证/全局搜索验证/批量删除清理",
+    "description": "单接口测试：POST /api/sov/keyword/batch + POST /api/sov/keyword/list + GET /api/sov/keyword/search + DELETE /api/sov/keyword/batch。四个接口构成一个完整生命周期：先批量添加2个自动化测试专用关键词(zzautotest_target_kw_1790575976_1/_2，deviceTypes=[0]+retailerIds=[1]+zipCodes=[])到真实存在数据的 target category(148915，categoryName=Phone，已含真实监控关键词iphone/iphone15/iphone16/galaxy)，再用 POST /keyword/list 按 categoryIds+keywordText 过滤验证已入库，再用 GET /keyword/search 做当前client+productLine下的全局模糊搜索验证可搜到，最后 DELETE 批量删除清理，并再次用 POST /keyword/list 与 GET /keyword/search 双重验证已删除(data均为空数组)，确保可重复执行且不留残留、不影响已有真实监控关键词。deviceTypes=[0]+retailerIds=[1]+zipCodes=[] 是target平台90天真实调用中100%占比的场景(POST /keyword/batch 142条真实命中样本中142条=100%；DELETE /keyword/batch 72条真实命中样本100%为{categoryId,keywordTexts}结构)，target平台没有其它≥1%的差异场景(不像walmart用zipCode、不像instacart用retailerIds+storeIds多值定位，target固定retailerIds=[1])。POST /keyword/list 与 GET /keyword/search 近90天target平台及全平台均为0调用(ES无流量)，按约定纳入生命周期case执行验证，不作为无流量跳过。生成前已用真实token手动预跑一遍全流程(add→list命中2条→search命中2条→delete→list验证为空→search验证为空)，确认该共享测试账号(clientId=62)在target平台无配额超限问题，无残留。POST /keyword/batch 500条随机样本(实际命中142条)中占比约100%（142次）；DELETE /keyword/batch 500条随机样本(实际命中72条)中占比约100%（72次）。",
+    "module": "MonitorKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 批量添加测试关键词(主测试 POST /keyword/batch，deviceTypes=[0]+retailerIds=[1] 100%占比场景)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryId": "{{variables.category_id}}",
+          "productLine": "TARGET",
+          "isDaypart": null,
+          "logOperationType": null,
+          "countryCode": "US",
+          "keywords": [
+            "zzautotest_target_kw_1790575976_1",
+            "zzautotest_target_kw_1790575976_2"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [],
+          "retailerIds": [
+            1
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 列表验证已添加(POST /keyword/list，按 categoryIds+keywordText 过滤)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_target_kw_1790575976"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 2
+          }
+        }
+      },
+      {
+        "name": "3. 全局搜索验证可搜到(GET /keyword/search，当前 client+productLine)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_target_kw_1790575976",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 2
+          }
+        }
+      },
+      {
+        "name": "4. 清理：批量删除测试关键词(主测试 DELETE /keyword/batch)",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "keywordTexts": [
+            "zzautotest_target_kw_1790575976_1",
+            "zzautotest_target_kw_1790575976_2"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "5. 复查删除生效(POST /keyword/list 应返回空数组，确认业务成功信号而非仅code:200)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_target_kw_1790575976"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      },
+      {
+        "name": "6. 复查搜索也不再命中(GET /keyword/search 应返回空数组)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_target_kw_1790575976",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      }
+    ]
+  }
+]

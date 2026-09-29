@@ -1,0 +1,140 @@
+[
+  {
+    "name": "MonitorKeyword 生命周期(主场景) - 添加/列表验证/全局搜索验证/删除清理(单关键词，控制共享账号配额争用)",
+    "description": "单接口测试：POST /api/sov/keyword/batch + POST /api/sov/keyword/list + GET /api/sov/keyword/search + DELETE /api/sov/keyword/batch。四个接口构成一个完整生命周期：先添加1个自动化测试专用关键词(zzautotest_criteo_kw_1790579939，deviceTypes=[0]+zipCodes=[]+retailerIds=[80]+storeIds=[0])到真实存在数据的 criteo category(141587，categoryName='all'，brandName='Crieo us-自动化监测数据专用，勿动！'，已含18个真实监控关键词如juice/coconut water/fish/jbl enceinte等)，再用 POST /keyword/list 按 categoryIds+keywordText 过滤验证已入库，再用 GET /keyword/search 做当前client+productLine下的全局模糊搜索验证可搜到(该接口返回值为关键词字符串数组，非对象数组)，最后 DELETE 删除清理，并再次用 POST /keyword/list 与 GET /keyword/search 双重验证已删除(data均为空数组)，确保可重复执行且不留残留、不影响已有18个真实监控关键词。deviceTypes=[0]+zipCodes=[] 是criteo平台90天真实调用中100%占比的场景(POST /keyword/batch 22条真实命中样本中22条=100%)；retailerIds/storeIds在22条样本中有8种不同组合(80+[0]占比最高40.9%/9次，其余79/2/16/9/20/92等各账号各自选择的retailer均为个位数次)，属于'该账号监控哪个retailer'的账号级选择参数，不是接口的业务分支维度(参照walmart案例zipCode/技能文档ToMarket的处理方式：保留真实值，取最高频真实组合，不按此拆分场景)，因此criteo只有1个真实业务场景，与target案例(retailerIds固定[1]100%)同属'仅1种真实调用模式'情形，如实只写1条真实case，不编造凑数。DELETE /keyword/batch 13条真实命中样本100%为{categoryId,keywordTexts:[单个关键词]}结构，本case清理步骤沿用相同单关键词结构。POST /keyword/list 与 GET /keyword/search 近90天criteo平台0调用(ES无流量)，按约定纳入生命周期case执行验证，不作为无流量跳过。【风险排查记录】生成过程中先用2个关键词的批量add测试，发现该共享测试账号(clientId=62)在criteo平台存在真实的槽位配额限制：delete为逻辑删除、账号全局配额随其它真实业务并发波动，2个关键词的批量add在短时间内连续执行(如两次run_cases.py紧邻执行)会稳定复现 code=400001(errorMessage: 'clientId=62 requested=2 remain=0')，说明该时刻账号级配额几乎耗尽；改为每次仅add 1个关键词后，连续3轮add→delete循环(间隔1秒)均稳定成功，配额压力显著降低。按技能文档指引('优先对已注册关键词做子集操作，或控制新增关键词数量')，最终将本case的批量添加数量从2个降为1个以降低对共享账号配额的争用，牺牲了对'批量多关键词'能力的直接覆盖，但保证了case在共享生产账号上安全、幂等、可重复执行。POST /keyword/batch 500条随机样本(实际命中22条)中占比约100%（22次）；DELETE /keyword/batch 500条随机样本(实际命中13条)中占比约100%（13次）。",
+    "module": "MonitorKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 添加测试关键词(主测试 POST /keyword/batch，deviceTypes=[0]+zipCodes=[] 100%占比场景，retailerIds=[80]+storeIds=[0]为最高频真实组合40.9%；仅add 1个关键词以控制对共享账号配额的争用)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryId": "{{variables.category_id}}",
+          "productLine": "CRITEO",
+          "isDaypart": null,
+          "logOperationType": null,
+          "countryCode": "US",
+          "keywords": [
+            "zzautotest_criteo_kw_1790579939"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [],
+          "retailerIds": [
+            80
+          ],
+          "storeIds": [
+            0
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 列表验证已添加(POST /keyword/list，按 categoryIds+keywordText 过滤)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_criteo_kw_1790579939"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 1
+          }
+        }
+      },
+      {
+        "name": "3. 全局搜索验证可搜到(GET /keyword/search，当前 client+productLine，返回字符串数组)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_criteo_kw_1790579939",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 1
+          }
+        }
+      },
+      {
+        "name": "4. 清理：删除测试关键词(主测试 DELETE /keyword/batch，与ES真实样本100%的单关键词结构一致)",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "keywordTexts": [
+            "zzautotest_criteo_kw_1790579939"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "5. 复查删除生效(POST /keyword/list 应返回空数组，确认业务成功信号而非仅code:200)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_criteo_kw_1790579939"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      },
+      {
+        "name": "6. 复查搜索也不再命中(GET /keyword/search 应返回空数组)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_criteo_kw_1790579939",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      }
+    ]
+  }
+]

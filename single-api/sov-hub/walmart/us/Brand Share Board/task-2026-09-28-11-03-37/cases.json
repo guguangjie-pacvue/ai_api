@@ -1,0 +1,260 @@
+[
+  {
+    "name": "POST /api/sov/brand-share-board - 创建品牌份额看板(自有品牌+竞品对比,含存在性/详情验证与后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/brand-share-board。brands 同时含 isMyBrand=true 的自有品牌和 isMyBrand=false 的竞品，用于竞品份额对比，是最常见的建板方式。第2步用 GET /exist 校验新看板名已存在，第3步用 GET /list 按 boardName 匹配提取新建看板ID，第4步用 GET /{id} 校验详情字段正确，第5步删除该看板，保证用例可重复执行、不留残留。90天ES真实调用样本(walmart平台，共7条，样本量<10已用全部命中，场景覆盖可能不全)中该模式占比约85.7%（6次）。",
+    "module": "Brand Share Board",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建看板(自有品牌+竞品)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "boardName": "swagger-api-case-walmart-mixed",
+          "productLine": "WALMART",
+          "categoryIds": "[\"90554\",\"90536\",\"87082\"]",
+          "sovMetrics": "[\"shareOfShelf\",\"paidSOV\",\"organicSOV\"]",
+          "brands": "[{\"name\":\"{{variables.brand_name}}\",\"isMyBrand\":true},{\"name\":\"Kirkland Signature\",\"isMyBrand\":false}]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "校验看板名已存在",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/exist?name=swagger-api-case-walmart-mixed",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": true
+        }
+      },
+      {
+        "name": "查询看板列表定位新建看板ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/list",
+        "request_body": {},
+        "extract_vars": {
+          "board_id_mixed": "data[boardName=swagger-api-case-walmart-mixed].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "按ID查询看板详情校验字段",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/{{board_id_mixed}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "boardName": "swagger-api-case-walmart-mixed"
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建看板",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/{{board_id_mixed}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-share-board - 创建品牌份额看板(仅自有品牌,含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/brand-share-board。brands 全部为 isMyBrand=true 的自有品牌，不含竞品对比。第2步用 GET /list 按 boardName 匹配提取新建看板ID，第3步删除该看板，保证用例可重复执行。90天ES真实调用样本(walmart平台，共7条，样本量<10已用全部命中，场景覆盖可能不全)中该模式占比约14.3%（1次）。",
+    "module": "Brand Share Board",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建看板(仅自有品牌)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "boardName": "swagger-api-case-walmart-mineonly",
+          "productLine": "WALMART",
+          "categoryIds": "[\"{{variables.category_id}}\"]",
+          "sovMetrics": "[\"shareOfShelf\",\"paidSOV\",\"organicSOV\"]",
+          "brands": "[{\"name\":\"{{variables.brand_name}}\",\"isMyBrand\":true}]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询看板列表定位新建看板ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/list",
+        "request_body": {},
+        "extract_vars": {
+          "board_id_mineonly": "data[boardName=swagger-api-case-walmart-mineonly].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除新建看板",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/{{board_id_mineonly}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/brand-share-board/{id} - 编辑品牌份额看板(为已有看板新增竞品对比,含前置建/详情校验/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：PUT /api/sov/brand-share-board/{id}。第1步前置创建一个仅自有品牌的看板，第2步用 GET /list 按 boardName 匹配提取该看板ID，第3步对其编辑，brands 改为自有品牌+竞品组合、categoryIds 改为多类目组合，第4步用 GET /{id} 校验编辑后字段已生效，第5步删除该看板，保证用例可重复执行。walmart平台该接口90天内无独立真实调用记录(ES 0命中)，编辑内容参照本模块POST创建接口最常见的\"自有+竞品对比\"业务模式构造，用于验证编辑接口在真实业务场景下可正常生效，不计入占比。",
+    "module": "Brand Share Board",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-仅自有品牌看板",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "boardName": "swagger-api-case-walmart-editflow",
+          "productLine": "WALMART",
+          "categoryIds": "[\"{{variables.category_id}}\"]",
+          "sovMetrics": "[\"shareOfShelf\",\"organicSOV\"]",
+          "brands": "[{\"name\":\"{{variables.brand_name}}\",\"isMyBrand\":true}]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询看板列表定位新建看板ID",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/list",
+        "request_body": {},
+        "extract_vars": {
+          "board_id_edit": "data[boardName=swagger-api-case-walmart-editflow].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "编辑看板(新增竞品对比+多类目)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/{{board_id_edit}}",
+        "request_body": {
+          "boardName": "swagger-api-case-walmart-editflow",
+          "productLine": "WALMART",
+          "categoryIds": "[\"90554\",\"90536\",\"87082\",\"86297\"]",
+          "sovMetrics": "[\"paidSOV\"]",
+          "brands": "[{\"name\":\"{{variables.brand_name}}\",\"isMyBrand\":true},{\"name\":\"Kirkland Signature\",\"isMyBrand\":false}]"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "按ID查询看板详情校验编辑已生效",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/{{board_id_edit}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "boardName": "swagger-api-case-walmart-editflow",
+            "sovMetrics": "[\"paidSOV\"]"
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除看板",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-share-board/{{board_id_edit}}",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

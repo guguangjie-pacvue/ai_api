@@ -1,0 +1,796 @@
+[
+  {
+    "name": "POST /api/sov/retailer/addKeywords - 单retailer(retailerIds长度=1,如[10]，criteo下最常见的单retailer场景)(含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。单retailer(retailerIds长度=1,如[10]，criteo下最常见的单retailer场景)。该接口90天criteo真实调用样本(共45条)中，isDaypart=false/deviceTypes=[0]/countryCode=US/zipCodes=[\"\"]/storeIds=[]在全部45条样本中保持不变，唯一真实变化维度是 retailerIds 的数量(单/双/多retailer)。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(criteo平台，共45条)中占比约91.1%（41次）。🔴 遵循前序MonitorKeyword模块发现的共享测试账号(clientId=62)criteo平台关键词监控槽位配额限制经验，本case仅新增1个关键词，避免消耗共享配额。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_A_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerAK_A_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-ak-a-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "hydration drink mix"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            10
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-ak-a-20260928154202"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/addKeywords - 双retailer(retailerIds长度=2,如[9,10])(含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。双retailer(retailerIds长度=2,如[9,10])。该接口90天criteo真实调用样本(共45条)中，isDaypart=false/deviceTypes=[0]/countryCode=US/zipCodes=[\"\"]/storeIds=[]在全部45条样本中保持不变，唯一真实变化维度是 retailerIds 的数量(单/双/多retailer)。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(criteo平台，共45条)中占比约4.4%（2次）。🔴 遵循前序MonitorKeyword模块发现的共享测试账号(clientId=62)criteo平台关键词监控槽位配额限制经验，本case仅新增1个关键词，避免消耗共享配额。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_B_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerAK_B_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-ak-b-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "retinol serum"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            9,
+            10
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-ak-b-20260928154202"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/addKeywords - 多retailer(retailerIds长度>1,批量投放多个retailer,配额安全缩减为3个真实retailerId)(含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。多retailer(retailerIds长度≥10,批量投放多个retailer,如样本真实值)。🔴 实测发现该共享测试账号(clientId=62)criteo平台存在关键词监控槽位配额限制(PUT/POST涉及retailerIds扩容时返回code=400001 'clientId=62 requested=x remain=y'，探测到某次remain仅剩5)，故本case将真实样本里的11个retailerIds等比缩减为3个真实值([10,9,88]，均来自ES真实样本)，只验证\"多retailer(>1个)\"这一业务维度，不追求与真实样本retailer数量完全一致。该接口90天criteo真实调用样本(共45条)中，isDaypart=false/deviceTypes=[0]/countryCode=US/zipCodes=[\"\"]/storeIds=[]在全部45条样本中保持不变，唯一真实变化维度是 retailerIds 的数量(单/双/多retailer)。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(criteo平台，共45条)中占比约4.4%（2次）。🔴 遵循前序MonitorKeyword模块发现的共享测试账号(clientId=62)criteo平台关键词监控槽位配额限制经验，本case仅新增1个关键词，避免消耗共享配额。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_C_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerAK_C_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-ak-c-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "zero sugar sport drink"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            10,
+            9,
+            88
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-ak-c-20260928154202"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(criteo平台，共69条)中该模式占比约50.7%（35次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_1_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerBC_1_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-bc-1-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "apple sauce",
+            "applesauce cups",
+            "apple sauce pouches",
+            "applesauce squeeze pouches",
+            "applesauce"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            10
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-bc-1-20260928154202",
+          "startDate": "2026-08-09",
+          "endDate": "2026-08-15",
+          "keywords": [
+            "apple sauce",
+            "applesauce cups",
+            "apple sauce pouches",
+            "applesauce squeeze pouches",
+            "applesauce"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Great Value",
+              "brands": [
+                "Great Value"
+              ]
+            },
+            {
+              "aggregationBrandName": "KDP Sauce/Juice/Tea",
+              "brands": [
+                "KDP Sauce/Juice/Tea"
+              ]
+            },
+            {
+              "aggregationBrandName": "Mott (KDP)",
+              "brands": [
+                "Mott (KDP)"
+              ]
+            },
+            {
+              "aggregationBrandName": "Mott's",
+              "brands": [
+                "motts applesauce variety",
+                "Mott's Store",
+                "Mott's"
+              ]
+            }
+          ],
+          "splitBySubChannel": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-bc-1-20260928154202"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(criteo平台，共69条)中该模式占比约46.4%（32次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_2_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerBC_2_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-bc-2-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "aidells chicken sausage",
+            "aidells",
+            "aidells sausage"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            10
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-bc-2-20260928154202",
+          "startDate": "2026-06-06",
+          "endDate": "2026-08-04",
+          "keywords": [
+            "aidells chicken sausage",
+            "aidells",
+            "aidells sausage"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Great Value",
+              "brands": [
+                "Great Value",
+                "great value disney stitch"
+              ]
+            },
+            {
+              "aggregationBrandName": "Wright Brand",
+              "brands": [
+                "Wright Brand"
+              ]
+            },
+            {
+              "aggregationBrandName": "Wright",
+              "brands": [
+                "Wright Brand",
+                "Wright™",
+                "Wright"
+              ]
+            },
+            {
+              "aggregationBrandName": "Evergood",
+              "brands": [
+                "Evergood"
+              ]
+            },
+            {
+              "aggregationBrandName": "Hormel",
+              "brands": [
+                "HORMEL PEPPERONI",
+                "Hormel",
+                "HORMEL BLACK LABEL"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-bc-2-20260928154202"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel=true(按SubChannel拆分) / keywords=[](不按关键词过滤,对比全类目)(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel=true(按SubChannel拆分) / keywords=[](不按关键词过滤,对比全类目))，第3步删除Category清理。90天ES真实调用样本(criteo平台，共69条)中该模式占比约2.9%（2次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_3_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerBC_3_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-bc-3-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "applesauce"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            10
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-bc-3-20260928154202",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "keywords": [],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Sprayway",
+              "brands": [
+                "Sprayway",
+                "SprayAway"
+              ]
+            },
+            {
+              "aggregationBrandName": "Adam's Polishes",
+              "brands": [
+                "Adam's Polish",
+                "Adams's Polishes"
+              ]
+            },
+            {
+              "aggregationBrandName": "Armor All",
+              "brands": [
+                "Armor All"
+              ]
+            },
+            {
+              "aggregationBrandName": "Aunt Fannie's",
+              "brands": [
+                "Aunt Fannie's"
+              ]
+            },
+            {
+              "aggregationBrandName": "BRASSO",
+              "brands": [
+                "BRASSO"
+              ]
+            }
+          ],
+          "splitBySubChannel": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-bc-3-20260928154202"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/retailer/editBrandName + editRetailers + keywords + keywords/copy + deleteKeywords - Category全生命周期编辑(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：串联测试 Retailer Category 的完整编辑生命周期(criteo平台)。第1步创建Category A(2个初始关键词)，第2步创建Category B(1个初始关键词，作为editBrandName所需的第二个categoryBatchId)，第3步 editBrandName 对[A,B]两个categoryBatchId同时改品牌名(90天真实调用2条，100%为传2个categoryBatchId的批量改名模式，占比100%)，第4步 keywords(PUT) 对Category A全量替换关键词列表，从2个初始关键词收缩为1个已注册关键词(90天真实调用6条，均为全量替换同一Category下已有关键词，占比100%)，第5步 editRetailers 对Category A全量替换retailerIds(90天真实调用1条，真实值为11个retailer的批量列表，占比100%；🔴 实测发现该共享测试账号(clientId=62)criteo平台的关键词监控槽位配额消耗 = keyword数量 x retailer数量，为规避配额超限(code=400001)，本步骤刻意调整到keywords(PUT)收缩到1个关键词之后再执行，且仅从[10]净增1个retailer到[10,9]，只验证\"retailer列表全量替换\"这一业务动作本身，不追求与真实样本retailer数量一致)，第6步调用 GET /api/sov/internal/category/detail(非Retailer模块,仅作为辅助步骤读取Category A的数字型categoryId，用于第7步keywords/copy；该numeric categoryId不通过Retailer模块任何接口返回，故借用此只读辅助接口桥接)，第7步 keywords/copy 将Category B已注册的关键词复制进Category A(targetCategoryId=Category A的数字id，90天真实调用14条，均为\"复制关键词到targetCategoryId指定的目标Category\"这一种模式，占比100%)，第8步 deleteKeywords 从Category A删除1个关键词(90天真实调用仅1条，样本极少，占比100%)，第9步 deleteCategories 同时删除[A,B]两个categoryBatchId做最终清理(90天真实调用9条中，传2个categoryBatchId占比约77.8%(7次)为主流模式，本步代表该模式；传1个categoryBatchId占比约22.2%(2次)已在addKeywords/brandComparison等其它case的后置清理步骤中充分覆盖)，保证用例可重复执行。这些编辑类接口(editBrandName/editRetailers/keywords-PUT/keywords-copy/deleteKeywords)样本量均较小(1~14条不等)且均围绕同一组Category实体操作，故合并为一条完整生命周期case，而非拆分成多条各自建删的独立case。🔴 遵循前序MonitorKeyword模块发现的共享测试账号(clientId=62)criteo平台关键词监控槽位配额限制经验，Category A/B初始关键词均只用1~2个，且keywords/copy步骤复制的是Category B已注册的关键词(非全新陌生关键词)，deleteKeywords只做已注册关键词的子集删除，全程不引入超出初始注册范围的陌生新关键词。🔴 criteo平台下 editCategoryName 90天真实调用为0(365天全平台历史交叉验证有13条，但均为90天窗口之外的历史调用，与target平台editCategoryName的处理方式一致，判定为近90天无流量，不纳入生命周期)；editDayParting/editDeviceType/editZipCode/convert-batch-ids criteo平台90天及365天交叉验证均为0调用，真实无流量(editDayParting/editDeviceType/editZipCode在其它平台有流量,如90天全平台分别为21/6/9条,convert-batch-ids的151次全平台调用全部来自amazon)，均不纳入本生命周期。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category A",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerLifecycle_A_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_A_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-lc-a-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "dry dog food",
+            "dog dry food"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            10
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "创建Category B",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerLifecycle_B_20260928154202",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_B_20260928154202",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-lc-b-20260928154202",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "dog dry food kibble"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            10
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量修改品牌名称(A+B)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editBrandName",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-lc-a-20260928154202",
+            "AutoTest-sovhub-criteo-retailer-lc-b-20260928154202"
+          ],
+          "brandName": "AutoTest_Brand_RetailerLifecycle_Renamed_20260928154202"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量编辑关键词(全量替换,A)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/keywords",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-lc-a-20260928154202",
+          "keywordTexts": [
+            "dry dog food"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "全量替换Retailer列表(A)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editRetailers",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-lc-a-20260928154202",
+          "retailerIds": [
+            10,
+            9
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询CategoryA的数字categoryId(辅助步骤,非Retailer模块)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/internal/category/detail?categoryBatchId=AutoTest-sovhub-criteo-retailer-lc-a-20260928154202",
+        "request_body": {},
+        "extract_vars": {
+          "category_id_a": "data.productLines[0].categoryId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": true
+          }
+        }
+      },
+      {
+        "name": "复制Category B已注册关键词到Category A",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/keywords/copy",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "CRITEO",
+          "targetCategoryId": "{{category_id_a}}",
+          "keywordTexts": [
+            "dog dry food kibble"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除Category A的1个关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteKeywords",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-criteo-retailer-lc-a-20260928154202",
+          "keywordTexts": [
+            "dry dog food"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-批量删除Category A+B",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-criteo-retailer-lc-a-20260928154202",
+            "AutoTest-sovhub-criteo-retailer-lc-b-20260928154202"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

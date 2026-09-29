@@ -1,0 +1,556 @@
+[
+  {
+    "name": "DELETE /api/sov/bulk/brand - 按品牌名批量删除 category(含前置创建+验证)",
+    "description": "单接口测试：DELETE /api/sov/bulk/brand。walmart平台90天真实流量10次，真实样本均为{brandName,countryCode}结构(如'Wizard Wellness'/'TruSkin'等)，占比100%，仅brandName取值不同、结构完全一致。因该接口按品牌名批量物理清空该品牌下的真实生产category，不可直接复用ES样本里的真实品牌名(会误删真实用户数据)，改用测试专用临时创建的category(brandName='ZZ-AutoTest-DeleteBrand-Brand')验证：先创建，用 category/page 按 searchGroupName 确认存在(data.total>=1)，再调用本接口删除，最后再次查询确认 data.total=0，即为业务成功信号(而非仅code:200)。保证幂等可重复执行。500条随机样本中占比约100%（10次）。",
+    "module": "Bulk Operation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试专用临时 category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-DeleteBrand-Brand",
+          "categoryName": "ZZ-AutoTest-DeleteBrand-Category",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "zzautotestkeyword"
+          ],
+          "deviceTypes": [
+            0
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认临时 category 已创建",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-DeleteBrand-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "主测试：按品牌名批量删除",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/brand",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-DeleteBrand-Brand",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认该品牌下 category 已被删除(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-DeleteBrand-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "DELETE /api/sov/bulk/category - 批量删除 category(逻辑删除,ID数组,含前置创建+提取ID)",
+    "description": "单接口测试：DELETE /api/sov/bulk/category。walmart平台90天真实流量24次，真实样本均为纯int64[]格式的categoryId数组(长度1~9不等)，占比100%，无结构性差异(均为逻辑删除动作)。因该接口按ID数组批量逻辑删除真实生产category，不可复用ES样本里的真实categoryId(会误删其它用户的真实数据)，也不可使用共享测试数据category_id=90554/category_ids_multi，改用测试专用临时创建的category：先创建，用 category/page 查询并 extract_vars 提取新建ID，再调用本接口按该ID删除，最后再次查询确认 data.total=0 作为业务成功信号。保证幂等可重复执行。500条随机样本中占比约100%（24次）。",
+    "module": "Bulk Operation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试专用临时 category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-BulkDeleteCat-Brand",
+          "categoryName": "ZZ-AutoTest-BulkDeleteCat-Category",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "zzautotestkeyword"
+          ],
+          "deviceTypes": [
+            0
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置：查询并提取新建 category 的真实ID",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-BulkDeleteCat-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {
+          "created_category_id": "data.list[0].categories[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "主测试：按ID数组批量删除",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/category",
+        "request_body": [
+          "{{created_category_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认该 category 已被删除(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-BulkDeleteCat-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/bulk/category/daypart - 批量开启/关闭 daypart(含前置创建+双向切换+清理)",
+    "description": "单接口测试：PUT /api/sov/bulk/category/daypart?isDaypart=<bool>。walmart平台90天真实流量4次，真实样本均为纯int64[] categoryId数组(isDaypart查询参数值ES未采集,无法统计true/false占比)。isDaypart是该接口的必填枚举查询参数，'开启'和'关闭'是swagger summary明确定义的两个对等业务动作，因此在同一case内先创建测试专用临时category(isDaypart初始false)，用 category/page 提取新建ID后，先切换为true并查询验证 isDaypart=true 生效，再切换回false并查询验证生效(同时也是幂等还原)，最后删除清理临时category，不污染共享测试数据category_id=90554/category_ids_multi。500条随机样本中占比约100%（4次）。",
+    "module": "Bulk Operation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试专用临时 category(isDaypart=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-Daypart-Brand",
+          "categoryName": "ZZ-AutoTest-Daypart-Category",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "zzautotestkeyword"
+          ],
+          "deviceTypes": [
+            0
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置：查询并提取新建 category 的真实ID",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-Daypart-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {
+          "created_category_id": "data.list[0].categories[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "主测试：批量开启 daypart(isDaypart=true)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/category/daypart?isDaypart=true",
+        "request_body": [
+          "{{created_category_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认 isDaypart 已变为 true(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-Daypart-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "反向操作：批量关闭 daypart(isDaypart=false,同时验证'关闭'动作+还原初始状态)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/category/daypart?isDaypart=false",
+        "request_body": [
+          "{{created_category_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试专用临时 category",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/category",
+        "request_body": [
+          "{{created_category_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/bulk/category/device-types - 批量更新多个 category 的设备类型列表(全量替换,含前置创建+验证+清理)",
+    "description": "单接口测试：PUT /api/sov/bulk/category/device-types。walmart平台90天真实流量2次，真实样本均为{ids:int64[],deviceTypes:int32[]}结构，deviceTypes真实值恒为[0,1,2](全设备类型)，占比100%。因该接口对真实生产category的deviceTypes做全量替换，不可复用ES样本里的真实categoryId，改用测试专用临时创建的category(初始deviceTypes=[0])：先创建，用 category/page 提取新建ID，调用本接口将deviceTypes全量替换为[0,1,2]，再次查询验证 deviceTypes 已变为[0,1,2](业务成功信号)，最后删除清理，不污染共享测试数据。500条随机样本中占比约100%（2次）。",
+    "module": "Bulk Operation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试专用临时 category(deviceTypes=[0])",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-DeviceTypes-Brand",
+          "categoryName": "ZZ-AutoTest-DeviceTypes-Category",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "zzautotestkeyword"
+          ],
+          "deviceTypes": [
+            0
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置：查询并提取新建 category 的真实ID",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-DeviceTypes-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {
+          "created_category_id": "data.list[0].categories[0].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "主测试：批量全量替换设备类型为[0,1,2]",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/category/device-types",
+        "request_body": {
+          "ids": [
+            "{{created_category_id}}"
+          ],
+          "deviceTypes": [
+            0,
+            1,
+            2
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认 deviceTypes 已全量替换生效(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-DeviceTypes-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "清理：删除测试专用临时 category",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/category",
+        "request_body": [
+          "{{created_category_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/bulk/import-sov-template - 导入 SOV 模板数据(含验证+品牌名清理)",
+    "description": "单接口测试：POST /api/sov/bulk/import-sov-template。walmart平台90天真实流量8次，真实样本均为brand+category+market+devices+isDaypart+keywords[]+retailers结构的数组(单次导入可含数十条record，真实业务含义为一次性批量创建多个brand/category/keywords组合，等价于Excel模板导入)。因该接口直接写入真实生产category数据，不可复用ES样本里的真实brand/category/keywords内容(会在生产账号里创建不受控的真实品牌数据)，改用测试专用brand/category('ZZ-AutoTest-Import-Brand'/'ZZ-AutoTest-Import-Category')按真实schema构造最小可用的1条导入记录验证功能正确性，导入后用 category/page 按 searchGroupName 验证已生成(data.total>=1，业务成功信号)，最后用 DELETE /api/sov/bulk/brand 按品牌名清理并二次验证 data.total=0，保证幂等可重复执行、不留残留。500条随机样本中占比约100%（8次）。",
+    "module": "Bulk Operation",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "主测试：导入 SOV 模板数据(测试专用brand/category)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/import-sov-template",
+        "request_body": [
+          {
+            "brand": "ZZ-AutoTest-Import-Brand",
+            "category": "ZZ-AutoTest-Import-Category",
+            "market": "US",
+            "devices": [
+              0
+            ],
+            "isDaypart": false,
+            "keywords": [
+              {
+                "keywordText": "zzautotestimportkeyword"
+              }
+            ],
+            "retailers": null
+          }
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认导入数据已生成真实 category(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-Import-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": {
+              "$gte": 1
+            }
+          }
+        }
+      },
+      {
+        "name": "清理：按品牌名删除导入生成的 category",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/bulk/brand",
+        "request_body": {
+          "brandName": "ZZ-AutoTest-Import-Brand",
+          "countryCode": "US"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "验证：确认清理彻底(业务成功信号)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/category/page",
+        "request_body": {
+          "searchGroupName": "ZZ-AutoTest-Import-Brand",
+          "pageInfo": {
+            "pageSize": 10,
+            "pageIndex": 1
+          }
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "total": 0
+          }
+        }
+      }
+    ]
+  }
+]

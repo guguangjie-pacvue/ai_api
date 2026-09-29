@@ -1,0 +1,228 @@
+[
+  {
+    "name": "POST /api/sov/share-link/search - 按userId过滤查询",
+    "description": "单接口测试：POST /api/sov/share-link/search。pageInfo.pageSize=50 + userIds传当前用户,分页查询该用户创建的分享链接列表。500条随机样本中占比约99.2%（496次）。",
+    "module": "Share Link",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询分享链接列表(按userId过滤)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/search",
+        "request_body": {
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": ""
+          },
+          "userIds": [
+            "{{variables.user_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "records": {
+              "$is_array": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/share-link/modify - 创建新分享链接(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/share-link/modify。不传id,以categoryIdList+countryCodeList+dateRange等新增一个分享链接,后置用search查到新记录id并调用delete移除,保证可重复执行,同时覆盖POST /api/sov/share-link/delete(该接口ES真实调用100%为单id,2次,样本较少)。500条随机样本中占比约70.6%（12次）。",
+    "module": "Share Link",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建分享链接",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/modify",
+        "request_body": {
+          "countryCodeList": [
+            "US"
+          ],
+          "categoryIdList": [
+            "{{variables.category_id}}"
+          ],
+          "brandList": [],
+          "dateRange": "10",
+          "description": "swagger-api-case-sharelink-create",
+          "password": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询获取新建记录id",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/search",
+        "request_body": {
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": ""
+          },
+          "userIds": [
+            "{{variables.user_id}}"
+          ]
+        },
+        "extract_vars": {
+          "sharelink_create_id": "data.records[description=swagger-api-case-sharelink-create].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "records": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除分享链接",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/delete",
+        "request_body": [
+          "{{sharelink_create_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/share-link/modify - 编辑已存在分享链接(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/share-link/modify。传id编辑已存在的分享链接(修改dateRange/startDate/endDate),前置先创建1条记录用于编辑,后置删除保证可重复执行。500条随机样本中占比约29.4%（5次）。",
+    "module": "Share Link",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建待编辑分享链接",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/modify",
+        "request_body": {
+          "countryCodeList": [
+            "US"
+          ],
+          "categoryIdList": [
+            "{{variables.category_id}}"
+          ],
+          "brandList": [],
+          "dateRange": "10",
+          "description": "swagger-api-case-sharelink-edit",
+          "password": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-获取待编辑记录id",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/search",
+        "request_body": {
+          "pageInfo": {
+            "pageSize": 50,
+            "pageIndex": 1,
+            "orderBy": ""
+          },
+          "userIds": [
+            "{{variables.user_id}}"
+          ]
+        },
+        "extract_vars": {
+          "sharelink_edit_id": "data.records[description=swagger-api-case-sharelink-edit].id"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "records": {
+              "$is_array": true
+            }
+          }
+        }
+      },
+      {
+        "name": "编辑分享链接",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/modify",
+        "request_body": {
+          "id": "{{sharelink_edit_id}}",
+          "countryCodeList": [
+            "US"
+          ],
+          "categoryIdList": [
+            "{{variables.category_id}}"
+          ],
+          "brandList": [],
+          "dateRange": "15",
+          "startDate": "2025-01-01",
+          "endDate": "2026-12-31",
+          "description": "swagger-api-case-sharelink-edit",
+          "password": ""
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除分享链接",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/share-link/delete",
+        "request_body": [
+          "{{sharelink_edit_id}}"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

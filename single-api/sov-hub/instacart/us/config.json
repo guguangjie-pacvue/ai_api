@@ -1,0 +1,50 @@
+{
+  "name": "sov-hub (instacart, us)",
+  "variables": {
+    "platform": "instacart",
+    "user_id": 18589,
+    "client_id": 62,
+    "category_id": 144084,
+    "category_name": "general merchandise 1821025547449065474",
+    "brand_name": "kirkland signature",
+    "category_ids_multi": [
+      144528,
+      144084,
+      144729,
+      145189,
+      144527,
+      144747,
+      144681,
+      144529,
+      144422,
+      144219,
+      155409
+    ],
+    "period_date": "2026-09-01",
+    "_note_account": "sov-hub instacart 平台使用 autoui_acount (clientId=62, userId=18589)，与 walmart/amazon 平台是同一个共享测试账号，只是 productline header 不同",
+    "_note_category_id": "category_id=144084 (categoryName='general merchandise 1821025547449065474', brandName='【勿动】autoTest-自动化P0专用', countryCode=US) 是与 walmart 平台 category_id=90554 同名规律的官方指定自动化专用 category（brandName 明确标注'勿动'）；已用 POST /api/sov/asin/page 实测确认可正常返回数据（2028条，日期范围 2026-08-01~2026-09-27），brand_name='kirkland signature' 为该 category 下真实高频品牌",
+    "_note_category_ids_multi": "该账号 instacart 平台下逐一探测确认为真实有数据的 11 个 category id（POST /api/sov/asin/page 实测均返回非零 total），用于替换 ES 日志里那些一次查询多个 categoryId 的批量场景",
+    "_note_brand_share_board_keeper": "2026-09-28 做 Brand Share Board 模块前先查 GET /list：该账号在 instacart 下当时仅有系统自动生成的 'Default Board'(id=2761，疑似账号下首次调用 /list 时系统自动补的默认看板) 共1个，命中 DELETE /api/sov/brand-share-board/{id} 的业务规则 code=400505 'At least one board must be retained'（每个用户每个 productline 下至少保留1个看板，与 walmart 平台已确认的规则一致，按 productline 隔离计数）。为保证创建+删除自清理 case 可反复执行不触发该规则，已手动创建常驻看板 boardName='zz-keeper-do-not-delete-instacart'（id=2762，永不删除）作为底座，使账号在 instacart 下始终 ≥2 个看板（Default Board + keeper）。新增/修改该模块 case 时注意不要误删这两个看板"
+  },
+  "base_urls": {
+    "SOVHUBBASEURL": "https://api.pacvue.com/sov-hub/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "instacart"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjZGNEIxQ0Y5NENFNTE0M0M5MUQ2MjhCQTJGRjEyNEM1NkQ0QjdCRkIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJiMHNjLVV6bEZEeVIxaWk2TF9Fa3hXMUxlX3MifQ.eyJuYmYiOjE3OTA1ODk1MDQsImV4cCI6MTc5MDYyNTUwNCwiaXNzIjoiaHR0cDovL2lkZW50aXR5IiwiYXVkIjpbImh0dHA6Ly9pZGVudGl0eS9yZXNvdXJjZXMiLCJhcGkxIl0sImNsaWVudF9pZCI6ImNsaWVudC5qd3QiLCJzdWIiOiIxODU4OSIsImF1dGhfdGltZSI6MTc5MDU4OTUwNCwiaWRwIjoibG9jYWwiLCJ1c2VySWQiOiIxODU4OSIsInJvbGUiOiJVc2VyIiwidXNlckluZm8iOiJ7XCJEZWZhdWx0Q3VycmVuY3lcIjpcIlVTXCIsXCJ1c2VyTmFtZVwiOlwiYXV0b3VpX2Fjb3VudFwiLFwidXNlclJvbGVcIjpcIlVzZXJcIixcImF2YWlsYWJsZVBsYXRmb3Jtc1wiOltcImFtYXpvblwiLFwiYm9sdjJcIixcImNoZXd5djJcIixcImNpdHJ1c1wiLFwiY29tbWVyY2VcIixcImNvbW1lcmNlLXRhcmdldFwiLFwiY29tbWVyY2UtdGlrdG9rXCIsXCJjb21tZXJjZS13YWxtYXJ0XCIsXCJjcml0ZW9cIixcImRvb3JkYXNoXCIsXCJkc3BcIixcImViYXlcIixcImluc3RhY2FydFwiLFwia3JvZ2VydjNcIixcIm1lcmNhZG9cIixcInJhc1wiLFwicmV0YWlsZXJcIixcInNhbXNjbHViXCIsXCJ0YXJnZXRcIixcInRpa3Rva1wiLFwidHRkXCIsXCJ3YWxtYXJ0XCIsXCJtdDM2MFwiXSxcImF2YWlsYWJsZUNvbW1lcmNlUGxhdGZvcm1zXCI6W1wiYW1hem9uXCIsXCJ3YWxtYXJ0XCJdLFwiQ2xpZW50SWRcIjo2MixcInNvdXJjZVR5cGVcIjowLFwiUm9vdFVzZXJJZFwiOjkzLFwiSXNWY1wiOjAsXCJpc0ZvcmV2ZXJcIjowLFwiU3Vic2NyaWJlU3RhdHVzXCI6MSxcImxhc3REYXlzXCI6MCxcIlF1b3RhXCI6MTAwMCxcIklzUmV0YWlsZXJEYXNoYm9hcmRBdmFpbGFibGVcIjp0cnVlLFwiYnlQYWN2dWVyXCI6XCJcIixcImlzUmVhbFRpbWVEYXRhXCI6dHJ1ZSxcIk1haWxcIjpcInpoYW5nc2hhb2JvQHBhY3Z1ZS5jb21cIixcImFkbWluUGxhdGZvcm1zXCI6W1wicmV0YWlsZXJcIl0sXCJhZG1pbkNvbW1lcmNlUGxhdGZvcm1zXCI6W10sXCJMZXZlbFwiOlwiQWRtaW5cIixcImlzQ2FuYXJ5XCI6ZmFsc2UsXCJpc0VtYWlsVmFsaWRhdGVkXCI6ZmFsc2V9Iiwic2NvcGUiOlsib3BlbmlkIiwiYXBpMSIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJhdXRodG9rZW4iXX0.ddchDMlb0c3KXJddVOU8vG7ZQqBWN9RfuXhJhWz18YSClhzWnADHBHlYyYZnoRWNl0sru1J8gR72MdIIddetzqwwSDDRYaVpN55yySg5DMx5T2vz1cWsxYomtl9DOUy-E_lkYr7--Nem6CUzJDJWUDNbvXuyXq4VmliHbDLPRkYXPh4DvRRkx3fgShr77OSLRzQdlyOIl7IlP6if-mKypuwjq4ptOKA6TJ_7jOeNStF-KHJ-hsnC0zJ_TthqpQZqFJb4Be1KiXm8PcYjcl8hbDSSw99BrxqgkMihNeB5y_mdG4bY8fW-cQEOmsUzKPLNgIrqP_5t2Cp9Z6jCfLbluw",
+    "Content-Type": "application/json",
+    "productline": "instacart"
+  }
+}

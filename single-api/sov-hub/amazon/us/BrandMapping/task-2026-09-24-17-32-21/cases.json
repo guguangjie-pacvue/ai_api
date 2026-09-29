@@ -1,0 +1,179 @@
+[
+  {
+    "name": "POST /api/sov/brand-mapping/saveMergeBrand - 新建品牌合并(create) + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/saveMergeBrand。真实90天流量291次，均为新建/编辑合并品牌名(mergedName+brandList)。用测试专用 mergedName 创建，后置步骤 deleteMergeBrand 清理，避免在账号里留残留。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建合并品牌(主测试)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save",
+          "oldMergedName": null,
+          "brandList": [
+            "OtterBox",
+            "ZAGG"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除刚创建的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/deleteMergeBrand - 删除已创建的品牌合并",
+    "description": "单接口测试：POST /api/sov/brand-mapping/deleteMergeBrand。真实90天流量24次。前置用 saveMergeBrand 建一个测试专用合并品牌，再调用本接口删除，删除动作本身即为主测试步骤，无残留。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建待删除的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete",
+          "oldMergedName": null,
+          "brandList": [
+            "Speck"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：删除合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/asMyBrand - 标记为我的品牌 + 取消 + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/asMyBrand。真实90天流量273次，均为对已存在的 mergedName 切换 myBrand true/false。用测试专用合并品牌切换 true 再切回 false 验证幂等，最后删除清理。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试用合并品牌(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand",
+          "oldMergedName": null,
+          "brandList": [
+            "Sonix"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：标记为我的品牌(myBrand=true)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand",
+          "myBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "反向操作：取消我的品牌标记(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

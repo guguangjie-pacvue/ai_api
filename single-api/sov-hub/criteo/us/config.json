@@ -1,0 +1,50 @@
+{
+  "name": "sov-hub (criteo, us)",
+  "variables": {
+    "platform": "criteo",
+    "user_id": 18589,
+    "client_id": 62,
+    "category_id": 141587,
+    "category_name": "all",
+    "brand_name": "JLab Audio",
+    "category_ids_multi": [
+      141587,
+      140316,
+      140393,
+      141354,
+      140345,
+      140304,
+      140293,
+      141541,
+      140394,
+      141455,
+      141709
+    ],
+    "period_date": "2026-09-01",
+    "_note_account": "sov-hub criteo 平台使用 autoui_acount (clientId=62, userId=18589)，与 walmart/instacart/target/amazon 平台是同一个共享测试账号，只是 productline header 不同",
+    "_note_category_id": "category_id=141587 (categoryName='all', brandName='Crieo us-自动化监测数据专用，勿动！', countryCode=US) 通过 POST /api/sov/category/filter 实测确认为该账号 criteo 平台下的真实 category，brandName 明确标注为自动化监测数据专用；已用 POST /api/sov/asin/page 实测确认可正常返回数据（68123条，日期范围 2026-08-01~2026-09-27），brand_name='JLab Audio' 为该 category 下真实高频品牌（300条抽样中出现24次，Top1）",
+    "_note_category_ids_multi": "该账号 criteo 平台下逐一探测确认为真实有数据的 11 个 category id（POST /api/sov/asin/page 实测均返回非零 total，118 个 category 中 116 个有数据，此处取 total 较高的前几个），用于替换 ES 日志里那些一次查询多个 categoryId 的批量场景",
+    "_note_brand_share_board_keeper": "生成 Brand Share Board 模块 case 前实测 GET /api/sov/brand-share-board/list（productLine=CRITEO）该账号仅有1个既有看板(id=2778, boardName='Default Board')，为避免写操作 case 的创建+删除配对清理触发业务规则 code=400505 'At least one board must be retained'，已于 2026-09-28 手动创建常驻兜底看板 boardName='zz-keeper-do-not-delete-criteo' (id=2779, productLine=CRITEO, categoryIds=[141587], brands=[JLab Audio])，该看板永久保留、不参与任何测试 case 的删除操作"
+  },
+  "base_urls": {
+    "SOVHUBBASEURL": "https://api.pacvue.com/sov-hub/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "criteo"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjZGNEIxQ0Y5NENFNTE0M0M5MUQ2MjhCQTJGRjEyNEM1NkQ0QjdCRkIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJiMHNjLVV6bEZEeVIxaWk2TF9Fa3hXMUxlX3MifQ.eyJuYmYiOjE3OTA1ODk1MDgsImV4cCI6MTc5MDYyNTUwOCwiaXNzIjoiaHR0cDovL2lkZW50aXR5IiwiYXVkIjpbImh0dHA6Ly9pZGVudGl0eS9yZXNvdXJjZXMiLCJhcGkxIl0sImNsaWVudF9pZCI6ImNsaWVudC5qd3QiLCJzdWIiOiIxODU4OSIsImF1dGhfdGltZSI6MTc5MDU4OTUwOCwiaWRwIjoibG9jYWwiLCJ1c2VySWQiOiIxODU4OSIsInJvbGUiOiJVc2VyIiwidXNlckluZm8iOiJ7XCJEZWZhdWx0Q3VycmVuY3lcIjpcIlVTXCIsXCJ1c2VyTmFtZVwiOlwiYXV0b3VpX2Fjb3VudFwiLFwidXNlclJvbGVcIjpcIlVzZXJcIixcImF2YWlsYWJsZVBsYXRmb3Jtc1wiOltcImFtYXpvblwiLFwiYm9sdjJcIixcImNoZXd5djJcIixcImNpdHJ1c1wiLFwiY29tbWVyY2VcIixcImNvbW1lcmNlLXRhcmdldFwiLFwiY29tbWVyY2UtdGlrdG9rXCIsXCJjb21tZXJjZS13YWxtYXJ0XCIsXCJjcml0ZW9cIixcImRvb3JkYXNoXCIsXCJkc3BcIixcImViYXlcIixcImluc3RhY2FydFwiLFwia3JvZ2VydjNcIixcIm1lcmNhZG9cIixcInJhc1wiLFwicmV0YWlsZXJcIixcInNhbXNjbHViXCIsXCJ0YXJnZXRcIixcInRpa3Rva1wiLFwidHRkXCIsXCJ3YWxtYXJ0XCIsXCJtdDM2MFwiXSxcImF2YWlsYWJsZUNvbW1lcmNlUGxhdGZvcm1zXCI6W1wiYW1hem9uXCIsXCJ3YWxtYXJ0XCJdLFwiQ2xpZW50SWRcIjo2MixcInNvdXJjZVR5cGVcIjowLFwiUm9vdFVzZXJJZFwiOjkzLFwiSXNWY1wiOjAsXCJpc0ZvcmV2ZXJcIjowLFwiU3Vic2NyaWJlU3RhdHVzXCI6MSxcImxhc3REYXlzXCI6MCxcIlF1b3RhXCI6MTAwMCxcIklzUmV0YWlsZXJEYXNoYm9hcmRBdmFpbGFibGVcIjp0cnVlLFwiYnlQYWN2dWVyXCI6XCJcIixcImlzUmVhbFRpbWVEYXRhXCI6dHJ1ZSxcIk1haWxcIjpcInpoYW5nc2hhb2JvQHBhY3Z1ZS5jb21cIixcImFkbWluUGxhdGZvcm1zXCI6W1wicmV0YWlsZXJcIl0sXCJhZG1pbkNvbW1lcmNlUGxhdGZvcm1zXCI6W10sXCJMZXZlbFwiOlwiQWRtaW5cIixcImlzQ2FuYXJ5XCI6ZmFsc2UsXCJpc0VtYWlsVmFsaWRhdGVkXCI6ZmFsc2V9Iiwic2NvcGUiOlsib3BlbmlkIiwiYXBpMSIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJhdXRodG9rZW4iXX0.YWWU8m1yCPU8l87PFxMs5qWvBvktZL75d8Uo0sbWPe0QVDdsW3ToXwSXInTtU4VfklJT4NrnOYpoB25oZWQWmgSDxGRQUH3APW_1vNYdWJshvmhCdmOHyX8qQGIN2XzueUGyafiEOE3Iy5_2Dgr23S2XzdjYQv8VNhIIPGzWd7nY5ZP0v-8AcM1rbNo0m5llviyQJSawtkXj3AYr5ApU0YWyG4zNNqxeTTWJTiWFilZxk7Sq9S1929auBy9BCPJi_PeDnlr9DdncoqaRKaaeYJSdY0-IYE_wYC0BV80nLcfvtSNwk4RcD1_SX4IRFozCI2sEpr8WoRCCUWkQup0Fuw",
+    "Content-Type": "application/json",
+    "productline": "criteo"
+  }
+}

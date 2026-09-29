@@ -1,0 +1,94 @@
+[
+  {
+    "name": "POST /api/sov/keyword-tag - 空categoryIds查询全部标签",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传空数组,查询账号下全部关键词标签(不按category过滤)。500条随机样本中占比约24.2%（121次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(空categoryIds)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 单个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传单个category,查询该分类下出现过的关键词标签。500条随机样本中占比约62.4%（312次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(单个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 多个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传多个category(合并覆盖真实样本中2/3/4/5/6/7/13/14/15/21/26/37/239等多种计数),查询多分类下出现过的关键词标签。500条随机样本中占比约13.4%（67次,取代表性场景合并统计）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(多个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": "{{variables.category_ids_multi}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

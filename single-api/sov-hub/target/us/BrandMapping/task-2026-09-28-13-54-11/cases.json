@@ -1,0 +1,242 @@
+[
+  {
+    "name": "POST /api/sov/brand-mapping/saveMergeBrand - 新建品牌合并(create) + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/saveMergeBrand。target平台90天真实流量18次，其中新建(oldMergedName为null)11次占比约61.1%，编辑既有合并(oldMergedName非null)7次占比约38.9%，均属于同一业务动作(保存合并品牌配置)。用测试专用 mergedName + 真实未合并品牌(brandList来自实测调用/api/sov/brand-mapping/getUnmergedBrandList，categoryId=148915返回的target真实未合并品牌'CASETiFY')创建，后置步骤 deleteMergeBrand 清理，避免在账号里留残留。500条随机样本中占比约100%（18次，新建/编辑合并操作）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建合并品牌(主测试)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save_Target",
+          "oldMergedName": null,
+          "brandList": [
+            "CASETiFY"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除刚创建的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save_Target",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/deleteMergeBrand - 删除已创建的品牌合并",
+    "description": "单接口测试：POST /api/sov/brand-mapping/deleteMergeBrand。target平台90天真实流量1次（{mergedName:'Uncrustables',myBrand:false}）。前置用 saveMergeBrand 建一个测试专用合并品牌(brandList使用target真实未合并品牌'OtterBox')，再调用本接口删除，删除动作本身即为主测试步骤，无残留。500条随机样本中占比约100%（1次）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建待删除的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete_Target",
+          "oldMergedName": null,
+          "brandList": [
+            "OtterBox"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：删除合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete_Target",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/asMyBrand - 标记为我的品牌 + 取消 + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/asMyBrand。target平台90天真实流量56次，其中myBrand:true(标记)51次占比约91.1%(如 Vetnique、Remedy Skin、Charmin 等真实合并品牌)，myBrand:false(取消标记)5次占比约8.9%(如 PiccoCasa、Scotch、Skippy 等)。前置用测试专用合并品牌(brandList使用target真实未合并品牌'ZAGG')，切换 true 再切回 false 验证幂等，最后删除清理，覆盖真实存在的两种取值。500条随机样本中占比约100%（56次，myBrand标记切换）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试用合并品牌(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_Target",
+          "oldMergedName": null,
+          "brandList": [
+            "ZAGG"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：标记为我的品牌(myBrand=true)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_Target",
+          "myBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "反向操作：取消我的品牌标记(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_Target",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_Target",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/setBrandColor - 设置合并品牌颜色 + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/setBrandColor。target平台90天该接口本身ES无流量（全平台365天内也是0命中），但作为写操作按Phase 3.5要求仍构造真实场景验证：颜色取值参考同索引 saveMergeBrand 请求体里真实出现过的 color 字段值(如 #9B88FA，来自其它平台真实调用样本)。前置用测试专用合并品牌(brandList使用target真实未合并品牌'Incipio')，主测试设置颜色，最后删除清理，保证可重复执行。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_Target",
+          "oldMergedName": null,
+          "brandList": [
+            "Incipio"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：设置合并品牌颜色",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/setBrandColor",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_Target",
+          "color": "#9B88FA"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_Target",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

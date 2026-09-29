@@ -1,0 +1,50 @@
+{
+  "name": "sov-hub (walmart, us)",
+  "variables": {
+    "platform": "walmart",
+    "user_id": 18589,
+    "client_id": 62,
+    "category_id": 90554,
+    "category_name": "general merchandise 1988856451880419329",
+    "brand_name": "Great Value",
+    "category_ids_multi": [
+      90554,
+      90536,
+      87082,
+      86297,
+      86828,
+      86460,
+      86599,
+      91034,
+      86104,
+      88796,
+      89939
+    ],
+    "period_date": "2026-09-01",
+    "_note_account": "sov-hub walmart 平台使用 autoui_acount (clientId=62, userId=18589)，与其它服务常用测试账号一致；superAdmin0913(clientId=3186) 是 amazon 平台用的另一个内部测试账号，两者都在 services.json 的 clientid_exclude=[62,3186] 里排除",
+    "_note_category_id": "category_id=90554 (categoryName='general merchandise 1988856451880419329', brandName='【勿动】autoTest-自动化P0专用[HQ]', countryCode=US) 通过 POST /api/sov/category/filter 实测确认为该账号 walmart 平台下的真实 category，命名即标注为自动化专用；已用 POST /api/sov/asin/page 验证可正常返回数据（6599条，日期范围 2026-08-01~2026-09-27），brand_name='Great Value' 为该 category 下真实高频品牌",
+    "_note_category_ids_multi": "该账号 walmart 平台下逐一探测确认为真实有数据的 11 个 category id（POST /api/sov/asin/page 实测均返回非零 total），用于替换 ES 日志里那些一次查询多个 categoryId 的批量场景",
+    "_note_brand_share_board_keeper": "2026-09-28 发现 DELETE /api/sov/brand-share-board/{id} 有业务规则 code=400505 'At least one board must be retained'（每个用户至少保留1个看板不可全删）。已手动创建常驻看板 boardName='zz-keeper-do-not-delete'（id=2754，永不删除）作为该账号的底座看板，保证 Brand Share Board 模块的创建+删除自清理 case 可反复执行而不触发该业务规则；新增/修改该模块 case 时注意不要误删这个看板"
+  },
+  "base_urls": {
+    "SOVHUBBASEURL": "https://api.pacvue.com/sov-hub/"
+  },
+  "auth": {
+    "login_url": "https://apiuser.pacvue.com/api/Login/v2",
+    "method": "POST",
+    "headers": {
+      "productline": "walmart"
+    },
+    "body": {
+      "userName": "autoui_acount",
+      "password": "walmart123!!"
+    },
+    "token_path": "data.accessToken",
+    "token_prefix": "Bearer "
+  },
+  "headers": {
+    "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjZGNEIxQ0Y5NENFNTE0M0M5MUQ2MjhCQTJGRjEyNEM1NkQ0QjdCRkIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJiMHNjLVV6bEZEeVIxaWk2TF9Fa3hXMUxlX3MifQ.eyJuYmYiOjE3OTA1ODk1MDIsImV4cCI6MTc5MDYyNTUwMiwiaXNzIjoiaHR0cDovL2lkZW50aXR5IiwiYXVkIjpbImh0dHA6Ly9pZGVudGl0eS9yZXNvdXJjZXMiLCJhcGkxIl0sImNsaWVudF9pZCI6ImNsaWVudC5qd3QiLCJzdWIiOiIxODU4OSIsImF1dGhfdGltZSI6MTc5MDU4OTUwMiwiaWRwIjoibG9jYWwiLCJ1c2VySWQiOiIxODU4OSIsInJvbGUiOiJVc2VyIiwidXNlckluZm8iOiJ7XCJEZWZhdWx0Q3VycmVuY3lcIjpcIlVTXCIsXCJ1c2VyTmFtZVwiOlwiYXV0b3VpX2Fjb3VudFwiLFwidXNlclJvbGVcIjpcIlVzZXJcIixcImF2YWlsYWJsZVBsYXRmb3Jtc1wiOltcImFtYXpvblwiLFwiYm9sdjJcIixcImNoZXd5djJcIixcImNpdHJ1c1wiLFwiY29tbWVyY2VcIixcImNvbW1lcmNlLXRhcmdldFwiLFwiY29tbWVyY2UtdGlrdG9rXCIsXCJjb21tZXJjZS13YWxtYXJ0XCIsXCJjcml0ZW9cIixcImRvb3JkYXNoXCIsXCJkc3BcIixcImViYXlcIixcImluc3RhY2FydFwiLFwia3JvZ2VydjNcIixcIm1lcmNhZG9cIixcInJhc1wiLFwicmV0YWlsZXJcIixcInNhbXNjbHViXCIsXCJ0YXJnZXRcIixcInRpa3Rva1wiLFwidHRkXCIsXCJ3YWxtYXJ0XCIsXCJtdDM2MFwiXSxcImF2YWlsYWJsZUNvbW1lcmNlUGxhdGZvcm1zXCI6W1wiYW1hem9uXCIsXCJ3YWxtYXJ0XCJdLFwiQ2xpZW50SWRcIjo2MixcInNvdXJjZVR5cGVcIjowLFwiUm9vdFVzZXJJZFwiOjkzLFwiSXNWY1wiOjAsXCJpc0ZvcmV2ZXJcIjowLFwiU3Vic2NyaWJlU3RhdHVzXCI6MSxcImxhc3REYXlzXCI6MCxcIlF1b3RhXCI6MTAwMCxcIklzUmV0YWlsZXJEYXNoYm9hcmRBdmFpbGFibGVcIjp0cnVlLFwiYnlQYWN2dWVyXCI6XCJcIixcImlzUmVhbFRpbWVEYXRhXCI6dHJ1ZSxcIk1haWxcIjpcInpoYW5nc2hhb2JvQHBhY3Z1ZS5jb21cIixcImFkbWluUGxhdGZvcm1zXCI6W1wicmV0YWlsZXJcIl0sXCJhZG1pbkNvbW1lcmNlUGxhdGZvcm1zXCI6W10sXCJMZXZlbFwiOlwiQWRtaW5cIixcImlzQ2FuYXJ5XCI6ZmFsc2UsXCJpc0VtYWlsVmFsaWRhdGVkXCI6ZmFsc2V9Iiwic2NvcGUiOlsib3BlbmlkIiwiYXBpMSIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJhdXRodG9rZW4iXX0.F3mtWpbns1PGeCRsBaXTOuQWCMjL2DKpAWPW8m1sSdgxm3I19VX2TMasUauCEll1kSfXsEb76UJ-T-mVWoqqTWLrUyFw7-qUa0h0LcicKZtrZVnfP_-Kt64FsSu_UT_BlBiH90X0cEHZ70Fb1lqKNfiXRfBWzC2yqd6nIbo4TsxM9k8y4VzIplu85JDEw6upLE1chwr5YbiYhr0CT1ZjxR0UW6owf6mehcup-YSc12MQ_js0z9Pz_yQsSEW9Jx4RhJ6C8Q8s9Y6h1UYueNdQbX5TDFaNvtlpPJaKx__liNtcqL2kdrp89hUv5vfJi6I1-ds-7BoE5YXxxIiOoQVeFQ",
+    "Content-Type": "application/json",
+    "productline": "walmart"
+  }
+}

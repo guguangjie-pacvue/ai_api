@@ -1,0 +1,218 @@
+[
+  {
+    "name": "POST /api/sov/followed-asin - 批量关注多个ASIN(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin。categoryId+多个asin(walmart真实商品id)批量关注,后置调用DELETE同接口移除,保证可重复执行,同时覆盖DELETE /api/sov/followed-asin(该接口walmart平台90天内ES无独立调用记录,作为本case强制自清理步骤执行验证其可逆性)。walmart平台90天内该接口真实调用共9次,ES样本显示100%为批量关注(单次4~7个ASIN不等,未观测到单ASIN关注样本)。9条样本中占比约100%（9次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量关注多个ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "18911968201",
+            "18896808508",
+            "18900215993",
+            "18911202410"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "18911968201",
+            "18896808508",
+            "18900215993",
+            "18911202410"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/positions - Aggregated设备模式(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/positions。前置关注1个ASIN(walmart真实商品id),查询该分类下关注ASIN关键词位置趋势(deviceMode=Aggregated,retailerIds/storeIds均为null),后置取消关注保证可重复执行。walmart平台90天内该接口真实调用共12次,ES样本显示100%为deviceMode=Aggregated+retailerIds=null+storeIds=null,未观测到PC/Mobile等其它设备模式。12条样本中占比约100%（12次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "18911968201"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询关键词位置趋势(Aggregated)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "Aggregated",
+          "retailerIds": null,
+          "storeIds": null
+        },
+        "extract_vars": {
+          "follow_id_pos_agg": "data[asin=18911968201].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "18911968201"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/selectable - 单条关注记录排除(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/selectable。前置关注1个ASIN(walmart真实商品id)并取其followId,以单个followId(非followIds数组)排除已关联关键词获取可选关键词列表,后置取消关注保证可重复执行。walmart平台90天内该接口真实调用仅1次,ES样本为单个followId模式(该接口真实调用模式单一,已全覆盖)。1条样本中占比约100%（1次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "18911968201"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-获取followId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "Aggregated",
+          "retailerIds": null,
+          "storeIds": null
+        },
+        "extract_vars": {
+          "follow_id_sel_single": "data[asin=18911968201].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "获取可选关键词(单followId排除)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/selectable",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "followId": "{{follow_id_sel_single}}",
+          "followIds": null
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "18911968201"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

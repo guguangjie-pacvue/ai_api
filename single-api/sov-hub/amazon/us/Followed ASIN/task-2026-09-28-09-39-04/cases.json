@@ -1,0 +1,674 @@
+[
+  {
+    "name": "POST /api/sov/followed-asin - 关注单个ASIN(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin。categoryId+单个asin关注,后置调用DELETE同接口移除,保证可重复执行,同时覆盖DELETE /api/sov/followed-asin(该接口ES真实调用100%为单asin,58次)。500条随机样本中占比约31.4%（69次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "关注单个ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin - 批量关注多个ASIN(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin。categoryId+多个asin(3个)批量关注,后置调用DELETE同批asin移除,保证可重复执行。500条随机样本中占比约68.6%（151次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "批量关注多个ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7",
+            "B0844DSCRM",
+            "B0844JJZ8H"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7",
+            "B0844DSCRM",
+            "B0844JJZ8H"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/positions - Aggregated设备模式(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/positions。前置关注1个ASIN,查询该分类下关注ASIN关键词位置趋势(deviceMode=Aggregated),后置取消关注保证可重复执行。500条随机样本中占比约96.8%（484次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询关键词位置趋势(Aggregated)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "Aggregated"
+        },
+        "extract_vars": {
+          "follow_id_pos_agg": "data[asin=B0844FK1K7].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/positions - PC设备模式(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/positions。前置关注1个ASIN,查询该分类下关注ASIN关键词位置趋势(deviceMode=PC),后置取消关注保证可重复执行。500条随机样本中占比约2.8%（14次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "查询关键词位置趋势(PC)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "PC"
+        },
+        "extract_vars": {
+          "follow_id_pos_pc": "data[asin=B0844FK1K7].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/selectable - 单条关注记录排除(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/selectable。前置关注1个ASIN并取其followId,以followId排除已关联关键词获取可选关键词列表,后置取消关注保证可重复执行。500条随机样本中占比约83.6%（271次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-获取followId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "Aggregated"
+        },
+        "extract_vars": {
+          "follow_id_sel_single": "data[asin=B0844FK1K7].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "获取可选关键词(单followId排除)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/selectable",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "followId": "{{follow_id_sel_single}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/selectable - 批量关注记录排除(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/selectable。前置关注2个ASIN并各取其followId,以followIds批量排除已关联关键词获取可选关键词列表,后置取消关注保证可重复执行。500条随机样本中占比约16.4%（53次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注2个ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7",
+            "B0844DSCRM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-获取2个followId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "Aggregated"
+        },
+        "extract_vars": {
+          "follow_id_sel_a": "data[asin=B0844FK1K7].followId",
+          "follow_id_sel_b": "data[asin=B0844DSCRM].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "获取可选关键词(批量followIds排除)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/selectable",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "followIds": [
+            "{{follow_id_sel_a}}",
+            "{{follow_id_sel_b}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7",
+            "B0844DSCRM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/bulk - 单条关注记录批量关联关键词(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/bulk。前置关注1个ASIN并取其followId,为该条记录一次性关联2个关键词,后置逐个调用DELETE /api/sov/followed-asin/{id}/keywords移除关联(该接口ES真实调用100%为单关键词/次,46次)并取消关注,保证可重复执行。500条随机样本中占比约90.4%（244次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-获取followId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "Aggregated"
+        },
+        "extract_vars": {
+          "follow_id_bulk1": "data[asin=B0844FK1K7].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "批量关联关键词(单条记录)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/bulk",
+        "request_body": {
+          "items": [
+            {
+              "followId": "{{follow_id_bulk1}}",
+              "keywordTexts": [
+                "iphone 16 pro",
+                "iphone 15 pro"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-移除关键词1",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/{{follow_id_bulk1}}/keywords",
+        "request_body": [
+          "iphone 16 pro"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-移除关键词2",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/{{follow_id_bulk1}}/keywords",
+        "request_body": [
+          "iphone 15 pro"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/followed-asin/keywords/bulk - 批量为多条关注记录关联关键词(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/followed-asin/keywords/bulk。前置关注2个ASIN并各取其followId,一次性为2条关注记录分别关联关键词,后置逐个移除关联并取消关注,保证可重复执行。500条随机样本中占比约9.6%（26次）。",
+    "module": "Followed ASIN",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-关注2个ASIN",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7",
+            "B0844DSCRM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置-获取2个followId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/positions",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "deviceMode": "Aggregated"
+        },
+        "extract_vars": {
+          "follow_id_bulk_a": "data[asin=B0844FK1K7].followId",
+          "follow_id_bulk_b": "data[asin=B0844DSCRM].followId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "批量关联关键词(多条记录)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/keywords/bulk",
+        "request_body": {
+          "items": [
+            {
+              "followId": "{{follow_id_bulk_a}}",
+              "keywordTexts": [
+                "iphone 16 pro"
+              ]
+            },
+            {
+              "followId": "{{follow_id_bulk_b}}",
+              "keywordTexts": [
+                "iphone 15 pro"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-移除记录A关键词",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/{{follow_id_bulk_a}}/keywords",
+        "request_body": [
+          "iphone 16 pro"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-移除记录B关键词",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin/{{follow_id_bulk_b}}/keywords",
+        "request_body": [
+          "iphone 15 pro"
+        ],
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-取消关注",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/followed-asin",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "asins": [
+            "B0844FK1K7",
+            "B0844DSCRM"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

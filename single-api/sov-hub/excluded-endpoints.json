@@ -1,0 +1,392 @@
+{
+  "source": "user-provided screenshots (2026-09-24)",
+  "reason": "用户指定不测试/不执行的接口（内部运维/内部服务间调用/健康检查/尚未开放的模块等），与 ES 90天无流量清单是两套独立机制",
+  "total_endpoints": 299,
+  "excluded_count": 64,
+  "excluded": [
+    {
+      "tag": "Admin",
+      "method": "POST",
+      "path": "/api/sov/admin/change-owner",
+      "summary": "批量替换监控数据 owner（category / monitor_keyword_user 等）"
+    },
+    {
+      "tag": "BrandRedirect",
+      "method": "POST",
+      "path": "/api/sov/brand-redirect/addAsinBrand",
+      "summary": "新增 ASIN 品牌关联"
+    },
+    {
+      "tag": "BrandRedirect",
+      "method": "POST",
+      "path": "/api/sov/brand-redirect/checkDuplicatedAsins",
+      "summary": "校验 ASIN 是否重复/存在"
+    },
+    {
+      "tag": "BrandRedirect",
+      "method": "POST",
+      "path": "/api/sov/brand-redirect/deleteAsinBrand",
+      "summary": "删除 ASIN 品牌关联"
+    },
+    {
+      "tag": "BrandRedirect",
+      "method": "POST",
+      "path": "/api/sov/brand-redirect/editAsinBrand",
+      "summary": "编辑 ASIN 品牌关联"
+    },
+    {
+      "tag": "BrandRedirect",
+      "method": "POST",
+      "path": "/api/sov/brand-redirect/getAsinInfoForSov",
+      "summary": "查询 ASIN 信息（Doris）"
+    },
+    {
+      "tag": "BrandRedirect",
+      "method": "POST",
+      "path": "/api/sov/brand-redirect/list",
+      "summary": "获取品牌重定向列表"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "DELETE",
+      "path": "/api/report/deleteConfig/{reportId}",
+      "summary": "删除报表配置"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/getConfigById",
+      "summary": "按 id 查配置"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/getConfigPage",
+      "summary": "配置分页"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/getTargetSOV/export",
+      "summary": "导出 Target SOV Excel"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "GET",
+      "path": "/api/report/getTargetSOV/{reportId}",
+      "summary": "查询父级 Target SOV 配置"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/getTargetSOVTab",
+      "summary": "Target SOV Tab"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/getTargetSOVTrend",
+      "summary": "Target SOV 趋势"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "GET",
+      "path": "/api/report/getTargetTagSOV/{reportId}",
+      "summary": "查询 Campaign Tag 级 Target 配置"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/saveConfig",
+      "summary": "保存报表 Tag 配置"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/saveTargetSOV",
+      "summary": "保存父级 Target SOV（先删后插）"
+    },
+    {
+      "tag": "Customized Report",
+      "method": "POST",
+      "path": "/api/report/saveTargetTagSOV",
+      "summary": "保存 Campaign Tag 级 Target（按 reportId+tagName upsert）"
+    },
+    {
+      "tag": "Data Compare",
+      "method": "POST",
+      "path": "/api/sov/compare/brand-sov",
+      "summary": "品牌指标一致性对比（by-device vs page）"
+    },
+    {
+      "tag": "Data Compare",
+      "method": "POST",
+      "path": "/api/sov/compare/brand-weekly-sov",
+      "summary": "品牌周/月度指标一致性对比（weekly-performance vs page）"
+    },
+    {
+      "tag": "Data Compare",
+      "method": "POST",
+      "path": "/api/sov/compare/dashboard-accuracy/run",
+      "summary": "Dashboard 数据准确性验证"
+    },
+    {
+      "tag": "InternalBrand",
+      "method": "GET",
+      "path": "/api/sov/internal/brand/list",
+      "summary": "按 clientId+productLine 查平台级品牌（my/other）"
+    },
+    {
+      "tag": "InternalCategory",
+      "method": "GET",
+      "path": "/api/sov/internal/category/detail",
+      "summary": "按 categoryBatchId 查各 productLine 维度配置"
+    },
+    {
+      "tag": "InternalCategory",
+      "method": "POST",
+      "path": "/api/sov/internal/category/keyword-count",
+      "summary": "批量按 categoryBatchId 统计 keyword 数"
+    },
+    {
+      "tag": "InternalCategory",
+      "method": "GET",
+      "path": "/api/sov/internal/category/retailer-markets",
+      "summary": "各平台可用市场（按 monitor_retailer.market 汇总）"
+    },
+    {
+      "tag": "InternalCategory",
+      "method": "GET",
+      "path": "/api/sov/internal/category/retailers",
+      "summary": "按 productLine 查平台级全量 retailer/store"
+    },
+    {
+      "tag": "InternalQuota",
+      "method": "POST",
+      "path": "/api/sov/internal/quota/check",
+      "summary": "配额只读预校验"
+    },
+    {
+      "tag": "InternalQuota",
+      "method": "POST",
+      "path": "/api/sov/internal/quota/hub-keyword-used",
+      "summary": "hub 关键词槽位已用量与总上限"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "POST",
+      "path": "/api/sov/organicRank/asin-detail",
+      "summary": "ASIN 详情（导出 Excel）"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "POST",
+      "path": "/api/sov/organicRank/asins/all",
+      "summary": "全部 ASIN 列表（关键词维度 SOV，分页）"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "GET",
+      "path": "/api/sov/organicRank/checkUserQuota/{addQuota}",
+      "summary": "预校验再添加若干关键词槽位是否足够"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "POST",
+      "path": "/api/sov/organicRank/favorites",
+      "summary": "保存收藏 ASIN"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "POST",
+      "path": "/api/sov/organicRank/favorites/query",
+      "summary": "收藏 ASIN 分页列表"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "DELETE",
+      "path": "/api/sov/organicRank/favorites/{id}",
+      "summary": "删除收藏 ASIN"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "POST",
+      "path": "/api/sov/organicRank/keyword-detail",
+      "summary": "关键词详情（导出 Excel）"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "GET",
+      "path": "/api/sov/organicRank/keywords",
+      "summary": "监控关键词列表"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "POST",
+      "path": "/api/sov/organicRank/keywords",
+      "summary": "添加监控关键词"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "GET",
+      "path": "/api/sov/organicRank/keywords/distinct-count",
+      "summary": "去重关键词数"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "DELETE",
+      "path": "/api/sov/organicRank/monitor-keywords",
+      "summary": "删除监控关键词"
+    },
+    {
+      "tag": "Itsumo Organic Rank",
+      "method": "GET",
+      "path": "/api/sov/organicRank/quota",
+      "summary": "用户 Itsumo 配额"
+    },
+    {
+      "tag": "MigrationAmazonCategory",
+      "method": "POST",
+      "path": "/api/sov/migration-amazon-category/page",
+      "summary": "分页查询 Amazon 类目迁移映射"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/cannibalization",
+      "summary": "自竞争检测"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "GET",
+      "path": "/api/sov/insight/favorite-group",
+      "summary": "获取收藏分组列表（含异常计数）"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/favorite-group",
+      "summary": "添加/更新收藏分组"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/high-rank-terms",
+      "summary": "高排名词 SOV 低检测"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/keyword",
+      "summary": "关键词维度洞察"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/keyword-asin",
+      "summary": "自竞争关键词-ASIN 对"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/my-brand-dropped",
+      "summary": "我的品牌 SOV 下降检测"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "GET",
+      "path": "/api/sov/insight/my-brands",
+      "summary": "获取我的品牌名列表"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/my-brands",
+      "summary": "按类目获取我的品牌名列表（最近 30 天 SOV 数据中出现过的）"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/new-brand-sprout",
+      "summary": "新品牌冒头检测"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/not-in-top4",
+      "summary": "ASIN 不在 Top4 检测"
+    },
+    {
+      "tag": "SOV Insight",
+      "method": "POST",
+      "path": "/api/sov/insight/top-brand-dropped",
+      "summary": "竞品品牌下降检测"
+    },
+    {
+      "tag": "Snapshot",
+      "method": "POST",
+      "path": "/api/sov/snapshot/export/async",
+      "summary": "快照异步导出"
+    },
+    {
+      "tag": "Social Momentum",
+      "method": "POST",
+      "path": "/api/sov/social-momentum/brand/download",
+      "summary": "品牌 SOV 下载（Excel，social 专用）"
+    },
+    {
+      "tag": "Social Momentum",
+      "method": "POST",
+      "path": "/api/sov/social-momentum/brand/page",
+      "summary": "品牌 SOV 列表（分页，social 专用）"
+    },
+    {
+      "tag": "Social Momentum",
+      "method": "POST",
+      "path": "/api/sov/social-momentum/brand/trend",
+      "summary": "品牌 SOV 趋势（social 专用）"
+    },
+    {
+      "tag": "Social Momentum",
+      "method": "POST",
+      "path": "/api/sov/social-momentum/group",
+      "summary": "保存 Group（幂等 upsert，不做 quota 校验）"
+    },
+    {
+      "tag": "SovHealth",
+      "method": "POST",
+      "path": "/api/sov/health/asin-brand/record",
+      "summary": "新增 asin-brand 更新记录"
+    },
+    {
+      "tag": "SovHealth",
+      "method": "DELETE",
+      "path": "/api/sov/health/asin-brand/record",
+      "summary": "删除 asin-brand 更新记录"
+    },
+    {
+      "tag": "SovHealth",
+      "method": "POST",
+      "path": "/api/sov/health/asin-brand/record/page",
+      "summary": "分页查询 asin-brand 更新记录"
+    },
+    {
+      "tag": "SovHealth",
+      "method": "POST",
+      "path": "/api/sov/health/asin-brand/sync",
+      "summary": "同步 asin-brand 更新记录"
+    },
+    {
+      "tag": "SovHealth",
+      "method": "GET",
+      "path": "/api/sov/health/monitor",
+      "summary": "近期监控健康"
+    },
+    {
+      "tag": "health-controller",
+      "method": "GET",
+      "path": "/health",
+      "summary": ""
+    }
+  ]
+}

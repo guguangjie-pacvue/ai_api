@@ -1,0 +1,193 @@
+{
+  "config": "sov-hub (kroger, us)",
+  "started_at": "2026-09-28T08:31:31.379077+00:00",
+  "finished_at": "2026-09-28T08:31:47.715076+00:00",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "DELETE /api/sov/bulk/brand - 按品牌名批量删除 category(含前置创建+验证)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置：创建测试专用临时 category",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/category",
+          "status_code": 200,
+          "ms": 2613,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证：确认临时 category 已创建",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/category/page",
+          "status_code": 200,
+          "ms": 1600,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "主测试：按品牌名批量删除",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/bulk/brand",
+          "status_code": 200,
+          "ms": 2990,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证：确认该品牌下 category 已被删除(业务成功信号)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/category/page",
+          "status_code": 200,
+          "ms": 1582,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/bulk/import-sov-template - 导入 SOV 模板数据(含验证+品牌名清理)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "主测试：导入 SOV 模板数据(测试专用brand/category)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/bulk/import-sov-template",
+          "status_code": 200,
+          "ms": 1411,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证：确认导入数据已生成真实 category(业务成功信号)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/category/page",
+          "status_code": 200,
+          "ms": 2756,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        },
+        {
+          "name": "清理：按品牌名删除导入生成的 category",
+          "method": "DELETE",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/bulk/brand",
+          "status_code": 200,
+          "ms": 1097,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证：确认清理彻底(业务成功信号)",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/category/page",
+          "status_code": 200,
+          "ms": 2281,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "dict",
+          "data_len": 4,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

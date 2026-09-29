@@ -1,0 +1,883 @@
+[
+  {
+    "name": "POST /api/sov/retailer/addKeywords - countryCode=US(含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。countryCode=US，deviceTypes=[0]、isDaypart=false、zipCodes=[\"\"]均为该接口90天instacart样本中的100%常量值，仅countryCode存在真实差异。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(instacart平台，共28条)中占比约89.3%（25次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_A_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerAK_A_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-ak-a-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-ak-a-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/addKeywords - countryCode=CA(含后置清理,可重复)",
+    "description": "单接口测试(写操作,自清理)：POST /api/sov/retailer/addKeywords。countryCode=CA(该接口90天instacart样本中唯一的第二国家分布，均来自同一Red Bull Canada账号)。categoryBatchId 由客户端自行生成(字符串)，第2步用同一 categoryBatchId 调用 deleteCategories 清理，保证用例可重复执行。90天ES真实调用样本(instacart平台，共28条)中占比约10.7%（3次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerAK_B_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerAK_B_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-ak-b-20260928133032",
+          "countryCode": "CA",
+          "isDaypart": false,
+          "keywords": [
+            "red bull energy drink"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            43,
+            55,
+            59,
+            66,
+            77
+          ],
+          "storeIds": [
+            997,
+            1009,
+            1019,
+            1028,
+            1044
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-ak-b-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel未传(不按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(instacart平台，共72条)中该模式占比约68.1%（49次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_1_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerBC_1_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-bc-1-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-bc-1-20260928133032",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Great Value",
+              "brands": [
+                "Great Value"
+              ]
+            },
+            {
+              "aggregationBrandName": "Kirkland Signature",
+              "brands": [
+                "Kirkland Signature",
+                "kirkland signature"
+              ]
+            },
+            {
+              "aggregationBrandName": "Member's Mark",
+              "brands": [
+                "Member's Mark"
+              ]
+            },
+            {
+              "aggregationBrandName": "365 Whole Foods Market",
+              "brands": [
+                "365 Whole Foods Market",
+                "365"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-bc-1-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel=true(按SubChannel拆分) / 含keywords过滤)，第3步删除Category清理。90天ES真实调用样本(instacart平台，共72条)中该模式占比约29.2%（21次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_2_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerBC_2_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-bc-2-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-bc-2-20260928133032",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Great Value",
+              "brands": [
+                "Great Value"
+              ]
+            },
+            {
+              "aggregationBrandName": "Kirkland Signature",
+              "brands": [
+                "Kirkland Signature",
+                "kirkland signature"
+              ]
+            },
+            {
+              "aggregationBrandName": "Member's Mark",
+              "brands": [
+                "Member's Mark"
+              ]
+            },
+            {
+              "aggregationBrandName": "365 Whole Foods Market",
+              "brands": [
+                "365 Whole Foods Market",
+                "365"
+              ]
+            }
+          ],
+          "splitBySubChannel": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-bc-2-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/brandComparison - splitBySubChannel未传(不按SubChannel拆分) / keywords=[](不按关键词过滤,对比全类目)(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作前置+查询,自清理)：第1步前置创建一个Category，第2步调用 brandComparison 做品牌对比查询(splitBySubChannel未传(不按SubChannel拆分) / keywords=[](不按关键词过滤,对比全类目))，第3步删除Category清理。90天ES真实调用样本(instacart平台，共72条)中该模式占比约2.8%（2次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerBC_3_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerBC_3_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-bc-3-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "品牌对比查询",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/brandComparison",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-bc-3-20260928133032",
+          "startDate": "2026-08-01",
+          "endDate": "2026-08-31",
+          "keywords": [],
+          "aggregationBrands": [
+            {
+              "aggregationBrandName": "Great Value",
+              "brands": [
+                "Great Value"
+              ]
+            },
+            {
+              "aggregationBrandName": "Kirkland Signature",
+              "brands": [
+                "Kirkland Signature",
+                "kirkland signature"
+              ]
+            },
+            {
+              "aggregationBrandName": "Member's Mark",
+              "brands": [
+                "Member's Mark"
+              ]
+            },
+            {
+              "aggregationBrandName": "365 Whole Foods Market",
+              "brands": [
+                "365 Whole Foods Market",
+                "365"
+              ]
+            }
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-bc-3-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/deleteCategories - 批量删除2个categoryBatchId(含前置建2个Category,可重复)",
+    "description": "单接口测试(写操作,自清理)：第1/2步各前置创建1个Category，第3步用同一次调用批量删除这2个categoryBatchId，覆盖 deleteCategories 的批量删除模式(与单个删除模式并列的另一真实场景)。90天ES真实调用样本(instacart平台，共14条)中：传1个categoryBatchId占50.0%（7次，已在其它case的后置清理步骤中覆盖），传多个(本case代表2个)categoryBatchId占50.0%（7次）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category1",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerDC_1_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerDC_1_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-dc-batch1-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "前置创建-Category2",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerDC_2_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerDC_2_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-dc-batch2-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量删除2个Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-dc-batch1-20260928133032",
+            "AutoTest-sovhub-instacart-retailer-dc-batch2-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/retailer/editRetailers - 全量替换Retailer/Store列表(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：第1步前置创建一个Category，第2步调用 editRetailers 全量替换该Category的retailerIds/storeIds列表(使用90天instacart样本中出现频率最高的一组真实取值)，第3步删除Category清理。该接口90天真实调用(instacart平台，共28条)里retailerIds/storeIds只是全量替换同一操作、列表长度因不同用户的真实店铺范围而异(1/3/4/11/28个不等)，不构成独立业务模式，故只取1条最高频代表样本，不按数量拆分场景：retailerIds=[37,43,71]+storeIds=[2,9,27]这组组合占比约35.7%（10/28次，为28条样本中出现次数最多的一组）。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置创建-Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerER_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerER_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-er-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "全量替换Retailer/Store列表",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editRetailers",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-er-20260928133032",
+          "retailerIds": [
+            37,
+            43,
+            71
+          ],
+          "storeIds": [
+            2,
+            9,
+            27
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-er-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "PUT /api/sov/retailer/editCategoryName - Category全生命周期编辑(含前置建/后置删,可重复)",
+    "description": "单接口测试(写操作,自清理)：串联测试 Retailer Category 的完整编辑生命周期(instacart平台)。第1步创建Category(3个初始关键词)，第2步 editCategoryName 改名(90天真实调用2条，100%单个categoryBatchId改名)，第3步 editBrandName 改品牌名(90天真实调用1条，样本极少，100%单个categoryBatchId改名)，第4步 keywords(PUT) 全量替换关键词列表，从3个初始关键词收缩为2个(90天真实调用14条，均为全量替换同一Category下若干关键词)，第5步 deleteKeywords 再删除1个关键词(90天真实调用4条，均为单个关键词删除)，第6步 deleteCategories 传单个categoryBatchId做最终清理(与deleteCategories另一批量删除场景并列，本步代表90天14条真实调用中占比约50.0%的单个删除模式)，保证用例可重复执行。这4个编辑类接口(editCategoryName/editBrandName/keywords-PUT/deleteKeywords)样本量均很小(1~14条不等)且均围绕同一Category实体操作，故合并为一条完整生命周期case，而非拆分成多条各自建删的独立case。🔴 与walmart平台不同：instacart平台下 editDeviceType/editDayParting/editZipCode 三个接口90天(及365天全平台交叉验证)均为0调用，真实无流量，不纳入本生命周期；editRetailers 则在instacart平台有真实流量(28次)，已在同模块另一条独立case中覆盖。",
+    "module": "Retailer",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建Category+添加关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/addKeywords",
+        "request_body": {
+          "brandName": "AutoTest_Brand_RetailerLifecycle_20260928133032",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_20260928133032",
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-lifecycle-20260928133032",
+          "countryCode": "US",
+          "isDaypart": false,
+          "keywords": [
+            "healthy school snacks",
+            "school snacks",
+            "kids school snacks"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [
+            ""
+          ],
+          "retailerIds": [
+            54,
+            63,
+            71,
+            77
+          ],
+          "storeIds": [
+            16,
+            22,
+            27,
+            37
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改Category名称",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editCategoryName",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-lifecycle-20260928133032",
+          "categoryName": "AutoTest_Category_RetailerLifecycle_Renamed_20260928133032"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "修改品牌名称",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/editBrandName",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-lifecycle-20260928133032"
+          ],
+          "brandName": "AutoTest_Brand_RetailerLifecycle_Renamed_20260928133032"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "批量编辑关键词(全量替换)",
+        "method": "PUT",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/keywords",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "productLine": "INSTACART",
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-lifecycle-20260928133032",
+          "keywordTexts": [
+            "healthy school snacks",
+            "school snacks"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "删除单个关键词",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteKeywords",
+        "request_body": {
+          "categoryBatchId": "AutoTest-sovhub-instacart-retailer-lifecycle-20260928133032",
+          "keywordTexts": [
+            "school snacks"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除Category",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/retailer/deleteCategories",
+        "request_body": {
+          "categoryBatchIds": [
+            "AutoTest-sovhub-instacart-retailer-lifecycle-20260928133032"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]

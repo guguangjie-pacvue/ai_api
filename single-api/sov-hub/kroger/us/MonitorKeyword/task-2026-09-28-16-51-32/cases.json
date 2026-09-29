@@ -1,0 +1,138 @@
+[
+  {
+    "name": "MonitorKeyword 生命周期(主场景) - 添加/列表验证/全局搜索验证/删除清理(单关键词，控制共享账号配额争用)",
+    "description": "单接口测试：POST /api/sov/keyword/batch + POST /api/sov/keyword/list + GET /api/sov/keyword/search + DELETE /api/sov/keyword/batch。四个接口构成一个完整生命周期：先添加1个自动化测试专用关键词(zzautotest_kroger_kw_1790585492，deviceTypes=[0]+zipCodes=[]+retailerIds=[7]+storeIds=[])到官方指定自动化专用 kroger category(146582，categoryName='general merchandise 1990670806578069506'，brandName='【勿动】autoTest-自动化P0专用')，再用 POST /keyword/list 按 categoryIds+keywordText 过滤验证已入库，再用 GET /keyword/search 做当前client+productLine下的全局模糊搜索验证可搜到，最后 DELETE 删除清理，并再次用 POST /keyword/list 与 GET /keyword/search 双重验证已删除(data均为空)，确保可重复执行且不留残留。【kroger平台别名说明】登录/请求 productline header 用 krogerv3，但 ES 真实流量分散在 krogerv3(productLine.keyword=krogerv3, 53次POST batch/31次DELETE batch) 与 kroger(0次) 两个别名下，已对4个接口逐一交叉核对，kroger别名下4个接口90天内均为0调用；krogerv3别名下POST/keyword/list与GET/keyword/search同样为0调用(ES无流量)，按约定纳入生命周期case执行验证，不作为无流量跳过。ES真实请求体里 productLine 字段值统一为大写'KROGER'(与登录header krogerv3不同，字段级真实值以此为准)。deviceTypes=[0]+zipCodes=[]+retailerIds=[7]+storeIds=[] 是krogerv3(kroger)平台90天真实调用中100%占比的场景(POST /keyword/batch 53条真实命中样本中53条=100%，均来自同批固定retailer=7的账号)，属于'该账号监控哪个retailer'的账号级选择参数，保留真实值不拆分场景，与criteo/target案例处理方式一致，如实只写1条真实case。DELETE /keyword/batch 31条真实命中样本100%为{categoryId,keywordTexts}结构，本case清理步骤沿用相同结构。为降低对共享测试账号(clientId=62)已知存在的关键词监控槽位配额风险，本case仅add 1个关键词(参照criteo案例排查结论：add数量越少配额争用越低)。POST /keyword/batch 500条随机样本(实际命中53条)中占比约100%（53次）；DELETE /keyword/batch 500条随机样本(实际命中31条)中占比约100%（31次）。",
+    "module": "MonitorKeyword",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "1. 添加测试关键词(主测试 POST /keyword/batch，deviceTypes=[0]+zipCodes=[]+retailerIds=[7]+storeIds=[] 100%占比场景；仅add 1个关键词以控制对共享账号配额的争用)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "clientId": "{{variables.client_id}}",
+          "userId": "{{variables.user_id}}",
+          "categoryId": "{{variables.category_id}}",
+          "productLine": "KROGER",
+          "isDaypart": null,
+          "logOperationType": null,
+          "countryCode": "US",
+          "keywords": [
+            "zzautotest_kroger_kw_1790585492"
+          ],
+          "deviceTypes": [
+            0
+          ],
+          "zipCodes": [],
+          "retailerIds": [
+            7
+          ],
+          "storeIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "2. 列表验证已添加(POST /keyword/list，按 categoryIds+keywordText 过滤)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_kroger_kw_1790585492"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 1
+          }
+        }
+      },
+      {
+        "name": "3. 全局搜索验证可搜到(GET /keyword/search，当前 client+productLine)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_kroger_kw_1790585492",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$length_gte": 1
+          }
+        }
+      },
+      {
+        "name": "4. 清理：删除测试关键词(主测试 DELETE /keyword/batch，与ES真实样本100%的{categoryId,keywordTexts}结构一致)",
+        "method": "DELETE",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/batch",
+        "request_body": {
+          "categoryId": "{{variables.category_id}}",
+          "keywordTexts": [
+            "zzautotest_kroger_kw_1790585492"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "5. 复查删除生效(POST /keyword/list 应返回空，确认业务成功信号而非仅code:200)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/list",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ],
+          "keywordText": "zzautotest_kroger_kw_1790585492"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      },
+      {
+        "name": "6. 复查搜索也不再命中(GET /keyword/search 应返回空)",
+        "method": "GET",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword/search?countryCode=US&searchKeyword=zzautotest_kroger_kw_1790585492",
+        "request_body": {},
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$not_empty": false
+          }
+        }
+      }
+    ]
+  }
+]

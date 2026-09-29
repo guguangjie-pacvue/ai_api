@@ -1,0 +1,274 @@
+[
+  {
+    "name": "POST /api/sov/brand-mapping/saveMergeBrand - 新建品牌合并(create) + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/saveMergeBrand。walmart平台90天真实流量38次，均为新建/编辑合并品牌名(mergedName+brandList，部分带oldMergedName表示编辑既有合并)。用测试专用 mergedName + 真实未合并品牌(brandList来自/api/sov/brand-mapping/getUnmergedBrandList实测返回的walmart真实未合并品牌'Zevia')创建，后置步骤 deleteMergeBrand 清理，避免在账号里留残留。500条随机样本中占比约100%（38次，新建/编辑合并操作）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建合并品牌(主测试)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save_WM",
+          "oldMergedName": null,
+          "brandList": [
+            "Zevia"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除刚创建的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Save_WM",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/deleteMergeBrand - 删除已创建的品牌合并",
+    "description": "单接口测试：POST /api/sov/brand-mapping/deleteMergeBrand。walmart平台90天真实流量2次。前置用 saveMergeBrand 建一个测试专用合并品牌(brandList使用真实未合并品牌'Voortman')，再调用本接口删除，删除动作本身即为主测试步骤，无残留。500条随机样本中占比约100%（2次）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建待删除的合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete_WM",
+          "oldMergedName": null,
+          "brandList": [
+            "Voortman"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：删除合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_Delete_WM",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/asMyBrand - 标记为我的品牌 + 取消 + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/asMyBrand。walmart平台90天真实流量44次，均为对已存在的 mergedName 切换 myBrand true/false（如 Electrolit、Welch's、Great Value 等真实合并品牌）。前置用测试专用合并品牌(brandList使用真实未合并品牌'Sunkist')，切换 true 再切回 false 验证幂等，最后删除清理。500条随机样本中占比约100%（44次，myBrand标记切换）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试用合并品牌(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_WM",
+          "oldMergedName": null,
+          "brandList": [
+            "Sunkist"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：标记为我的品牌(myBrand=true)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_WM",
+          "myBrand": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "反向操作：取消我的品牌标记(myBrand=false)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/asMyBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_WM",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_AsMyBrand_WM",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/setBrandColor - 设置合并品牌颜色 + 删除清理",
+    "description": "单接口测试：POST /api/sov/brand-mapping/setBrandColor。walmart平台90天该接口本身ES无流量（全平台365天内也是0命中），但作为写操作按Phase 3.5要求仍构造真实场景验证：颜色取值参考同索引 saveMergeBrand 请求体里真实出现过的 color 字段值(如 #28DAC6，来自其它平台真实调用样本)。前置用测试专用合并品牌(brandList使用真实未合并品牌'Doritos')，主测试设置颜色，最后删除清理，保证可重复执行。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置：创建测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/saveMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_WM",
+          "oldMergedName": null,
+          "brandList": [
+            "Doritos"
+          ],
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "主测试：设置合并品牌颜色",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/setBrandColor",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_WM",
+          "color": "#28DAC6"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "清理：删除测试用合并品牌",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/deleteMergeBrand",
+        "request_body": {
+          "mergedName": "AutoTest_SovHub_BrandMapping_SetColor_WM",
+          "myBrand": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/brand-mapping/convertToMergedBrands - 单品牌名转换为合并后品牌名",
+    "description": "单接口测试：POST /api/sov/brand-mapping/convertToMergedBrands。walmart平台90天真实流量13次，全部为单元素brandNames数组查询，其中'Zevo'出现12次占比约92.3%，'Del Monte'出现1次占比约7.7%，均为对同一真实品牌名做单个转换查询，无结构性差异（数组长度恒为1），取占比最高的真实值'Zevo'作为代表场景。500条随机样本中占比约92.3%（12次）。",
+    "module": "BrandMapping",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "调用 convertToMergedBrands",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/brand-mapping/convertToMergedBrands",
+        "request_body": {
+          "brandNames": [
+            "Zevo"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  }
+]

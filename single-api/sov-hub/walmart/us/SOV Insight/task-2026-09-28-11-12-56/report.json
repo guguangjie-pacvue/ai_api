@@ -1,0 +1,130 @@
+{
+  "config": "sov-hub (walmart, us)",
+  "started_at": "2026-09-28T03:13:19.517952+00:00",
+  "finished_at": "2026-09-28T03:13:33.631040+00:00",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "POST /api/sov/insight/asin - ASIN维度洞察(YTD聚合+ShareOfShelf降序默认排序)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "ASIN维度洞察查询",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/asin",
+          "status_code": 200,
+          "ms": 6977,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 302,
+          "msg": null
+        }
+      ]
+    },
+    {
+      "name": "POST /api/sov/insight/anomaly-setting - 保存全部异常类型筛选(含前置读取原值/后置还原,可重复)",
+      "status": "passed",
+      "pass": true,
+      "steps": [
+        {
+          "name": "前置-读取原始已选异常类型",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/anomaly-setting",
+          "status_code": 200,
+          "ms": 1994,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 7,
+          "msg": null
+        },
+        {
+          "name": "保存全部异常类型",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/anomaly-setting",
+          "status_code": 200,
+          "ms": 1538,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        },
+        {
+          "name": "验证已选异常类型已生效",
+          "method": "GET",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/anomaly-setting",
+          "status_code": 200,
+          "ms": 1192,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "list",
+          "data_len": 7,
+          "msg": null
+        },
+        {
+          "name": "后置清理-还原原始已选异常类型",
+          "method": "POST",
+          "url": "https://api.pacvue.com/sov-hub/api/sov/insight/anomaly-setting",
+          "status_code": 200,
+          "ms": 2406,
+          "pass": true,
+          "failures": [],
+          "resp_code": 200,
+          "resp_keys": [
+            "code",
+            "data",
+            "errorMessage",
+            "jsonResult",
+            "messageKey",
+            "success"
+          ],
+          "data_shape": "null",
+          "data_len": null,
+          "msg": null
+        }
+      ]
+    }
+  ]
+}

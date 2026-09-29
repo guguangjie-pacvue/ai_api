@@ -1,0 +1,339 @@
+[
+  {
+    "name": "POST /api/sov/keyword-tag - 空categoryIds查询全部标签",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传空数组,查询账号下全部关键词标签(不按category过滤)。500条随机样本中占比约5.2%（26次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(空categoryIds)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": []
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 单个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传单个category,查询该分类下出现过的关键词标签。500条随机样本中占比约82.0%（410次）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(单个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": [
+            "{{variables.category_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag - 多个categoryId查询",
+    "description": "单接口测试：POST /api/sov/keyword-tag。categoryIds传多个category(合并覆盖真实样本中2/3/4/5/6/7/10/11/12/15/45等多种计数),查询多分类下出现过的关键词标签。500条随机样本中占比约12.8%（64次,含categoryIds数量2~45不等的多种计数场景,合并统计）。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "查询标签(多个categoryId)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag",
+        "request_body": {
+          "categoryIds": "{{variables.category_ids_multi}}"
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/create - 单个标签名创建(含后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/create。tagNames传单个标签名创建一级标签(自动化专用命名前缀AutoTest_,避免与共享账号已有真实标签混淆),后置调用delete移除,保证可重复执行。criteo平台90天内该接口仅4次真实调用,样本较少但100%为单tagName模式,未见批量创建样本(不编造批量场景)。清理步骤调用的delete接口criteo平台90天内ES无流量(全平台76次),仅作为清理机制内嵌使用,不代表delete已有criteo独立场景覆盖。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "创建单个标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_single_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "查询获取新建tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_single_id": "data[tagName=AutoTest_kwtag_single_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_single_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/addKeywords - appendOnly=false覆盖模式(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/addKeywords。前置创建1个自动化专用标签,以appendOnly=false覆盖模式关联真实法语香水类关键词样本(eau de parfum/parfum等),后置删除标签(级联清理关键词)保证可重复执行。criteo平台90天内该接口仅2次真实调用,样本较少但100%为appendOnly=false模式,未见true样本(不编造true场景)。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_addkw_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "前置-获取tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_addkw_id": "data[tagName=AutoTest_kwtag_addkw_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "关联关键词(覆盖模式)",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/addKeywords",
+        "request_body": {
+          "tagId": "{{kwtag_addkw_id}}",
+          "keywordTexts": [
+            "eau parfum hommes",
+            "eau de parfum",
+            "parfum"
+          ],
+          "appendOnly": false
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      },
+      {
+        "name": "后置清理-删除标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_addkw_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "POST /api/sov/keyword-tag/sub-tag/create - 批量创建多个子标签moveKeywords=true(含前置建/后置清理,可重复)",
+    "description": "单接口测试：POST /api/sov/keyword-tag/sub-tag/create。前置创建1个自动化专用一级标签,subTagNames传2个子标签名(真实样本值'curling iron'/'curling wand')批量创建,moveKeywords=true(与唯一真实样本一致),后置删除父标签(级联清理子标签)保证可重复执行。criteo平台90天内该接口仅1次真实调用,样本极少,已100%覆盖唯一真实模式,不编造其他场景。",
+    "module": "Keyword Tag",
+    "granularity": "API",
+    "since": "init",
+    "last_modified": "init",
+    "change_type": "NEW",
+    "generated_by": "swagger-api-case",
+    "steps": [
+      {
+        "name": "前置-创建父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/create",
+        "request_body": {
+          "tagNames": [
+            "AutoTest_kwtag_subtag_20260928"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 1
+          }
+        }
+      },
+      {
+        "name": "前置-获取父tagId",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/list",
+        "request_body": {},
+        "extract_vars": {
+          "kwtag_subtag_id": "data[tagName=AutoTest_kwtag_subtag_20260928].tagId"
+        },
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$is_array": true
+          }
+        }
+      },
+      {
+        "name": "批量创建2个子标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/sub-tag/create",
+        "request_body": {
+          "tagId": "{{kwtag_subtag_id}}",
+          "subTagNames": [
+            "curling iron",
+            "curling wand"
+          ],
+          "moveKeywords": true
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true,
+          "data": {
+            "$gte": 2
+          }
+        }
+      },
+      {
+        "name": "后置清理-删除父标签",
+        "method": "POST",
+        "base_url": "{{base_urls.SOVHUBBASEURL}}",
+        "headers": "{{headers}}",
+        "path": "/api/sov/keyword-tag/delete",
+        "request_body": {
+          "tagIds": [
+            "{{kwtag_subtag_id}}"
+          ]
+        },
+        "extract_vars": {},
+        "expected_response": {
+          "code": 200,
+          "success": true
+        }
+      }
+    ]
+  }
+]
